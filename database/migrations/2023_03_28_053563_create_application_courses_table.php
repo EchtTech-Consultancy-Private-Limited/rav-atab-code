@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use App\Models\ApplicationCourse;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('application_courses', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('application_id')->unsigned()->nullable();
+            $table->foreign('application_id')
+            ->references('id')
+            ->on('applications')
+            ->onDelete('cascade');
+            $table->integer('level_id')->unsigned()->nullable();
+            $table->integer('course_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->string('course_name',32)->nullable();
+            $table->integer('course_duration')->default(0); //in months
+            $table->string('eligibility',32)->nullable();
+            $table->string('mode_of_course',32)->nullable();
+            $table->string('course_brief',255)->nullable();
+            $table->timestamp('valid_from')->nullable();
+            $table->timestamp('valid_to')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('application_courses');
+    }
+};
