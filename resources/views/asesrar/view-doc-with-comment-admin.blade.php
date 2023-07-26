@@ -92,8 +92,8 @@
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
-                                                                <select class="form-control text-center" id="show-view-doc-options" name="status" required>
-                                                                    <option>--Select--</option>
+                                                                <select required class="form-control text-center" id="show-view-doc-options" name="status" >
+                                                                    <option value="">--Select--</option>
                                                                     <option value="1">Approved</option>
                                                                     <option value="0">Not Approved</option>
                                                                 </select>
@@ -102,7 +102,7 @@
                                                             <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
                                                                 
                                                                 <label>Add Comment</label>
-                                                                <textarea rows="10" cols="60" name="doc_comment" class="form-control"></textarea>
+                                                                <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="show-view-doc-options1"></textarea>
                                                             </div>
                                                             <input type="submit" value="Add Comment" class="btn btn-primary">
                                                         </div>
@@ -270,6 +270,18 @@
              
             
          });
+</script>
+<script>
+     $('#show-view-doc-options1').bind('input', function() {
+      var c = this.selectionStart,
+          r = /[^a-z0-9 .]/gi,
+          v = $(this).val();
+      if(r.test(v)) {
+        $(this).val(v.replace(r, ''));
+        c--;
+      }
+      this.setSelectionRange(c, c);
+    });
 </script>
     @include('layout.footer')
 
