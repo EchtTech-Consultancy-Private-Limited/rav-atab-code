@@ -92,7 +92,7 @@
                                                             <div class="col-sm-12 col-md-8" >
                                                                 
                                                                 <label>Add Comment</label>
-                                                                <input type="text" name="doc_admin_comment" class="form-control">
+                                                                <input type="text" name="doc_admin_comment" class="form-control" required>
                                                             </div>
 
                                                              <div class="col-sm-12 col-md-4">

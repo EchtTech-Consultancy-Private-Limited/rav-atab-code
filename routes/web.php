@@ -231,6 +231,8 @@ Route::post('add-accr-comment-view-doc',[LevelController::class,'acc_doc_comment
 Route::get('/admin-view-document/{id}/{course_id}', [LevelController::class, 'admin_view_document']);
 Route::get('/document-report-by-admin/{course_id}', [LevelController::class, 'document_report_by_admin']);
 Route::post('/document-report-by-admin', [LevelController::class, 'document_report_by_admin_submit']);
+Route::get('/document-comment-admin-assessor/{course_id}', [LevelController::class, 'document_comment_admin_assessor']);
+Route::get('/document-report-verified-by-assessor/{id}/{course_id}', [LevelController::class, 'document_report_verified_by_assessor']);
 
 
 

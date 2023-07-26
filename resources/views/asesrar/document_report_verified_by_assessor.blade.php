@@ -129,12 +129,11 @@ td.text-justify {
                            
                         </ul>
                     </div>
-                    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                         <ul class="breadcrumb breadcrumb-style ">
                              <a href="{{ url()->previous() }}" type="button" class="btn btn-primary" style="float:right;">Back To Documents</a>
                         </ul>
-                    </div> -->
-
+                    </div>
                 </div>
             </div>
 
@@ -247,13 +246,12 @@ td.text-justify {
 
 
                                           @if(isset($check_admin))
-                                          <div class="header">
+                                          <div id="printDiv">
+                                          <div class="header" >
                                              <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
-                                             <a href="{{ url('document-report-by-admin/'.$course_id) }}" class="btn btn-primary">Update Document Status</a>
-
-                                             <a style="float:right;margin:10px;" href="{{ url('document-report-verified-by-assessor/'.$application_id.'/'.$course_id) }}" class="btn btn-primary"> Vefified Report</a>
-
-                                              <a style="float:right;margin:10px;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">Assessor & Admin Conversation</a>
+                                            
+                                             <a class="btn btn-secondary" onclick="PrintElem('#printDiv')" > Print Document</a>
+                                              
                                           </div>
                                             @if ($message = Session::get('success'))
                                                 <div class="alert alert-success">
@@ -273,8 +271,8 @@ td.text-justify {
                                                             <th class="center">#S.N0</th>
                                                             <th class="center">Objective criteria</th>
                                                            <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
-                                                            <th class="center">View Documents</th>
-                                                           <!--  <th>Comments</th> -->
+                                                            <!-- <th class="center">View Documents</th> -->
+                                                            <th>Comments</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
@@ -291,24 +289,36 @@ td.text-justify {
                                                                 @endforeach -->
                                                               <!--   <h1>{{$doc_id1->id}}</h1> -->
 
-  <tr class="@if(isset($doc_id1->doc_file)) highlight   @if(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==3) highlight_nc @endif @endif">
+                                                            <tr class="@if(isset($doc_id1->doc_file)) highlight   @if(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==3) highlight_nc @endif @endif">
                                                                     <td>VMO.1</td>
                                                                    <td class="text-justify">The institution shall have a clearly defined and documented mission and vision. </td>
 
                                                                    @if(isset($doc_id1->doc_file))
                                                                   
-                                                                    <td>
-
- <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc_id1->doc_file.'/'.$doc_id1->id.'/'.$course_id) }}"
-                                                                        class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
-
                                                                     <!-- <td>
 
-                                                                        <a href="{{ url('show-comment/'.$doc_id1->id) }}" 
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
+                                                                   <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc_id1->doc_file.'/'.$doc_id1->id.'/'.$course_id) }}"
+                                                                        class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
+                                                                    </td>
+ -->
+                                                                    <td>
 
-                                                                    </td> -->
+                                                                      <!--   <a href="{{ url('show-comment/'.$doc_id1->id) }}" 
+                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a> -->
+
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+
+
+
+                                                                    </td>
                                                               
                                                                     @endif
                                                                     
@@ -332,17 +342,28 @@ td.text-justify {
                                                                     <td>VMO.2</td>
                                                                     <td class="text-justify">The institution shall have defined objectives and measure them periodically</td>
                                                                      @if(isset($doc_id2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[2].'/'.$doc_id2->doc_file.'/'.$doc_id2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
 
                                                                     
@@ -352,34 +373,56 @@ td.text-justify {
                                                                     <td>VMO.3</td>
                                                                     <td class="text-justify">The institution shall have mentioned activities that are taken to achieve these objectives. </td>
                                                                      @if(isset($doc_id3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[3].'/'.$doc_id3->doc_file.'/'.$doc_id3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>                                                              
                                                                 <tr class="@if(isset($doc_id4->doc_file)) highlight   @if(get_doc_code($doc_id4->id)==__('arrayfile.document_doc_id_chap1')[4] && get_doccomment_status($doc_id4->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id4->id)==__('arrayfile.document_doc_id_chap1')[4] && get_doccomment_status($doc_id4->id)==3) highlight_nc @endif @endif">
                                                                     <td>VMO.4</td>
                                                                     <td class="text-justify">The institution shall define its quality policy. </td>
                                                                     @if(isset($doc_id4->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[4].'/'.$doc_id4->doc_file.'/'.$doc_id4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id4->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -387,17 +430,28 @@ td.text-justify {
                                                                     <td>VMO.5</td>
                                                                     <td class="text-justify">The institution shall have a policy for evaluation of human resources engaged in training. </td>
                                                                      @if(isset($doc_id5->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[5].'/'.$doc_id5->doc_file.'/'.$doc_id5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id5->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -405,17 +459,28 @@ td.text-justify {
                                                                     <td>VMO.6</td>
                                                                     <td class="text-justify">The institution shall have policy for evaluation of the students </td>
                                                                      @if(isset($doc_id6->doc_file))
-                                                                   <td>
+                                                                  <!--  <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[6].'/'.$doc_id6->doc_file.'/'.$doc_id6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id6->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -436,17 +501,28 @@ td.text-justify {
                                                                       The institution shall declare its ownership and legal status and details of ownership.
                                                                     </td>
                                                                     @if(isset($doc_id_chap2_1->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[1].'/'.$doc_id_chap2_1->doc_file.'/'.$doc_id_chap2_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
-
+ -->
                                                                    <!--   <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap2_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                            
                                                                 </tr>
@@ -457,17 +533,28 @@ td.text-justify {
                                                                     The institution shall define its organizational structure or organogram
                                                                     </td>
                                                                     @if(isset($doc_id_chap2_2->doc_file))
-                                                                     <td>
+                                                                     <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[2].'/'.$doc_id_chap2_2->doc_file.'/'.$doc_id_chap2_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap2_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -488,6 +575,17 @@ td.text-justify {
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap2_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -497,18 +595,30 @@ td.text-justify {
                                                                       The institution shall define rules applicable to all personnel.
                                                                     </td>
                                                                     @if(isset($doc_id_chap2_4->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[4].'/'.$doc_id_chap2_4->doc_file.'/'.$doc_id_chap2_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap2_4->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
+                                                                    
                                                                 </tr>
 
                                                                 <tr class="@if(isset($doc_id_chap2_5->doc_file)) highlight   @if(get_doc_code($doc_id_chap2_5->id)==__('arrayfile.document_doc_id_chap2')[5] && get_doccomment_status($doc_id_chap2_5->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id_chap2_5->id)==__('arrayfile.document_doc_id_chap2')[5] && get_doccomment_status($doc_id_chap2_5->id)==3) highlight_nc @endif @endif">
@@ -520,11 +630,11 @@ td.text-justify {
                                                                     The accredited training providers must witness the delivery of the outsourced entity at least once annually.
                                                                     </td>
                                                                    @if(isset($doc_id_chap2_5->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[5].'/'.$doc_id_chap2_5->doc_file.'/'.$doc_id_chap2_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     
 
@@ -533,7 +643,19 @@ td.text-justify {
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap2_5->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
+                                                                    
                                                                 </tr>
 
                                                                 <tr class="@if(isset($doc_id_chap2_6->doc_file)) highlight   @if(get_doc_code($doc_id_chap2_6->id)==__('arrayfile.document_doc_id_chap2')[6] && get_doccomment_status($doc_id_chap2_6->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id_chap2_6->id)==__('arrayfile.document_doc_id_chap2')[6] && get_doccomment_status($doc_id_chap2_6->id)==3) highlight_nc @endif @endif">
@@ -542,17 +664,28 @@ td.text-justify {
                                                                     The institution shall identify regulations applicable to its activities and shall have a system to meet the regulations.
                                                                     </td>
                                                                    @if(isset($doc_id_chap2_6->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[6].'/'.$doc_id_chap2_6->doc_file.'/'.$doc_id_chap2_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                     <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap2_6->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -572,17 +705,28 @@ td.text-justify {
                                                                     The institution shall have suitable mechanism to monitor its financial resources.
                                                                     </td>
                                                                     @if(isset($doc_id_chap3_1->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap3')[1].'/'.$doc_id_chap3_1->doc_file.'/'.$doc_id_chap3_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap3_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap3_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                     
                                                                 </tr>
@@ -603,17 +747,28 @@ td.text-justify {
                                                                     The institution shall have sufficient resources to operate the training courses.
                                                                     </td>
                                                                     @if(isset($doc_id_chap4_1->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[1].'/'.$doc_id_chap4_1->doc_file.'/'.$doc_id_chap4_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 
                                                                     
@@ -626,17 +781,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap4_2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[2].'/'.$doc_id_chap4_2->doc_file.'/'.$doc_id_chap4_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                       
                                                                     
@@ -650,17 +816,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap4_3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[3].'/'.$doc_id_chap4_3->doc_file.'/'.$doc_id_chap4_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -672,17 +849,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap4_4->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[4].'/'.$doc_id_chap4_4->doc_file.'/'.$doc_id_chap4_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_4->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -694,17 +882,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap4_5->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[5].'/'.$doc_id_chap4_5->doc_file.'/'.$doc_id_chap4_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_5->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -716,17 +915,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap4_6->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[6].'/'.$doc_id_chap4_6->doc_file.'/'.$doc_id_chap4_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_6->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -739,17 +949,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap4_7->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[7].'/'.$doc_id_chap4_7->doc_file.'/'.$doc_id_chap4_7->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_7->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap4_7->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                     
                                                                 </tr>
@@ -771,17 +992,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap5_1->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[1].'/'.$doc_id_chap5_1->doc_file.'/'.$doc_id_chap5_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap5_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap5_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -793,17 +1025,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap5_2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[2].'/'.$doc_id_chap5_2->doc_file.'/'.$doc_id_chap5_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap5_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap5_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -815,17 +1058,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap5_3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[3].'/'.$doc_id_chap5_3->doc_file.'/'.$doc_id_chap5_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap5_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap5_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                  
                                                                    
@@ -849,17 +1103,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap6_1->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[1].'/'.$doc_id_chap6_1->doc_file.'/'.$doc_id_chap6_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap6_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap6_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                               
                                                                    
@@ -872,17 +1137,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap6_2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[2].'/'.$doc_id_chap6_2->doc_file.'/'.$doc_id_chap6_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap6_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap6_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                           
                                                                    
@@ -895,17 +1171,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap6_3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[3].'/'.$doc_id_chap6_3->doc_file.'/'.$doc_id_chap6_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap6_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap6_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                    
@@ -929,18 +1216,30 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap7_1->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[1].'/'.$doc_id_chap7_1->doc_file.'/'.$doc_id_chap7_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap7_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
+
                                                                    
                                                                 </tr>
 
@@ -952,17 +1251,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap7_2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[2].'/'.$doc_id_chap7_2->doc_file.'/'.$doc_id_chap7_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap7_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                  
                                                                 </tr>
@@ -974,17 +1284,28 @@ td.text-justify {
                                                                 </td>
 
                                                                  @if(isset($doc_id_chap7_3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[3].'/'.$doc_id_chap7_3->doc_file.'/'.$doc_id_chap7_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap7_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -997,17 +1318,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap7_4->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[4].'/'.$doc_id_chap7_4->doc_file.'/'.$doc_id_chap7_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap7_4->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1018,17 +1350,28 @@ td.text-justify {
                                                                     The institution shall define the learning outcome of its training courses. 
                                                                     </td>
                                                                     @if(isset($doc_id_chap7_5->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[5].'/'.$doc_id_chap7_5->doc_file.'/'.$doc_id_chap7_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap7_5->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1040,17 +1383,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap7_6->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[6].'/'.$doc_id_chap7_6->doc_file.'/'.$doc_id_chap7_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
-
+ -->
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap7_6->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1071,17 +1425,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap8_1->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[1].'/'.$doc_id_chap8_1->doc_file.'/'.$doc_id_chap8_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap8_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                     
                                                                 </tr>
@@ -1093,17 +1458,28 @@ td.text-justify {
                                                                     </td>
 
                                                                       @if(isset($doc_id_chap8_2->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[2].'/'.$doc_id_chap8_2->doc_file.'/'.$doc_id_chap8_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap8_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1116,17 +1492,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap8_3->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[3].'/'.$doc_id_chap8_3->doc_file.'/'.$doc_id_chap8_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap8_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1139,17 +1526,28 @@ td.text-justify {
                                                                     without training if yes, how many times.                                                                    </td>
 
                                                                      @if(isset($doc_id_chap8_4->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[4].'/'.$doc_id_chap8_4->doc_file.'/'.$doc_id_chap8_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap8_4->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1162,17 +1560,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap8_5->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[5].'/'.$doc_id_chap8_5->doc_file.'/'.$doc_id_chap8_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap8_5->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1184,17 +1593,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap8_6->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[6].'/'.$doc_id_chap8_6->doc_file.'/'.$doc_id_chap8_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap8_6->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1215,17 +1635,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap9_1->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[1].'/'.$doc_id_chap9_1->doc_file.'/'.$doc_id_chap9_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap9_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap9_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                  
                                                                 </tr>
@@ -1237,17 +1668,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap9_2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[2].'/'.$doc_id_chap9_2->doc_file.'/'.$doc_id_chap9_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap9_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap9_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1268,17 +1710,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap10_1->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[1].'/'.$doc_id_chap10_1->doc_file.'/'.$doc_id_chap10_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap10_1->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1290,17 +1743,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap10_2->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[2].'/'.$doc_id_chap10_2->doc_file.'/'.$doc_id_chap10_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap10_2->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1312,17 +1776,28 @@ td.text-justify {
                                                                     </td>
 
                                                                      @if(isset($doc_id_chap10_3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[3].'/'.$doc_id_chap10_3->doc_file.'/'.$doc_id_chap10_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                    <!--   <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap10_3->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                 
                                                                 </tr>
@@ -1334,17 +1809,28 @@ td.text-justify {
                                                                     </td>
 
                                                                     @if(isset($doc_id_chap10_4->doc_file))
-                                                                    <td>
+                                                                   <!--  <td>
 
                                                                     <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[4].'/'.$doc_id_chap10_4->doc_file.'/'.$doc_id_chap10_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                      <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
                                                                     </td> -->
+                                                                    <td>
+                                                                        <ul>
+                                                                         <?php 
+                                                                         $i=1;
+                                                                            foreach(get_all_comments($doc_id_chap10_4->id) as $date){
+                                                                            ?>
+                                                                               <li class="text-justify" style="text-align: left;">{{ $i++ }}. {!! $date->comments !!}</li>
+                                                                            <?php }   ?>
+                                                                       
+                                                                        </ul>
+                                                                    </td>
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1357,7 +1843,7 @@ td.text-justify {
                                           @else
                                           <h3 class="text-center">You dont have any document</h3>
                                           @endif
-
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1445,5 +1931,25 @@ td.text-justify {
              
             
          });
+</script>
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js" > </script>  
+<script type="text/javascript">
+    function PrintElem(elem)
+    {
+        Popup($(elem).html());
+    }
+
+    function Popup(data)
+    {
+        var mywindow = window.open('', 'new div', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>my div</title>');
+        /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+        mywindow.print();
+        mywindow.close();
+        return true;
+    }
 </script>
     @include('layout.footer')

@@ -1285,8 +1285,8 @@ div#ui-datepicker-div {
                                                  <ul class="list-inline pull-right">
                                                     <li><button type="button"
                                                             class="btn btn-danger prev-step1">Previous</button></li>
-                                                    <li><button type="button"
-                                                            class="btn btn-info preview-step mr-2">Preview</button></li>
+                                                   <!--  <li><button type="button"
+                                                            class="btn btn-info preview-step mr-2">Preview</button></li> -->
                                                     <li><button type="submit"
                                                             class="btn btn-primary btn-info-full ">Submit</button>
                                                     </li>

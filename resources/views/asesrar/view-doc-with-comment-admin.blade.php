@@ -129,7 +129,49 @@
         
         </div>
 
-
+            <div class="row">
+                 <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                       <div class="body">
+                       <div class="table-responsive">
+                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row"><div class="col-sm-12">
+                                    <table class="table table-hover js-basic-example contact_list dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                   <tr role="row">
+                                        <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> S.No. </th>
+                                        <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments  </th>
+                                        <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments By  </th>
+                                        <th class="center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label=" Name : activate to sort column ascending">Date </th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                                                                               
+                                                                    
+                                                                    
+                                                                    
+                                @foreach($comment as $key=>$comments) 
+                                                                                         
+                                <tr class="gradeX odd ">
+                                         <td class="center sorting_1">{{ ++$key }}</td>
+                                          <td class="center"><a ><b>{{$comments->comments}}</b></a></td>
+                                          <td class="center"><a ><b>@if(get_role($comments->user_id)==1)  {{ get_admin_comments($comments->user_id) }} ( Admin ) @elseif(get_role($comments->user_id)==3)  {{ get_admin_comments($comments->user_id) }} ( Assessor ) @endif</b></a></td>
+                                         <td class="center"><a >{{$comments->created_at}}</a></td>
+                                </tr>
+                                @endforeach
+                                
+                            </tbody>
+                             </table>
+                            </div></div>
+                            
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+                 <a style="line-height:2;" type="button" class="btn btn-secondary" href="{{ url()->previous() }}">Back To Documents</a>
+              </div>
+            </div>
     
     </section>
 

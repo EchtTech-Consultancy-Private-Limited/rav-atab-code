@@ -108,13 +108,14 @@
                                                                     
                                                                     
                                 @foreach($comment as $key=>$comments) 
-                                                                                         
+                                                                                      
                                 <tr class="gradeX odd ">
                                          <td class="center sorting_1">{{ ++$key }}</td>
-                                          <td class="center"><a ><b>{{$comments->comments}}</b></a></td>
-                                          <td class="center"><a ><b>{{ get_admin_comments($comments->doc_id) }}</b></a></td>
+                                          <td class="center"><a ><b>{{$comments->comment_by_assessor}}</b></a></td>
+                                          <td class="center"><a ><b>@if(get_role($comments->user_id)==1)  {{ get_admin_comments($comments->user_id) }} ( Admin ) @elseif(get_role($comments->user_id)==3)  {{ get_admin_comments($comments->user_id) }} ( Assessor ) @endif</b></a></td>
                                          <td class="center"><a >{{$comments->created_at}}</a></td>
                                 </tr>
+                       
                                 @endforeach
                                 
                             </tbody>

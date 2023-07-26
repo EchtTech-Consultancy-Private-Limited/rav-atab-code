@@ -148,6 +148,7 @@ class applicationController extends Controller
             ->orWhere('applications.country', '=', 19)
             ->orWhere('applications.country', '=', 133)
             ->orWhere('applications.country', '=', 1)
+            ->orderBy('applications.id', 'DESC')
             ->join('application_payments', 'application_payments.application_id', '=','applications.id')
             ->get();
     
@@ -161,6 +162,7 @@ class applicationController extends Controller
             ->whereNot('applications.country', 1)
             ->whereNot('applications.country', 101)
             ->join('application_payments', 'application_payments.application_id', '=','applications.id')
+            ->orderBy('applications.id', 'DESC')
             ->get();
    
      //dd($collection);   
@@ -284,8 +286,9 @@ class applicationController extends Controller
         $Application = DB::table('applications')
         ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
         ->where('applications.country','=',101)
+        ->orderBy('applications.id', 'DESC')
         ->get();
-       
+        
         if(count($Application))
         {
 

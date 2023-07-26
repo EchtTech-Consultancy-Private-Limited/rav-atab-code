@@ -190,8 +190,19 @@ function checktppaymentstatustype($id)
     
 }
 
+     function get_all_comments($id=0)
+        {  
+            //dd($id);
+            //return $id;
+          return  $doc_code=App\Models\DocComment::select('comments')->where('doc_id',$id)->get();
+            /*if($doc_code)
+            {
+               $doc_comments = $doc_code->comments;
+               return $doc_comments;
+            }*/
+        }
 
-function get_doc_code($id=0)
+     function get_doc_code($id=0)
         {  
             //dd($id);
             //return $id;
@@ -211,6 +222,28 @@ function get_doc_code($id=0)
             {
                $doc_comment_status = $doc_code->status;
                return $doc_comment_status;
+            }
+        }
+
+         function get_admin_comments($id=0)
+        {  
+           
+            $record=App\Models\User::orderBy('id', 'desc')->where('id',$id)->first();
+            if($record)
+            {
+               $user_name = $record->firstname;
+               return $user_name;
+            }
+        }
+
+        function get_role($id=0)
+        {  
+           
+            $record=App\Models\User::orderBy('id', 'desc')->where('id',$id)->first();
+            if($record)
+            {
+               $user_name = $record->role;
+               return $user_name;
             }
         }
 

@@ -282,7 +282,7 @@ td.text-justify {
 
 
                                                                 @endforeach -->
-<tr class="@if(isset($doc_id1->doc_file)) highlight @if(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==2) highlight_nc @endif @endif">
+                                                                <tr class="@if(isset($doc_id1->doc_file)) highlight @if(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==2) highlight_nc @endif @endif">
                                                                     <td>VMO.1</td>
                                                                     <td class="text-justify">The institution shall have a clearly defined and documented mission and vision. </td>
                                                                     <!--<td> <div class="form-group default-select mb-0">
@@ -328,8 +328,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
 
-                                                                    <td>
-                                                                        @if(isset($doc_id1->doc_file))
+                                                                    <td> @if(isset($doc_id1->doc_file) && get_doccomment_status($doc_id1->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id1->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -383,7 +382,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id2->doc_file))
+                                                                        @if(isset($doc_id2->doc_file) && get_doccomment_status($doc_id2->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id2->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -431,7 +430,7 @@ td.text-justify {
                                                                     </td>
 
                                                                     <td>
-                                                                        @if(isset($doc_id3->doc_file))
+                                                                        @if(isset($doc_id3->doc_file) && get_doccomment_status($doc_id3->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id3->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -474,7 +473,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                      <td>
-                                                                        @if(isset($doc_id4->doc_file))
+                                                                        @if(isset($doc_id4->doc_file) && get_doccomment_status($doc_id4->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id4->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -517,7 +516,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                      <td>
-                                                                        @if(isset($doc_id5->doc_file))
+                                                                        @if(isset($doc_id5->doc_file) && get_doccomment_status($doc_id5->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id5->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -561,7 +560,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id6->doc_file))
+                                                                        @if(isset($doc_id6->doc_file) && get_doccomment_status($doc_id6->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id6->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -619,8 +618,9 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
 
-                                                                    <td>
-                                                                        @if(isset($doc_id_chap2_1->doc_file))
+                                                                    <td>@if(isset($doc_id_chap2_1->doc_file) && get_doccomment_status($doc_id_chap2_1->id)==2)
+
+                                                                       
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap2_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -666,7 +666,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap2_2->doc_file))
+                                                                        @if(isset($doc_id_chap2_2->doc_file) && get_doccomment_status($doc_id_chap2_2->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap2_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -714,7 +714,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap2_3->doc_file))
+                                                                        @if(isset($doc_id_chap2_3->doc_file) && get_doccomment_status($doc_id_chap2_3->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap2_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -762,7 +762,7 @@ td.text-justify {
                                                                     </td>
 
                                                                      <td>
-                                                                        @if(isset($doc_id_chap2_4->doc_file))
+                                                                        @if(isset($doc_id_chap2_4->doc_file) && get_doccomment_status($doc_id_chap2_4->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap2_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -813,7 +813,7 @@ td.text-justify {
                                                                             </td>
 
                                                                      <td>
-                                                                        @if(isset($doc_id_chap2_5->doc_file))
+                                                                        @if(isset($doc_id_chap2_5->doc_file) && get_doccomment_status($doc_id_chap2_5->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap2_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -861,7 +861,7 @@ td.text-justify {
                                                                     </td>
 
                                                                      <td>
-                                                                        @if(isset($doc_id_chap2_6->doc_file))
+                                                                        @if(isset($doc_id_chap2_6->doc_file) && get_doccomment_status($doc_id_chap2_6->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap2_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -920,7 +920,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap3_1->doc_file))
+                                                                        @if(isset($doc_id_chap3_1->doc_file) && get_doccomment_status($doc_id_chap3_1->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap3_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -979,7 +979,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap4_1->doc_file))
+                                                                        @if(isset($doc_id_chap4_1->doc_file) && get_doccomment_status($doc_id_chap4_1->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap4_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -1028,7 +1028,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap4_2->doc_file))
+                                                                        @if(isset($doc_id_chap4_2->doc_file) && get_doccomment_status($doc_id_chap4_2->id)==2)
                                                                      
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap4_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -1076,7 +1076,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                      <td>
-                                                                            @if(isset($doc_id_chap4_3->doc_file))
+                                                                            @if(isset($doc_id_chap4_3->doc_file) && get_doccomment_status($doc_id_chap4_3->id)==2)
                                                                          
                                                                                <a href="{{ url('show-comment/'.$doc_id_chap4_3->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -1123,7 +1123,7 @@ td.text-justify {
                                                                     </td>
 
                                                                     <td>
-                                                                            @if(isset($doc_id_chap4_4->doc_file))
+                                                                            @if(isset($doc_id_chap4_4->doc_file) && get_doccomment_status($doc_id_chap4_4->id)==2)
                                                                          
                                                                                <a href="{{ url('show-comment/'.$doc_id_chap4_4->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -1172,7 +1172,7 @@ td.text-justify {
                                                                     </td>
 
                                                                     <td>
-                                                                            @if(isset($doc_id_chap4_5->doc_file))
+                                                                            @if(isset($doc_id_chap4_5->doc_file) && get_doccomment_status($doc_id_chap4_5->id)==2)
                                                                          
                                                                                <a href="{{ url('show-comment/'.$doc_id_chap4_5->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -1217,8 +1217,7 @@ td.text-justify {
                                                                         </form>
                                                                     </td>
 
-                                                                    <td>
-                                                                            @if(isset($doc_id_chap4_6->doc_file))
+                                                                    <td>  @if(isset($doc_id_chap4_6->doc_file) && get_doccomment_status($doc_id_chap4_6->id)==2)
                                                                          
                                                                                <a href="{{ url('show-comment/'.$doc_id_chap4_6->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
@@ -1265,7 +1264,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap4_7->id))
+                                                                        @if(isset($doc_id_chap4_7->id) && get_doccomment_status($doc_id_chap4_7->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap4_4->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1319,7 +1318,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap5_1->id))
+                                                                        @if(isset($doc_id_chap5_1->id) && get_doccomment_status($doc_id_chap5_1->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap5_1->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1363,7 +1362,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap5_2->id))
+                                                                        @if(isset($doc_id_chap5_2->id) && get_doccomment_status($doc_id_chap5_2->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap5_2->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1407,7 +1406,7 @@ td.text-justify {
                                                                             @endif
                                                                     </td>
                                                                      <td>
-                                                                        @if(isset($doc_id_chap5_3->id))
+                                                                        @if(isset($doc_id_chap5_3->id) && get_doccomment_status($doc_id_chap5_3->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap5_3->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1459,7 +1458,7 @@ td.text-justify {
                                                                             @endif
                                                                             </td>
                                                                             <td>
-                                                                                @if(isset($doc_id_chap6_1->id))
+                                                                                @if(isset($doc_id_chap6_1->id) && get_doccomment_status($doc_id_chap6_1->id)==2)
                                                                                 <a href="{{ url('show-comment/'.$doc_id_chap6_1->id) }}" 
                                                                                         class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                                 @endif
@@ -1505,7 +1504,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap6_2->id))
+                                                                        @if(isset($doc_id_chap6_2->id) && get_doccomment_status($doc_id_chap6_2->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap6_2->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1549,7 +1548,7 @@ td.text-justify {
                                                                             @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap6_3->id))
+                                                                        @if(isset($doc_id_chap6_3->id) && get_doccomment_status($doc_id_chap6_3->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap6_3->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1604,7 +1603,7 @@ td.text-justify {
                                                                             @endif
                                                                         </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap7_1->id))
+                                                                        @if(isset($doc_id_chap7_1->id) && get_doccomment_status($doc_id_chap7_1->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap7_1->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1649,7 +1648,7 @@ td.text-justify {
                                                                             @endif
                                                                         </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap7_2->id))
+                                                                        @if(isset($doc_id_chap7_2->id) && get_doccomment_status($doc_id_chap7_2->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap7_2->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1693,7 +1692,7 @@ td.text-justify {
                                                                             @endif
                                                                          </td>
                                                                      <td>
-                                                                        @if(isset($doc_id_chap7_3->id))
+                                                                        @if(isset($doc_id_chap7_3->id) && get_doccomment_status($doc_id_chap7_3->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap7_3->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1738,7 +1737,7 @@ td.text-justify {
                                                                             @endif
                                                                          </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap7_4->id))
+                                                                        @if(isset($doc_id_chap7_4->id) && get_doccomment_status($doc_id_chap7_4->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap7_4->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1782,7 +1781,7 @@ td.text-justify {
                                                                             @endif
                                                                          </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap7_5->id))
+                                                                        @if(isset($doc_id_chap7_5->id) && get_doccomment_status($doc_id_chap7_5->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap7_5->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1826,7 +1825,7 @@ td.text-justify {
                                                                             @endif
                                                                         </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap7_6->id))
+                                                                        @if(isset($doc_id_chap7_6->id) && get_doccomment_status($doc_id_chap7_6->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap7_6->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1879,7 +1878,7 @@ td.text-justify {
                                                                             @endif
                                                                      </td>
                                                                       <td>
-                                                                        @if(isset($doc_id_chap8_1->id))
+                                                                        @if(isset($doc_id_chap8_1->id) && get_doccomment_status($doc_id_chap8_1->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap8_1->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1924,7 +1923,7 @@ td.text-justify {
                                                                             @endif
                                                                         </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap8_2->id))
+                                                                        @if(isset($doc_id_chap8_2->id) && get_doccomment_status($doc_id_chap8_2->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap8_2->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -1969,7 +1968,7 @@ td.text-justify {
                                                                             @endif
                                                                         </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap8_3->id))
+                                                                        @if(isset($doc_id_chap8_3->id) && get_doccomment_status($doc_id_chap8_3->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap8_3->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2014,7 +2013,7 @@ td.text-justify {
                                                                             @endif
                                                                          </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap8_4->id))
+                                                                        @if(isset($doc_id_chap8_4->id) && get_doccomment_status($doc_id_chap8_4->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap8_4->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2059,7 +2058,7 @@ td.text-justify {
                                                                             @endif
                                                                         </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap8_5->id))
+                                                                        @if(isset($doc_id_chap8_5->id) && get_doccomment_status($doc_id_chap8_5->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap8_5->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2103,7 +2102,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap8_6->id))
+                                                                        @if(isset($doc_id_chap8_6->id) && get_doccomment_status($doc_id_chap8_6->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap8_6->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2157,7 +2156,7 @@ td.text-justify {
                                                                     </td>
 
                                                                     <td>
-                                                                        @if(isset($doc_id_chap9_1->id))
+                                                                        @if(isset($doc_id_chap9_1->id) && get_doccomment_status($doc_id_chap9_1->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap9_1->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2201,7 +2200,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap9_2->id))
+                                                                        @if(isset($doc_id_chap9_2->id) && get_doccomment_status($doc_id_chap9_2->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap9_2->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2254,7 +2253,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap10_1->id))
+                                                                        @if(isset($doc_id_chap10_1->id) && get_doccomment_status($doc_id_chap10_1->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap10_1->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2298,7 +2297,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                      <td>
-                                                                        @if(isset($doc_id_chap10_2->id))
+                                                                        @if(isset($doc_id_chap10_2->id) && get_doccomment_status($doc_id_chap10_2->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap10_2->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2342,7 +2341,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap10_3->id))
+                                                                        @if(isset($doc_id_chap10_3->id) && get_doccomment_status($doc_id_chap10_3->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap10_3->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif
@@ -2387,7 +2386,7 @@ td.text-justify {
                                                                         @endif
                                                                     </td>
                                                                     <td>
-                                                                        @if(isset($doc_id_chap10_4->id))
+                                                                        @if(isset($doc_id_chap10_4->id) && get_doccomment_status($doc_id_chap10_4->id)==2)
                                                                         <a href="{{ url('show-comment/'.$doc_id_chap10_4->id) }}" 
                                                                                 class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Comments</a>
                                                                         @endif

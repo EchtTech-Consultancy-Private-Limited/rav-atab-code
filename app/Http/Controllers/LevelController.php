@@ -9,6 +9,7 @@ use App\Models\ApplicationCourse;
 use App\Models\ApplicationPayment;
 use App\Models\ApplicationDocument;
 use App\Models\LevelInformation;
+use App\Models\DocumentReportVerified;
 use App\Models\User;
 use App\Models\Faq;
 use Illuminate\Support\Facades\Cookie;
@@ -1287,8 +1288,7 @@ public function accr_upload_document($id,$course_id)
 
 }
 
-
-public function admin_view_document($id,$course_id)
+public function document_report_verified_by_assessor($id,$course_id)
 {
     //return $course_id;
     $application_id=$id;
@@ -1296,13 +1296,16 @@ public function admin_view_document($id,$course_id)
 
     $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',1)->first();
     
+    //Comments
+
+
     
     // dd(dDecrypt($id));
     $data =ApplicationPayment::whereapplication_id($id)->get();
     $file =ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
     $doc_id1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[1])->where('course_id',$course_id)->first();
-   // dd($doc_id1);
+    // dd($doc_id1);
     
     //return __('arrayfile.document_doc_id_chap1')[2];
     $doc_id2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[2])->where('course_id',$course_id)->first();
@@ -1359,13 +1362,95 @@ public function admin_view_document($id,$course_id)
     $doc_id_chap10_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[3])->where('course_id',$course_id)->first();
     $doc_id_chap10_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[4])->where('course_id',$course_id)->first();
 
-   return view('asesrar.admin_view_document',['file'=>$file,'data'=>$data],compact('course_id','doc_id1','doc_id2','doc_id3','doc_id4','doc_id5','doc_id6','doc_id_chap2_1','doc_id_chap2_2','doc_id_chap2_3','doc_id_chap2_4','doc_id_chap2_5','doc_id_chap2_6','doc_id_chap3_1',
+
+
+
+   return view('asesrar.document_report_verified_by_assessor',['file'=>$file,'data'=>$data],compact('course_id','doc_id1','doc_id2','doc_id3','doc_id4','doc_id5','doc_id6','doc_id_chap2_1','doc_id_chap2_2','doc_id_chap2_3','doc_id_chap2_4','doc_id_chap2_5','doc_id_chap2_6','doc_id_chap3_1',
         'doc_id_chap4_1','doc_id_chap4_2','doc_id_chap4_3','doc_id_chap4_4','doc_id_chap4_5','doc_id_chap4_6','doc_id_chap5_1','doc_id_chap5_2','doc_id_chap5_3','doc_id_chap6_1','doc_id_chap6_2','doc_id_chap6_3','doc_id_chap7_1','doc_id_chap7_2','doc_id_chap7_3','doc_id_chap7_4','doc_id_chap7_5','doc_id_chap7_6','doc_id_chap8_1','doc_id_chap8_2','doc_id_chap8_3','doc_id_chap8_4','doc_id_chap8_5','doc_id_chap8_6','doc_id_chap9_1','doc_id_chap9_2','doc_id_chap10_1','doc_id_chap10_2','doc_id_chap10_3','doc_id_chap10_4','check_admin'))->with('success', 'Documents Update Successfully');
-   
-   
+ 
+}
+
+
+public function admin_view_document($id,$course_id)
+{
+    //return $course_id;
+    $application_id=$id;
+     $course_id=$course_id;
+
+    $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',1)->first();
+    
+    //Comments
+
 
     
+    // dd(dDecrypt($id));
+    $data =ApplicationPayment::whereapplication_id($id)->get();
+    $file =ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
+    $doc_id1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[1])->where('course_id',$course_id)->first();
+    // dd($doc_id1);
+    
+    //return __('arrayfile.document_doc_id_chap1')[2];
+    $doc_id2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[2])->where('course_id',$course_id)->first();
+    $doc_id3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[3])->where('course_id',$course_id)->first();
+    $doc_id4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[4])->where('course_id',$course_id)->first();
+    $doc_id5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[5])->where('course_id',$course_id)->first();
+    $doc_id6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap2_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap2_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap2_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[3])->where('course_id',$course_id)->first();
+    $doc_id_chap2_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap2_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap2_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[6])->where('course_id',$course_id)->first();
+    
+    
+    $doc_id_chap3_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap3')[1])->where('course_id',$course_id)->first();
+
+    $doc_id_chap4_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[1])->where('course_id',$course_id)->first();
+
+    $doc_id_chap4_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap4_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[3])->where('course_id',$course_id)->first();
+    $doc_id_chap4_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap4_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap4_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap5_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap5')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap5_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap5')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap5_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap5')[3])->where('course_id',$course_id)->first();
+
+    $doc_id_chap6_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap6')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap6_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap6')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap6_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap6')[3])->where('course_id',$course_id)->first();
+
+    $doc_id_chap7_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap7_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap7_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[3])->where('course_id',$course_id)->first();
+     $doc_id_chap7_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap7_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap7_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap8_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap8_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap8_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[3])->where('course_id',$course_id)->first();
+     $doc_id_chap8_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap8_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap8_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap9_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap9')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap9_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap9')[2])->where('course_id',$course_id)->first();
+
+    $doc_id_chap10_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap10_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap10_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[3])->where('course_id',$course_id)->first();
+    $doc_id_chap10_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[4])->where('course_id',$course_id)->first();
+
+
+
+
+   return view('asesrar.admin_view_document',['file'=>$file,'data'=>$data],compact('application_id','course_id','doc_id1','doc_id2','doc_id3','doc_id4','doc_id5','doc_id6','doc_id_chap2_1','doc_id_chap2_2','doc_id_chap2_3','doc_id_chap2_4','doc_id_chap2_5','doc_id_chap2_6','doc_id_chap3_1',
+        'doc_id_chap4_1','doc_id_chap4_2','doc_id_chap4_3','doc_id_chap4_4','doc_id_chap4_5','doc_id_chap4_6','doc_id_chap5_1','doc_id_chap5_2','doc_id_chap5_3','doc_id_chap6_1','doc_id_chap6_2','doc_id_chap6_3','doc_id_chap7_1','doc_id_chap7_2','doc_id_chap7_3','doc_id_chap7_4','doc_id_chap7_5','doc_id_chap7_6','doc_id_chap8_1','doc_id_chap8_2','doc_id_chap8_3','doc_id_chap8_4','doc_id_chap8_5','doc_id_chap8_6','doc_id_chap9_1','doc_id_chap9_2','doc_id_chap10_1','doc_id_chap10_2','doc_id_chap10_3','doc_id_chap10_4','check_admin'))->with('success', 'Documents Update Successfully');
+ 
 }
 
 
@@ -1373,6 +1458,12 @@ public function show_comment($doc_id)
 {
    $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
     return view('asesrar.show-comment',compact('comment'));
+}
+
+public function document_comment_admin_assessor($course_id)
+{
+    $comment=DocumentReportVerified::orderby('id','Desc')->where('course_id',$course_id)->get();
+    return view('asesrar.show-comment-accr-admin',compact('comment'));
 }
 
  public function add_courses(Request $request)
@@ -1432,30 +1523,34 @@ public function show_comment($doc_id)
 
  public function view_doc($doc_code,$id,$doc_id,$course_id)
 {   
-    $id= $id;
+    $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
     $doc_latest_record_comment=DocComment::orderby('id','desc')->where('doc_id',$doc_id)->count();
 
        //$doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
    
 
-    return view('asesrar.view-doc-with-comment',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code],compact('course_id'));
+    return view('asesrar.view-doc-with-comment',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code,'comment'=>$comment],compact('course_id'));
 
 }
 
  public function admin_view_doc($doc_code,$id,$doc_id,$course_id)
 {   
-    $id= $id;
+    $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
+
     $doc_latest_record_comment=DocComment::orderby('id','desc')->where('doc_id',$doc_id)->count();
 
        //$doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
    
 
-    return view('asesrar.view-doc-with-comment-admin',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code],compact('course_id'));
+    return view('asesrar.view-doc-with-comment-admin',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code, 'comment'=>$comment],compact('course_id'));
 
 }
 
 public function acc_doc_comments(Request $request)
-{
+{   
+    /*$this->validate($request, [
+            'status' => 'required',
+        ]);*/   
     //return $request->all();
     //return $request->course_id;
     $login_id=Auth::user()->role;
@@ -1468,6 +1563,7 @@ public function acc_doc_comments(Request $request)
            $comment->status=$request->status;
            $comment->comments=$request->doc_comment;
            $comment->course_id=$request->course_id;
+           $comment->user_id=Auth::user()->id;
            $comment->save();
     }
     elseif($login_id==1)
@@ -1478,6 +1574,7 @@ public function acc_doc_comments(Request $request)
            $comment->status=$request->status;
            $comment->comments=$request->doc_comment;
            $comment->course_id=$request->course_id;
+           $comment->user_id=Auth::user()->id;
            $comment->save();
     }
    
@@ -1501,27 +1598,45 @@ public function document_report_by_admin($course_id)
 
 public function doc_to_admin_sumit(Request $request)
 {  
+   $finalcomment=new DocumentReportVerified;
+   $finalcomment->user_id=Auth::user()->id;
+   $finalcomment->comment_by_assessor=$request->doc_admin_comment;
+   $finalcomment->course_id=$request->course_id;
+   $finalcomment->save();
    
    $course_id=$request->course_id;
    $doc_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->first();
    $doc_admin->doc_admin_comment=$request->doc_admin_comment;
    $doc_admin->send_to_admin=1;
    $doc_admin->save();
+
+
    return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
 
 }
 
 public function document_report_by_admin_submit(Request $request)
 {  
-   //dd("yes");
+    //return $request->doc_admin_comment;
+   //dd("ysses");
+
+   $finalcomment=new DocumentReportVerified;
+   $finalcomment->user_id=Auth::user()->id;
+   $finalcomment->comment_by_assessor=$request->doc_admin_comment;
+   $finalcomment->course_id=$request->course_id;
+   $finalcomment->save();
+
+
    $course_id=$request->course_id;
    $doc_record_status=DocComment::where('status',3)->where('course_id',$course_id)->get();
 
    foreach($doc_record_status as $doc_status)
    {
+   
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
+       $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
 
       
@@ -1531,9 +1646,11 @@ public function document_report_by_admin_submit(Request $request)
 
    foreach($doc_record_status as $doc_status)
    {
+    
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
+       $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
 
       

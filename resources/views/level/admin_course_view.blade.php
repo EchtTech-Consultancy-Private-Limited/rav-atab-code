@@ -442,6 +442,23 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Payment Screenshot</strong></label><br>
+                                             <!--    <label>{{ $ApplicationPayment->payment_details_file ?? '' }}
+                                                   </label> -->
+                                                
+                                                @if(isset($ApplicationPayment->payment_details_file))
+                                                <a target="_blank" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}">
+                                                <img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" style="width:100px;height:70px;">
+                                                 </a>
+                                                 @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
