@@ -30,7 +30,7 @@ class AdminController extends Controller
     {
       //$data = user::where('role','1')->orderBy('id','DESC')->get();
 
-      $data = user::where('role','1')->orderBy('id','DESC')->whereNotIn('email', ['superadmin@yopmail.com'])->get();
+      $data = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', [97])->get();
 
      
       return view('user.index',['data'=> $data]);

@@ -64,7 +64,7 @@
                 </ul>
             </li>
 
-            <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''; }}" >
+            <!-- <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''; }}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>
                     <span>My Availability</span>
@@ -113,9 +113,9 @@
                     <span>Grievance</span>
                 </a>
             </li>
+ -->
 
-
-            <li>
+         <!--    <li>
                 <a href="#" onClick="return false;">
                     <i data-feather="message-circle"></i>
                     <span>Feedback</span>
@@ -127,17 +127,15 @@
                     <i data-feather="message-circle"></i>
                     <span>Remark</span>
                 </a>
-            </li>
+            </li> -->
 
 
-            <li>
+           <!--  <li>
                 <a href="{{ url('/view-faqs') }}" class="{{ Request::is('view-faqs') ? 'active' : '' }}">
                     <i data-feather="file-text"></i>
                     <span>FAQs</span>
                 </a>
-            </li>
-
-
+            </li> -->
         </ul>
     </div>
     <!-- #Menu -->

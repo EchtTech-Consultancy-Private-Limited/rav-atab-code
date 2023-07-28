@@ -208,9 +208,7 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Address<span class="text-danger">*</span></label>
-                                                <textarea cols="15" rows="2" name="address" id="address" class="form-control capitalize"
-                                                    value="{{ old('address') }}" placeholder="Street Address">
-                                          </textarea>
+                                                <textarea cols="15" rows="2" name="address" id="address" class="form-control capitalize" value="{{ old('address') }}" placeholder="Street Address"></textarea>
                                             </div>
 
                                             <label for="address" id="address-error" class="error">
@@ -492,7 +490,7 @@
                                                 <option value="4" {{ old('role') == '4' ? 'selected' : '' }}>
                                                     Professional</option>
                                                 <option value="5" {{ old('role') == '5' ? 'selected' : '' }}>
-                                                    Secrete</option>
+                                                    Secretariat</option>
                                             </select>
                                         </div>
 

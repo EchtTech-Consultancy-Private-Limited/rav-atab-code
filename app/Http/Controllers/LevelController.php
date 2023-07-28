@@ -9,6 +9,7 @@ use App\Models\ApplicationCourse;
 use App\Models\ApplicationPayment;
 use App\Models\ApplicationDocument;
 use App\Models\LevelInformation;
+use App\Models\DocumentReportVerified;
 use App\Models\User;
 use App\Models\Faq;
 use Illuminate\Support\Facades\Cookie;
@@ -18,6 +19,21 @@ use File;
 use DB;
 use Mail;
 use App\Mail\SendAcknowledgment;
+use App\Mail\AdmintoAssessorSingleFinalMail;
+use App\Mail\assessorAdminFinalApplicationMail;
+use App\Mail\adminSingleDocumentMail;
+
+use App\Mail\uploadDocumentFirstMail;
+
+use App\Mail\tpAdminApplicationmail;
+
+use App\Mail\assessorFinalApplicationMail;
+use App\Mail\assessorToself;
+use App\Mail\assessorSingleAdminFinalApplicationMail;
+use App\Mail\assessorSingleFinalMail;
+
+use App\Mail\tpApplicationmail;
+
 use App\Models\Add_Document;
 use App\Models\DocComment;
 use App\Mail\paymentSuccessMail;
@@ -944,10 +960,7 @@ public function newapplication()
 
   public function new_application_payment(Request $request)
   {
-    
-      
-
-        $this->validate($request, [
+     $this->validate($request, [
             'payment_details_file' => 'mimes:jpeg,png,jpg,gif,svg',
             
             ]);
@@ -975,16 +988,17 @@ public function newapplication()
 
             //mail send
             $userEmail = 'superadmin@yopmail.com';
+            $adminEmail = 'admin@yopmail.com';
 
             //Mail sending scripts starts here
             $paymentMail = [
-            'title' =>'Course Payment successfully Done!!!!',
+            'title' =>'Traing Provider Ctreate a New Application. and Course Payment Successfully Done!!!!',
             'body' => ''
             ];
             $paymentid=$request->Application_id;
             $userid=Auth::user()->firstname;
 
-            Mail::to($userEmail)->send(new paymentSuccessMail($paymentMail,$paymentid,$userid));
+            Mail::to([$userEmail,$adminEmail])->send(new paymentSuccessMail($paymentMail,$paymentid,$userid));
             //Mail sending script ends here
 
   if($request->level_id =='1')
@@ -1287,8 +1301,7 @@ public function accr_upload_document($id,$course_id)
 
 }
 
-
-public function admin_view_document($id,$course_id)
+public function document_report_verified_by_assessor($id,$course_id)
 {
     //return $course_id;
     $application_id=$id;
@@ -1296,13 +1309,16 @@ public function admin_view_document($id,$course_id)
 
     $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',1)->first();
     
+    //Comments
+
+
     
     // dd(dDecrypt($id));
     $data =ApplicationPayment::whereapplication_id($id)->get();
     $file =ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
     $doc_id1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[1])->where('course_id',$course_id)->first();
-   // dd($doc_id1);
+    // dd($doc_id1);
     
     //return __('arrayfile.document_doc_id_chap1')[2];
     $doc_id2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[2])->where('course_id',$course_id)->first();
@@ -1359,13 +1375,95 @@ public function admin_view_document($id,$course_id)
     $doc_id_chap10_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[3])->where('course_id',$course_id)->first();
     $doc_id_chap10_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[4])->where('course_id',$course_id)->first();
 
-   return view('asesrar.admin_view_document',['file'=>$file,'data'=>$data],compact('course_id','doc_id1','doc_id2','doc_id3','doc_id4','doc_id5','doc_id6','doc_id_chap2_1','doc_id_chap2_2','doc_id_chap2_3','doc_id_chap2_4','doc_id_chap2_5','doc_id_chap2_6','doc_id_chap3_1',
+
+
+
+   return view('asesrar.document_report_verified_by_assessor',['file'=>$file,'data'=>$data],compact('course_id','doc_id1','doc_id2','doc_id3','doc_id4','doc_id5','doc_id6','doc_id_chap2_1','doc_id_chap2_2','doc_id_chap2_3','doc_id_chap2_4','doc_id_chap2_5','doc_id_chap2_6','doc_id_chap3_1',
         'doc_id_chap4_1','doc_id_chap4_2','doc_id_chap4_3','doc_id_chap4_4','doc_id_chap4_5','doc_id_chap4_6','doc_id_chap5_1','doc_id_chap5_2','doc_id_chap5_3','doc_id_chap6_1','doc_id_chap6_2','doc_id_chap6_3','doc_id_chap7_1','doc_id_chap7_2','doc_id_chap7_3','doc_id_chap7_4','doc_id_chap7_5','doc_id_chap7_6','doc_id_chap8_1','doc_id_chap8_2','doc_id_chap8_3','doc_id_chap8_4','doc_id_chap8_5','doc_id_chap8_6','doc_id_chap9_1','doc_id_chap9_2','doc_id_chap10_1','doc_id_chap10_2','doc_id_chap10_3','doc_id_chap10_4','check_admin'))->with('success', 'Documents Update Successfully');
-   
-   
+ 
+}
+
+
+public function admin_view_document($id,$course_id)
+{
+    //return $course_id;
+    $application_id=$id;
+     $course_id=$course_id;
+
+    $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',1)->first();
+    
+    //Comments
+
 
     
+    // dd(dDecrypt($id));
+    $data =ApplicationPayment::whereapplication_id($id)->get();
+    $file =ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
+    $doc_id1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[1])->where('course_id',$course_id)->first();
+    // dd($doc_id1);
+    
+    //return __('arrayfile.document_doc_id_chap1')[2];
+    $doc_id2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[2])->where('course_id',$course_id)->first();
+    $doc_id3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[3])->where('course_id',$course_id)->first();
+    $doc_id4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[4])->where('course_id',$course_id)->first();
+    $doc_id5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[5])->where('course_id',$course_id)->first();
+    $doc_id6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap2_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap2_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap2_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[3])->where('course_id',$course_id)->first();
+    $doc_id_chap2_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap2_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap2_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap2')[6])->where('course_id',$course_id)->first();
+    
+    
+    $doc_id_chap3_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap3')[1])->where('course_id',$course_id)->first();
+
+    $doc_id_chap4_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[1])->where('course_id',$course_id)->first();
+
+    $doc_id_chap4_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap4_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[3])->where('course_id',$course_id)->first();
+    $doc_id_chap4_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap4_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap4_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap4')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap5_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap5')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap5_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap5')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap5_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap5')[3])->where('course_id',$course_id)->first();
+
+    $doc_id_chap6_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap6')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap6_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap6')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap6_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap6')[3])->where('course_id',$course_id)->first();
+
+    $doc_id_chap7_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap7_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap7_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[3])->where('course_id',$course_id)->first();
+     $doc_id_chap7_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap7_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap7_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap7')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap8_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap8_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap8_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[3])->where('course_id',$course_id)->first();
+     $doc_id_chap8_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[4])->where('course_id',$course_id)->first();
+    $doc_id_chap8_5=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[5])->where('course_id',$course_id)->first();
+    $doc_id_chap8_6=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap8')[6])->where('course_id',$course_id)->first();
+
+    $doc_id_chap9_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap9')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap9_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap9')[2])->where('course_id',$course_id)->first();
+
+    $doc_id_chap10_1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[1])->where('course_id',$course_id)->first();
+    $doc_id_chap10_2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[2])->where('course_id',$course_id)->first();
+    $doc_id_chap10_3=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[3])->where('course_id',$course_id)->first();
+    $doc_id_chap10_4=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap10')[4])->where('course_id',$course_id)->first();
+
+
+
+
+   return view('asesrar.admin_view_document',['file'=>$file,'data'=>$data],compact('application_id','course_id','doc_id1','doc_id2','doc_id3','doc_id4','doc_id5','doc_id6','doc_id_chap2_1','doc_id_chap2_2','doc_id_chap2_3','doc_id_chap2_4','doc_id_chap2_5','doc_id_chap2_6','doc_id_chap3_1',
+        'doc_id_chap4_1','doc_id_chap4_2','doc_id_chap4_3','doc_id_chap4_4','doc_id_chap4_5','doc_id_chap4_6','doc_id_chap5_1','doc_id_chap5_2','doc_id_chap5_3','doc_id_chap6_1','doc_id_chap6_2','doc_id_chap6_3','doc_id_chap7_1','doc_id_chap7_2','doc_id_chap7_3','doc_id_chap7_4','doc_id_chap7_5','doc_id_chap7_6','doc_id_chap8_1','doc_id_chap8_2','doc_id_chap8_3','doc_id_chap8_4','doc_id_chap8_5','doc_id_chap8_6','doc_id_chap9_1','doc_id_chap9_2','doc_id_chap10_1','doc_id_chap10_2','doc_id_chap10_3','doc_id_chap10_4','check_admin'))->with('success', 'Documents Update Successfully');
+ 
 }
 
 
@@ -1373,6 +1471,12 @@ public function show_comment($doc_id)
 {
    $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
     return view('asesrar.show-comment',compact('comment'));
+}
+
+public function document_comment_admin_assessor($course_id)
+{
+    $comment=DocumentReportVerified::orderby('id','Desc')->where('course_id',$course_id)->get();
+    return view('asesrar.show-comment-accr-admin',compact('comment'));
 }
 
  public function add_courses(Request $request)
@@ -1425,6 +1529,18 @@ public function show_comment($doc_id)
     }
    
     $course->save();
+       $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+
+         $adminEmail = $admin->email;
+         $superadminEmail="superadmin@yopmail.com";
+         $documentupload = [
+            'title' =>'You Have Received a Report of this Application from Assessor Successfully!!!!',
+            
+            ];
+     
+
+            Mail::to([$superadminEmail,$adminEmail])->send(new uploadDocumentFirstMail($documentupload));
+
   
     return redirect("$request->previous_url")->with('success', 'Documents Update Successfully');
     //return response()->json("Course Added Successfully");
@@ -1432,35 +1548,49 @@ public function show_comment($doc_id)
 
  public function view_doc($doc_code,$id,$doc_id,$course_id)
 {   
-    $id= $id;
+    $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
     $doc_latest_record_comment=DocComment::orderby('id','desc')->where('doc_id',$doc_id)->count();
 
        //$doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
    
 
-    return view('asesrar.view-doc-with-comment',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code],compact('course_id'));
+    return view('asesrar.view-doc-with-comment',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code,'comment'=>$comment],compact('course_id'));
 
 }
 
  public function admin_view_doc($doc_code,$id,$doc_id,$course_id)
 {   
-    $id= $id;
+    $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
+
     $doc_latest_record_comment=DocComment::orderby('id','desc')->where('doc_id',$doc_id)->count();
 
        //$doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
    
 
-    return view('asesrar.view-doc-with-comment-admin',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code],compact('course_id'));
+    return view('asesrar.view-doc-with-comment-admin',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code, 'comment'=>$comment],compact('course_id'));
 
 }
 
 public function acc_doc_comments(Request $request)
-{
+{   
+
+    //dd("yesss");
+    /*$this->validate($request, [
+            'status' => 'required',
+        ]);*/   
     //return $request->all();
     //return $request->course_id;
     $login_id=Auth::user()->role;
     if($login_id==3)
     {
+            $request->doc_code;
+
+            $document=Add_Document::where('doc_id',$request->doc_code)->first();
+            $document->assessor_id=Auth::user()->id;
+            $document->save();
+            
+
+          
 
            $comment=new DocComment;
            $comment->doc_id=$request->doc_id;
@@ -1468,7 +1598,44 @@ public function acc_doc_comments(Request $request)
            $comment->status=$request->status;
            $comment->comments=$request->doc_comment;
            $comment->course_id=$request->course_id;
+           $comment->user_id=Auth::user()->id;
            $comment->save();
+           
+           if($request->status==1)
+           {
+             $mailstatus="Approved";
+           }
+           else
+           {
+              $mailstatus="Not Approved";
+           }
+            //mail send
+            $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+            $adminEmail = $admin->email;
+            $superadminEmail = 'superadmin@yopmail.com';
+            $asses_email = Auth::user()->email;
+           
+
+            //Mail sending scripts starts here
+            $assessorToAdminSingle = [
+            'title' =>'You Have Received a Report of this Application from Assessor Successfully!!!!',
+            'body' => $request->sec_email,
+            'status' =>$mailstatus,
+            ];
+            $application_id=$request->application_id;
+            $username="Auth::user()->firstname TP Name";
+
+            Mail::to([$superadminEmail,$adminEmail])->send(new assessorSingleAdminFinalApplicationMail($assessorToAdminSingle,$application_id));
+
+            $assessorToSingleApplication = [
+            'title' =>'You Have Send a Report of this Application to Admin Successfully!!!!',
+            
+            'status' =>$mailstatus,
+            ];
+
+           Mail::to([$asses_email])->send(new assessorSingleFinalMail($assessorToSingleApplication,$application_id));
+            //Mail sending script ends here
+
     }
     elseif($login_id==1)
     {      //return $request->course_id;
@@ -1478,7 +1645,63 @@ public function acc_doc_comments(Request $request)
            $comment->status=$request->status;
            $comment->comments=$request->doc_comment;
            $comment->course_id=$request->course_id;
+           $comment->user_id=Auth::user()->id;
            $comment->save();
+
+           //mail send
+           $document=Add_Document::where('doc_id',$request->doc_code)->first();
+           $user=User::where('id',$document->assessor_id)->first();
+
+           if($user)
+           {
+              $asses_email=$user->email;  
+           }
+           else
+           {
+             $asses_email="vishal@yopmail.com"; 
+           }
+
+          
+            
+
+           $user=ApplicationCourse::where('id',$request->course_id)->first();
+
+           // $user->user_id;
+
+           if($request->status==1)
+           {
+             $mailstatus="Approved";
+           }
+           else
+           {
+              $mailstatus="Not Approved";
+           }
+            $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+
+            $adminEmail = $admin->email;
+            $superadminEmail = 'superadmin@yopmail.com';
+           /* $dasses_email = "my@yopmail.com";*/
+           
+
+            //Mail sending scripts starts here
+            $AdminSingleDocumentCommentApplication = [
+            'title' =>' You Have Send a Report of this Application to Assessor Successfully!!!!',
+            'status' =>$mailstatus,
+            ];
+            //$application_id=$request->application_id;
+            //$username="Auth::user()->firstname TP Name";
+
+            Mail::to([$superadminEmail,$adminEmail])->send(new adminSingleDocumentMail($AdminSingleDocumentCommentApplication));
+
+            $assessorToSingleApplication = [
+            'title' =>'You Have Send a Report of this Application to Admin Successfully!!!!',
+            
+            'status' =>$mailstatus,
+            ];
+
+           Mail::to([$asses_email])->send(new AdmintoAssessorSingleFinalMail($assessorToSingleApplication));
+            //Mail sending script ends here
+
     }
    
 
@@ -1501,27 +1724,71 @@ public function document_report_by_admin($course_id)
 
 public function doc_to_admin_sumit(Request $request)
 {  
+    //dd("yesss");
+   $finalcomment=new DocumentReportVerified;
+   $finalcomment->user_id=Auth::user()->id;
+   $finalcomment->comment_by_assessor=$request->doc_admin_comment;
+   $finalcomment->course_id=$request->course_id;
+   $finalcomment->save();
    
    $course_id=$request->course_id;
    $doc_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->first();
    $doc_admin->doc_admin_comment=$request->doc_admin_comment;
    $doc_admin->send_to_admin=1;
    $doc_admin->save();
+ 
+   //mail send
+    $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+    $adminEmail = $admin->email;
+    $superadminEmail = 'superadmin@yopmail.com';
+    $asses_email = Auth::user()->email;
+   
+
+    //Mail sending scripts starts here
+    $assessorToAdmin = [
+    'title' =>'You Have Received a Final Report of this Application from Assessor Successfully!!!!',
+    'body' => $request->sec_email,
+    ];
+    $application_id=$request->application_id;
+    $username="Auth::user()->firstname TP Name";
+
+    Mail::to([$superadminEmail,$adminEmail])->send(new assessorAdminFinalApplicationMail($assessorToAdmin,$application_id));
+
+    $assessorToself = [
+    'title' =>'You Have Send a Final Report of this Application to Admin Successfully!!!!',
+    'body' => ''
+    ];
+
+    Mail::to([$asses_email])->send(new assessorFinalApplicationMail($assessorToself,$application_id));
+    //Mail sending script ends here
+
+
+
    return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
 
 }
 
 public function document_report_by_admin_submit(Request $request)
 {  
-   //dd("yes");
+    //return $request->doc_admin_comment;
+   //dd("ysses");
+
+   $finalcomment=new DocumentReportVerified;
+   $finalcomment->user_id=Auth::user()->id;
+   $finalcomment->comment_by_assessor=$request->doc_admin_comment;
+   $finalcomment->course_id=$request->course_id;
+   $finalcomment->save();
+
    $course_id=$request->course_id;
    $doc_record_status=DocComment::where('status',3)->where('course_id',$course_id)->get();
 
    foreach($doc_record_status as $doc_status)
    {
+   
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
+       $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
 
       
@@ -1531,9 +1798,11 @@ public function document_report_by_admin_submit(Request $request)
 
    foreach($doc_record_status as $doc_status)
    {
+    
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
+       $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
 
       
@@ -1544,7 +1813,61 @@ public function document_report_by_admin_submit(Request $request)
    $doc_admin->doc_admin_comment=$request->doc_admin_comment;
    $doc_admin->send_to_admin=1;
    $doc_admin->save();*/
+
+    //mail send
+    $superadminEmail = 'superadmin@yopmail.com';
+    $adminEmail = 'admin@yopmail.com';
+    /*$asses_email = $request->sec_email;*/
+
+     $request->course_id;
+       $document_data=DocComment::where('course_id',$request->course_id)->first();
+     if($document_data)
+     {  
+        $doc_code=$document_data->doc_code;
+        $add_document=Add_Document::where('doc_id',$doc_code)->first();
+        $data=User::where('id',$add_document->assessor_id)->first();
+        $assessor_email=$data->email;
+     }
+
+    
+     $course=ApplicationCourse::where('id',$request->course_id)->first();
+    
+     if($course)
+     {
+         $user_id = $course->user_id;
+         $data=User::where('id',$user_id)->first();
+         $tp_email=$data->email;
+
+     }
+     else
+     {
+        $tp_email = "demo1@gmail.com@yopmail.com";
+
+     }
+    
+    //Mail sending scripts starts here
+    $tpadminMail = [
+    'title' =>'Application Final Report Send Successfully!!!!',
+    'body' => $request->sec_email,
+    ];
+    $application_id=$request->application_id;
+    $username="Auth::user()->firstname TP Name";
+
+    Mail::to([$superadminEmail,$adminEmail])->send(new tpAdminApplicationmail($tpadminMail,$application_id,$username));
+
+    $tpMail = [
+    'title' =>'You Have Received a Final Report of this Application from Admin Successfully!!!!',
+    'body' => ''
+    ];
+
+    Mail::to([$tp_email,$assessor_email])->send(new tpApplicationmail($tpMail,$application_id,$username));
+    //Mail sending script ends here
+
    return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
+
+
+
+   
 
 }
 

@@ -209,11 +209,7 @@
                                             <div class="form-line">
                                                 <label>Address<span class="text-danger">*</span></label>
                                                 <textarea cols="15" rows="2" name="address" id="address" class="form-control capitalize"
-                                                    placeholder="Street Address">
-
-                                          {{ $data->address }}
-
-                                        </textarea>
+                                                    placeholder="Street Address">{{ $data->address }}</textarea>
                                             </div>
 
                                             <label for="address" id="address-error" class="error">

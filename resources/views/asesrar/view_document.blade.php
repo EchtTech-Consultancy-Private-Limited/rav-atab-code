@@ -129,11 +129,11 @@ td.text-justify {
                            
                         </ul>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                         <ul class="breadcrumb breadcrumb-style ">
                              <a href="{{ url()->previous() }}" type="button" class="btn btn-primary" style="float:right;">Back To Documents</a>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -246,7 +246,11 @@ td.text-justify {
 
                                           <div class="header">
                                              <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
-                                             <a href="{{ url('document-report-toadmin/'.$course_id) }}" class="btn btn-primary">Send To Admin</a>
+
+                                             <a href="{{ url('document-report-toadmin/'.$course_id) }}" class="btn btn-primary">Send Document To Admin</a>
+
+                                             <a style="float:right;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">Assessor & Admin Conversation</a>
+
                                           </div>
                                             @if ($message = Session::get('success'))
                                                 <div class="alert alert-success">
@@ -266,7 +270,7 @@ td.text-justify {
                                                             <th class="center">Objective criteria</th>
                                                            <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                                             <th class="center">View Documents</th>
-                                                            <th>Comments</th>
+                                                           <!--  <th>Comments</th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
@@ -288,19 +292,14 @@ td.text-justify {
                                                                    @if(isset($doc_id1->doc_file))
                                                                     <td>
 
- <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc_id1->doc_file.'/'.$doc_id1->id.'/'.$course_id) }}"  class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
+                                                                <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc_id1->doc_file.'/'.$doc_id1->id.'/'.$course_id) }}"  class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                    <td>
-                                                                          <!-- <a href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc_id1->doc_file.'/'.$doc_id1->id) }}"
-                                                                        class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc">View Documents</a> -->
+                                                                    <!-- <td>
+                                                                         <a href="{{ url('show-comment/'.$doc_id1->id) }}" 
+                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a> 
 
-                                                                        
-
-                                                                        <a href="{{ url('show-comment/'.$doc_id1->id) }}" 
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                     
                                                                     <!-- <td>
@@ -322,15 +321,15 @@ td.text-justify {
                                                                      @if(isset($doc_id2->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[2].'/'.$doc_id2->doc_file.'/'.$doc_id2->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[2].'/'.$doc_id2->doc_file.'/'.$doc_id2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
 
                                                                     
@@ -342,15 +341,15 @@ td.text-justify {
                                                                      @if(isset($doc_id3->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[3].'/'.$doc_id3->doc_file.'/'.$doc_id3->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[3].'/'.$doc_id3->doc_file.'/'.$doc_id3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>                                                              
                                                                 <tr class="@if(isset($doc_id4->doc_file)) highlight   @if(get_doc_code($doc_id4->id)==__('arrayfile.document_doc_id_chap1')[4] && get_doccomment_status($doc_id4->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id4->id)==__('arrayfile.document_doc_id_chap1')[4] && get_doccomment_status($doc_id4->id)==0) highlight_nc @endif @endif">
@@ -359,15 +358,15 @@ td.text-justify {
                                                                     @if(isset($doc_id4->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[4].'/'.$doc_id4->doc_file.'/'.$doc_id4->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[4].'/'.$doc_id4->doc_file.'/'.$doc_id4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -377,15 +376,15 @@ td.text-justify {
                                                                      @if(isset($doc_id5->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[5].'/'.$doc_id5->doc_file.'/'.$doc_id5->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[5].'/'.$doc_id5->doc_file.'/'.$doc_id5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -395,15 +394,15 @@ td.text-justify {
                                                                      @if(isset($doc_id6->doc_file))
                                                                    <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[6].'/'.$doc_id6->doc_file.'/'.$doc_id6->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[6].'/'.$doc_id6->doc_file.'/'.$doc_id6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -426,15 +425,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap2_1->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[1].'/'.$doc_id_chap2_1->doc_file.'/'.$doc_id_chap2_1->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[1].'/'.$doc_id_chap2_1->doc_file.'/'.$doc_id_chap2_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                            
                                                                 </tr>
@@ -447,15 +446,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap2_2->doc_file))
                                                                      <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[2].'/'.$doc_id_chap2_2->doc_file.'/'.$doc_id_chap2_2->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[2].'/'.$doc_id_chap2_2->doc_file.'/'.$doc_id_chap2_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -467,15 +466,15 @@ td.text-justify {
                                                                    @if(isset($doc_id_chap2_3->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[3].'/'.$doc_id_chap2_3->doc_file.'/'.$doc_id_chap2_3->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[3].'/'.$doc_id_chap2_3->doc_file.'/'.$doc_id_chap2_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -487,15 +486,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap2_4->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[4].'/'.$doc_id_chap2_4->doc_file.'/'.$doc_id_chap2_4->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[4].'/'.$doc_id_chap2_4->doc_file.'/'.$doc_id_chap2_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -510,17 +509,17 @@ td.text-justify {
                                                                    @if(isset($doc_id_chap2_5->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[5].'/'.$doc_id_chap2_5->doc_file.'/'.$doc_id_chap2_5->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[5].'/'.$doc_id_chap2_5->doc_file.'/'.$doc_id_chap2_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
                                                                     
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -532,15 +531,15 @@ td.text-justify {
                                                                    @if(isset($doc_id_chap2_6->doc_file))
                                                                     <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[6].'/'.$doc_id_chap2_6->doc_file.'/'.$doc_id_chap2_6->id) }}"
+                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[6].'/'.$doc_id_chap2_6->doc_file.'/'.$doc_id_chap2_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 </tr>
 
@@ -562,15 +561,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap3_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap3')[1].'/'.$doc_id_chap3_1->doc_file.'/'.$doc_id_chap3_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap3')[1].'/'.$doc_id_chap3_1->doc_file.'/'.$doc_id_chap3_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap3_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                     
                                                                 </tr>
@@ -593,15 +592,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap4_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[1].'/'.$doc_id_chap4_1->doc_file.'/'.$doc_id_chap4_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[1].'/'.$doc_id_chap4_1->doc_file.'/'.$doc_id_chap4_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 
                                                                     
@@ -616,15 +615,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap4_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[2].'/'.$doc_id_chap4_2->doc_file.'/'.$doc_id_chap4_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[2].'/'.$doc_id_chap4_2->doc_file.'/'.$doc_id_chap4_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                       
                                                                     
@@ -640,15 +639,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap4_3->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[3].'/'.$doc_id_chap4_3->doc_file.'/'.$doc_id_chap4_3->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[3].'/'.$doc_id_chap4_3->doc_file.'/'.$doc_id_chap4_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -662,15 +661,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap4_4->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[4].'/'.$doc_id_chap4_4->doc_file.'/'.$doc_id_chap4_4->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[4].'/'.$doc_id_chap4_4->doc_file.'/'.$doc_id_chap4_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -684,15 +683,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap4_5->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[5].'/'.$doc_id_chap4_5->doc_file.'/'.$doc_id_chap4_5->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[5].'/'.$doc_id_chap4_5->doc_file.'/'.$doc_id_chap4_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -706,15 +705,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap4_6->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[6].'/'.$doc_id_chap4_6->doc_file.'/'.$doc_id_chap4_6->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[6].'/'.$doc_id_chap4_6->doc_file.'/'.$doc_id_chap4_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -729,15 +728,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap4_7->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[7].'/'.$doc_id_chap4_7->doc_file.'/'.$doc_id_chap4_7->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[7].'/'.$doc_id_chap4_7->doc_file.'/'.$doc_id_chap4_7->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                   <!--   <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap4_7->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                     
                                                                 </tr>
@@ -761,15 +760,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap5_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[1].'/'.$doc_id_chap5_1->doc_file.'/'.$doc_id_chap5_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[1].'/'.$doc_id_chap5_1->doc_file.'/'.$doc_id_chap5_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                 <!--     <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap5_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -783,15 +782,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap5_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[2].'/'.$doc_id_chap5_2->doc_file.'/'.$doc_id_chap5_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[2].'/'.$doc_id_chap5_2->doc_file.'/'.$doc_id_chap5_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap5_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -805,15 +804,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap5_3->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[3].'/'.$doc_id_chap5_3->doc_file.'/'.$doc_id_chap5_3->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[3].'/'.$doc_id_chap5_3->doc_file.'/'.$doc_id_chap5_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap5_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                  
                                                                    
@@ -839,15 +838,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap6_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[1].'/'.$doc_id_chap6_1->doc_file.'/'.$doc_id_chap6_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[1].'/'.$doc_id_chap6_1->doc_file.'/'.$doc_id_chap6_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap6_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                               
                                                                    
@@ -862,15 +861,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap6_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[2].'/'.$doc_id_chap6_2->doc_file.'/'.$doc_id_chap6_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[2].'/'.$doc_id_chap6_2->doc_file.'/'.$doc_id_chap6_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap6_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                           
                                                                    
@@ -885,15 +884,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap6_3->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[3].'/'.$doc_id_chap6_3->doc_file.'/'.$doc_id_chap6_3->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[3].'/'.$doc_id_chap6_3->doc_file.'/'.$doc_id_chap6_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap6_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                    
@@ -919,15 +918,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap7_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[1].'/'.$doc_id_chap7_1->doc_file.'/'.$doc_id_chap7_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[1].'/'.$doc_id_chap7_1->doc_file.'/'.$doc_id_chap7_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -942,15 +941,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap7_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[2].'/'.$doc_id_chap7_2->doc_file.'/'.$doc_id_chap7_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[2].'/'.$doc_id_chap7_2->doc_file.'/'.$doc_id_chap7_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                  
                                                                 </tr>
@@ -964,15 +963,15 @@ td.text-justify {
                                                                  @if(isset($doc_id_chap7_3->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[3].'/'.$doc_id_chap7_3->doc_file.'/'.$doc_id_chap7_3->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[3].'/'.$doc_id_chap7_3->doc_file.'/'.$doc_id_chap7_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -987,15 +986,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap7_4->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[4].'/'.$doc_id_chap7_4->doc_file.'/'.$doc_id_chap7_4->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[4].'/'.$doc_id_chap7_4->doc_file.'/'.$doc_id_chap7_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1008,15 +1007,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap7_5->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[5].'/'.$doc_id_chap7_5->doc_file.'/'.$doc_id_chap7_5->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[5].'/'.$doc_id_chap7_5->doc_file.'/'.$doc_id_chap7_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1030,15 +1029,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap7_6->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[6].'/'.$doc_id_chap7_6->doc_file.'/'.$doc_id_chap7_6->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[6].'/'.$doc_id_chap7_6->doc_file.'/'.$doc_id_chap7_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap7_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1061,15 +1060,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap8_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[1].'/'.$doc_id_chap8_1->doc_file.'/'.$doc_id_chap8_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[1].'/'.$doc_id_chap8_1->doc_file.'/'.$doc_id_chap8_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                   <!--   <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                     
                                                                 </tr>
@@ -1083,15 +1082,15 @@ td.text-justify {
                                                                       @if(isset($doc_id_chap8_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[2].'/'.$doc_id_chap8_2->doc_file.'/'.$doc_id_chap8_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[2].'/'.$doc_id_chap8_2->doc_file.'/'.$doc_id_chap8_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                   <!--   <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1106,15 +1105,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap8_3->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[3].'/'.$doc_id_chap8_3->doc_file.'/'.$doc_id_chap8_3->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[3].'/'.$doc_id_chap8_3->doc_file.'/'.$doc_id_chap8_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1129,15 +1128,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap8_4->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[4].'/'.$doc_id_chap8_4->doc_file.'/'.$doc_id_chap8_4->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[4].'/'.$doc_id_chap8_4->doc_file.'/'.$doc_id_chap8_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1152,15 +1151,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap8_5->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[5].'/'.$doc_id_chap8_5->doc_file.'/'.$doc_id_chap8_5->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[5].'/'.$doc_id_chap8_5->doc_file.'/'.$doc_id_chap8_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_5->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1174,15 +1173,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap8_6->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[6].'/'.$doc_id_chap8_6->doc_file.'/'.$doc_id_chap8_6->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[6].'/'.$doc_id_chap8_6->doc_file.'/'.$doc_id_chap8_6->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap8_6->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1205,15 +1204,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap9_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[1].'/'.$doc_id_chap9_1->doc_file.'/'.$doc_id_chap9_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[1].'/'.$doc_id_chap9_1->doc_file.'/'.$doc_id_chap9_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap9_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                  
                                                                 </tr>
@@ -1227,15 +1226,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap9_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[2].'/'.$doc_id_chap9_2->doc_file.'/'.$doc_id_chap9_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[2].'/'.$doc_id_chap9_2->doc_file.'/'.$doc_id_chap9_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap9_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>
@@ -1258,15 +1257,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap10_1->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[1].'/'.$doc_id_chap10_1->doc_file.'/'.$doc_id_chap10_1->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[1].'/'.$doc_id_chap10_1->doc_file.'/'.$doc_id_chap10_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_1->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1280,15 +1279,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap10_2->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[2].'/'.$doc_id_chap10_2->doc_file.'/'.$doc_id_chap10_2->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[2].'/'.$doc_id_chap10_2->doc_file.'/'.$doc_id_chap10_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_2->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                   
                                                                 </tr>
@@ -1302,15 +1301,15 @@ td.text-justify {
                                                                      @if(isset($doc_id_chap10_3->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[3].'/'.$doc_id_chap10_3->doc_file.'/'.$doc_id_chap10_3->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[3].'/'.$doc_id_chap10_3->doc_file.'/'.$doc_id_chap10_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                    <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_3->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                 
                                                                 </tr>
@@ -1324,15 +1323,15 @@ td.text-justify {
                                                                     @if(isset($doc_id_chap10_4->doc_file))
                                                                     <td>
 
-                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[4].'/'.$doc_id_chap10_4->doc_file.'/'.$doc_id_chap10_4->id) }}"
+                                                                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap10')[4].'/'.$doc_id_chap10_4->doc_file.'/'.$doc_id_chap10_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
                                                                     </td>
 
-                                                                     <td>
+                                                                     <!-- <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap10_4->id) }}" 
                                                                         class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
 
-                                                                    </td>
+                                                                    </td> -->
                                                                     @endif
                                                                    
                                                                 </tr>

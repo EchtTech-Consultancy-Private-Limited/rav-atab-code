@@ -40,21 +40,21 @@
                 <li class="{{ (Request::is('admin-user') || Request::is('secrete-user') || Request::is('training-provider') || Request::is('assessor-user') )?'active':''; }}" || class="{{ Request::is('training-provider')?'active':''; }}" || class="{{ Request::is('assessor-user')?'active':''; }}"  >
                     <a href="#" onClick="return false;" class="menu-toggle">
                         <i data-feather="users"></i>
-                        <span>User management</span>
+                        <span>User Management</span>
                     </a>
                     <ul class="ml-menu">
 
                         <li  class="{{ Request::is('admin-user')?'active':''; }}" >
-                            <a  href="{{ url('/admin-user') }}">Admin User list</a>
+                            <a  href="{{ url('/admin-user') }}">Admin User List</a>
                         </li>
                         <li class="{{ Request::is('training-provider')?'active':''; }}">
-                            <a  href="{{ url('/training-provider') }}">Training Provider User list</a>
+                            <a  href="{{ url('/training-provider') }}">Training Provider User List</a>
                         </li>
                         <li class="{{ Request::is('assessor-user')?'active':''; }}">
-                            <a  href="{{ url('/assessor-user') }}">Assessor User list</a>
+                            <a  href="{{ url('/assessor-user') }}">Assessor User List</a>
                         </li>
                         <li class="{{ Request::is('secrete-user')?'active':''; }}">
-                            <a  href="{{ url('/secrete-user') }}">Secrate list</a>
+                            <a  href="{{ url('/secrete-user') }}">Secretariat User List</a>
                         </li>
 
 
