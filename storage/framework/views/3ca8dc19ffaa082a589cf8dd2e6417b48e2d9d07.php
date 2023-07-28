@@ -168,10 +168,26 @@
         });
     });
 </script>
-
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
 <script>
 
     $(document).ready(function(){
+        new DataTable('#DtTable', {
+            dom: 'RlBfrtip',
+            lengthMenu: [
+                [100, 25, 50, -1],
+                [100, 25, 50, 'All']
+            ],
+            buttons: [
+                    'csvHtml5','excelHtml5'
+                ],
+        });
+
     $("#Country").on('change',function(){
         $("#city").html('');
         $("#state").html('');
@@ -332,7 +348,11 @@ $("document").ready(function(){
         e.preventDefault();
         return false;
     });
-    </script>
+
+
+
+
+</script>
 
 
 

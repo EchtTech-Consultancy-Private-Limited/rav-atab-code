@@ -14,8 +14,17 @@ use App\Models\ApplicationDocument;
 use App\Models\DocumentType;
 use App\Models\ApplicationReport;
 use App\Models\asessor_application;
+
+use App\Mail\paymentSuccessMail;
+use App\Mail\secretariatapplicationmail;
+use App\Mail\secretariatadminapplicationmail;
+
+use App\Mail\assessoradminapplicationmail;
+use App\Mail\assessorapplicationmail;
+
 use App\Models\User;
 use App\Models\Event;
+use Mail;
 use DB;
 use Auth;
 use Carbon\Carbon;
@@ -46,7 +55,7 @@ class applicationController extends Controller
 
     public function Assigan_application(Request $request)
     {
-            
+       
    // return $request->application_id;   
     $value= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->get();
     if(count($value) > 0)
@@ -75,8 +84,11 @@ class applicationController extends Controller
     }else{
     $assessor_id=$request->assessor_id;
 
+    //dd("in out");
+
     for($i=0; $i<count($assessor_id); $i++)
-    {
+    { 
+       // dd("in loop");
 
         $data = new asessor_application();
         $data->assessor_id=$request->assessor_id[$i];
@@ -85,7 +97,32 @@ class applicationController extends Controller
         $data->assessment_type=$request->assessment_type;
         $data->due_date=$due_date = Carbon::now()->addDay(15);
         $data->save();
+
+           //mail send
+            $superadminEmail = 'superadmin@yopmail.com';
+            $adminEmail = 'admin@yopmail.com';
+            $asses_email = $request->sec_email;
+
+            //Mail sending scripts starts here
+            $adminapplicationsecretariatMail = [
+            'title' =>'Application Send Successfully!!!!',
+            'body' => $request->sec_email,
+            ];
+            $application_id=$request->application_id;
+            $username=Auth::user()->firstname;
+
+            Mail::to([$superadminEmail,$adminEmail])->send(new assessoradminapplicationmail($adminapplicationsecretariatMail,$application_id,$username));
+
+            $assessorapplicationMail = [
+            'title' =>'You Have Received a Application from Admin Successfully!!!!',
+            'body' => ''
+            ];
+
+            Mail::to([$asses_email])->send(new assessorapplicationmail($assessorapplicationMail,$application_id,$username));
+            //Mail sending script ends here
+
     }
+
     return  back()->with('sussess','Application has been successfully assigned to assessor');
 
   }
@@ -93,6 +130,7 @@ class applicationController extends Controller
 
   public function assigan_secretariat_application(Request $request)
     {
+      //  dd("yesssd");
     //return $request->all();   
     $value= DB::table('secretariat')->where('application_id','=',$request->application_id)->get();
     if(count($value) > 0)
@@ -121,6 +159,9 @@ class applicationController extends Controller
     }
     else{
    $secretariat_id=$request->secretariat_id;
+   //$secretariat_email=$request->sec_email;
+
+   //return $request->sec_email;
 
     for($i=0; $i<count($secretariat_id); $i++){
 
@@ -132,8 +173,34 @@ class applicationController extends Controller
         $data->due_date=$due_date = Carbon::now()->addDay(15);
         $data->save();
 
+            //mail send
+            $userEmail = 'superadmin@yopmail.com';
+            $adminEmail = $request->sec_email;
+
+            //Mail sending scripts starts here
+            $applicationsecretariatMail = [
+            'title' =>'This Application is  Assigned to You by Admin  Successfully!!!!',
+            'body' => ''
+            ];
+            $application_id=$request->application_id;
+            $username=Auth::user()->firstname;
+
+            Mail::to([$userEmail,$adminEmail])->send(new secretariatapplicationmail($applicationsecretariatMail,$application_id,$username));
+
+            $adminapplicationsecretariatMail = [
+            'title' =>'You have send this application to Assessor Successfully!!!!',
+            'body' => $request->sec_email,
+            ];
+
+            Mail::to([$userEmail])->send(new secretariatadminapplicationmail($adminapplicationsecretariatMail,$application_id,$username));
+            //Mail sending script ends here
+
+        
+
        
     }
+
+    
     return  back()->with('sussess','Application has been successfully assigned to Secretariat');
 
   }

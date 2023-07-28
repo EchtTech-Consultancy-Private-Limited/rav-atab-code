@@ -280,6 +280,7 @@
                                                                         </span>
 
                                                                     </label>
+                                                                    <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
                                                                     <div>
                                                                     <?php 
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){
@@ -362,11 +363,14 @@
 
                                                                                                @endif >
 
+
+
                                                                                             <span>
                                                                                                 {{ $assesorsData->firstname }}
                                                                                             </span>
 
                                                                                         </label>
+                                                                                        <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
                                                                                     <!-- <div>
                                                                                         <?php 
                                                                                         foreach(get_accessor_date($assesorsData->id) as $date){

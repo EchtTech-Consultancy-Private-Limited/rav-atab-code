@@ -119,7 +119,7 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover js-basic-example contact_list" id="DtTable">
+                                <table class="table table-hover js-basic-example contact_list">
                                     <thead>
                                         <tr>
                                             <th class="center">#S.N0</th>
@@ -269,6 +269,7 @@
                                                                         </span>
 
                                                                     </label>
+                                                                    <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
                                                                 <div>
                                                                     <?php 
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){
@@ -354,6 +355,7 @@
                                                                         </span>
 
                                                                     </label>
+                                                                    <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
                                                                 <!-- <div>
                                                                     <?php 
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){

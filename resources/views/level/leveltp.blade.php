@@ -768,7 +768,7 @@ div#ui-datepicker-div {
                                          </form>
                                          <div class="body mt-5">
                                              <div class="table-responsive">
-                                                 <table class="table table-hover js-basic-example contact_list" id="DtTable">
+                                                 <table class="table table-hover js-basic-example contact_list">
                                                      <thead>
                                                          <tr>
                                                              <th class="center">S.No.</th>
@@ -1317,7 +1317,7 @@ div#ui-datepicker-div {
                                          </div>
                                          <div class="body">
                                              <div class="table-responsive">
-                                                 <table class="table table-hover js-basic-example contact_list" id="DtTables">
+                                                 <table class="table table-hover js-basic-example contact_list">
                                                      <thead>
                                                          <tr>
                                                              <th class="center">#S.N0</th>
@@ -1515,7 +1515,7 @@ div#ui-datepicker-div {
 
                                  <div class="body">
                                      <div class="table-responsive table-con-free">
-                                         <table class="table table-hover js-basic-example contact_list table-bordered" id="DtTable">
+                                         <table class="table table-hover js-basic-example contact_list table-bordered">
                                              <tbody>
 
 
@@ -2528,16 +2528,7 @@ div#ui-datepicker-div {
           }
          
         });
-new DataTable('#DtTables', {
-    dom: 'Bfrtip',
-    lengthMenu: [
-        [100, 25, 50, -1],
-        [100, 25, 50, 'All']
-    ],
-    buttons: [
-            'csv', 'excel'
-        ]
-});
+
    </script>
 
    <script>

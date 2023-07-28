@@ -123,7 +123,7 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover js-basic-example contact_list">
+                                <table class="table table-hover js-basic-example contact_list" id="DtTable">
                                     <thead>
                                         <tr>
                                             <th class="center">#S.N0</th>
@@ -292,7 +292,7 @@
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">save</button>
+                                                                <button type="submit" class="btn btn-primary">Save</button>
                                                             </div>
                                                     </div>
                                                     </form>
@@ -379,7 +379,7 @@
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">save</button>
+                                                                <button type="submit" class="btn btn-primary">Save</button>
                                                             </div>
                                                     </div>
                                                     </form>
