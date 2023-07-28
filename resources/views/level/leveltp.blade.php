@@ -2390,7 +2390,7 @@ div#ui-datepicker-div {
                }
                else if(modecourse1!='' && modecourse2!='' && modecourse3==undefined)
 
-               {   alert("2");
+               {   //alert("2");
                    var selectValues = [1,2];
                }
 
