@@ -180,7 +180,7 @@
 
 
                                          <div class="table-responsive">
-                                             <table class="table table-hover js-basic-example contact_list">
+                                             <table class="table table-hover js-basic-example contact_list" id="DtTable">
                                                  <thead>
                                                      <tr>
                                                          <th class="center">#S.N0</th>
