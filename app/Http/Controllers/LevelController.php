@@ -43,7 +43,8 @@ class LevelController extends Controller
 
 
     public function level_list()
-    {
+    { 
+
 
         //$data=Application::whereuser_id(Auth::user()->id)->get();
         //$data=Application::whereuser_id(Auth::user()->id)->where('status','0')->get();
@@ -53,13 +54,16 @@ class LevelController extends Controller
          ->where('applications.status','0')
          ->select('applications.*','countries.name as country_name')
          ->join('countries','applications.country', '=', 'countries.id')->get();
-//dd($data);
+        //dd($data);
 
-        if(count($data) > 0){
-
+        if(count($data) > 0)
+        {
+            
             return view("level.levellist",['data'=>$data]);
 
-        }else{
+        }
+        else
+        {   dd("else");
             return redirect('level-first');
         }
     }
@@ -271,9 +275,26 @@ class LevelController extends Controller
     $id=Auth::user()->id;
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     $Country =Country::get();
-    return view('level.leveltp',['id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs]);
+    
+       /*level list */
+       
+        $level_list_data=DB::table('applications')
+         ->where('applications.user_id',Auth::user()->id)
+         ->where('applications.status','0')
+         ->select('applications.*','countries.name as country_name')
+         ->join('countries','applications.country', '=', 'countries.id')->get();
+       /*end level list */
 
- }else{
+
+
+    return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs]);
+
+ }else
+ {
+
+      
+
+
 
     $id=Auth::user()->id;
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
@@ -363,8 +384,16 @@ class LevelController extends Controller
 
        }
    }
+     /*level list */
+       
+        $level_list_data=DB::table('applications')
+         ->where('applications.user_id',Auth::user()->id)
+         ->where('applications.status','0')
+         ->select('applications.*','countries.name as country_name')
+         ->join('countries','applications.country', '=', 'countries.id')->get();
+       /*end level list */
 
-      return view('level.leveltp',['collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs]);
+      return view('level.leveltp',['level_list_data'=>$level_list_data,'collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs]);
 
 
 
@@ -1161,7 +1190,8 @@ public function upload_document($id,$course_id)
     // dd(dDecrypt($id));
     $data =ApplicationPayment::whereapplication_id($id)->get();
     $file =ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
-
+    
+    //return $file;
     
     $doc_id1=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[1])->where('course_id',$course_id)->first();
     $doc_id2=Add_Document::orderBy('id', 'desc')->where('doc_id',__('arrayfile.document_doc_id_chap1')[2])->where('course_id',$course_id)->first();
@@ -1499,6 +1529,7 @@ public function document_comment_admin_assessor($course_id)
             $course->doc_file= $filename;
            }
            $course->status=1;
+           $course->application_id=$request->application_id;
 
            //update document comment latest record
            $document=DocComment::orderBy('id', 'desc')->where('doc_id',$request->add_doc_id)->first();
@@ -1512,13 +1543,13 @@ public function document_comment_admin_assessor($course_id)
         
          $course=new Add_Document;
          $course->course_id=$request->course_id;
-        $course->section_id=$request->section_id;
-        $course->doc_id=$request->doc_id;
+         $course->section_id=$request->section_id;
+         $course->doc_id=$request->doc_id;
+         $course->application_id=$request->application_id;
       
 
         if($request->hasfile('fileup'))
                {
-                
                 $file = $request->file('fileup');
                 $name = $file->getClientOriginalName();
                 $filename = time().$name;
@@ -1529,7 +1560,7 @@ public function document_comment_admin_assessor($course_id)
     }
    
     $course->save();
-       $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+        $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
 
          $adminEmail = $admin->email;
          $superadminEmail="superadmin@yopmail.com";
@@ -1537,9 +1568,7 @@ public function document_comment_admin_assessor($course_id)
             'title' =>'You Have Received a Report of this Application from Assessor Successfully!!!!',
             
             ];
-     
-
-            Mail::to([$superadminEmail,$adminEmail])->send(new uploadDocumentFirstMail($documentupload));
+    Mail::to([$superadminEmail,$adminEmail])->send(new uploadDocumentFirstMail($documentupload));
 
   
     return redirect("$request->previous_url")->with('success', 'Documents Update Successfully');
@@ -2163,11 +2192,16 @@ public function course_edit(Request $request)
 $item=LevelInformation:: whereid('1')->get();
 $ApplicationCourse=ApplicationCourse::whereid($request->id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 $Document=ApplicationDocument::wherecourse_number($ApplicationCourse[0]->id)->get();
-$course_mode=['1'=>'Online','2'=>'Offline','3'=>'Both'];
-//return $ApplicationCourse[0]->mode_of_course;
+$course_mode=['1'=>'Online','2'=>'Offline','3'=>'Hybrid'];
+$arrdata=$ApplicationCourse[0]->mode_of_course;
+$countmode=count($ApplicationCourse[0]->mode_of_course);
+
+$modecourse=implode(",",$arrdata);
+
+//return gettype($modecourse);
 //dd(gettype($ApplicationCourse[0]->mode_of_course));
 
-return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Document,'course_mode'=>$course_mode]);
+return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Document,'course_mode'=>$course_mode,'modecourse'=>$modecourse,'countmode'=>$countmode]);
 
 }
 

@@ -271,6 +271,7 @@ td.text-justify {
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
+                                                        <input type="text" name="" value="{{ $file[0]->application_id }}" id="form_application_id">
 
 <!-- 
                                                         @foreach ($file as $k=> $files )
@@ -2424,6 +2425,11 @@ td.text-justify {
            let formData = new FormData(document.getElementById(sbformId));
            console.log(formData);
            formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
+           
+           formData.append('application_id', $('#form_application_id').val()); 
+
+            /*var application_id = $('#form_application_id').val();
+           alert(application_id);*/
 
            //formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
            $("#success-msg").removeClass('d-none');
@@ -2468,6 +2474,9 @@ td.text-justify {
            let formData = new FormData(document.getElementById(sbformId));
            console.log(formData);
            formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
+           
+           var application_id = $('#submitform_doc_form').val();
+           alert(application_id);
 
            //formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
            $("#success-msg").removeClass('d-none');

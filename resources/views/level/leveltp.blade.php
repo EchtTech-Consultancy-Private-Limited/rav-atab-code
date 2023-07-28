@@ -128,17 +128,25 @@ div#ui-datepicker-div {
                              <div class="p-l-20">
                                  <ul class="nav ">
                                      <li class="nav-item tab-all">
-                                         <a class="nav-link show" href="#general_information"
-                                             data-bs-toggle="tab">General Information</a>
+                                         <a class="nav-link show active" href="#general_information"
+                                             data-bs-toggle="tab" >General Information</a>
                                      </li>
-                                     <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link active" href="#new_application" data-bs-toggle="tab">New
-                                             Application</a>
+
+                                     <li class="nav-item tab-all" >
+                                         <a class="nav-link show" href="#pending_payment_list"
+                                             data-bs-toggle="tab">Pending Payment List</a>
                                      </li>
+
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#preveious_application" data-bs-toggle="tab">Previous
                                              Applications</a>
                                      </li>
+
+                                     <li class="nav-item tab-all p-l-20">
+                                         <a class="nav-link " href="#new_application" data-bs-toggle="tab">New
+                                             Application</a>
+                                     </li>
+                                     
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
                                      </li>
@@ -196,7 +204,62 @@ div#ui-datepicker-div {
                      @endif --}}
 
                      <div class="tab-content">
-                         <div role="tabpanel" class="tab-pane" id="general_information" aria-expanded="true">
+
+                        <div role="tabpanel" class="tab-pane" id="pending_payment_list" aria-expanded="true">
+                             <div class="row clearfix">
+                                 <div class="col-lg-12 col-md-12 col-sm-12">
+                                     <div class="card project_widget">
+                                         <div class="header">
+                                         </div>
+                                          <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover js-basic-example contact_list">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th class="center"> Application ID </th>
+<!--                                                                <th class="center"> Create User ID </th>-->
+                                                                <th class="center"> Level ID </th>
+                                                                <th class="center"> Country </th>
+                                                                <th class="center"> Action </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @isset($level_list_data)
+
+                                                                <tr>
+
+                                                                    @foreach ($level_list_data as $item_level_list)
+
+                                                                    @if(checktppaymentstatus($item_level_list->id) == 0)
+
+                                                                        <td class="center">  RAVAP-{{ 4000 + $item_level_list->id }}</td></td>
+<!--                                                                        <td class="center"> {{ $item_level_list->user_id ?? '' }}</td>-->
+                                                                        <td class="center"> {{ $item_level_list->level_id ?? '' }}</td>
+                                                                        <td class="center"> {{ $item_level_list->country_name ?? '' }}</td>
+
+                                                                        <td class="center"> <a href="{{ url('/level-first'.'/'.$item_level_list->id) }}"
+                                                                                class="btn btn-tbl-edit bg-success"><i
+                                                                                    class="fa fa-edit"></i></a></td>
+
+                                                                    @endif
+
+                                                                </tr>
+                                                                @endforeach
+
+                                                            @endisset
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                     </div>
+                                 </div>
+                             </div>
+                        </div>
+
+                         <div role="tabpanel" class="tab-pane active" id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
                                      <div class="card project_widget">
@@ -282,7 +345,7 @@ div#ui-datepicker-div {
                          </div>
                          <!-- <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
                                         </div> -->
-                         <div role="tabpanel" class="tab-pane active" id="new_application" aria-expanded="false">
+                         <div role="tabpanel" class="tab-pane " id="new_application" aria-expanded="false">
 
 
                          {{--
@@ -620,7 +683,7 @@ div#ui-datepicker-div {
                                                                 <div class="form-group default-select select2Style">
                                                                  <select class="form-control select2" name="mode_of_course[]"
                                                                      required multiple="" style="width:200px;" >
-                                                                     <option>Select Title</option>
+                                                                     <option>Select Mode of Course</option>
                                                                     @foreach(__('arrayfile.mode_of_course_array') as $key=>$value)
                                                                        <option value="{{$value}}">{{$value}}</option>
                                                                     @endforeach
@@ -1692,22 +1755,40 @@ div#ui-datepicker-div {
                                                  </div>
                                              </div>
 
-                                             <div class="col-sm-2">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label class="active">Mode Of Courses<span
-                                                                 class="text-danger">*</span></label>
-                                                         <input type="text" name="Mode_Of_Courses"
-                                                             id="Mode_Of_Courses" class="form-control">
+                                              <div class="col-sm-2">
+                                                         <div class="form-group select-modal">
+                                                             <div class="form-line">
+                                                                 <label>Mode of Course  <span class="text-danger">*</span></label>
+                                                               
+                                                              <!--  <select class="form-control" name="mode_of_course[]"
+                                                                     required multiple="" style="width:160px;" id="mode_of_course_edit">
+                                                                     <option value="1">Online</option>
+                                                                     <option value="2">Offline</option>
+                                                                     <option value="3">Hybrid</option> -->
 
-                                                       <!--   <select id="courses_mode" class="form-control state" name="Mode_Of_Courses" >
-                                                             <option > </option>
-                                                          </select> -->
+                                                                   
+                                                                     <!-- <option>Select Mode of Course</option> -->
+                                                                    <!-- @foreach(__('arrayfile.mode_of_course_array') as $key=>$value)
+                                                                       <option value="{{$value}}">{{$value}}</option>
+                                                                    @endforeach -->
+                                                                 <!-- </select> -->
 
+                                                                <select multiple name="myselect" id="mode_of_course_edit">
+                                                                      <option value="1">Online</option>
+                                                                      <option value="2">Offline</option>
+                                                                      <option value="3">Hybrid</option>
+                                                                </select>
 
+                                                                   
+
+                                                         
+                                                             </div>
+                                                             @error('mode_of_course')
+                                                                 <div class="alert alert-danger">{{ $message }}
+                                                                 </div>
+                                                             @enderror
+                                                         </div>
                                                      </div>
-                                                 </div>
-                                             </div>
 
 
                                              <div class="col-sm-12">
@@ -2099,71 +2180,7 @@ div#ui-datepicker-div {
                                 </script>
 
 
-                                {{-- multiple video section shwo --}}
-                                <script>
-                                    $(document).on("click", "#edit_course", function() {
-                                        var UserName = $(this).data('id');
-                                        console.log(UserName);
-
-                                        $.ajaxSetup({
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                            }
-                                        });
-
-                                        $.ajax({
-                                            url: "{{ url('course-edit') }}",
-                                            type: "get",
-                                            data: {
-                                                id: UserName
-                                            },
-                                            success: function(data) {
-
-                                                //console.log(data.ApplicationCourse[0].id)
-                                                // console.log(data.Document[0].document_file)
-                                               //alert(data.ApplicationCourse[0].mode_of_course);
-                                              /* alert(data.ApplicationCourse[0].mode_of_course);*/
-
-                                               /* $('#courses_mode').html('<option value="">-- Select Mode Of Course --</option>');*/
-                                                  
-
-                                               
-
-
-
-
-                                                $('#form_update').attr('action', '{{ url('/course-edit') }}' + '/' + data
-                                                    .ApplicationCourse[0].id)
-                                                $("#Course_Names").val(data.ApplicationCourse[0].course_name);
-                                                $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                                $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
-                                                if(data.ApplicationCourse[0].payment=="false")
-                                                {  
-                                                    $("#Payment_Status").val("Not Done");
-                                                }
-
-                                                $("#years").val(data.ApplicationCourse[0].years);
-                                                $("#months").val(data.ApplicationCourse[0].months);
-                                                $("#days").val(data.ApplicationCourse[0].days);
-                                                $("#hours").val(data.ApplicationCourse[0].hours);
-
-                                                
-                                                $("a#docpdf1ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[0]
-                                                    .document_file);
-                                                $("a#docpdf2ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[1]
-                                                    .document_file);
-                                                $("a#docpdf3ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[2]
-                                                    .document_file);
-
-                                                
-
-
-                                            }
-
-                                        });
-
-                                    });
-                                </script>
+                               
 
 
 
@@ -2332,11 +2349,13 @@ div#ui-datepicker-div {
 
 
    {{-- multiple video section shwo --}}
-   <script>
+    <script>
        $(document).on("click", "#edit_course", function() {
+
+      //  alert("edit course second 2420");
            var UserName = $(this).data('id');
            console.log(UserName);
-
+          
            $.ajaxSetup({
                headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -2353,8 +2372,75 @@ div#ui-datepicker-div {
 
                    //console.log(data.ApplicationCourse[0].id)
                    // console.log(data.Document[0].document_file)
+                 
                 
-                   
+                //alert(data.ApplicationCourse[0].mode_of_course);
+                //console.log(data.ApplicationCourse[0].mode_of_course);
+               
+               const modecourse1=data.ApplicationCourse[0].mode_of_course[0];
+               const modecourse2=data.ApplicationCourse[0].mode_of_course[1];
+               const modecourse3=data.ApplicationCourse[0].mode_of_course[2];
+               
+               
+               var selectValues = [];
+               if(modecourse1!='' && modecourse2==undefined && modecourse3==undefined)
+               {
+                  
+                   var selectValues = [1];
+               }
+               else if(modecourse1!='' && modecourse2!='' && modecourse3==undefined)
+
+               {   alert("2");
+                   var selectValues = [1,2];
+               }
+
+               else if(modecourse1!='' && modecourse2!='' && modecourse3!='')
+               {  
+                   var selectValues = [1,2,3];
+               }
+
+               else if(modecourse1==undefined && modecourse2!='' && modecourse3==undefined)
+               {  
+               
+                   var selectValues = [2];
+               }
+
+               
+
+
+               
+               console.log(selectValues);
+
+             
+               // console.log(selectValues);
+                //const selectValues = $entArr;
+                
+                
+                //const selectValues = [data.ApplicationCourse[0].mode_of_course];
+                /* Iterate options of select element */
+                for (const option of document.querySelectorAll('#mode_of_course_edit option')) {
+
+                  /* Parse value to integer */
+                  const value = Number.parseInt(option.value);
+
+                  /* If option value contained in values, set selected attribute */
+                  if (selectValues.indexOf(value) !== -1) {
+                    option.setAttribute('selected', 'selected');
+                  }
+                  /* Otherwise ensure no selected attribute on option */
+                  else {
+                    option.removeAttribute('selected');
+                  }
+                }
+
+
+                var values="Online,Offline,Hybrid";
+               // jQuery.inArray("Online", values);
+
+                $.each(values.split(","), function(i,e){
+                    //jQuery.inArray("Online", values);
+                    //$("#mode_of_course_edisst option[value='" + e + "']").prop("selected", true);
+                });
 
                    $('#form_update').attr('action', '{{ url('/course-edit') }}' + '/' + data
                        .ApplicationCourse[0].id)
@@ -2397,7 +2483,7 @@ div#ui-datepicker-div {
            });
 
        });
-   </script>
+   </script> 
 
 
 

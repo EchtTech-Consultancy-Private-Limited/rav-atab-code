@@ -69,8 +69,12 @@
                             <span>Manage Applications</span>
                         </a>
                         <ul class="ml-menu">
-                            <li class="{{ Request::is('level-first')?'active':''; }}" >
+                           <!--  <li class="{{ Request::is('level-first')?'active':''; }}" >
                                 <a href="{{ url('/level-list') }}">Level 1</a>
+                            </li> -->
+
+                            <li class="{{ Request::is('level-first')?'active':''; }}" >
+                                <a href="{{ url('/level-first') }}">Level 1 </a>
                             </li>
 
                             <li class="{{ Request::is('level-second')?'active':''; }}">
