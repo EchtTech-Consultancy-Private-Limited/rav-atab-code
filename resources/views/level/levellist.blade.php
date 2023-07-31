@@ -94,7 +94,7 @@
 
                                             <div class="body">
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover js-basic-example contact_list" id="DtTable">
+                                                    <table class="table table-hover js-basic-example contact_list">
                                                         <thead>
                                                             <tr>
 

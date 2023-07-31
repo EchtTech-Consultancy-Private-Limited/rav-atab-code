@@ -168,6 +168,7 @@
         });
     });
 </script>
+
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -187,6 +188,7 @@
                     'csvHtml5','excelHtml5'
                 ],
         });
+
 
     $("#Country").on('change',function(){
         $("#city").html('');
@@ -348,11 +350,7 @@ $("document").ready(function(){
         e.preventDefault();
         return false;
     });
-
-
-
-
-</script>
+    </script>
 
 
 

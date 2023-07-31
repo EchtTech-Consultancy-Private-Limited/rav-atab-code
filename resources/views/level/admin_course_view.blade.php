@@ -61,7 +61,7 @@
                         </ul>
 
 
-                        <a href="{{ url()->previous() }}" type="button" class="btn btn-primary" style="float:right;">Back </a>
+                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back </a>
 
                     </div>
                 </div>

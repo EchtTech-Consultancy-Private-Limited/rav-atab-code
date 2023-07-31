@@ -873,7 +873,7 @@ div#ui-datepicker-div {
                                                                 </td>
                                                                  <td class="center">{{ $courses->course_brief }}
                                                                  </td>
-                                                                 <td class="center">@if($courses->payment=="false") Not Done @endif</td>
+                                                                 <td class="center">@if($courses->payment=="false") Pending @endif</td>
                                                                  <!-- <td class="center">
                                                                      {{ date('d F Y', strtotime($courses->created_at)) }}
                                                                  </td>
@@ -2160,7 +2160,7 @@ div#ui-datepicker-div {
                                                 $("#Mode_Of_Course").val(data.ApplicationCourse[0].mode_of_course);
                                                 if(data.ApplicationCourse[0].payment=="false")
                                                 {
-                                                    $("#Payment_Status").val("Not Done");
+                                                    $("#Payment_Status").val("Pending");
                                                 }
                                                 
                                              
@@ -2316,7 +2316,7 @@ div#ui-datepicker-div {
                    $("#Mode_Of_Course").val(data.ApplicationCourse[0].mode_of_course);
                    if(data.ApplicationCourse[0].payment=="false")
                     {
-                        $("#Payment_Status").val("Not Done");
+                        $("#Payment_Status").val("Pending");
                     }
                    $("#view_course_brief").val(data.ApplicationCourse[0].course_brief);
 
@@ -2377,33 +2377,63 @@ div#ui-datepicker-div {
                 //alert(data.ApplicationCourse[0].mode_of_course);
                 //console.log(data.ApplicationCourse[0].mode_of_course);
                
-               const modecourse1=data.ApplicationCourse[0].mode_of_course[0];
-               const modecourse2=data.ApplicationCourse[0].mode_of_course[1];
-               const modecourse3=data.ApplicationCourse[0].mode_of_course[2];
+               var modecourse1=data.ApplicationCourse[0].mode_of_course[0];
+               var modecourse2=data.ApplicationCourse[0].mode_of_course[1];
+               var modecourse3=data.ApplicationCourse[0].mode_of_course[2];
                
                
-               var selectValues = [];
-               if(modecourse1!='' && modecourse2==undefined && modecourse3==undefined)
+               if(modecourse1=='2')
                {
-                  
+                 var modecourse1="undefined";
+                 var modecourse2='2';
+                 
+               }
+               if(modecourse2=='3')
+               {
+                 var modecourse2="undefined";
+                 var modecourse3='3';
+                 
+               }
+               
+              /* alert(modecourse1);
+               alert(modecourse2);
+               alert(modecourse3);*/
+               var selectValues = [];
+               if(modecourse1=='1' && modecourse2==undefined && modecourse3==undefined)
+               {
+                 /* alert("yy");*/
+                /*alert("third");*/
                    var selectValues = [1];
                }
-               else if(modecourse1!='' && modecourse2!='' && modecourse3==undefined)
+               else if(modecourse1=='1' && modecourse2=='2' && modecourse3==undefined)
 
-               {   //alert("2");
+               {    /*alert("second");*/
+                /*alert("third");*/
                    var selectValues = [1,2];
                }
 
-               else if(modecourse1!='' && modecourse2!='' && modecourse3!='')
-               {  
+               else if(modecourse1=='1' && modecourse2=='2' && modecourse3=='3')
+               { /* alert("third");*/
                    var selectValues = [1,2,3];
                }
 
-               else if(modecourse1==undefined && modecourse2!='' && modecourse3==undefined)
+               else if(modecourse2=='2' && modecourse1==undefined)
                {  
-               
+                   /*alert("third");*/
                    var selectValues = [2];
                }
+
+               else if(modecourse1=='1'  && modecourse3=='3')
+               {  
+                  var selectValues = [1,3];
+               }
+
+               else if(modecourse==undefined  && modecourse3=='3')
+               {  
+                 var selectValues = [3];
+               }
+
+
 
                
 
@@ -2451,7 +2481,7 @@ div#ui-datepicker-div {
 
                    if(data.ApplicationCourse[0].payment=="false")
                     {
-                        $("#Payment_Statuss").val("Not Done");
+                        $("#Payment_Statuss").val("Pending");
                     }
 
               $("#years").val(data.ApplicationCourse[0].years);

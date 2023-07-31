@@ -41,6 +41,7 @@ return [
         '4'=>'HR.4',
         '5'=>'HR.5',
         '6'=>'HR.6',
+        '7'=>'HR.7',
     ],
 
     'document_doc_id_chap5' => [

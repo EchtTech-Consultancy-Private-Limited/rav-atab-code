@@ -68,14 +68,14 @@
             <div class="block-header">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <ul class="breadcrumb breadcrumb-style ">
+                        <ul class="breadcrumb breadcrumb-style">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">National Applicationsss</h4>
+                                <h4 class="page-title">National Applications</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
                                     <i class="fas fa-home"></i> Home</a>
-                            </li>
+                            </li>   
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">Dashboard</a>
                             </li>
@@ -119,7 +119,7 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover js-basic-example contact_list" id="DtTable">
+                                <table class="table table-hover js-basic-example contact_list">
                                     <thead>
                                         <tr>
                                             <th class="center">#S.N0</th>
@@ -269,7 +269,7 @@
                                                                         </span>
 
                                                                     </label>
-                                                                    <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
+                                                                    <input type="hidden" name="sec_email[]" value="{{ $assesorsData->email }}">
                                                                 <div>
                                                                     <?php 
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){

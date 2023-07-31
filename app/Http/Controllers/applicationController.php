@@ -55,7 +55,10 @@ class applicationController extends Controller
 
     public function Assigan_application(Request $request)
     {
-       
+
+       // dd($request->assessor_id);
+      
+    //return $request->all(); 
    // return $request->application_id;   
     $value= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->get();
     if(count($value) > 0)
@@ -97,29 +100,38 @@ class applicationController extends Controller
         $data->assessment_type=$request->assessment_type;
         $data->due_date=$due_date = Carbon::now()->addDay(15);
         $data->save();
-
+        //dd($request->sec_email);
            //mail send
+            $asses_email=$request->sec_email;
             $superadminEmail = 'superadmin@yopmail.com';
             $adminEmail = 'admin@yopmail.com';
-            $asses_email = $request->sec_email;
 
             //Mail sending scripts starts here
             $adminapplicationsecretariatMail = [
-            'title' =>'Application Send Successfully!!!!',
-            'body' => $request->sec_email,
+            'title' =>'Application Send to Assessor Successfully!!!!',
+            'body' => '',
+            'type' => 'Send To Assessor'
             ];
             $application_id=$request->application_id;
             $username=Auth::user()->firstname;
 
             Mail::to([$superadminEmail,$adminEmail])->send(new assessoradminapplicationmail($adminapplicationsecretariatMail,$application_id,$username));
 
+           for($k=0; $k<= (count($request->assessor_id)-1); $k++)
+           {
+             $assessor_email=User::select('email')->where('id',$request->assessor_id[$k])->first();
+            
+            
             $assessorapplicationMail = [
-            'title' =>'You Have Received a Application from Admin Successfully!!!!',
-            'body' => ''
-            ];
-
-            Mail::to([$asses_email])->send(new assessorapplicationmail($assessorapplicationMail,$application_id,$username));
+                'title' =>'Application sent by admin, You Have Received a Application from Admin Successfully!!!!',
+                'body' => '',
+                'type' => 'Assigned By Admin to Assessor'
+                ];
+            //dd($asses_email);
+            Mail::to($assessor_email)->send(new assessorapplicationmail($assessorapplicationMail,$application_id,$username));
             //Mail sending script ends here
+            }
+            
 
     }
 

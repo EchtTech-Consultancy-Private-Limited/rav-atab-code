@@ -246,9 +246,14 @@ td.text-justify {
 
                                           <div class="header">
                                              <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
-
+                                             
+                                             @if(check_document_upload($course_id)==Auth::user()->id)
                                              <a href="{{ url('document-report-toadmin/'.$course_id) }}" class="btn btn-primary">Send Document To Admin</a>
 
+                                             @else
+                                             <a href="#" class="btn btn-danger">Send Document To Admin</a>
+                                             @endif
+  
                                              <a style="float:right;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">Assessor & Admin Conversation</a>
 
                                           </div>

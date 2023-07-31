@@ -135,7 +135,7 @@
                                             </div>
                                             <div class="body">
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover js-basic-example contact_list" id="DtTable">
+                                                    <table class="table table-hover js-basic-example contact_list">
                                                         <thead>
                                                             <tr>
                                                                 <th class="center">#S.N0</th>
@@ -410,17 +410,15 @@
                             <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
                             </div>
                             <div role="tabpanel" class="tab-pane" id="new_application" aria-expanded="false">
+                               <!--  <h1>saarc country list</h1> -->
                                 <div class="card">
                                     <div class="header">
                                         <h2>SAARC Countries </h2>
                                     </div>
                                     <div class="body">
-
-
-
                                         <div class="body">
                                             <div class="table-responsive">
-                                                <table class="table table-hover js-basic-example contact_list" id="DtTable">
+                                                <table class="table table-hover js-basic-example contact_list">
                                                     <thead>
                                                         <tr>
                                                             <th class="center">#S.N0</th>
@@ -438,7 +436,7 @@
                                                         @isset($collections)
 
                                                             @foreach ($collections as $k => $item)
-                                                                <tr class="odd gradeX">
+                                                                <tr class="odd gradeX @if($item->status=='2') approved_status @elseif($item->status=='1') process_status @elseif($item->status=='0') pending_status @endif">
                                                                     <td class="center">{{ $k + 1 }}</td>
                                                                     <td class="center">{{ $item->level_id ?? '' }}</td>
                                                                     <td class="center">RAVAP-{{ 4000 + $item->application_id  }}</td>
@@ -450,7 +448,7 @@
 
 
                                                                         @if ($item->status == '0')
-                                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($item->id)) }}"
+                                                                            <a 
                                                                                 onclick="return confirm_option('change status')"
                                                                                 @if ($item->status == 0) <div class="badge col-black">Pending</div> @elseif($item->status == 1) <div class="badge col-green">Proccess</div> @else @endif
                                                                                 </a>
@@ -459,7 +457,7 @@
 
 
                                                             @if ($item->status == '1')
-                                                                <a href="{{ url('preveious-app-status/' . dEncrypt($item->id)) }}"
+                                                                <a 
                                                                     onclick="return confirm_option('change status')"
                                                                     @if ($item->status == 0) <div class="badge col-black">Pending</div> @elseif($item->status == 1) <div class="badge col-green">Proccess</div> @else @endif
                                                                     </a>
@@ -467,7 +465,7 @@
                                                             @endif
 
                                                             @if ($item->status == '2')
-                                                                <a href="{{ url('preveious-app-status/' . dEncrypt($item->id)) }}"
+                                                                <a 
                                                                     onclick="return confirm_option('change status')"
                                                                     @if ($item->status == 1) <div class="badge col-green">Proccess</div> @elseif($item->status == 2) <div class="badge col-green">Approved</div> @else @endif
                                                                     </a>
@@ -487,7 +485,9 @@
                                                                     data-bs-target="#View_popup_{{ $item->application_id }}" id="view"> <i
                                                                         class="material-icons">accessibility</i>
                                                                 </a>
-                                                            <?php } ?>    
+                                                            <?php } ?>
+
+                                                            
                                                             </td>
 
 
@@ -500,7 +500,7 @@
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                                                                             <h5 class="modal-title" id="exampleModalCenterTitle"> View
-                                                                                Details </h5>
+                                                                                Details  saarc</h5>
                                                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                                                 aria-label="Close">
                                                                                 <span aria-hidden="true">&times;</span>
@@ -513,31 +513,33 @@
                                                                         <form action="{{ url('/Assigan-application') }}" method="post">
 
                                                                             @csrf
-                                                             <?php 
-                                                             $application_assessor_arr = listofapplicationassessor($item->application_id);
-//                                                             print_r($item->application_id);
-//                                                             echo ",";
-//                                                             print_r($application_assessor_arr);
-                                                             $assessment_type = checkapplicationassessmenttype($item->application_id);
-                                                             ?>
+                                                                             <?php 
+                                                                             $application_assessor_arr = listofapplicationassessor($item->application_id);
+                //                                                             print_r($item->application_id);
+                //                                                             echo ",";
+                //                                                             print_r($application_assessor_arr);
+                                                                             $assessment_type = checkapplicationassessmenttype($item->application_id);
+                                                                             ?>
+                                                                             <br><br>
+                                                                             <select name="assessment_type" id="assessment_type" class="form-control">
+                                                                              <option value="">Select Assessment Type</option>
+                                                                              <option value="1" @if($assessment_type == 1) {
+                                                                               selected @endif>Desktop Assessment</option>
+                                                                              <option value="2" @if($assessment_type == 2) {
+                                                                               selected @endif>On-Site Assessment</option>
+                                                                              <option value="3" @if($assessment_type == 3) {
+                                                                               selected @endif>Surveillance Assessment</option>
+                                                                              <option value="4" @if($assessment_type == 4) {
+                                                                               selected @endif>Surprise Assessment</option>
+                                                                              <option value="5" @if($assessment_type == 5) {
+                                                                               selected @endif>Re-Assessment</option>
+
+                                                                             </select>
                                                                             <div class="modal-body">
 
                                                                                 @foreach ($assesors as $k => $assesorsData)
                                                                                 <br>
-                                                                                <select name="assessment_type" id="assessment_type" class="form-control">
-                                                              <option value="">Select Assessment Type</option>
-                                                              <option value="1" @if($assessment_type == 1) {
-                                                               selected @endif>Desktop Assessment</option>
-                                                              <option value="2" @if($assessment_type == 2) {
-                                                               selected @endif>On-Site Assessment</option>
-                                                              <option value="3" @if($assessment_type == 3) {
-                                                               selected @endif>Surveillance Assessment</option>
-                                                              <option value="4" @if($assessment_type == 4) {
-                                                               selected @endif>Surprise Assessment</option>
-                                                              <option value="5" @if($assessment_type == 5) {
-                                                               selected @endif>Re-Assessment</option>
-
-                                                             </select>
+                                                                                
                                                                                 <label>
 
                                                                                     <input type="checkbox" id="assesorsid" class="d-none"
@@ -556,6 +558,13 @@
                                                                                     </span>
 
                                                                                 </label>
+                                                                                <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
+                                                                                <div>
+                                                                                <?php 
+                                                                                foreach(get_accessor_date($assesorsData->id) as $date){
+                                                                                ?>
+                                                                                    {!! $date !!}
+                                                                                <?php }   ?>
 
                                                                                 <input type="hidden" name="application_id"
                                                                                     value="{{ $item->application_id ?? '' }}">

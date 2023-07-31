@@ -275,6 +275,7 @@
                                                                         </span>
 
                                                                     </label>
+                                                                    <input type="hidden" name="sec_email" value="<?php echo e($assesorsData->email); ?>">
                                                                 <div>
                                                                     <?php 
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){
@@ -362,6 +363,7 @@
                                                                         </span>
 
                                                                     </label>
+                                                                    <input type="hidden" name="sec_email" value="<?php echo e($assesorsData->email); ?>">
                                                                 <!-- <div>
                                                                     <?php 
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){

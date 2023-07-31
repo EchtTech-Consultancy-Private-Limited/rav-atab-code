@@ -8,5 +8,6 @@
     <p>{{ $paymentMail['body'] }}</p>
     <p>  Application Number : RAVAP-{{(4000+$paymentid)}}  </p>
     <p> Training Provider : {{ $userid }}</p>
+    <p>Application Type: {{ $paymentMail['type'] }}</p>
 </body>
 </html>

@@ -100,10 +100,10 @@ class AuthController extends Controller
 // else {
 //     dd("here");
 // }
-
+         //return $request->all();
         $request->validate(
             [
-                'organization' => ['required'],
+                'organization' => 'required',
                 'title' => 'required',
                 'firstname' => 'required|max:32|min:2',
                 'lastname' =>'required|max:32|min:2',
@@ -112,16 +112,18 @@ class AuthController extends Controller
                 'designation' => ['required'],
                 'gender' => ['required'],
                 'address' => 'required',
+                'landline' => 'required',
                 'mobile_no'=>'required|numeric|min:10|unique:users,mobile_no|numeric|digits:10',
                 // 'phonecode'=> ['required'],
                 'Country'=> ['required'],
                 'state' => 'required',
                 // 'city' => 'required',
 //                'captcha' => 'required|captcha',
+                'CaptchaCode'  => 'required|captcha',
                 'check'=>'required',
                 'password'  => 'required|min:8|max:15',
                 'cpassword'  => 'required|same:password',
-                'CaptchaCode' => 'required|valid_captcha'
+               
            ]
        );
 
@@ -151,6 +153,7 @@ class AuthController extends Controller
        $data->city =$request->city;
        $data->postal =$request->pincode;
        $data->phone_no =$request->phone_no;
+       $data->landline =$request->landline;
        $data->last_login_ip =$request->last_login_ip;
        $data->status =$request->status;
        $data->role =$request->role;

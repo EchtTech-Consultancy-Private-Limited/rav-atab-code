@@ -197,9 +197,21 @@ a#ContactCaptcha_ReloadLink {
                     {{ $message }}
                     @enderror</label>
                 </div>
-                <div class="iconInput email">
-
+                <div class="iconInput_container">
+                        <label  class="label_input"> Landline No.<span class="text-danger">*</span></label>
+                    <div class="iconInput landline">
+                        <i class="fa fa-mobile" aria-hidden="true"></i>
+                        <input type="text" placeholder="Landline No." name="landline" value="{{ old('landline') }}"  id="dis_alphabet" maxlength="15">
+                    </div>
+                    {{-- <p class="error">This field is required</p> --}}
+                    <label for="landline"  id="landline-error" class="error">
+                    @error('landline')
+                    {{ $message }}
+                    @enderror</label>
                 </div>
+                <!-- <div class="iconInput email">
+
+                </div> -->
 
                     <div class="iconInput email">
 
@@ -489,12 +501,14 @@ a#ContactCaptcha_ReloadLink {
 
                 <div class="iconInput_container">
                     <label  class="label_input">Captcha<span class="text-danger">*</span></label>
+                     <div class="iconInput email">
                         <div class="captcha">
                             <span>{!! captcha_img('math') !!}</span>
                             <button type="button" class="btn_refresh btn-refresh" id="btn-refresh">
                                 <i class="fa fa-refresh" aria-hidden="true"></i>
                              </button>
                          </div>
+</div>
                         <label  for="captcha" id="captcha-error" class="error">
                             @error('captcha')
                             {{ $message }}
@@ -608,6 +622,9 @@ a#ContactCaptcha_ReloadLink {
                 //     required: true,
                 // },
                 captcha:{
+                    required: true,
+                },
+                CaptchaCode:{
                     required: true,
                 },
                 organization: {
@@ -1065,6 +1082,18 @@ $('#mobile_no').keypress(function (e) {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+    </script>
+    <script>
+         // disable alphate
+           $('#dis_alphabet').keypress(function (e) {
+            var regex = new RegExp("^[0-9_]");
+            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(str)) {
+                return true;
+            }
+            e.preventDefault();
+            return false;
+        });
     </script>
 </body>
 </html>

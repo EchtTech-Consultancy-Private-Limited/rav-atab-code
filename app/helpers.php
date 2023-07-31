@@ -202,6 +202,15 @@ function checktppaymentstatustype($id)
             }*/
         }
 
+    function check_document_upload($id=0)
+        {  
+           $document_checked=App\Models\DocComment::where('course_id',$id)->first();
+           if($document_checked)
+           {
+             return $document_verify=$document_checked->user_id;
+           }
+        }
+
      function get_doc_code($id=0)
         {  
             //dd($id);

@@ -271,7 +271,7 @@ td.text-justify {
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
-                                                        <input type="text" name="" value="{{ $file[0]->application_id }}" id="form_application_id">
+                                                        <input type="hidden" name="" value="{{ $file[0]->application_id }}" id="form_application_id">
 
 <!-- 
                                                         @foreach ($file as $k=> $files )
