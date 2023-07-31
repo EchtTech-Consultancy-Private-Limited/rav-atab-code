@@ -489,26 +489,23 @@ a#ContactCaptcha_ReloadLink {
 
                 <div class="iconInput_container">
                     <label  class="label_input">Captcha<span class="text-danger">*</span></label>
-                    <div class="captcha">
-                        <div class="captcha-item">
-                            {!! captcha_image_html('ContactCaptcha') !!}
-                        </div>
-                        
-<!--                            <input id="CaptchaCode" type="text" class="form-control" placeholder="Enter Captcha" name="CaptchaCode">-->
-                       
-                        
-                    </div>
-                    <label  for="captcha" id="captcha-error" class="error">
-                        @error('CaptchaCode')
-                        {{ $message }}
+                        <div class="captcha">
+                            <span>{!! captcha_img('math') !!}</span>
+                            <button type="button" class="btn_refresh btn-refresh" id="btn-refresh">
+                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                             </button>
+                         </div>
+                        <label  for="captcha" id="captcha-error" class="error">
+                            @error('captcha')
+                            {{ $message }}
                         @enderror
-                    </label>
+                        </label>
                 </div>
 
-                    <div class="iconInput_container">
-                        <label for="Orgnisation" class="label_input">Enter Captcha code</label>
+                <div class="iconInput_container">
+                    <label for="Orgnisation" class="label_input">Enter Captcha code</label>
                     <div class="iconInput email">
-                        <input id="CaptchaCode" type="text" class="form-control" placeholder="Enter Captcha" name="CaptchaCode">
+                        <input type="text" class="form-control"  aria-label="Captcha Code" placeholder="Enter Captcha" id="CaptchaCode" name="CaptchaCode">
                     </div>
                 </div>
 
