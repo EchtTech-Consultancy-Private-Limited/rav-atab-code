@@ -56,7 +56,7 @@ Route::get('/',[AuthController::class,'landing'])->name('/');
 Route::get('/login/{slug?}',[AuthController::class,'login'])->name('login');
 Route::post('/login_post',[AuthController::class,'login_post']);
 Route::get('{slug}/{sulg}/register',[AuthController::class,'register']);
-Route::Post('/register',[AuthController::class,'register_post']);
+Route::Post('/register',[AuthController::class,'commonRegistration']);
 
 //captcha
 //Route::get('my-captcha',[AuthController::class,'myCaptcha'])->name('myCaptcha');

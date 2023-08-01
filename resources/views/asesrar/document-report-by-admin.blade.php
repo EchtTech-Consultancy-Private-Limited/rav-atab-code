@@ -47,7 +47,7 @@
 
     </div>
 
-<h1>Hreeeeeeeeeeeeeeee</h1>
+
      <section class="content">
         <div class="container-fluid">
          
@@ -88,7 +88,7 @@
                                                         <input type="hidden" name="previous_url" value="{{ Request::url() }}">
                                                         <input type="hidden"  value="{{$course_id}}" name="course_id">
                                                         
-                                                        <div class="row">
+                                                        <div class="row" id="first-page">
                                                             <div class="col-sm-12 col-md-8" >
                                                                 
                                                                 <label>Add Comment</label>
@@ -130,7 +130,33 @@
     </section>
 
 
-   
+   <script>
+       $('#exportForm').click(function(){
+  var pdf = new jsPDF('a', 'mm', 'a4');
+  var firstPage;
+  var secondPage;
+  
+  html2canvas($('#first-page'), {
+    onrendered: function(canvas) {
+      firstPage = canvas.toDataURL('image/jpeg', 1.0);
+    }
+  });
+  
+  html2canvas($('#second-page'), {
+    onrendered: function(canvas) {
+      secondPage = canvas.toDataURL('image/jpeg', 1.0);
+    }
+  });
+  
+  
+  setTimeout(function(){
+    pdf.addImage(firstPage, 'JPEG', 5, 5, 200, 0);
+    pdf.addPage();
+    pdf.addImage(secondPage, 'JPEG', 5, 5, 200, 0);
+    pdf.save("export.pdf");
+  }, 150);
+});
+   </script>
 
 <br><br><br><br><br><br><br><br>
 <script>

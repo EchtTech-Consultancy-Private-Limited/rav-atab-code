@@ -2475,8 +2475,7 @@ td.text-justify {
            console.log(formData);
            formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
            
-           var application_id = $('#submitform_doc_form').val();
-           alert(application_id);
+           formData.append('application_id', $('#form_application_id').val()); 
 
            //formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
            $("#success-msg").removeClass('d-none');

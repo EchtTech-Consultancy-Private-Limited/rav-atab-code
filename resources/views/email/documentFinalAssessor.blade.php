@@ -4,10 +4,10 @@
     <title>RAV ATAB - You Application Send Successfully</title>
 </head>
 <body>
-    <h1>{{ $assessorapplicationMail['title'] }}</h1>
- <!--    <p>Assessor Email {{ $assessorapplicationMail['body'] }}</p> -->
+    <h1>{{ $assessorToself['title'] }}</h1>
+ <!--    <p>Assessor Email {{ $assessorToself['body'] }}</p> -->
     <p>  Application Number : RAVAP-{{(4000+$application_id)}}  </p>
-    <p>Application Type: {{ $assessorapplicationMail['type'] }}</p>
+    <p>Application Type: {{ $assessorToself['type'] }}</p>
     
 </body>
 </html>

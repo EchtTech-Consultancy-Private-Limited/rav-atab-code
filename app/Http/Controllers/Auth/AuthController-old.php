@@ -90,147 +90,10 @@ class AuthController extends Controller
           $data =Country::orderBy('name')->get();
         return view('auth.register',compact('data'));
     }
-    public function commonRegistration(Request $request){
-            //dd('Hello');
-        $data = user::where('email', $request->email)->get();
-        if(count($data) > 0){
-            $notification = array(
-                'message' => 'Email is Already Exit!',
-                'alert-type' => 'info'
-            );
-        }else{
-            $request->validate([
-                'organization' => 'required',
-                'title' => 'required',
-                'firstname' => 'required',
-                'lastname' => 'required',
-                'designation' => 'required',
-                'gender' => 'required',
-                'landline' => 'required',
-                'email' => 'required',
-                'email_otp' => 'required',
-                'mobile_no' => 'required',
-                'Country' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'address' => 'required',
-                'password' => 'required',
-                'CaptchaCode' => 'required',
-                'check' => 'required',
-            ],[
-                'organization.required' => 'BKS Organization',
-                'title.required' => 'Input Bucket Value (In inches)',
-                'firstname.required' => 'Input Bucket Value (In inches)',
-                'lastname.required' => 'Input Bucket Value (In inches)',
-                'designation.required' => 'Input Bucket Value (In inches)',
-                'gender.required' => 'Input Bucket Value (In inches)',
-                'landline.required' => 'Input Bucket Value (In inches)',
-                'email.required' => 'Input Bucket Value (In inches)',
-                'email_otp.required' => 'Input Bucket Value (In inches)',
-                'mobile_no.required' => 'Input Bucket Value (In inches)',
-                'Country.required' => 'Input Bucket Value (In inches)',
-                'state.required' => 'Input Bucket Value (In inches)',
-                'city.required' => 'Input Bucket Value (In inches)',
-                'address.required' => 'Input Bucket Value (In inches)',
-                'password.required' => 'Input Bucket Value (In inches)',
-                'CaptchaCode.required' => 'Input Bucket Value (In inches)',
-                'check.required' => 'Input Bucket Value (In inches)',
-            ]);
-            if($this->verifyOtp($request->email,$request->email_otp)==false){
-                return back()->with('fail','OTP is invalid.!!');
-            }
-            $result = user::insert([
-                        'title' =>  $request->title,
-                        'firstname' => $request->firstname,
-                        'middlename' => $request->middlename,
-                        'lastname' => $request->lastname,
-                        'email' => $request->email,
-                        'password' =>   Hash::make($request->password),
-                        'organization' => $request->organization,
-                        'designation' => $request->designation,
-                        'gender' => $request->gender,
-                        'address' => $request->address,
-                        'mobile_no' => $request->mobile_no,
-                        'phonecode' => $request->phonecode,
-                        'country' => $request->Country,
-                        'state' => $request->state,
-                        'city' => $request->city,
-                        'postal' => $request->pincode,
-                        'phone_no' => $request->phone_no,
-                        'landline' => $request->landline,
-                        'last_login_ip' => $request->last_login_ip,
-                        'status' => $request->status,
-                        'role' => $request->role,
-                        'about' => $request->about,
-                        'last_login_at' => $request->last_login_at,
-                    ]);
-           // dd($result);
-            //if(count($data)>0 && $data[0]->role == $request->role)
-            if($result == true)
-            {
-                // if($data[0]->status == 0)
-                // {
-    
-                //      if(Auth::attempt($request->only('email','password')))
-                //      {
-                //         $userEmail = $request->email;
-                //         //Mail sending scripts starts here
-                //         $mailData = [
-                //             'title' => 'You have successfully registered',
-                //             'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
-                //             'type' => 'New Registration'
-                //         ];
-    
-                //         Mail::to($userEmail)->send(new SendMail($mailData));
-    
-                //          return redirect()->intended('/dashboard')->with('success', 'login successfull!!');
-                //      }
-                //      else
-                //      {
-                //      return back()->with ('fail','Email and/or password invalid.!!');
-                //      }
-    
-                // }else
-    
-                // {
-                    $userEmail = $request->email;
-    
-                    //Mail sending scripts starts here
-                    $mailData = [
-                        'title' => 'You have successfully registered',
-                        'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
-                        'type' => 'New Registration'
-                    ];
-    
-                    Mail::to($userEmail)->send(new SendMail($mailData));
-                    //Mail sending script ends here
-    
-                    return redirect()->intended('/')->with('falils','Your registration is successfull. your account is not actived yet. please contact your adminstrator to active your account');
-    
-               // }
-            }
-            else
-            {
-                return back()->with('fail','Unauthorised User!!');
-            }
-        }
-            //     $notification = array(
-            //         'message' => 'Inserted Successfully',
-            //         'alert-type' => 'success'
-            //     );
-            // }
-            //     return redirect()->back()->with($notification);
 
-    }
     public function  register_post(Request $request)
     {
-//        if ( captcha_check($request->captcha) == false ) {
-//            dd("here1");
-//        return back()->with('invalid-captcha','incorrect captcha!');
-//        }
-// else {
-//     dd("here");
-// }
+
          //return $request->all();
         $request->validate(
             [
@@ -245,11 +108,8 @@ class AuthController extends Controller
                 'address' => 'required',
                 'landline' => 'required',
                 'mobile_no'=>'required|numeric|min:10|unique:users,mobile_no|numeric|digits:10',
-                // 'phonecode'=> ['required'],
                 'Country'=> ['required'],
                 'state' => 'required',
-                // 'city' => 'required',
-//                'captcha' => 'required|captcha',
                 'CaptchaCode'  => 'required|captcha',
                 'check'=>'required',
                 'password'  => 'required|min:8|max:15',
@@ -260,12 +120,15 @@ class AuthController extends Controller
 
 
 
-     //dd($request->all());
 
-       if($this->verifyOtp($request->email,$request->email_otp)==false){
+
+       if($this->verifyOtp($request->email,$request->email_otp)==false)
+        {
+           dd("in");
             return back()->with('fail','OTP is invalid.!!');
         }
-
+        
+       
        $data = new user;
        $data->title = $request->title;
        $data->firstname =$request->firstname;
@@ -291,6 +154,8 @@ class AuthController extends Controller
        $data->about =$request->about;
        $data->last_login_at =$request->last_login_at;
        $data->save();
+
+
 
     //    if(Auth::attempt($request->only('email','password'))){
 
@@ -330,13 +195,13 @@ class AuthController extends Controller
                     $userEmail = $request->email;
 
                     //Mail sending scripts starts here
-                    $mailData = [
-                        'title' => 'You have successfully registered',
-                        'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
-                        'type' => 'New Registration'
+                    $registerMailData = [
+                    'title' => 'You have successfully registered',
+                    'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.'
                     ];
 
-                    Mail::to($userEmail)->send(new SendMail($mailData));
+                    Mail::to($userEmail)->send(new SendMail($registerMailData));
+                    //Mail sending script ends here
 
                      return redirect()->intended('/dashboard')->with('success', 'login successfull!!');
                  }
@@ -351,13 +216,12 @@ class AuthController extends Controller
                 $userEmail = $request->email;
 
                 //Mail sending scripts starts here
-                $mailData = [
-                    'title' => 'You have successfully registered',
-                    'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
-                    'type' => 'New Registration'
+                $registerMailData = [
+                'title' => 'You have successfully registered',
+                'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.'
                 ];
 
-                Mail::to($userEmail)->send(new SendMail($mailData));
+                Mail::to($userEmail)->send(new SendMail($registerMailData));
                 //Mail sending script ends here
 
                 return redirect()->intended('/')->with('falils','Your registration is successfull. your account is not actived yet. please contact your adminstrator to active your account');
@@ -424,16 +288,19 @@ class AuthController extends Controller
 
 
    public function sendEmailOtp(Request $request){
-    
+
     $request->validate(
     [
       'email' => ['required','string','email','max:50','unique:users','regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
     ]
    );
+
 //    $new_array = explode('@',$request->email);
 
 //    $userEmailDomain = emaildomeins::where('emaildomain',$new_array[1])->get();
+
     $response = array();
+
     // if(count($userEmailDomain) == 0)
     // {
     //     return response()->json([
@@ -442,37 +309,41 @@ class AuthController extends Controller
     //         'message' => 'Email domin is not valid.',
     //    ]);
     // }
-   // dd($request->email);
-    //if (isset($request->email) && trim($request->email) =="" ) {
-    if ($request->email !="" ) {
-        $customer=User::select('id')
-                    ->distinct()
-                    ->where('email',$request->email)
-                    ->limit(1)
-                    ->get()
-                    ->first();
-       if(!empty($customer['id'])){
+    
+    if ( isset($request->email) && trim($request->email) =="" ) {
+        return response()->json([
+            'error'   => 1,
+            'message' => 'Email is not valid.',
+       ]);
+
+    }
+    else {
+
+        $customer=User::select('users.id')
+        ->distinct()
+        ->where('email',$request->email)
+        ->limit(1)
+       ->get()
+       ->first();
+
+       if(isset($customer['id'])){
+
             return response()->json([
                 'status' => 409,
-                'Message' => 'Email id is already exist.'],409);
+                'Message' => 'Email id is already exist.']);
 
         }
+
         $otp = rand(100000, 999999);
 
         Otp::where("phone_email",$request->email)->delete();
         Otp::create(["otp"=>$otp,"phone_email"=>$request->email]);
 
-        Mail::queue(new VerificationEmail(['email' =>$request->email ,'otp' => $otp]));
+            Mail::queue(new VerificationEmail(['email' =>$request->email ,'otp' => $otp]));
             return response()->json([
                 'status' => 200,
                 'Message' => 'Email Send in your Email ID!!!. ']);
     }
-    else {
-        return response()->json([
-            'error'   => 1,
-            'message' => 'Email is not valid.',
-       ]);
-    } 
 
 }
 

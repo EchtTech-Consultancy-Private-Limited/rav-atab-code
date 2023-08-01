@@ -25,6 +25,7 @@ class tpApplicationmail extends Mailable
         $this->tpMail = $tpMail;
         $this->application_id = $application_id;
         $this->username = $username;
+
     }
 
     /**

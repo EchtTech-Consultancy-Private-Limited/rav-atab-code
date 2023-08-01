@@ -14,7 +14,7 @@ use App\Models\ApplicationDocument;
 use App\Models\DocumentType;
 use App\Models\ApplicationReport;
 use App\Models\asessor_application;
-
+use App\Mail\SendMail;
 use App\Mail\paymentSuccessMail;
 use App\Mail\secretariatapplicationmail;
 use App\Mail\secretariatadminapplicationmail;
@@ -107,28 +107,37 @@ class applicationController extends Controller
             $adminEmail = 'admin@yopmail.com';
 
             //Mail sending scripts starts here
-            $adminapplicationsecretariatMail = [
+           /* $adminapplicationsecretariatMail = [
             'title' =>'Application Send to Assessor Successfully!!!!',
             'body' => '',
             'type' => 'Send To Assessor'
+            ];*/
+             $mailData= 
+            [
+                'from'=>"Admin",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"Admin Assigned Application to Assessor Successfully",
+                'subject'=>"Application Assigned",
             ];
             $application_id=$request->application_id;
             $username=Auth::user()->firstname;
 
-            Mail::to([$superadminEmail,$adminEmail])->send(new assessoradminapplicationmail($adminapplicationsecretariatMail,$application_id,$username));
+            Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
 
            for($k=0; $k<= (count($request->assessor_id)-1); $k++)
            {
              $assessor_email=User::select('email')->where('id',$request->assessor_id[$k])->first();
             
             
-            $assessorapplicationMail = [
-                'title' =>'Application sent by admin, You Have Received a Application from Admin Successfully!!!!',
-                'body' => '',
-                'type' => 'Assigned By Admin to Assessor'
-                ];
+            $mailData= 
+            [
+                'from'=>"Admin",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"Admin Assigned Application to Assessor Successfully",
+                'subject'=>"Application Assigned",
+            ];
             //dd($asses_email);
-            Mail::to($assessor_email)->send(new assessorapplicationmail($assessorapplicationMail,$application_id,$username));
+            Mail::to($assessor_email)->send(new SendMail($mailData));
             //Mail sending script ends here
             }
             

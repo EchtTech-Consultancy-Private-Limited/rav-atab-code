@@ -11,16 +11,16 @@ class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $mailData;
+    public $registerMailData;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($mailData)
+    public function __construct($registerMailData)
     {
-        $this->mailData = $mailData;
+        $this->registerMailData = $registerMailData;
     }
 
     /**
@@ -30,7 +30,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('RAV ATAB - '.$this->mailData['subject'])
-                    ->view('email.emailTemplate');
+        return $this->subject('RAV ATAB - Registration Success')
+                    ->view('email.register-mail');
     }
 }

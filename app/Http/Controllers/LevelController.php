@@ -17,7 +17,9 @@ use Redirect;
 use Auth;
 use File;
 use DB;
+use PDF;
 use Mail;
+use App\Mail\SendMail;
 use App\Mail\SendAcknowledgment;
 use App\Mail\AdmintoAssessorSingleFinalMail;
 use App\Mail\assessorAdminFinalApplicationMail;
@@ -1026,10 +1028,22 @@ public function newapplication()
             'body' => '',
             'type' => 'New Application'
             ];
+
+            $mailData= 
+            [
+                'from'=>"T.P",
+                'applicationNo'=>$request->Application_id,
+                'applicationStatus'=>"T.P Created Application Successfully",
+                'subject'=>"T.P Created Application Successfully",
+            ];
             $paymentid=$request->Application_id;
             $userid=Auth::user()->firstname;
+            
+           // dd($mailData);
 
-            Mail::to([$userEmail])->send(new paymentSuccessMail($paymentMail,$paymentid,$userid));
+            Mail::to([$userEmail])->send(new SendMail($mailData));
+
+           // Mail::to([$userEmail])->send(new paymentSuccessMail($paymentMail,$paymentid,$userid));
             //Mail sending script ends here
 
   if($request->level_id =='1')
@@ -1542,6 +1556,7 @@ public function document_comment_admin_assessor($course_id)
            }
            $course->status=1;
            $course->application_id=$request->application_id;
+           $course->user_id=Auth::user()->id;
 
            //update document comment latest record
            $document=DocComment::orderBy('id', 'desc')->where('doc_id',$request->add_doc_id)->first();
@@ -1558,6 +1573,7 @@ public function document_comment_admin_assessor($course_id)
          $course->section_id=$request->section_id;
          $course->doc_id=$request->doc_id;
          $course->application_id=$request->application_id;
+         $course->user_id=Auth::user()->id;
       
 
         if($request->hasfile('fileup'))
@@ -1572,7 +1588,7 @@ public function document_comment_admin_assessor($course_id)
     }
    
     $course->save();
-        $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+        /*$admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
 
          $adminEmail = $admin->email;
          $superadminEmail="superadmin@yopmail.com";
@@ -1580,7 +1596,16 @@ public function document_comment_admin_assessor($course_id)
             'title' =>'You Have Received a Report of this Application from Assessor Successfully!!!!',
             
             ];
-    Mail::to([$superadminEmail,$adminEmail])->send(new uploadDocumentFirstMail($documentupload));
+
+        $mailData= 
+            [
+                'from'="T.P",
+                'applicationNo'=$request->application_id,
+                'applicationStatus'="T.P Uploaded Document Successfully",
+                'subject'="T.P Uploaded Document Successfully",
+            ];
+
+    Mail::to([$superadminEmail,$adminEmail])->send(new uploadDocumentFirstMail($documentupload));*/
 
   
     return redirect("$request->previous_url")->with('success', 'Documents Update Successfully');
@@ -1658,23 +1683,39 @@ public function acc_doc_comments(Request $request)
            
 
             //Mail sending scripts starts here
-            $assessorToAdminSingle = [
+           /* $assessorToAdminSingle = [
             'title' =>'You Have Received a Report of this Application from Assessor Successfully!!!!',
             'body' => $request->sec_email,
             'status' =>$mailstatus,
+            ];*/
+
+            $mailData= 
+            [
+                'from'=>"T.P",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"Application Assessor to Admin",
+                'subject'=>"You Have Received a Report of this Application from Assessor Successfully!!!!",
             ];
+
             $application_id=$request->application_id;
             $username="Auth::user()->firstname TP Name";
 
-            Mail::to([$superadminEmail,$adminEmail])->send(new assessorSingleAdminFinalApplicationMail($assessorToAdminSingle,$application_id));
+            Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
 
-            $assessorToSingleApplication = [
+            /*$assessorToSingleApplication = [
             'title' =>'You Have Send a Report of this Application to Admin Successfully!!!!',
             
             'status' =>$mailstatus,
+            ];*/
+            $mailData= 
+            [
+                'from'=>"T.P",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"Application Assessor to Admin",
+                'subject'=>"You Have Send a Report of this Application to Admin Successfully!!!!",
             ];
 
-           Mail::to([$asses_email])->send(new assessorSingleFinalMail($assessorToSingleApplication,$application_id));
+           Mail::to([$asses_email])->send(new SendMail($mailData));
             //Mail sending script ends here
 
     }
@@ -1697,10 +1738,7 @@ public function acc_doc_comments(Request $request)
            {
               $asses_email=$user->email;  
            }
-           else
-           {
-             $asses_email="vishal@yopmail.com"; 
-           }
+           
 
           
             
@@ -1725,22 +1763,28 @@ public function acc_doc_comments(Request $request)
            
 
             //Mail sending scripts starts here
-            $AdminSingleDocumentCommentApplication = [
-            'title' =>' You Have Send a Report of this Application to Assessor Successfully!!!!',
-            'status' =>$mailstatus,
+           
+
+            $mailData= 
+            [
+                'from'=>"Admin",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"Application Admin to Assessor",
+                'subject'=>"You Have Send a Report of this Application to Assessor Successfully!!!!",
             ];
-            //$application_id=$request->application_id;
-            //$username="Auth::user()->firstname TP Name";
 
-            Mail::to([$superadminEmail,$adminEmail])->send(new adminSingleDocumentMail($AdminSingleDocumentCommentApplication));
+            Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
 
-            $assessorToSingleApplication = [
-            'title' =>'You Have Send a Report of this Application to Admin Successfully!!!!',
             
-            'status' =>$mailstatus,
+            $mailData= 
+            [
+                'from'=>"Admin",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"Application Admin to Assessor",
+                'subject'=>"You Have Received a Report of this Application From Admin Successfully!!!!",
             ];
 
-           Mail::to([$asses_email])->send(new AdmintoAssessorSingleFinalMail($assessorToSingleApplication));
+           Mail::to([$asses_email])->send(new SendMail($mailData));
             //Mail sending script ends here
 
     }
@@ -1786,34 +1830,99 @@ public function doc_to_admin_sumit(Request $request)
    
 
     //Mail sending scripts starts here
-    $assessorToAdmin = [
+    /*$assessorToAdmin = [
     'title' =>'You Have Received a Final Report of this Application from Assessor Successfully!!!!',
     'body' => $request->sec_email,
+    ];*/
+    $mailData= 
+    [
+        'from'=>"Assessor",
+        'applicationNo'=>$request->application_id,
+        'applicationStatus'=>"Application Assessor to Admin",
+        'subject'=>"Application Submit from Assessor Successfully!!!!",
     ];
+
     $application_id=$request->application_id;
     $username="Auth::user()->firstname TP Name";
 
-    Mail::to([$superadminEmail,$adminEmail])->send(new assessorAdminFinalApplicationMail($assessorToAdmin,$application_id));
+    Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
 
-    $assessorToself = [
-    'title' =>'You Have Send a Final Report of this Application to Admin Successfully!!!!',
-    'body' => ''
+    $mailData= 
+    [
+        'from'=>"Assessor",
+        'applicationNo'=>$request->application_id,
+        'applicationStatus'=>"Application Assessor to Admin",
+        'subject'=>"Application Submit from Assessor Successfully!!!!",
     ];
 
-    Mail::to([$asses_email])->send(new assessorFinalApplicationMail($assessorToself,$application_id));
+    Mail::to([$asses_email])->send(new SendMail($mailData));
     //Mail sending script ends here
-
-
-
-   return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
+    return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
 
 }
 
+public function document_report_by_admin_submit1(Request $request)
+    {
+        $data["email"] = "test1@yopmail.com";
+        $data["title"] = "Laravel 8 send email with attachment - Techsolutionstuff";
+        $data["body"] = "Laravel 8 send email with attachment";
+
+        $pdf = PDF::loadView('pdf_mail', $data);
+
+        Mail::send('pdf_mail', $data, function ($message) use ($data, $pdf) {
+            
+            $message->to($data["email"], $data["email"])
+                ->subject($data["title"])
+                ->attachData($pdf->output(), "test.pdf");
+
+              
+        });
+
+        echo "email send successfully !!";
+    }
+
 public function document_report_by_admin_submit(Request $request)
 {  
-    //return $request->doc_admin_comment;
-   //dd("ysses");
 
+     /*send attachment mail to tp and assessor*/
+     /*$tp_email="dsd@yopmail.com";
+     $tp_name="brijesh";*/
+     $course=ApplicationCourse::where('id',$request->course_id)->first();
+     
+
+    
+
+     if($course)
+     {
+         $user_id = $course->user_id;
+         $data=User::where('id',$user_id)->first();
+         $tp_email=$data->email;
+         $tp_name=$data->firstname;
+         $application_id=$course->application_id;
+
+          $data1["email"] = $tp_email;
+        $data1["title"] = $tp_name;
+        $data1["body"] = "";
+
+     }
+   
+        //return $tp_name;
+       
+        $data=(array) $data1;
+      //  dd(gettype($data));
+        $pdf = PDF::loadView('pdf_mail', $data);
+
+        Mail::send('pdf_mail', $data, function ($message) use ($data, $pdf) {
+            
+            $message->to($data["email"], $data["email"])
+                ->subject($data["title"])
+                ->attachData($pdf->output(), "acknowledgement.pdf");
+
+              
+        });
+      
+
+    //return $request->all();
    $finalcomment=new DocumentReportVerified;
    $finalcomment->user_id=Auth::user()->id;
    $finalcomment->comment_by_assessor=$request->doc_admin_comment;
@@ -1871,38 +1980,49 @@ public function document_report_by_admin_submit(Request $request)
      }
 
     
-     $course=ApplicationCourse::where('id',$request->course_id)->first();
+      $course=ApplicationCourse::where('id',$request->course_id)->first();
     
      if($course)
      {
          $user_id = $course->user_id;
          $data=User::where('id',$user_id)->first();
          $tp_email=$data->email;
+         $tp_name=$data->firstname;
+         $application_id=$course->application_id;
 
      }
-     else
+     /*else
      {
-        $tp_email = "demo1@gmail.com@yopmail.com";
+        $tp_email = "demo1@yopmail.com";
 
-     }
+     }*/
     
     //Mail sending scripts starts here
     $tpadminMail = [
     'title' =>'Application Final Report Send Successfully!!!!',
     'body' => $request->sec_email,
     ];
-    $application_id=$request->application_id;
+    $application_id;
     $username="Auth::user()->firstname TP Name";
 
+
+
     Mail::to([$superadminEmail,$adminEmail])->send(new tpAdminApplicationmail($tpadminMail,$application_id,$username));
+   
+   // $file = 'uploads/1687499674Payments PDF.pdf';
+
+
 
     $tpMail = [
-    'title' =>'You Have Received a Final Report of this Application from Admin Successfully!!!!',
-    'body' => ''
+    'title' =>'Acknowledgement Mail You Have Received a Final Report of this Application from Admin Successfully!!!!',
+    'body' => '',
+    'type' => 'Admin Send final report ',
     ];
 
-    Mail::to([$tp_email,$assessor_email])->send(new tpApplicationmail($tpMail,$application_id,$username));
+    //Mail::to([$tp_email,$assessor_email])->send(new tpApplicationmail($tpMail,$application_id,$username,$file));
     //Mail sending script ends here
+
+   
 
    return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
 

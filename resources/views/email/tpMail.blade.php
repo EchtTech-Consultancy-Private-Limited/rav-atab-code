@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>{{ $tpMail['title'] }}</h1>
- <!--    <p>Assessor Email {{ $tpMail['body'] }}</p> -->
+    <p>Type {{ $tpMail['type'] }}</p> 
     <p>  Application Number : RAVAP-{{(4000+$application_id)}}  </p>
     
 </body>

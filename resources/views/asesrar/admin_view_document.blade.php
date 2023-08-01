@@ -249,7 +249,7 @@ td.text-justify {
                                           @if(isset($check_admin))
                                           <div class="header">
                                              <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
-                                             <a href="{{ url('document-report-by-admin/'.$course_id) }}" class="btn btn-primary">Update Document Status</a>
+                                             <a href="{{ url('document-report-by-admin/'.$course_id) }}" class="btn btn-primary">Final Approval</a>
 
                                              <a style="float:right;margin:10px;" href="{{ url('document-report-verified-by-assessor/'.$application_id.'/'.$course_id) }}" class="btn btn-primary"> Vefified Report</a>
 

@@ -501,26 +501,32 @@ a#ContactCaptcha_ReloadLink {
 
                 <div class="iconInput_container">
                     <label  class="label_input">Captcha<span class="text-danger">*</span></label>
-                     <div class="iconInput email">
+
+                    
                         <div class="captcha">
                             <span>{!! captcha_img('math') !!}</span>
                             <button type="button" class="btn_refresh btn-refresh" id="btn-refresh">
                                 <i class="fa fa-refresh" aria-hidden="true"></i>
                              </button>
                          </div>
-</div>
-                        <label  for="captcha" id="captcha-error" class="error">
-                            @error('captcha')
-                            {{ $message }}
-                        @enderror
-                        </label>
-                </div>
+                    </div>
+
+
+                
+
+
 
                 <div class="iconInput_container">
                     <label for="Orgnisation" class="label_input">Enter Captcha code</label>
-                    <div class="iconInput email">
+                    <div class="iconInput email" style="display: block !important;">
                         <input type="text" class="form-control"  aria-label="Captcha Code" placeholder="Enter Captcha" id="CaptchaCode" name="CaptchaCode">
                     </div>
+                    <br>
+                    <label  for="captcha" id="captcha-error" class="error">
+                            @error('captcha')
+                            {{ $message }}
+                        @enderror
+                    </label>
                 </div>
 
         </div>
