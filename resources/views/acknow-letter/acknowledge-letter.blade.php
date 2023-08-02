@@ -100,25 +100,28 @@
                                                 <tr>
                                                     <th class="center">#S.N0</th>
                                                     <th class="center">Application Number</th>
-                                                    <th class="center">Donwloard</th>
+                                                    <th class="center">Check Acknowledgement Letter</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
 
-
-
+                                                 
+                                                    @foreach($final_application as $key=>$final_applications)
+ 
                                                     <tr class="odd gradeX">
-                                                        <td class="center">1</td>
-                                                        <td class="center">second</td>
+                                                        <td class="center">{{++$key}}</td>
+                                                        <td class="center">{{$final_applications->application_id}}</td>
 
                                                         <td class="center">
+                                                         
 
-                                                        <button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">create</i></button>
+                                                        <a href="mailto:{{get_user_email($final_applications->user_id)}}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a>
 
                                                         </td>
 
 
                                                     </tr>
+                                                    @endforeach
 
                                             </tbody>
                                         </table>

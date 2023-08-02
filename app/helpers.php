@@ -245,6 +245,28 @@ function checktppaymentstatustype($id)
             }
         }
 
+        function get_user_email($id=0)
+        {  
+           
+            $record=App\Models\User::where('id',$id)->first();
+            if($record)
+            {
+               $user_email = $record->email;
+               return $user_email;
+            }
+        }
+
+        function check_acknowledgement($id=0)
+        {  
+          
+            $record=App\Models\AcknowledgementRecord::where('course_id',$id)->first();
+            if($record)
+            {
+              return $course = $record->course_id;
+                
+            }
+        }
+
         function get_role($id=0)
         {  
            
@@ -264,6 +286,7 @@ function checktppaymentstatustype($id)
              if($vartype=="array")
              {
                return $course_modes = implode(',', $course_mode->mode_of_course);
+               
              }
              else
              {

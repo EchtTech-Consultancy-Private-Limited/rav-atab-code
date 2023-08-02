@@ -82,7 +82,7 @@
 
                                             
                                                 <h4>Update Document Status</h4><br><br>
-                                              
+                                                     
                                                      <form method="post" action="{{ url('document-report-by-admin') }}">
                                                         @csrf
                                                         <input type="hidden" name="previous_url" value="{{ Request::url() }}">

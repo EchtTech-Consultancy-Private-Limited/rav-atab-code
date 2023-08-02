@@ -593,12 +593,12 @@ div#ui-datepicker-div {
                                  <div class="tab-pane" role="tabpanel" id="step2">
                                      <div class="card">
                                          <div class="header mb-4">
-                                             <h2 style="float:left; clear:none;">Level Courses </h2>
+                                             <h2 style="float:left; clear:none;">Level Courses</h2>
                                              {{-- @if (count($course) > 0) --}}
                                              {{-- @else --}}
                                              <a href="javascript:void();" class="btn btn-outline-primary mb-0"
                                                  style="float:right; clear:none; cursor:pointer;line-height: 24px;"
-                                                 onclick="add_new_courses();"
+                                                 onclick="add_new_course();"
                                                  @if (request()->path() == 'level-first') id="count" @elseif(request()->path() == 'level-second') id="count_second" @endif>
                                                  <i class="fa fa-plus font-14"></i> Add More Course</a>
                                              {{-- @endif --}}
@@ -608,7 +608,6 @@ div#ui-datepicker-div {
                                              enctype="multipart/form-data" method="post" class="form"
                                              id="regForm">
                                              @csrf
-                                             <input type="hidden"  name="form_step_type"  value="step2">
                                              <div class="body pb-0" id="courses_body">
                                                  <!-- level start -->
                                                  <div class="row clearfix">
@@ -979,13 +978,13 @@ div#ui-datepicker-div {
                                                              <label>Mode of Course <span
                                                                      class="text-danger">*</span></label>
                                                                       <div class="form-group default-select select2Style">
-                                                                     <select class="form-control select2 width" name="mode_of_course[]"
-                                                                         >
-                                                                         <option value="" SELECTED>Select Mode
-                                                                         </option>
-                                                                         <option value="Online">Online</option>
-                                                                         <option value="Offline">Offline</option>
-                                                                     </select>
+                                                             <select class="form-control select2 width" name="mode_of_course[]"
+                                                                 required>
+                                                                 <option value="" SELECTED>Select Mode
+                                                                 </option>
+                                                                 <option value="Online">Online</option>
+                                                                 <option value="Offline">Offline</option>
+                                                             </select>
                                                          </div>
                                                          </div>
                                                          @error('mode_of_course')
@@ -1426,7 +1425,7 @@ div#ui-datepicker-div {
 
 
                                                                  <td class="center">
-                                                                    <a href="{{ url('/previews-application-first' . '/' . $item->id.'/'.$item->application_id) }}"
+                                                                    <a href="{{ url('/previews-application-first' . '/' . $item->id) }}"
                                                                         class="btn btn-tbl-edit"><i
                                                                             class="material-icons">visibility</i></a>
                                                                     <!-- @if ($item->status == 1)
@@ -1775,9 +1774,9 @@ div#ui-datepicker-div {
                                                                  <!-- </select> -->
 
                                                                 <select multiple name="myselect" id="mode_of_course_edit">
-                                                                      <option value="Online">Online</option>
-                                                                      <option value="Offline">Offline</option>
-                                                                      <option value="Hybrid">Hybrid</option>
+                                                                      <option value="1">Online</option>
+                                                                      <option value="2">Offline</option>
+                                                                      <option value="3">Hybrid</option>
                                                                 </select>
 
                                                                    
@@ -2353,7 +2352,7 @@ div#ui-datepicker-div {
     <script>
        $(document).on("click", "#edit_course", function() {
 
-      //  alert("edit course second 2420");
+         //alert("edit course");
            var UserName = $(this).data('id');
            console.log(UserName);
           
@@ -2370,14 +2369,101 @@ div#ui-datepicker-div {
                    id: UserName
                },
                success: function(data) {
-                   
-            console.log(data.ApplicationCourse[0].mode_of_course);
-              
+
+                   //console.log(data.ApplicationCourse[0].id)
+                   // console.log(data.Document[0].document_file)
+                 
+                
+                //alert(data.ApplicationCourse[0].mode_of_course);
+                //console.log(data.ApplicationCourse[0].mode_of_course);
+               
+               var modecourse1=data.ApplicationCourse[0].mode_of_course[0];
+               var modecourse2=data.ApplicationCourse[0].mode_of_course[1];
+               var modecourse3=data.ApplicationCourse[0].mode_of_course[2];
+               
+               
+               if(modecourse1=='2')
+               {
+                 var modecourse1="undefined";
+                 var modecourse2='2';
+                 
+               }
+               if(modecourse2=='3')
+               {
+                 var modecourse2="undefined";
+                 var modecourse3='3';
+                 
+               }
+               
+              /* alert(modecourse1);
+               alert(modecourse2);
+               alert(modecourse3);*/
+               var selectValues = [];
+               if(modecourse1=='1' && modecourse2==undefined && modecourse3==undefined)
+               {
+                 /* alert("yy");*/
+                /*alert("third");*/
+                   var selectValues = [1];
+               }
+               else if(modecourse1=='1' && modecourse2=='2' && modecourse3==undefined)
+
+               {    /*alert("second");*/
+                /*alert("third");*/
+                   var selectValues = [1,2];
+               }
+
+               else if(modecourse1=='1' && modecourse2=='2' && modecourse3=='3')
+               { /* alert("third");*/
+                   var selectValues = [1,2,3];
+               }
+
+               else if(modecourse2=='2' && modecourse1==undefined)
+               {  
+                   /*alert("third");*/
+                   var selectValues = [2];
+               }
+
+               else if(modecourse1=='1'  && modecourse3=='3')
+               {  
+                  var selectValues = [1,3];
+               }
+
+               else if(modecourse1==undefined  && modecourse3=='3')
+               {  
+                 var selectValues = [3];
+               }
+
+               console.log(selectValues);
+
+             
+               // console.log(selectValues);
+                //const selectValues = $entArr;
+                
+                
+                //const selectValues = [data.ApplicationCourse[0].mode_of_course];
+                /* Iterate options of select element */
+                for (const option of document.querySelectorAll('#mode_of_course_edit option')) {
+
+                  /* Parse value to integer */
+                  const value = Number.parseInt(option.value);
+
+                  /* If option value contained in values, set selected attribute */
+                  if (selectValues.indexOf(value) !== -1) {
+                    option.setAttribute('selected', 'selected');
+                  }
+                  /* Otherwise ensure no selected attribute on option */
+                  else {
+                    option.removeAttribute('selected');
+                  }
+                }
 
 
-                var values=data.ApplicationCourse[0].mode_of_course;
-                $.each(values, function(i,e){
-                    $("#mode_of_course_edit option[value='" + e + "']").prop("selected", true);
+                var values="Online,Offline,Hybrid";
+               // jQuery.inArray("Online", values);
+
+                $.each(values.split(","), function(i,e){
+                    //jQuery.inArray("Online", values);
+                    //$("#mode_of_course_edisst option[value='" + e + "']").prop("selected", true);
                 });
 
                    $('#form_update').attr('action', '{{ url('/course-edit') }}' + '/' + data
@@ -2411,6 +2497,11 @@ div#ui-datepicker-div {
                        .document_file);
 
                    //dd
+
+                    
+                   
+
+
                }
 
            });

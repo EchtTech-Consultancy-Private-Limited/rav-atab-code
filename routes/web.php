@@ -121,7 +121,7 @@ Route::post('/Assigan-application',[applicationController::class,'Assigan_applic
 Route::post('/assigan-secretariat-application',[applicationController::class,'assigan_secretariat_application']);
 
 //previews-application view page
-Route::get('/previews-application-first/{id?}',[LevelController::class,'previews_application1']);
+Route::get('/previews-application-first/{id?}/{application_id}',[LevelController::class,'previews_application1']);
 Route::get('/previews-application-second/{id?}',[LevelController::class,'previews_application2']);
 Route::get('/previews-application-third/{id?}',[LevelController::class,'previews_application3']);
 Route::get('/previews-application-fourth/{id?}',[LevelController::class,'previews_application4']);

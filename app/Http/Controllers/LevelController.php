@@ -10,13 +10,16 @@ use App\Models\ApplicationPayment;
 use App\Models\ApplicationDocument;
 use App\Models\LevelInformation;
 use App\Models\DocumentReportVerified;
+use App\Models\AcknowledgementRecord;
 use App\Models\User;
 use App\Models\Faq;
 use Illuminate\Support\Facades\Cookie;
 use Redirect;
 use Auth;
 use File;
+use Session;
 use DB;
+use Carbon\Carbon;
 use PDF;
 use Mail;
 use App\Mail\SendMail;
@@ -83,12 +86,12 @@ class LevelController extends Controller
 
     public function admin_view($id)
     {
-
+ 
     $Application =Application::whereid(dDecrypt($id))->get();
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
-    
-    $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
+    $spocData =DB::table('applications')->where('id',$Application[0]->id)->first();
+
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     return view('level.admin_course_view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
     }
@@ -187,6 +190,12 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
+   /* dd("we are work on manage ");
+    $form_step_type= Session::get('session_for_redirections');
+         if(empty($form_step_type))
+         {  
+           $form_step_type="withour-session-step";
+         }*/
     
  if($id)
  {
@@ -880,7 +889,7 @@ public function newapplication()
      }else{
          $file->application_id =$request->application_id;
      }
-
+     
      $file->course_name=$course_name[$i];
      $file->years=$years[$i];
      $file->months=$months[$i];
@@ -961,6 +970,10 @@ public function newapplication()
 
 
  }
+
+    $session_for_redirection=$request->form_step_type;
+    Session::put('session_for_redirections', $session_for_redirection);
+    $session_for_redirections= Session::get('session_for_redirections');
 
  if($request->level_id =='1')
  {
@@ -1102,9 +1115,10 @@ public function newapplication()
 
   //level information view page 4 url
 
-public function previews_application1($ids)
-{
-    $id=Auth::user()->id;
+public function previews_application1($ids,$application_id)
+{   
+
+     $id=Auth::user()->id;
     $item=LevelInformation:: whereid('1')->get();
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')
             ->join('countries','users.country', '=', 'countries.id')
@@ -1112,7 +1126,7 @@ public function previews_application1($ids)
             ->join('states','users.state', '=', 'states.id')
             ->first();
     
-    $spocData =DB::table('applications')->where('user_id',$id)->first();
+    $spocData =DB::table('applications')->where('id',$application_id)->first();
     
     $ApplicationCourse=ApplicationCourse::where('user_id',$id)->wherepayment($ids)->wherelevel_id($item[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::where('user_id',$id)->whereid($ids)->wherelevel_id($item[0]->id)->get();
@@ -1883,15 +1897,8 @@ public function document_report_by_admin_submit1(Request $request)
 
 public function document_report_by_admin_submit(Request $request)
 {  
-
-     /*send attachment mail to tp and assessor*/
-     /*$tp_email="dsd@yopmail.com";
-     $tp_name="brijesh";*/
+      /*send attachment mail to tp and assessor*/
      $course=ApplicationCourse::where('id',$request->course_id)->first();
-     
-
-    
-
      if($course)
      {
          $user_id = $course->user_id;
@@ -1899,18 +1906,15 @@ public function document_report_by_admin_submit(Request $request)
          $tp_email=$data->email;
          $tp_name=$data->firstname;
          $application_id=$course->application_id;
-
-          $data1["email"] = $tp_email;
-        $data1["title"] = $tp_name;
-        $data1["body"] = "";
+         $data1["email"] = $tp_email;
+         $data1["title"] = $tp_name;
+         $data1["body"] = "";
 
      }
    
-        //return $tp_name;
-       
-        $data=(array) $data1;
-      //  dd(gettype($data));
-        $pdf = PDF::loadView('pdf_mail', $data);
+      $data=(array) $data1;
+      //dd(gettype($data));
+      $pdf = PDF::loadView('pdf_mail', $data);
 
         Mail::send('pdf_mail', $data, function ($message) use ($data, $pdf) {
             
@@ -1921,6 +1925,24 @@ public function document_report_by_admin_submit(Request $request)
               
         });
       
+    /*end send attachment mail to tp and assessor*/
+
+    /*update statur that acknowledgement send or not*/
+       if($course)
+       {  
+          
+          $currentdatetime = Carbon::now();
+          $current_date = $currentdatetime->toDateString();
+          $acknowledgement=new AcknowledgementRecord;
+          $acknowledgement->application_id=$course->application_id;
+          $acknowledgement->course_id=$request->course_id;
+          $acknowledgement->acknowledgement_id=1;
+          $acknowledgement->status=1;
+          $acknowledgement->send_date=$current_date;
+          $acknowledgement->user_id=$course->user_id;
+          $acknowledgement->save();
+        }
+      /*end update statur that acknowledgement send or not*/
 
     //return $request->all();
    $finalcomment=new DocumentReportVerified;
@@ -1966,7 +1988,14 @@ public function document_report_by_admin_submit(Request $request)
 
     //mail send
     $superadminEmail = 'superadmin@yopmail.com';
-    $adminEmail = 'admin@yopmail.com';
+    //$adminEmail = 'admin@yopmail.com';
+    
+    $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('email', ['superadmin@yopmail.com'])->first();
+    if($admin)
+    { 
+        $adminEmail=$admin->email;
+
+    }
     /*$asses_email = $request->sec_email;*/
 
      $request->course_id;
@@ -1991,45 +2020,18 @@ public function document_report_by_admin_submit(Request $request)
          $application_id=$course->application_id;
 
      }
-     /*else
-     {
-        $tp_email = "demo1@yopmail.com";
-
-     }*/
-    
+     
     //Mail sending scripts starts here
-    $tpadminMail = [
-    'title' =>'Application Final Report Send Successfully!!!!',
-    'body' => $request->sec_email,
+    $mailData= 
+    [
+        'from'=>"Admin",
+        'applicationNo'=>$application_id,
+        'applicationStatus'=>"Admin send Final Report of this Application",
+        'subject'=>"Application Final Report Send Successfully with Acknowledgment Attachment",
     ];
-    $application_id;
-    $username="Auth::user()->firstname TP Name";
-
-
-
-    Mail::to([$superadminEmail,$adminEmail])->send(new tpAdminApplicationmail($tpadminMail,$application_id,$username));
-   
-   // $file = 'uploads/1687499674Payments PDF.pdf';
-
-
-
-    $tpMail = [
-    'title' =>'Acknowledgement Mail You Have Received a Final Report of this Application from Admin Successfully!!!!',
-    'body' => '',
-    'type' => 'Admin Send final report ',
-    ];
-
-    //Mail::to([$tp_email,$assessor_email])->send(new tpApplicationmail($tpMail,$application_id,$username,$file));
-    //Mail sending script ends here
-
-   
+   Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
 
    return redirect("$request->previous_url")->with('success', 'This Document Send to Admin Successfully');
-
-
-
-   
-
 }
 
 

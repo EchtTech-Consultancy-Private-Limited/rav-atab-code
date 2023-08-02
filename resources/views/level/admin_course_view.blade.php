@@ -247,6 +247,14 @@
                                   <div class="col-sm-4">
                                      <div class="form-group">
                                         <div class="form-line">
+                                           <label><strong>Designation</strong></label><br>
+                                            {{ $spocData->designation ??'' }}
+                                        </div>
+                                     </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                     <div class="form-group">
+                                        <div class="form-line">
 
                                             <label><strong>Email Id</strong></label><br>
 
@@ -327,7 +335,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <!-- <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Valid From</strong></label><br>
@@ -344,11 +352,9 @@
                                                     <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at->addYear())) }}</label>            </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
-
-
-                                    <div class="row clearfix">
+                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Course Brief</strong></label><br>
@@ -356,6 +362,17 @@
                                             </div>
                                         </div>
                                     </div>
+
+
+
+                                    <!-- <div class="row clearfix">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Course Brief</strong></label><br>
+                                                <label>{{ $ApplicationCourses->course_brief ?? '' }}</label>
+                                            </div>
+                                        </div>
+                                    </div> -->
 
                                      <div class="col-sm-12 text-right">
                                        <div class="form-group">
