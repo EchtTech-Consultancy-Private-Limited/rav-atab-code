@@ -13,6 +13,7 @@ use App\Models\DocumentReportVerified;
 use App\Models\AcknowledgementRecord;
 use App\Models\User;
 use App\Models\Faq;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cookie;
 use Redirect;
 use Auth;
@@ -1898,7 +1899,8 @@ public function document_report_by_admin_submit1(Request $request)
     }
 
 public function document_report_by_admin_submit(Request $request)
-{  
+{   
+
       /*send attachment mail to tp and assessor*/
      $course=ApplicationCourse::where('id',$request->course_id)->first();
      if($course)
@@ -1923,13 +1925,18 @@ public function document_report_by_admin_submit(Request $request)
             $message->to($data["email"], $data["email"])
                 ->subject($data["title"])
                 ->attachData($pdf->output(), "acknowledgement.pdf");
-
-              
-        });
-      
+            });
+        
     /*end send attachment mail to tp and assessor*/
+    $filename=$course->application_id;
+    $acknowledgement_pdf= $filename.'.pdf';
+    $content = $pdf->download()->getOriginalContent();
+    Storage::put('public/pdf/'.$filename.'.pdf',$content);
+    
+   
 
-    /*update statur that acknowledgement send or not*/
+    
+        /*update statur that acknowledgement send or not*/
        if($course)
        {  
           
@@ -1942,6 +1949,7 @@ public function document_report_by_admin_submit(Request $request)
           $acknowledgement->status=1;
           $acknowledgement->send_date=$current_date;
           $acknowledgement->user_id=$course->user_id;
+          $acknowledgement->pdf=$acknowledgement_pdf;
           $acknowledgement->save();
         }
       /*end update statur that acknowledgement send or not*/

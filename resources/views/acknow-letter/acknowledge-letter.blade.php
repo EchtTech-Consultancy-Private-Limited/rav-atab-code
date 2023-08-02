@@ -98,7 +98,7 @@
                                         <table class="table table-hover js-basic-example contact_list">
                                             <thead>
                                                 <tr>
-                                                    <th class="center">#S.N0</th>
+                                                    <th class="center">#S.N0 </th>
                                                     <th class="center">Application Number</th>
                                                     <th class="center">Check Acknowledgement Letter</th>
                                                 </tr>
@@ -110,12 +110,14 @@
  
                                                     <tr class="odd gradeX">
                                                         <td class="center">{{++$key}}</td>
-                                                        <td class="center">{{$final_applications->application_id}}</td>
+                                                        <td class="center">{{$final_applications->application_id}} </td>
 
                                                         <td class="center">
                                                          
 
-                                                        <a href="mailto:{{get_user_email($final_applications->user_id)}}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a>
+                                                     <!--    <a href="mailto:{{get_user_email($final_applications->user_id)}}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a> -->
+
+                                                        <a href="{{ '../storage/app/public/pdf/'.$final_applications->pdf }}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a>
 
                                                         </td>
 
