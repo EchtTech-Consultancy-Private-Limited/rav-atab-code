@@ -203,7 +203,7 @@ class AuthController extends Controller
                         'type' => 'New Registration'
                     ];
     
-                    Mail::to($userEmail)->send(new SendMail($mailData));
+                    Mail::to($userEmail)->send(new SendMailRegis($mailData));
                     //Mail sending script ends here
     
                     return redirect()->intended('/')->with('falils','Your registration is successfull. your account is not actived yet. please contact your adminstrator to active your account');
