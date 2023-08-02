@@ -1332,8 +1332,8 @@ div#ui-datepicker-div {
                                                                  <label>Payment Screenshot <span
                                                                          class="text-danger">*</span></label>
                                                                  <input type="file" name="payment_details_file"
-                                                                     id="payment_reference_no" required
-                                                                     class="form-control">
+                                                                     id="payment_details_file" required
+                                                                     class="form-control payment_details_file">
                                                              </div>
                                                              <label for="payment_reference_no"
                                                                  id="payment_reference_no-error" class="error">
@@ -2353,7 +2353,7 @@ div#ui-datepicker-div {
     <script>
        $(document).on("click", "#edit_course", function() {
 
-      //  alert("edit course second 2420");
+       //alert("edit course second 2420");
            var UserName = $(this).data('id');
            console.log(UserName);
           
@@ -2371,7 +2371,7 @@ div#ui-datepicker-div {
                },
                success: function(data) {
                    
-            console.log(data.ApplicationCourse[0].mode_of_course);
+               console.log(data.ApplicationCourse[0].mode_of_course);
               
 
 
@@ -2508,6 +2508,30 @@ div#ui-datepicker-div {
 
    </script>
    
+    <script>
+       var doc_payment_file="";
+       
+       $('.payment_details_file').on('change',function(){
+
+          doc_payment_file = $(".payment_details_file").val();
+          
+          var doc_payment_files = doc_payment_file.split('.').pop();
+         
+          if(doc_payment_files=='png' || doc_payment_files=='jpg' || doc_payment_files=='jpeg')
+          {
+          // alert("File uploaded is pdf");
+           }
+          else{
+            alert("Only jpg, png, jpeg are allowed")
+             $('.payment_details_file').val("");
+          }
+         
+        });
+
+        
+        
+   </script>
+
    <script>
        var doc_file1="";
        
@@ -2529,6 +2553,8 @@ div#ui-datepicker-div {
         
         
    </script>
+
+
 
    <script>
 

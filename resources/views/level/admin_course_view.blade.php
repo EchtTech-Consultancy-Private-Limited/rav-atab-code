@@ -3,6 +3,8 @@
 
 <title>RAV Accreditation || Previous Applications View</title>
 
+<link rel="stylesheet" type="text/css" href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
+
 </head>
 
 <body class="light">
@@ -468,7 +470,7 @@
                                                    </label> -->
                                                 
                                                 @if(isset($ApplicationPayment->payment_details_file))
-                                                <a target="_blank" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}">
+                                                <a target="_blank" class="image-link" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}">
                                                 <img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" style="width:100px;height:70px;">
                                                  </a>
                                                  @endif
@@ -536,6 +538,13 @@
 
         </div>
     </section>
+
+
+
+
+
+
+
         <script>
    function confirm_option(){
       if(!confirm("Are you sure to change action of this record!")){
@@ -547,4 +556,34 @@
    }
 </script>
 
+    <script>
+
+$(document).ready(function () {
+
+$('.image-link').magnificPopup({
+
+type: 'image',
+
+mainClass: 'mfp-with-zoom',
+
+gallery: {
+
+enabled: true
+
+},
+zoom: {
+enabled: true,
+duration: 300, // duration of the effect, in milliseconds
+easing: 'ease-in-out', // CSS transition easing function
+opener: function (openerElement) {
+return openerElement.is('img') ? openerElement : openerElement.find('img');
+}}
+});
+});
+
+
+
+</script>
+
     @include('layout.footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>

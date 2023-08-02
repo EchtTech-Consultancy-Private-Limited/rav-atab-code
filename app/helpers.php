@@ -267,6 +267,13 @@ function checktppaymentstatustype($id)
             }
         }
 
+        function count_document_record($id=0)
+        {  
+          
+            return $record=App\Models\Add_Document::where('course_id',$id)->count();
+            
+        }
+
         function get_role($id=0)
         {  
            

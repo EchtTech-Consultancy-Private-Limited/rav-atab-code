@@ -2,6 +2,7 @@
 
 
 <title>RAV Accreditation || Previous Applications View</title>
+<link rel="stylesheet" type="text/css" href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
 
 </head>
 
@@ -411,24 +412,16 @@
                                    <div class="col-sm-4">
                                    <div class="form-group">
                                       <div class="form-line">
-                                         <label><strong>Payment Image</strong></label><br>
+                                         <label><strong>Payment Screenshot</strong></label><br>
                                          
                                          @if(isset($ApplicationPayment->payment_details_file))
-                                         <a target="_blank" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" ><img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" alt="Payment File" width="100px;" height="100px;"></a>
+                                         <a target="_blank" class="image-link" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" ><img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" alt="Payment File" width="100px;" height="100px;"></a>
 
                                          @endif
 
-                                        
-
-                                      </div>
+                                       </div>
                                    </div>
-                                   </div>
-
-
-
-
-
-                                  </div>
+                                </div>
                                 <!-- basic end -->
                               </div>
                               </div>
@@ -439,12 +432,36 @@
             </div>
         </div>
 @endforeach
-
-
-
-
-        </div>
+ </div>
     </section>
+    <script>
 
+$(document).ready(function () {
+
+$('.image-link').magnificPopup({
+
+type: 'image',
+
+mainClass: 'mfp-with-zoom',
+
+gallery: {
+
+enabled: true
+
+},
+zoom: {
+enabled: true,
+duration: 300, // duration of the effect, in milliseconds
+easing: 'ease-in-out', // CSS transition easing function
+opener: function (openerElement) {
+return openerElement.is('img') ? openerElement : openerElement.find('img');
+}}
+});
+});
+
+
+
+</script>
     @include('layout.footer')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
 

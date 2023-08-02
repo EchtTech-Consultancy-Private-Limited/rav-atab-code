@@ -81,7 +81,7 @@
                                         <div class="body">
 
                                             
-                                                <h4>Update Document Status</h4><br><br>
+                                                <h4>Update Document Status </h4><br><br>
                                                      
                                                      <form method="post" action="{{ url('document-report-by-admin') }}">
                                                         @csrf
@@ -99,8 +99,15 @@
                                                                
                                                                 <input type="hidden" name="send_to_admin" value="1" >
                                                             </div>
-
+                                                            @if(isset($acknow_record))
+                                                            @if($acknow_record->course_id==$course_id)
+                                                            <input  value="Comment Send Already" class="btn btn-danger">
+                                                            @else
                                                             <input type="submit" value="Add Comment" class="btn btn-primary">
+                                                            @endif
+                                                            @else
+                                                            <input type="submit" value="Add Comment" class="btn btn-primary">
+                                                            @endif
                                                         </div>
                                                     </form>
 

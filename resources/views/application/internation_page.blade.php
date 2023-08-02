@@ -246,16 +246,18 @@
                                                                             <br>
                                                                              <select name="assessment_type" id="assessment_type" class="form-control">
                                                                               <option value="">Select Assessment Type</option>
+
                                                                               <option value="1" @if($assessment_type == 1) {
                                                                                selected @endif>Desktop Assessment</option>
                                                                               <option value="2" @if($assessment_type == 2) {
                                                                                selected @endif>On-Site Assessment</option>
-                                                                              <option value="3" @if($assessment_type == 3) {
+                                                                               
+                                                                              <!-- <option value="3" @if($assessment_type == 3) {
                                                                                selected @endif>Surveillance Assessment</option>
                                                                               <option value="4" @if($assessment_type == 4) {
                                                                                selected @endif>Surprise Assessment</option>
                                                                               <option value="5" @if($assessment_type == 5) {
-                                                                               selected @endif>Re-Assessment</option>
+                                                                               selected @endif>Re-Assessment</option> -->
 
                                                                              </select>
                                                                                                 <div class="modal-body mod-css">
@@ -523,16 +525,18 @@
                                                                              <br><br>
                                                                              <select name="assessment_type" id="assessment_type" class="form-control">
                                                                               <option value="">Select Assessment Type</option>
+
                                                                               <option value="1" @if($assessment_type == 1) {
                                                                                selected @endif>Desktop Assessment</option>
                                                                               <option value="2" @if($assessment_type == 2) {
                                                                                selected @endif>On-Site Assessment</option>
-                                                                              <option value="3" @if($assessment_type == 3) {
+
+                                                                             <!--  <option value="3" @if($assessment_type == 3) {
                                                                                selected @endif>Surveillance Assessment</option>
                                                                               <option value="4" @if($assessment_type == 4) {
                                                                                selected @endif>Surprise Assessment</option>
                                                                               <option value="5" @if($assessment_type == 5) {
-                                                                               selected @endif>Re-Assessment</option>
+                                                                               selected @endif>Re-Assessment</option> -->
 
                                                                              </select>
                                                                             <div class="modal-body">

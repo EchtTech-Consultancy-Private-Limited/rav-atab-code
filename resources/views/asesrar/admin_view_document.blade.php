@@ -244,16 +244,21 @@ td.text-justify {
                                             
                                             <hr> -->
                                         
-
+ 
 
                                           @if(isset($check_admin))
+
                                           <div class="header">
                                              <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
                                      
                                              @if(check_acknowledgement($course_id)==$course_id)
                                              <a  class="btn btn-danger">Final Approval Done</a>
                                              @else
+                                             @if(count_document_record($course_id)==44)
                                              <a href="{{ url('document-report-by-admin/'.$course_id) }}" class="btn btn-primary">Final Approval</a>
+                                             @else
+                                             <a  class="btn btn-danger">All Document Not Uploaded</a>
+                                             @endif
                                              @endif
 
 

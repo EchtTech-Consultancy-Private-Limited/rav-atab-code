@@ -190,12 +190,12 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
-   /* dd("we are work on manage ");
-    $form_step_type= Session::get('session_for_redirections');
+    //dd("we are work on manage ");
+     $form_step_type= Session::get('session_for_redirections');
          if(empty($form_step_type))
          {  
            $form_step_type="withour-session-step";
-         }*/
+         }
     
  if($id)
  {
@@ -298,7 +298,7 @@ class LevelController extends Controller
 
 
 
-    return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs]);
+    return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs],compact('form_step_type'));
 
  }else
  {
@@ -1817,8 +1817,10 @@ public function doc_to_admin($course_id)
 
 public function document_report_by_admin($course_id)
 {
-    //return $course_id;
-    return view('asesrar.document-report-by-admin',compact('course_id'));
+ 
+   $acknow_record=AcknowledgementRecord::select('course_id')->where('course_id',$course_id)->first();
+   //return $acknow_record->course_id;
+   return view('asesrar.document-report-by-admin',compact('course_id','acknow_record'));
 }
 
 public function doc_to_admin_sumit(Request $request)
@@ -2327,15 +2329,12 @@ $item=LevelInformation:: whereid('1')->get();
 $ApplicationCourse=ApplicationCourse::whereid($request->id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 $Document=ApplicationDocument::wherecourse_number($ApplicationCourse[0]->id)->get();
 $course_mode=['1'=>'Online','2'=>'Offline','3'=>'Hybrid'];
-$arrdata=$ApplicationCourse[0]->mode_of_course;
-$countmode=count($ApplicationCourse[0]->mode_of_course);
 
-$modecourse=implode(",",$arrdata);
 
 //return gettype($modecourse);
 //dd(gettype($ApplicationCourse[0]->mode_of_course));
-
-return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Document,'course_mode'=>$course_mode,'modecourse'=>$modecourse,'countmode'=>$countmode]);
+//return $request->all();
+return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Document]);
 
 }
 
@@ -2343,7 +2342,7 @@ return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Do
 public function course_edits(Request $request,$id)
 {
 
-    //dd($request->all());
+   
     $Document=ApplicationDocument::wherecourse_number($id)->get();
 
 
