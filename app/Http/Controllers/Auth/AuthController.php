@@ -21,6 +21,7 @@ use Mail;
 use App\Mail\VerificationMobile;
 use App\Mail\VerificationEmail;
 use App\Mail\SendMail;
+use App\Mail\SendMailRegis;
 
 class AuthController extends Controller
 {
