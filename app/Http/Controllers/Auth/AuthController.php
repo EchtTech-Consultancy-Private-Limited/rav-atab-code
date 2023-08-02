@@ -197,6 +197,7 @@ class AuthController extends Controller
     
                     //Mail sending scripts starts here
                     $mailData = [
+                        'subject' => 'New Registration',
                         'title' => 'You have successfully registered',
                         'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
                         'type' => 'New Registration'
