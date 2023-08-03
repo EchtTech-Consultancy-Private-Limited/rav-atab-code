@@ -961,7 +961,8 @@ public function newapplication()
      $data->user_id = Auth::user()->id;
 
 
-     if($request->application_id == NULL){
+     if($request->application_id == NULL)
+     {
          $data->application_id =$request->application;
      }else{
          $data->application_id =$request->application_id;
@@ -973,6 +974,7 @@ public function newapplication()
 
 
  }
+    
 
     $session_for_redirection=$request->form_step_type;
     Session::put('session_for_redirections', $session_for_redirection);
@@ -1076,6 +1078,9 @@ public function newapplication()
       $ApplicationCourse->save();
 
    // return  redirect('/level-first')->with('success','Payment Done successfully!!!!');
+    
+    $user_have_session="Payment Added";
+    $session_store=Session::put('is_session',$user_have_session);
 
     $session_for_redirection=$request->form_step_type;
     Session::put('session_for_redirections', $session_for_redirection);
