@@ -38,6 +38,10 @@ div#ui-datepicker-div {
     width: 250px;
 }
 
+.select-box-hide-class select {
+    display: none;
+}
+
  </style>
 
 
@@ -1126,13 +1130,12 @@ div#ui-datepicker-div {
                                          </div>
                                          <div class="body">
                                              <div class="form-group">
-                                                 <div class="form-line">
+                                                 <div class="form-line select-box-hide-class">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
                                                          <option value="">Select Option</option>
                                                          <option value="QR-Code"
-                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
-                                                             Code
+                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR Code
                                                          </option>
                                                          <option value="Bank"
                                                              {{ old('title') == 'Bank' ? 'selected' : '' }}>Bank
@@ -1142,6 +1145,7 @@ div#ui-datepicker-div {
                                                  </div>
                                              </div>
                                              <!-- payment start -->
+
                                              <div style="text-align:center; width:100%;" id="QR">
                                                  <div
                                                      style="width:100px; height:100px; border:1px solid #ccc; float:right;">

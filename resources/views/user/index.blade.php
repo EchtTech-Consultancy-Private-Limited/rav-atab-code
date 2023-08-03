@@ -127,7 +127,7 @@
                                 <tr class="odd gradeX">
                                    <td class="center">RAVTP-{{ $user->id }}</td>
                                    <td class="center">{{ date('d F Y', strtotime($user->created_at)) }}</td>
-                                   <td class="center">{{ date('d F Y', strtotime($user->created_at->addYear())) }}</td>
+                                   <td class="center">@if(isset($user->created_at)) {{ date('d F Y', strtotime($user->created_at->addYear())) }} @endif</td>
                                    <td class="center">{{ $user->firstname }}</td>
                                    <td class="center">{{ $user->email }}</td>
                                    <td class="text-center">

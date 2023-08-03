@@ -1603,24 +1603,26 @@ public function document_comment_admin_assessor($course_id)
     }
    
     $course->save();
-        /*$admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
-
-         $adminEmail = $admin->email;
+        $admin = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
+         if($admin)
+         {
+              $adminEmail = $admin->email;
+         }
+         else
+         {
+            $adminEmail="adminuser@yopmail.com";
+         }
+       
          $superadminEmail="superadmin@yopmail.com";
-         $documentupload = [
-            'title' =>'You Have Received a Report of this Application from Assessor Successfully!!!!',
-            
-            ];
-
-        $mailData= 
+         $mailData= 
             [
-                'from'="T.P",
-                'applicationNo'=$request->application_id,
-                'applicationStatus'="T.P Uploaded Document Successfully",
-                'subject'="T.P Uploaded Document Successfully",
+                'from'=>"T.P",
+                'applicationNo'=>$request->application_id,
+                'applicationStatus'=>"T.P Uploaded Document Successfully",
+                'subject'=>"T.P Uploaded Document Successfully",
             ];
 
-    Mail::to([$superadminEmail,$adminEmail])->send(new uploadDocumentFirstMail($documentupload));*/
+    Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
 
   
     return redirect("$request->previous_url")->with('success', 'Documents Update Successfully');
