@@ -191,13 +191,15 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
-    //dd("we are work on manage ");
-     $form_step_type= Session::get('session_for_redirections');
-         if(empty($form_step_type))
+        //dd("we are work on manage ");
+        $form_step_type= Session::get('session_for_redirections');
+        /* if(empty($form_step_type))
          {  
            $form_step_type="withour-session-step";
-         }
-    
+         }*/
+
+       //return $form_step_type;
+     
  if($id)
  {
 
@@ -975,7 +977,7 @@ public function newapplication()
     $session_for_redirection=$request->form_step_type;
     Session::put('session_for_redirections', $session_for_redirection);
     $session_for_redirections= Session::get('session_for_redirections');
-
+ 
  if($request->level_id =='1')
  {
 
@@ -1074,6 +1076,10 @@ public function newapplication()
       $ApplicationCourse->save();
 
    // return  redirect('/level-first')->with('success','Payment Done successfully!!!!');
+
+    $session_for_redirection=$request->form_step_type;
+    Session::put('session_for_redirections', $session_for_redirection);
+    $session_for_redirections= Session::get('session_for_redirections');
 
  return  redirect('level-first/'.$item->application_id)->with('success','Payment Done successfully!!!!');
 

@@ -132,7 +132,8 @@ div#ui-datepicker-div {
                              <div class="p-l-20">
                                  <ul class="nav ">
                                      <li class="nav-item tab-all">
-                                         <a class="nav-link show active" href="#general_information"
+
+                                    <a class="nav-link show  @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step')   @endif @else active  @endif" href="#general_information"
                                              data-bs-toggle="tab" >General Information</a>
                                      </li>
 
@@ -147,7 +148,7 @@ div#ui-datepicker-div {
                                      </li>
 
                                      <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link " href="#new_application" data-bs-toggle="tab">New
+                                         <a class="nav-link @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') active @else  @endif  @endif" href="#new_application" data-bs-toggle="tab">New
                                              Application</a>
                                      </li>
                                      
@@ -221,11 +222,11 @@ div#ui-datepicker-div {
                                                         <thead>
                                                             <tr>
 
-                                                                <th class="center"> Application ID </th>
+                                                                <th> Application ID </th>
 <!--                                                                <th class="center"> Create User ID </th>-->
-                                                                <th class="center"> Level ID </th>
-                                                                <th class="center"> Country </th>
-                                                                <th class="center"> Action </th>
+                                                                <th> Level ID </th>
+                                                                <th> Country </th>
+                                                                <th> Action </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -238,12 +239,12 @@ div#ui-datepicker-div {
 
                                                                     @if(checktppaymentstatus($item_level_list->id) == 0)
 
-                                                                        <td class="center">  RAVAP-{{ 4000 + $item_level_list->id }}</td></td>
-<!--                                                                        <td class="center"> {{ $item_level_list->user_id ?? '' }}</td>-->
-                                                                        <td class="center"> {{ $item_level_list->level_id ?? '' }}</td>
-                                                                        <td class="center"> {{ $item_level_list->country_name ?? '' }}</td>
+                                                                        <td>  RAVAP-{{ 4000 + $item_level_list->id }}</td></td>
+<!--                                                                        <td class="center">{{ $item_level_list->user_id ?? '' }}</td>-->
+                                                                        <td> {{ $item_level_list->level_id ?? '' }}</td>
+                                                                        <td> {{ $item_level_list->country_name ?? '' }}</td>
 
-                                                                        <td class="center"> <a href="{{ url('/level-first'.'/'.$item_level_list->id) }}"
+                                                                        <td> <a href="{{ url('/level-first'.'/'.$item_level_list->id) }}"
                                                                                 class="btn btn-tbl-edit bg-success"><i
                                                                                     class="fa fa-edit"></i></a></td>
 
@@ -263,7 +264,7 @@ div#ui-datepicker-div {
                              </div>
                         </div>
 
-                         <div role="tabpanel" class="tab-pane active" id="general_information" aria-expanded="true">
+                         <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step')   @endif @else active @endif" id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
                                      <div class="card project_widget">
@@ -349,7 +350,7 @@ div#ui-datepicker-div {
                          </div>
                          <!-- <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
                                         </div> -->
-                         <div role="tabpanel" class="tab-pane " id="new_application" aria-expanded="false">
+                         <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') active @else  @endif  @endif" id="new_application" aria-expanded="false">
 
 
                          {{--
@@ -360,11 +361,11 @@ div#ui-datepicker-div {
                                 <!-- progressbar -->
                                 <ul id="progressbar">
                                     <li class="progress1 bg_green">Basic Information</li>
-                                    <li class="progress2">Level Courses</li>
-                                    <li class="progress3">Payment</li>
+                                    <li class="progress2 @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') bg_green @else  @endif  @endif ">Level Courses</li>
+                                    <li class="progress3 @if(isset($form_step_type)) @if($form_step_type=='application-payment') bg_green @endif  @endif">Payment</li>
                                 </ul>
 
-                                 <div class="tab-pane active" role="tabpanel" id="step1">
+                                 <div class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment')   @endif @else active @endif" role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
                                              <h2>Basic Information</h2>
@@ -594,7 +595,7 @@ div#ui-datepicker-div {
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="tab-pane" role="tabpanel" id="step2">
+                                 <div class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step') active @else  @endif  @endif" role="tabpanel" id="step2">
                                      <div class="card">
                                          <div class="header mb-4">
                                              <h2 style="float:left; clear:none;">Level Courses </h2>
@@ -612,7 +613,7 @@ div#ui-datepicker-div {
                                              enctype="multipart/form-data" method="post" class="form"
                                              id="regForm">
                                              @csrf
-                                             <input type="hidden"  name="form_step_type"  value="step2">
+                                             <input type="hidden"  name="form_step_type"  value="add-course">
                                              <div class="body pb-0" id="courses_body">
                                                  <!-- level start -->
                                                  <div class="row clearfix">
@@ -904,7 +905,7 @@ div#ui-datepicker-div {
                                                                      @endif
 
 
-                                                                     <a href="{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}"
+                                                                     <a onclick="return confirm_option('delete')" href="{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}"
                                                                          class="btn btn-tbl-delete bg-danger">
                                                                          <i class="material-icons">delete</i>
                                                                      </a>
@@ -1118,7 +1119,7 @@ div#ui-datepicker-div {
                                      </div>
                                  </div>
 
-                                 <div class="tab-pane" role="tabpanel" id="step3">
+                                 <div class="tab-pane  @if(isset($form_step_type)) @if($form_step_type=='application-payment') active @endif  @endif" role="tabpanel" id="step3">
                                      <div class="card">
                                          <div class="header">
                                              <h2 style="float:left; clear:none;">Payment</h2>
@@ -1210,6 +1211,7 @@ div#ui-datepicker-div {
                                             <form action="{{ url('/new-application_payment') }}" method="post"
                                                  class="form" id="regForm" enctype="multipart/form-data">
                                                  @csrf
+                                                 <input type="hidden"  name="form_step_type"  value="application-payment">
                                                  <div class="row clearfix">
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
@@ -1417,7 +1419,6 @@ div#ui-datepicker-div {
                                                                  <td class="center">{{ $item->payment_date }}</td>
                                                                  <td class="center">
                                                                      <a href="javascript:void(0)"
-                                                                         onclick="return confirm_option('change status')"
                                                                          @if ($item->status == 0) <div class="badge col-brown">Pending</div>
                                                                     @elseif($item->status == 1)
                                                                     <div class="badge col-green">InProssess</div>
@@ -1891,7 +1892,26 @@ div#ui-datepicker-div {
                                          function add_new_course() {
                                              $("#courses_body").append($("#add_courses").html());
                                          }
+
+
+
+                                     $(document).ready(function() {
+
+                                        $(".prev-step").click(function(){
+                                            $(".progress3").removeClass('bg_green');
+                                        })
+                                   
+                                   });
+
+
+
                                      </script>
+
+
+
+
+
+
      {{-- button click count --}}
      <script>
          $(document).ready(function() {
@@ -2684,9 +2704,23 @@ div#ui-datepicker-div {
             });
 });
 </script>
-
+      @if ($message = Session::has('session_for_redirections'))
+      @php
+          Session::forget('session_for_redirections');
+      @endphp
+  @endif
      @include('layout.footer')
      <!-- New JS -->
+<script>
+   function confirm_option(action){
+      if(!confirm("Are you sure to "+action+", this record!")){
+         return false;
+      }
+
+      return true;
+ 
+   }
+</script>
 
 <script src="{{ asset('assets/js/form.min.js') }} "></script>
 <script src="{{ asset('assets/js/bundles/multiselect/js/jquery.multi-select.js') }}"></script>
