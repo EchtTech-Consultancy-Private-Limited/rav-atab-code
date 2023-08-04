@@ -1079,8 +1079,7 @@ public function newapplication()
 
    // return  redirect('/level-first')->with('success','Payment Done successfully!!!!');
     
-    $user_have_session="Payment Added";
-    $session_store=Session::put('is_session',$user_have_session);
+   
 
     $session_for_redirection=$request->form_step_type;
     Session::put('session_for_redirections', $session_for_redirection);
@@ -2345,7 +2344,7 @@ public function course_list(Request $request)
 
 public function course_edit(Request $request)
 {
-
+ 
 $item=LevelInformation:: whereid('1')->get();
 $ApplicationCourse=ApplicationCourse::whereid($request->id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 $Document=ApplicationDocument::wherecourse_number($ApplicationCourse[0]->id)->get();
@@ -2362,15 +2361,17 @@ return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Do
 
 public function course_edits(Request $request,$id)
 {
+   // dd("test");
+   //return  $request->all();
+     $mode_of_course=$request->mode_of_course;
 
-   
     $Document=ApplicationDocument::wherecourse_number($id)->get();
-
-
+      
+     
 
       //document upload
       if($request->hasfile('doc1'))
-      {
+      {   
           $doc1 = $request->file('doc1');
           $data = ApplicationDocument::find($Document[0]->id);
           $data->document_type_name='doc1';
@@ -2413,7 +2414,7 @@ public function course_edits(Request $request,$id)
       $file->user_id=Auth::user()->id;
       $file->country=Auth::user()->country;
       $file->eligibility=$request->Eligibilitys;
-      $file->mode_of_course=$request->Mode_Of_Courses;
+      $file->mode_of_course=$request->mode_of_course;
       $file->course_brief=$request->course_brief;
       $file->valid_from=$request->created_at;
 
@@ -2428,7 +2429,8 @@ public function course_edits(Request $request,$id)
 
       $file->save();
 
-      return back();
+      return back()->with('sussess', 'level Update successfull!! ');
+     
 }
 
 public function Assessor_view($id)
