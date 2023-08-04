@@ -143,12 +143,12 @@ div#ui-datepicker-div {
                                      </li>
 
                                      <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link" href="#preveious_application" data-bs-toggle="tab">Previous
+                                       <a class="nav-link @if(isset($form_step_type)) @if( $form_step_type=='application-payment') active @else @endif  @endif" href="#preveious_application" data-bs-toggle="tab">Previous
                                              Applications</a>
                                      </li>
 
                                      <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') active @else  @endif  @endif" href="#new_application" data-bs-toggle="tab">New
+                                         <a class="nav-link @if(isset($form_step_type)) @if($form_step_type=='add-course') active @else  @endif  @endif" href="#new_application" data-bs-toggle="tab">New
                                              Application</a>
                                      </li>
                                      
@@ -350,7 +350,7 @@ div#ui-datepicker-div {
                          </div>
                          <!-- <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
                                         </div> -->
-                         <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') active @else  @endif  @endif" id="new_application" aria-expanded="false">
+                         <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course') active @else  @endif  @endif" id="new_application" aria-expanded="false">
 
 
                          {{--
@@ -365,7 +365,7 @@ div#ui-datepicker-div {
                                     <li class="progress3 @if(isset($form_step_type)) @if($form_step_type=='application-payment') bg_green @endif  @endif">Payment</li>
                                 </ul>
 
-                                 <div class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment')   @endif @else active @endif" role="tabpanel" id="step1">
+                                 <div class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course') @else active @endif @else active @endif " role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
                                              <h2>Basic Information</h2>
@@ -1119,7 +1119,7 @@ div#ui-datepicker-div {
                                      </div>
                                  </div>
 
-                                 <div class="tab-pane  @if(isset($form_step_type)) @if($form_step_type=='application-payment') active @endif  @endif" role="tabpanel" id="step3">
+                                 <div class="tab-pane " role="tabpanel" id="step3">
                                      <div class="card">
                                          <div class="header">
                                              <h2 style="float:left; clear:none;">Payment</h2>
@@ -1378,7 +1378,7 @@ div#ui-datepicker-div {
                              </div>
                              </form>
                              </div>
-                                 <div role="tabpanel" class="tab-pane" id="preveious_application"
+                                 <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if( $form_step_type=='application-payment') active @endif  @endif" id="preveious_application"
                                      aria-expanded="false">
                                      <div class="card">
                                          <div class="header">

@@ -199,10 +199,19 @@ class LevelController extends Controller
          }*/
 
        //return $form_step_type;
+     //return  $id;
+         if($id)
+         {
+             $id=decrypt($id);
+         }
+      
+
+       
+
      
  if($id)
  {
-
+  
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
     $item=LevelInformation:: whereid('1')->get();
@@ -318,9 +327,9 @@ class LevelController extends Controller
 
     $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 
-    $collection=ApplicationPayment::whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
    // dd($collection);
-    $collections=Application::whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
+    $collections=Application::orderBy('id','desc')->whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
     $Application = new Application;
 
     $course =ApplicationCourse::get();
@@ -407,7 +416,7 @@ class LevelController extends Controller
          ->join('countries','applications.country', '=', 'countries.id')->get();
        /*end level list */
 
-      return view('level.leveltp',['level_list_data'=>$level_list_data,'collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs]);
+      return view('level.leveltp',['level_list_data'=>$level_list_data,'collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs],compact('form_step_type'));
 
 
 
@@ -982,8 +991,8 @@ public function newapplication()
  
  if($request->level_id =='1')
  {
-
- return  redirect('level-first/'.$data->application_id)->with('success','Course  successfully  Added!!!!');
+     return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
+    // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
  }elseif($request->level_id =='2')
  {
@@ -1085,7 +1094,7 @@ public function newapplication()
     Session::put('session_for_redirections', $session_for_redirection);
     $session_for_redirections= Session::get('session_for_redirections');
 
- return  redirect('level-first/'.$item->application_id)->with('success','Payment Done successfully!!!!');
+  return  redirect('level-first')->with('success','Payment Done successfully!!!!');
 
 
 //count payment in course status true

@@ -1,4 +1,7 @@
 @include('layout.header')
+
+
+   
 <title>RAV Accreditation</title>
 
 <style>
@@ -248,7 +251,7 @@ td.text-justify {
                                           <div class="header">
                                              <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
 
-                                             <?php  echo count_document_record($course_id); ?>
+                                            
 
                                              @if(check_acknowledgement($course_id)==$course_id)
                                              <a  class="btn btn-danger">Final Approval Done</a>
