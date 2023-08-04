@@ -1,6 +1,4 @@
  @include('layout.header')
- <!-- New CSS -->
- <link rel="stylesheet" href="{{ asset('assets/css/form.min.css') }}" class="js">
 
  <style>
      @media (min-width: 900px) {
@@ -36,10 +34,6 @@ div#ui-datepicker-div {
 .payment-status.d-flex {
     align-items: center;
     width: 250px;
-}
-
-.select-box-hide-class select {
-    display: none;
 }
 
  </style>
@@ -132,26 +126,17 @@ div#ui-datepicker-div {
                              <div class="p-l-20">
                                  <ul class="nav ">
                                      <li class="nav-item tab-all">
-
-                                    <a class="nav-link show  @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step')   @endif @else active  @endif" href="#general_information"
-                                             data-bs-toggle="tab" >General Information</a>
+                                         <a class="nav-link show" href="#general_information"
+                                             data-bs-toggle="tab">General Information</a>
                                      </li>
-
-                                     <li class="nav-item tab-all" >
-                                         <a class="nav-link show" href="#pending_payment_list"
-                                             data-bs-toggle="tab">Pending Payment List</a>
+                                     <li class="nav-item tab-all p-l-20">
+                                         <a class="nav-link active" href="#new_application" data-bs-toggle="tab">New
+                                             Application</a>
                                      </li>
-
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#preveious_application" data-bs-toggle="tab">Previous
                                              Applications</a>
                                      </li>
-
-                                     <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') active @else  @endif  @endif" href="#new_application" data-bs-toggle="tab">New
-                                             Application</a>
-                                     </li>
-                                     
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
                                      </li>
@@ -209,62 +194,7 @@ div#ui-datepicker-div {
                      @endif --}}
 
                      <div class="tab-content">
-
-                        <div role="tabpanel" class="tab-pane" id="pending_payment_list" aria-expanded="true">
-                             <div class="row clearfix">
-                                 <div class="col-lg-12 col-md-12 col-sm-12">
-                                     <div class="card project_widget">
-                                         <div class="header">
-                                         </div>
-                                          <div class="body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover js-basic-example contact_list">
-                                                        <thead>
-                                                            <tr>
-
-                                                                <th> Application ID </th>
-<!--                                                                <th class="center"> Create User ID </th>-->
-                                                                <th> Level ID </th>
-                                                                <th> Country </th>
-                                                                <th> Action </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                            @isset($level_list_data)
-
-                                                                <tr>
-
-                                                                    @foreach ($level_list_data as $item_level_list)
-
-                                                                    @if(checktppaymentstatus($item_level_list->id) == 0)
-
-                                                                        <td>  RAVAP-{{ 4000 + $item_level_list->id }}</td></td>
-<!--                                                                        <td class="center">{{ $item_level_list->user_id ?? '' }}</td>-->
-                                                                        <td> {{ $item_level_list->level_id ?? '' }}</td>
-                                                                        <td> {{ $item_level_list->country_name ?? '' }}</td>
-
-                                                                        <td> <a href="{{ url('/level-first'.'/'.$item_level_list->id) }}"
-                                                                                class="btn btn-tbl-edit bg-success"><i
-                                                                                    class="fa fa-edit"></i></a></td>
-
-                                                                    @endif
-
-                                                                </tr>
-                                                                @endforeach
-
-                                                            @endisset
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                     </div>
-                                 </div>
-                             </div>
-                        </div>
-
-                         <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step')   @endif @else active @endif" id="general_information" aria-expanded="true">
+                         <div role="tabpanel" class="tab-pane" id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
                                      <div class="card project_widget">
@@ -350,7 +280,7 @@ div#ui-datepicker-div {
                          </div>
                          <!-- <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
                                         </div> -->
-                         <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') active @else  @endif  @endif" id="new_application" aria-expanded="false">
+                         <div role="tabpanel" class="tab-pane active" id="new_application" aria-expanded="false">
 
 
                          {{--
@@ -361,11 +291,11 @@ div#ui-datepicker-div {
                                 <!-- progressbar -->
                                 <ul id="progressbar">
                                     <li class="progress1 bg_green">Basic Information</li>
-                                    <li class="progress2 @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment') bg_green @else  @endif  @endif ">Level Courses</li>
-                                    <li class="progress3 @if(isset($form_step_type)) @if($form_step_type=='application-payment') bg_green @endif  @endif">Payment</li>
+                                    <li class="progress2">Level Courses</li>
+                                    <li class="progress3">Payment</li>
                                 </ul>
 
-                                 <div class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='application-payment')   @endif @else active @endif" role="tabpanel" id="step1">
+                                 <div class="tab-pane active" role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
                                              <h2>Basic Information</h2>
@@ -595,15 +525,15 @@ div#ui-datepicker-div {
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step') active @else  @endif  @endif" role="tabpanel" id="step2">
+                                 <div class="tab-pane" role="tabpanel" id="step2">
                                      <div class="card">
                                          <div class="header mb-4">
-                                             <h2 style="float:left; clear:none;">Level Courses </h2>
+                                             <h2 style="float:left; clear:none;">Level Courses</h2>
                                              {{-- @if (count($course) > 0) --}}
                                              {{-- @else --}}
                                              <a href="javascript:void();" class="btn btn-outline-primary mb-0"
                                                  style="float:right; clear:none; cursor:pointer;line-height: 24px;"
-                                                 onclick="add_new_courses();"
+                                                 onclick="add_new_course();"
                                                  @if (request()->path() == 'level-first') id="count" @elseif(request()->path() == 'level-second') id="count_second" @endif>
                                                  <i class="fa fa-plus font-14"></i> Add More Course</a>
                                              {{-- @endif --}}
@@ -613,7 +543,6 @@ div#ui-datepicker-div {
                                              enctype="multipart/form-data" method="post" class="form"
                                              id="regForm">
                                              @csrf
-                                             <input type="hidden"  name="form_step_type"  value="add-course">
                                              <div class="body pb-0" id="courses_body">
                                                  <!-- level start -->
                                                  <div class="row clearfix">
@@ -686,18 +615,15 @@ div#ui-datepicker-div {
                                                              <div class="form-line">
                                                                  <label>Mode of Course <span
                                                                          class="text-danger">*</span></label>
-                                                                <div class="form-group default-select select2Style">
-                                                                 <select class="form-control select2" name="mode_of_course[]"
-                                                                     required multiple="" style="width:200px;" >
-                                                                     <option>Select Mode of Course</option>
-                                                                    @foreach(__('arrayfile.mode_of_course_array') as $key=>$value)
-                                                                       <option value="{{$value}}">{{$value}}</option>
-                                                                    @endforeach
+                                                                 <select class="form-control" name="mode_of_course[]"
+                                                                     required multiple="">
+                                                                        <option>Select Mode of Course</option>
+                                                                        @foreach(__('arrayfile.mode_of_course_array') as $key=>$value)
+                                                                           <option value="{{$value}}">{{$value}}</option>
+                                                                        @endforeach
+
+
                                                                  </select>
-
-                                                                   
-
-                                                             </div>
                                                              </div>
                                                              @error('mode_of_course')
                                                                  <div class="alert alert-danger">{{ $message }}
@@ -874,12 +800,12 @@ div#ui-datepicker-div {
                                                                  </td>
                                                                 <td class="center">
                                                                     <!-- {{$courses->id}} -->
-                                                                   [ <?php echo get_course_mode($courses->id); ?> ]
+                                                                    [<?php echo get_course_mode($courses->id); ?>]
                                                                   
                                                                 </td>
                                                                  <td class="center">{{ $courses->course_brief }}
                                                                  </td>
-                                                                 <td class="center">@if($courses->payment=="false") Pending @endif</td>
+                                                                 <td class="center">@if($courses->payment=="false") Not Done @endif</td>
                                                                  <!-- <td class="center">
                                                                      {{ date('d F Y', strtotime($courses->created_at)) }}
                                                                  </td>
@@ -905,7 +831,7 @@ div#ui-datepicker-div {
                                                                      @endif
 
 
-                                                                     <a onclick="return confirm_option('delete')" href="{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}"
+                                                                     <a href="{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}"
                                                                          class="btn btn-tbl-delete bg-danger">
                                                                          <i class="material-icons">delete</i>
                                                                      </a>
@@ -984,13 +910,13 @@ div#ui-datepicker-div {
                                                              <label>Mode of Course <span
                                                                      class="text-danger">*</span></label>
                                                                       <div class="form-group default-select select2Style">
-                                                                     <select class="form-control select2 width" name="mode_of_course[]"
-                                                                         >
-                                                                         <option value="" SELECTED>Select Mode
-                                                                         </option>
-                                                                         <option value="Online">Online</option>
-                                                                         <option value="Offline">Offline</option>
-                                                                     </select>
+                                                             <select class="form-control select2 width" name="mode_of_course[]"
+                                                                 required>
+                                                                 <option value="" SELECTED>Select Mode
+                                                                 </option>
+                                                                 <option value="Online">Online</option>
+                                                                 <option value="Offline">Offline</option>
+                                                             </select>
                                                          </div>
                                                          </div>
                                                          @error('mode_of_course')
@@ -1119,7 +1045,7 @@ div#ui-datepicker-div {
                                      </div>
                                  </div>
 
-                                 <div class="tab-pane  @if(isset($form_step_type)) @if($form_step_type=='application-payment') active @endif  @endif" role="tabpanel" id="step3">
+                                 <div class="tab-pane" role="tabpanel" id="step3">
                                      <div class="card">
                                          <div class="header">
                                              <h2 style="float:left; clear:none;">Payment</h2>
@@ -1131,12 +1057,13 @@ div#ui-datepicker-div {
                                          </div>
                                          <div class="body">
                                              <div class="form-group">
-                                                 <div class="form-line select-box-hide-class">
+                                                 <div class="form-line">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
                                                          <option value="">Select Option</option>
                                                          <option value="QR-Code"
-                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR Code
+                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
+                                                             Code
                                                          </option>
                                                          <option value="Bank"
                                                              {{ old('title') == 'Bank' ? 'selected' : '' }}>Bank
@@ -1146,7 +1073,6 @@ div#ui-datepicker-div {
                                                  </div>
                                              </div>
                                              <!-- payment start -->
-
                                              <div style="text-align:center; width:100%;" id="QR">
                                                  <div
                                                      style="width:100px; height:100px; border:1px solid #ccc; float:right;">
@@ -1211,7 +1137,6 @@ div#ui-datepicker-div {
                                             <form action="{{ url('/new-application_payment') }}" method="post"
                                                  class="form" id="regForm" enctype="multipart/form-data">
                                                  @csrf
-                                                 <input type="hidden"  name="form_step_type"  value="application-payment">
                                                  <div class="row clearfix">
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
@@ -1338,8 +1263,8 @@ div#ui-datepicker-div {
                                                                  <label>Payment Screenshot <span
                                                                          class="text-danger">*</span></label>
                                                                  <input type="file" name="payment_details_file"
-                                                                     id="payment_details_file" required
-                                                                     class="form-control payment_details_file">
+                                                                     id="payment_reference_no" required
+                                                                     class="form-control">
                                                              </div>
                                                              <label for="payment_reference_no"
                                                                  id="payment_reference_no-error" class="error">
@@ -1355,8 +1280,8 @@ div#ui-datepicker-div {
                                                  <ul class="list-inline pull-right">
                                                     <li><button type="button"
                                                             class="btn btn-danger prev-step1">Previous</button></li>
-                                                   <!--  <li><button type="button"
-                                                            class="btn btn-info preview-step mr-2">Preview</button></li> -->
+                                                    <li><button type="button"
+                                                            class="btn btn-info preview-step mr-2">Preview</button></li>
                                                     <li><button type="submit"
                                                             class="btn btn-primary btn-info-full ">Submit</button>
                                                     </li>
@@ -1419,6 +1344,7 @@ div#ui-datepicker-div {
                                                                  <td class="center">{{ $item->payment_date }}</td>
                                                                  <td class="center">
                                                                      <a href="javascript:void(0)"
+                                                                         onclick="return confirm_option('change status')"
                                                                          @if ($item->status == 0) <div class="badge col-brown">Pending</div>
                                                                     @elseif($item->status == 1)
                                                                     <div class="badge col-green">InProssess</div>
@@ -1431,7 +1357,7 @@ div#ui-datepicker-div {
 
 
                                                                  <td class="center">
-                                                                    <a href="{{ url('/previews-application-first' . '/' . $item->id.'/'.$item->application_id) }}"
+                                                                    <a href="{{ url('/previews-application-first' . '/' . $item->id) }}"
                                                                         class="btn btn-tbl-edit"><i
                                                                             class="material-icons">visibility</i></a>
                                                                     <!-- @if ($item->status == 1)
@@ -1761,40 +1687,22 @@ div#ui-datepicker-div {
                                                  </div>
                                              </div>
 
-                                              <div class="col-sm-2">
-                                                         <div class="form-group select-modal">
-                                                             <div class="form-line">
-                                                                 <label>Mode of Course  <span class="text-danger">*</span></label>
-                                                               
-                                                              <!--  <select class="form-control" name="mode_of_course[]"
-                                                                     required multiple="" style="width:160px;" id="mode_of_course_edit">
-                                                                     <option value="1">Online</option>
-                                                                     <option value="2">Offline</option>
-                                                                     <option value="3">Hybrid</option> -->
+                                             <div class="col-sm-2">
+                                                 <div class="form-group">
+                                                     <div class="form-line">
+                                                         <label class="active">Mode Of Courses<span
+                                                                 class="text-danger">*</span></label>
+                                                         <input type="text" name="Mode_Of_Courses"
+                                                             id="Mode_Of_Courses" class="form-control">
 
-                                                                   
-                                                                     <!-- <option>Select Mode of Course</option> -->
-                                                                    <!-- @foreach(__('arrayfile.mode_of_course_array') as $key=>$value)
-                                                                       <option value="{{$value}}">{{$value}}</option>
-                                                                    @endforeach -->
-                                                                 <!-- </select> -->
+                                                       <!--   <select id="courses_mode" class="form-control state" name="Mode_Of_Courses" >
+                                                             <option > </option>
+                                                          </select> -->
 
-                                                                <select multiple name="myselect" id="mode_of_course_edit">
-                                                                      <option value="Online">Online</option>
-                                                                      <option value="Offline">Offline</option>
-                                                                      <option value="Hybrid">Hybrid</option>
-                                                                </select>
 
-                                                                   
-
-                                                         
-                                                             </div>
-                                                             @error('mode_of_course')
-                                                                 <div class="alert alert-danger">{{ $message }}
-                                                                 </div>
-                                                             @enderror
-                                                         </div>
                                                      </div>
+                                                 </div>
+                                             </div>
 
 
                                              <div class="col-sm-12">
@@ -1823,8 +1731,7 @@ div#ui-datepicker-div {
                                                              id="payment_reference_no"
                                                              class="form-control doc_edit_1">
 
-
-                                                         <a target="_blank" href="" id="docpdf1ss" title=" Document 1"
+                                                            <a target="_blank" href="" id="docpdf1ss" title=" Document 1"
                                                              ><i class="fa fa-download mr-2"></i> PDF 1 </a>
 
                                                      </div>
@@ -1892,26 +1799,7 @@ div#ui-datepicker-div {
                                          function add_new_course() {
                                              $("#courses_body").append($("#add_courses").html());
                                          }
-
-
-
-                                     $(document).ready(function() {
-
-                                        $(".prev-step").click(function(){
-                                            $(".progress3").removeClass('bg_green');
-                                        })
-                                   
-                                   });
-
-
-
                                      </script>
-
-
-
-
-
-
      {{-- button click count --}}
      <script>
          $(document).ready(function() {
@@ -2185,7 +2073,7 @@ div#ui-datepicker-div {
                                                 $("#Mode_Of_Course").val(data.ApplicationCourse[0].mode_of_course);
                                                 if(data.ApplicationCourse[0].payment=="false")
                                                 {
-                                                    $("#Payment_Status").val("Pending");
+                                                    $("#Payment_Status").val("Not Done");
                                                 }
                                                 
                                              
@@ -2205,7 +2093,71 @@ div#ui-datepicker-div {
                                 </script>
 
 
-                               
+                                {{-- multiple video section shwo --}}
+                                <script>
+                                    $(document).on("click", "#edit_course", function() {
+                                        var UserName = $(this).data('id');
+                                        console.log(UserName);
+
+                                        $.ajaxSetup({
+                                            headers: {
+                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                            }
+                                        });
+
+                                        $.ajax({
+                                            url: "{{ url('course-edit') }}",
+                                            type: "get",
+                                            data: {
+                                                id: UserName
+                                            },
+                                            success: function(data) {
+
+                                                //console.log(data.ApplicationCourse[0].id)
+                                                // console.log(data.Document[0].document_file)
+                                               //alert(data.ApplicationCourse[0].mode_of_course);
+                                              /* alert(data.ApplicationCourse[0].mode_of_course);*/
+
+                                               /* $('#courses_mode').html('<option value="">-- Select Mode Of Course --</option>');*/
+                                                  
+
+                                               
+
+
+
+
+                                                $('#form_update').attr('action', '{{ url('/course-edit') }}' + '/' + data
+                                                    .ApplicationCourse[0].id)
+                                                $("#Course_Names").val(data.ApplicationCourse[0].course_name);
+                                                $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
+                                                $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+                                                if(data.ApplicationCourse[0].payment=="false")
+                                                {  
+                                                    $("#Payment_Status").val("Not Done");
+                                                }
+
+                                                $("#years").val(data.ApplicationCourse[0].years);
+                                                $("#months").val(data.ApplicationCourse[0].months);
+                                                $("#days").val(data.ApplicationCourse[0].days);
+                                                $("#hours").val(data.ApplicationCourse[0].hours);
+
+                                                
+                                                $("a#docpdf1ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[0]
+                                                    .document_file);
+                                                $("a#docpdf2ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[1]
+                                                    .document_file);
+                                                $("a#docpdf3ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[2]
+                                                    .document_file);
+
+                                                
+
+
+                                            }
+
+                                        });
+
+                                    });
+                                </script>
 
 
 
@@ -2341,7 +2293,7 @@ div#ui-datepicker-div {
                    $("#Mode_Of_Course").val(data.ApplicationCourse[0].mode_of_course);
                    if(data.ApplicationCourse[0].payment=="false")
                     {
-                        $("#Payment_Status").val("Pending");
+                        $("#Payment_Status").val("Not Done");
                     }
                    $("#view_course_brief").val(data.ApplicationCourse[0].course_brief);
 
@@ -2374,13 +2326,11 @@ div#ui-datepicker-div {
 
 
    {{-- multiple video section shwo --}}
-    <script>
+   <script>
        $(document).on("click", "#edit_course", function() {
-
-       //alert("edit course second 2420");
            var UserName = $(this).data('id');
            console.log(UserName);
-          
+
            $.ajaxSetup({
                headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -2394,15 +2344,11 @@ div#ui-datepicker-div {
                    id: UserName
                },
                success: function(data) {
+
+                   //console.log(data.ApplicationCourse[0].id)
+                   // console.log(data.Document[0].document_file)
+                
                    
-               console.log(data.ApplicationCourse[0].mode_of_course);
-              
-
-
-                var values=data.ApplicationCourse[0].mode_of_course;
-                $.each(values, function(i,e){
-                    $("#mode_of_course_edit option[value='" + e + "']").prop("selected", true);
-                });
 
                    $('#form_update').attr('action', '{{ url('/course-edit') }}' + '/' + data
                        .ApplicationCourse[0].id)
@@ -2413,7 +2359,7 @@ div#ui-datepicker-div {
 
                    if(data.ApplicationCourse[0].payment=="false")
                     {
-                        $("#Payment_Statuss").val("Pending");
+                        $("#Payment_Statuss").val("Not Done");
                     }
 
               $("#years").val(data.ApplicationCourse[0].years);
@@ -2435,12 +2381,17 @@ div#ui-datepicker-div {
                        .document_file);
 
                    //dd
+
+                    
+                   
+
+
                }
 
            });
 
        });
-   </script> 
+   </script>
 
 
 
@@ -2533,30 +2484,6 @@ div#ui-datepicker-div {
    </script>
    
     <script>
-       var doc_payment_file="";
-       
-       $('.payment_details_file').on('change',function(){
-
-          doc_payment_file = $(".payment_details_file").val();
-          
-          var doc_payment_files = doc_payment_file.split('.').pop();
-         
-          if(doc_payment_files=='png' || doc_payment_files=='jpg' || doc_payment_files=='jpeg')
-          {
-          // alert("File uploaded is pdf");
-           }
-          else{
-            alert("Only jpg, png, jpeg are allowed")
-             $('.payment_details_file').val("");
-          }
-         
-        });
-
-        
-        
-   </script>
-
-   <script>
        var doc_file1="";
        
        $('.doc_1').on('change',function(){
@@ -2573,12 +2500,9 @@ div#ui-datepicker-div {
           }
          
         });
+    </script>
 
-        
-        
-   </script>
-
-
+   
 
    <script>
 
@@ -2621,7 +2545,7 @@ div#ui-datepicker-div {
         });
    </script>
 
-   <script>
+    <script>
        var doc_file1="";
        
        $('.doc_edit_1').on('change',function(){
@@ -2704,26 +2628,6 @@ div#ui-datepicker-div {
             });
 });
 </script>
-      @if ($message = Session::has('session_for_redirections'))
-      @php
-          Session::forget('session_for_redirections');
-      @endphp
-  @endif
+
      @include('layout.footer')
-     <!-- New JS -->
-<script>
-   function confirm_option(action){
-      if(!confirm("Are you sure to "+action+", this record!")){
-         return false;
-      }
-
-      return true;
- 
-   }
-</script>
-
-<script src="{{ asset('assets/js/form.min.js') }} "></script>
-<script src="{{ asset('assets/js/bundles/multiselect/js/jquery.multi-select.js') }}"></script>
-<script src="{{ asset('assets/js/bundles/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js') }} "></script>
-<script src=" {{ asset('assets/js/pages/forms/advanced-form-elements.js') }}"></script>
  </body>
