@@ -284,7 +284,7 @@ a#ContactCaptcha_ReloadLink {
 
 
 
-                    <div class="iconInput_container">
+                    <!-- <div class="iconInput_container">
                         <label for="email" class="label_input"> Mobile OTP</label>
                     <div class="iconInput email">
                         <input type="number" class="input_otp" name="mobile_otp" value="{{ old('mobile_otp') }}"  placeholder="Enter Mobile OTP" >
@@ -298,7 +298,7 @@ a#ContactCaptcha_ReloadLink {
                           @error('email_otp')
                             <p class="error">{{ $message }}</p>
                             @enderror
-                    </div>
+                    </div> -->
 
 
 
@@ -486,7 +486,7 @@ a#ContactCaptcha_ReloadLink {
 
 
                 <input type="hidden"  value="1"  name="status">
-
+          
           @if(request()->path() == 'login/admin/register')
             <input type="hidden" placeholder="role" name="role" value="{{ 1 }}">
           @elseif(request()->path() == 'login/TP/register')
@@ -495,6 +495,9 @@ a#ContactCaptcha_ReloadLink {
               <input type="hidden" placeholder="role" name="role" value="{{ 3 }}">
           @elseif(request()->path() == 'login/professional/register')
              <input type="hidden" placeholder="role" name="role" value="{{ 4 }}">
+
+          @elseif(request()->path() == 'login/secretariat/register')
+             <input type="hidden" placeholder="role" name="role" value="{{ 5 }}">
           @endif
 
 

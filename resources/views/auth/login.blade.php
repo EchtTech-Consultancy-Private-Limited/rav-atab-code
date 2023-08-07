@@ -199,10 +199,16 @@
 
                             @elseif(request()->path() == 'login/TP')
                             <p class="mb-0">Don't have an account? <a href="{{ url(request()->path().'/'.'register') }}" class="link-text">Register here</a></p>
+
                             @elseif(request()->path() == 'login/Accessor')
                             <p class="mb-0">Don't have an account? <a href="{{ url(request()->path().'/'.'register') }}" class="link-text">Register here</a></p>
+
                             @elseif(request()->path() == 'login/professional')
                             <p class="mb-0">Don't have an account? <a href="{{ url(request()->path().'/'.'register') }}" class="link-text">Register here</a></p>
+
+                            @elseif(request()->path() == 'login/secretariat')
+                            <p class="mb-0">Don't have an account? <a href="{{ url(request()->path().'/'.'register') }}" class="link-text">Register here</a></p>
+
                             @endif
 
                             <p class="mb-0 mt-1 back-btn">Back to <a href="{{ url('/') }}" class="link-text">Landing Page</a></p>
