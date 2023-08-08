@@ -564,11 +564,11 @@ td.text-justify {
                                                                     The institution shall define the roles and responsibilities of all personnel.
                                                                     </td>
                                                                    @if(isset($doc_id_chap2_3->doc_file))
-                                                                    <td>
+                                                                    <!-- <td>
 
                                                                         <a target="_blank" href="{{ url('admin-view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[3].'/'.$doc_id_chap2_3->doc_file.'/'.$doc_id_chap2_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>  
-                                                                    </td>
+                                                                    </td> -->
 
                                                                     <!--  <td>
                                                                           <a href="{{ url('show-comment/'.$doc_id_chap2_3->id) }}" 

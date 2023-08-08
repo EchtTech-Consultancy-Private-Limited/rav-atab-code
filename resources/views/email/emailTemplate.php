@@ -358,13 +358,13 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td>From: <?=  $mailData['from']  ?></td>
+                                      <td> From: <?=  $mailData['from']  ?> </td>
                                     </tr>
 									                    <tr>
-                                       <td>Application Number: <?= 'RAV-'.+4000+$mailData['applicationNo'] ?></td>
+                                       <td> Application Number: <?= 'RAV-'.+4000+$mailData['applicationNo'] ?> </td>
                                     </tr>
 								                    <tr>
-                                      <td>Application Status/Type: <?= $mailData['applicationStatus'] ?></td>
+                                      <td> Application Status/Type: <?= $mailData['applicationStatus'] ?> </td>
                                     </tr>
                                   </tbody>
                                 </table>

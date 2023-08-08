@@ -10,6 +10,7 @@ use App\Http\Controllers\aknownledgeController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\SecretariatController;
+use App\Http\Controllers\UpgradeLevelController;
 use App\Http\Controllers\FaqController; #SKP
 use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Models\Otp;
@@ -173,6 +174,11 @@ Route::post('profile_submit/{id?}', [AdminController::class, 'profile_submit']);
 Route::get('get-faqs', [FaqController::class, 'get_faqs']);
 Route::post('get-faqs', [FaqController::class, 'get_faqs']);
 Route::get('view-faqs', [FaqController::class, 'view_faqs']);
+Route::get('send-feedback', [FaqController::class, 'send_feedback']);
+Route::post('send-feedback', [FaqController::class, 'send_feedback_submit']);
+Route::get('show-feedback', [FaqController::class, 'show_feedback']);
+Route::get('show-previous-level', [UpgradeLevelController::class, 'show_previous_level']);
+
 Route::get('add-faq', [FaqController::class, 'add_faq']);
 Route::post('add-faq', [FaqController::class, 'add_faq_post']);
 Route::get('update-faq/{id?}', [FaqController::class, 'update_faq']);

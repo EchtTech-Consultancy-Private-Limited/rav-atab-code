@@ -102,6 +102,8 @@
                 <a href="{{ url('assessor-user-manuals') }}">
                     <i data-feather="message-circle"></i>
                     <span>Assessor Manual</span>
+                    
+
                 </a>
             </li>
 
@@ -115,19 +117,19 @@
             </li>
 
 
-            <li>
-                <a href="#" onClick="return false;">
+            <li class="{{ Request::is('send-feedback')?'active':''; }}">
+                <a href="{{ url('/send-feedback') }}">
                     <i data-feather="message-circle"></i>
                     <span>Feedback</span>
                 </a>
             </li>
 
-            <li>
+            <!-- <li>
                 <a href="#" onClick="return false;">
                     <i data-feather="message-circle"></i>
                     <span>Remark</span>
                 </a>
-            </li>
+            </li> -->
 
 
             <li>

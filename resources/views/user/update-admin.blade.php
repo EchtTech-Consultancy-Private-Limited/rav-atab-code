@@ -513,6 +513,8 @@
                                                         Assessor</option>
                                                     <option value="4" {{ $data->role == '4' ? 'selected' : '' }}>
                                                         Professional</option>
+                                                    <option value="5" {{ $data->role == '5' ? 'selected' : '' }}>
+                                                    Secretariat</option>
                                                 </select>
                                             </div>
 
@@ -565,5 +567,66 @@
         </div>
     </section>
 
+  <script>
+       
+         $(document).ready(function(){
 
+        var myData = $('#Country').val();
+                $.ajax({
+                    url: "{{url('/state-list')}}",
+                    type: "get",
+                    data: {
+                        myData: myData,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log(result);
+                        $('#state').html('<option value="">-- Select State --</option>');
+                        $.each(result, function (key, value) {
+                       
+                            $("#state").append('<option value="' + value
+                                .id + '" '+(value.id=={{$data->state}}?"SELECTED":"")+'>' + value.name + '</option>');
+                        });
+                        //$('#city-dropdown').html('<option value="">-- Select City --</option>');
+                    }
+                });
+
+
+
+              
+            });
+
+
+            $(document).ready(function(){
+
+            var myData = $('#state').val();
+
+           
+     
+                $.ajax({
+                    url: "{{url('/city-list')}}",
+                    type: "get",
+                    data: {
+                        myData: myData,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log(result);
+                        $('#city').html('<option value="">-- Select City --</option>');
+                        $.each(result, function (key, value) {
+                       
+                            $("#city").append('<option value="' + value
+                                .id + '" '+(value.id=={{$data->city}}?"SELECTED":"")+'>' + value.name + '</option>');
+                        });
+                        //$('#city-dropdown').html('<option value="">-- Select City --</option>');
+                    }
+                });
+
+
+
+              
+            });    
+    </script>
     @include('layout.footer')

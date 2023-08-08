@@ -64,6 +64,26 @@ button#modal-btn-delete, #modal-btn-edit {
    </div>
    <section class="content">
       <div class="container-fluid">
+        <div class="block-header">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <ul class="breadcrumb breadcrumb-style">
+                            <li class="breadcrumb-item">
+                                <h4 class="page-title">My Availability</h4>
+                            </li>
+                            <li class="breadcrumb-item bcrumb-1">
+                                <a href="{{ url('/') }}">
+                                    <i class="fas fa-home"></i> Home</a>
+                            </li>   
+                            <li class="breadcrumb-item bcrumb-2">
+                                <a href="{{ url('/dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active">My Availability</li>
+                             <li class="breadcrumb-item active">Onsite/Virtual Assessment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
          <div class="block-header">
             <div class="row">
                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -96,7 +116,7 @@ button#modal-btn-delete, #modal-btn-edit {
                   </div>
                   <div class="body">
                      <div class="container">
-                        <h1>Manage your calendar for Onsite/Virtual Assessment</h1>
+                        <h3>Manage your calendar for Onsite/Virtual Assessment</h3><br>
                         <div id="schedule-calendar"></div>
                      </div>
                

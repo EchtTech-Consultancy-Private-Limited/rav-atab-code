@@ -2,6 +2,7 @@
 
 
 <title>RAV Accreditation</title>
+
 </head>
 
 <body class="light">
@@ -99,6 +100,7 @@
                @elseif(request()->path() == 'secrete-user')
 
                     <a type="button" href="{{ url('/adduser/secrete-user') }}" class="btn btn-primary waves-effect" style="line-height:2;">+ Add User</a>
+                    
 
                 @endif
 
@@ -109,7 +111,7 @@
                     </div>
                     <div class="body">
                        <div class="table-responsive">
-                          <table class="table table-hover js-basic-example contact_list">
+                          <table class="table table-hover js-basic-example contact_list" id="export-btn">
                              <thead>
                                 <tr>
 
@@ -159,6 +161,10 @@
 
                                     <a class="btn btn-tbl-edit btn-primary btn-sm" href="{{ url('/update-admin'.'/assessor-user'.'/'.dEncrypt($user->id)) }}"  onclick="return confirm_option('edit')"><i style="line-height:22px !important;" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
+                                    @elseif(request()->path() == 'secrete-user')
+
+                                    <a class="btn btn-tbl-edit btn-primary btn-sm" href="{{ url('/update-admin'.'/secrete-user'.'/'.dEncrypt($user->id)) }}"  onclick="return confirm_option('edit')"><i style="line-height:22px !important;" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
                                     @endif
 
                          {{-- delete code  --}}
@@ -167,7 +173,7 @@
 
                                     <a class="btn btn-tbl-edit btn-danger btn-sm" href="{{ url('/delete-admin'.'/'.dEncrypt($user->id)) }}"  onclick="return confirm_option('delete')"><i class="fa fa-trash" aria-hidden="true" style="line-height:22px !important;" ></i></a>
 
-                        @endif
+                              @endif
 
                                     <a href="{{ url('view-user'.'/'.dEncrypt($user->id)) }}" class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
 
@@ -184,7 +190,18 @@
            </div>
         </div>
      </section>
+  
 
+    <!--  <script >
+         $(document).ready(function() {
+       $('#example').DataTable( {
+           dom: 'Bfrtip',
+           buttons: [
+               'copy', 'csv', 'excel', 'pdf', 'print'
+           ]
+       } );
+   } );
+     </script> -->
      <script>
    function confirm_option(action){
       if(!confirm("Are you sure to "+action+", this record!")){
@@ -195,4 +212,5 @@
 
    }
 </script>
+
     @include('layout.footer')

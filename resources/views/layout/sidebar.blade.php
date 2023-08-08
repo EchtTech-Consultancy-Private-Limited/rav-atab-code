@@ -141,10 +141,10 @@
                     </li>
 
 
-                    <li>
-                        <a href="#" onClick="return false;" >
+                    <li class="{{ Request::is('show-feedback')?'active':''; }}">
+                        <a href="{{ url('/show-feedback') }}">
                             <i data-feather="message-circle"></i>
-                            <span>Feedbacks</span>
+                            <span>Feedback</span>
                         </a>
                     </li>
 

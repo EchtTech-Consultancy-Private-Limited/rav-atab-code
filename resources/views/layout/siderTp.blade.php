@@ -91,7 +91,7 @@
                         </ul>
                     </li>
 
-                    <li>
+                   <!--  <li>
                         <a href="#" onClick="return false;"  class="menu-toggle" >
                             <i data-feather="airplay"></i>
                             <span>Manage Course</span>
@@ -104,17 +104,17 @@
                             </li>
 
                         </ul>
-                    </li>
+                    </li> -->
 
 
                     <li>
-                        <a href="#" onClick="return false;" class="menu-toggle">
+                        <a class="menu-toggle">
                             <i data-feather="monitor"></i>
                             <span>History of Levels</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="#">Show Previous Level</a>
+                                <a href="{{ url('show-previous-level') }}">Show Previous Level</a>
                                 <a href="#">Upgrade  Level</a>
                             </li>
 
@@ -130,19 +130,19 @@
                     </li>
 
 
-                    <li>
-                        <a href="#" onClick="return false;" >
+                    <li class="{{ Request::is('send-feedback')?'active':''; }}">
+                        <a href="{{ url('/send-feedback') }}">
                             <i data-feather="message-circle"></i>
                             <span>Feedback</span>
                         </a>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <a href="#" onClick="return false;" >
                             <i data-feather="message-circle"></i>
                             <span>Remark</span>
                         </a>
-                    </li>
+                    </li> -->
 
 
 

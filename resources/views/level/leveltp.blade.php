@@ -218,7 +218,7 @@ div#ui-datepicker-div {
                                          </div>
                                           <div class="body">
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover  contact_list">
+                                                    <table class="table table-hover js-basic-example contact_list">
                                                         <thead>
                                                             <tr>
 
@@ -837,7 +837,7 @@ div#ui-datepicker-div {
                                          </form>
                                          <div class="body mt-5">
                                              <div class="table-responsive">
-                                                 <table class="table table-hover contact_list">
+                                                 <table class="table table-hover js-basic-example contact_list">
                                                      <thead>
                                                          <tr>
                                                              <th class="center">S.No.</th>
@@ -1387,7 +1387,7 @@ div#ui-datepicker-div {
                                          </div>
                                          <div class="body">
                                              <div class="table-responsive">
-                                                 <table class="table table-hover contact_list">
+                                                 <table class="table table-hover js-basic-example contact_list">
                                                      <thead>
                                                          <tr>
                                                              <th class="center">#S.N0</th>

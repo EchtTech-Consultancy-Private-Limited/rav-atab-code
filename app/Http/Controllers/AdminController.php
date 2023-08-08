@@ -122,6 +122,8 @@ class AdminController extends Controller
 
     public function updateRecord_post(Request $request,$id)
     {
+      
+      //return $request->all();
 
       $request->validate(
         [
@@ -168,18 +170,25 @@ class AdminController extends Controller
         $data->about =$request->about;
         $data->last_login_at =$request->last_login_at;
         $data->save();
-
-         if( $request->role = '1')
+        
+     
+         if($request->role == '1')
         {
+            
         return redirect('/admin-user')->with('success', 'User Add successfull!!');
         }
-        elseif($request->role = '2')
+
+        elseif($request->role == '2')
         {
         return redirect('/training-provider')->with('success', 'User Add successfull!!');
         }
-        elseif($request->role = '3')
+        elseif($request->role == '3')
         {
         return redirect('/assessor-user')->with('success', 'User Add successfull!!');
+        }
+        elseif($request->role == '5')
+        {
+        return redirect('/secrete-user')->with('success', 'User Add successfull!!');
         }
 
     }
@@ -276,7 +285,7 @@ public function active_user($id)
 public function  tp_index()
 {
     $data = user::where('role','2')->orderBy('id','DESC')->get();
- return view('user.index',['data'=> $data]);
+    return view('user.index',['data'=> $data]);
 }
 
 public function  assessor_user()

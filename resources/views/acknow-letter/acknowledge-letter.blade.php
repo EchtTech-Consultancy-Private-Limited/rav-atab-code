@@ -115,9 +115,13 @@
                                                         <td class="center">
                                                          
 
-                                                     <!--    <a href="mailto:{{get_user_email($final_applications->user_id)}}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a> -->
+                                                     <!--<a href="mailto:{{get_user_email($final_applications->user_id)}}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a> -->
 
-                                                        <a href="{{ '../storage/app/public/pdf/'.$final_applications->pdf }}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a>
+                                                        <a target="_blank" href="{{ '../storage/app/public/pdf/'.$final_applications->pdf }}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a>
+
+                                                        <a href="{{ asset('storage/app/public/pdf.$final_applications->application_id') }}" >
+                                                            
+                                                        </a>
 
                                                         </td>
 

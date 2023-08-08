@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Faq;
+use App\Models\Feedback;
 
 class FaqController extends Controller
 {
@@ -91,6 +92,27 @@ class FaqController extends Controller
         $data->status = ($data->status==1?0:1);
         $data->save();
         return redirect('/get-faqs')->with('success', 'Faq Activated successfull!! ');
+    }
+
+    public function send_feedback()
+    {
+        return view('feedback');
+    }
+
+    public function send_feedback_submit(Request $request)
+    {
+        
+        $feedback= new Feedback;
+        $feedback->user_id=$request->user_id;
+        $feedback->remark=$request->remark;
+        $feedback->save();
+        return back()->with('success',"Your Feedback Send Successfully");
+    }
+
+    public function show_feedback()
+    {   
+        $feedback=Feedback::all();
+        return view('show-feedback',compact('feedback'));
     }
 
 }

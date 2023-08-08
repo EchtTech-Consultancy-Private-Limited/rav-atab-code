@@ -256,6 +256,17 @@ function checktppaymentstatustype($id)
             }
         }
 
+        function get_user_name($id=0)
+        {  
+       
+            $record=App\Models\User::where('id',$id)->first();
+            if($record)
+            {
+               $user_email = $record->firstname.' '.$record->lastname;
+               return $user_email;
+            }
+        }
+
         function check_acknowledgement($id=0)
         {  
           
