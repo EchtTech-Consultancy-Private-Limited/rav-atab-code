@@ -344,4 +344,22 @@ function checktppaymentstatustype($id)
                return $eventsDate;
             
         }
+
+        function check_upgrade($id=0)
+        {
+             $created_at= $id;
+                
+                $todate=Carbon\Carbon::now();
+                
+                $result = $todate->diffInDays($created_at);  
+
+                if($result>=350 && $result<=365)
+                {
+                    return "true";
+                }
+                /*else
+                {
+                    return "no";
+                }*/
+        }
 ?>

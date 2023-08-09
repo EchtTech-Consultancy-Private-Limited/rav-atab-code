@@ -24,10 +24,11 @@
 
     <div>
 
-
+        @if(Auth::user()->role==1)
+        @include('layout.sidebar')
+        @elseif(Auth::user()->role==2)
         @include('layout.siderTp')
-
-
+        @endif
 
         @include('layout.rightbar')
 
@@ -41,13 +42,9 @@
               <div class="row">
                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-
-
-
-
-                    <ul class="breadcrumb breadcrumb-style ">
+                     <ul class="breadcrumb breadcrumb-style ">
                        <li class="breadcrumb-item">
-                          <h4 class="page-title">All Users</h4>
+                          <h4 class="page-title">Application Previous Level</h4>
 
                        </li>
                        <li class="breadcrumb-item bcrumb-1">
@@ -55,10 +52,10 @@
                           <i class="fas fa-home"></i> Home</a>
                        </li>
                        <li class="breadcrumb-item bcrumb-2">
-                          <a href="#" onClick="return false;">Users</a>
+                          <a href="#" onClick="return false;">History of Levels</a>
                        </li>
-                       <li class="breadcrumb-item active">All Users</li>
-                    </ul>
+                       <li class="breadcrumb-item active">Application Previous Level</li>
+                     </ul>
                  </div>
               </div>
            </div>

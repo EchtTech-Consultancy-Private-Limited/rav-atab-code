@@ -1397,6 +1397,7 @@ div#ui-datepicker-div {
                                                              <th class="center">Total Fee</th>
                                                              <th class="center"> Payment Date </th>
                                                              <th class="center">Status</th>
+                                                             <th class="center">Upgrade Button</th>
                                                              <th class="center">Action</th>
                                                          </tr>
                                                      </thead>
@@ -1417,6 +1418,7 @@ div#ui-datepicker-div {
                                                                      {{ $item->currency }}{{ $item->amount }}
                                                                  </td>
                                                                  <td class="center">{{ $item->payment_date }}</td>
+
                                                                  <td class="center">
                                                                      <a href="javascript:void(0)"
                                                                          @if ($item->status == 0) <div class="badge col-brown">Pending</div>
@@ -1426,6 +1428,17 @@ div#ui-datepicker-div {
                                                                     <div class="badge col-red">Approved</div> @endif
                                                                          </a>
                                                                  </td>
+                                                                
+                                                                @if(check_upgrade($item->created_at)=="true")
+                                                                 <td class="center">
+                                                                    <a onclick="return confirm_to_switch();" type="btn" class="btn btn-primary" >Upgrade</a>
+
+                                                                 </td>
+                                                                 @else
+                                                                 <td>
+
+                                                                 </td>
+                                                                 @endif
 
 
 
@@ -2725,6 +2738,37 @@ div#ui-datepicker-div {
  
    }
 </script>
+
+<script>
+   function confirm_to_switch(){
+      if(!confirm("Are you sure to switch to upgrade level!")){
+         return false;
+      }
+
+      $('#exampleModalToggle').modal('show');
+      return true;
+ 
+   }
+</script>
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Upgrade Level Model</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         Level 2
+      </div>
+      <div class="modal-footer">
+        <!-- <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Open second modal</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a> -->
 
 <script src="{{ asset('assets/js/form.min.js') }} "></script>
 <script src="{{ asset('assets/js/bundles/multiselect/js/jquery.multi-select.js') }}"></script>
