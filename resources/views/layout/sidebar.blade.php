@@ -90,7 +90,7 @@
                         </a>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <a href="#" onClick="return false;"  class="menu-toggle" >
                             <i data-feather="airplay"></i>
                             <span>Manage Course</span>
@@ -103,16 +103,16 @@
                             </li>
 
                         </ul>
-                    </li>
+                    </li> -->
 
-                    <li>
+                    <li class="{{ Request::is('show-previous-level')?'active':''; }}">
                         <a href="#" onClick="return false;" class="menu-toggle">
                             <i data-feather="monitor"></i>
                             <span>History of Levels</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="#">Show Previous Level</a>
+                                <a href="{{ url('show-previous-level') }}">Show Previous Level</a>
                                 <a href="#">Upgrade  Level</a>
                             </li>
 
@@ -148,12 +148,12 @@
                         </a>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <a href="#" onClick="return false;" >
                             <i data-feather="message-circle"></i>
                             <span>Remarks</span>
                         </a>
-                    </li>
+                    </li> -->
 
                     <li>
                         <a href="{{ url('/get-faqs') }}" class="{{ Request::is('get-faqs')?'active':''; }}" >
