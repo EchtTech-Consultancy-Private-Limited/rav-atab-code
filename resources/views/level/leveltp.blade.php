@@ -681,7 +681,7 @@ div#ui-datepicker-div {
 
                                                      <input type="hidden" name="application_id"   value="{{ $collections->id ?? '' }}"  class="form-control" readonly>
 
-                                                 <input type="hidden" placeholder="level_id"   name="level_id" value="@if(isset($Application)){{ $Application[0]->level_id ?? '' }}@endif">
+                                                 <input type="hidden" placeholder="level_id"   name="level_id" value="@if(isset($Application)){{ $Application->level_id ?? '' }}@endif">
 
                                                      <input type="hidden" name="coutry"
                                                          value=" {{ $data->country ??'' }}">
