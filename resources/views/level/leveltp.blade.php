@@ -1,7 +1,50 @@
  @include('layout.header')
  <!-- New CSS -->
  <link rel="stylesheet" href="{{ asset('assets/css/form.min.css') }}" class="js">
+<style>
+    
+.button-blinking {
+  background-color: #004A7F;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+  -o-animation: glowing 1500ms infinite;
+  animation: glowing 1500ms infinite;
+}
+@-webkit-keyframes glowing {
+  0% { background-color: #B20000; -webkit-box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; -webkit-box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; -webkit-box-shadow: 0 0 3px #B20000; }
+}
 
+@-moz-keyframes glowing {
+  0% { background-color: #B20000; -moz-box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; -moz-box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; -moz-box-shadow: 0 0 3px #B20000; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+}
+
+@keyframes glowing {
+  0% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+}
+</style>
  <style>
      @media (min-width: 900px) {
          .modal-dialog {
@@ -43,8 +86,6 @@ div#ui-datepicker-div {
 }
 
  </style>
-
-
 
 
  <title>RAV Accreditation</title>
@@ -640,7 +681,7 @@ div#ui-datepicker-div {
 
                                                      <input type="hidden" name="application_id"   value="{{ $collections->id ?? '' }}"  class="form-control" readonly>
 
-                                                 <input type="hidden" placeholder="level_id"   name="level_id" value="{{ 1 }}">
+                                                 <input type="hidden" placeholder="level_id"   name="level_id" value="@if(isset($Application)){{ $Application[0]->level_id ?? '' }}@endif">
 
                                                      <input type="hidden" name="coutry"
                                                          value=" {{ $data->country ??'' }}">
@@ -1263,10 +1304,11 @@ div#ui-datepicker-div {
 
 
 
+                                                  
 
                                                      @if (request()->path() == 'level-first')
-                                                         <input type="hidden" placeholder="level_id" name="level_id"
-                                                             value="{{ 1 }}">
+                                                         <input type="text" placeholder="level_id" name="level_id"
+                                                             value="sasa {{ $Application->level_id ?? '' }}">
                                                      @elseif(request()->path() == 'level-second')
                                                          <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="{{ 2 }}">
@@ -1277,6 +1319,18 @@ div#ui-datepicker-div {
                                                          <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="{{ 4 }}">
                                                      @endif
+
+                                                      @if(isset($Application->id))
+                                                       @if(check_upgraded_level2($Application->id)== "false")
+                                                         <input type="text" placeholder="level_id" name="level_id"
+                                                             value="1">
+                                                          @elseif(check_upgraded_level2($Application->id)== "true")
+                                                          
+                                                          <input type="text" placeholder="level_id" name="level_id"
+                                                             value="2">
+
+                                                      @endif
+                                                      @endif
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
                                                              <div class="form-line">
@@ -1325,9 +1379,9 @@ div#ui-datepicker-div {
                                                      <input type="hidden" value="{{ $collections->id ?? '' }}"
                                                      name="Application_id" required class="course_input">
 
-                                                    <input type="hidden" placeholder="level_id"
-                                                     value="{{ $collections->level_id ?? '' }}" name="level_id"
-                                                     value="{{ 1 }}">
+                                                    <!-- <input type="hidden" placeholder="level_id"
+                                                     value="{{ $collections->level_id ?? '' }}" name="level_id1"
+                                                     value="{{ 1 }}"> -->
 
 
 
@@ -1404,16 +1458,17 @@ div#ui-datepicker-div {
                                                      <tbody>
 
                                                         @isset($collection)
-
-
-
-                                                         @foreach ($collection as $k => $item)
+                                                        @foreach ($collection as $k => $item)
                                                              <tr class="odd gradeX">
                                                                  <td class="center">{{ $k + 1 }}</td>
                                                                  <td class="center">
                                                                      RAVAP-{{ 4000 + $item->application_id }}</td>
-                                                                 <td class="center">{{ $item->level_id }}</td>
-                                                                 <td class="center">{{ $item->course_count }}</td>
+
+                                                                
+                                                                 <td class="center level-id">{{ $item->level_id }}
+                                                                  </td>
+                                                                 
+                                                                  <td class="center">{{ $item->course_count }}</td>
                                                                  <td class="center">
                                                                      {{ $item->currency }}{{ $item->amount }}
                                                                  </td>
@@ -1430,17 +1485,34 @@ div#ui-datepicker-div {
                                                                  </td>
                                                                 
                                                                 @if(check_upgrade($item->created_at)=="true")
+                                                                  
+                                                                  
+                                                                @if(check_upgraded_level2($item->application_id)== "false")
                                                                  <td class="center">
-                                                                    <a onclick="return confirm_to_switch();" type="btn" class="btn btn-primary" >Upgrade</a>
+                                                                    <input type="hidden" value="{{$item->level_id}}" id="upgrade-btn-level-id">
+
+                                                                    <input type="hidden" value="{{$item->application_id}}" id="upgrade-btn-application-id">
+
+                                                                    <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" type="btn" class="button-blinking" > Upgrade </a>
+                                                                 
 
                                                                  </td>
+                                                                 @else
+                                                                  <td>
+                                                                      
+                                                                  </td>
+                                                                  @endif
+                                                                 
                                                                  @else
                                                                  <td>
 
                                                                  </td>
+                                                                
                                                                  @endif
 
 
+
+  
 
 
                                                                  <td class="center">
@@ -1464,9 +1536,9 @@ div#ui-datepicker-div {
 
                                                                  @elseif(request()->path() == 'level-second')
                                                                      <td class="center">
-                                                                         <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
+                                                                         <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
                                                                              class="btn btn-tbl-edit"><i
-                                                                                 class="material-icons">visibility</i></a>
+                                                                                 class="material-icons">visibility</i></a> -->
                                                                          @if ($item->status == 1)
                                                                              <a href="{{ url('/upload-document') }}"
                                                                                  class="btn btn-tbl-upload"><i
@@ -2759,7 +2831,24 @@ div#ui-datepicker-div {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-         Level 2
+        <form action="{{ url('upgrade-level') }}" method="post">
+            <input type="hidden" id="application_id_upgrade" name="application_id_upgrade">
+            <input type="hidden" id="level_id_upgrade1" name="level_id_upgrade">
+            @csrf
+
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                    <span style="float:left;"> Current Level </span>
+                </div>
+                <div class="col-sm-12 col-md-9" style="float:right;">
+                    <input type="text" id="level_id_upgrade" name="level_id_upgrade">
+                </div><br><br>
+                <div class="col-sm-12 col-md-12">
+                   <input type="submit" class="btn" value="Upgrade to next levet">
+                </div>
+            </div>
+            <p>
+        </form>
       </div>
       <div class="modal-footer">
         <!-- <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Open second modal</button> -->
@@ -2767,6 +2856,22 @@ div#ui-datepicker-div {
     </div>
   </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+    $(".button-blinking").click(function () {
+       
+        let level_id = $(this).closest('.gradeX').find('#upgrade-btn-level-id').val();
+        let application_id = $(this).closest('.gradeX').find('#upgrade-btn-application-id').val();
+        $('#level_id_upgrade').val(level_id);
+        $('#application_id_upgrade').val(application_id);
+    /*  alert(application_id);
+        alert(level_id);*/
+
+
+    });
+})
+</script>
 
 <!-- <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a> -->
 

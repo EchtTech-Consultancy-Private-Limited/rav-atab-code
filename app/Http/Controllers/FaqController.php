@@ -91,7 +91,7 @@ class FaqController extends Controller
         $data=Faq::find($id);
         $data->status = ($data->status==1?0:1);
         $data->save();
-        return redirect('/get-faqs')->with('success', 'Faq Activated successfull!! ');
+        return redirect('/get-faqs')->with('success', 'Faq Activated successfull!!');
     }
 
     public function send_feedback()
@@ -111,7 +111,7 @@ class FaqController extends Controller
 
     public function show_feedback()
     {   
-        $feedback=Feedback::all();
+        $feedback=Feedback::orderBy('id','desc')->get();
         return view('show-feedback',compact('feedback'));
     }
 

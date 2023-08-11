@@ -347,7 +347,7 @@ function checktppaymentstatustype($id)
 
         function check_upgrade($id=0)
         {
-             $created_at= $id;
+                $created_at= $id;
                 
                 $todate=Carbon\Carbon::now();
                 
@@ -361,5 +361,26 @@ function checktppaymentstatustype($id)
                 {
                     return "no";
                 }*/
+        }
+
+        function check_upgraded_level2($id=0)
+        {
+            
+          $level2=App\Models\ApplicationLevel2::where('level1_application_id',$id)->first();
+          if($level2)
+          {
+            return 'true';
+          }
+          else
+          {
+            return 'false';
+          }
+        }
+
+        function main_menu()
+        {
+          
+            $data=App\Models\Menu::orderBy('sorting','ASC')->whereparent_id('0')->get();
+            return $data;
         }
 ?>

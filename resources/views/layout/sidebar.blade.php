@@ -162,6 +162,36 @@
                         </a>
                     </li>
 
+                     <li class="{{ (Request::is('admin-models') || (Request::is('model-routes') || Request::is('admin-routes')))?'active':''; }}">
+                        <a href="#" onClick="return false;" class="menu-toggle">
+                            <i data-feather="monitor"></i>
+                            <span>Masters</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="{{ Request::is('admin-models')?'active':''; }}">
+                                <a href="{{url('admin-models')}}" >
+                                    <i data-feather="check-circle"></i>
+                                    <span> Modules </span>
+                                </a>
+                            </li>
+                            <li class="{{ Request::is('admin-routes')?'active':''; }}">
+                                <a href="{{url('admin-routes')}}" >
+                                    <i data-feather="check-circle"></i>
+                                    <span> Routes </span>
+                                </a>
+                            </li>
+                            <li class="{{ Request::is('model-routes')?'active':''; }}">
+                                <a href="{{url('model-routes')}}" >
+                                    <i data-feather="check-circle"></i>
+                                    <span> Module Routes </span>
+                                </a>
+                            </li>
+                           
+                            
+                            
+                        </ul>
+                    </li>
+
 
                 </ul>
             </div>

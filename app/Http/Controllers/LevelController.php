@@ -13,6 +13,7 @@ use App\Models\DocumentReportVerified;
 use App\Models\AcknowledgementRecord;
 use App\Models\User;
 use App\Models\Faq;
+use App\Models\ApplicationLevel2;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cookie;
 use Redirect;
@@ -187,9 +188,7 @@ class LevelController extends Controller
 
 
 
-
-
-  public function level1tp(Request $request,$id=null)
+ public function level1tp_upgrade(Request $request,$upgrade_application_id=null,$id=null)
   {
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
@@ -199,16 +198,252 @@ class LevelController extends Controller
          }*/
 
        //return $form_step_type;
-     //return  $id;
+     
+         // if($id)
+         // {
+         //     $id=decrypt($id);
+         // }
+        
+    
+ if($id)
+ {
+  
+    $id= $id;
+    $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
+    $item=LevelInformation::whereid('1')->get();
+    $file =ApplicationDocument::get();
+
+    //$1Application =Applicationevel2::find($id);
+    $Application =Applicationlevel2::where('level2_application_id',$upgrade_application_id)->first();
+
+    $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+    $collections=Application::orderBy('id','desc')->whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
+
+    if(Auth::user()->country == $this->get_india_id()){
+
+        if(count($course) == '0')
+        {
+            $currency = '₹';
+            $total_amount = '0';
+
+        }elseif(count($course) <= 5 )
+        {
+            $currency = '₹';
+            $total_amount = '1000';
+
+
+        }elseif(count($course) <= 10 )
+        {
+            $currency = '₹';
+            $total_amount =  '2000';
+
+        }else{
+            $currency = '₹';
+            $total_amount =   '3000';
+
+        }
+      }
+
+      elseif(in_array(Auth::user()->country,$this->get_saarc_ids()))
+      {
+       if(count($course) == '0')
+       {
+            $currency = 'US $';
+            $total_amount = '0';
+
+       }elseif(count($course) <= 5 )
+       {
+           $currency = 'US $';
+           $total_amount =  '15';
+
+
+       }elseif(count($course) <= 10 )
+
+       {
+           $currency = 'US $';
+           $total_amount = '30';
+       }else{
+           $currency = 'US $';
+           $total_amount =  '45';
+       }
+
+
+      }else{
+
+       if(count($course) == '0')
+       {
+           $currency = 'US $';
+           $total_amount = '';
+
+       }elseif(count($course) <= 5 )
+       {
+           $currency = 'US $';
+           $total_amount = '50';
+
+
+       }elseif(count($course) <= 10 )
+       {
+           $currency = 'US $';
+           $total_amount = '100';
+
+       }else{
+           $currency = 'US $';
+           $total_amount =  '150';
+
+       }
+   }
+
+    $id=Auth::user()->id;
+    $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
+    $Country =Country::get();
+    
+       /*level list */
+       
+        $level_list_data=DB::table('applications')
+         ->where('applications.user_id',Auth::user()->id)
+         ->where('applications.status','0')
+         ->select('applications.*','countries.name as country_name')
+         ->join('countries','applications.country', '=', 'countries.id')->get();
+       /*end level list */
+
+   // return $Application;
+
+    return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs],compact('form_step_type'));
+
+ }else
+ {
+
+      
+
+
+
+    $id=Auth::user()->id;
+    $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
+    $Country =Country::get();
+    $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
+    $item=LevelInformation:: whereid('1')->get();
+
+    $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+
+    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+    //dd("$collection");
+    $collections=Application::orderBy('id','desc')->whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
+    $Application = new Application;
+
+    $course =ApplicationCourse::get();
+
+    if(Auth::user()->country == $this->get_india_id()){
+
+        if(count($course) == '0')
+        {
+            $currency = '₹';
+            $total_amount = '0';
+
+        }elseif(count($course) <= 5 )
+        {
+            $currency = '₹';
+            $total_amount = '1000';
+
+
+        }elseif(count($course) <= 10 )
+        {
+            $currency = '₹';
+            $total_amount =  '2000';
+
+        }else{
+            $currency = '₹';
+            $total_amount =   '3000';
+
+        }
+      }
+
+      elseif(in_array(Auth::user()->country,$this->get_saarc_ids()))
+      {
+       if(count($course) == '0')
+       {
+            $currency = 'US $';
+            $total_amount = '0';
+
+       }elseif(count($course) <= 5 )
+       {
+           $currency = 'US $';
+           $total_amount =  '15';
+
+
+       }elseif(count($course) <= 10 )
+
+       {
+           $currency = 'US $';
+           $total_amount = '30';
+       }else{
+           $currency = 'US $';
+           $total_amount =  '45';
+       }
+
+
+      }else{
+
+       if(count($course) == '0')
+       {
+           $currency = 'US $';
+           $total_amount = '';
+
+       }elseif(count($course) <= 5 )
+       {
+           $currency = 'US $';
+           $total_amount = '50';
+
+
+       }elseif(count($course) <= 10 )
+       {
+           $currency = 'US $';
+           $total_amount = '100';
+
+       }else{
+           $currency = 'US $';
+           $total_amount =  '150';
+
+       }
+   }
+     /*level list */
+       
+        $level_list_data=DB::table('applications')
+         ->where('applications.user_id',Auth::user()->id)
+         ->where('applications.status','0')
+         ->select('applications.*','countries.name as country_name')
+         ->join('countries','applications.country', '=', 'countries.id')->get();
+       /*end level list */
+
+      return view('level.leveltp',['level_list_data'=>$level_list_data,'collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs],compact('form_step_type'));
+
+
+
+ }
+
+  }
+
+  /*end upgrade part*/
+
+  public function level1tp(Request $request,$id=null)
+  {
+        //dd("we are work on manage ");
+        $form_step_type= Session::get('session_for_redirections');
+        /*
+         if(empty($form_step_type))
+         {  
+            $form_step_type="withour-session-step"; 
+         }
+        */
+
+       //return $form_step_type;
+     
          if($id)
          {
              $id=decrypt($id);
          }
-      
-
-       
-
-     
+    //  return $id;
+    
  if($id)
  {
   
@@ -216,9 +451,17 @@ class LevelController extends Controller
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
     $item=LevelInformation:: whereid('1')->get();
     $file =ApplicationDocument::get();
+
     $Application =Application::find($id);
-    $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
-    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+    
+    /*$course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id(2)->get();*/
+
+    $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->get();
+    /*$collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
+
+    //we show previous application listing without copmare level below
+
+    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->get();
     $collections=Application::orderBy('id','desc')->whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
 
     if(Auth::user()->country == $this->get_india_id()){
@@ -314,21 +557,24 @@ class LevelController extends Controller
 
  }else
  {
-
-      
-
-
-
-    $id=Auth::user()->id;
+   
+   //dd("ds");
+   $id=Auth::user()->id;
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     $Country =Country::get();
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
     $item=LevelInformation:: whereid('1')->get();
 
+    /*$course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
+
     $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 
-    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
-   // dd($collection);
+    /*$collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
+
+    //we show previous application listing without copmare level below
+
+    $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->get();
+    //dd("$collection");
     $collections=Application::orderBy('id','desc')->whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
     $Application = new Application;
 
@@ -848,7 +1094,7 @@ public function newapplication()
  public function new_application_course(Request $request)
  {
 
-  // return $request->all();
+ // return $request->all();
    
   /* $this->validate($request, [
            'doc2' => 'mimes:pdf',
@@ -988,7 +1234,8 @@ public function newapplication()
     $session_for_redirection=$request->form_step_type;
     Session::put('session_for_redirections', $session_for_redirection);
     $session_for_redirections= Session::get('session_for_redirections');
- 
+   
+   $level2_application_id=$data->applications_id;
  if($request->level_id =='1')
  {
      return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
@@ -996,8 +1243,11 @@ public function newapplication()
 
  }elseif($request->level_id =='2')
  {
+        return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
-     return  redirect('level-list')->with('success','Course successfully Added!!!!');
+    //return  redirect('level-first-upgrade/'.$level2_application_id.'/'.$data->applications_id)->with('success','Course  successfully  Added!!!!');
+
+     //return  redirect('level-list')->with('success','Course successfully Added!!!!');
 
  }elseif($request->level_id =='3')
  {
@@ -1018,6 +1268,8 @@ public function newapplication()
 
   public function new_application_payment(Request $request)
   {
+
+    //return $request->all();
      $this->validate($request, [
             'payment_details_file' => 'mimes:jpeg,png,jpg,gif,svg',
             
@@ -1101,7 +1353,9 @@ public function newapplication()
 
   }elseif($request->level_id =='2')
   {
-      //dd("hii");
+      
+      return  redirect('level-first')->with('success','Course  successfully  Added!!!!');
+
       foreach($request->course_id as $item)
       {
       $ApplicationCourse=ApplicationCourse::find($item);
@@ -1147,11 +1401,22 @@ public function previews_application1($ids,$application_id)
             ->first();
     
     $spocData =DB::table('applications')->where('id',$application_id)->first();
-    
+
+   //return $item[0]->id;
+
+
     $ApplicationCourse=ApplicationCourse::where('user_id',$id)->wherepayment($ids)->wherelevel_id($item[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::where('user_id',$id)->whereid($ids)->wherelevel_id($item[0]->id)->get();
 
+    $check_payment=ApplicationPayment::where('id',$ids)->first();
+       if($check_payment->level_id==2)
+       {
+            $ApplicationCourse=ApplicationCourse::where('user_id',$id)->wherepayment($ids)->wherelevel_id(2)->get();
+            $ApplicationPayment=ApplicationPayment::where('user_id',$id)->whereid($ids)->wherelevel_id(2)->get();
 
+       }
+
+       
     //return $ApplicationPayment;
     
     

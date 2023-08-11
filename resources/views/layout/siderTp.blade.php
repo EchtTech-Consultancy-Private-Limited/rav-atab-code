@@ -107,8 +107,8 @@
                     </li> -->
 
 
-                    <li>
-                        <a class="menu-toggle">
+                   <li class="{{ Request::is('show-previous-level')?'active':''; }}">
+                        <a href="#" onClick="return false;" class="menu-toggle">
                             <i data-feather="monitor"></i>
                             <span>History of Levels</span>
                         </a>
