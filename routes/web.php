@@ -13,6 +13,7 @@ use App\Http\Controllers\SecretariatController;
 use App\Http\Controllers\UpgradeLevelController;
 use App\Http\Controllers\FaqController; #SKP
 use App\Http\Controllers\AssessorController; #SKP
+use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
 
 
@@ -93,6 +94,8 @@ Route::post('/new-application',[LevelController::class,'new_application']);
 
 Route::get('level-list',[LevelController::class, 'level_list']);
 Route::get('/level-first/{id?}', [LevelController::class, 'level1tp']);
+
+Route::get('/level-first-upgrade/{upgrade_application_id?}/{id?}', [LevelController::class, 'level1tp_upgrade']);
 
 
 
@@ -218,13 +221,14 @@ Route::post('/add-courses',[LevelController::class,'add_courses']);
 Route::get('/Assessor-view/{id}', [LevelController::class, 'Assessor_view']);
 Route::get('/secretariat-view/{id}', [LevelController::class, 'secretariat_view']);
 
-
-
-
 Route::get('view-application-documents', [applicationController::class, 'assessor_view_docs']);
-
-
 Route::get('/accr-view-document/{id}/{course_id}', [LevelController::class, 'accr_upload_document']);
+
+//upgrade level route
+
+Route::post('/upgrade-level', [UpgradeLevelController::class, 'upgrade_level']);
+
+
 });
 
 Route::get('view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'view_doc']);
@@ -241,5 +245,13 @@ Route::get('/document-comment-admin-assessor/{course_id}', [LevelController::cla
 Route::get('/document-report-verified-by-assessor/{id}/{course_id}', [LevelController::class, 'document_report_verified_by_assessor']);
 
 
+
+
+    /*Admin Url Roles and Permissions Routes*/
+    Route::get('main-menu', [MenuController::class, 'index']);
+    Route::post('add-new-menu', [MenuController::class, 'create']);
+    Route::get('edit-model/{id}', [MenuController::class, 'edit_model']);
+    Route::post('update-model/{id}', [MenuController::class, 'update_model']);
+    Route::get('model-dlt/{id}', [MenuController::class, 'delete_model']);
 
 
