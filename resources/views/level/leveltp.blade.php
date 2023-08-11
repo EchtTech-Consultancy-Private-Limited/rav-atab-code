@@ -1322,11 +1322,11 @@ div#ui-datepicker-div {
 
                                                       @if(isset($Application->id))
                                                        @if(check_upgraded_level2($Application->id)== "false")
-                                                         <input type="text" placeholder="level_id" name="level_id"
+                                                         <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="1">
                                                           @elseif(check_upgraded_level2($Application->id)== "true")
                                                           
-                                                          <input type="text" placeholder="level_id" name="level_id"
+                                                          <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="2">
 
                                                       @endif

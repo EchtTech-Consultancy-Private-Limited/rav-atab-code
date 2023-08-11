@@ -217,6 +217,7 @@ class LevelController extends Controller
     $Application =Applicationlevel2::where('level2_application_id',$upgrade_application_id)->first();
 
     $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+
     $collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
     $collections=Application::orderBy('id','desc')->whereid($id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->first();
 
@@ -770,7 +771,7 @@ public function newapplication()
     $faqs=Faq::where('category',2)->orderby('sort_order','Asc')->get();
 
     $item=LevelInformation::whereid('2')->get();
-    $Application =Application::whereuser_id(Auth::user()->id)->get();
+    $Application =Application::whereuser_id(Auth::user()->id)->first();
     $collection=ApplicationPayment::whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
     $course=ApplicationCourse::wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
     if(Auth::user()->country == $this->get_india_id()){
@@ -1236,13 +1237,17 @@ public function newapplication()
     $session_for_redirections= Session::get('session_for_redirections');
    
    $level2_application_id=$data->applications_id;
+  
+  //return $request->level_id;
  if($request->level_id =='1')
- {
+ {   
+    
      return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
     // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
  }elseif($request->level_id =='2')
  {
+        //dd("level2");
         return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
     //return  redirect('level-first-upgrade/'.$level2_application_id.'/'.$data->applications_id)->with('success','Course  successfully  Added!!!!');
@@ -1251,9 +1256,11 @@ public function newapplication()
 
  }elseif($request->level_id =='3')
  {
+    
      return  redirect('level-list')->with('success','Course successfully Added!!!!');
- }else
- {
+ }
+ else
+ {    
      return  redirect('level-list')->with('success','Course successfully Added!!!!');
  }
 
