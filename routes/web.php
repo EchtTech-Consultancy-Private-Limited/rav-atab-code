@@ -144,7 +144,7 @@ Route::get('/application-upgrade-third',[LevelController::class,'application_upg
 Route::get('/application-upgrade-fourth',[LevelController::class,'application_upgrade4']);
 
 //acknowledgement letter
-Route::get('/Akment-letter', [aknownledgeController::class, 'index']);
+Route::get('/Akment-letter', [aknownledgeController::class,'index']);
 
 //Application
 Route::get('/internationl-page', [applicationController::class, 'internationl_index']);

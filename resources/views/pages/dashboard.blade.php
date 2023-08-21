@@ -78,11 +78,11 @@
 
 
 
-<body class="light 
+<body class="light
 
 @if(Auth::user()->role  == 1 )
 
-        
+
 
         @elseif(Auth::user()->role  == 2)
 
@@ -94,7 +94,7 @@
 
         @elseif(Auth::user()->role  == 4)
 
-        
+
 
         @endif
 
@@ -250,7 +250,7 @@
 
 </div>
 
-@elseif(Auth::user()->role == 1 || Auth::user()->role == 2)
+@elseif(Auth::user()->role == 1)
 
             <div class="row ">
                 <div class="col-xl-3 col-sm-6">
@@ -258,7 +258,7 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
                             <div class="mb-4">
-                                <h5 class="font-20 mb-0">National Applications</h5>
+                               <a href="{{ url('nationl-page') }}"><h5 class="font-20 mb-0">National Applications</h5></a>
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
@@ -287,7 +287,7 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
                             <div class="mb-4">
-                                <h5 class="font-20 mb-0">International Applications</h5>
+                                <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">International Applications</h5></a>
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">

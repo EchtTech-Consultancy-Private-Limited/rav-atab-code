@@ -2,7 +2,7 @@
  <!-- New CSS -->
  <link rel="stylesheet" href="{{ asset('assets/css/form.min.css') }}" class="js">
 <style>
-    
+
 .button-blinking {
   background-color: #004A7F;
   -webkit-border-radius: 10px;
@@ -172,27 +172,28 @@ div#ui-datepicker-div {
                          <div class="profile-tab-box">
                              <div class="p-l-20">
                                  <ul class="nav ">
-                                     <li class="nav-item tab-all">
+                                     {{-- <li class="nav-item tab-all">
 
                                     <a class="nav-link show  @if(isset($form_step_type)) @if($form_step_type=='add-course' || $form_step_type=='withour-session-step')   @endif @else active  @endif" href="#general_information"
                                              data-bs-toggle="tab" >General Information</a>
-                                     </li>
-
-                                     <li class="nav-item tab-all" >
-                                         <a class="nav-link show" href="#pending_payment_list"
-                                             data-bs-toggle="tab">Pending Payment List</a>
-                                     </li>
+                                     </li> --}}
 
                                      <li class="nav-item tab-all p-l-20">
-                                       <a class="nav-link @if(isset($form_step_type)) @if( $form_step_type=='application-payment') active @else @endif  @endif" href="#preveious_application" data-bs-toggle="tab">Previous
+                                        <a class="nav-link add-active-b @if(isset($form_step_type)) @if($form_step_type=='add-course') active @else  @endif  @endif" href="#new_application" data-bs-toggle="tab">New
+                                            Application</a>
+                                    </li>
+
+
+                                     <li class="nav-item tab-all p-l-20">
+                                       <a class="nav-link @if(isset($form_step_type)) @if( $form_step_type=='application-payment') active @else @endif  @endif" href="#preveious_application" data-bs-toggle="tab">
                                              Applications</a>
                                      </li>
 
-                                     <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link @if(isset($form_step_type)) @if($form_step_type=='add-course') active @else  @endif  @endif" href="#new_application" data-bs-toggle="tab">New
-                                             Application</a>
-                                     </li>
-                                     
+                                     <li class="nav-item tab-all" >
+                                        <a class="nav-link show" href="#pending_payment_list"
+                                            data-bs-toggle="tab">Pending Payment List</a>
+                                    </li>
+
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
                                      </li>
@@ -379,16 +380,27 @@ div#ui-datepicker-div {
                                              <a target="_blank" href="{{ url('show-pdf'.'/'.$item[0]->documents_required_pdf) }}"
                                                   title="level Information pdf"><i
                                                       class="fa fa-download mr-2"></i> PDF Documents Required pdf </a>
-
                                              @endif
-
-
                                              <br>
                                          </div>
+                                        <div class="col-md-12 ml-auto" style="text-align: right">
+                                            <button class="btn btn-info" id="add-new-application">New Application</button>
+                                        </div>
+
+
+
+
                                      </div>
+
                                  </div>
                              </div>
-                         </div>
+
+
+
+
+
+
+                            </div>
                          <!-- <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
                                         </div> -->
                          <div role="tabpanel" class="tab-pane @if(isset($form_step_type)) @if($form_step_type=='add-course') active @else  @endif  @endif" id="new_application" aria-expanded="false">
@@ -508,7 +520,7 @@ div#ui-datepicker-div {
                                                          </div>
                                                      </div>
                                                  </div>
-                                                 
+
                                              </div>
                                              <!-- Form  -->
                                              <div class="row">
@@ -517,7 +529,7 @@ div#ui-datepicker-div {
                                                  </div>
 
                                                  <div class="col-md-12">
-                                                    
+
                                                     <form class="form" id="regForm">
                                                         @csrf
                                                         <div class="body pb-0">
@@ -571,8 +583,8 @@ div#ui-datepicker-div {
                                                                             <label>Contact Number<span
                                                                                     class="text-danger">*</span></label>
                                                                             <input type="text" required="required"
-                                                                                name="Contact_Number" class="preventalpha" 
-                                                                                placeholder="Contact Number" id="Contact_Number" 
+                                                                                name="Contact_Number" class="preventalpha"
+                                                                                placeholder="Contact Number" id="Contact_Number"
                                                                                 @isset($id)
                                                                                 value="{{ $Application->Contact_Number ?? '' }}"
                                                                                 @endisset >
@@ -675,7 +687,7 @@ div#ui-datepicker-div {
 
 
 
-                                                   
+
 
                                                      <input type="hidden" name="application"  class="content_id" readonly>
 
@@ -736,7 +748,7 @@ div#ui-datepicker-div {
                                                                     @endforeach
                                                                  </select>
 
-                                                                   
+
 
                                                              </div>
                                                              </div>
@@ -775,7 +787,7 @@ div#ui-datepicker-div {
 
                                                                  <input type="file" name="doc1[]"
                                                                      id="payment_reference_no" required
-                                                                     class="form-control doc_1">
+                                                                     class="form-control doc_1 file_size">
                                                              </div>
 
                                                              {{-- <label for="payment_reference_no"
@@ -795,9 +807,9 @@ div#ui-datepicker-div {
 
                                                                 <input type="file" name="doc2[]"
                                                                      id="payment_reference_no"  required
-                                                                     class="form-control doc_2"> 
+                                                                     class="form-control doc_2 file_size">
 
-                                                                     
+
                                                              </div>
 
                                                              {{-- <label for="payment_reference_no"
@@ -819,7 +831,7 @@ div#ui-datepicker-div {
 
                                                                  <input type="file" name="doc3[]"
                                                                      id="payment_reference_no" required
-                                                                     class="form-control doc_3">
+                                                                     class="form-control doc_3 file_size">
                                                              </div>
 
                                                              {{-- <label for="payment_reference_no"
@@ -916,7 +928,7 @@ div#ui-datepicker-div {
                                                                 <td class="center">
                                                                     <!-- {{$courses->id}} -->
                                                                    [ <?php echo get_course_mode($courses->id); ?> ]
-                                                                  
+
                                                                 </td>
                                                                  <td class="center">{{ $courses->course_brief }}
                                                                  </td>
@@ -1092,7 +1104,7 @@ div#ui-datepicker-div {
 
                                                              <input type="file" name="doc1[]"
                                                                  id="payment_reference_no" required
-                                                                 class="form-control">
+                                                                 class="form-control file_size">
                                                          </div>
 
                                                          <label for="payment_reference_no"
@@ -1114,7 +1126,7 @@ div#ui-datepicker-div {
 
                                                              <input type="file" name="doc2[]"
                                                                  id="payment_reference_no" required
-                                                                 class="form-control">
+                                                                 class="form-control file_size">
                                                          </div>
 
                                                          <label for="payment_reference_no"
@@ -1274,9 +1286,21 @@ div#ui-datepicker-div {
                                                              </label>
                                                          </div>
                                                      </div>
+
                                                      <input type='hidden' name="amount"
                                                       @isset($total_amount)
-                                                      value="{{ $total_amount }}"
+
+                                                      @if(Auth::user()->country == '101')
+
+                                                         value="{{ $total_amount+$total_amount*(18/100) }}"
+                                                    @else
+
+                                                      value="{{ $total_amount  }}"
+
+                                                    @endif
+
+
+
                                                       @endisset  >
                                                      <input type='hidden' name="course_count"
                                                      @isset($course)
@@ -1304,7 +1328,7 @@ div#ui-datepicker-div {
 
 
 
-                                                  
+
 
                                                      @if (request()->path() == 'level-first')
                                                          <input type="text" placeholder="level_id" name="level_id"
@@ -1325,7 +1349,7 @@ div#ui-datepicker-div {
                                                          <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="1">
                                                           @elseif(check_upgraded_level2($Application->id)== "true")
-                                                          
+
                                                           <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="2">
 
@@ -1393,7 +1417,7 @@ div#ui-datepicker-div {
                                                                          class="text-danger">*</span></label>
                                                                  <input type="file" name="payment_details_file"
                                                                      id="payment_details_file" required
-                                                                     class="form-control payment_details_file">
+                                                                     class="form-control payment_details_file  file_size">
                                                              </div>
                                                              <label for="payment_reference_no"
                                                                  id="payment_reference_no-error" class="error">
@@ -1464,10 +1488,10 @@ div#ui-datepicker-div {
                                                                  <td class="center">
                                                                      RAVAP-{{ 4000 + $item->application_id }}</td>
 
-                                                                
+
                                                                  <td class="center level-id">{{ $item->level_id }}
                                                                   </td>
-                                                                 
+
                                                                   <td class="center">{{ $item->course_count }}</td>
                                                                  <td class="center">
                                                                      {{ $item->currency }}{{ $item->amount }}
@@ -1483,10 +1507,10 @@ div#ui-datepicker-div {
                                                                     <div class="badge col-red">Approved</div> @endif
                                                                          </a>
                                                                  </td>
-                                                                
+
                                                                 @if(check_upgrade($item->created_at)=="true")
-                                                                  
-                                                                  
+
+
                                                                 @if(check_upgraded_level2($item->application_id)== "false")
                                                                  <td class="center">
                                                                     <input type="hidden" value="{{$item->level_id}}" id="upgrade-btn-level-id">
@@ -1494,25 +1518,25 @@ div#ui-datepicker-div {
                                                                     <input type="hidden" value="{{$item->application_id}}" id="upgrade-btn-application-id">
 
                                                                     <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" type="btn" class="button-blinking" > Upgrade </a>
-                                                                 
+
 
                                                                  </td>
                                                                  @else
                                                                   <td>
-                                                                      
+
                                                                   </td>
                                                                   @endif
-                                                                 
+
                                                                  @else
                                                                  <td>
 
                                                                  </td>
-                                                                
+
                                                                  @endif
 
 
 
-  
+
 
 
                                                                  <td class="center">
@@ -1850,14 +1874,14 @@ div#ui-datepicker-div {
                                                          <div class="form-group select-modal">
                                                              <div class="form-line">
                                                                  <label>Mode of Course  <span class="text-danger">*</span></label>
-                                                               
+
                                                               <!--  <select class="form-control" name="mode_of_course[]"
                                                                      required multiple="" style="width:160px;" id="mode_of_course_edit">
                                                                      <option value="1">Online</option>
                                                                      <option value="2">Offline</option>
                                                                      <option value="3">Hybrid</option> -->
 
-                                                                   
+
                                                                      <!-- <option>Select Mode of Course</option> -->
                                                                     <!-- @foreach(__('arrayfile.mode_of_course_array') as $key=>$value)
                                                                        <option value="{{$value}}">{{$value}}</option>
@@ -1870,9 +1894,9 @@ div#ui-datepicker-div {
                                                                       <option value="Hybrid">Hybrid</option>
                                                                 </select>
 
-                                                                   
 
-                                                         
+
+
                                                              </div>
                                                              @error('mode_of_course')
                                                                  <div class="alert alert-danger">{{ $message }}
@@ -1906,7 +1930,7 @@ div#ui-datepicker-div {
                                                                  <label>Declaration<span class="text-danger">*</span></label>
                                                          <input type="file" name="doc1"
                                                              id="doc1_edit"
-                                                             class="form-control doc_edit_1">
+                                                             class="form-control doc_edit_1 file_size">
 
 
                                                          <a target="_blank" href="" id="docpdf1ss" title=" Document 1"
@@ -1922,7 +1946,7 @@ div#ui-datepicker-div {
                                                          <label>Course Curriculum / Material / Syllabus <span class="text-danger">*</span></label>
                                                          <input type="file" name="doc2"
                                                              id="payment_reference_no"
-                                                             class="form-control doc_edit_2">
+                                                             class="form-control doc_edit_2 file_size">
 
                                                          <a target="_blank" href="" id="docpdf2ss" title=" Document 1"
                                                              ><i class="fa fa-download mr-2"></i> PDF 2</a>
@@ -1939,7 +1963,7 @@ div#ui-datepicker-div {
                                                          <label>Course Details (Excel format) <span class="text-danger">*</span></label>
                                                          <input type="file" name="doc3"
                                                              id="payment_reference_no"
-                                                             class="form-control doc_edit_3">
+                                                             class="form-control doc_edit_3 file_size">
 
 
                                                          <a href="" id="docpdf3ss" title="Download Document 1"
@@ -1985,7 +2009,7 @@ div#ui-datepicker-div {
                                         $(".prev-step").click(function(){
                                             $(".progress3").removeClass('bg_green');
                                         })
-                                   
+
                                    });
 
 
@@ -2272,8 +2296,8 @@ div#ui-datepicker-div {
                                                 {
                                                     $("#Payment_Status").val("Pending");
                                                 }
-                                                
-                                             
+
+
 
                                                 $("a#docpdf1").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[0]
                                                     .document_file);
@@ -2290,7 +2314,7 @@ div#ui-datepicker-div {
                                 </script>
 
 
-                               
+
 
 
 
@@ -2349,8 +2373,8 @@ div#ui-datepicker-div {
                                             success: function(response) {
 
                                                 console.log(response.id)
-                                                
- 
+
+
                                                 if (response.id) {
 
                                                     $('.content_id').val(response.id);
@@ -2363,7 +2387,7 @@ div#ui-datepicker-div {
 
                                             },
 
-                                            error: function(response) 
+                                            error: function(response)
                                             {
                                                 //console.log(response);
                                                 $("#email_id_error").empty();
@@ -2415,7 +2439,7 @@ div#ui-datepicker-div {
                    id: UserName
                },
                success: function(data) {
-                   
+
 
                    console.log(data.ApplicationCourse[0].eligibility)
                    console.log(data.Document[0].document_file)
@@ -2434,7 +2458,7 @@ div#ui-datepicker-div {
                    $("#view_months").html(data.ApplicationCourse[0].months + " Month(s)");
                    $("#view_days").html(data.ApplicationCourse[0].days + " Day(s)");
                    $("#view_hours").html(data.ApplicationCourse[0].hours + " Hour(s)");
-                   
+
                    //alert(data.Document[2].document_file);
 
                    $("a#docpdf1").attr("href", "{{ url('show-course-pdf') }}" + '/' + data.Document[0]
@@ -2465,7 +2489,7 @@ div#ui-datepicker-div {
        //alert("edit course second 2420");
            var UserName = $(this).data('id');
            console.log(UserName);
-          
+
            $.ajaxSetup({
                headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -2479,9 +2503,9 @@ div#ui-datepicker-div {
                    id: UserName
                },
                success: function(data) {
-                   
+
                console.log(data.ApplicationCourse[0].mode_of_course);
-              
+
 
 
                 var values=data.ApplicationCourse[0].mode_of_course;
@@ -2529,7 +2553,7 @@ div#ui-datepicker-div {
            });
 
        });
-   </script> 
+   </script>
 
 
 
@@ -2570,7 +2594,7 @@ div#ui-datepicker-div {
     });
 
 
-    
+
 
     // disable alphate
     $('#postal').keypress(function (e) {
@@ -2585,7 +2609,7 @@ div#ui-datepicker-div {
     });
    </script>
    <script>
-   
+
     $('.preventalpha').keypress(function (e) {
           //alert("yes");
          var regex = new RegExp("^[0-9_]");
@@ -2620,34 +2644,34 @@ div#ui-datepicker-div {
     });
 
    </script>
-   
+
     <script>
        var doc_payment_file="";
-       
+
        $('.payment_details_file').on('change',function(){
 
           doc_payment_file = $(".payment_details_file").val();
-          
+
           var doc_payment_files = doc_payment_file.split('.').pop();
-         
-          if(doc_payment_files=='png' || doc_payment_files=='jpg' || doc_payment_files=='jpeg')
+
+          if(doc_payment_files=='png' || doc_payment_files=='jpg' || doc_payment_files=='pdf' || doc_payment_files=='jpeg')
           {
           // alert("File uploaded is pdf");
            }
           else{
-            alert("Only jpg, png, jpeg are allowed")
+            alert("Only jpg, png, jpeg ,pdf are allowed")
              $('.payment_details_file').val("");
           }
-         
+
         });
 
-        
-        
+
+
    </script>
 
    <script>
        var doc_file1="";
-       
+
        $('.doc_1').on('change',function(){
 
           doc_file1 = $(".doc_1").val();
@@ -2660,11 +2684,11 @@ div#ui-datepicker-div {
             alert("Only PDF are allowed")
              $('.doc_1').val("");
           }
-         
+
         });
 
-        
-        
+
+
    </script>
 
 
@@ -2673,7 +2697,7 @@ div#ui-datepicker-div {
 
     var doc_file2="";
     $('.doc_2').on('change',function(){
-          
+
           doc_file2 = $(".doc_2").val();
           console.log(doc_file2);
           var doc_file2 = doc_file2.split('.').pop();
@@ -2684,21 +2708,21 @@ div#ui-datepicker-div {
             alert("Only PDF are allowed");
              $('.doc_2').val("");
           }
-         
+
         });
 
    </script>
 
    <script>
-   
+
     var doc_file3="";
     $('.doc_3').on('change',function(){
-        
+
           doc_file3 = $(".doc_3").val();
           console.log(doc_file3);
           var doc_file3 = doc_file3.split('.').pop();
 
-         
+
           if(doc_file3=='csv' || doc_file3=='xlsx' || doc_file3=='xls'){
           // alert("File uploaded is pdf");
            }
@@ -2706,13 +2730,13 @@ div#ui-datepicker-div {
             alert("Only csv,xlsx,xls  are allowed")
              $('.doc_3').val("");
           }
-         
+
         });
    </script>
 
    <script>
        var doc_file1="";
-       
+
        $('.doc_edit_1').on('change',function(){
 
           doc_file1 = $(".doc_edit_1").val();
@@ -2726,12 +2750,12 @@ div#ui-datepicker-div {
             alert("Only PDF are allowed")
              $('.doc_edit_1').val("");
           }
-         
+
         });
     </script>
      <script>
        var doc_file_edit2="";
-       
+
        $('.doc_edit_2').on('change',function(){
 
           doc_file_edit2 = $(".doc_edit_2").val();
@@ -2745,12 +2769,12 @@ div#ui-datepicker-div {
             alert("Only PDF are allowed")
              $('.doc_edit_2').val("");
           }
-         
+
         });
     </script>
      <script>
        var doc_file_edit3="";
-       
+
        $('.doc_edit_3').on('change',function()
        {
 
@@ -2765,7 +2789,7 @@ div#ui-datepicker-div {
             alert("Only PDF are allowed");
              $('.doc_edit_3').val("");
           }
-         
+
         });
     </script>
 
@@ -2807,7 +2831,7 @@ div#ui-datepicker-div {
       }
 
       return true;
- 
+
    }
 </script>
 
@@ -2819,9 +2843,22 @@ div#ui-datepicker-div {
 
       $('#exampleModalToggle').modal('show');
       return true;
- 
+
    }
+
+
+   $(document).ready(function(){
+  $("#add-new-application").click(function(){
+    $("#new_application").addClass('active');
+    $(".add-active-b").addClass('active');
+    $("#general_information").removeClass('active');
+  })
+});
+
 </script>
+
+
+
 
 <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -2860,7 +2897,7 @@ div#ui-datepicker-div {
 <script>
     $(document).ready(function () {
     $(".button-blinking").click(function () {
-       
+
         let level_id = $(this).closest('.gradeX').find('#upgrade-btn-level-id').val();
         let application_id = $(this).closest('.gradeX').find('#upgrade-btn-application-id').val();
         $('#level_id_upgrade').val(level_id);

@@ -53,7 +53,7 @@
                           <a href="{{url('/dashboard')}}">
                           <i class="fas fa-home"></i> Home</a>
                        </li>
-                       
+
                        <li class="breadcrumb-item active">Manage Manual</li>
                     </ul>
                  </div>
@@ -88,7 +88,7 @@
                     <div class="body">
 
                      <div class="row">
-                        
+
                         <form method="post" action="{{ url('/save-manual') }}"
                             class="javavoid(0) validation-form123" id="regForm" enctype="multipart/form-data">
                             @csrf
@@ -141,7 +141,7 @@
                                         <div class="form-group mb-0">
                                             <div class="form-line">
                                                 <label>Select File<span class="text-danger">*</span></label>
-                                                <input type="file" id="file" class="special_no form-control pt-3" name="file" value="">
+                                                <input type="file" id="file" class="special_no form-control pt-3 file_size" name="file" value="">
                                             </div>
 
                                             <label for="manual_file" id="manual_file" class="error">
@@ -158,10 +158,10 @@
 
                                 <div class="col-lg-12 p-t-10 text-center">
                         <button type="submit" class="btn btn-primary waves-effect m-r-10">Submit</button>
-                        
+
 
                     </div>
-                            
+
 
                      </div>
 

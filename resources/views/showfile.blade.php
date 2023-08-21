@@ -88,11 +88,11 @@
                         <div role="tabpanel" class="tab-pane active" id="level_information" aria-expanded="true">
                             <div class="row clearfix">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <div class="card project_widget">
+                                    <div class="card project_widget p-0">
 
-                                        <div class="body">
+                                        <div class="body p-0">
 
-                                            <object data="{{ url('level'.'/'.$data) }}" type="application/pdf" width="100%" height="500px">
+                                            <object data="{{ url('level'.'/'.$data) }}" type="application/pdf" width="100%" height="1150px">
                                                 <p>Unable to display PDF file. <a href="{{ url('level'.'/'.$data) }}">Download</a> instead.</p>
                                             </object>
 

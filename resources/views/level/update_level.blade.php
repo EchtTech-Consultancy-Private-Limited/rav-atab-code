@@ -130,9 +130,9 @@
                                                     <div class="form-line">
                                                         <label class="active">level Information pdf<span
                                                                 class="text-danger">*</span></label>
-                                                        <input type="file" 
-                                                            class="special_no valid form-control"
-                                                            name="level_Information_pdf">
+                                                        <input type="file"
+                                                            class="special_no valid form-control file_size"
+                                                            name="level_Information_pdf ">
                                                     </div>
 
 
@@ -175,7 +175,7 @@
                                                 <div class="form-line">
                                                     <label class="active">Prerequisites pdf<span
                                                             class="text-danger">*</span></label>
-                                                    <input type="file"  class="special_no valid form-control"
+                                                    <input type="file"  class="special_no valid form-control file_size"
                                                         name="Prerequisites_pdf">
                                                 </div>
 
@@ -218,8 +218,8 @@
                                                     <div class="form-line">
                                                         <label class="active">Documents Required pdf<span
                                                                 class="text-danger">*</span></label>
-                                                        <input type="file" 
-                                                            class="special_no valid form-control"
+                                                        <input type="file"
+                                                            class="special_no valid form-control file_size"
                                                             name="documents_required_pdf">
                                                     </div>
 
@@ -299,7 +299,7 @@
                                             <div class="form-line">
                                                 <label class="active">Fee Structure pdf<span
                                                         class="text-danger">*</span></label>
-                                                <input type="file"  class="special_no valid form-control"
+                                                <input type="file"  class="special_no valid form-control file_size"
                                                     name="Fee_Structure_pdf">
                                             </div>
 

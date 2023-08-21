@@ -95,7 +95,7 @@
                     required: true,
                 },
 
-               
+
 
             },
             messages: {
@@ -376,9 +376,9 @@ $("document").ready(function(){
 
 
 
-   
-  
-   
+
+
+
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -399,6 +399,20 @@ $("document").ready(function(){
        } );
    } );
      </script>
+
+
+<script>
+
+    $('.file_size').on('change', function() {
+        if (this.files[0].size > 5242880) {
+            alert("Try to upload file less than 5MB!");
+            $( ".file_size" ).val("")
+        } else {
+            $('#GFG_DOWN').text(this.files[0].size + "bytes");
+        }
+    });
+
+</script>
 
 </body>
 
