@@ -284,6 +284,7 @@
         display: flex;
         align-items: center;
         color: #fff;
+        width: 35px;
     }
     
     .btn_refresh i {
@@ -654,6 +655,20 @@
         padding: 0px 10px 0 0 !important;
     }
 
+    .captcha span img {
+        height: 32px;
+        width: 100%;
+    }
+
+    .iconInput_container.wid-flex-two {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .iconInput_container.wid-flex-two .iconInput_container {
+width: 50%;
+    }
+
 
     @media (max-width: 650px) {
         .form-container {
@@ -690,6 +705,10 @@
 
         .icon-t .tooltip.l{
             display: none;
+        }
+
+        .iconInput_container.wid-flex-two {
+            display: block;
         }
 
     }

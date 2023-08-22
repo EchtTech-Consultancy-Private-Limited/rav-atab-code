@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="profile-usertitle">
-                            <div class="sidebar-userpic-name">{{ Auth::user()->firstname;}}</div>
+                            <div class="sidebar-userpic-name">{{ Auth::user()->firstname}}</div>
                             <div class="profile-usertitle-job">(Training Provider)</div>
                         </div>
                     </li>
