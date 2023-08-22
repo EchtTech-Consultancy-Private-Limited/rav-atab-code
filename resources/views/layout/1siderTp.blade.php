@@ -15,7 +15,7 @@
                             </div>
                         </div>
                         <div class="profile-usertitle">
-                            <div class="sidebar-userpic-name">{{ Auth::user()->firstname;}}</div>
+                            <div class="sidebar-userpic-name">{{ Auth::user()->firstname}}</div>
                             <div class="sidebar-userpic-name">Training Provider Login</div>
                         </div>
                     </li>
@@ -26,9 +26,6 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-
-
-
 
                 <li>
                     <a href="#" onClick="return false;" class="menu-toggle">

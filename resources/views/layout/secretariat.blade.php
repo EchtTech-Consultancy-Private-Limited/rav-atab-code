@@ -29,8 +29,6 @@
                 </div>
             </li>
 
-
-
             <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="{{ url('dashboard') }}">
                     <i data-feather="monitor"></i>

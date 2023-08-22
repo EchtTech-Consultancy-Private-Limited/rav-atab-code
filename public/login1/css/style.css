@@ -329,3 +329,198 @@ body {
   width: 90% !important;
 }
 }
+
+
+/* Landing Page Css */
+
+.body-bg{   
+  opacity: 0.8;
+  background-repeat: no-repeat !important;
+  background-position: center;
+  background: url(../../../public/landing_page/v904-nunny-012.png);
+  background-size: cover;
+}
+
+section.landing-page-main {
+  padding-top: 30px;
+}
+
+.logo-center p.site-title, .logo-center small {
+   font-size: 14px;
+   color: #000;
+   margin-top: 0px;
+   margin-bottom: 0;
+   line-height: 10px;
+}
+
+.logo-center small {
+  font-weight: 700;
+}
+
+.logo-center {
+  text-align: center;
+}
+
+.logo-atab {
+  text-align: right;
+}
+
+.logo-center a img {
+  width: 42px;
+  margin-bottom: 10px;
+}
+
+a{
+  text-decoration: none !important;
+}
+
+.align-item-center {
+  align-items: center;
+}
+
+h2.text-main {
+  color: #9E5700;
+  font: normal normal bold 26px/30px Tahoma;
+  margin-top: 15px;
+}
+
+.gif-box {
+  text-align: center;
+}
+
+.pt-lg-60{
+  padding-top: 110px;
+  padding-bottom: 60px;
+}
+
+.gif-box .text-title-l{
+  font: normal normal bold 30px/50px tahoma;
+letter-spacing: 0px;
+color: #202020;
+opacity: 1;
+}
+
+.gif-box .sub-text-l{
+  text-align: center;
+font: normal normal normal 14px/24px tahoma;
+letter-spacing: 0.07px;
+color: #3A3A3A;
+opacity: 1;
+}
+
+.gif-box img {
+  width: 220px;
+}
+
+.inner-box {
+  background: #FFF 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  opacity: 0.89;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  padding: 45px 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.inner-box img {
+  width: 58px;
+  margin-bottom: 6px;
+}
+
+.inner-box h4 {
+  color: #000 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 700;
+}
+/* 
+.inner-box a:hover h4 i {
+  margin-left: 10px;
+} */
+
+
+.inner-box a:hover h4 i {
+  display: inline-block;
+  transition: 0.1s ease-in;
+}
+
+.inner-box a:hover h4 i {
+  transform: translateX(50%);
+}
+
+.inner-box h4 i {
+  height: auto;
+  width: auto;
+  margin-left: 5px;
+}
+
+footer.footer {
+  background: #EFF3FB 0% 0% no-repeat padding-box;
+  padding: 18px 20px;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+footer.footer p {
+  letter-spacing: 0px;
+  color: #000;
+  opacity: 1;
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+
+@media (max-width: 768px) {
+  footer.footer{
+    position: static;
+  }
+
+  .col-md-3.order-logo-1, .col-md-3.order-logo-2 {
+    width: 30%;
+}
+
+.col-md-6.order-logo-3 {
+  width: 40%;
+  padding: 0px;
+}
+
+.order-logo-1 .logo-rav.logo-m a img, .order-logo-2 .logo-atab.logo-m a img {
+  width: 80px;
+}
+
+.logo-center a img {
+  width: 25px;
+  margin-bottom: 10px;
+}
+
+.logo-center p.site-title, .logo-center small{
+  font-size: 12px;
+}
+
+.logo-center small {
+  font-weight: 700;
+  line-height: 15px;
+  display: inline-block;
+  padding-top: 6px;
+}
+
+h2.text-main{
+  font: normal normal bold 22px/28px Tahoma;
+  padding-top: 20px;
+}
+
+.pt-lg-60{
+  padding-top: 40px;
+}
+
+
+}

@@ -12683,7 +12683,8 @@ table .checkbox [type="checkbox"]+label {
     position: absolute;
     right: 15px;
     top: 10px;
-    opacity: .1
+    opacity: .1;
+    display: none;
 }
 
 .l-bg-cyan {
@@ -14258,8 +14259,8 @@ fieldset[disabled] .form-control {
 }
 
 .profile-usertitle-job {
-    font-size: 10px;
-    color: #919aa3
+    font-size: 12px;
+    color: #000000;
 }
 
 .sidebar-userpic-btn {
@@ -24298,4 +24299,34 @@ div#ui-datepicker-div{
 .alert p{
     margin-bottom: 0px;
     padding-bottom: 7px;
+}
+
+.theme-black .sidebar .menu .list li.active ul.ml-menu li {
+    background-color: #def0f5 !important;
+}
+
+.theme-black .sidebar .menu .list li.active, .sidebar .menu .list .active .menu-toggle, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active {
+    background-color: #2196F3 !important;
+}
+
+.sidebar .menu .list li.active>:first-child span, .sidebar .menu .list li.active a .feather, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active a{
+    color:#fff !important;
+}
+
+div#ui-datepicker-div{
+    display: none;
+}
+
+@media(max-width:767px) {
+    .sidebar .menu{
+        background: #def0f5 !important;
+    }
+
+    .navbar-header{
+        background-color: transparent !important;
+    }
+
+    .form-group {
+        margin-bottom: 10px !important;
+    }
 }
