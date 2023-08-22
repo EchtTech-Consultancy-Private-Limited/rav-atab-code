@@ -8,7 +8,7 @@
             <!-- Menu -->
             <div class="menu">
                 <ul class="list">
-                    <li class="sidebar-user-panel active">
+                    <li class="sidebar-user-panel">
                         <div class="user-panel">
                           <div class=" image">
                                <img src="{{ asset('assets/images/usrbig.jpg')}}" class="user-img-style" alt="User Image" />

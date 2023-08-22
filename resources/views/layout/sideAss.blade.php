@@ -8,7 +8,7 @@
 }
 </style>
 <!-- Left Sidebar -->
-<aside id="leftsidebar" class="sidebar">
+<aside id="leftsidebar" class="sidebar asse">
     <div class="logo-brand">
         <img src="{{ asset('assets/images/rav-logo.png') }}" alt="" />
         <p class="logo-name">Accreditation </p>
@@ -16,7 +16,7 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="sidebar-user-panel active">
+            <li class="sidebar-user-panel">
                 <div class="user-panel">
                     <div class=" image">
                         <img src="{{ asset('assets/images/usrbig.jpg') }}" class="user-img-style" alt="User Image" />
@@ -66,7 +66,7 @@
 
             <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''; }}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
-                    <i data-feather="file"></i>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
                     <span>My Availability</span>
                 </a>
                 <ul class="ml-menu">
@@ -85,14 +85,14 @@
 
             <li>
                 <a href="#" onClick="return false;">
-                    <i data-feather="message-circle"></i>
+                    <i class="fa fa-building" aria-hidden="true"></i>
                     <span>Capacity Building</span>
                 </a>
             </li>
 
             <li>
                 <a href="#" onClick="return false;">
-                    <i data-feather="message-circle"></i>
+                    <i data-feather="bell"></i>
                     <span>Circulars & Notifications</span>
                 </a>
             </li>
@@ -100,7 +100,7 @@
 
             <li class="{{ Request::is('assessor-user-manuals')?'active':''; }}">
                 <a href="{{ url('assessor-user-manuals') }}">
-                    <i data-feather="message-circle"></i>
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
                     <span>Assessor Manual</span>
                     
 
@@ -111,7 +111,7 @@
 
             <li>
                 <a href="#" onClick="return false;">
-                    <i data-feather="message-circle"></i>
+                    <i data-feather="clipboard"></i>
                     <span>Grievance</span>
                 </a>
             </li>
@@ -119,7 +119,7 @@
 
             <li class="{{ Request::is('send-feedback')?'active':''; }}">
                 <a href="{{ url('/send-feedback') }}">
-                    <i data-feather="message-circle"></i>
+                    <i class="fa fa-comments" aria-hidden="true"></i>
                     <span>Feedback</span>
                 </a>
             </li>
@@ -131,10 +131,9 @@
                 </a>
             </li> -->
 
-
             <li>
                 <a href="{{ url('/view-faqs') }}" class="{{ Request::is('view-faqs') ? 'active' : '' }}">
-                    <i data-feather="file-text"></i>
+                    <i data-feather="message-circle"></i>
                     <span>FAQs</span>
                 </a>
             </li>

@@ -72,36 +72,40 @@
 
                     </div>
                     
-                       <div class="table-responsive">
-                          <table class="table table-hover js-basic-example contact_list">
-                             <thead>
-                                <tr>
+                    <div class="body">
+                     <div class="table-responsive">
+                        <table class="table table-hover js-basic-example contact_list">
+                           <thead>
+                              <tr>
 
-                                   <th class="center"> S.No. </th>
-                                   <th class="center"> Manual Type </th>
-                                   <th class="center"> Description </th>
-                                   <th class="center"> Status </th>
-                                   <th class="center"> Action </th>
-                                </tr>
-                             </thead>
-                             <tbody>
-                                @php $k = 1; @endphp
-                                @foreach ($data as $datalist)
-                                <tr class="odd gradeX">
-                                   <td class="center">{{$k}}</td>
-                                   <td class="center">{{checkmanualtype($datalist->type)}}</td>
-                                   <td class="center">{{$datalist->description}}</td>
-                                   <td class="center">{{ $datalist->status ? 'Active' : 'In-Active' }}</td>
-                                   <td class="center">
-                                       <a target="_blank" href="{{asset('manuals/')}}/{{$datalist->manual_file}}" class="" id="view"><img height="30" width="30" src="{{asset('assets/images/file-download-icon.png')}}" alt="" title=""/>
-                                       </a>
-                                   </td>
-                                </tr>
-                                 @php $k ++; @endphp
-                                @endforeach
-                             </tbody>
-                          </table>
-                       </div>     
+                                 <th class="center"> S.No. </th>
+                                 <th class="center"> Manual Type </th>
+                                 <th class="center"> Description </th>
+                                 <th class="center"> Status </th>
+                                 <th class="center"> Action </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              @php $k = 1; @endphp
+                              @foreach ($data as $datalist)
+                              <tr class="odd gradeX">
+                                 <td class="center">{{$k}}</td>
+                                 <td class="center">{{checkmanualtype($datalist->type)}}</td>
+                                 <td class="center">{{$datalist->description}}</td>
+                                 <td class="center">{{ $datalist->status ? 'Active' : 'In-Active' }}</td>
+                                 <td class="center">
+                                     <a target="_blank" href="{{asset('manuals/')}}/{{$datalist->manual_file}}" class="" id="view"><img height="30" width="30" src="{{asset('assets/images/file-download-icon.png')}}" alt="" title=""/>
+                                     </a>
+                                 </td>
+                              </tr>
+                               @php $k ++; @endphp
+                              @endforeach
+                           </tbody>
+                        </table>
+                     </div>    
+                    </div>
+
+                     
 
                      </div>
 
