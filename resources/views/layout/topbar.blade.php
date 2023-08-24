@@ -30,8 +30,6 @@
                   <span class="logo-name">Accreditation</span>
               </a>
 
-
-
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse">
               <ul class="pull-left">
