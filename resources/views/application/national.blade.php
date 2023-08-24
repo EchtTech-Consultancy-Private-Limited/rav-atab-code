@@ -30,6 +30,10 @@
     color: #000;
 }
 
+.font-a {
+    line-height: 20px !important;
+}
+
     </style>
 
 </head>
@@ -122,9 +126,9 @@
                                 <table class="table table-hover js-basic-example contact_list">
                                     <thead>
                                         <tr>
-                                            <th class="center">#S.N0</th>
-                                            <th class="center">Level ID</th>
-                                            <th class="center">Application No</th>
+                                            <th class="center">Sr.No</th>
+                                            <th class="center">Level </th>
+                                            <th class="center">Application Number</th>
                                             <th class="center">Total Course</th>
                                             <th class="center">Total Fee</th>
                                             <th class="center"> Payment Date </th>
@@ -181,25 +185,26 @@
                                                 <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
                                                     class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
 
-                                                {{-- <a data-bs-toggle="modal"  data-bs-target="#exampleModal" class="btn btn-tbl-edit"><i class="material-icons">accessibility</i></a> --}}
+                                                {{-- <a data-bs-toggle="modal"  data-bs-target="#exampleModal" class="btn btn-tbl-edit bg-success">
+                                                    <i class="fa fa-font" aria-hidden="true"></i> </a> --}}
                                                 
                                                 <?php if(checktppaymentstatustype($item->application_id) == 1 || checktppaymentstatustype($item->application_id) == 2) { ?>
-                                                <a class="btn btn-tbl-delete bg-primary" data-bs-toggle="modal"
+                                                <a class="btn btn-tbl-delete bg-primary font-a" data-bs-toggle="modal"
                                                     data-id='{{ $item->application_id ?? '' }}'
-                                                    data-bs-target="#View_popup_{{ $item->application_id }}" id="view"> <i
-                                                        class="material-icons">accessibility</i>
+                                                    data-bs-target="#View_popup_{{ $item->application_id }}" id="view">
+                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
                                                 </a>
-                                                <?php } ?>
+                                                <?php } ?>  
 
                                                 <!--Assign Secreate User --> 
                                                 <!-- {{checktppaymentstatustype($item->application_id)}} -->
 
                                                  <?php if(checktppaymentstatustype($item->application_id) == 1 || checktppaymentstatustype($item->application_id) == 2) { ?>
 
-                                                <a class="btn btn-tbl-delete bg-primary" data-bs-toggle="modal"
-                                                    data-id='{{ $item->application_id ?? '' }}'
+                                                <a class="btn btn-tbl-delete bg-danger font-a" data-bs-toggle="modal"
+                                                    data-id='{{ $item->application_id ?? ''  }}'
                                                     data-bs-target="#view_secreate_popup_{{ $item->application_id }}" id="view"> 
-                                                    <i class="material-icons">lock_open</i>
+                                                    <i class="fa fa-scribd" aria-hidden="true" title=""></i>
                                                 </a>
                                                 <?php } ?>
                                             </td>

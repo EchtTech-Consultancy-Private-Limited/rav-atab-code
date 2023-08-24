@@ -108,13 +108,13 @@
                                                     <thead>
 
                                                             <tr>
-                                                                <th class="center">#S.N0</th>
-                                                                <th class="center">Level ID</th>
-                                                                <th class="center">Application No</th>
+                                                                <th class="center">Sr.No</th>
+                                                                <th class="center">Level</th>
+                                                                <th class="center">Application Number</th>
                                                                 <th class="center">Total Course</th>
-                                                                <th class="center">Submissiom date </th>
-                                                                <th class="center">Assessment Assign Date </th>
-                                                                <th class="center">Due Date </th>
+                                                                <th class="center">Date of Application </th>
+                                                                <th class="center">Assessment Date </th>
+                                                                <!-- <th class="center">Due Date </th> -->
 
                                                                 <th class="center">Action</th>
 
@@ -141,7 +141,7 @@
                                                     <td class="center">{{  $item->course_count  }}</td>
                                                     <td class="center">{{application_submission_date($item->application_id,$assessor_id)}}</td>
                                                     <td class="center">{{assessor_assign_date($item->application_id,$assessor_id)}}</td>
-                                                    <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td>
+                                                    <!-- <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td> -->
 
                                                     <td class="center">
                                                         <a href="{{ url('/Assessor-view/'.dEncrypt($item->application_id)) }}" class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
@@ -178,13 +178,13 @@
                                         <table class="table table-hover js-basic-example contact_list">
                                             <thead>
                                                 <tr>
-                                                    <th class="center">#S.N0</th>
-                                                    <th class="center">Level ID</th>
-                                                    <th class="center">Application No</th>
+                                                    <th class="center">Sr.No</th>
+                                                    <th class="center">Level </th>
+                                                    <th class="center">Application Number</th>
                                                     <th class="center">Total Course</th>
-                                                    <th class="center">Submissiom date </th>
-                                                    <th class="center">Assessment Assign Date </th>
-                                                    <th class="center">Due Date </th>
+                                                    <th class="center">Date of Application </th>
+                                                    <th class="center">Assessment Date </th>
+                                                    <!-- <th class="center">Due Date </th> -->
 
                                                     <th class="center">Action</th>
 
@@ -208,7 +208,7 @@
                                                             <td class="center">{{  $item->course_count  }}</td>
                                                             <td class="center">{{application_submission_date($item->application_id,$assessor_id)}}</td>
                                                             <td class="center">{{assessor_assign_date($item->application_id,$assessor_id)}}</td>
-                                                            <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td>
+                                                            <!-- <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td> -->
 
                                                             <td class="center">
                                                                 <a href="{{ url('/Assessor-view/'.dEncrypt($item->application_id)) }}" class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>

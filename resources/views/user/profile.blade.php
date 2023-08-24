@@ -219,6 +219,7 @@
                                         </div>
                                     </div>
 
+                                    <input type="hidden" name="update_count" value="{{ $data->update_count + 1 }}"  >
 
 
                                     <div class="col-sm-4">
@@ -446,7 +447,7 @@
                                                     <input type="text" minlength="2" maxlength="6"  name="postal" id="postal"  placeholder="Postal code"
                                                     value="{{ $data->postal }}">
                                             </div>
-                                        
+
 
                                             <label for="postal" id="postal-error" class="error" style="color:#f44336;">
                                                 @error('postal')
@@ -560,12 +561,12 @@
         </div>
     </section>
 
-   
+
 
 
 
     <script>
-       
+
          $(document).ready(function(){
 
         var myData = $('#Country').val();
@@ -581,7 +582,7 @@
                         console.log(result);
                         $('#state').html('<option value="">-- Select State --</option>');
                         $.each(result, function (key, value) {
-                       
+
                             $("#state").append('<option value="' + value
                                 .id + '" '+(value.id=={{$data->state}}?"SELECTED":"")+'>' + value.name + '</option>');
                         });
@@ -591,7 +592,7 @@
 
 
 
-              
+
             });
 
 
@@ -599,8 +600,8 @@
 
             var myData = $('#state').val();
 
-           
-     
+
+
                 $.ajax({
                     url: "{{url('/city-list')}}",
                     type: "get",
@@ -613,7 +614,7 @@
                         console.log(result);
                         $('#city').html('<option value="">-- Select City --</option>');
                         $.each(result, function (key, value) {
-                       
+
                             $("#city").append('<option value="' + value
                                 .id + '" '+(value.id=={{$data->city}}?"SELECTED":"")+'>' + value.name + '</option>');
                         });
@@ -623,8 +624,8 @@
 
 
 
-              
-            });    
+
+            });
     </script>
 
        <script>

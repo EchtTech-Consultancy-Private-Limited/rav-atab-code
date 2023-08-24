@@ -144,7 +144,7 @@
                     <li class="{{ Request::is('show-feedback')?'active':''; }}">
                         <a href="{{ url('/show-feedback') }}">
                             <i data-feather="message-circle"></i>
-                            <span>Feedback</span>
+                            <span>Help Desk</span>
                         </a>
                     </li>
 

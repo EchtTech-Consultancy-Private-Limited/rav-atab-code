@@ -138,9 +138,9 @@
                                                     <table class="table table-hover js-basic-example contact_list">
                                                         <thead>
                                                             <tr>
-                                                                <th class="center">#S.N0</th>
-                                                                <th class="center">Level ID</th>
-                                                                <th class="center">Application No</th>
+                                                                <th class="center">Sr.No</th>
+                                                                <th class="center">Level </th>
+                                                                <th class="center">Application Number</th>
                                                                 <th class="center">Total Course</th>
                                                                 <th class="center">Total Fee</th>
                                                                 <th class="center"> Payment Date </th>
@@ -423,9 +423,9 @@
                                                 <table class="table table-hover js-basic-example contact_list">
                                                     <thead>
                                                         <tr>
-                                                            <th class="center">#S.N0</th>
-                                                            <th class="center">Level ID</th>
-                                                            <th class="center">Application No</th>
+                                                            <th class="center">Sr.No</th>
+                                                            <th class="center">Level </th>
+                                                            <th class="center">Application Number</th>
                                                             <th class="center">Total Course</th>
                                                             <th class="center">Total Fee</th>
                                                             <th class="center"> Payment Date </th>

@@ -32,7 +32,7 @@ class AdminController extends Controller
 
       $data = user::where('role','1')->orderBy('id','DESC')->whereNotIn('id', [97])->get();
 
-     
+
       return view('user.index',['data'=> $data]);
     }
 
@@ -122,7 +122,7 @@ class AdminController extends Controller
 
     public function updateRecord_post(Request $request,$id)
     {
-      
+
       //return $request->all();
 
       $request->validate(
@@ -170,11 +170,11 @@ class AdminController extends Controller
         $data->about =$request->about;
         $data->last_login_at =$request->last_login_at;
         $data->save();
-        
-     
+
+
          if($request->role == '1')
         {
-            
+
         return redirect('/admin-user')->with('success', 'User Add successfull!!');
         }
 
@@ -196,7 +196,7 @@ class AdminController extends Controller
 
 //profile section
 public function  profile()
-{  
+{
   //  dd('yes');
     $id = Auth::user()->id;
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
@@ -209,6 +209,9 @@ public function  profile()
 
 public function profile_submit(Request $request,$id)
 {
+
+     //dd(user::find(dDecrypt($id))->update_count  <= "3");
+if(user::find(dDecrypt($id))->update_count  <= "3"){
 
   $request->validate(
     [
@@ -227,8 +230,6 @@ public function profile_submit(Request $request,$id)
         'postal'=> 'required',
     ]
 );
-
-
     $data=user::find(dDecrypt($id));
     $data->title = $request->title;
     $data->firstname =$request->firstname;
@@ -238,6 +239,7 @@ public function profile_submit(Request $request,$id)
     $data->organization =$request->organization;
     $data->designation =$request->designation;
     $data->gender =$request->gender;
+    $data->update_count =$request->update_count;
     $data->address =$request->address;
     $data->mobile_no =$request->mobile_no;
     $data->country =$request->Country;
@@ -268,7 +270,10 @@ public function profile_submit(Request $request,$id)
     // }
     $data->save();
     return back()->with('success', 'Your profile successfully updated !!!!!');
-
+    }else{
+      //  dd('hii');
+        return back()->with('success','profile not update');
+    }
 }
 
 

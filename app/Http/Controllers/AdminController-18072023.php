@@ -191,6 +191,8 @@ public function  profile()
 public function profile_submit(Request $request,$id)
 {
 
+      dd($id);
+
   $request->validate(
     [
         'organization' => ['required'],

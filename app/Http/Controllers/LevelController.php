@@ -1285,7 +1285,7 @@ public function newapplication()
 
     //return $request->all();
      $this->validate($request, [
-            'payment_details_file' => 'mimes:jpeg,png,jpg,gif,svg',
+            'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
 
             ]);
   $item = new ApplicationPayment;
@@ -1874,6 +1874,7 @@ public function document_comment_admin_assessor($course_id)
            //update document comment latest record
            $document=DocComment::orderBy('id', 'desc')->where('doc_id',$request->add_doc_id)->first();
            $document->status=0;
+           $course->notApraove_count=$course->notApraove_count+1;
            $document->save();
 
 
@@ -1887,6 +1888,7 @@ public function document_comment_admin_assessor($course_id)
          $course->doc_id=$request->doc_id;
          $course->application_id=$request->application_id;
          $course->user_id=Auth::user()->id;
+         $course->notApraove_count=1;
 
 
         if($request->hasfile('fileup'))
@@ -1931,11 +1933,9 @@ public function document_comment_admin_assessor($course_id)
 {
     $comment=DocComment::orderby('id','Desc')->where('doc_id',$doc_id)->get();
     $doc_latest_record_comment=DocComment::orderby('id','desc')->where('doc_id',$doc_id)->count();
+    $doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
 
-       //$doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
-
-
-    return view('asesrar.view-doc-with-comment',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code,'comment'=>$comment],compact('course_id'));
+    return view('asesrar.view-doc-with-comment',['doc_latest_record'=>$doc_latest_record,'id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code,'comment'=>$comment],compact('course_id'));
 
 }
 
@@ -1945,10 +1945,10 @@ public function document_comment_admin_assessor($course_id)
 
     $doc_latest_record_comment=DocComment::orderby('id','desc')->where('doc_id',$doc_id)->count();
 
-       //$doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
+    $doc_latest_record=Add_Document::orderby('id','desc')->where('id',$doc_id)->first();
 
 
-    return view('asesrar.view-doc-with-comment-admin',['id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code, 'comment'=>$comment],compact('course_id'));
+    return view('asesrar.view-doc-with-comment-admin',['doc_latest_record'=>$doc_latest_record,'id'=>$id,'doc_id'=>$doc_id,'doc_latest_record_comment'=>$doc_latest_record_comment,'doc_code'=>$doc_code, 'comment'=>$comment],compact('course_id'));
 
 }
 
@@ -1969,8 +1969,6 @@ public function acc_doc_comments(Request $request)
             $document=Add_Document::where('doc_id',$request->doc_code)->first();
             $document->assessor_id=Auth::user()->id;
             $document->save();
-
-
 
 
            $comment=new DocComment;

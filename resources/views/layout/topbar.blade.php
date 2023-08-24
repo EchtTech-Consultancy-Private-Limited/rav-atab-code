@@ -1,8 +1,8 @@
   <!-- Top Bar -->
-  <nav class="navbar 
+  <nav class="navbar
        @if(Auth::user()->role  == 1 )
 
-        
+
 
         @elseif(Auth::user()->role  == 2)
 
@@ -14,7 +14,7 @@
 
         @elseif(Auth::user()->role  == 4)
 
-        
+
 
         @endif
        ">
@@ -42,7 +42,7 @@
                   </li>
                   <li>
                       <div class="title-nav">
-                          <p> 
+                          <p>
 
         @if(Auth::user()->role  == 1 )
 
@@ -75,83 +75,27 @@
                   </li>
                   <!-- #END# Full Screen Button -->
                   <!-- #START# Notifications-->
-                  <!-- <li class="dropdown">
+                 <li class="dropdown">
                       <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
                           role="button">
                           <i class="far fa-bell"></i>
                           <span class="notify"></span>
                           <span class="heartbeat"></span>
                       </a>
-                      <!-- <ul class="dropdown-menu pullDown">
-                          <li class="header">NOTIFICATIONS</li>
+                       <ul class="dropdown-menu pullDown">
+                          <li class="header">NOTIFICATIONS </li>
                           <li class="body">
                               <ul class="menu">
-                                  <li>
-                                      <a href="#" onClick="return false;">
-                                          <span class="table-img msg-user">
-                                              <img src="#" alt="">
-                                          </span>
-                                          <span class="menu-info">
-                                              <span class="menu-title">Sarah Smith</span>
-                                              <span class="menu-desc">
-                                                  <i class="material-icons">access_time</i> 14 mins ago
-                                              </span>
-                                              <span class="menu-desc">Please check your email.</span>
-                                          </span>
-                                      </a>
-                                  </li>
 
 
 
-                                  <li>
-                                      <a href="#" onClick="return false;">
-                                          <span class="table-img msg-user">
-                                              <img src="#" alt="">
-                                          </span>
-                                          <span class="menu-info">
-                                              <span class="menu-title">Cara Stevens</span>
-                                              <span class="menu-desc">
-                                                  <i class="material-icons">access_time</i> 4 hours ago
-                                              </span>
-                                              <span class="menu-desc">Please check your email.</span>
-                                          </span>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#" onClick="return false;">
-                                          <span class="table-img msg-user">
-                                              <img src="#" alt="">
-                                          </span>
-                                          <span class="menu-info">
-                                              <span class="menu-title">Charde Marshall</span>
-                                              <span class="menu-desc">
-                                                  <i class="material-icons">access_time</i> 3 hours ago
-                                              </span>
-                                              <span class="menu-desc">Please check your email.</span>
-                                          </span>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#" onClick="return false;">
-                                          <span class="table-img msg-user">
-                                              <img src="#" alt="">
-                                          </span>
-                                          <span class="menu-info">
-                                              <span class="menu-title">John Doe</span>
-                                              <span class="menu-desc">
-                                                  <i class="material-icons">access_time</i> Yesterday
-                                              </span>
-                                              <span class="menu-desc">Please check your email.</span>
-                                          </span>
-                                      </a>
-                                  </li>
                               </ul>
                           </li>
                           <li class="footer">
                               <a href="#" onClick="return false;">View All Notifications</a>
                           </li>
-                      </ul> 
-                  </li> -->
+                      </ul>
+                  </li>
                   <!-- #END# Notifications-->
                   <li class="dropdown user_profile">
                       <div class="dropdown-toggle" data-bs-toggle="dropdown">
@@ -165,7 +109,7 @@
                                           <i class="material-icons">person</i>Profile
                                       </a>
                                   </li>
-                                  
+
                                   <li>
                                       <a href="{{ url('/logout') }}">
                                           <i class="material-icons">power_settings_new</i>Logout

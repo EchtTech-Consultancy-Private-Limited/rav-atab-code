@@ -90,14 +90,55 @@
                                                         <input type="hidden"  value="{{$doc_code}}" name="doc_code">
                                                         <input type="hidden"  value="{{$course_id}}" name="course_id">
                                                         <div class="row">
-                                                            <div class="col-sm-12 col-md-4">
+                                                            <!-- <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
                                                                 <select required class="form-control text-center" id="show-view-doc-options" name="status" >
                                                                     <option value="">--Select--</option>
                                                                     <option value="1">Approved</option>
-                                                                    <option value="0">Not Approved</option>
+                                                                    <option value="2">Not Approved</option>
+                                                                </select>
+                                                            </div> -->
+
+
+
+                                                            @if($doc_latest_record->notApraove_count == 1)
+
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <label>Select Type</label>
+                                                                    <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                        <option value="">--Select--</option>
+                                                                        <option value="2">NC 1</option>
+                                                                        <option value="1">Close</option>
+                                                                    </select>
+                                                                </div>
+
+                                                            @endif    
+
+
+                                                            @if($doc_latest_record->notApraove_count == 2)
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <label>Select Type</label>
+                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="2">NC 2</option>
+                                                                    <option value="1">Close</option>
                                                                 </select>
                                                             </div>
+                                                            @endif
+
+                                                            @if($doc_latest_record->notApraove_count  >= 3)
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <label>Select Type</label>
+                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="1">Close</option>
+                                                                    <option value="2">Not Recommended</option>
+                                                                </select>
+                                                            </div>
+                                                            @endif
+
+
+
 
                                                             <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
                                                                 

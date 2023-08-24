@@ -295,7 +295,7 @@ td.text-justify {
                                                                     </div>  </td>-->
                                                                     <td> 
                                                                         
-                                                                        <form   name="submitform_doc_form" id="submitform_doc_form_1" class="submitform_doc_form" enctype="multipart/form-data">
+                                                                        <form  name="submitform_doc_form" id="submitform_doc_form_1" class="submitform_doc_form" enctype="multipart/form-data">
 
                                                                         
                                                                         @if(isset($doc_id1->doc_file))
@@ -303,6 +303,7 @@ td.text-justify {
                                                                         <input type="file"  class="from-control fileup" name="fileup" id="fileup"/><br>
                                                                         @endif
                                                                         @if(isset($doc_id1->id))
+                                                                        
                                                                         @if(get_doc_code($doc_id1->id) && get_doccomment_status($doc_id1->id)==2)
                                                                      
                                                                         <input type="file"  class="fileup_update" name="fileup_update" id="fileup"/>
@@ -2468,6 +2469,7 @@ td.text-justify {
 
 <script>
   $('.fileup_update').on('change',function(e){
+    
            e.preventDefault();
            
            let sbformId = $(this).closest("form").attr('id');

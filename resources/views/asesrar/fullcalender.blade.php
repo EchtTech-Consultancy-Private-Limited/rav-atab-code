@@ -37,6 +37,7 @@
   }
 </style>
 <title>RAV Accreditation</title>undefined</head>undefined<body class="light">
+
   <!-- Page Loader -->
   <div class="page-loader-wrapper">
     <div class="loader">
@@ -201,6 +202,9 @@
       </div>
     </div>
   </section> @include('layout.footer')
+
+
+  
   <script>
     $(document).ready(function() {
       var SITEURL = "{{ url('/') }}";
@@ -434,3 +438,27 @@
       });
     });
   </script>
+
+<script>
+  
+  $(document).ready(function(){
+    var count = 0;
+  $("span.fc-button.fc-button-next.fc-state-default.fc-corner-right").click(function() {
+      
+    count++;
+   
+    if(count <= 6){
+      alert(count)
+    }else{
+      alert("not click")
+    }
+       
+  });
+
+});
+
+
+
+
+ 
+</script>

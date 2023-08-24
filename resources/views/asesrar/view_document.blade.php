@@ -254,7 +254,7 @@ td.text-justify {
                                              <a href="#" class="btn btn-danger">Send Document To Admin</a>
                                              @endif
   
-                                             <a style="float:right;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">Assessor & Admin Conversation</a>
+                                             <a style="float:right;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">History Log</a>
 
                                           </div>
                                             @if ($message = Session::get('success'))

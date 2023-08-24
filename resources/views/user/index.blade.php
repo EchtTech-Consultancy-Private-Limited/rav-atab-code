@@ -116,10 +116,11 @@
                                 <tr>
 
                                    <th class="center"> Registration No. </th>
-                                   <th class="center"> Registration Date </th>
-                                   <th class="center"> Valid Upto </th>
+                                   <!-- <th class="center"> Registration Date </th>
+                                   <th class="center"> Valid Upto </th> -->
                                    <th class="center"> Name </th>
                                    <th class="center"> Email </th>
+                                   <th class="center"> Designation </th>
                                    <th class="center"> Status </th>
                                    <th class="center"> Action </th>
                                 </tr>
@@ -128,10 +129,11 @@
                                 @foreach ($data as $key => $user)
                                 <tr class="odd gradeX">
                                    <td class="center">RAVTP-{{ $user->id }}</td>
-                                   <td class="center">{{ date('d F Y', strtotime($user->created_at)) }}</td>
-                                   <td class="center">@if(isset($user->created_at)) {{ date('d F Y', strtotime($user->created_at->addYear())) }} @endif</td>
+                                   <!-- <td class="center">{{ date('d F Y', strtotime($user->created_at)) }}</td>
+                                   <td class="center">@if(isset($user->created_at)) {{ date('d F Y', strtotime($user->created_at->addYear())) }} @endif</td> -->
                                    <td class="center">{{ $user->firstname }}</td>
                                    <td class="center">{{ $user->email }}</td>
+                                   <td class="center">{{ $user->designation }}</td>
                                    <td class="text-center">
                                     @if(Auth::user()->user_type=='2')
                                         <a href="{{ url('active-users/'.dEncrypt($user->id)) }}" onclick="return confirm_option('change status')" class="@if($user->status==0) btn-tbl-disable @elseif($user->status==1) btn-tbl-edit @endif" title="Verify Users">

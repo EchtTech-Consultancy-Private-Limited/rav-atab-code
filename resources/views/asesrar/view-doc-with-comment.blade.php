@@ -109,14 +109,46 @@
                                                         <input type="hidden"  value="{{$doc_code}}" name="doc_code">
                                                         <input type="hidden"  value="{{$course_id}}" name="course_id">
                                                         <div class="row">
+
+                                                      
+
+                                                        @if($doc_latest_record->notApraove_count == 1)
+
                                                             <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
                                                                 <select required class="form-control required text-center" id="show-view-doc-options" name="status">
                                                                     <option value="">--Select--</option>
-                                                                    <option value="1">Approved</option>
-                                                                    <option value="3">Not Approved</option>
+                                                                    <option value="0">NC 1</option>
+                                                                    <option value="1">Close</option>
                                                                 </select>
                                                             </div>
+
+                                                        @endif    
+
+
+                                                        @if($doc_latest_record->notApraove_count == 2)
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <label>Select Type</label>
+                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="0">NC 2</option>
+                                                                    <option value="1">Close</option>
+                                                                </select>
+                                                            </div>
+                                                        @endif
+
+                                                        @if($doc_latest_record->notApraove_count  >= 3)
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <label>Select Type</label>
+                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="1">Close</option>
+                                                                    <option value="0">Not Recommended</option>
+                                                                </select>
+                                                            </div>
+                                                        @endif
+
+
 
                                                             <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
                                                                 
@@ -188,7 +220,7 @@
                        </div>
                     </div>
                  </div>
-                 <a style="line-height:2;" type="button" class="btn btn-secondary" href="{{ url()->previous() }}">Back To Documents</a>
+                 <a style="line-height:2;" type="button" class="btn btn-secondary" href="{{ url('nationl-accesser')}}">Back To Documents</a>
               </div>
             </div>
 
@@ -230,7 +262,6 @@
             <div class="row clearfix">
 
                 <div class="col-lg-12 col-md-12">
-
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="level_information" aria-expanded="true">
                             <div class="row clearfix">

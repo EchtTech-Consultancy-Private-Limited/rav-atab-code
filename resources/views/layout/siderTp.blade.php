@@ -133,7 +133,7 @@
                     <li class="{{ Request::is('send-feedback')?'active':''; }}">
                         <a href="{{ url('/send-feedback') }}">
                             <i data-feather="message-circle"></i>
-                            <span>Feedback</span>
+                            <span>Help Desk</span>
                         </a>
                     </li>
 
@@ -143,8 +143,6 @@
                             <span>Remark</span>
                         </a>
                     </li> -->
-
-
 
 
                     <li>

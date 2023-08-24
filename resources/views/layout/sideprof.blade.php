@@ -82,7 +82,7 @@
                     <li>
                         <a href="#" onClick="return false;" >
                             <i data-feather="message-circle"></i>
-                            <span>Feedback</span>
+                            <span>Help Desk</span>
                         </a>
                     </li>
 

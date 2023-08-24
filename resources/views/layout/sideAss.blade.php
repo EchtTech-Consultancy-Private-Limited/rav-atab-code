@@ -84,7 +84,7 @@
 
 
             <li>
-                <a href="#" onClick="return false;">
+                <a href="javascript void(0)" onClick="return false;">
                     <i data-feather="message-circle"></i>
                     <span>Capacity Building</span>
                 </a>
@@ -120,16 +120,16 @@
             <li class="{{ Request::is('send-feedback')?'active':''; }}">
                 <a href="{{ url('/send-feedback') }}">
                     <i data-feather="message-circle"></i>
-                    <span>Feedback</span>
+                    <span>Help Desk</span>
                 </a>
             </li>
 
-            <!-- <li>
+            <li>
                 <a href="#" onClick="return false;">
                     <i data-feather="message-circle"></i>
                     <span>Remark</span>
                 </a>
-            </li> -->
+            </li>
 
 
             <li>

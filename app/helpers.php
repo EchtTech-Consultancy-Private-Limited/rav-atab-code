@@ -83,9 +83,26 @@ function assessor_due_date($application_id,$asessor_id)
  {
     $applications=DB::table('asessor_applications')->where('application_id','=',$application_id)->where('assessor_id','=',$asessor_id)->first();
 
+       $application_due_date = date("Y-m-d",strtotime($applications->due_date));
 
-    $application_due_date = $applications->due_date;
-    return $application_due_date;
+        $startdate= date("Y-m-d", strtotime("-7 days", strtotime($application_due_date)));
+        $application_due_dates = date("Y-m-d",strtotime($startdate));
+        $mytime = Carbon\Carbon::now();
+
+    // // // return  $mytime.','.$startdate;
+
+    //    if($application_due_dates >= $mytime){
+    //         return true ;
+    //     }else{
+    //         return false ;
+    //     }
+        $startdue_date= date("Y-m-d", strtotime("-7 days", strtotime($application_due_date)));
+        $startdate= date("Y-m-d", strtotime("-7 days", strtotime($mytime)));
+        // $start = Carbon\Carbon::parse($application_due_date);
+        // $end =  Carbon\Carbon::parse($startdate);
+
+        // $days = $end->diffInDays($start);
+        return $startdate.','.$startdue_date;
  }
 
  function secretariat_due_date($application_id,$secretariat_id)
@@ -103,7 +120,7 @@ function assessor_due_date($application_id,$asessor_id)
     $assessorid = array();
     if(!empty($assessors))
     {
-        
+
         foreach($assessors as $assessorids)
         {
             $assessorid[] = $assessorids->secretariat_id;
@@ -123,7 +140,7 @@ function listofapplicationassessor($application_id)
     $assessorid = array();
     if(!empty($assessors))
     {
-        
+
         foreach($assessors as $assessorids)
         {
             $assessorid[] = $assessorids->assessor_id;
@@ -175,7 +192,7 @@ function checktppaymentstatus($id)
 function checktppaymentstatustype($id)
 {
     $application_payment_confirm = DB::table('application_payments')->where('application_id','=',$id)->first();
-    
+
     if($application_payment_confirm != '')
     {
         $status = $application_payment_confirm->status;
@@ -187,11 +204,11 @@ function checktppaymentstatustype($id)
         return $status;
     }
     //dd($application_payment_confirm);
-    
+
 }
 
      function get_all_comments($id=0)
-        {  
+        {
             //dd($id);
             //return $id;
           return  $doc_code=App\Models\DocComment::select('comments')->where('doc_id',$id)->get();
@@ -203,7 +220,7 @@ function checktppaymentstatustype($id)
         }
 
     function check_document_upload($id=0)
-        {  
+        {
            $document_checked=App\Models\DocComment::where('course_id',$id)->first();
            if($document_checked)
            {
@@ -212,7 +229,7 @@ function checktppaymentstatustype($id)
         }
 
      function get_doc_code($id=0)
-        {  
+        {
             //dd($id);
             //return $id;
             $doc_code=App\Models\DocComment::orderBy('id', 'desc')->where('doc_id',$id)->first();
@@ -224,7 +241,7 @@ function checktppaymentstatustype($id)
         }
 
         function get_doccomment_status($id=0)
-        {  
+        {
             //return $id;
             $doc_code=App\Models\DocComment::orderBy('id', 'desc')->where('doc_id',$id)->first();
             if($doc_code)
@@ -235,8 +252,8 @@ function checktppaymentstatustype($id)
         }
 
          function get_admin_comments($id=0)
-        {  
-           
+        {
+
             $record=App\Models\User::orderBy('id', 'desc')->where('id',$id)->first();
             if($record)
             {
@@ -246,8 +263,8 @@ function checktppaymentstatustype($id)
         }
 
         function get_user_email($id=0)
-        {  
-           
+        {
+
             $record=App\Models\User::where('id',$id)->first();
             if($record)
             {
@@ -257,8 +274,8 @@ function checktppaymentstatustype($id)
         }
 
         function get_user_name($id=0)
-        {  
-       
+        {
+
             $record=App\Models\User::where('id',$id)->first();
             if($record)
             {
@@ -268,26 +285,26 @@ function checktppaymentstatustype($id)
         }
 
         function check_acknowledgement($id=0)
-        {  
-          
+        {
+
             $record=App\Models\AcknowledgementRecord::where('course_id',$id)->first();
             if($record)
             {
               return $course = $record->course_id;
-                
+
             }
         }
 
         function count_document_record($id=0)
-        {  
-          
+        {
+
             return $record=App\Models\Add_Document::where('course_id',$id)->count();
-            
+
         }
 
         function get_role($id=0)
-        {  
-           
+        {
+
             $record=App\Models\User::orderBy('id', 'desc')->where('id',$id)->first();
             if($record)
             {
@@ -299,26 +316,26 @@ function checktppaymentstatustype($id)
         function get_course_mode($id)
         {
              $course_mode=App\Models\ApplicationCourse::where('id',$id)->first();
-            
+
              $vartype=gettype($course_mode->mode_of_course);
              if($vartype=="array")
              {
                return $course_modes = implode(',', $course_mode->mode_of_course);
-               
+
              }
              else
              {
                 $course_modes = $course_mode->mode_of_course;
                 return $course_modes;
              }
-           
-            
+
+
             //dd("$course_modes");
             //return $course_modes;
         }
         function get_accessor_date($id)
         {
-            
+
              $begin = Carbon\Carbon::now();
              $end = Carbon\Carbon::now()->addDays(15)->format('Y-m-d');
 
@@ -327,31 +344,31 @@ function checktppaymentstatustype($id)
               $arr_data = [];
               $eventsDate = [];
               $entArr=[];
-              
+
               for($i=0; $i<=(count($events)-1); $i++){
                     $entArr[] =$events[$i];
-              } 
+              }
               $eventsDate=[];
-              for($j = $begin; $j <= $end; $j->modify('+1 day')){ 
+              for($j = $begin; $j <= $end; $j->modify('+1 day')){
 
                 if(in_array($j->format("Y-m-d"), $entArr)){
                     $eventsDate[] = '<span class="btn btn-danger" style="color:red">'.$j->format("Y-m-d").'</span>';
                   }else{
                     $eventsDate[] = '<span class="btn btn-success" style="color:green">'.$j->format("Y-m-d").'</span>';
                   }
-                
+
              }
                return $eventsDate;
-            
+
         }
 
         function check_upgrade($id=0)
         {
                 $created_at= $id;
-                
+
                 $todate=Carbon\Carbon::now();
-                
-                $result = $todate->diffInDays($created_at);  
+
+                $result = $todate->diffInDays($created_at);
 
                 if($result>=350 && $result<=365)
                 {
@@ -365,7 +382,7 @@ function checktppaymentstatustype($id)
 
         function check_upgraded_level2($id=0)
         {
-            
+
           $level2=App\Models\ApplicationLevel2::where('level1_application_id',$id)->first();
           if($level2)
           {
@@ -379,8 +396,41 @@ function checktppaymentstatustype($id)
 
         function main_menu()
         {
-          
+
             $data=App\Models\Menu::orderBy('sorting','ASC')->whereparent_id('0')->get();
             return $data;
         }
+
+         function show_btn($date){
+
+
+            $application_due_date = date("Y-m-d",strtotime($date));
+            $startdate= date("Y-m-d", strtotime("-7 days", strtotime($application_due_date)));
+
+            $mytime = Carbon\Carbon::now();
+            $mytime->toDateTimeString();
+
+           return $startdate  ;
+
+            if( $startdate  ==  $mytime->toDateTimeString()){
+
+                return "1";
+
+            }else{
+
+                return "0";
+            }
+
+
+         }
+
+        //  function Checknotification($id){
+
+        //     $assessors = DB::table('asessor_applications')->where('assessor_id',$id)->first();
+        //     $Application = DB::table('applications')->whereid($assessors->id)->get();
+        //     return $Application;
+
+        //  }
+
+
 ?>

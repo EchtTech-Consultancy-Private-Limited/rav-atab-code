@@ -2106,9 +2106,6 @@ div#ui-datepicker-div {
      </script>
      <script>
          $(document).ready(function() {
-
-
-
              $(window).on("load", function() {
                  $("#bank_id").hide();
                  $("#QR").hide();
@@ -2772,12 +2769,13 @@ div#ui-datepicker-div {
 
         });
     </script>
-     <script>
+
+    
+    <script>
        var doc_file_edit3="";
 
        $('.doc_edit_3').on('change',function()
        {
-
           doc_file_edit3 = $(".doc_edit_3").val();
          // alert(doc_file1);
           console.log(doc_file_edit3);

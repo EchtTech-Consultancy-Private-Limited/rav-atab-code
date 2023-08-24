@@ -41,7 +41,50 @@
 
     </div>
 
+<style>
 
+.blinking-btn{
+    background-color: #004A7F;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Arial;
+  font-size: 15px;
+    padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+}
+
+@-webkit-keyframes glowing {
+  0% { background-color: #B20000; -webkit-box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; -webkit-box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; -webkit-box-shadow: 0 0 3px #B20000; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: #B20000; -moz-box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; -moz-box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; -moz-box-shadow: 0 0 3px #B20000; }
+}
+/* 
+@-o-keyframes glowing {
+  0% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+}
+
+@keyframes glowing {
+  0% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+  50% { background-color: #FF0000; box-shadow: 0 0 40px #FF0000; }
+  100% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
+} */
+
+</style>    
 
 
     <section class="content">
@@ -78,13 +121,15 @@
                                 <table class="table table-hover js-basic-example contact_list">
                                     <thead>
                                         <tr>
-                                            <th class="center">#S.N0</th>
-                                            <th class="center">Level ID</th>
-                                            <th class="center">Application No</th>
+                                            <th class="center">Sr.No</th>
+                                            <th class="center">Level</th>
+                                            <th class="center">Application Number</th>
                                             <th class="center">Total Course</th>
-                                            <th class="center">Submissiom date </th>
-                                            <th class="center">Assessment Assign Date </th>
-                                            <th class="center">Due Date </th>
+                                            <th class="center">Date of Application </th>
+                                            <th class="center">Assessment Date </th>
+                                            <th class="center">State </th>
+
+                                            <!-- <th class="center">Due Date </th> -->
 
                                             <th class="center">Action</th>
 
@@ -105,10 +150,24 @@
                                             <td class="center">{{  $item->course_count  }}</td>
                                             <td class="center">{{application_submission_date($item->application_id,$assessor_id)}}</td>
                                             <td class="center">{{assessor_assign_date($item->application_id,$assessor_id)}}</td>
-                                            <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td>
+                                            <!-- <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td>
+                                             -->
 
+                                              
+                                              <!-- {{assessor_due_date($item->application_id,$assessor_id)}} -->
+                                             
+                                          
+                                               <!-- @if(show_btn($item->due_date) == 0)
+                                              <td class="center"><button type="submit" class="button blinking-btn">Click me!</button></td>
+                                               @endif -->
 
+                                              
 
+                                              
+
+                                               
+
+                                           
                                             <td class="center">
                                                 <a href="{{ url('/Assessor-view/'.dEncrypt($item->application_id)) }}" class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
 

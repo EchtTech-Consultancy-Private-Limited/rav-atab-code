@@ -12683,7 +12683,8 @@ table .checkbox [type="checkbox"]+label {
     position: absolute;
     right: 15px;
     top: 10px;
-    opacity: .1
+    opacity: .1;
+    display: none;
 }
 
 .l-bg-cyan {
@@ -12703,11 +12704,13 @@ table .checkbox [type="checkbox"]+label {
 
 .form-check,
 label {
-    font-size: 15px;
+    font-size: 13px;
     line-height: 1.42857;
     color: #414244;
     font-weight: 400
 }
+
+input:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea{font-size: 14px !important;}
 
 .input-group {
     width: 100%;
@@ -12869,7 +12872,7 @@ label {
 }
 
 .form-control{
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .form-group .help-info {
@@ -14258,8 +14261,8 @@ fieldset[disabled] .form-control {
 }
 
 .profile-usertitle-job {
-    font-size: 10px;
-    color: #919aa3
+    font-size: 12px;
+    color: #000000;
 }
 
 .sidebar-userpic-btn {
@@ -24298,4 +24301,52 @@ div#ui-datepicker-div{
 .alert p{
     margin-bottom: 0px;
     padding-bottom: 7px;
+}
+
+.theme-black .sidebar .menu .list li.active ul.ml-menu li {
+    background-color: #def0f5 !important;
+}
+
+.theme-black .sidebar .menu .list li.active, .sidebar .menu .list .active .menu-toggle, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active {
+    background-color: #f89d5e !important;
+}
+
+.sidebar .menu .list li.active>:first-child span, .sidebar .menu .list li.active a .feather,.sidebar .menu .list li.active a i, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active a{
+    color:#fff !important;
+}
+
+div#ui-datepicker-div{
+    display: none;
+}
+.select2-container--default .select2-selection--multiple{
+    border: 0px !important;
+    border-bottom: 1px solid #aaa !important;
+    border-radius: 0px !important;
+}
+
+.theme-black .sidebar.asse .menu .list li ul.ml-menu li {
+    background-color: #f4e5d8 !important;
+}
+
+.theme-black .sidebar.asse .menu .list li ul.ml-menu li a{
+    color: #000 !important;
+}
+
+
+@media(max-width:767px) {
+    .sidebar .menu{
+        background: #def0f5 !important;
+    }
+
+    .navbar-header{
+        background-color: transparent !important;
+    }
+
+    .form-group {
+        margin-bottom: 10px !important;
+    }
+
+    .sidebar, .overlay-open.ls-closed .sidebar{
+        top: 8%;
+    }
 }
