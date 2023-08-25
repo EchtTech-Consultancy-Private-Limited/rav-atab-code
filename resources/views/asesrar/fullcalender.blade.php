@@ -4,7 +4,7 @@
   }
 
   .fc-future {
-    background-color: #fcf8e3;
+    background-color: #FF3131 !important;
   }
 
   .activeDaygreen {
@@ -63,7 +63,7 @@
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/') }}">
                                     <i class="fas fa-home"></i> Home</a>
-                            </li>   
+                            </li>
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="{{ url('/dashboard') }}">Dashboard</a>
                             </li>
@@ -140,7 +140,7 @@
                         <input type="hidden" name="asesrar_id" id="asesrar_id" value="{{ Auth::user()->id }}">
                         <input type="hidden" name="start_date" id="start_date">
                         <input type="hidden" name="end_date" id="end_date">
-                       
+
                         <input type="hidden" name="available_date" value="<?php echo date('Y-m-d'); ?>" onfocus="focused(this)">
                         <div class="form-group">
                           <!-- <label>Select Option</label> -->
@@ -204,7 +204,7 @@
   </section> @include('layout.footer')
 
 
-  
+
   <script>
     $(document).ready(function() {
       var SITEURL = "{{ url('/') }}";
@@ -219,7 +219,7 @@
         displayEventTime: false,
         editable: true,
         /*eventRender: function (event, element, view) {
-         
+
             if (event.allDay === 'true') {
                     event.allDay = true;
             } else {
@@ -251,7 +251,7 @@
         eventDrop: function(start, end, event, delta) {
           /*var newstart = moment(start).format('YYYY-MM-DD');
                                                 var newend = moment(end).format('YYYY-MM-DD')
-                                                
+
                                                 $('#edit_date12').on('click',function(e) {
                                                    alert("yes");
                                                    var add_event_descp = $('#add_event_descpe').val();
@@ -259,7 +259,7 @@
                                                 $.ajax({
                                                     url: SITEURL + '/fullcalenderAjax',
                                                     data: {
-                                                       
+
                                                         start: add_event_descp,
                                                         type: 'update'
                                                     },
@@ -440,25 +440,23 @@
   </script>
 
 <script>
-  
+
   $(document).ready(function(){
     var count = 0;
   $("span.fc-button.fc-button-next.fc-state-default.fc-corner-right").click(function() {
-      
+
     count++;
-   
+
     if(count <= 6){
-      alert(count)
+      console.log(count);
     }else{
-      alert("not click")
+        $("span.fc-button.fc-button-next.fc-state-default.fc-corner-right").hide();
     }
-       
+
   });
 
 });
 
 
 
-
- 
 </script>

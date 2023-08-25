@@ -1,7 +1,7 @@
 <?php
-  
+
 namespace App\Http\Controllers;
-  
+
 use Illuminate\Http\Request;
 use App\Models\Event;
 use Auth;
@@ -11,7 +11,7 @@ class FullCalenderController extends Controller
 public function index(Request $request)
     {
         if($request->ajax()) {
-             
+
              $user=Auth::user()->id;
              $datawe = Event::whereDate('id',$user)
                        ->get(['id', 'asesrar_id','title']);
@@ -25,14 +25,14 @@ public function index(Request $request)
             //return $data;
             return response()->json($data);
         }
-  
+
         return view('asesrar.fullcalender');
     }
 public function onsiteassessment(Request $request)
     {
-  
+
         if($request->ajax()) {
-            
+
              $user=Auth::user()->id;
              $datawe = Event::whereDate('id',$user)
                        ->get(['id', 'asesrar_id','title']);
@@ -44,15 +44,15 @@ public function onsiteassessment(Request $request)
              //dd("$data");
             return response()->json($data);
         }
- 
+
         return view('asesrar.fullcalenderonsite');
     }
 
     public function assessor_onsite_assessment(Request $request)
     {
-   
+
         if($request->ajax()) {
-             
+
              $user=Auth::user()->id;
              $datawe = Event::whereDate('id',$user)
                        ->get(['id', 'asesrar_id','title']);
@@ -64,14 +64,14 @@ public function onsiteassessment(Request $request)
              //dd("$data");
             return response()->json($data);
         }
-  
+
         return view('asesrar.fullcalenderonsite');
     }
 
 
 
-    
- 
+
+
     /**
      * Write code on Method
      *
@@ -81,7 +81,7 @@ public function onsiteassessment(Request $request)
     {
         switch ($request->type) {
            case 'add':
-              
+
               if($request->add_event_availability==1)
               {
                     //dd("available");
@@ -112,7 +112,7 @@ public function onsiteassessment(Request $request)
 
                        ]);
                     }
-                    
+
               }
               else
               {
@@ -145,7 +145,7 @@ public function onsiteassessment(Request $request)
                        ]);
                     }
               }
-              
+
               /*$event = Event::create([
                   'asesrar_id' => $request->asesrar_id,
                   'type' => $request->event_type,
@@ -155,28 +155,28 @@ public function onsiteassessment(Request $request)
                   'end' => $request->end,
 
                ]);*/
-             
+
              //return Redirect::to('assessor-desktop-assessment');
              return response()->json($event);
              break;
-  
+
              case 'update':
              //dd($request->edit_event_descp);
               $event = Event::find($request->event_id)->update([
-                 
+
                   'title' => $request->edit_event_descp,
               ]);
- 
+
               return response()->json($event);
              break;
-           
-          
+
+
            case 'delete':
               $event = Event::find($request->id)->delete();
-  
+
               return response()->json($event);
              break;
-             
+
            default:
              # code...
              break;
@@ -197,25 +197,25 @@ public function onsiteassessment(Request $request)
                   'end' => $request->end,
 
                ]);
-             
+
              //return Redirect::to('assessor-desktop-assessment');
              return response()->json($event);
              break;
-  
+
              case 'update':
               $event = Event::find($request->event_id)->update([
                   'title' => $request->edit_event_descp,
               ]);
- 
+
               return response()->json($event);
              break;
-  
+
            case 'delete':
               $event = Event::find($request->id)->delete();
-  
+
               return response()->json($event);
              break;
-             
+
            default:
              # code...
              break;

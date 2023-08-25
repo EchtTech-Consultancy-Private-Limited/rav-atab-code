@@ -258,7 +258,7 @@
                                                         </div>
 
 
-
+                                                        <div class="modal-body mod-css">
 
                                                         <form action="{{ url('/Assigan-application') }}" method="post">
 
@@ -268,12 +268,13 @@
                                                             $assessment_type = checkapplicationassessmenttype($item->application_id);
                                                             ?>
                                                             <br>
+
+                                                            <label class="mb-3"><b>Assessment Type</b></label><br>
                                                              <select name="assessment_type" id="assessment_type" class="form-control">
                                                               <option value="">Select Assessment Type</option>
-
-                                                              <option value="1" @if($assessment_type == 1) {
+                                                              <option value="1" @if($assessment_type == 1)
                                                                selected @endif>Desktop Assessment</option>
-                                                              <option value="2" @if($assessment_type == 2) {
+                                                              <option value="2" @if($assessment_type == 2)
                                                                selected @endif>On-Site Assessment</option>
 
                                                               <!-- <option value="3" @if($assessment_type == 3) {
@@ -286,7 +287,7 @@
                                                              </select>
 
 
-                                                            <div class="modal-body mod-css">
+
 
                                                                 @foreach ($assesors as $k => $assesorsData)
                                                                     <br>

@@ -6,7 +6,7 @@
   }
 
   .fc-future {
-    background-color: #fcf8e3;
+    background-color:#FF3131 !important;
   }
 
   .activeDaygreen {
@@ -48,7 +48,7 @@ button#modal-btn-delete, #modal-btn-edit {
    <!-- #END# Overlay For Sidebars -->
    @include('layout.topbar')
    <div>
-    
+
         @if (Auth::user()->role == '1')
             @include('layout.sidebar')
         @elseif(Auth::user()->role == '2')
@@ -74,7 +74,7 @@ button#modal-btn-delete, #modal-btn-edit {
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/') }}">
                                     <i class="fas fa-home"></i> Home</a>
-                            </li>   
+                            </li>
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="{{ url('/dashboard') }}">Dashboard</a>
                             </li>
@@ -90,7 +90,7 @@ button#modal-btn-delete, #modal-btn-edit {
                   <!--  <ul class="breadcrumb breadcrumb-style ">
                      <li class="breadcrumb-item">
                         <h4 class="page-title">All Users</h4>
-                     
+
                      </li>
                      <li class="breadcrumb-item bcrumb-1">
                         <a href="{{url('/dashboard')}}">
@@ -119,7 +119,7 @@ button#modal-btn-delete, #modal-btn-edit {
                         <h3>Manage your calendar for Onsite/Virtual Assessment</h3><br>
                         <div id="schedule-calendar"></div>
                      </div>
-               
+
                     </div>
                      <!-- Add Modal  -->
                      <div class="modal fade" id="schedule-add" role="dialog">
@@ -140,19 +140,19 @@ button#modal-btn-delete, #modal-btn-edit {
                                     <input type="hidden" name="end_date" id="end_date">
                                     <input type="hidden" name="event_class">
                                     <input type="hidden" name="available_date" value="<?php echo date('Y-m-d'); ?>" onfocus="focused(this)">
-                                    
+
                                     <input type="hidden" name="type" value="add">
                                     <input type="hidden" name="event_type" value="2" id="event_type">
-                                    
+
                                     <h5 class="text-center mt-5 ">Please Select your Action to Procced</h5>
                                     <div class="d-flex btn-m pb-4">
-                                     
+
                                       <button type="button" class="btn btn-primary m-2 add_schedule" id="add_date" name="available">Available</button>
                                       <button type="button" class="btn btn-danger modal-close m-2 add_schedule" id="add_date_unavailable" name="unavailable">Unavailable</button>
                                     </div>
                                   </form>
                               </div>
-                              
+
                            </div>
                         </div>
                      </div>
@@ -203,7 +203,7 @@ button#modal-btn-delete, #modal-btn-edit {
                               </div>
                               <!-- Modal footer -->
                               <div class="modal-footer">
-                               
+
                                  <button type="button" class="btn btn-success" id="edit_date">Save Your Schedule</button>
                               </div>
                            </div>
@@ -231,7 +231,7 @@ button#modal-btn-delete, #modal-btn-edit {
         displayEventTime: false,
         editable: true,
         /*eventRender: function (event, element, view) {
-         
+
             if (event.allDay === 'true') {
                     event.allDay = true;
             } else {
@@ -263,7 +263,7 @@ button#modal-btn-delete, #modal-btn-edit {
         eventDrop: function(start, end, event, delta) {
           /*var newstart = moment(start).format('YYYY-MM-DD');
                                                 var newend = moment(end).format('YYYY-MM-DD')
-                                                
+
                                                 $('#edit_date12').on('click',function(e) {
                                                    alert("yes");
                                                    var add_event_descp = $('#add_event_descpe').val();
@@ -271,7 +271,7 @@ button#modal-btn-delete, #modal-btn-edit {
                                                 $.ajax({
                                                     url: SITEURL + '/fullcalenderAjax',
                                                     data: {
-                                                       
+
                                                         start: add_event_descp,
                                                         type: 'update'
                                                     },
@@ -409,9 +409,30 @@ button#modal-btn-delete, #modal-btn-edit {
           }
         });
       });
-    
+
     });
   </script>
 
 
 
+<script>
+
+    $(document).ready(function(){
+      var count = 0;
+    $("span.fc-button.fc-button-next.fc-state-default.fc-corner-right").click(function() {
+
+      count++;
+
+      if(count <= 6){
+        console.log(count);
+      }else{
+          $("span.fc-button.fc-button-next.fc-state-default.fc-corner-right").hide();
+      }
+
+    });
+
+  });
+
+
+
+  </script>
