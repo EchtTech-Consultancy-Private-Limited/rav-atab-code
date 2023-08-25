@@ -80,7 +80,7 @@
 
 <body class="light
 
-@if(Auth::user()->role  == 1 )
+        @if(Auth::user()->role  == 1 )
 
 
 
@@ -136,6 +136,10 @@
         @elseif(Auth::user()->role  == 5)
 
         @include('layout.secretariat')
+
+        @elseif(Auth::user()->role  == 6)
+
+        @include('layout.sidbarAccount')
 
 
         @endif
@@ -198,8 +202,10 @@
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
                 <div class="mb-4">
+                    <a href="{{ url('/assessor-desktop-assessment') }}">
                     <h5 class="font-20 mb-0">Desktop Applications</h5>
-                </div>
+                    </a>
+                  </div>
                             </div>
         </div>
     </div>
@@ -208,7 +214,9 @@
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
                 <div class="mb-4">
+                    <a href="{{ url('/assessor-onsite-assessment-page') }}">
                     <h5 class="font-20 mb-0">Onsite Applications</h5>
+                    </a>
                 </div>
 
             </div>

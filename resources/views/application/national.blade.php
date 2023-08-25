@@ -58,7 +58,32 @@
     <div>
 
 
+        @if(Auth::user()->role  == 1 )
+
         @include('layout.sidebar')
+
+        @elseif(Auth::user()->role  == 2)
+
+        @include('layout.siderTp')
+
+        @elseif(Auth::user()->role  == 3)
+
+        @include('layout.sideAss')
+
+        @elseif(Auth::user()->role  == 4)
+
+        @include('layout.sideprof')
+
+        @elseif(Auth::user()->role  == 5)
+
+        @include('layout.secretariat')
+
+        @elseif(Auth::user()->role  == 6)
+
+        @include('layout.sidbarAccount')
+
+
+        @endif
 
 
 
@@ -79,7 +104,7 @@
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
                                     <i class="fas fa-home"></i> Home</a>
-                            </li>   
+                            </li>
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">Dashboard</a>
                             </li>
@@ -99,7 +124,7 @@
                 </div>
             @endif
 
-            
+
             @if (Session::has('error'))
             <div class="alert alert-danger" role="alert">
                 {{ session::get('error') }}
@@ -109,8 +134,8 @@
                 {{ session::get('fail') }}
             </div>
             @endif
-            
-            
+
+
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -153,7 +178,7 @@
 
 
                                                         @if ($item->status == '0')
-                                                            <a 
+                                                            <a
                                                                 @if ($item->status == 0) <div class="badge col-black">Pending</div> @elseif($item->status == 1) <div class="badge col-green">Proccess</div> @else @endif
                                                                 </a>
                                                     </td>
@@ -161,7 +186,7 @@
 
 
                                                 @if ($item->status == '1')
-                                                    <a 
+                                                    <a
                                                         @if ($item->status == 0) <div class="badge col-black">Pending</div>
 
                                                          @elseif($item->status == 1) <div class="badge col-green">Proccess</div> @else @endif
@@ -170,49 +195,56 @@
                                                 @endif
 
                                                 @if ($item->status == '2')
-                                                    <a 
+                                                    <a
                                                         @if ($item->status == 1) <div class="badge col-green">Proccess</div> @elseif($item->status == 2) <div class="badge col-green">Approved</div> @else @endif
                                                         </a>
                                                         </td>
-                                                @endif 
+                                                @endif
 
 
+                                                @if(Auth::user()->role  == 6)
+                                                <td class="center">
 
+                                                    <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
+                                                        class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
+                                                </td>
+                                                 @endif
+
+
+                                             @if(Auth::user()->role  == 1)
                                             <td class="center">
-                                                
-                                                
-                                                
+
                                                 <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
                                                     class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
 
                                                 {{-- <a data-bs-toggle="modal"  data-bs-target="#exampleModal" class="btn btn-tbl-edit bg-success">
                                                     <i class="fa fa-font" aria-hidden="true"></i> </a> --}}
-                                                
+
                                                 <?php if(checktppaymentstatustype($item->application_id) == 1 || checktppaymentstatustype($item->application_id) == 2) { ?>
                                                 <a class="btn btn-tbl-delete bg-primary font-a" data-bs-toggle="modal"
                                                     data-id='{{ $item->application_id ?? '' }}'
                                                     data-bs-target="#View_popup_{{ $item->application_id }}" id="view">
                                                     <i class="fa fa-font" aria-hidden="true" title=""></i>
                                                 </a>
-                                                <?php } ?>  
+                                                <?php } ?>
 
-                                                <!--Assign Secreate User --> 
+                                                <!--Assign Secreate User -->
                                                 <!-- {{checktppaymentstatustype($item->application_id)}} -->
 
                                                  <?php if(checktppaymentstatustype($item->application_id) == 1 || checktppaymentstatustype($item->application_id) == 2) { ?>
 
                                                 <a class="btn btn-tbl-delete bg-danger font-a" data-bs-toggle="modal"
                                                     data-id='{{ $item->application_id ?? ''  }}'
-                                                    data-bs-target="#view_secreate_popup_{{ $item->application_id }}" id="view"> 
+                                                    data-bs-target="#view_secreate_popup_{{ $item->application_id }}" id="view">
                                                     <i class="fa fa-scribd" aria-hidden="true" title=""></i>
                                                 </a>
                                                 <?php } ?>
                                             </td>
-
+                                             @endif
 
                                             {{-- popup form --}}
 
- 
+
                                             <div class="modal fade" id="View_popup_{{ $item->application_id }}" tabindex="-1" role="dialog"
                                                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -231,7 +263,7 @@
                                                         <form action="{{ url('/Assigan-application') }}" method="post">
 
                                                             @csrf
-                                                            <?php 
+                                                            <?php
                                                             $application_assessor_arr = listofapplicationassessor($item->application_id);
                                                             $assessment_type = checkapplicationassessmenttype($item->application_id);
                                                             ?>
@@ -243,7 +275,7 @@
                                                                selected @endif>Desktop Assessment</option>
                                                               <option value="2" @if($assessment_type == 2) {
                                                                selected @endif>On-Site Assessment</option>
-                                                               
+
                                                               <!-- <option value="3" @if($assessment_type == 3) {
                                                                selected @endif>Surveillance Assessment</option>
                                                               <option value="4" @if($assessment_type == 4) {
@@ -252,8 +284,8 @@
                                                                selected @endif>Re-Assessment</option> -->
 
                                                              </select>
-                                                            
-                                                            
+
+
                                                             <div class="modal-body mod-css">
 
                                                                 @foreach ($assesors as $k => $assesorsData)
@@ -278,7 +310,7 @@
                                                                     </label>
                                                                     <input type="hidden" name="sec_email[]" value="{{ $assesorsData->email }}">
                                                                 <div>
-                                                                    <?php 
+                                                                    <?php
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){
                                                                     ?>
                                                                         {!! $date !!}
@@ -319,7 +351,7 @@
                                                         <form action="{{ url('/assigan-secretariat-application') }}" method="post">
 
                                                             @csrf
-                                                            <?php 
+                                                            <?php
                                                             $application_assessor_arr = listofapplicationsecretariat($item->application_id);
                                                             $assessment_type = checkapplicationassessmenttype($item->application_id);
                                                             ?>
@@ -338,8 +370,8 @@
                                                                selected @endif>Re-Assessment</option>
 
                                                              </select> -->
-                                                            
-                                                            
+
+
                                                             <div class="modal-body mod-css">
 
                                                                 @foreach ($secretariatdata as $k => $assesorsData)
@@ -364,7 +396,7 @@
                                                                     </label>
                                                                     <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
                                                                 <!-- <div>
-                                                                    <?php 
+                                                                    <?php
                                                                     foreach(get_accessor_date($assesorsData->id) as $date){
                                                                     ?>
                                                                         {!! $date !!}
@@ -437,6 +469,6 @@
 
 
  --}}
- 
+
 
     @include('layout.footer')

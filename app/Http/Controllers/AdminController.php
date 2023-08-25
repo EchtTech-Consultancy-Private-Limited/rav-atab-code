@@ -211,7 +211,7 @@ public function profile_submit(Request $request,$id)
 {
 
      //dd(user::find(dDecrypt($id))->update_count  <= "3");
-if(user::find(dDecrypt($id))->update_count  <= "3"){
+if(user::find(dDecrypt($id))->update_count  <= "2"){
 
   $request->validate(
     [
@@ -259,20 +259,11 @@ if(user::find(dDecrypt($id))->update_count  <= "3"){
 
      }
 
-
-    // if($request->hasfile('file'))
-    // {
-    //     $img = $request->file('file');
-    //     $name =$img->getClientOriginalName();
-    //     $filename = time().$name;
-    //     $img->move('profile/',$filename);
-    //     $data->file=$filename;
-    // }
     $data->save();
     return back()->with('success', 'Your profile successfully updated !!!!!');
     }else{
       //  dd('hii');
-        return back()->with('success','profile not update');
+        return back()->with('error','profile update limit is fixed!!!!!');
     }
 }
 

@@ -23,7 +23,21 @@
     <div>
 
 
-        @include('layout.sidebar')
+
+        @if (Auth::user()->role == '1')
+            @include('layout.sidebar')
+        @elseif(Auth::user()->role == '2')
+            @include('layout.siderTp')
+        @elseif(Auth::user()->role == '3')
+            @include('layout.sideAss')
+        @elseif(Auth::user()->role == '4')
+            @include('layout.sideprof')
+        @elseif(Auth::user()->role == '5')
+            @include('layout.secretariat')
+        @elseif(Auth::user()->role == '6')
+            @include('layout.sidbarAccount')
+        @endif
+
 
 
 
@@ -98,7 +112,7 @@
                @elseif(request()->path() == 'secrete-user')
 
                     <a type="button" href="{{ url('/adduser/secrete-user') }}" class="btn btn-primary waves-effect" style="line-height:2;">+ Add User</a>
-                    
+
 
                 @endif
 
@@ -117,7 +131,7 @@
                                    <th class="center"> User Name </th>
                                    <th class="center"> User Email </th>
                                    <th class="center"> Remark </th>
-                                  
+
                                 </tr>
                              </thead>
                              <tbody>
@@ -127,7 +141,7 @@
                                    <td class="center"><?php echo get_user_name($feedbacks->user_id); ?></td>
                                    <td class="center"><?php echo get_user_email($feedbacks->user_id); ?></td>
                                    <td class="center">{{ $feedbacks->remark }}</td>
-                           
+
                                 </tr>
                                 @endforeach
                              </tbody>
@@ -139,7 +153,7 @@
            </div>
         </div>
      </section>
-  
+
 
     <!--  <script >
          $(document).ready(function() {

@@ -33,9 +33,10 @@
             @include('layout.sideAss')
         @elseif(Auth::user()->role == '4')
             @include('layout.sideprof')
-
         @elseif(Auth::user()->role == '5')
             @include('layout.secretariat')
+        @elseif(Auth::user()->role == '6')
+            @include('layout.sidbarAccount')
         @endif
 
 
@@ -97,6 +98,14 @@
                                 <p>{{ $message }}</p>
                             </div>
                         @endif
+
+                        @if ($message = Session::get('error'))
+                            <div class="alert alert-danger">
+                                <p>{{ $message }}</p>
+                            </div>
+                        @endif
+
+
 
                         <form method="post" action="{{ url('/profile_submit' . '/' .dEncrypt($data->id)) }}"
                             class="javavoid(0) validation-form123" id="regForm" enctype="multipart/form-data">

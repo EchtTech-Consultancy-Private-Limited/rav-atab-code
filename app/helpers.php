@@ -424,14 +424,29 @@ function checktppaymentstatustype($id)
 
          }
 
-        //  function Checknotification($id){
-
-        //     $assessors = DB::table('asessor_applications')->where('assessor_id',$id)->first();
-        //     $Application = DB::table('applications')->whereid($assessors->id)->get();
-        //     return $Application;
-
-        //  }
 
 
+
+        function Checknotification($id=0){
+
+            $assessors=DB::table('asessor_applications')->select('id','created_at')->where('notification_id','0')->where('assessor_id',$id)->get();
+
+            if($assessors != NULL){
+
+            return $assessors;
+
+            }else{
+                return false;
+            }
+
+        }
+
+        function showstate($id){
+
+            $state=DB::table('states')->where('id',$id)->first();
+
+            return $state->name;
+
+        }
 
 ?>

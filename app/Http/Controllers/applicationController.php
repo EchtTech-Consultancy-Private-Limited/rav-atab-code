@@ -57,9 +57,9 @@ class applicationController extends Controller
     {
 
        // dd($request->assessor_id);
-      
-    //return $request->all(); 
-   // return $request->application_id;   
+
+    //return $request->all();
+   // return $request->application_id;
     $value= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->get();
     if(count($value) > 0)
     {
@@ -90,7 +90,7 @@ class applicationController extends Controller
     //dd("in out");
 
     for($i=0; $i<count($assessor_id); $i++)
-    { 
+    {
        // dd("in loop");
 
         $data = new asessor_application();
@@ -112,7 +112,7 @@ class applicationController extends Controller
             'body' => '',
             'type' => 'Send To Assessor'
             ];*/
-             $mailData= 
+             $mailData=
             [
                 'from'=>"Admin",
                 'applicationNo'=>$request->application_id,
@@ -127,9 +127,9 @@ class applicationController extends Controller
            for($k=0; $k<= (count($request->assessor_id)-1); $k++)
            {
              $assessor_email=User::select('email')->where('id',$request->assessor_id[$k])->first();
-            
-            
-            $mailData= 
+
+
+            $mailData=
             [
                 'from'=>"Admin",
                 'applicationNo'=>$request->application_id,
@@ -140,7 +140,7 @@ class applicationController extends Controller
             Mail::to($assessor_email)->send(new SendMail($mailData));
             //Mail sending script ends here
             }
-            
+
 
     }
 
@@ -152,7 +152,7 @@ class applicationController extends Controller
   public function assigan_secretariat_application(Request $request)
     {
       //  dd("yesssd");
-    //return $request->all();   
+    //return $request->all();
     $value= DB::table('secretariat')->where('application_id','=',$request->application_id)->get();
     if(count($value) > 0)
     {
@@ -216,12 +216,12 @@ class applicationController extends Controller
             Mail::to([$userEmail])->send(new secretariatadminapplicationmail($adminapplicationsecretariatMail,$application_id,$username));
             //Mail sending script ends here
 
-        
 
-       
+
+
     }
 
-    
+
     return  back()->with('sussess','Application has been successfully assigned to Secretariat');
 
   }
@@ -239,7 +239,7 @@ class applicationController extends Controller
             ->orderBy('applications.id', 'DESC')
             ->join('application_payments', 'application_payments.application_id', '=','applications.id')
             ->get();
-    
+
 
     //rest of the would
     $collection= DB::table('applications')
@@ -252,8 +252,8 @@ class applicationController extends Controller
             ->join('application_payments', 'application_payments.application_id', '=','applications.id')
             ->orderBy('applications.id', 'DESC')
             ->get();
-   
-     //dd($collection);   
+
+     //dd($collection);
     if(count($collections) || count( $collection))
     {
         $assessordata = user::where('role','3')->orderBy('id','DESC')->get();
@@ -376,7 +376,7 @@ class applicationController extends Controller
         ->where('applications.country','=',101)
         ->orderBy('applications.id', 'DESC')
         ->get();
-        
+
         if(count($Application))
         {
 
@@ -393,7 +393,7 @@ class applicationController extends Controller
              $end = new DateTime('2023-07-30');*/
 
 
-            
+
             $fifteenthDaysadd = Carbon::now()->addDays(15)->format('Y-m-d');
             $events=Event::select('start')->where('asesrar_id',76)->whereDate('start','<=',$fifteenthDaysadd)->where('availability',2)->get();
              //return count($events);

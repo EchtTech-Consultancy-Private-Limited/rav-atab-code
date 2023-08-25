@@ -28,15 +28,18 @@
 
 
         @if (Auth::user()->role == '1')
-            @include('layout.sidebar')
-        @elseif(Auth::user()->role == '2')
-            @include('layout.siderTp')
-        @elseif(Auth::user()->role == '3')
-            @include('layout.sideAss')
-        @elseif(Auth::user()->role == '4')
-            @include('layout.sideprof')
-        @endif
-
+        @include('layout.sidebar')
+    @elseif(Auth::user()->role == '2')
+        @include('layout.siderTp')
+    @elseif(Auth::user()->role == '3')
+        @include('layout.sideAss')
+    @elseif(Auth::user()->role == '4')
+        @include('layout.sideprof')
+    @elseif(Auth::user()->role == '5')
+        @include('layout.secretariat')
+    @elseif(Auth::user()->role == '6')
+        @include('layout.sidbarAccount')
+    @endif
 
 
 
@@ -468,7 +471,7 @@
                                                 <label><strong>Payment Screenshot</strong></label><br>
                                              <!--    <label>{{ $ApplicationPayment->payment_details_file ?? '' }}
                                                    </label> -->
-                                                
+
                                                 @if(isset($ApplicationPayment->payment_details_file))
                                                 <a target="_blank" class="image-link" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}">
                                                 <img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" style="width:100px;height:70px;">
@@ -477,44 +480,47 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+                                    @if(Auth::user()->role == '6')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Verify Payment </strong></label><br>
                                                 <label><br>
 
+
+
                                                  @if ($ApplicationPayment->status == '0')
                                                             <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                 onclick="return confirm_option('change status')"
                                                                 @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-secondary btn-sm">Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Proccess</div> @else @endif
                                                                 </a>
-                                                    
-                                            @endif
+
+                                                  @endif
 
 
-                                            @if ($ApplicationPayment->status == '1')
-                                                <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                    onclick="return confirm_option('change status')"
-                                                    @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-secondary">Pending</strong></div>
+                                                    @if ($ApplicationPayment->status == '1')
+                                                        <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                                            onclick="return confirm_option('change status')"
+                                                            @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-secondary">Pending</strong></div>
 
-                                                     @elseif($ApplicationPayment->status == 1)
-                                                      <div class=" col-green" ><strong class="btn btn-success">Proccess</strong></div> @else @endif
-                                                    </a>
-                                                  
-                                            @endif
+                                                            @elseif($ApplicationPayment->status == 1)
+                                                            <div class=" col-green" ><strong class="btn btn-success">Proccess</strong></div> @else @endif
+                                                            </a>
+
+                                                    @endif
 
                                             @if ($ApplicationPayment->status == '2')
                                                 <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                     onclick="return confirm_option('change status')"
                                                     @if ($ApplicationPayment->status == 1) <div class="badge col-green">Proccess</div> @elseif($ApplicationPayment->status == 2) <div class=" col-green"><strong class="btn btn-success">Approved</strong></div> @else @endif
                                                     </a>
-                                                    
+
                                             @endif
-                                                  
+
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <!-- basic end -->
                             </div>
@@ -552,7 +558,7 @@
       }
 
       return true;
- 
+
    }
 </script>
 

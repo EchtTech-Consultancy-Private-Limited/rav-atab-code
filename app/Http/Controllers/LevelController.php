@@ -42,12 +42,20 @@ use App\Mail\assessorSingleFinalMail;
 use App\Mail\tpApplicationmail;
 
 use App\Models\Add_Document;
+use App\Models\asessor_application;
 use App\Models\DocComment;
 use App\Mail\paymentSuccessMail;
 
 class LevelController extends Controller
 {
 
+    public function notification(Request $request){
+
+       // $data=DB::table('asessor_applications')->where('id',$request->myData)->first();
+        $data = asessor_application::find($request->myData);
+        $data->notification_id='1';
+        $data->save();
+    }
 
     public function level_list()
     {
