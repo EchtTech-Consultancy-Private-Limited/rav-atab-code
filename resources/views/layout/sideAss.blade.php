@@ -16,7 +16,7 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="sidebar-user-panel active">
+            <li class="sidebar-user-panel">
                 <div class="user-panel">
                     <div class=" image">
                         <img src="{{ asset('assets/images/usrbig.jpg') }}" class="user-img-style" alt="User Image" />
@@ -39,43 +39,43 @@
             </li>
 
 
-            <li class="{{ Request::is('profile-get')?'active':''; }}">
+            <li class="{{ Request::is('profile-get')?'active':''}}">
                     <a href="{{ url('profile-get') }}" >
                         <i data-feather="user"></i>
                         <span>Manage Profile</span>
                     </a>
             </li>
 
-            <li  class="{{ (Request::is('nationl-accesser') ||  Request::is('internationl-accesser') )?'active':''; }}" >
+            <li  class="{{ (Request::is('nationl-accesser') ||  Request::is('internationl-accesser') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>
                     <span>Manage Application</span>
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('nationl-accesser')?'active':''; }}" >
+                    <li class="{{ Request::is('nationl-accesser')?'active':''}}" >
                         <a  href="{{ url('nationl-accesser') }}">National Application</a>
                     </li>
 
-                    <li class="{{ Request::is('internationl-accesser')?'active':''; }}">
+                    <li class="{{ Request::is('internationl-accesser')?'active':''}}">
                         <a  href="{{ url('/internationl-accesser') }}">International Application</a>
                     </li>
 
                 </ul>
             </li>
 
-            <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''; }}" >
+            <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>
                     <span>My Availability</span>
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('assessor-desktop-assessment')?'active':''; }}" >
+                    <li class="{{ Request::is('assessor-desktop-assessment')?'active':''}}" >
                         <a  href="{{ url('assessor-desktop-assessment') }}">Desktop Assessment</a>
                     </li>
 
-                    <li class="{{ Request::is('assessor-onsite-assessment-page')?'active':''; }}">
+                    <li class="{{ Request::is('assessor-onsite-assessment-page')?'active':''}}">
                         <a  href="{{ url('assessor-onsite-assessment-page') }}">Onsite / Virtual Assessment</a>
                     </li>
 
@@ -98,17 +98,13 @@
             </li>
 
 
-            <li class="{{ Request::is('assessor-user-manuals')?'active':''; }}">
+            <li class="{{ Request::is('assessor-user-manuals')?'active':''}}">
                 <a href="{{ url('assessor-user-manuals') }}">
                     <i data-feather="message-circle"></i>
-                    <span>Assessor Manual</span>
-                    
-
+                    <span>Assessor Manual</span>                   
                 </a>
             </li>
-
-
-
+            
             <li>
                 <a href="#" onClick="return false;">
                     <i data-feather="message-circle"></i>
@@ -117,7 +113,7 @@
             </li>
 
 
-            <li class="{{ Request::is('send-feedback')?'active':''; }}">
+            <li class="{{ Request::is('send-feedback')?'active':''}}">
                 <a href="{{ url('/send-feedback') }}">
                     <i data-feather="message-circle"></i>
                     <span>Help Desk</span>

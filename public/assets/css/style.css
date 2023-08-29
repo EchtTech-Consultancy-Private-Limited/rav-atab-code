@@ -24363,3 +24363,8 @@ div#ui-datepicker-div{
 .info-box-5 a {
     color: #fff;
 }
+
+.card .info-box-5 a{
+
+    color: #fff !important;
+}
