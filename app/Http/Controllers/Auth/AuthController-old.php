@@ -37,7 +37,7 @@ class AuthController extends Controller
 
 
    public function login_post(Request $request){
- 
+
   // $a= $request->password;
   $request['password']=decode5t($request->password); #SKP
 
@@ -114,7 +114,7 @@ class AuthController extends Controller
                 'check'=>'required',
                 'password'  => 'required|min:8|max:15',
                 'cpassword'  => 'required|same:password',
-               
+
            ]
        );
 
@@ -127,8 +127,8 @@ class AuthController extends Controller
            dd("in");
             return back()->with('fail','OTP is invalid.!!');
         }
-        
-       
+
+
        $data = new user;
        $data->title = $request->title;
        $data->firstname =$request->firstname;
@@ -309,7 +309,7 @@ class AuthController extends Controller
     //         'message' => 'Email domin is not valid.',
     //    ]);
     // }
-    
+
     if ( isset($request->email) && trim($request->email) =="" ) {
         return response()->json([
             'error'   => 1,

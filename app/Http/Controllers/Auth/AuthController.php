@@ -38,7 +38,7 @@ class AuthController extends Controller
 
 
    public function login_post(Request $request){
- 
+
   // $a= $request->password;
   $request['password']=decode5t($request->password); #SKP
 
@@ -55,7 +55,7 @@ class AuthController extends Controller
 
       $data = user::where('email',$request->email)->get();
 
-      if(count($data)>0 && $data[0]->role == $request->role)
+      if(count($data)>0 && $data[0]->role == $request->role || $data[0]->role == '6')
        {
             if($data[0]->status == 0)
             {
@@ -171,7 +171,7 @@ class AuthController extends Controller
             {
                 // if($data[0]->status == 0)
                 // {
-    
+
                 //      if(Auth::attempt($request->only('email','password')))
                 //      {
                 //         $userEmail = $request->email;
@@ -181,33 +181,32 @@ class AuthController extends Controller
                 //             'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
                 //             'type' => 'New Registration'
                 //         ];
-    
+
                 //         Mail::to($userEmail)->send(new SendMail($mailData));
-    
+
                 //          return redirect()->intended('/dashboard')->with('success', 'login successfull!!');
                 //      }
                 //      else
                 //      {
                 //      return back()->with ('fail','Email and/or password invalid.!!');
                 //      }
-    
+
                 // }else
-    
+
                 // {
                     $userEmail = $request->email;
-    
+
                     //Mail sending scripts starts here
                     $mailData = [
                         'title' => 'You have successfully registered',
                         'body' => 'Welcome to RAV Accredetation application. Please login with your username and password for further process.',
                         'type' => 'New Registration'
                     ];
-    
+
                     Mail::to($userEmail)->send(new SendMailRegis($mailData));
                     //Mail sending script ends here
-    
+
                     return redirect()->intended('/')->with('falils','Your registration is successfull. your account is not actived yet. please contact your adminstrator to active your account');
-    
                // }
             }
             else
@@ -255,7 +254,7 @@ class AuthController extends Controller
                 'check'=>'required',
                 'password'  => 'required|min:8|max:15',
                 'cpassword'  => 'required|same:password',
-               
+
            ]
        );
 
@@ -425,7 +424,7 @@ class AuthController extends Controller
 
 
    public function sendEmailOtp(Request $request){
-    
+
     $request->validate(
     [
       'email' => ['required','string','email','max:50','unique:users','regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
@@ -473,7 +472,7 @@ class AuthController extends Controller
             'error'   => 1,
             'message' => 'Email is not valid.',
        ]);
-    } 
+    }
 
 }
 
