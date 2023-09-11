@@ -11685,23 +11685,14 @@ table .checkbox [type="checkbox"]+label {
 }
 
 .dropdown-menu ul.menu li a {
-    padding: 4px 11px;
+    padding: 11px 11px;
     text-decoration: none;
     -moz-transition: .5s;
     -o-transition: .5s;
     -webkit-transition: .5s;
     transition: .5s;
     float: left;
-    width: 100%;
-    color: #333;
-}
-
-ul.menu span.menu-info h5 {
-    text-align: center;
-    padding: 6px 30px;
-    width: 100%;
-    font-weight: 500;
-    font-size: 14px;
+    width: 100%
 }
 
 .dropdown-menu ul.menu li a:hover {
@@ -11714,7 +11705,7 @@ ul.menu span.menu-info h5 {
     top: 3px;
     left: 10px;
     float: left;
-    width:100%;
+    width: calc(100% - 45px)
 }
 
 .dropdown-menu ul.menu .menu-info h4,
@@ -24222,7 +24213,7 @@ input.course_input {
 }
 #progressbar li:first-child:after {
 	/*connector not needed before the first step*/
-	content: none;
+	content: none; 
 }
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
@@ -24301,7 +24292,7 @@ div#ui-datepicker-div{
 .card .body .header{
     padding-left: 0px;
     padding-bottom: 25px;
-}
+}   
 
 .table tbody tr td a {
     white-space: nowrap;
@@ -24358,8 +24349,4 @@ div#ui-datepicker-div{
     .sidebar, .overlay-open.ls-closed .sidebar{
         top: 8%;
     }
-}
-
-.info-box-5 a {
-    color: #fff;
 }

@@ -2,13 +2,14 @@
         <!-- Left Sidebar -->
         <aside id="leftsidebar" class="sidebar">
         <div class="logo-brand">
-                    <img src="{{ asset('assets/images/rav-logo.png') }}" alt="" />
-                    <p class="logo-name">Accreditation </p>
-                </div>
+            <img src="{{ asset('assets/images/rav-logo.png') }}" alt="" />
+            <p class="logo-name">Accreditation </p>
+        </div>
+
             <!-- Menu -->
             <div class="menu" >
                 <ul class="list">
-                    <li class="sidebar-user-panel active">
+                    <li class="sidebar-user-panel">
                          <div class="user-panel">
                            <div class=" image">
                                 <img src="{{ asset('assets/images/usrbig.jpg')}}" class="user-img-style" alt="User Image" />
@@ -107,7 +108,7 @@
 
                     <li class="{{ Request::is('show-previous-level')?'active':''; }}">
                         <a href="#" onClick="return false;" class="menu-toggle">
-                            <i data-feather="monitor"></i>
+                            <i class="fa fa-history" aria-hidden="true"></i>
                             <span>History of Levels</span>
                         </a>
                         <ul class="ml-menu">
@@ -121,12 +122,12 @@
 
                     <li>
                         <a href="{{ url('/manage-manual') }}" class="{{ Request::is('manage-manual')?'active':''; }}" >
-                            <i data-feather="message-circle"></i>
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
                             <span>Manage Manual</span>
                         </a>
                     </li>
 
-                <!--     <li>
+                <!--  <li>
                         <a href="{{ url('/email-verification') }}" class="{{ Request::is('email-verification')?'active':''; }}" >
                             <i data-feather="message-circle"></i>
                             <span>Email domain verification</span>
@@ -143,8 +144,8 @@
 
                     <li class="{{ Request::is('show-feedback')?'active':''; }}">
                         <a href="{{ url('/show-feedback') }}">
-                            <i data-feather="message-circle"></i>
-                            <span>Help Desk</span>
+                            <i class="fa fa-comments" aria-hidden="true"></i>
+                            <span>Feedback</span>
                         </a>
                     </li>
 
@@ -170,19 +171,16 @@
                         <ul class="ml-menu">
                             <li class="{{ Request::is('admin-models')?'active':''; }}">
                                 <a href="{{url('admin-models')}}" >
-                                    <i data-feather="check-circle"></i>
                                     <span> Modules </span>
                                 </a>
                             </li>
                             <li class="{{ Request::is('admin-routes')?'active':''; }}">
                                 <a href="{{url('admin-routes')}}" >
-                                    <i data-feather="check-circle"></i>
                                     <span> Routes </span>
                                 </a>
                             </li>
                             <li class="{{ Request::is('model-routes')?'active':''; }}">
                                 <a href="{{url('model-routes')}}" >
-                                    <i data-feather="check-circle"></i>
                                     <span> Module Routes </span>
                                 </a>
                             </li>

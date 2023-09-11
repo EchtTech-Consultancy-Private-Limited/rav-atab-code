@@ -17,14 +17,14 @@
             <!-- Menu -->
             <div class="menu">
                 <ul class="list">
-                    <li class="sidebar-user-panel active">
+                    <li class="sidebar-user-panel">
                          <div class="user-panel">
                            <div class=" image">
                                 <img src="{{ asset('assets/images/usrbig.jpg')}}" class="user-img-style" alt="User Image" />
                             </div>
                         </div>
                         <div class="profile-usertitle">
-                            <div class="sidebar-userpic-name">{{ Auth::user()->firstname;}}</div>
+                            <div class="sidebar-userpic-name">{{ Auth::user()->firstname}}</div>
                             <div class="profile-usertitle-job">(Training Provider)</div>
                         </div>
                     </li>
@@ -65,7 +65,7 @@
 
                     <li class="{{ (Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') )?'active':''; }}">
                         <a href="#" onClick="return false;" class="menu-toggle" >
-                            <i data-feather="info"></i>
+                            <i data-feather="settings"></i>
                             <span>Manage Applications</span>
                         </a>
                         <ul class="ml-menu">
@@ -109,7 +109,8 @@
 
                    <li class="{{ Request::is('show-previous-level')?'active':''; }}">
                         <a href="#" onClick="return false;" class="menu-toggle">
-                            <i data-feather="monitor"></i>
+                            {{-- <i data-feather="history"></i> --}}
+                            <i class="fa fa-history" aria-hidden="true"></i>
                             <span>History of Levels</span>
                         </a>
                         <ul class="ml-menu">
@@ -132,8 +133,8 @@
 
                     <li class="{{ Request::is('send-feedback')?'active':''; }}">
                         <a href="{{ url('/send-feedback') }}">
-                            <i data-feather="message-circle"></i>
-                            <span>Help Desk</span>
+                            <i class="fa fa-comments" aria-hidden="true"></i>
+                            <span>Feedback</span>
                         </a>
                     </li>
 
@@ -143,6 +144,8 @@
                             <span>Remark</span>
                         </a>
                     </li> -->
+
+
 
 
                     <li>

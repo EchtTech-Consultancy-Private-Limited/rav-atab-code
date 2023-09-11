@@ -16,7 +16,7 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="sidebar-user-panel active">
+            <li class="sidebar-user-panel">
                 <div class="user-panel">
                     <div class=" image">
                         <img src="{{ asset('assets/images/usrbig.jpg') }}" class="user-img-style" alt="User Image" />
@@ -25,11 +25,8 @@
                 <div class="profile-usertitle">
                     <div class="sidebar-userpic-name">{{ ucfirst(Auth::user()->firstname) }}</div>
                     <div class="profile-usertitle-job">(Secretariat)</div>
-
                 </div>
             </li>
-
-
 
             <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="{{ url('dashboard') }}">
@@ -37,7 +34,6 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-
 
             <li class="{{ Request::is('profile-get')?'active':''; }}">
                     <a href="{{ url('profile-get') }}" >

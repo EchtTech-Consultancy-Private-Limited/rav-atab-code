@@ -52,17 +52,14 @@ class AuthController extends Controller
 
    // dd($request->all());
 
-      $data = user::where('email',$request->email)->get();
+      $data = user::where('email',$request->email)->first();
 
-      if(count($data)>0 && $data[0]->role == $request->role)
+      if(count($data)>0 && $data->role == $request->role)
        {
-            if($data[0]->status == 0)
+            if($data->status == 0)
             {
 
-                if(Auth::attempt($request->only('email','password')))
-                {
-
-
+                if(Auth::attempt($request->only('email','password'))){
                     return redirect()->intended('/dashboard')->with('success', 'Login successfull!!');
                 }
                 else
