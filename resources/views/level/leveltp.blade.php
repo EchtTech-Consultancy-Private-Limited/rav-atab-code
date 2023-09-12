@@ -94,14 +94,14 @@ div#ui-datepicker-div {
 
  <body class="light">
      <!-- Page Loader -->
-     <div class="page-loader-wrapper">
+     {{-- <div class="page-loader-wrapper">
          <div class="loader">
              <div class="m-t-30">
                  <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
              </div>
              <p>Please wait...</p>
          </div>
-     </div>
+     </div> --}}
      <!-- #END# Page Loader -->
      <!-- Overlay For Sidebars -->
      <div class="overlay"></div>
@@ -1141,7 +1141,7 @@ div#ui-datepicker-div {
                                                  <div class="col-sm-3">
                                                      <div class="form-group">
                                                          <div class="form-line">
-                                                             <label>Course Details (Excel format) <span
+                                                             <label>Course Details (Excel / CSV format) <span
                                                                      class="text-danger">*</span></label>
 
 
@@ -1500,11 +1500,11 @@ div#ui-datepicker-div {
 
                                                                  <td class="center">
                                                                      <a href="javascript:void(0)"
-                                                                         @if ($item->status == 0) <div class="badge col-brown">Pending</div>
+                                                                         @if ($item->status == 0) <div class="badge col-brown">Applications Pending</div>
                                                                     @elseif($item->status == 1)
-                                                                    <div class="badge col-green">InProssess</div>
+                                                                    <div class="badge col-green">Applications InProssess</div>
                                                                     @elseif($item->status == 2)
-                                                                    <div class="badge col-red">Approved</div> @endif
+                                                                    <div class="badge col-red">Applications Approved</div> @endif
                                                                          </a>
                                                                  </td>
 
@@ -2770,7 +2770,7 @@ div#ui-datepicker-div {
         });
     </script>
 
-    
+
     <script>
        var doc_file_edit3="";
 

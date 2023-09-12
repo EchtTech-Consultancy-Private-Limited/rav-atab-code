@@ -32,7 +32,7 @@ nav {
   {
   	color: #000 !important;
   }
-  
+
 </style>
 
 
@@ -42,14 +42,14 @@ nav {
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -105,7 +105,7 @@ nav {
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">All FAQs</a>
                             </li>
-                           
+
                         </ul>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ nav {
                             <ul style="float:right; overflow:hidden;">
                             <form role="form" method="POST" action="{{ url('get-faqs') }}" id="frmfaqs">
                                 @csrf
-                                <li style="float:left;clear:none; margin-top:0px; margin-right:10px;"> 
+                                <li style="float:left;clear:none; margin-top:0px; margin-right:10px;">
                                     <select class="form-control" name="category" onchange="javascript:$('#frmfaqs').submit();">
                                         <option value="">Filter Category</option>
                                         @php
@@ -167,11 +167,11 @@ nav {
                                             <th class="center"> Created At </th>
                                             <th class="center"> Status </th>
                                             <th class="center"> Action </th>
-                                           
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      
+
                                     @foreach($faqs as $k=>$faq)
                                         <tr class="odd gradeX">
                                             <td class="center">@if(request()->page){{(((request()->page-1)*10)+$k+1)}}@else{{($k+1)}}@endif</td>
@@ -192,13 +192,13 @@ nav {
                                                     <i class="fa fa-trash" aria-hidden="true" style="line-height:1.5 !important;" ></i>
                                                 </a>
                                             </th>
-                                           
+
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                   
+
                                 </table>
-                                
+
                             </div>
                             {{ $faqs->links('pagination::bootstrap-5') }}
                         </div>
@@ -211,7 +211,7 @@ nav {
             </div>
         </div>
 
-   
+
 
 
     </section>

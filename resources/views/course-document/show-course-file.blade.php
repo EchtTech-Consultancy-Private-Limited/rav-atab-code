@@ -7,14 +7,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -93,7 +93,7 @@
                                         <div class="body">
 
                                             <object data="{{ asset('documnet'.'/'.$data) }}" type="application/pdf" width="100%" height="500px">
-                                                <p>Unable to display PDF file. 
+                                                <p>Unable to display PDF file.
                                                <a href="{{ asset('documnet'.'/'.$data) }}">Download</a> instead.</p>
                                             </object>
 

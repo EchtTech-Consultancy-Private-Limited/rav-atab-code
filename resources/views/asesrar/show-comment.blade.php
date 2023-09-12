@@ -7,14 +7,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -48,7 +48,7 @@
     </div>
 
 
-  
+
 <section class="content">
            @if (count($errors) > 0)
               <div class="alert alert-danger">
@@ -64,17 +64,17 @@
               <div class="block-header">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                          
+
                        <ul class="breadcrumb breadcrumb-style ">
                           <li class="breadcrumb-item">
                              <h6 class="page-title"> Documents  History </h6>
-                             
+
                           </li>
                           <li class="breadcrumb-item bcrumb-1">
                             <a href="{{url('/dashboard')}}">
                              <i class="fas fa-home"></i> Home</a>
                           </li>
-                          
+
                           <li class="breadcrumb-item active">Documents History </li>
                        </ul>
                        @if ($message = Session::get('success'))
@@ -99,16 +99,16 @@
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments  </th>
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments By Admin </th>
                                         <th class="center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label=" Name : activate to sort column ascending">Date </th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                                                                               
-                                                                    
-                                                                    
-                                                                    
-                                @foreach($comment as $key=>$comments) 
-                                                                                         
+
+
+
+
+                                @foreach($comment as $key=>$comments)
+
                                 <tr class="gradeX odd ">
                                          <td class="center sorting_1">{{ ++$key }}</td>
                                           <td class="center"><a ><b>{{$comments->comments}}</b></a></td>
@@ -116,11 +116,11 @@
                                          <td class="center"><a >{{$comments->created_at}}</a></td>
                                 </tr>
                                 @endforeach
-                                
+
                             </tbody>
                              </table>
                             </div></div>
-                            
+
                           </div>
                        </div>
                     </div>
@@ -135,17 +135,17 @@
 <script>
     $( document ).ready(function() {
          $('#doc-comment-textarea').hide();
-         
+
       });
 
           $('#show-view-doc-options').on('change', function(){
 
           var listvalue = $(this).val();
-          //alert(listvalue);   
+          //alert(listvalue);
           if(listvalue==1)
           {
                $('#doc-comment-textarea').hide();
-          } 
+          }
           else if(listvalue==2)
           {
               $('#doc-comment-textarea').show();
@@ -155,8 +155,8 @@
           {
               $('#doc-comment-textarea').hide();
           }
-             
-            
+
+
          });
 </script>
     @include('layout.footer')

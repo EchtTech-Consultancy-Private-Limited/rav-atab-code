@@ -22,14 +22,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -105,22 +105,22 @@
                                             </thead>
                                             <tbody>
 
-                                                 
+
                                                     @foreach($final_application as $key=>$final_applications)
- 
+
                                                     <tr class="odd gradeX">
                                                         <td class="center">{{++$key}}</td>
                                                         <td class="center">{{$final_applications->application_id}} </td>
 
                                                         <td class="center">
-                                                         
+
 
                                                      <!--<a href="mailto:{{get_user_email($final_applications->user_id)}}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a> -->
 
                                                         <a target="_blank" href="{{ '../storage/app/public/pdf/'.$final_applications->pdf }}"><button  class="btn btn-tbl-edit" data-toggle="modal" data-target="#exampleModal"><i class="material-icons">mail</i></button></a>
 
                                                         <a href="{{ asset('storage/app/public/pdf.$final_applications->application_id') }}" >
-                                                            
+
                                                         </a>
 
                                                         </td>

@@ -7,14 +7,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -50,7 +50,7 @@
 
      <section class="content">
         <div class="container-fluid">
-         
+
 
             @if(Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -61,9 +61,9 @@
                 {{session::get('fail')}}
             </div>
             @endif
-            
 
-           
+
+
 
 
             <div class="row ">
@@ -80,9 +80,9 @@
 
                                         <div class="body">
 
-                                            
+
                                                 <h4>Create NC</h4><br><br>
-                                              
+
                                                      <form method="post" action="{{ url('add-accr-comment-view-doc') }}">
                                                         @csrf
                                                         <input type="hidden" name="previous_url" value="{{ Request::url() }}">
@@ -112,7 +112,7 @@
                                                                     </select>
                                                                 </div>
 
-                                                            @endif    
+                                                            @endif
 
 
                                                             @if($doc_latest_record->notApraove_count == 2)
@@ -141,7 +141,7 @@
 
 
                                                             <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
-                                                                
+
                                                                 <label>Add Comment</label>
                                                                 <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="show-view-doc-options1"></textarea>
                                                             </div>
@@ -149,10 +149,10 @@
                                                         </div>
                                                     </form>
 
-                                          
-                                           
-                                                
-                                               
+
+
+
+
                                             </div>
 
                                     </div>
@@ -167,7 +167,7 @@
             </div>
         </div>
 
-        
+
         </div>
 
             <div class="row">
@@ -184,16 +184,16 @@
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments  </th>
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments By  </th>
                                         <th class="center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label=" Name : activate to sort column ascending">Date </th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                                                                               
-                                                                    
-                                                                    
-                                                                    
-                                @foreach($comment as $key=>$comments) 
-                                                                                         
+
+
+
+
+                                @foreach($comment as $key=>$comments)
+
                                 <tr class="gradeX odd ">
                                          <td class="center sorting_1">{{ ++$key }}</td>
                                           <td class="center"><a ><b>{{$comments->comments}}</b></a></td>
@@ -201,11 +201,11 @@
                                          <td class="center"><a >{{$comments->created_at}}</a></td>
                                 </tr>
                                 @endforeach
-                                
+
                             </tbody>
                              </table>
                             </div></div>
-                            
+
                           </div>
                        </div>
                     </div>
@@ -213,7 +213,7 @@
                  <a style="line-height:2;" type="button" class="btn btn-secondary" href="{{ url()->previous() }}">Back To Documents</a>
               </div>
             </div>
-    
+
     </section>
 
     <section class="content">
@@ -275,30 +275,34 @@
             </div>
         </div>
 
-        
+
         </div>
 
 
-    
+
     </section>
 
-   
+
 
 <br><br><br><br><br><br><br><br>
 <script>
     $( document ).ready(function() {
          $('#doc-comment-textarea').hide();
-         
+
       });
 
           $('#show-view-doc-options').on('change', function(){
 
           var listvalue = $(this).val();
-          //alert(listvalue);   
-          if(listvalue==1)
+         // alert(listvalue);
+          if(listvalue==2)
+          {
+               $('#doc-comment-textarea').show();
+          }
+          else if(listvalue==1)
           {
                $('#doc-comment-textarea').hide();
-          } 
+          }
           else if(listvalue==0)
           {
               $('#doc-comment-textarea').show();
@@ -308,8 +312,8 @@
           {
               $('#doc-comment-textarea').hide();
           }
-             
-            
+
+
          });
 </script>
 <script>

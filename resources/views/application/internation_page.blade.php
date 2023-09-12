@@ -478,7 +478,7 @@
                                                                         @if ($item->status == '0')
                                                                             <a
                                                                                 onclick="return confirm_option('change status')"
-                                                                                @if ($item->status == 0) <div class="badge col-black">Pending</div> @elseif($item->status == 1) <div class="badge col-green">Proccess</div> @else @endif
+                                                                                @if ($item->status == 0) <div class="badge col-black">Payment Pending</div> @elseif($item->status == 1) <div class="badge col-green">Payment Proccess</div> @else @endif
                                                                                 </a>
                                                                     </td>
                                                                         @endif
@@ -487,7 +487,7 @@
                                                             @if ($item->status == '1')
                                                                 <a
                                                                     onclick="return confirm_option('change status')"
-                                                                    @if ($item->status == 0) <div class="badge col-black">Pending</div> @elseif($item->status == 1) <div class="badge col-green">Proccess</div> @else @endif
+                                                                    @if ($item->status == 0) <div class="badge col-black">Payment Pending</div> @elseif($item->status == 1) <div class="badge col-green">Payment Proccess</div> @else @endif
                                                                     </a>
                                                                     </td>
                                                             @endif
@@ -495,7 +495,7 @@
                                                             @if ($item->status == '2')
                                                                 <a
                                                                     onclick="return confirm_option('change status')"
-                                                                    @if ($item->status == 1) <div class="badge col-green">Proccess</div> @elseif($item->status == 2) <div class="badge col-green">Approved</div> @else @endif
+                                                                    @if ($item->status == 1) <div class="badge col-green">Payment Proccess</div> @elseif($item->status == 2) <div class="badge col-green">Payment Approved</div> @else @endif
                                                                     </a>
                                                                     </td>
                                                             @endif

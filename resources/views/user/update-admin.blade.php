@@ -6,14 +6,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -480,7 +480,7 @@
                                                     password</label>
 
                                                 <i class="fa fa-eye " aria-hidden="true" id="togglecpassword"></i>
-                                           
+
                                             <input type="password" placeholder="Confirm Password" name="cpassword"
                                                 value="{{ old('cpassword') }}" for="cpassword" id="cpassword">
 
@@ -568,7 +568,7 @@
     </section>
 
   <script>
-       
+
          $(document).ready(function(){
 
         var myData = $('#Country').val();
@@ -584,7 +584,7 @@
                         console.log(result);
                         $('#state').html('<option value="">-- Select State --</option>');
                         $.each(result, function (key, value) {
-                       
+
                             $("#state").append('<option value="' + value
                                 .id + '" '+(value.id=={{$data->state}}?"SELECTED":"")+'>' + value.name + '</option>');
                         });
@@ -594,7 +594,7 @@
 
 
 
-              
+
             });
 
 
@@ -602,8 +602,8 @@
 
             var myData = $('#state').val();
 
-           
-     
+
+
                 $.ajax({
                     url: "{{url('/city-list')}}",
                     type: "get",
@@ -616,7 +616,7 @@
                         console.log(result);
                         $('#city').html('<option value="">-- Select City --</option>');
                         $.each(result, function (key, value) {
-                       
+
                             $("#city").append('<option value="' + value
                                 .id + '" '+(value.id=={{$data->city}}?"SELECTED":"")+'>' + value.name + '</option>');
                         });
@@ -626,7 +626,7 @@
 
 
 
-              
-            });    
+
+            });
     </script>
     @include('layout.footer')

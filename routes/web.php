@@ -130,6 +130,7 @@ Route::get('/previews-application-second/{id?}',[LevelController::class,'preview
 Route::get('/previews-application-third/{id?}',[LevelController::class,'previews_application3']);
 Route::get('/previews-application-fourth/{id?}',[LevelController::class,'previews_application4']);
 Route::get('/preveious-app-status/{id?}',[LevelController::class,'preveious_app_status']);
+Route::post('/image-app-status/{id?}',[LevelController::class,'image_app_status']);
 Route::get('/upload-document/{id}/{course_id}',[LevelController::class,'upload_document']);
 Route::post('/upload-document',[LevelController::class,'uploads_document']);
 //Manage Manual
@@ -137,6 +138,9 @@ Route::get('manage-manual', [AdminController::class, 'manage_manual'])->name('ma
 Route::post('save-manual', [AdminController::class, 'save_manual']);
 Route::get('delete-manual/{id}', [AdminController::class, 'delete_manual']);
 
+
+//payment status
+Route::get('paymentstatus/{id?}', [LevelController::class, 'paymentstatus']);
 
 //previews-application upgrade
 Route::get('/application-upgrade-second',[LevelController::class,'application_upgrade2']);
@@ -189,7 +193,6 @@ Route::post('update-faq/{id?}', [FaqController::class, 'update_faq_post']);
 Route::get('activate-faq/{id?}', [FaqController::class, 'activate_faq']);
 Route::get('delete-faq/{id?}', [FaqController::class, 'delete_faq']);
 
-
 //Grievance section
 Route::get('Grievance-list',[DashboardController::class,'Grievance_list']);
 Route::get('Grievance',[DashboardController::class,'Grievance']);
@@ -217,10 +220,8 @@ Route::get('assessor-user-manuals', [AssessorController::class, 'manual_list']);
 
 //add courses root
 Route::post('/add-courses',[LevelController::class,'add_courses']);
-
 Route::get('/Assessor-view/{id}', [LevelController::class, 'Assessor_view']);
 Route::get('/secretariat-view/{id}', [LevelController::class, 'secretariat_view']);
-
 Route::get('view-application-documents', [applicationController::class, 'assessor_view_docs']);
 Route::get('/accr-view-document/{id}/{course_id}', [LevelController::class, 'accr_upload_document']);
 

@@ -1,22 +1,22 @@
 @include('layout.header')
 
 
-<title>RAV Accreditation || Previous Applications View</title>
-
+<title>RAV Accreditation Previous Applications View</title>
+{{--
 <link rel="stylesheet" type="text/css" href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
-
+ --}}
 </head>
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -26,22 +26,19 @@
 
     <div>
 
-
         @if (Auth::user()->role == '1')
-        @include('layout.sidebar')
-    @elseif(Auth::user()->role == '2')
-        @include('layout.siderTp')
-    @elseif(Auth::user()->role == '3')
-        @include('layout.sideAss')
-    @elseif(Auth::user()->role == '4')
-        @include('layout.sideprof')
-    @elseif(Auth::user()->role == '5')
-        @include('layout.secretariat')
-    @elseif(Auth::user()->role == '6')
-        @include('layout.sidbarAccount')
-    @endif
-
-
+            @include('layout.sidebar')
+        @elseif(Auth::user()->role == '2')
+            @include('layout.siderTp')
+        @elseif(Auth::user()->role == '3')
+            @include('layout.sideAss')
+        @elseif(Auth::user()->role == '4')
+            @include('layout.sideprof')
+        @elseif(Auth::user()->role == '5')
+            @include('layout.secretariat')
+        @elseif(Auth::user()->role == '6')
+            @include('layout.sidbarAccount')
+        @endif
 
         @include('layout.rightbar')
 
@@ -66,7 +63,8 @@
                         </ul>
 
 
-                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back </a>
+                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary"
+                            style="float:right;">Back </a>
 
                     </div>
                 </div>
@@ -86,7 +84,7 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Title</strong></label><br>
-                                                <label>{{ $data->title ??'' }}</label>
+                                                <label>{{ $data->title ?? '' }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -228,46 +226,47 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div><div class="header">
+                                </div>
+                                <div class="header">
                                     <h2>Single Point of Contact Details (SPoC) Details</h2>
                                 </div>
-                                 <div class="row clearfix">
+                                <div class="row clearfix">
                                     <div class="col-sm-4">
-                                     <div class="form-group">
-                                        <div class="form-line">
-                                           <label ><strong>Person Name</strong></label><br>
-                                               <label >{{ $spocData->Person_Name  }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Person Name</strong></label><br>
+                                                <label>{{ $spocData->Person_Name }}</label>
+                                            </div>
                                         </div>
-                                     </div>
                                     </div>
 
-                                  <div class="col-sm-4">
-                                     <div class="form-group">
-                                        <div class="form-line">
-                                           <label><strong>Contact Number</strong></label><br>
-                                            {{ $spocData->Contact_Number ??'' }}
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Contact Number</strong></label><br>
+                                                {{ $spocData->Contact_Number ?? '' }}
+                                            </div>
                                         </div>
-                                     </div>
-                                  </div>
-                                  <div class="col-sm-4">
-                                     <div class="form-group">
-                                        <div class="form-line">
-                                           <label><strong>Designation</strong></label><br>
-                                            {{ $spocData->designation ??'' }}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Designation</strong></label><br>
+                                                {{ $spocData->designation ?? '' }}
+                                            </div>
                                         </div>
-                                     </div>
-                                  </div>
-                                  <div class="col-sm-4">
-                                     <div class="form-group">
-                                        <div class="form-line">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
 
-                                            <label><strong>Email Id</strong></label><br>
+                                                <label><strong>Email Id</strong></label><br>
 
-                                              <label>{{ $spocData->Email_ID ??'' }}</label>
+                                                <label>{{ $spocData->Email_ID ?? '' }}</label>
 
+                                            </div>
                                         </div>
-                                     </div>
-                                  </div>
+                                    </div>
                                 </div>
                                 <!-- basic end -->
                             </div>
@@ -289,7 +288,7 @@
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h2>Add Course Information Record No: {{ $k + 1 }}</h2>
+                                <h2>View Course Information Record No: {{ $k + 1 }}</h2>
                             </div>
                             <div class="body">
 
@@ -359,7 +358,7 @@
                                         </div>
                                     </div> -->
 
-                                     <div class="col-sm-4">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Course Brief</strong></label><br>
@@ -379,13 +378,20 @@
                                         </div>
                                     </div> -->
 
-                                     <div class="col-sm-12 text-right">
-                                       <div class="form-group">
-                                          <div class="form-line">
-                                             <a href="{{ url('/admin-view-document' . '/' .$ApplicationCourses->application_id.'/'.$ApplicationCourses->id) }}"
-                                      class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
-                                          </div>
-                                       </div>
+
+
+
+
+
+                                    <div class="col-sm-12 text-right">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <a href="{{ url('/admin-view-document' . '/' . $ApplicationCourses->application_id . '/' . $ApplicationCourses->id) }}"
+                                                    class="btn text-white bg-primary"
+                                                    style="float:right; color: #fff ; line-height: 25px;">View
+                                                    Documents</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- basic end -->
@@ -469,58 +475,132 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Screenshot</strong></label><br>
-                                             <!--    <label>{{ $ApplicationPayment->payment_details_file ?? '' }}
-                                                   </label> -->
 
-                                                @if(isset($ApplicationPayment->payment_details_file))
-                                                <a target="_blank" class="image-link" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}">
-                                                <img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" style="width:100px;height:70px;">
-                                                 </a>
-                                                 @endif
+
+
+                                                <?php
+                                                substr($ApplicationPayment->payment_details_file, -3);
+
+                                                $data = substr($ApplicationPayment->payment_details_file, -3);
+                                                ?>
+
+
+                                                @if ($data == 'pdf')
+                                                    <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                        target="_blank" title="Document 3" id="docpdf3" download>
+                                                        <i class="fa fa-download mr-2"></i>Payment pdf
+                                                    </a>
+                                                @else
+                                                    @if (isset($ApplicationPayment->payment_details_file))
+                                                        <a target="_blank" class="image-link"
+                                                            href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                            <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                                style="width:100px;height:70px;">
+                                                        </a>
+                                                    @endif
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
-                                    @if(Auth::user()->role == '6')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Verify Payment </strong></label><br>
-                                                <label><br>
+
+                                    @if (Auth::user()->role == '6')
+                                    @if ($ApplicationPayment->status == '1')
+                                        <div class="col-md-4">
+                                            <form action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id))  }}" method="post" id="frmtypes" enctype= "multipart/form-data">
+                                           @csrf
+                                                <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Payment remark </strong></label><br>
+
+                                                    <div class="col-md-12">
+                                                        <input type="text" name="paymentremark" required value="{{ $ApplicationPayment->payment_remark }}" >
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4 payment_file" >
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Payment Confirm </strong></label><br>
+
+                                                    <div class="col-md-12">
+                                                        <input type="file" name="payment_slip"
+                                                            class="form-control" required value="{{$ApplicationPayment->payment_slip }}" onchange="javascript:$('#frmtypes').submit();">
+                                                    </div>
+
+                                                    {{ $ApplicationPayment->payment_slip }}
 
 
+                                                <?php
+                                                substr($ApplicationPayment->payment_slip, -3);
 
-                                                 @if ($ApplicationPayment->status == '0')
+                                                $data = substr($ApplicationPayment->payment_slip, -3);
+                                                ?>
+
+
+                                                    @if ($data == 'pdf')
+                                                    <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                        target="_blank" title="Document 3" id="docpdf3" download>
+                                                        <i class="fa fa-download mr-2"></i>Payment pdf
+                                                    </a>
+                                                @else
+                                                    @if (isset($ApplicationPayment->payment_slip))
+                                                        <a target="_blank" class="image-link"
+                                                            href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
+                                                            <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                                style="width:100px;height:70px;">
+                                                        </a>
+                                                    @endif
+                                                @endif
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                 @endif
+                                @endif
+
+                                    @if (Auth::user()->role == '6')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Verify Payment </strong></label><br>
+                                                    <label><br>
+                                                        @if ($ApplicationPayment->status == '0')
                                                             <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                 onclick="return confirm_option('change status')"
-                                                                @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-secondary btn-sm">Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Proccess</div> @else @endif
+                                                                @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-secondary btn-sm"> Application Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @else @endif
                                                                 </a>
+                                                        @endif
 
-                                                  @endif
-
-
-                                                    @if ($ApplicationPayment->status == '1')
+                                                        @if ($ApplicationPayment->status == '1')
                                                         <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                             onclick="return confirm_option('change status')"
                                                             @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-secondary">Pending</strong></div>
 
-                                                            @elseif($ApplicationPayment->status == 1)
-                                                            <div class=" col-green" ><strong class="btn btn-success">Proccess</strong></div> @else @endif
+                                                        @elseif($ApplicationPayment->status == 1)
+                                                        <div class=" col-green" ><strong class="btn btn-success">Proccess</strong></div> @else @endif
                                                             </a>
+                                                        @endif
 
-                                                    @endif
 
-                                            @if ($ApplicationPayment->status == '2')
-                                                <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                    onclick="return confirm_option('change status')"
-                                                    @if ($ApplicationPayment->status == 1) <div class="badge col-green">Proccess</div> @elseif($ApplicationPayment->status == 2) <div class=" col-green"><strong class="btn btn-success">Approved</strong></div> @else @endif
-                                                    </a>
+                                                        @if ($ApplicationPayment->status == '2')
+                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                                                onclick="return confirm_option('change status')"
+                                                                @if ($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @elseif($ApplicationPayment->status == 2) <div class=" col-green"><strong class="btn btn-success">Application Approved</strong></div> @else @endif
+                                                                </a>
+                                                        @endif
 
-                                            @endif
-
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     @endif
+
+
+
+
                                 </div>
                                 <!-- basic end -->
                             </div>
@@ -551,45 +631,44 @@
 
 
 
-        <script>
-   function confirm_option(){
-      if(!confirm("Are you sure to change action of this record!")){
-         return false;
-      }
+    <script>
+        function confirm_option() {
+            if (!confirm("Are you sure to change action of this record!")) {
+                return false;
+            }
 
-      return true;
+            return true;
 
-   }
-</script>
+        }
+    </script>
 
     <script>
+        $(document).ready(function() {
 
-$(document).ready(function () {
+            $('.image-link').magnificPopup({
 
-$('.image-link').magnificPopup({
+                type: 'image',
 
-type: 'image',
+                mainClass: 'mfp-with-zoom',
 
-mainClass: 'mfp-with-zoom',
+                gallery: {
 
-gallery: {
+                    enabled: true
 
-enabled: true
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300, // duration of the effect, in milliseconds
+                    easing: 'ease-in-out', // CSS transition easing function
+                    opener: function(openerElement) {
+                        return openerElement.is('img') ? openerElement : openerElement.find('img');
+                    }
+                }
+            });
+        });
+    </script>
 
-},
-zoom: {
-enabled: true,
-duration: 300, // duration of the effect, in milliseconds
-easing: 'ease-in-out', // CSS transition easing function
-opener: function (openerElement) {
-return openerElement.is('img') ? openerElement : openerElement.find('img');
-}}
-});
-});
 
-
-
-</script>
 
     @include('layout.footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
