@@ -32,7 +32,7 @@ nav {
   {
   	color: #000 !important;
   }
-  
+
 </style>
 
 
@@ -42,14 +42,14 @@ nav {
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -105,14 +105,14 @@ nav {
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">General FAQs</a>
                             </li>
-                           
+
                         </ul>
                     </div>
                 </div>
             </div>
-           
 
-                    
+
+
                         @foreach($faqs as $k=>$faq)
                             <div class="row clearfix">
                                 <div class="col-lg-12 col-md-12">
@@ -137,9 +137,9 @@ nav {
                                 </div>
                             </div>
                            @endforeach
-                                  
-                      
-                           
+
+
+
                         </div>
 
 
@@ -150,7 +150,7 @@ nav {
             </div>
         </div>
 
-   
+
 
 
     </section>

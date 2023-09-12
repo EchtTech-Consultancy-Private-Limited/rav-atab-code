@@ -6,14 +6,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>

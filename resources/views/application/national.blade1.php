@@ -196,7 +196,7 @@
 
                                                                            checked
 
-                                                                           @endif @endforeach 
+                                                                           @endif @endforeach
                                                                      class="d-none"     >
 
                                                                     <span>

@@ -24213,7 +24213,7 @@ input.course_input {
 }
 #progressbar li:first-child:after {
 	/*connector not needed before the first step*/
-	content: none; 
+	content: none;
 }
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
@@ -24292,7 +24292,7 @@ div#ui-datepicker-div{
 .card .body .header{
     padding-left: 0px;
     padding-bottom: 25px;
-}   
+}
 
 .table tbody tr td a {
     white-space: nowrap;
@@ -24349,4 +24349,13 @@ div#ui-datepicker-div{
     .sidebar, .overlay-open.ls-closed .sidebar{
         top: 8%;
     }
+}
+
+.info-box-5 a {
+    color: #fff;
+}
+
+.card .info-box-5 a{
+
+    color: #fff !important;
 }

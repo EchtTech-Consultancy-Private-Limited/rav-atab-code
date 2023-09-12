@@ -2490,9 +2490,25 @@ public function appliction_status()
 
 }
 
+public function image_app_status(Request $request,$id){
+
+    $data=ApplicationPayment::find(dDecrypt($id));
+    if($request->hasfile('payment_slip'))
+    {
+          $doc1=$request->file('payment_slip');
+          $name =$doc1->getClientOriginalName();
+          $filename = time().$name;
+          $doc1->move('documnet/',$filename);
+          $data->payment_slip = $filename;
+      }
+    $data->payment_remark=$request->paymentremark;
+    $data->save();
+    return back();
+
+}
+
 public function preveious_app_status($id)
 {
-
 
     $user=ApplicationPayment::find(dDecrypt($id));
    // dd($user);
@@ -2727,18 +2743,15 @@ public function course_edits(Request $request,$id)
 
 }
 
-public function Assessor_view($id)
-{
-
+public function Assessor_view($id){
     $Application =Application::whereid(dDecrypt($id))->get();
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
-
+    $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
+   // dd($ApplicationDocument);
     $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
-
-
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
-    return view('application.accesser.Assessor_view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
+    return view('application.accesser.Assessor_view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
 }
 
 public function secretariat_view($id)

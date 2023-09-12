@@ -7,14 +7,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -330,7 +330,7 @@
                                         </div>
                                     </div>
 
-                                    
+
 
 
 
@@ -435,7 +435,7 @@
                                                 <label><strong>Payment Screenshot</strong></label><br>
                                              <!--    <label>{{ $ApplicationPayment->payment_details_file ?? '' }}
                                                    </label> -->
-                                                
+
                                                 @if(isset($ApplicationPayment->payment_details_file))
                                                 <a target="_blank" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}">
                                                 <img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" style="width:100px;height:70px;">

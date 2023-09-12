@@ -9,14 +9,14 @@
 <body class="light">
 
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -178,14 +178,14 @@
                                                          </div>
                                                      </div>
                                                  </div>
-                                                 
+
                                              </div>
 
 
-                                     
+
                                 <div class="header">
                                     <h2>Single Point of Contact Details (SPoC) Details</h2>
-                                </div>   
+                                </div>
                                  <div class="row clearfix">
                                     <div class="col-sm-3">
                                      <div class="form-group">
@@ -204,17 +204,17 @@
                                         </div>
                                      </div>
                                   </div>
-                                     
+
                                   <div class="col-sm-3">
                                      <div class="form-group">
                                         <div class="form-line">
                                            <label><strong>Designation</strong></label><br>
                                            {{ $spocData->designation ??'' }}
-                                            
+
                                         </div>
                                      </div>
                                   </div>
-                                     
+
                                   <div class="col-sm-3">
                                      <div class="form-group">
                                         <div class="form-line">
@@ -413,7 +413,7 @@
                                    <div class="form-group">
                                       <div class="form-line">
                                          <label><strong>Payment Screenshot</strong></label><br>
-                                         
+
                                          @if(isset($ApplicationPayment->payment_details_file))
                                          <a target="_blank" class="image-link" href="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" ><img src="{{ asset('uploads/'.$ApplicationPayment->payment_details_file) }}" alt="Payment File" width="100px;" height="100px;"></a>
 

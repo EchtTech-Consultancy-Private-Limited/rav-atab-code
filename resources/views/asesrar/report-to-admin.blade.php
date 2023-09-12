@@ -7,14 +7,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -50,7 +50,7 @@
 <h1>Hreeeeeeeeeeeeeeee</h1>
      <section class="content">
         <div class="container-fluid">
-         
+
 
             @if(Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -61,9 +61,9 @@
                 {{session::get('fail')}}
             </div>
             @endif
-            
 
-           
+
+
 
 
             <div class="row ">
@@ -80,23 +80,23 @@
 
                                         <div class="body">
 
-                                            
+
                                                 <h4>Send Document to Admin</h4><br><br>
-                                              
+
                                                      <form method="post" action="{{ url('document-report-toadmin') }}">
                                                         @csrf
                                                         <input type="hidden" name="previous_url" value="{{ Request::url() }}">
                                                         <input type="hidden"  value="{{$course_id}}" name="course_id">
-                                                        
+
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-8" >
-                                                                
+
                                                                 <label>Add Comment</label>
                                                                 <input type="text" name="doc_admin_comment" class="form-control" required>
                                                             </div>
 
                                                              <div class="col-sm-12 col-md-4">
-                                                               
+
                                                                 <input type="hidden" name="send_to_admin" value="1">
                                                             </div>
 
@@ -104,10 +104,10 @@
                                                         </div>
                                                     </form>
 
-                                            
-                                           
-                                                
-                                               
+
+
+
+
                                             </div>
 
                                     </div>
@@ -122,31 +122,31 @@
             </div>
         </div>
 
-        
+
         </div>
 
 
-    
+
     </section>
 
 
-   
+
 
 <br><br><br><br><br><br><br><br>
 <script>
     $( document ).ready(function() {
          $('#doc-comment-textarea').hide();
-         
+
       });
 
           $('#show-view-doc-options').on('change', function(){
 
           var listvalue = $(this).val();
-          //alert(listvalue);   
+          //alert(listvalue);
           if(listvalue==1)
           {
                $('#doc-comment-textarea').hide();
-          } 
+          }
           else if(listvalue==2)
           {
               $('#doc-comment-textarea').show();
@@ -156,8 +156,8 @@
           {
               $('#doc-comment-textarea').hide();
           }
-             
-            
+
+
          });
 </script>
     @include('layout.footer')

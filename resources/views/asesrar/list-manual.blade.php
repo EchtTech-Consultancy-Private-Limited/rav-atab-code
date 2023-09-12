@@ -6,14 +6,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -53,7 +53,7 @@
                           <a href="{{url('/dashboard')}}">
                           <i class="fas fa-home"></i> Home</a>
                        </li>
-                       
+
                        <li class="breadcrumb-item active">Manuals List</li>
                     </ul>
                  </div>
@@ -71,7 +71,7 @@
                        </h2>
 
                     </div>
-                    
+
                        <div class="table-responsive">
                           <table class="table table-hover js-basic-example contact_list">
                              <thead>
@@ -101,11 +101,11 @@
                                 @endforeach
                              </tbody>
                           </table>
-                       </div>     
+                       </div>
 
                      </div>
 
-                       
+
                     </div>
                  </div>
               </div>
@@ -113,5 +113,5 @@
         </div>
      </section>
 
-     
+
     @include('layout.footer')

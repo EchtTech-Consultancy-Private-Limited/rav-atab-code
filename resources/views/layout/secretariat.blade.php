@@ -35,43 +35,44 @@
                 </a>
             </li>
 
-            <li class="{{ Request::is('profile-get')?'active':''; }}">
+
+            <li class="{{ Request::is('profile-get')?'active':''}}">
                     <a href="{{ url('profile-get') }}" >
                         <i data-feather="user"></i>
                         <span>Manage Profile</span>
                     </a>
             </li>
 
-            <li  class="{{ (Request::is('nationl-secretariat') ||  Request::is('internationl-secretariat') )?'active':''; }}" >
+            <li  class="{{ (Request::is('nationl-secretariat') ||  Request::is('internationl-secretariat') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>
                     <span>Manage Application</span>
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('nationl-secretariat')?'active':''; }}" >
+                    <li class="{{ Request::is('nationl-secretariat')?'active':''}}" >
                         <a  href="{{ url('nationl-secretariat') }}">National Application</a>
                     </li>
 
-                    <li class="{{ Request::is('internationl-secretariat')?'active':''; }}">
+                    <li class="{{ Request::is('internationl-secretariat')?'active':''}}">
                         <a  href="{{ url('/internationl-secretariat') }}">International Application</a>
                     </li>
 
                 </ul>
             </li>
 
-            <!-- <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''; }}" >
+            <!-- <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>
                     <span>My Availability</span>
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('assessor-desktop-assessment')?'active':''; }}" >
+                    <li class="{{ Request::is('assessor-desktop-assessment')?'active':''}}" >
                         <a  href="#">Desktop Assessment</a>
                     </li>
 
-                    <li class="{{ Request::is('assessor-onsite-assessment-page')?'active':''; }}">
+                    <li class="{{ Request::is('assessor-onsite-assessment-page')?'active':''}}">
                         <a  href="#">Onsite / Virtual Assessment</a>
                     </li>
 
@@ -94,7 +95,7 @@
             </li>
 
 
-            <li class="{{ Request::is('assessor-user-manuals')?'active':''; }}">
+            <li class="{{ Request::is('assessor-user-manuals')?'active':''}}">
                 <a href="#">
                     <i data-feather="message-circle"></i>
                     <span>Assessor Manual</span>

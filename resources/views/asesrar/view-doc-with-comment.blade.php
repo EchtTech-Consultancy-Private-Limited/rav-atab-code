@@ -7,14 +7,14 @@
 
 <body class="light">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
+    {{-- <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> --}}
     @if (count($errors) > 0)
        <div class="alert alert-danger">
           <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -60,7 +60,7 @@
 
      <section class="content">
         <div class="container-fluid">
-         
+
 
             @if(Session::has('success'))
             <div class="alert alert-success" role="alert">
@@ -71,9 +71,9 @@
                 {{session::get('fail')}}
             </div>
             @endif
-            
 
-           
+
+
 
 
             <div class="row ">
@@ -90,9 +90,9 @@
 
                                         <div class="body">
 
-                                            
+
                                                 <h4>Create NC</h4><br><br>
-                                         
+
                                                      <!--you can send comment to admin on this record only one time -->
                                                     @if(get_doccomment_status($doc_id)==3 || get_doccomment_status($doc_id)==2)
                                                      <h4 class="text-center">You Have Send Comment to Admin</h4>
@@ -100,7 +100,7 @@
                                                      @elseif(get_doccomment_status($doc_id)==1)
 
                                                      <h4 class="text-center">You Document Profile Locked Successfully</h4>
-                                                     
+
                                                      @else
                                                      <form method="post" action="{{ url('add-accr-comment-view-doc') }}">
                                                         @csrf
@@ -110,7 +110,7 @@
                                                         <input type="hidden"  value="{{$course_id}}" name="course_id">
                                                         <div class="row">
 
-                                                      
+
 
                                                         @if($doc_latest_record->notApraove_count == 1)
 
@@ -123,7 +123,7 @@
                                                                 </select>
                                                             </div>
 
-                                                        @endif    
+                                                        @endif
 
 
                                                         @if($doc_latest_record->notApraove_count == 2)
@@ -151,7 +151,7 @@
 
 
                                                             <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
-                                                                
+
                                                                 <label>Add Comment</label>
                                                                 <textarea rows="10" cols="60" name="doc_comment" class="form-control"></textarea>
                                                             </div>
@@ -160,10 +160,10 @@
                                                     </form>
                                                     @endif
 
-                                             
-                                           
-                                                
-                                               
+
+
+
+
                                             </div>
 
                                     </div>
@@ -178,7 +178,7 @@
             </div>
         </div>
 
-        
+
     <div class="row">
                  <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -191,18 +191,18 @@
                                    <tr role="row">
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> S.No. </th>
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments  </th>
-                                        <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments By  </th> 
+                                        <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments By  </th>
                                         <th class="center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label=" Name : activate to sort column ascending">Date </th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                                                                               
-                                                                    
-                                                                    
-                                                                    
-                                @foreach($comment as $key=>$comments) 
-                                                                                         
+
+
+
+
+                                @foreach($comment as $key=>$comments)
+
                                 <tr class="gradeX odd ">
                                          <td class="center sorting_1">{{ ++$key }}</td>
                                           <td class="center"><a ><b>{{$comments->comments}}</b></a></td>
@@ -211,11 +211,11 @@
                                          <td class="center"><a >{{$comments->created_at}}</a></td>
                                 </tr>
                                 @endforeach
-                                
+
                             </tbody>
                              </table>
                             </div></div>
-                            
+
                           </div>
                        </div>
                     </div>
@@ -224,8 +224,8 @@
               </div>
             </div>
 
-    
-    
+
+
     </section>
 
     <section class="content">
@@ -286,30 +286,30 @@
             </div>
         </div>
 
-        
+
         </div>
 
 
-    
+
     </section>
 
-   
+
 
 <br><br><br><br><br><br><br><br>
 <script>
     $( document ).ready(function() {
          $('#doc-comment-textarea').hide();
-         
       });
 
           $('#show-view-doc-options').on('change', function(){
-
           var listvalue = $(this).val();
-          //alert(listvalue);   
-          if(listvalue==1)
+          if(listvalue==0){
+            $('#doc-comment-textarea').show();
+          }
+          else if(listvalue==1)
           {
                $('#doc-comment-textarea').hide();
-          } 
+          }
           else if(listvalue==3)
           {
               $('#doc-comment-textarea').show();
@@ -319,8 +319,8 @@
           {
               $('#doc-comment-textarea').hide();
           }
-             
-            
+
+
          });
 </script>
     @include('layout.footer')

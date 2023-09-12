@@ -1,7 +1,7 @@
 @include('layout.header')
 
 
-   
+
 <title>RAV Accreditation</title>
 
 <style>
@@ -25,7 +25,7 @@ td select.form-control.text-center {
     height: 100%;
     background:rgba(0,0,0,0.5);;
     overflow: hidden;
-    text-align: center; 
+    text-align: center;
 }
 .loading-img .box {
     position: absolute;
@@ -33,7 +33,7 @@ td select.form-control.text-center {
     left: 50%;
     margin: auto;
     transform: translate(-50% , -50%);
-    z-index: 2;  
+    z-index: 2;
 }
 
 .uploading-text {
@@ -54,22 +54,22 @@ td.text-justify {
 <body class="light">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
-        <div class="loader">
+        <!-- <div class="loader">
             <div class="m-t-30">
                 <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
             </div>
             <p>Please wait...</p>
         </div>
-    </div>
+    </div> -->
     <!-- #END# Page Loader -->
 
-    
+
 <!-- Progressbar Modal Poup -->
-<div class="loading-img d-none" id="loader">                 
+<div class="loading-img d-none" id="loader">
     <div class="box">
-    <img src="{{ asset('assets/img/VAyR.gif') }}">  
+    <img src="{{ asset('assets/img/VAyR.gif') }}">
     <h5 class="uploading-text"> Uploading... </h5>
-</div>       
+</div>
             </div>
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -219,7 +219,7 @@ td.text-justify {
                                                         </div>
                                                 </form>
                                             </div>
-                                            
+
                                             <hr> -->
 
 
@@ -236,7 +236,7 @@ td.text-justify {
                                               </div>
                                           <!-- table-striped  -->
                                             <div class="table-responsive mt-3">
-                                            
+
                                                 <table class="table table-hover js-basic-example contact_list">
                                                     <thead>
                                                         <tr>
@@ -248,7 +248,7 @@ td.text-justify {
                                                     </thead>
                                                     <tbody class="text-center">
 
-<!-- 
+<!--
                                                         @foreach ($file as $k=> $files )
                                                             <tr class="odd gradeX">
                                                                 <td class="center">{{  $k+1 }}</td>
@@ -280,9 +280,9 @@ td.text-justify {
                                                                         <input type="hidden" id="course_id" name="course_id" value="{{ $course_id }}">
                                                                         <input type="hidden" class="section_id" name="section_id" value="VMO">
                                                                         <input type="hidden" class="doc_id" name="doc_id" value="VMO1">
-                                                                        
+
                                                                         </form>
-                                                                        
+
                                                                     </td>
                                                                 </tr>
 
@@ -314,7 +314,7 @@ td.text-justify {
                                                                     <td>
                                                                         <input type="file" class="from-control"/>
                                                                     </td>
-                                                                </tr>                                                              
+                                                                </tr>
                                                                 <tr>
                                                                     <td>VMO.4</td>
                                                                     <td class="text-justify">The institution shall define its quality policy. </td>
@@ -362,12 +362,12 @@ td.text-justify {
 
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 2(OGA) ORGANIZATION, GOVERNANCE AND ADMINISTRATION </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
 
@@ -443,7 +443,7 @@ td.text-justify {
                                                                     <td>OGA.5</td>
                                                                     <td class="text-justify">
                                                                     The institution shall have a policy and procedure for outsourcing, if any. The policy shall ensure that the
-                                                                    outsourced entity complies with applicable parts of the standards and part of the assessment. 
+                                                                    outsourced entity complies with applicable parts of the standards and part of the assessment.
                                                                     The accredited training providers must witness the delivery of the outsourced entity at least once annually.
                                                                     </td>
                                                                     <!--<td> <div class="form-group default-select mb-0">
@@ -476,12 +476,12 @@ td.text-justify {
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 3- (FA) FINANCIAL RESOURCES </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
 
@@ -503,12 +503,12 @@ td.text-justify {
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 4- (HR) HUMAN RESOURCES </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
 
@@ -549,7 +549,7 @@ td.text-justify {
                                                                 <tr>
                                                                     <td>HR.3</td>
                                                                     <td class="text-justify">
-                                                                    The institution shall have a mechanism to identify training needs of its personnel. 
+                                                                    The institution shall have a mechanism to identify training needs of its personnel.
                                                                     The feedback of the training is to be collected, analyzed and used for improvement.
                                                                     </td>
                                                                     <!--<td> <div class="form-group default-select mb-0">
@@ -634,12 +634,12 @@ td.text-justify {
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 5- (IR) INFRASTRUCTURE RESOURCES </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
 
@@ -696,12 +696,12 @@ td.text-justify {
 
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 6- (SS) STUDENT SERVICES </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
 
@@ -758,12 +758,12 @@ td.text-justify {
 
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 7- (CC) COURSE CURRICULUM </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
 
@@ -840,7 +840,7 @@ td.text-justify {
                                                                 <tr>
                                                                     <td>CC.5</td>
                                                                     <td class="text-justify">
-                                                                    The institution shall define the learning outcome of its training courses. 
+                                                                    The institution shall define the learning outcome of its training courses.
                                                                     </td>
                                                                     <!--<td> <div class="form-group default-select mb-0">
     <select class="form-control text-center">
@@ -872,12 +872,12 @@ td.text-justify {
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 8- (EA) EVALUATION AND ASSESSMENT </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
                                                                 <tr>
@@ -986,12 +986,12 @@ td.text-justify {
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 9- (LR)- LEARNING RESOURCES </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
                                                                 <tr>
@@ -1029,12 +1029,12 @@ td.text-justify {
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th colspan="4">                                                                        
+                                                                    <th colspan="4">
                                                                         <div class="header">
                                                                           <h2 class="text-center">CHAPTER 10- (QI)- QUALITY IMPROVEMENT </h2>
                                                                         </div>
-                                                                    </td>                                                                   
-                                                              
+                                                                    </td>
+
                                                                 </tr>
 
                                                                 <tr>
@@ -1106,11 +1106,11 @@ td.text-justify {
                                                                 </tr>
 
 
-                                                              
+
                                                     </tbody>
                                                 </table>
 
-                                            
+
                                           </div>
 
                                         </div>
@@ -1134,10 +1134,10 @@ td.text-justify {
 <script>
    $('.chapter1_vmo_1').on('change',function(e) {
            e.preventDefault();
-           
-           let formData = new FormData(document.getElementById('submitform_doc_form'));    
-           formData.append('fileup', $('input[type=file]').val().split('\\').pop()); 
-           
+
+           let formData = new FormData(document.getElementById('submitform_doc_form'));
+           formData.append('fileup', $('input[type=file]').val().split('\\').pop());
+
            $("#loader").removeClass('d-none');
            $(".success-msg").removeClass('d-none');
            $.ajaxSetup({
@@ -1154,8 +1154,8 @@ td.text-justify {
             processData:false,
             contentType: false,
             enctype: 'multipart/form-data',
-            
-            
+
+
 
             success: function (response) {
                 $("#loader").addClass('d-none');
@@ -1164,8 +1164,8 @@ td.text-justify {
                 window.location.href= "{{ url(Request::url()) }}";
                 $("#loader").append('d-none');
                 //$("#mydiv").load(location.href + " #mydiv");
-              
-                
+
+
             }
         });
      });

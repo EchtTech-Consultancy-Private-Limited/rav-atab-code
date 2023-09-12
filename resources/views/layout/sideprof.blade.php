@@ -8,7 +8,7 @@
             <!-- Menu -->
             <div class="menu">
                 <ul class="list">
-                    <li class="sidebar-user-panel active">
+                    <li class="sidebar-user-panel">
                         <div class="user-panel">
                           <div class=" image">
                                <img src="{{ asset('assets/images/usrbig.jpg')}}" class="user-img-style" alt="User Image" />
@@ -28,7 +28,7 @@
                     </a>
                 </li>
 
-                <li class="{{ Request::is('profile')?'active':''; }}">
+                <li class="{{ Request::is('profile')?'active':''}}">
                     <a href="{{ url('/profile-get') }}" >
                         <i data-feather="user"></i>
                         <span>Manage Profile</span>
@@ -55,7 +55,7 @@
                     </li>
 
                     <li>
-                        <a href="#" onClick="return false;"  class="menu-toggle" >
+                        <a href="#" onClick="return false;" class="menu-toggle" >
                             <i data-feather="monitor"></i>
                             <span>Manage Course</span>
                         </a>
@@ -72,7 +72,7 @@
 
 
                     <li>
-                        <a href="#" onClick="return false;"   >
+                        <a href="#" onClick="return false;">
                             <i data-feather="message-circle"></i>
                             <span>Grievance</span>
                         </a>
