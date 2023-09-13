@@ -30,7 +30,7 @@
                 max-width: 1440px;
             }
         }
-      
+
     </style>
 
 
@@ -112,7 +112,7 @@
                             <div class="inner-box">
                                 <a href="{{ url('/login/Accessor') }}">
                                     <img src="{{ asset('landing_page/employee.png')}}" alt="admin-login">
-                                    <h4>Accessor Login <i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
+                                    <h4>Assessor Login <i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
                                 </a>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
             </div>
 
 
-            
+
         </div>
     </section>
 
