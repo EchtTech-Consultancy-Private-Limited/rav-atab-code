@@ -58,7 +58,7 @@ class AuthController extends Controller
     if($data != null){
       if($data->role == $request->role )
        {
-          dd($data->status);
+          //dd($data->status);
             if($data->status == 0)
             {
                 //dd($request->all());
