@@ -93,6 +93,14 @@
 
                   ?>
 
+                @elseif(request()->path() == 'login/account')
+
+                <?php
+
+                $data= "Account"
+
+                ?>
+
                   @endif
 
 
@@ -159,6 +167,8 @@
                                 <input type="hidden" placeholder="role" name="role" value="{{ 4 }}">
                                 @elseif(request()->path() == 'login/secretariat')
                                 <input type="hidden" placeholder="role" name="role" value="{{ 5 }}">
+                                @elseif(request()->path() == 'login/account')
+                                <input type="hidden" placeholder="role" name="role" value="{{ 6 }}">
                                 @endif
 
 

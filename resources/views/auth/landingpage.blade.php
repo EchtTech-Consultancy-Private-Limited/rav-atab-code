@@ -116,7 +116,7 @@
                                 </a>
                             </div>
                         </div>
-                  <div class="col-md-2"></div>
+
                         <div class="col-md-4">
                             <div class="inner-box">
                                 <a href="{{ url('/login/secretariat') }}">
@@ -134,6 +134,16 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="inner-box">
+                                <a href="{{ url('/login/account') }}">
+                                    <img src="{{ asset('landing_page/businessman1.png')}}" alt="admin-login">
+                                    <h4>Account Login<i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

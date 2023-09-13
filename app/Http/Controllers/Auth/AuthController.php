@@ -54,13 +54,14 @@ class AuthController extends Controller
    // dd($request->all());
 
       $data = user::where('email',$request->email)->first();
-    //dd($data != null);
+    //dd($data);
     if($data != null){
-      if($data->role == $request->role || $data->role == '6')
+      if($data->role == $request->role )
        {
+          //dd($request->all());
             if($data->status == 0)
             {
-
+                //dd($request->all());
                 if(Auth::attempt($request->only('email','password')))
                 {
 
@@ -74,6 +75,7 @@ class AuthController extends Controller
 
             }else
             {
+               // dd($request->all());
 
                 return back()->with('fail','Your account is not active Yet. please Contact Your website Adminstrator.');
 
