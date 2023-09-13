@@ -54,10 +54,11 @@ class AuthController extends Controller
    // dd($request->all());
 
       $data = user::where('email',$request->email)->first();
-
-      if(count($data)>0 && $data->role == $request->role || $data->role == '6')
+    //dd($data != null);
+    if($data != null){
+      if($data->role == $request->role || $data->role == '6')
        {
-            if($data[0]->status == 0)
+            if($data->status == 0)
             {
 
                 if(Auth::attempt($request->only('email','password')))
@@ -83,8 +84,10 @@ class AuthController extends Controller
             return back()->with('fail','Unauthorised User!!');
         }
 
+    } else{
+        return back()->with('fail','Record not exist!!');
     }
-
+   }
 
     public function register()
     {
