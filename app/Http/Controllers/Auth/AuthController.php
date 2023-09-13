@@ -53,9 +53,9 @@ class AuthController extends Controller
 
    // dd($request->all());
 
-      $data = user::where('email',$request->email)->get();
+      $data = user::where('email',$request->email)->first();
 
-      if(count($data)>0 && $data[0]->role == $request->role || $data[0]->role == '6')
+      if(count($data)>0 && $data->role == $request->role || $data->role == '6')
        {
             if($data[0]->status == 0)
             {
