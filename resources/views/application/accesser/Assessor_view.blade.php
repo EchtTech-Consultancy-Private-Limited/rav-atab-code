@@ -342,6 +342,7 @@
                                     </div>
 
                                     @if($spocData->status == 1)
+                                    @if($ApplicationDocument[0]->document_show == 2)
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -377,6 +378,10 @@
                                     </div>
 
                                     @endif
+                                    @endif
+
+
+
 
 
                                     <div class="col-sm-12 text-right">
@@ -464,6 +469,41 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Payment Screenshot</strong></label><br>
+
+
+
+                                                <?php
+                                                substr($ApplicationPayment->payment_details_file, -3);
+
+                                                $data = substr($ApplicationPayment->payment_details_file, -3);
+                                                ?>
+
+
+                                                @if ($data == 'pdf')
+                                                    <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                        target="_blank" title="Document 3" id="docpdf3" download>
+                                                        <i class="fa fa-download mr-2"></i>Payment pdf
+                                                    </a>
+                                                @else
+                                                    @if (isset($ApplicationPayment->payment_details_file))
+                                                        <a target="_blank" class="image-link"
+                                                            href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                            <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                                style="width:100px;height:70px;">
+                                                        </a>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
                                 <!-- basic end -->
                             </div>

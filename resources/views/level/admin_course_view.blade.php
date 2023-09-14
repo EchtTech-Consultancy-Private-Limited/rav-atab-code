@@ -267,6 +267,70 @@
                                             </div>
                                         </div>
                                     </div>
+
+
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Declaration</strong></label><br>
+                                                <label><a href="{{ url('show-course-pdf/'.$ApplicationDocument[0]->document_file) }}" target="_blank" id="docpdf1" title="Download Document 1" ><i class="fa fa-download mr-2"></i> PDF 1
+                                                </a></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Course Curriculum / Material / Syllabus </strong></label><br>
+                                                <label> <a href="{{ url('show-course-pdf/'.$ApplicationDocument[1]->document_file) }}" target="_blank" id="docpdf2" title="Download Document 2" ><i class="fa fa-download mr-2"></i> PDF 2
+                                                </a></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Course Details (Excel format) </strong></label><br>
+                                                <label>
+                                                    <a  href="{{ url('documnet/'.$ApplicationDocument[2]->document_file) }}" target="_blank" title="Document 3" id="docpdf3" download>
+                                                        <i class="fa fa-download mr-2"></i> PDF 3
+                                                    </a>
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                @if($ApplicationDocument[0]->document_show == 0)
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                              <a href="{{ url('document-view/'.dEncrypt($ApplicationDocument[0]->id)) }}"
+                                        onclick="return confirm_option('change status')"
+                                        @if($ApplicationDocument[0]->document_show == 0) <div class="badge col-green">hide</div> @elseif ($ApplicationDocument[0]->document_show == 1) <div class=" col-green"><strong class="btn btn-success">show</strong></div> @else @endif
+                                        </a>
+                                    </div>
+                                </div>
+
+                                @elseif($ApplicationDocument[0]->document_show == 1)
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                              <a href="{{ url('document-view-accessor/'.dEncrypt($ApplicationDocument[0]->id)) }}"
+                                        onclick="return confirm_option('change status')"
+                                        @if($ApplicationDocument[0]->document_show == 1) <div class="badge col-green">hide</div> @elseif ($ApplicationDocument[0]->document_show == 2) <div class=" col-green"><strong class="btn btn-success">show</strong></div> @else @endif
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                @else
+
+                                @endif
                                 </div>
                                 <!-- basic end -->
                             </div>
@@ -382,8 +446,9 @@
 
 
 
-
+                                    @if (Auth::user()->role != '6')
                                     <div class="col-sm-12 text-right">
+
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <a href="{{ url('/admin-view-document' . '/' . $ApplicationCourses->application_id . '/' . $ApplicationCourses->id) }}"
@@ -393,6 +458,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <!-- basic end -->
                             </div>
@@ -449,6 +515,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+
 
 
                                 <div class="row clearfix">
@@ -581,7 +649,7 @@
                                                             @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-secondary">Pending</strong></div>
 
                                                         @elseif($ApplicationPayment->status == 1)
-                                                        <div class=" col-green" ><strong class="btn btn-success">Proccess</strong></div> @else @endif
+                                                        <div class=" col-green" ><strong class="btn btn-success">In Process</strong></div> @else @endif
                                                             </a>
                                                         @endif
 

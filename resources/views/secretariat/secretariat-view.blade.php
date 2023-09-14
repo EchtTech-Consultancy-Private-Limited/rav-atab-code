@@ -40,13 +40,13 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <ul class="breadcrumb breadcrumb-style ">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">Assessor View Application</h4>
+                                <h4 class="page-title">Secretariat View Application</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
-                                    <i class="fas fa-home"></i> Applications</a>
+                                    <i class="fas fa-home"></i> Secretariat</a>
                             </li>
-                            <li class="breadcrumb-item active"> Assessor View Applications </li>
+                            <li class="breadcrumb-item active"> Secretariat View Applications </li>
                         </ul>
                     </div>
                 </div>
@@ -240,7 +240,60 @@
                                         </div>
                                      </div>
                                   </div>
+
+                                  @if($spocData->status == 1)
+                                  @if($ApplicationDocument[0]->document_show == 1)
+
+                                  <div class="col-sm-4">
+                                      <div class="form-group">
+                                          <div class="form-line">
+                                              <label><strong>Declaration</strong></label><br>
+                                              <label><a href="{{ url('show-course-pdf/'.$ApplicationDocument[0]->document_file) }}" target="_blank" id="docpdf1" title="Download Document 1" ><i class="fa fa-download mr-2"></i> PDF 1
+                                              </a></label>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-sm-4">
+                                      <div class="form-group">
+                                          <div class="form-line">
+                                              <label><strong>Course Curriculum / Material / Syllabus </strong></label><br>
+                                              <label> <a href="{{ url('show-course-pdf/'.$ApplicationDocument[1]->document_file) }}" target="_blank" id="docpdf2" title="Download Document 2" ><i class="fa fa-download mr-2"></i> PDF 2
+                                              </a></label>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-sm-4">
+                                      <div class="form-group">
+                                          <div class="form-line">
+                                              <label><strong>Course Details (Excel format) </strong></label><br>
+                                              <label>
+                                                  <a  href="{{ url('documnet/'.$ApplicationDocument[2]->document_file) }}" target="_blank" title="Document 3" id="docpdf3" download>
+                                                      <i class="fa fa-download mr-2"></i> PDF 3
+                                                  </a>
+                                          </label>
+                                          </div>
+                                      </div>
+                                  </div>
+                                   @endif
+                                  @endif
+
                                 </div>
+
+
+                                @if($ApplicationDocument[0]->document_show == 1)
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                          <a href="{{ url('document-view-accessor/'.dEncrypt($ApplicationDocument[0]->id)) }}"
+                                    onclick="return confirm_option('change status')"
+                                    @if($ApplicationDocument[0]->document_show == 1) <div class="badge col-green">hide</div> @elseif ($ApplicationDocument[0]->document_show == 2) <div class=" col-green"><strong class="btn btn-success">show</strong></div> @else @endif
+                                    </a>
+                                </div>
+                                 </div>
+                            @endif
+
+
                                 <!-- basic end -->
                             </div>
                         </div>
@@ -261,7 +314,7 @@
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h2>Add Course Information Record No: {{ $k + 1 }}</h2>
+                                <h2>View Course Information Record No: {{ $k + 1 }}</h2>
                             </div>
                             <div class="body">
 
@@ -312,8 +365,8 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <label><strong>Valid From</strong></label><br>
-                                                    <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at->addYear())) }}</label>
+                                                    <label><strong> Valid To</strong></label><br>
+                                                    <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at)) }}</label>
 
                                                 </div>
                                             </div>
@@ -323,10 +376,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong> Valid To</strong></label><br>
 
-                                                <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at)) }}</label>
-                                                 </div>
+                                                <label><strong>Valid From</strong></label><br>
+                                                <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at->addYear())) }}</label>
+
+
+                                            </div>
                                         </div>
                                     </div>
 

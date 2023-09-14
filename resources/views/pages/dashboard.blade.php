@@ -82,8 +82,6 @@
 
         @if(Auth::user()->role  == 1 )
 
-
-
         @elseif(Auth::user()->role  == 2)
 
         nav-Tp
@@ -93,8 +91,6 @@
         nav-Ass
 
         @elseif(Auth::user()->role  == 4)
-
-
 
         @endif
 
@@ -140,7 +136,6 @@
         @elseif(Auth::user()->role  == 6)
 
         @include('layout.sidbarAccount')
-
 
         @endif
 

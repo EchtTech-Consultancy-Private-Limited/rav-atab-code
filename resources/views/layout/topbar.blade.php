@@ -52,7 +52,7 @@
                              @elseif(Auth::user()->role == 4)
                                  Professional
                               @elseif(Auth::user()->role == 5)
-                              secretariat
+                                Secretariat
                               @elseif(Auth::user()->role == 6)
                                Accountant
                              @endif
