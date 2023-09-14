@@ -227,6 +227,10 @@ Route::get('/accr-view-document/{id}/{course_id}', [LevelController::class, 'acc
 
 //upgrade level route
 
+Route::get('document-view/{id?}',[LevelController::class, 'document_view']);
+Route::get('document-view-accessor/{id?}',[LevelController::class, 'document_view_accessor']);
+
+
 Route::post('/upgrade-level', [UpgradeLevelController::class, 'upgrade_level']);
 
 
