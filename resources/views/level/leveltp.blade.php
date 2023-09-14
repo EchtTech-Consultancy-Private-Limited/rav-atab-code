@@ -1766,7 +1766,7 @@ div#ui-datepicker-div {
                                                      <th class="center">Declaration </th>
                                                      <td class="center">
 
-                                                         <a href="" target="_blank" id="docpdf1" title="Download Document 1" ><i class="fa fa-download mr-2"></i> PDF 1
+                                                         <a href="" target="_blank" id="docpdf1" title="PDF 1" ><i class="fa fa-download mr-2"></i> PDF 1
                                                          </a>
                                                      </td>
 
@@ -1776,7 +1776,7 @@ div#ui-datepicker-div {
                                                      <th class="center">Course Curriculum / Material / Syllabus </th>
                                                      <td class="center">
 
-                                                         <a href="" target="_blank" id="docpdf2" title="Download Document 2" ><i class="fa fa-download mr-2"></i> PDF 2
+                                                         <a href="" target="_blank" id="docpdf2" title="PDF 2" ><i class="fa fa-download mr-2"></i> PDF 2
                                                          </a>
                                                     </td>
                                                  </tr>
@@ -1785,7 +1785,7 @@ div#ui-datepicker-div {
                                                      <th class="center">Course Details (Excel format)  </th>
                                                      <td class="center">
 
-                                                        <a  target="_blank"  href="" title="Document 3" id="docpdf3" download>
+                                                        <a  target="_blank"  href="" title="PDF 3" id="docpdf3" download>
                                                              <i class="fa fa-download mr-2"></i> PDF 3
                                                          </a>
 
