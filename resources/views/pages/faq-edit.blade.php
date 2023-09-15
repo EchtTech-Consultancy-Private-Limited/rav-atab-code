@@ -12,8 +12,6 @@
 
 </head>
 
-
-
 <body class="light">
     <!-- Page Loader -->
     {{-- <div class="page-loader-wrapper">

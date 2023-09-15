@@ -1433,8 +1433,6 @@ td.text-justify {
              $("#view_doc").hide();
              $("#show_comments").hide();
           }
-
-
          });
 </script>
     @include('layout.footer')

@@ -62,10 +62,6 @@
             </div>
             @endif
 
-
-
-
-
             <div class="row ">
 
             <div class="row clearfix">
@@ -79,8 +75,6 @@
                                     <div class="card project_widget">
 
                                         <div class="body">
-
-
                                                 <h4>Send Document to Admin</h4><br><br>
 
                                                      <form method="post" action="{{ url('document-report-toadmin') }}">
@@ -89,25 +83,21 @@
                                                         <input type="hidden"  value="{{$course_id}}" name="course_id">
 
                                                         <div class="row">
-                                                            <div class="col-sm-12 col-md-8" >
-
+                                                            <div class="col-sm-12 col-md-4">
                                                                 <label>Add Comment</label>
                                                                 <input type="text" name="doc_admin_comment" class="form-control" required>
                                                             </div>
 
-                                                             <div class="col-sm-12 col-md-4">
-
+                                                             <div class="col-sm-12 col-md-4 d-none">
                                                                 <input type="hidden" name="send_to_admin" value="1">
                                                             </div>
 
-                                                            <input type="submit" value="Add Comment" class="btn btn-primary">
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <input type="submit" value="Add Comment" class="btn btn-primary">
+                                                            </div>
+                                                           
                                                         </div>
                                                     </form>
-
-
-
-
-
                                             </div>
 
                                     </div>
@@ -132,7 +122,7 @@
 
 
 
-<br><br><br><br><br><br><br><br>
+
 <script>
     $( document ).ready(function() {
          $('#doc-comment-textarea').hide();
