@@ -424,7 +424,7 @@ class LevelController extends Controller
   public function level1tp(Request $request,$id=null)
   {
 
-    //dd(dDecrypt($id));
+
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
         /*
@@ -2748,7 +2748,6 @@ public function secretariat_view($id){
     return view('secretariat.secretariat-view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData,'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
 
 }
-
 public function document_view($id){
 
    $ApplicationDocument=ApplicationDocument::find(dDecrypt($id));
