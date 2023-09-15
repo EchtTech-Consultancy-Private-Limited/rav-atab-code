@@ -383,10 +383,10 @@
                         @error('city')
                             <p class="error">{{ $message }}</p>
                             @enderror
-                    </div> -->
-
+                    </div> 
+ 
                 </div>
-            </div>
+           
 
 
                 <div class="iconInput_container">
@@ -559,8 +559,8 @@
                         @enderror
                     </label>
                 </div>
-
-            </div>
+                </div>
+            
             <ul style="padding-left:0px;">
 
 
@@ -607,7 +607,7 @@
         </form>
     </div>
 
-
+   
     <script>
         let password = document.querySelector('#password');
         let togglePassword = document.querySelector('#togglePassword');

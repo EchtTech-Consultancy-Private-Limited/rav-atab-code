@@ -93,7 +93,8 @@ Route::get('view-user/{id?}',[adminController::class,'user_view']);
 Route::post('/new-application',[LevelController::class,'new_application']);
 
 Route::get('level-list',[LevelController::class, 'level_list']);
-Route::get('/level-first/{id?}', [LevelController::class, 'level1tp']);
+
+Route::get('/level-first/{id?}',[LevelController::class,'level1tp']);
 
 Route::get('/level-first-upgrade/{upgrade_application_id?}/{id?}', [LevelController::class, 'level1tp_upgrade']);
 
