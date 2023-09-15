@@ -110,3 +110,211 @@
 [stacktrace]
 #0 {main}
 "} 
+[2023-09-15 12:07:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:08:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:09:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:10:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:11:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:12:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:13:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:14:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:15:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:16:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:17:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:18:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:19:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:20:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:21:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:22:51] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:23:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:24:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:25:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:26:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:27:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:28:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:29:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:30:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:31:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:32:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:33:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:34:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:35:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:36:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 12:37:52] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:02:32] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:03:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:04:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:05:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:06:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:07:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:08:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:09:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:10:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:11:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:12:30] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:13:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:14:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:15:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:16:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:17:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:18:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:19:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:20:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:21:29] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2023-09-15 14:22:30] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 
