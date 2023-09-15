@@ -437,7 +437,7 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
-    //dd($id);
+
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
 
