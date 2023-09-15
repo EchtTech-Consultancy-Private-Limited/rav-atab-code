@@ -423,6 +423,7 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
+
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
         /*
@@ -431,6 +432,7 @@ class LevelController extends Controller
             $form_step_type="withour-session-step";
          }
         */
+
 
        //return $form_step_type;
 
@@ -442,6 +444,7 @@ class LevelController extends Controller
 
  if($id)
  {
+
 
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
@@ -2739,7 +2742,23 @@ public function secretariat_view($id)
 
 
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
+
+    return view('secretariat.secretariat-view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData,'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
+
+}
+public function document_view($id){
+
+
+    $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     return view('secretariat.secretariat-view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
 }
+
+public function document_view_accessor($id){
+
+    $ApplicationDocument=ApplicationDocument::find(dDecrypt($id));
+    $ApplicationDocument->document_show=2;
+    $ApplicationDocument->save();
+    return back();
+ }
 
 }
