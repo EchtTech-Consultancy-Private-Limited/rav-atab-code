@@ -11,6 +11,8 @@ class ApplicationCourse extends Model
 
     protected $casts = [
         'mode_of_course' => 'array',
-       
+            'status'
     ];
+
+
 }

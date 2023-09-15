@@ -42,17 +42,23 @@ use App\Mail\assessorSingleFinalMail;
 use App\Mail\tpApplicationmail;
 
 use App\Models\Add_Document;
+use App\Models\asessor_application;
 use App\Models\DocComment;
 use App\Mail\paymentSuccessMail;
 
 class LevelController extends Controller
 {
 
+    public function notification(Request $request){
+
+       // $data=DB::table('asessor_applications')->where('id',$request->myData)->first();
+        $data = asessor_application::find($request->myData);
+        $data->notification_id='1';
+        $data->save();
+    }
 
     public function level_list()
     {
-
-
         //$data=Application::whereuser_id(Auth::user()->id)->get();
         //$data=Application::whereuser_id(Auth::user()->id)->where('status','0')->get();
         $Country =Country::get();
@@ -63,14 +69,11 @@ class LevelController extends Controller
          ->join('countries','applications.country', '=', 'countries.id')->get();
         //dd($data);
 
-        if(count($data) > 0)
-        {
-
+        if(count($data) > 0){
             return view("level.levellist",['data'=>$data]);
-
         }
-        else
-        {   dd("else");
+        else{
+            // dd("else");
             return redirect('level-first');
         }
     }
@@ -92,20 +95,18 @@ class LevelController extends Controller
     $Application =Application::whereid(dDecrypt($id))->get();
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
+    $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
     $spocData =DB::table('applications')->where('id',$Application[0]->id)->first();
-
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
-    return view('level.admin_course_view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
+    return view('level.admin_course_view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData,'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
     }
 
-    public function level_view($id)
-    {
+    public function level_view($id){
      $data = LevelInformation::find(dDecrypt($id));
      return view('level.levelview_page',['data'=>$data]);
     }
 
-    public function update_level($id)
-    {
+    public function update_level($id){
     $data = LevelInformation::find(dDecrypt($id));
     return view('level.update_level',['data'=>$data]);
     }
@@ -192,22 +193,8 @@ class LevelController extends Controller
   {
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
-        /* if(empty($form_step_type))
-         {
-           $form_step_type="withour-session-step";
-         }*/
 
-       //return $form_step_type;
-
-         // if($id)
-         // {
-         //     $id=decrypt($id);
-         // }
-
-
- if($id)
- {
-
+ if($id){
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
     $item=LevelInformation::whereid('1')->get();
@@ -417,9 +404,6 @@ class LevelController extends Controller
        /*end level list */
 
       return view('level.leveltp',['level_list_data'=>$level_list_data,'collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs],compact('form_step_type'));
-
-
-
  }
 
   }
@@ -428,25 +412,13 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
+
+        // dd($id);
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
-        /*
-         if(empty($form_step_type))
-         {
-            $form_step_type="withour-session-step";
-         }
-        */
 
-       //return $form_step_type;
-
-         if($id)
-         {
-             $id=decrypt($id);
-         }
-    //  return $id;
-
- if($id)
- {
+    if($id)
+    {
 
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
@@ -1096,26 +1068,11 @@ public function newapplication()
  {
 
 
- // return $request->all();
-
-//   /* $this->validate($request, [
-//            'doc2' => 'mimes:pdf',
-
-//     ]);*/
-
-// $this->validate($request, [
-//     'doc1' =>  "max:5120",
-//     'doc2' =>  "max:5120",
-//     'doc3' =>  "max:5120",
-// ]);
-
  $active='active';
  $course_name=$request->course_name;
  $course_duration=$request->course_duration;
  $eligibility=$request->eligibility;
  $mode_of_course=$request->mode_of_course;
-
-
 
  $course_brief=$request->course_brief;
  $level_id =$request->level_id;
@@ -1169,10 +1126,10 @@ public function newapplication()
      $file->mode_of_course=$mode_of_course;
      $file->course_brief=$course_brief[$i];
      $file->valid_from=$request->created_at;
-     $file->status='0';
+    //  $file->status= 0;
+
      $file->payment='false';
      $file->save();
-
 
      $data = new ApplicationDocument;
      $data->document_type_name='doc1';
@@ -1187,7 +1144,7 @@ public function newapplication()
      }else{
          $data->application_id =$request->application_id;
      }
-
+     $data->status='0';
      $data->level_id=$request->level_id;
      $data->course_number=$file->id;
      $data->save();
@@ -1208,7 +1165,6 @@ public function newapplication()
          $data->application_id =$request->application_id;
 
      }
-
      $data->level_id=$request->level_id;
      $data->course_number=$file->id;
      $data->save();
@@ -1403,10 +1359,8 @@ public function newapplication()
 
   //level information view page 4 url
 
-public function previews_application1($ids,$application_id)
-{
-
-     $id=Auth::user()->id;
+public function previews_application1($ids,$application_id){
+    $id=Auth::user()->id;
     $item=LevelInformation:: whereid('1')->get();
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')
             ->join('countries','users.country', '=', 'countries.id')
@@ -2264,28 +2218,22 @@ public function document_report_by_admin_submit(Request $request)
 
    foreach($doc_record_status as $doc_status)
    {
-
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
        $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
-
-
    }
 
    $doc_record_status=DocComment::where('status',0)->where('course_id',$course_id)->get();
 
    foreach($doc_record_status as $doc_status)
    {
-
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
        $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
-
-
    }
    /*dd("ye");
    return $doc_record_status;
@@ -2461,9 +2409,6 @@ public function acc_doc_comments_backup(Request $request)
 //    //return response()->json("Course Added Successfully");
 // }
 
-
-
-
 public function  course_status()
 {
 
@@ -2482,9 +2427,25 @@ public function appliction_status()
 
 }
 
+public function image_app_status(Request $request,$id){
+
+    $data=ApplicationPayment::find(dDecrypt($id));
+    if($request->hasfile('payment_slip'))
+    {
+          $doc1=$request->file('payment_slip');
+          $name =$doc1->getClientOriginalName();
+          $filename = time().$name;
+          $doc1->move('documnet/',$filename);
+          $data->payment_slip = $filename;
+      }
+    $data->payment_remark=$request->paymentremark;
+    $data->save();
+    return back();
+
+}
+
 public function preveious_app_status($id)
 {
-
 
     $user=ApplicationPayment::find(dDecrypt($id));
    // dd($user);
@@ -2719,32 +2680,45 @@ public function course_edits(Request $request,$id)
 
 }
 
-public function Assessor_view($id)
-{
-
+public function Assessor_view($id){
     $Application =Application::whereid(dDecrypt($id))->get();
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
-
-    $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
-
-
+    $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
+   // dd($ApplicationDocument);
+    // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
+    $spocData =DB::table('applications')->where('id',$Application[0]->id)->first();
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
-    return view('application.accesser.Assessor_view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
+    return view('application.accesser.Assessor_view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
 }
 
-public function secretariat_view($id)
-{
-
+public function secretariat_view($id){
     $Application =Application::whereid(dDecrypt($id))->get();
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
-
-    $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
+    $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
+   // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
+    $spocData =DB::table('applications')->where('id',$Application[0]->id)->first();
 
 
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
-    return view('secretariat.secretariat-view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
+    return view('secretariat.secretariat-view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData,'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
 }
+public function document_view($id){
+
+   $ApplicationDocument=ApplicationDocument::find(dDecrypt($id));
+
+   $ApplicationDocument->document_show=1;
+   $ApplicationDocument->save();
+   return back();
+}
+
+public function document_view_accessor($id){
+
+    $ApplicationDocument=ApplicationDocument::find(dDecrypt($id));
+    $ApplicationDocument->document_show=2;
+    $ApplicationDocument->save();
+    return back();
+ }
 
 }
