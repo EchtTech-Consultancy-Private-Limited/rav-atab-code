@@ -2771,6 +2771,4 @@ public function document_view_accessor($id){
     return back();
  }
 
-
-
 }
