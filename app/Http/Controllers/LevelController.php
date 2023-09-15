@@ -447,14 +447,6 @@ class LevelController extends Controller
          }
         */
 
-       //return $form_step_type;
-
-        //  if(dDecrypt($id))
-        //  {
-        //      $id=decrypt($id);
-        //  }
-    //  return $id;
-
  if($id)
  {
 
