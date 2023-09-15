@@ -442,9 +442,9 @@ class LevelController extends Controller
         //  }
     //  return $id;
 
+    if($id)
+    {
 
- if(dDecrypt($id))
- {
 
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
