@@ -201,18 +201,6 @@ class LevelController extends Controller
   {
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
-        /* if(empty($form_step_type))
-         {
-           $form_step_type="withour-session-step";
-         }*/
-
-       //return $form_step_type;
-
-         // if($id)
-         // {
-         //     $id=decrypt($id);
-         // }
-
 
  if($id){
     $id= $id;
