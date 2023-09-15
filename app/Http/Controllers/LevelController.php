@@ -29,18 +29,13 @@ use App\Mail\SendAcknowledgment;
 use App\Mail\AdmintoAssessorSingleFinalMail;
 use App\Mail\assessorAdminFinalApplicationMail;
 use App\Mail\adminSingleDocumentMail;
-
 use App\Mail\uploadDocumentFirstMail;
-
 use App\Mail\tpAdminApplicationmail;
-
 use App\Mail\assessorFinalApplicationMail;
 use App\Mail\assessorToself;
 use App\Mail\assessorSingleAdminFinalApplicationMail;
 use App\Mail\assessorSingleFinalMail;
-
 use App\Mail\tpApplicationmail;
-
 use App\Models\Add_Document;
 use App\Models\DocComment;
 use App\Mail\paymentSuccessMail;
