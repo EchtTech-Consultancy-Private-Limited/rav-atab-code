@@ -214,9 +214,7 @@ class LevelController extends Controller
          // }
 
 
- if($id)
- {
-
+ if($id){
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
     $item=LevelInformation::whereid('1')->get();
@@ -2274,28 +2272,22 @@ public function document_report_by_admin_submit(Request $request)
 
    foreach($doc_record_status as $doc_status)
    {
-
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
        $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
-
-
    }
 
    $doc_record_status=DocComment::where('status',0)->where('course_id',$course_id)->get();
 
    foreach($doc_record_status as $doc_status)
    {
-
        $doc_status->status;
        $doc_record_status=DocComment::where('status',$doc_status->status)->where('course_id',$course_id)->first();
        $doc_record_status->status=2;
        $doc_record_status->doc_comment_assessor_admin=$request->doc_admin_comment;
        $doc_record_status->save();
-
-
    }
    /*dd("ye");
    return $doc_record_status;
