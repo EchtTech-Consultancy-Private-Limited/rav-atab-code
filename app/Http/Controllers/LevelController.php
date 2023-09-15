@@ -2455,9 +2455,6 @@ public function acc_doc_comments_backup(Request $request)
 //    //return response()->json("Course Added Successfully");
 // }
 
-
-
-
 public function  course_status()
 {
 
