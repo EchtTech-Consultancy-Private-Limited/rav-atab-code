@@ -428,8 +428,8 @@ class LevelController extends Controller
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
 
- if($id)
- {
+    if($id)
+    {
 
     $id= $id;
     $faqs=Faq::where('category',1)->orderby('sort_order','Asc')->get();
