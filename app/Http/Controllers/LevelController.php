@@ -438,7 +438,7 @@ class LevelController extends Controller
 
          if($id)
          {
-             $id=decrypt($id);
+             $id=$id;
          }
     //  return $id;
 
