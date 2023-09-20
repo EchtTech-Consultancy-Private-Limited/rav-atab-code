@@ -2683,6 +2683,7 @@ public function Assessor_view($id){
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
     $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
    // dd($ApplicationDocument);
+
     // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
     $spocData =DB::table('applications')->where('id',$Application[0]->id)->first();
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
