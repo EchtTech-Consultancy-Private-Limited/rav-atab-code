@@ -2150,8 +2150,9 @@ active @endif "
                             contentType: false,
                             success: function(response) {
 
-                                console.log(response.id)
+                                alert('Application Create Successfully')
 
+                                //alert(response.id);
 
                                 if (response.id) {
 

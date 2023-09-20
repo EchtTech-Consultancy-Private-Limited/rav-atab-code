@@ -1357,7 +1357,7 @@ public function newapplication()
     Session::put('session_for_redirections', $session_for_redirection);
     $session_for_redirections= Session::get('session_for_redirections');
 
-  return  redirect('level-first')->with('success','Payment Done successfully!!!!');
+  return  redirect('level-first')->with('success','Payment Done successfully');
 
 
 //count payment in course status true
@@ -1365,7 +1365,7 @@ public function newapplication()
   }elseif($request->level_id =='2')
   {
 
-      return  redirect('level-first')->with('success','Course  successfully  Added!!!!');
+      return  redirect('level-first')->with('success','Course  successfully  Added');
 
       foreach($request->course_id as $item)
       {
@@ -1376,7 +1376,7 @@ public function newapplication()
       }
       $ApplicationCourse->save();
 
-      return  redirect('/level-second')->with('success','Payment Done successfully!!!!');;
+      return  redirect('/level-second')->with('success','Payment Done successfully');;
 
   }elseif($request->level_id =='3')
   {
@@ -1389,10 +1389,10 @@ public function newapplication()
       }
       $ApplicationCourse->save();
 
-      return  redirect('/level-third')->with('success',' Payment Done successfully!!!!');;
+      return  redirect('/level-third')->with('success',' Payment Done successfully');;
   }else
   {
-      return  redirect('/level-fourth')->with('success','Payment Done successfully!!!!');;
+      return  redirect('/level-fourth')->with('success','Payment Done successfully');;
   }
 
 
@@ -2479,26 +2479,20 @@ public function appliction_status()
 
 }
 
-public function preveious_app_status($id)
-{
-
-
+public function preveious_app_status($id){
     $user=ApplicationPayment::find(dDecrypt($id));
    // dd($user);
     $user_info=User::find($user->user_id);
 
-    if($user->status == '0')
-    {
-       // dd('hello');
+    if($user->status == '0'){
+          // dd('hello');
          $user->status='1';
 
-    }elseif($user->status == '1')
-    {
+    }elseif($user->status == '1'){
         //dd("hii");
         $user->status= '2';
         $file=ApplicationPayment::whereid(dDecrypt($id))->get('application_id');
         $files=Application::whereid($file[0]->application_id)->get('id');
-
         $file=Application::find($files[0]->id);
         $file->status= '1';
         $file->update();
