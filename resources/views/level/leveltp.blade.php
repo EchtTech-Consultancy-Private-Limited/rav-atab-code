@@ -2149,11 +2149,8 @@ active @endif "
                             dataType: 'json',
                             contentType: false,
                             success: function(response) {
-
                                 alert('Application Create Successfully')
-
                                 //alert(response.id);
-
                                 if (response.id) {
 
                                     $('.content_id').val(response.id);
