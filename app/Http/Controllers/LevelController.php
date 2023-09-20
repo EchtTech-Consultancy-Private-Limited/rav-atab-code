@@ -2733,7 +2733,6 @@ public function secretariat_view($id)
 
     $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
 
-
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     return view('secretariat.secretariat-view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
 }
