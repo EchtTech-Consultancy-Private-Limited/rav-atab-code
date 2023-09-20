@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Application;
@@ -2598,9 +2597,7 @@ $Document=ApplicationDocument::wherecourse_number($ApplicationCourse[0]->id)->ge
 $course_mode=['1'=>'Online','2'=>'Offline','3'=>'Hybrid'];
 
 
-//return gettype($modecourse);
-//dd(gettype($ApplicationCourse[0]->mode_of_course));
-//return $request->all();
+
 return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Document]);
 
 }
