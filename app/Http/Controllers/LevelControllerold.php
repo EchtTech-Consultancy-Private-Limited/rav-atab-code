@@ -29,18 +29,13 @@ use App\Mail\SendAcknowledgment;
 use App\Mail\AdmintoAssessorSingleFinalMail;
 use App\Mail\assessorAdminFinalApplicationMail;
 use App\Mail\adminSingleDocumentMail;
-
 use App\Mail\uploadDocumentFirstMail;
-
 use App\Mail\tpAdminApplicationmail;
-
 use App\Mail\assessorFinalApplicationMail;
 use App\Mail\assessorToself;
 use App\Mail\assessorSingleAdminFinalApplicationMail;
 use App\Mail\assessorSingleFinalMail;
-
 use App\Mail\tpApplicationmail;
-
 use App\Models\Add_Document;
 use App\Models\asessor_application;
 use App\Models\DocComment;
@@ -93,6 +88,7 @@ class LevelController extends Controller
     {
 
     $Application =Application::whereid(dDecrypt($id))->get();
+   // dd($Application);
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
     $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
@@ -412,6 +408,7 @@ class LevelController extends Controller
 
   public function level1tp(Request $request,$id=null)
   {
+    dd($request->all());
 
         // dd($id);
         //dd("we are work on manage ");
@@ -1205,13 +1202,13 @@ public function newapplication()
  if($request->level_id =='1')
  {
 
-     return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
+     return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added');
     // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
  }elseif($request->level_id =='2')
  {
         //dd("level2");
-        return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
+        return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added');
 
     //return  redirect('level-first-upgrade/'.$level2_application_id.'/'.$data->applications_id)->with('success','Course  successfully  Added!!!!');
 
@@ -1220,11 +1217,11 @@ public function newapplication()
  }elseif($request->level_id =='3')
  {
 
-     return  redirect('level-list')->with('success','Course successfully Added!!!!');
+     return  redirect('level-list')->with('success','Course successfully Added');
  }
  else
  {
-     return  redirect('level-list')->with('success','Course successfully Added!!!!');
+     return  redirect('level-list')->with('success','Course successfully Added');
  }
 
 }
@@ -1234,7 +1231,6 @@ public function newapplication()
 
 
   //couser payment
-
 
   public function new_application_payment(Request $request)
   {
@@ -1316,7 +1312,7 @@ public function newapplication()
     Session::put('session_for_redirections', $session_for_redirection);
     $session_for_redirections= Session::get('session_for_redirections');
 
-  return  redirect('level-first')->with('success','Payment Done successfully!!!!');
+  return  redirect('level-first')->with('success','Payment Done successfully');
 
 
 //count payment in course status true
@@ -1324,7 +1320,7 @@ public function newapplication()
   }elseif($request->level_id =='2')
   {
 
-      return  redirect('level-first')->with('success','Course  successfully  Added!!!!');
+      return  redirect('level-first')->with('success','Course Successfully Added');
 
       foreach($request->course_id as $item)
       {
@@ -1335,7 +1331,7 @@ public function newapplication()
       }
       $ApplicationCourse->save();
 
-      return  redirect('/level-second')->with('success','Payment Done successfully!!!!');;
+      return  redirect('/level-second')->with('success','Payment Done successfully');;
 
   }elseif($request->level_id =='3')
   {

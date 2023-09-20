@@ -90,9 +90,9 @@ class LevelController extends Controller
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
     $spocData =DB::table('applications')->where('id',$Application[0]->id)->first();
-
+    $ApplicationDocument=ApplicationDocument::whereapplication_id($Application[0]->id)->get();
     $data=DB::table('users')->where('users.id',$Application[0]->user_id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
-    return view('level.admin_course_view',['spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
+    return view('level.admin_course_view',['ApplicationDocument'=>$ApplicationDocument,'spocData'=>$spocData, 'data'=>$data,'ApplicationCourse'=>$ApplicationCourse,'ApplicationPayment'=>$ApplicationPayment]);
     }
 
     public function level_view($id)
