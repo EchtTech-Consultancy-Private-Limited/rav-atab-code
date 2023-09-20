@@ -35,7 +35,9 @@ use App\Mail\assessorFinalApplicationMail;
 use App\Mail\assessorToself;
 use App\Mail\assessorSingleAdminFinalApplicationMail;
 use App\Mail\assessorSingleFinalMail;
+
 use App\Mail\tpApplicationmail;
+
 use App\Models\Add_Document;
 use App\Models\DocComment;
 use App\Mail\paymentSuccessMail;
@@ -438,7 +440,7 @@ class LevelController extends Controller
 
          if($id)
          {
-             $id=decrypt($id);
+             $id=$id;
          }
     //  return $id;
 
@@ -862,7 +864,7 @@ public function newapplication()
     $item=LevelInformation:: whereid('3')->get();
     $course=ApplicationCourse::wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
   //  dd($course);
-  $Application =Application::whereuser_id(Auth::user()->id)->get();
+    $Application =Application::whereuser_id(Auth::user()->id)->first();
     $collection=ApplicationPayment::whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 
     if(Auth::user()->country == $this->get_india_id()){
@@ -953,7 +955,7 @@ public function newapplication()
     $faqs=Faq::where('category',4)->orderby('sort_order','Asc')->get();
 
     $item=LevelInformation:: whereid('4')->get();
-    $Application =Application::whereuser_id(Auth::user()->id)->get();
+    $Application =Application::whereuser_id(Auth::user()->id)->first();
     $course=ApplicationCourse::whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
     $collection=ApplicationPayment::wherestatus('1')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
     if(Auth::user()->country == $this->get_india_id()){
