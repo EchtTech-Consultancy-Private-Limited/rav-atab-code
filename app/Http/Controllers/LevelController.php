@@ -1241,13 +1241,13 @@ public function newapplication()
   //return $request->level_id;
  if($request->level_id =='1')
  {
-     return  redirect('level-first/'.$data->application_id)->with('success','Course  successfully  Added!!!!');
+     return  redirect('level-first/'.$data->application_id)->with('success','Course  successfully  Added');
     // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
  }elseif($request->level_id =='2')
  {
         //dd("level2");
-        return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
+        return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added');
 
     //return  redirect('level-first-upgrade/'.$level2_application_id.'/'.$data->applications_id)->with('success','Course  successfully  Added!!!!');
 
@@ -1256,11 +1256,11 @@ public function newapplication()
  }elseif($request->level_id =='3')
  {
 
-     return  redirect('level-list')->with('success','Course successfully Added!!!!');
+     return  redirect('level-list')->with('success','Course successfully Added');
  }
  else
  {
-     return  redirect('level-list')->with('success','Course successfully Added!!!!');
+     return  redirect('level-list')->with('success','Course successfully Added');
  }
 
 }
@@ -1309,7 +1309,7 @@ public function newapplication()
            // $adminEmail = isset(level-first)?level-first:'brijesh-admin@yopmail.com';
             //Mail sending scripts starts here
             $paymentMail = [
-            'title' =>'Traing Provider Ctreate a New Application. and Course Payment Successfully Done!!!!',
+            'title' =>'Traing Provider Ctreate a New Application. and Course Payment Successfully Done',
             'body' => '',
             'type' => 'New Application'
             ];
@@ -1352,7 +1352,7 @@ public function newapplication()
     Session::put('session_for_redirections', $session_for_redirection);
     $session_for_redirections= Session::get('session_for_redirections');
 
-  return  redirect('level-first')->with('success','Payment Done successfully!!!!');
+  return  redirect('level-first')->with('success','Payment Done successfully');
 
 
 //count payment in course status true
@@ -1360,7 +1360,7 @@ public function newapplication()
   }elseif($request->level_id =='2')
   {
 
-      return  redirect('level-first')->with('success','Course  successfully  Added!!!!');
+      return  redirect('level-first')->with('success','Course  successfully  Added');
 
       foreach($request->course_id as $item)
       {
@@ -1371,7 +1371,7 @@ public function newapplication()
       }
       $ApplicationCourse->save();
 
-      return  redirect('/level-second')->with('success','Payment Done successfully!!!!');;
+      return  redirect('/level-second')->with('success','Payment Done successfully');;
 
   }elseif($request->level_id =='3')
   {
@@ -1384,10 +1384,10 @@ public function newapplication()
       }
       $ApplicationCourse->save();
 
-      return  redirect('/level-third')->with('success',' Payment Done successfully!!!!');;
+      return  redirect('/level-third')->with('success',' Payment Done successfully');;
   }else
   {
-      return  redirect('/level-fourth')->with('success','Payment Done successfully!!!!');;
+      return  redirect('/level-fourth')->with('success','Payment Done successfully');;
   }
 
 
@@ -1749,7 +1749,7 @@ public function admin_view_document($id,$course_id)
     $application_id=$id;
      $course_id=$course_id;
 
-    $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',1)->first();
+    $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',[0,1])->first();
 
     //Comments
 
@@ -1999,7 +1999,7 @@ public function acc_doc_comments(Request $request)
                 'from'=>"T.P",
                 'applicationNo'=>$request->application_id,
                 'applicationStatus'=>"Application Assessor to Admin",
-                'subject'=>"You Have Received a Report of this Application from Assessor Successfully!!!!",
+                'subject'=>"You Have Received a Report of this Application from Assessor Successfully",
             ];
 
             $application_id=$request->application_id;
@@ -2017,7 +2017,7 @@ public function acc_doc_comments(Request $request)
                 'from'=>"T.P",
                 'applicationNo'=>$request->application_id,
                 'applicationStatus'=>"Application Assessor to Admin",
-                'subject'=>"You Have Send a Report of this Application to Admin Successfully!!!!",
+                'subject'=>"You Have Send a Report of this Application to Admin Successfully",
             ];
 
            Mail::to([$asses_email])->send(new SendMail($mailData));
@@ -2075,7 +2075,7 @@ public function acc_doc_comments(Request $request)
                 'from'=>"Admin",
                 'applicationNo'=>$request->application_id,
                 'applicationStatus'=>"Application Admin to Assessor",
-                'subject'=>"You Have Send a Report of this Application to Assessor Successfully!!!!",
+                'subject'=>"You Have Send a Report of this Application to Assessor Successfully",
             ];
 
             Mail::to([$superadminEmail,$adminEmail])->send(new SendMail($mailData));
@@ -2086,7 +2086,7 @@ public function acc_doc_comments(Request $request)
                 'from'=>"Admin",
                 'applicationNo'=>$request->application_id,
                 'applicationStatus'=>"Application Admin to Assessor",
-                'subject'=>"You Have Received a Report of this Application From Admin Successfully!!!!",
+                'subject'=>"You Have Received a Report of this Application From Admin Successfully",
             ];
 
            Mail::to([$asses_email])->send(new SendMail($mailData));
@@ -2116,7 +2116,7 @@ public function document_report_by_admin($course_id)
 
 public function doc_to_admin_sumit(Request $request)
 {
-    //dd("yesss");
+    dd("yesss");
    $finalcomment=new DocumentReportVerified;
    $finalcomment->user_id=Auth::user()->id;
    $finalcomment->comment_by_assessor=$request->doc_admin_comment;
@@ -2146,7 +2146,7 @@ public function doc_to_admin_sumit(Request $request)
         'from'=>"Assessor",
         'applicationNo'=>$request->application_id,
         'applicationStatus'=>"Application Assessor to Admin",
-        'subject'=>"Application Submit from Assessor Successfully!!!!",
+        'subject'=>"Application Submit from Assessor Successfully",
     ];
 
     $application_id=$request->application_id;
@@ -2159,7 +2159,7 @@ public function doc_to_admin_sumit(Request $request)
         'from'=>"Assessor",
         'applicationNo'=>$request->application_id,
         'applicationStatus'=>"Application Assessor to Admin",
-        'subject'=>"Application Submit from Assessor Successfully!!!!",
+        'subject'=>"Application Submit from Assessor Successfully",
     ];
 
     Mail::to([$asses_email])->send(new SendMail($mailData));
@@ -2185,7 +2185,7 @@ public function document_report_by_admin_submit1(Request $request)
 
         });
 
-        echo "email send successfully !!";
+        echo "email send successfully";
     }
 
 public function document_report_by_admin_submit(Request $request)
@@ -2601,7 +2601,7 @@ public function  uploads_document(Request $request)
         $data->level_id=$request->level_id;
         $data->save();
     }
-    return back()->with('success','Done successfully!!!!');
+    return back()->with('success','Done successfully');
 }
 
 //course model data get
