@@ -1133,7 +1133,7 @@ active @endif "
                                                  <div class="form-line select-box-hide-class">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
-                                                         <option value="" disabled>Select Option</option>
+                                                         <option value="">Select Option</option>
                                                          <option value="QR-Code"
                                                              {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR Code
                                                          </option>

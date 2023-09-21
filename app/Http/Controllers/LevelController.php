@@ -1749,7 +1749,7 @@ public function admin_view_document($id,$course_id)
     $application_id=$id;
      $course_id=$course_id;
 
-    $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->where('send_to_admin',[0,1])->first();
+    $check_admin=Add_Document::orderBy('id','desc')->where('course_id',$course_id)->whereIn('send_to_admin',[0,1])->first();
 
     //Comments
 
@@ -2748,5 +2748,22 @@ public function document_view_accessor($id){
     $ApplicationDocument->save();
     return back();
  }
+
+ public function image_app_status(Request $request,$id){
+
+    $data=ApplicationPayment::find(dDecrypt($id));
+    if($request->hasfile('payment_slip'))
+    {
+          $doc1=$request->file('payment_slip');
+          $name =$doc1->getClientOriginalName();
+          $filename = time().$name;
+          $doc1->move('documnet/',$filename);
+          $data->payment_slip = $filename;
+      }
+    $data->payment_remark=$request->paymentremark;
+    $data->save();
+    return back();
+
+}
 
 }
