@@ -530,23 +530,17 @@
                                 </div>
 
 
-                                @if (request()->path() == 'adduser/admin-user')
+                               <input type="hidden" value="{{ $data->assessment }}" name="assessment">
+
+
+
+                            @if (request()->path() == 'adduser/admin-user')
                                 <input type="text" placeholder="role" name="role"  value="{{ $data->role }}">
                             @elseif(request()->path() == 'adduser/training-provider')
                                 <input type="text" placeholder="role" name="role" value="{{ $data->role }}">
                             @elseif(request()->path() == 'adduser/assessor-user')
                                 <input type="text" placeholder="role" name="role"  value="{{ $data->role }}">
                             @endif
-
-
-
-
-
-
-
-
-
-
 
 
                             </div>

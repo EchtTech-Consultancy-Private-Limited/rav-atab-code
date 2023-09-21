@@ -571,8 +571,64 @@
                                         </div>
                                     </div>
 
-                                    @if (Auth::user()->role == '6')
-                                    @if ($ApplicationPayment->status == '1')
+
+
+                                    {{-- @if(Auth::user()->role != '6') --}}
+                                    @if($ApplicationPayment->status == '2')
+                                    <div class="col-md-4">
+                                            <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Payment remark </strong></label><br>
+
+                                                <div class="col-md-12">
+                                                    <input type="text" name="paymentremark" disabled required value="{{ $ApplicationPayment->payment_remark }}" >
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 payment_file" >
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Payment Confirm </strong></label><br>
+
+
+                                                {{-- {{ $ApplicationPayment->payment_slip }} --}}
+
+                                            <?php
+                                            substr($ApplicationPayment->payment_slip, -3);
+
+                                            $data = substr($ApplicationPayment->payment_slip, -3);
+                                            ?>
+
+
+                                                @if ($data == 'pdf')
+                                                <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                    target="_blank" title="Document 3" id="docpdf3" download>
+                                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                                </a>
+                                            @else
+                                                @if (isset($ApplicationPayment->payment_slip))
+                                                    <a target="_blank" class="image-link"
+                                                        href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
+                                                        <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                            style="width:100px;height:70px;">
+                                                    </a>
+                                                @endif
+                                            @endif
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                 @endif
+
+                                 {{-- @endif --}}
+
+
+                                    @if(Auth::user()->role == '6')
+                                    @if($ApplicationPayment->status == '1')
                                         <div class="col-md-4">
                                             <form action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id))  }}" method="post" id="frmtypes" enctype= "multipart/form-data">
                                            @csrf
@@ -598,8 +654,7 @@
                                                             class="form-control" required value="{{$ApplicationPayment->payment_slip }}" onchange="javascript:$('#frmtypes').submit();">
                                                     </div>
 
-                                                    {{ $ApplicationPayment->payment_slip }}
-
+                                                    {{-- {{ $ApplicationPayment->payment_slip }} --}}
 
                                                 <?php
                                                 substr($ApplicationPayment->payment_slip, -3);
@@ -627,7 +682,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                 @endif
+                                     @endif
                                 @endif
 
                                     @if (Auth::user()->role == '6')
@@ -655,10 +710,14 @@
 
 
                                                         @if ($ApplicationPayment->status == '2')
-                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                                onclick="return confirm_option('change status')"
-                                                                @if ($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @elseif($ApplicationPayment->status == 2) <div class=" col-green"><strong class="btn btn-success">Application Approved</strong></div> @else @endif
-                                                                </a>
+                                                            {{-- <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}" --}}
+                                                                {{-- onclick="return confirm_option('change status')" --}}
+                                                                @if ($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div>
+                                                                 @elseif($ApplicationPayment->status == 2) <div class=" col-green"><strong class="btn btn-success">Application Approved</strong>
+                                                                </div>
+                                                                @else
+                                                                @endif
+                                                                {{-- </a> --}}
                                                         @endif
 
                                                 </div>

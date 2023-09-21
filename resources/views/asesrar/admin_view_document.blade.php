@@ -138,6 +138,7 @@
             </div>
 
             @if (Session::has('sussess'))
+
                 <div class="alert alert-success" role="alert">
                     {{ session::get('success') }}
                 </div>
@@ -265,7 +266,7 @@
 
                                                     <a style="float:right;margin:10px;"
                                                         href="{{ url('document-report-verified-by-assessor/' . $application_id . '/' . $course_id) }}"
-                                                        class="btn btn-primary"> Vefified Report</a>
+                                                        class="btn btn-primary"> Verified Report</a>
 
                                                     <a style="float:right;margin:10px;"
                                                         href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
@@ -287,7 +288,7 @@
                                                     <table class="table table-hover js-basic-example contact_list">
                                                         <thead>
                                                             <tr>
-                                                                <th class="center">#S.N0</th>
+                                                                <th class="center">#Sr.N0</th>
                                                                 <th class="center">Objective criteria</th>
                                                                 <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                                                 <th class="center">View Documents</th>

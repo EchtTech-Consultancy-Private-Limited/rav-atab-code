@@ -424,7 +424,7 @@
                                    <div class="form-group">
                                       <div class="form-line">
 
-                                        {{ $ApplicationPayment->payment_details_file }}
+                                        {{-- {{ $ApplicationPayment->payment_details_file }} --}}
 
                                          <label><strong>Payment Screenshot</strong></label><br>
 
