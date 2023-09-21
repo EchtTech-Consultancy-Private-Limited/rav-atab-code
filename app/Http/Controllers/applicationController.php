@@ -56,18 +56,69 @@ class applicationController extends Controller
     public function Assigan_application(Request $request)
     {
 
-       // dd($request->assessor_id);
 
-    //return $request->all();
-   // return $request->application_id;
+    if($request->assessment_type == 2){
+
+        $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessor_id','=',$request->assessor_radio )->count()  > 0;
+
+
+        if($data == false){
+        // dd($request->all());
+
+        $value= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessment_type','=', '2')->count() > 0;
+
+         if($value == false){
+
+            $data = new asessor_application();
+            $data->assessor_id=$request->assessor_radio;
+            $data->application_id=$request->application_id;
+            $data->status=1;
+            $data->assessment_type=$request->assessment_type;
+            $data->due_date=$due_date = Carbon::now()->addDay(15);
+            $data->save();
+            return  back()->with('sussess','Application has been successfully assigned to assessor');
+
+         }else{
+            $item= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessment_type','=', '2')->first();
+
+            $data = asessor_application::find($item->id);
+            $data->assessor_id=$request->assessor_radio;
+            $data->application_id=$request->application_id;
+            $data->status=1;
+            $data->assessment_type=$request->assessment_type;
+            $data->due_date=$due_date = Carbon::now()->addDay(15);
+            $data->save();
+            return  back()->with('sussess','Application has been successfully assigned to assessor');
+
+
+         }
+
+
+        }else{
+
+
+            $value= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessor_id','=',$request->assessor_radio )->first();
+
+                //dd($value);
+            $data = asessor_application::find($value->id);
+            $data->assessor_id=$request->assessor_radio;
+            $data->application_id=$request->application_id;
+            $data->status=1;
+            $data->assessment_type=$request->assessment_type;
+            $data->due_date=$due_date = Carbon::now()->addDay(15);
+            $data->save();
+            return  back()->with('sussess','Application has been successfully assigned to assessor');
+    }
+
+    }else{
     $value= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->get();
     if(count($value) > 0)
     {
-            $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id);
+        $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->count()  > 0;
             if($data == false)
             {
-                $assessor_id=$request->assessor_id;
 
+                $assessor_id=$request->assessor_id;
                 for($i=0; $i<count($assessor_id); $i++){
 
                     $data = new asessor_application();
@@ -78,10 +129,45 @@ class applicationController extends Controller
                     $data->due_date=$due_date = Carbon::now()->addDay(15);
                     $data->save();
                 }
+
                 return  back()->with('sussess','Application has been successfully assigned to assessor');
             }
             else{
-                return  back()->with('error',' This application has already been assigned to this assesser ');
+
+                $assessor_id=$request->assessor_id;
+                for($i=0; $i<count($assessor_id); $i++){
+
+                    $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessor_id','=',$request->assessor_id[$i] )->count()  > 0;
+
+                  //return $data;
+                    if($data == false){
+
+                       $data = new asessor_application();
+                       $data->assessor_id=$request->assessor_id[$i];
+                       $data->application_id=$request->application_id;
+                       $data->status=1;
+                       $data->assessment_type=$request->assessment_type;
+                       $data->due_date=$due_date = Carbon::now()->addDay(15);
+                       $data->save();
+
+                    }else{
+
+                        $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessor_id','=',$request->assessor_id[$i] )->first();
+
+                       // dd($data->id);
+                        $data = asessor_application::find($data->id);
+                        $data->assessor_id=$request->assessor_id[$i];
+                        $data->application_id=$request->application_id;
+                        $data->status=1;
+                        $data->assessment_type=$request->assessment_type;
+                        $data->due_date=$due_date = Carbon::now()->addDay(15);
+                        $data->save();
+                        // return  back()->with('sussess','Application has been successfully assigned to assessor');
+                    }
+                }
+
+
+                return  back()->with('sussess','Application has been successfully assigned to assessor');
 
             }
     }else{
@@ -141,6 +227,7 @@ class applicationController extends Controller
             //Mail sending script ends here
             }
 
+        }
 
     }
 
