@@ -67,7 +67,7 @@ class LevelController extends Controller
 
         }
         else
-        {   dd("else");
+        {  // dd("else");
             return redirect('level-first');
         }
     }
@@ -547,8 +547,6 @@ class LevelController extends Controller
          ->join('countries','applications.country', '=', 'countries.id')->get();
        /*end level list */
 
-
-
     return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs],compact('form_step_type'));
 
  }else
@@ -655,7 +653,7 @@ class LevelController extends Controller
          ->where('applications.user_id',Auth::user()->id)
          ->where('applications.status','0')
          ->select('applications.*','countries.name as country_name')
-         ->join('countries','applications.country', '=', 'countries.id')->get();
+         ->join('countries','applications.country', '=', 'countries.id')->orderBy('applications.id','desc')->get();
        /*end level list */
 
       return view('level.leveltp',['level_list_data'=>$level_list_data,'collection'=> $collection,'collections'=>$collections,'item'=>$item,'data'=>$data,'faqs'=>$faqs],compact('form_step_type'));
@@ -1232,7 +1230,7 @@ public function newapplication()
 
 
  }
-
+    //dd($request->form_step_type);
 
     $session_for_redirection=$request->form_step_type;
     Session::put('session_for_redirections', $session_for_redirection);
@@ -2624,16 +2622,11 @@ public function course_list(Request $request)
 
 public function course_edit(Request $request)
 {
-
 $item=LevelInformation:: whereid('1')->get();
 $ApplicationCourse=ApplicationCourse::whereid($request->id)->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
 $Document=ApplicationDocument::wherecourse_number($ApplicationCourse[0]->id)->get();
 $course_mode=['1'=>'Online','2'=>'Offline','3'=>'Hybrid'];
 
-
-//return gettype($modecourse);
-//dd(gettype($ApplicationCourse[0]->mode_of_course));
-//return $request->all();
 return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Document]);
 
 }
@@ -2641,14 +2634,11 @@ return response()->json(['ApplicationCourse'=>$ApplicationCourse,'Document'=>$Do
 
 public function course_edits(Request $request,$id)
 {
-   // dd("test");
+    // dd($id);
    //return  $request->all();
      $mode_of_course=$request->mode_of_course;
 
     $Document=ApplicationDocument::wherecourse_number($id)->get();
-
-
-
       //document upload
       if($request->hasfile('doc1'))
       {
@@ -2705,11 +2695,16 @@ public function course_edits(Request $request,$id)
       $file->days=$request->days;
       $file->hours=$request->hours;
 
-      //dd($file);
+      //dd($file->application_id);
+
+      $session_for_redirection=$request->form_step_type;
+      Session::put('session_for_redirections', $session_for_redirection);
+      $session_for_redirections= Session::get('session_for_redirections');
 
       $file->save();
+      return  redirect('level-first/'.$file->application_id)->with('success','Course Edit successfull');
 
-      return back()->with('sussess', 'level Update successfull!! ');
+     // return back()->with('sussess', 'level Update successfull');
 
 }
 
