@@ -225,8 +225,24 @@
 
                 </div> -->
 
-                <div class="iconInput email">
+                <div class="">
+                    @if (request()->path() == 'login/Accessor/register')
 
+                    <div class="iconInput_container">
+                        <label class="label_input">Assessment Type<span class="text-danger">*</span></label>
+                        <div class="iconInput email">
+
+                            <select name="assessment" id="assessment" class="select" required>
+
+                                <option value="">Select Assessment Type</option>
+                                <option value="1">Desktop Assessment</option>
+                                <option value="2">Onsite Assessment</option>
+                            </select>
+                        </div>
+                        <label for="assessment" id="assessment-error" class="error"></label>
+                    </div>
+
+                   @endif
                 </div>
 
                 <div class="iconInput_container">
@@ -383,10 +399,10 @@
                         @error('city')
                             <p class="error">{{ $message }}</p>
                             @enderror
-                    </div> 
- 
+                    </div>
+
                 </div>
-           
+
 
 
                 <div class="iconInput_container">
@@ -560,7 +576,7 @@
                     </label>
                 </div>
                 </div>
-            
+
             <ul style="padding-left:0px;">
 
 
@@ -607,7 +623,7 @@
         </form>
     </div>
 
-   
+
     <script>
         let password = document.querySelector('#password');
         let togglePassword = document.querySelector('#togglePassword');
