@@ -694,7 +694,7 @@ active @endif "
                                                                          name="months[]" maxlength="2" required
                                                                          class="course_input preventalpha">
                                                                      <input type="text" maxlength="2"
-                                                                         placeholder="Days preventalpha"
+                                                                         placeholder="Days "
                                                                          name="days[]" required
                                                                          class="course_input preventalpha">
                                                                      <input type="number" placeholder="Hours"
@@ -751,7 +751,7 @@ active @endif "
                                                                          class="text-danger">*</span></label>
                                                                  <!-- <input type="text" placeholder="Course Brief"
                name="course_brief[]" required> -->
-                                                                 <textarea rows="4" cols="50" class="form-control" name="course_brief[]"></textarea>
+                                                                 <textarea rows="4" cols="50" class="form-control" name="course_brief[]" required></textarea>
                                                              </div>
                                                              @error('course_brief')
                                                                  <div class="alert alert-danger">{{ $message }}
@@ -1133,14 +1133,12 @@ active @endif "
                                                  <div class="form-line select-box-hide-class">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
-                                                         <option value="">Select Option</option>
+                                                         <option value="" disabled>Select Option</option>
                                                          <option value="QR-Code"
-                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
-                                                             Code
+                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR Code
                                                          </option>
                                                          <option value="Bank"
-                                                             {{ old('title') == 'Bank' ? 'selected' : '' }}>Bank
-                                                             Transfers
+                                                             {{ old('title') == 'Bank' ? 'selected' : '' }}>Bank Transfers
                                                          </option>
                                                      </select>
                                                  </div>
