@@ -749,7 +749,7 @@ active @endif "
                                                                         class="text-danger">*</span></label>
                                                                 <!-- <input type="text" placeholder="Course Brief"
                name="course_brief[]" required> -->
-                                                                <textarea rows="4" cols="50" class="form-control" placeholder="Course Brief" name="course_brief[]"></textarea>
+                                                                <textarea rows="4" cols="50" class="form-control" name="course_brief[]"></textarea>
                                                             </div>
                                                             @error('course_brief')
                                                                 <div class="alert alert-danger">{{ $message }}
@@ -998,8 +998,7 @@ active @endif "
                                                             <div class="form-group default-select select2Style">
                                                                 <select class="form-control select2 width"
                                                                     name="mode_of_course[]">
-                                                                    <option value="" disabled>Select Mode
-                                                                    </option>
+                                                                    <option value="" disabled>Select Mode</option>
                                                                     <option value="Online">Online</option>
                                                                     <option value="Offline">Offline</option>
                                                                 </select>

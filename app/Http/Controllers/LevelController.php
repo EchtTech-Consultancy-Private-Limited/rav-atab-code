@@ -312,10 +312,6 @@ class LevelController extends Controller
  }else
  {
 
-
-
-
-
     $id=Auth::user()->id;
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     $Country =Country::get();
@@ -435,6 +431,7 @@ class LevelController extends Controller
          }
         */
 
+        //dd('hii');
 
        //return $form_step_type;
 
@@ -454,9 +451,7 @@ class LevelController extends Controller
     $file =ApplicationDocument::get();
 
     $Application =Application::find($id);
-
     /*$course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id(2)->get();*/
-
     $course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->get();
     /*$collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
 
@@ -559,7 +554,7 @@ class LevelController extends Controller
  }else
  {
 
-   //dd("ds");
+  // dd("ds");
    $id=Auth::user()->id;
     $data=DB::table('users')->where('users.id',$id)->select('users.*','cities.name as city_name','states.name as state_name','countries.name as country_name')->join('countries','users.country', '=', 'countries.id')->join('cities','users.city', '=', 'cities.id')->join('states','users.state', '=', 'states.id')->first();
     $Country =Country::get();
@@ -1248,8 +1243,7 @@ public function newapplication()
   //return $request->level_id;
  if($request->level_id =='1')
  {
-
-     return  redirect('level-first/'.encrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
+     return  redirect('level-first/'.$data->application_id)->with('success','Course  successfully  Added!!!!');
     // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
  }elseif($request->level_id =='2')
