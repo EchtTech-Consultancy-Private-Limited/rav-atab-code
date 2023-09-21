@@ -1243,7 +1243,6 @@ public function newapplication()
   //return $request->level_id;
  if($request->level_id =='1')
  {
-
      return  redirect('level-first/'.$data->application_id)->with('success','Course  successfully  Added!!!!');
     // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
