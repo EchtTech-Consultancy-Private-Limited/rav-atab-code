@@ -430,6 +430,9 @@
                                     </div>
 
 
+
+
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
@@ -505,6 +508,30 @@
 
                             </div>
 
+
+                            @if (request()->path() == 'adduser/assessor-user')
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label for="example-text-input" class="form-control-label">Assessment Type<span
+                                                class="text-danger">*</span></label>
+                                                <select name="assessment" id="assessment" class="form-control"  required>
+
+                                                    <option value="">Select Assessment Type</option>
+                                                    <option value="1">Desktop Assessment</option>
+                                                    <option value="2">Onsite Assessment</option>
+                                                </select>
+                                    </div>
+
+                                    <label for="assessment" id="assessment-error" class="error">
+                                        @error('assessment')
+                                            {{ $message }}
+                                        @enderror
+                                    </label>
+
+                                </div>
+                            </div>
+                            @endif
 
                             {{-- <input type="text" placeholder="role" name="role" value="1">
                             @elseif(request()->path() == 'adduser/training-provider')

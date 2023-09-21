@@ -76,6 +76,7 @@ class AdminController extends Controller
         $data->mobile_no =$request->mobile_no;
         $data->country =$request->Country;
         $data->state =$request->state;
+        $data->assessment =$request->assessment;
         $data->city =$request->city;
         $data->postal =$request->postal;
         $data->phone_no =$request->phone_no;

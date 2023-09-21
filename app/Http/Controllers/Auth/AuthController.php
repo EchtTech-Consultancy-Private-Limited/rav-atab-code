@@ -291,6 +291,7 @@ class AuthController extends Controller
        $data->landline =$request->landline;
        $data->last_login_ip =$request->last_login_ip;
        $data->status =$request->status;
+       $data->assessment =$request->assessment;
        $data->role =$request->role;
        $data->about =$request->about;
        $data->last_login_at =$request->last_login_at;
