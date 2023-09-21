@@ -1677,7 +1677,7 @@ active @endif "
                                                  </div>
                                              </div>
 
-                                             <input type="hidden" name="form_step_type" value="add-course">  Edit Details
+                                             <input type="hidden" name="form_step_type" value="add-course">
                                              <div class="col-sm-4">
                                                  <div class="form-group">
                                                      <div class="form-line">
