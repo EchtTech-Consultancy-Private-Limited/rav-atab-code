@@ -24359,3 +24359,16 @@ div#ui-datepicker-div{
 
     color: #fff !important;
 }
+
+
+.select2-container{
+    display: inline !important;
+}
+
+.profile-tab-box li.nav-item.tab-all a.nav-link:hover {
+    background-color: #e91e63 !important;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    color: #fff !important;
+    border-radius: 30px;
+    height: 35px;
+}

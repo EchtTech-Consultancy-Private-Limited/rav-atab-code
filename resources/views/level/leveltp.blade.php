@@ -129,6 +129,12 @@
      .select-box-hide-class select {
          display: none;
      }
+
+     .form-control[type=file] {
+    overflow: hidden;
+    height: 3rem;
+}
+
  </style>
  <title>RAV Accreditation</title>
  </head>
@@ -1130,7 +1136,7 @@ active @endif "
                                          </div>
                                          <div class="body">
                                              <div class="form-group">
-                                                 <div class="form-line select-box-hide-class">
+                                                 <div class="form-line select-box-hide-class"  style="width:25%">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
                                                          <option value="">Select Option</option>
@@ -1146,7 +1152,7 @@ active @endif "
                                              <!-- payment start -->
                                              <div style="text-align:center; width:100%;" id="QR">
                                                  <div
-                                                     style="width:100px; height:100px; border:1px solid #ccc; float:right;">
+                                                     style="width:100px; height:100px; border:1px solid #ccc; float:left;">
                                                      <img src="{{ asset('/assets/images/demo-qrcode.png') }}"
                                                          width="100" height="100">
                                                  </div>
@@ -1250,7 +1256,7 @@ active @endif "
                                                          @endforeach
                                                      @endisset
                                                      @if (request()->path() == 'level-first')
-                                                         <input type="text" placeholder="level_id" name="level_id"
+                                                         <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="sasa {{ $Application->level_id ?? '' }}">
                                                      @elseif(request()->path() == 'level-second')
                                                          <input type="hidden" placeholder="level_id" name="level_id"
@@ -2157,7 +2163,7 @@ active @endif "
                              dataType: 'json',
                              contentType: false,
                              success: function(response) {
-                                 alert('Application Create Successfully')
+                                 alert('Application Created Successfully')
                                  //alert(response.id);
                                  if (response.id) {
 
