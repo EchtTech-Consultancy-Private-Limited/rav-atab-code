@@ -497,9 +497,7 @@ class applicationController extends Controller
 
    public function assigin_check_delete(Request $request){
 
-     // dd($request->application);
-
-    $data= DB::table('asessor_applications')->where('application_id','=',$request->application)->where('assessor_id','=',$request->id )->first();
+       $data= DB::table('asessor_applications')->where('application_id','=',$request->id)->where('assessor_id','=',$request->assessor_id )->first();
        $data = asessor_application::find($data->id)->delete();
        return response()->json('success');
    }
