@@ -19182,6 +19182,7 @@ nav.navbar {
     border-bottom: 1px solid #eee;
     vertical-align: middle;
     font-size: 16px;
+    white-space: nowrap;
 }
 
 .table tbody tr td ul,
@@ -24358,4 +24359,25 @@ div#ui-datepicker-div{
 .card .info-box-5 a{
 
     color: #fff !important;
+}
+
+
+.select2-container{
+    display: inline !important;
+}
+
+.profile-tab-box li.nav-item.tab-all a.nav-link:hover {
+    background-color: #e91e63 !important;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    color: #fff !important;
+    border-radius: 30px;
+    height: 35px;
+}
+
+.table-responsive{
+    overflow-x: overlay;
+}
+
+.modal-content .edit-popup .edit-m-d .select-wrapper li input {
+    display: none;
 }

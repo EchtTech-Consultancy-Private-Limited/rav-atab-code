@@ -56,6 +56,9 @@ class applicationController extends Controller
     public function Assigan_application(Request $request)
     {
 
+     //  dd($request->all());
+
+
 
     if($request->assessment_type == 2){
 
@@ -491,4 +494,15 @@ class applicationController extends Controller
         }
         return view('application.national');
    }
+
+   public function assigin_check_delete(Request $request){
+
+     // dd($request->application);
+
+    $data= DB::table('asessor_applications')->where('application_id','=',$request->application)->where('assessor_id','=',$request->id )->first();
+       $data = asessor_application::find($data->id)->delete();
+       return response()->json('success');
+   }
+
+
 }
