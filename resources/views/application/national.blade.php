@@ -270,8 +270,9 @@
                                                             <br>
 
                                                             <label class="mb-3"><b>Assessment Type</b></label><br>
-                                                             <select name="assessment_type" id="assessment_type" class="form-control">
-                                                              <option value="">Select Assessment Type</option>
+                                                             <select name="assessment_type" id="assessment_type"
+                                                             class="form-control">
+                                                              <option value="0">Select Assessment Type</option>
                                                               <option value="1" @if($assessment_type == 1)
                                                                selected @endif>Desktop Assessment</option>
                                                               <option value="2" @if($assessment_type == 2)
@@ -286,10 +287,10 @@
 
                                                              </select>
 
-
-
+                                                             <div id="destop-id">
 
                                                                 @foreach ($assesors as $k => $assesorsData)
+                                                                   @if($assesorsData->assessment  == 1)
                                                                     <br>
                                                                     <label>
 
@@ -319,14 +320,56 @@
                                                                 </div>
                                                                     <input type="hidden" name="application_id"
                                                                         value="{{ $item->application_id ?? '' }}">
+                                                                    @endif
                                                                 @endforeach
+
+                                                            </div>
+
+                                                            <div id="onsite-id">
+
+                                                                @foreach ($assesors as $k => $assesorsData)
+                                                                  @if($assesorsData->assessment == 2)
+                                                                    <br>
+                                                                    <label>
+
+                                                                        <input type="radio" id="assesorsid" class="d-none"
+                                                                           name="assessor_radio"
+                                                                           value="{{ $assesorsData->id }}"
+
+
+                                                                           @if (in_array($assesorsData->id,$application_assessor_arr))
+
+                                                                           checked
+
+                                                                           @endif >
+
+                                                                        <span>
+                                                                            {{ $assesorsData->firstname }}
+                                                                        </span>
+
+                                                                    </label>
+                                                                    <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">
+                                                                <div>
+                                                                    <?php
+                                                                    foreach(get_accessor_date($assesorsData->id) as $date){
+                                                                    ?>
+                                                                        {!! $date !!}
+                                                                    <?php }   ?>
+                                                                </div>
+                                                                    <input type="hidden" name="application_id"
+                                                                        value="{{ $item->application_id ?? '' }}">
+
+                                                                    @endif
+                                                                @endforeach
+
+                                                            </div>
 
                                                             </div>
 
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                                <button type="submit" class="btn btn-primary my-button" >Save</button>
                                                             </div>
                                                     </div>
                                                     </form>
@@ -407,6 +450,9 @@
                                                                         value="{{ $item->application_id ?? '' }}">
                                                                 @endforeach
 
+
+
+
                                                             </div>
 
                                                             <div class="modal-footer">
@@ -471,5 +517,51 @@
 
  --}}
 
+ <script>
+
+   $('#assessment_type').on('change', function() {
+
+     var data= $('#assessment_type').val();
+
+      //alert(data);
+
+    //   $('#destop-id').html(data);
+
+      if(data == 1){
+        //alert('1');
+        $('#destop-id').show();
+        $('#onsite-id').hide();
+        $('.my-button').prop('disabled', false)
+        $('.modal-footer').show();
+
+      }else if(data == 2){
+
+      //  alert('2');
+        $('#destop-id').hide();
+        $('#onsite-id').show();
+        $('.modal-footer').hide();
+
+      }else{
+      //alert('hii')
+        $('#destop-id').hide();
+        $('#onsite-id').hide();
+        $('.my-button').attr('disabled',false)
+        $('.modal-footer').show();
+      }
+   });
+
+
+   $(document).ready(function(){
+        $('#destop-id').hide();
+        $('#onsite-id').hide();
+        $('.my-button').prop('disabled', true)
+        $('.modal-footer').hide();
+
+
+   });
+
+
+
+  </script>
 
     @include('layout.footer')

@@ -166,6 +166,7 @@ class AuthController extends Controller
                         'last_login_ip' => $request->last_login_ip,
                         'status' => $request->status,
                         'role' => $request->role,
+                        'assessment' =>$request->assessment,
                         'about' => $request->about,
                         'last_login_at' => $request->last_login_at,
                     ]);
@@ -228,6 +229,8 @@ class AuthController extends Controller
     }
     public function  register_post(Request $request)
     {
+
+        //dd($request->all());
 //        if ( captcha_check($request->captcha) == false ) {
 //            dd("here1");
 //        return back()->with('invalid-captcha','incorrect captcha!');
@@ -291,7 +294,6 @@ class AuthController extends Controller
        $data->landline =$request->landline;
        $data->last_login_ip =$request->last_login_ip;
        $data->status =$request->status;
-       $data->assessment =$request->assessment;
        $data->role =$request->role;
        $data->about =$request->about;
        $data->last_login_at =$request->last_login_at;
