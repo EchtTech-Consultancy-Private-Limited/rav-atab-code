@@ -232,10 +232,16 @@
                                                    @foreach ($assesors as $k => $assesorsData)
                                                    @if($assesorsData->assessment  == 1)
                                                    <br>
+                                                   {{-- <input type="text" class="assesorsid"  value="{{ $assesorsData->id }}_{{ $item->application_id }}"  > --}}
+{{--
+                                                  <a href=""  ><h1 class="assesorsid"  data-id="{{ $assesorsData->id }}_{{ $item->application_id }}">delete</h1></a> --}}
+
+
                                                    <label>
-                                                   <input type="checkbox" id="assesorsid" class="d-none "
+
+                                                   <input type="checkbox" id="assesorsid" class="d-none assesorsid "
                                                    name="assessor_id[]"
-                                                   value="{{ $assesorsData->id }}"
+                                                   value="{{ $assesorsData->id }}_{{ $item->application_id }}"
                                                    @if (in_array($assesorsData->id,$application_assessor_arr))
                                                    checked
                                                    @endif >
@@ -254,7 +260,6 @@
                                                    <input type="hidden" name="application_id"
                                                       value="{{ $item->application_id ?? '' }}">
 
-                                                      <input type="text" class="assesorsid"  value="{{ $assesorsData->id }}_{{ $item->application_id }}"  >
 
                                                    @endif
                                                    @endforeach
@@ -448,9 +453,10 @@
 
       $('.assesorsid').on('click',function(){
 
-         var application = $(this).val().split('_'); //127_92
 
+        //event.preventDefault();
 
+        var application = $(this).val().split('_');
 
         var application_id = application[1]
         var assessor_id = application[0];
@@ -473,6 +479,7 @@
 
                                       if(data == 'success'){
                                           alert('Record Deleted Succesfully')
+                                          location.reload(true);
                                       }else{
                                         alert('Record not exist')
                                       }
