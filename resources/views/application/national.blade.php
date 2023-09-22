@@ -272,7 +272,7 @@
                                                             <label class="mb-3"><b>Assessment Type</b></label><br>
                                                              <select name="assessment_type" id="assessment_type"
                                                              class="form-control">
-                                                              <option value="">Select Assessment Type</option>
+                                                              <option value="0">Select Assessment Type</option>
                                                               <option value="1" @if($assessment_type == 1)
                                                                selected @endif>Desktop Assessment</option>
                                                               <option value="2" @if($assessment_type == 2)
@@ -369,7 +369,7 @@
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                                <button type="submit" class="btn btn-primary my-button" >Save</button>
                                                             </div>
                                                     </div>
                                                     </form>
@@ -528,29 +528,36 @@
     //   $('#destop-id').html(data);
 
       if(data == 1){
-        alert('1');
+        //alert('1');
         $('#destop-id').show();
         $('#onsite-id').hide();
 
 
       }else if(data == 2){
 
-        alert('2');
+      //  alert('2');
         $('#destop-id').hide();
         $('#onsite-id').show();
 
       }else{
-
+alert('hii')
+        $('#destop-id').hide();
+        $('#onsite-id').hide();
+        $('.my-button').attr('disabled','true')
       }
    });
 
 
    $(document).ready(function(){
-
         $('#destop-id').hide();
         $('#onsite-id').hide();
 
+        $('.my-button').prop('disabled', true)
+
    });
+
+
+
   </script>
 
     @include('layout.footer')
