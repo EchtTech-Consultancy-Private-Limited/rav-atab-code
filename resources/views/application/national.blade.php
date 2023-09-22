@@ -531,19 +531,22 @@
         //alert('1');
         $('#destop-id').show();
         $('#onsite-id').hide();
-
+        $('.my-button').prop('disabled', false)
+        $('.modal-footer').show();
 
       }else if(data == 2){
 
       //  alert('2');
         $('#destop-id').hide();
         $('#onsite-id').show();
+        $('.modal-footer').hide();
 
       }else{
-alert('hii')
+      //alert('hii')
         $('#destop-id').hide();
         $('#onsite-id').hide();
-        $('.my-button').attr('disabled','true')
+        $('.my-button').attr('disabled',false)
+        $('.modal-footer').show();
       }
    });
 
@@ -551,8 +554,9 @@ alert('hii')
    $(document).ready(function(){
         $('#destop-id').hide();
         $('#onsite-id').hide();
-
         $('.my-button').prop('disabled', true)
+        $('.modal-footer').hide();
+
 
    });
 
