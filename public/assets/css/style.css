@@ -19182,6 +19182,7 @@ nav.navbar {
     border-bottom: 1px solid #eee;
     vertical-align: middle;
     font-size: 16px;
+    white-space: nowrap;
 }
 
 .table tbody tr td ul,
@@ -24371,4 +24372,12 @@ div#ui-datepicker-div{
     color: #fff !important;
     border-radius: 30px;
     height: 35px;
+}
+
+.table-responsive{
+    overflow-x: overlay;
+}
+
+.modal-content .edit-popup .edit-m-d .select-wrapper li input {
+    display: none;
 }

@@ -695,7 +695,7 @@ active @endif "
                                                                  <div class="course_group">
                                                                      <input type="text" placeholder="Years"
                                                                          name="years[]" maxlength="4" required
-                                                                         class="course_input preventalpha">
+                                                                         class="course_i nput preventalpha">
                                                                      <input type="text" placeholder="Months"
                                                                          name="months[]" maxlength="2" required
                                                                          class="course_input preventalpha">
@@ -1401,11 +1401,11 @@ active @endif "
                                                              <td class="center">{{ $item->payment_date }}</td>
                                                              <td class="center">
                                                                  <a href="javascript:void(0)"
-                                                                     @if ($item->status == 0) <div class="badge col-brown">Applications Pending</div>
+                                                                     @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
                                  @elseif($item->status == 1)
-                                 <div class="badge col-green">Applications In Process</div>
+                                 <div class="badge col-orange">Applications In Process</div>
                                  @elseif($item->status == 2)
-                                 <div class="badge col-red">Applications Approved</div> @endif
+                                 <div class="badge col-green">Applications Approved</div> @endif
                                                                      </a>
                                                              </td>
                                                              @if (check_upgrade($item->created_at) == 'true')
@@ -1718,7 +1718,7 @@ active @endif "
                                                  </div>
                                              </div>
                                              <div class="col-sm-2">
-                                                 <div class="form-group select-modal">
+                                                 <div class="form-group select-modal edit-m-d">
                                                      <div class="form-line">
                                                          <label>Mode of Course <span
                                                                  class="text-danger">*</span></label>
