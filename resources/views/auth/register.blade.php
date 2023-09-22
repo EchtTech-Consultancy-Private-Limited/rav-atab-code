@@ -235,7 +235,7 @@
                             <select name="assessment" id="assessment" class="select" required>
 
                                 <option value="">Select Assessment Type</option>
-                                <option value="1">Desktop Assessment</option>
+                                <option value="1" >Desktop Assessment</option>
                                 <option value="2">Onsite Assessment</option>
                             </select>
                         </div>

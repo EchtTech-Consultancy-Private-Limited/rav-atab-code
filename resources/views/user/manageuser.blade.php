@@ -518,8 +518,8 @@
                                                 <select name="assessment" id="assessment" class="form-control"  required>
 
                                                     <option value="">Select Assessment Type</option>
-                                                    <option value="1">Desktop Assessment</option>
-                                                    <option value="2">Onsite Assessment</option>
+                                                    <option value="1" {{ old('assessment') == '1' ? 'selected' : '' }}>Desktop Assessment</option>
+                                                    <option value="2" {{ old('assessment') == '2' ? 'selected' : '' }}>Onsite Assessment</option>
                                                 </select>
                                     </div>
 
