@@ -129,6 +129,12 @@
      .select-box-hide-class select {
          display: none;
      }
+
+     .form-control[type=file] {
+    overflow: hidden;
+    height: 3rem;
+}
+
  </style>
  <title>RAV Accreditation</title>
  </head>
@@ -689,7 +695,7 @@ active @endif "
                                                                  <div class="course_group">
                                                                      <input type="text" placeholder="Years"
                                                                          name="years[]" maxlength="4" required
-                                                                         class="course_input preventalpha">
+                                                                         class="course_i nput preventalpha">
                                                                      <input type="text" placeholder="Months"
                                                                          name="months[]" maxlength="2" required
                                                                          class="course_input preventalpha">
@@ -1130,7 +1136,7 @@ active @endif "
                                          </div>
                                          <div class="body">
                                              <div class="form-group">
-                                                 <div class="form-line select-box-hide-class">
+                                                 <div class="form-line select-box-hide-class"  style="width:25%">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
                                                          <option value="">Select Option</option>
@@ -1146,7 +1152,7 @@ active @endif "
                                              <!-- payment start -->
                                              <div style="text-align:center; width:100%;" id="QR">
                                                  <div
-                                                     style="width:100px; height:100px; border:1px solid #ccc; float:right;">
+                                                     style="width:100px; height:100px; border:1px solid #ccc; float:left;">
                                                      <img src="{{ asset('/assets/images/demo-qrcode.png') }}"
                                                          width="100" height="100">
                                                  </div>
@@ -1250,7 +1256,7 @@ active @endif "
                                                          @endforeach
                                                      @endisset
                                                      @if (request()->path() == 'level-first')
-                                                         <input type="text" placeholder="level_id" name="level_id"
+                                                         <input type="hidden" placeholder="level_id" name="level_id"
                                                              value="sasa {{ $Application->level_id ?? '' }}">
                                                      @elseif(request()->path() == 'level-second')
                                                          <input type="hidden" placeholder="level_id" name="level_id"
@@ -1395,11 +1401,11 @@ active @endif "
                                                              <td class="center">{{ $item->payment_date }}</td>
                                                              <td class="center">
                                                                  <a href="javascript:void(0)"
-                                                                     @if ($item->status == 0) <div class="badge col-brown">Applications Pending</div>
+                                                                     @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
                                  @elseif($item->status == 1)
-                                 <div class="badge col-green">Applications In Process</div>
+                                 <div class="badge col-orange">Applications In Process</div>
                                  @elseif($item->status == 2)
-                                 <div class="badge col-red">Applications Approved</div> @endif
+                                 <div class="badge col-green">Applications Approved</div> @endif
                                                                      </a>
                                                              </td>
                                                              @if (check_upgrade($item->created_at) == 'true')
@@ -1712,7 +1718,7 @@ active @endif "
                                                  </div>
                                              </div>
                                              <div class="col-sm-2">
-                                                 <div class="form-group select-modal">
+                                                 <div class="form-group select-modal edit-m-d">
                                                      <div class="form-line">
                                                          <label>Mode of Course <span
                                                                  class="text-danger">*</span></label>
@@ -2157,7 +2163,7 @@ active @endif "
                              dataType: 'json',
                              contentType: false,
                              success: function(response) {
-                                 alert('Application Create Successfully')
+                                 alert('Application Created Successfully')
                                  //alert(response.id);
                                  if (response.id) {
 
