@@ -83,9 +83,7 @@ class LevelController extends Controller
         return view("level.level",['level'=>$level,'collection'=>$collection,'collection1'=>$collection1,'collection2'=>$collection2]);
     }
 
-    public function admin_view($id)
-    {
-
+    public function admin_view($id){
     $Application =Application::whereid(dDecrypt($id))->get();
     $ApplicationCourse=ApplicationCourse::whereapplication_id($Application[0]->id)->get();
     $ApplicationPayment=ApplicationPayment::whereapplication_id($Application[0]->id)->get();
@@ -119,7 +117,10 @@ class LevelController extends Controller
             'validity' =>'required',
             'fee_structure' =>'required',
             'timelines' =>'required',
+            'image' => 'mimes:jpeg,bmp,png,gif,svg,pdf',
             ]
+
+
         );
            // dd($request->all());
             $data=LevelInformation::find(dDecrypt($id));
@@ -424,6 +425,8 @@ class LevelController extends Controller
 
         //dd("we are work on manage ");
         $form_step_type= Session::get('session_for_redirections');
+
+        $payment_list = "active_payment_list";
         /*
          if(empty($form_step_type))
          {
@@ -547,7 +550,7 @@ class LevelController extends Controller
          ->join('countries','applications.country', '=', 'countries.id')->get();
        /*end level list */
 
-    return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs],compact('form_step_type'));
+    return view('level.leveltp',['level_list_data'=>$level_list_data,'id'=>$id,'collections'=>$collections,'Application'=>$Application,'item'=>$item,'Country'=>$Country,'data'=>$data,'course'=>$course,'currency'=>$currency,'total_amount'=>$total_amount,'collection'=>$collection,'file'=>$file,'faqs'=>$faqs],compact('form_step_type','payment_list'));
 
  }else
  {
@@ -1048,11 +1051,10 @@ public function newapplication()
 
            $this->validate($request, [
             'Email_ID' => ['required','regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
-            'Contact_Number'=>'required|numeric|min:10,mobile_no|digits:10',
+            'Contact_Number'=>'required|numeric|min:10,mobile_no|digits:10|unique:applications',
             'Person_Name'=>'required',
             'designation'=>'required',
-
-
+            'Email_ID'     => 'required|unique:applications',
             ],
             [
                 'Email_ID.regex'=>"Please Enter Valid Email Id",
@@ -2751,6 +2753,14 @@ public function document_view_accessor($id){
 
  public function image_app_status(Request $request,$id){
 
+
+    $request->validate(
+        [
+        'payment_slip' => 'mimes:jpeg,png,pdf',
+        ]
+
+    );
+
     $data=ApplicationPayment::find(dDecrypt($id));
     if($request->hasfile('payment_slip'))
     {
@@ -2762,7 +2772,8 @@ public function document_view_accessor($id){
       }
     $data->payment_remark=$request->paymentremark;
     $data->save();
-    return back();
+
+    return back()->with('sussess','Payment Confirmation is Successfully');;
 
 }
 
