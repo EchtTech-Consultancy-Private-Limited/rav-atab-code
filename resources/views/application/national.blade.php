@@ -417,6 +417,7 @@
       $('.assessment_type').on('change', function() {
 
         var data= $(this).val();
+      ///  alert(data);
 
          if(data == 1){
            //alert('1');
@@ -431,6 +432,7 @@
            $('.destop-id').hide();
            $('.onsite-id').show();
            $('.modal-footer').show();
+           $('.my-button').prop('disabled', false)
 
          }else{
          //alert('hii')
@@ -451,13 +453,12 @@
 
 
 
-      $('.assesorsid').on('click',function(){
 
+      $('.assesorsid').on('click',function(){
 
         //event.preventDefault();
 
         var application = $(this).val().split('_');
-
         var application_id = application[1]
         var assessor_id = application[0];
 
