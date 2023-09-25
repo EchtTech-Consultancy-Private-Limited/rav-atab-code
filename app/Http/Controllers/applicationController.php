@@ -140,13 +140,17 @@ class applicationController extends Controller
                 $assessor_id=$request->assessor_id;
                 for($i=0; $i<count($assessor_id); $i++){
 
+
+                    //dd($arraycontent[0]);
+
                     $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessor_id','=',$request->assessor_id[$i] )->count()  > 0;
+                    $arraycontent = explode('_', $assessor_id[$i]);
 
                   //return $data;
                     if($data == false){
 
                        $data = new asessor_application();
-                       $data->assessor_id=$request->assessor_id[$i];
+                       $data->assessor_id= $arraycontent[0];//$request->assessor_id[$i];
                        $data->application_id=$request->application_id;
                        $data->status=1;
                        $data->assessment_type=$request->assessment_type;
@@ -156,10 +160,10 @@ class applicationController extends Controller
                     }else{
 
                         $data= DB::table('asessor_applications')->where('application_id','=',$request->application_id)->where('assessor_id','=',$request->assessor_id[$i] )->first();
-
+                        $arraycontent = explode('_', $assessor_id[$i]);
                        // dd($data->id);
                         $data = asessor_application::find($data->id);
-                        $data->assessor_id=$request->assessor_id[$i];
+                        $data->assessor_id= $arraycontent[0];//$request->assessor_id[$i];
                         $data->application_id=$request->application_id;
                         $data->status=1;
                         $data->assessment_type=$request->assessment_type;
@@ -180,10 +184,13 @@ class applicationController extends Controller
 
     for($i=0; $i<count($assessor_id); $i++)
     {
-       // dd("in loop");
+
+        $arraycontent = explode('_', $assessor_id[$i]);
+        //dd($arraycontent);
+
 
         $data = new asessor_application();
-        $data->assessor_id=$request->assessor_id[$i];
+        $data->assessor_id= $arraycontent[0];//$request->assessor_id[$i];
         $data->application_id=$request->application_id;
         $data->status=1;
         $data->assessment_type=$request->assessment_type;
@@ -497,9 +504,7 @@ class applicationController extends Controller
 
    public function assigin_check_delete(Request $request){
 
-     // dd($request->application);
-
-    $data= DB::table('asessor_applications')->where('application_id','=',$request->application)->where('assessor_id','=',$request->id )->first();
+       $data= DB::table('asessor_applications')->where('application_id','=',$request->id)->where('assessor_id','=',$request->assessor_id )->first();
        $data = asessor_application::find($data->id)->delete();
        return response()->json('success');
    }

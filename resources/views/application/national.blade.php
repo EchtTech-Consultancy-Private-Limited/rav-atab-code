@@ -228,14 +228,20 @@
                                                       <option value="5" @if($assessment_type == 5) {
                                                       selected @endif>Re-Assessment</option> -->
                                                 </select>
-                                                <div class="destop-id">
+                                                <div class="destop-id" data-id="{{ $item->application_id }}">
                                                    @foreach ($assesors as $k => $assesorsData)
                                                    @if($assesorsData->assessment  == 1)
                                                    <br>
+                                                   {{-- <input type="text" class="assesorsid"  value="{{ $assesorsData->id }}_{{ $item->application_id }}"  > --}}
+{{--
+                                                  <a href=""  ><h1 class="assesorsid"  data-id="{{ $assesorsData->id }}_{{ $item->application_id }}">delete</h1></a> --}}
+
+
                                                    <label>
-                                                   <input type="checkbox" id="assesorsid" class="d-none assesorsid"
+
+                                                   <input type="checkbox" id="assesorsid" class="d-none assesorsid "
                                                    name="assessor_id[]"
-                                                   value="{{ $assesorsData->id }}"
+                                                   value="{{ $assesorsData->id }}_{{ $item->application_id }}"
                                                    @if (in_array($assesorsData->id,$application_assessor_arr))
                                                    checked
                                                    @endif >
@@ -253,6 +259,8 @@
                                                    </div>
                                                    <input type="hidden" name="application_id"
                                                       value="{{ $item->application_id ?? '' }}">
+
+
                                                    @endif
                                                    @endforeach
                                                 </div>
@@ -409,10 +417,7 @@
       $('.assessment_type').on('change', function() {
 
         var data= $(this).val();
-
-        // alert(data);
-
-       //   $('#destop-id').html(data);
+      ///  alert(data);
 
          if(data == 1){
            //alert('1');
@@ -423,10 +428,11 @@
 
          }else if(data == 2){
 
-         //  alert('2');
+          // alert('2');
            $('.destop-id').hide();
            $('.onsite-id').show();
-           $('.modal-footer').hide();
+           $('.modal-footer').show();
+           $('.my-button').prop('disabled', false)
 
          }else{
          //alert('hii')
@@ -447,14 +453,14 @@
 
 
 
-      $('.assesorsid').on('click', function() {
 
-         var data= $(this).val();
-         var application= $('.application_id').val();
+      $('.assesorsid').on('click',function(){
 
+        //event.preventDefault();
 
-           // alert(application);
-
+        var application = $(this).val().split('_');
+        var application_id = application[1]
+        var assessor_id = application[0];
 
                            $.ajaxSetup({
                                 headers: {
@@ -467,13 +473,14 @@
                                 url: "{{ url('/assigin-check-delete') }}",
                                 type: "get",
                                 data: {
-                                    id: data,application
+                                    id: application_id,assessor_id
                                 },
                                 success: function(data) {
                                           //alert(data)
 
                                       if(data == 'success'){
                                           alert('Record Deleted Succesfully')
+                                          location.reload(true);
                                       }else{
                                         alert('Record not exist')
                                       }
