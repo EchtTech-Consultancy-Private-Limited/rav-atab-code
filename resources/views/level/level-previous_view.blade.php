@@ -80,6 +80,9 @@
                             </li>
                             <li class="breadcrumb-item active">Previous Application Details </li>
                         </ul>
+
+                        <a href="{{ URL::previous() }}" type="button" class="btn btn-primary"
+                        style="float:right;">Back </a>
                     </div>
                 </div>
             </div>

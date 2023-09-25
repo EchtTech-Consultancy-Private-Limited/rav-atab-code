@@ -19182,7 +19182,7 @@ nav.navbar {
     border-bottom: 1px solid #eee;
     vertical-align: middle;
     font-size: 16px;
-    white-space: nowrap;
+    /* white-space: nowrap; */
 }
 
 .table tbody tr td ul,

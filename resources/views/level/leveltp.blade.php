@@ -278,7 +278,7 @@
                                                      <thead>
                                                          <tr>
                                                              <th> Application ID </th>
-                                                             <!--                                                                <th class="center"> Create User ID </th>-->
+                                                             <!--<th class="center"> Create User ID </th>-->
                                                              <th> Level ID </th>
                                                              <th> Country </th>
                                                              <th> Action </th>
@@ -291,7 +291,7 @@
                                                                      @if (checktppaymentstatus($item_level_list->id) == 0)
                                                                          <td> RAVAP-{{ 4000 + $item_level_list->id }}</td>
                                                                          </td>
-                                                                         <!--                                                                        <td class="center">{{ $item_level_list->user_id ?? '' }}</td>-->
+                                                                         <!-- <td class="center">{{ $item_level_list->user_id ?? '' }}</td>-->
                                                                          <td> {{ $item_level_list->level_id ?? '' }}</td>
                                                                          <td> {{ $item_level_list->country_name ?? '' }}
                                                                          </td>
@@ -896,7 +896,13 @@ active @endif "
                                                                          <!-- {{ $courses->id }} -->
                                                                          [ <?php echo get_course_mode($courses->id); ?> ]
                                                                      </td>
-                                                                     <td class="center">{{ $courses->course_brief }}
+                                                                     <td class="center">
+
+
+
+                                                                        {{substr_replace($courses->course_brief ,'...',15)}}
+
+
                                                                      </td>
                                                                      <td class="center">
                                                                          @if ($courses->payment == 'false')
@@ -1119,8 +1125,16 @@ active @endif "
                                              <li><button type="button"
                                                      class="btn btn-danger prev-step">Previous</button>
                                              </li>
-                                             <li><button type="button"
-                                                     class="btn btn-primary next-step1">Next</button></li>
+
+                                             <li>
+
+                                                @isset($course)
+                                                @if(count($course) > 0)
+                                                <button type="button"
+                                                     class="btn btn-primary next-step1">Next</button>
+                                                @endif
+                                                @endisset
+                                                </li>
                                          </ul>
                                      </div>
                                  </div>
@@ -1329,7 +1343,7 @@ active @endif "
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
                                                              <div class="form-line">
-                                                                 <label>Payment Screenshot <span
+                                                                 <label>Payment Screenshot(jpg,png,jpeg,pdf) <span
                                                                          class="text-danger">*</span></label>
                                                                  <input type="file" name="payment_details_file"
                                                                      id="payment_details_file" required
