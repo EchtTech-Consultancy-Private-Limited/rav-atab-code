@@ -777,7 +777,7 @@
                                                                 <div class="badge col-green">Application Proccess</div>
                                                             @elseif($ApplicationPayment->status == 2)
                                                                 <div class=" col-green"><strong
-                                                                        class="btn btn-success">Application
+                                                                        class="btn btn-success">Application Payment
                                                                         Approved</strong>
                                                                 </div>
                                                             @else
@@ -825,7 +825,7 @@
 
     <script>
         function confirm_option() {
-            if (!confirm("Are you sure to change action of this record!")) {
+            if (!confirm("Are you sure to approve the payment of this application!")) {
                 return false;
             }
 
@@ -863,7 +863,7 @@
 
 
             $(".payment_alert").click(function(){
-                alert('Document pending approval from Accountant')
+                alert('Document is pending for approval from Accounts department')
             });
 
 
@@ -871,7 +871,7 @@
 
 <script>
     $('.payment_details_file').on('click', function() {
-        alert('Payment confirmation is mandatory please upload the file')
+        alert('Payment confirmation is mandatory.Kindly upload a reference file to proceed.')
     });
 </script>
 

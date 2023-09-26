@@ -337,10 +337,15 @@
                                </div>
                             <div class="col-sm-12 text-right">
                                    <div class="form-group">
+
+
+
+                                    @if($spocData->status  == 1)
                                       <div class="form-line">
                                         <a href="{{ url('/upload-document' . '/' .$ApplicationCourses->application_id.'/'.$ApplicationCourses->id) }}"
                                             class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">Upload Documents</a>
                                     </div>
+                                    @endif
                                    </div>
                                    </div>
 

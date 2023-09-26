@@ -11,7 +11,7 @@ use App\Models\ApplicationLevel2;
 class UpgradeLevelController extends Controller
 {
     public function show_previous_level()
-    {   
+    {
        if(Auth::user()->role==1)
        {
         $applications = Application::all();
@@ -30,12 +30,12 @@ class UpgradeLevelController extends Controller
 
          $applications_id = $request->application_id_upgrade;
          $level1=Application::where('id',$applications_id)->first();
-         
+
          $level2_application_id=$applications_id+1;
          //$level2_application_id='';
          $level2_check_record=ApplicationLevel2::where('level2_application_id',$level2_application_id)->first();
          if(empty($level2_check_record))
-         {   
+         {
              $level2 = new ApplicationLevel2;
              $level2->level_id=$level1->level_id+1;
              $level2->user_id=$level1->user_id;
@@ -62,9 +62,9 @@ class UpgradeLevelController extends Controller
 
          return  redirect('level-first')->with('success','Course  successfully  Added!!!!');
 
-    
+
 
     }
 
-   
+
 }
