@@ -608,7 +608,7 @@
                                                                          <div class="form-line">
                                                                              <label>Email-ID<span
                                                                                      class="text-danger">*</span></label>
-                                                                             <input type="text" name="Email_ID"
+                                                                             <input id="emailId" type="text" name="Email_ID"
                                                                                  placeholder="Email-ID"
                                                                                  @isset($id)
             value="{{ $Application->Email_ID ?? '' }}"
@@ -2815,5 +2815,89 @@
                          // Find the parent row and remove it
                          $(button).closest('.new-course-html').remove();
                      }
+
+
+                     $('#Contact_Number').on('keyup', function() {
+    // Get the contact number value
+    var contactNumber = $(this).val();
+
+    // Check if the contact number is empty
+    if (contactNumber === '') {
+        // Clear the error message and exit
+        $('#contact_error').text('');
+        return;
+    }
+
+    // Check if the contact number is numeric and has exactly 10 digits
+    if (/^\d{10}$/.test(contactNumber)) {
+        // Send an AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/checkContactNumber', // Update with your Laravel route URL
+            data: {
+                contact_number: contactNumber,
+                _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
+            },
+            success: function(response) {
+                if (response.status === 'duplicate') {
+                    // Display the error message in the #contact_error span
+                    $('#contact_error').text('Contact number is already in use.');
+                } else {
+                    // Clear the error message if the contact number is unique
+                    $('#contact_error').text('');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle AJAX errors if needed
+            }
+        });
+    } else {
+        // Display an error message for an invalid contact number
+        $('#contact_error').text('Contact number must be 10 digits and numeric.');
+    }
+});
+
+
+$('#emailId').on('keyup', function() {
+    // Get the email value
+    var email = $(this).val();
+
+    // Check if the email is empty
+    if (email === '') {
+        // Clear the error message and exit
+        $('#email_id_error').text('');
+        return;
+    }
+
+    // Check if the email format is valid
+    if (/^\S+@\S+\.\S+$/.test(email)) {
+        // Send an AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/checkEmail', // Update with your Laravel route URL
+            data: {
+                email: email,
+                _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
+            },
+            success: function(response) {
+                if (response.status === 'duplicate') {
+                    // Display the error message in the #email_id_error span
+                    $('#email_id_error').text('Email is already in use.');
+                } else {
+                    // Clear the error message if the email is unique
+                    $('#email_id_error').text('');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle AJAX errors if needed
+            }
+        });
+    } else {
+        // Display an error message for an invalid email format
+        $('#email_id_error').text('Invalid email format.');
+    }
+});
+
+
                  </script>
  </body>

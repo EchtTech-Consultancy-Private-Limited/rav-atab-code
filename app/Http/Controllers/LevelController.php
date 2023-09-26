@@ -2635,4 +2635,31 @@ class LevelController extends Controller
 
         return back()->with('sussess', 'Payment Confirmation is Successfully');;
     }
+
+
+    public function checkContactNumber(Request $request)
+    {
+        $contactNumber = $request->contact_number;
+
+        $existingApplication = Application::where('Contact_Number', $contactNumber)->first();
+
+        if ($existingApplication) {
+            return response()->json(['status' => 'duplicate']);
+        }
+
+        return response()->json(['status' => 'unique']);
+    }
+
+    public function checkEmail(Request $request)
+    {
+        $email = $request->email;
+
+        $existingApplication = Application::where('Email_ID', $email)->first();
+
+        if ($existingApplication) {
+            return response()->json(['status' => 'duplicate']);
+        }
+
+        return response()->json(['status' => 'unique']);
+    }
 }
