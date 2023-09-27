@@ -217,11 +217,9 @@
                                                 <select name="assessment_type" required
                                                    class="form-control assessment_type">
                                                    <option value="0">Select Assessment Type</option>
-                                                   <option value="1" @if($assessment_type == 1)
-                                                   selected @endif>Desktop Assessment</option>
-                                                   <option value="2" @if($assessment_type == 2)
-                                                   selected @endif>On-Site Assessment</option>
-                                                   <!-- <option value="3" @if($assessment_type == 3) {
+                                                   <option value="1" >Desktop Assessment</option>
+                                                   <option value="2" >On-Site Assessment</option>
+                                                    <!-- <option value="3" @if($assessment_type == 3) {
                                                       selected @endif>Surveillance Assessment</option>
                                                       <option value="4" @if($assessment_type == 4) {
                                                       selected @endif>Surprise Assessment</option>

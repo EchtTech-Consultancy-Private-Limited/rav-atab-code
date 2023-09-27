@@ -56,7 +56,7 @@ function decode5t($str)
     $applications=DB::table('application_payments')->where('application_id','=',$application_id)->first();
 
     //$applications = "Test";
-    $application_created_at = $applications->created_at;
+    $application_created_at = date('d-m-Y',strtotime($applications->created_at));
     return $application_created_at;
  }
  function assessor_assign_date($application_id,$asessor_id)
@@ -64,7 +64,9 @@ function decode5t($str)
     $applications=DB::table('asessor_applications')->where('application_id','=',$application_id)->where('assessor_id','=',$asessor_id)->first();
 
 
-    $application_assign_date = $applications->created_at;
+    $application_assign_date = date('d-m-Y',strtotime($applications->created_at));
+
+  //  dd( $application_assign_date);
     return $application_assign_date;
  }
 

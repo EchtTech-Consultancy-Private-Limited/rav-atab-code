@@ -124,12 +124,7 @@ Route::get('/admin-view/{id}',[LevelController::class,'admin_view']);
 Route::get('/delete-course/{id}',[LevelController::class,'delete_course']);
 Route::post('/Assigan-application',[applicationController::class,'Assigan_application']);
 Route::post('/assigan-secretariat-application',[applicationController::class,'assigan_secretariat_application']);
-
-
-
 Route::get('/assigin-check-delete',[applicationController::class,'assigin_check_delete']);
-
-
 //previews-application view page
 Route::get('/previews-application-first/{id?}/{application_id}',[LevelController::class,'previews_application1']);
 Route::get('/previews-application-second/{id?}',[LevelController::class,'previews_application2']);
