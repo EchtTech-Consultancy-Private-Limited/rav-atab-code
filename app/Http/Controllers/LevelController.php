@@ -2609,10 +2609,9 @@ class LevelController extends Controller
     public function image_app_status(Request $request, $id)
     {
 
-
         $request->validate(
             [
-                'payment_slip' => 'mimes:jpeg,png,pdf',
+                'file' => 'mimes:png,jpg,jpeg,pdf|max:2048'
             ]
 
         );

@@ -110,7 +110,7 @@
                                                             aria-controls="DataTables_Table_0" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
                                                             aria-label=" No : activate to sort column descending">
-                                                            Comments By Admin </th>
+                                                            User </th>
                                                         <th class="center sorting" tabindex="0"
                                                             aria-controls="DataTables_Table_0" rowspan="1"
                                                             colspan="1"

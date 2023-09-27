@@ -300,7 +300,7 @@
                                                 <label><a
                                                         href="{{ url('show-course-pdf/' . $ApplicationDocument[0]->document_file) }}"
                                                         target="_blank" id="docpdf1" title="Download Document 1"><i
-                                                            class="fa fa-eye mr-2"></i> PDF 1
+                                                            class="fa fa-eye mr-2"></i> Doc 1
                                                     </a></label>
                                             </div>
                                         </div>
@@ -314,7 +314,7 @@
                                                 <label><a
                                                         href="{{ url('show-course-pdf/' . $ApplicationDocument[1]->document_file) }}"
                                                         target="_blank" id="docpdf2" title="Download Document 2"><i
-                                                            class="fa fa-eye mr-2"></i> PDF 2
+                                                            class="fa fa-eye mr-2"></i> Doc 2
                                                     </a></label>
                                             </div>
                                         </div>
@@ -327,7 +327,7 @@
                                                 <label>
                                                     <a href="{{ url('documnet/' . $ApplicationDocument[2]->document_file) }}"
                                                         target="_blank" title="Document 3" id="docpdf3" download>
-                                                        <i class="fa fa-download mr-2"></i> PDF 3
+                                                        <i class="fa fa-download mr-2"></i> Doc 3
                                                     </a>
                                                 </label>
                                             </div>
