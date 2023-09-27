@@ -78,7 +78,9 @@
 
             <div class="row ">
 
+
             <div class="row clearfix">
+
 
                 <div class="col-lg-12 col-md-12">
 
@@ -89,6 +91,8 @@
                                     <div class="card project_widget">
 
                                         <div class="body">
+
+                                            <a href="{{ url('nationl-accesser')}}" type="button" class="btn btn-primary" style="float:right;">Back</a>
 
 
                                                 <h4>Create NC</h4><br><br>
@@ -149,7 +153,6 @@
                                                         @endif
 
 
-
                                                             <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
 
                                                                 <label>Add Comment</label>
@@ -191,8 +194,10 @@
                                    <tr role="row">
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> S.No. </th>
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments  </th>
-                                        <th class="center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label=" Name : activate to sort column ascending">Date </th>
+
                                         <th class="center sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" No : activate to sort column descending"> Comments By  </th>
+
+                                        <th class="center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label=" Name : activate to sort column ascending">Date </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -202,12 +207,21 @@
 
                                 @foreach($comment as $key=>$comments)
 
-                                <tr class="gradeX odd ">
+                                    <tr class="gradeX odd ">
+
                                          <td class="center sorting_1">{{ ++$key }}</td>
                                           <td class="center"><a ><b>{{$comments->comments}}</b></a></td>
-                                         <td class="center"><a >{{$comments->created_at}}</a></td>
+
+
                                          <td class="center"><a ><b>@if(get_role($comments->user_id)==1)  {{ get_admin_comments($comments->user_id) }} ( Admin ) @elseif(get_role($comments->user_id)==3)  {{ get_admin_comments($comments->user_id) }} ( Assessor ) @endif</b></a></td>
-                                </tr>
+
+                                         <td class="center"><a>{{
+
+                                            date('d F Y', strtotime( $comments->created_at))
+
+
+                                          }}</a></td>
+                                    </tr>
                                 @endforeach
 
                             </tbody>
@@ -218,7 +232,7 @@
                        </div>
                     </div>
                  </div>
-                 <a style="line-height:2;" type="button" class="btn btn-secondary" href="{{ url('nationl-accesser')}}">Back To Documents</a>
+                 {{-- <a style="line-height:2;" type="button" class="btn btn-secondary" href="{{ url('nationl-accesser')}}">Back To Documents</a> --}}
               </div>
             </div>
 

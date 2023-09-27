@@ -1749,9 +1749,8 @@ class LevelController extends Controller
         return view('asesrar.show-comment', compact('comment'));
     }
 
-    public function document_comment_admin_assessor($course_id)
-    {
-        $comment = DocumentReportVerified::orderby('id', 'Desc')->where('course_id', $course_id)->get();
+    public function document_comment_admin_assessor($course_id){
+        $comment = DocComment::orderby('id', 'Desc')->where('course_id', $course_id)->get();
         return view('asesrar.show-comment-accr-admin', compact('comment'));
     }
 
@@ -1838,12 +1837,8 @@ class LevelController extends Controller
     public function admin_view_doc($doc_code, $id, $doc_id, $course_id)
     {
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
-
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
-
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
-
-
         return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id'));
     }
 
