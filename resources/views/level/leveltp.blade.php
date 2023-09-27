@@ -1267,12 +1267,9 @@
                                                              <div class="form-line">
                                                                  <label>Payment Date <span
                                                                          class="text-danger">*</span></label>
-                                                                 <input type="text" name="payment_date"
-                                                                     class="form-control" id="payment_date" required
-                                                                     placeholder="Payment Date "aria-label="Date"
-                                                                     value="{{ old('payment_date') }}"
-                                                                     onfocus="focused(this)"
-                                                                     onfocusout="defocused(this)">
+                                                                         <input type="text" name="payment_date" class="form-control" id="payment_date" required
+                                                                         placeholder="Payment Date" aria-label="Date" value="{{ old('payment_date') }}"
+                                                                         onfocus="focused(this)" onfocusout="defocused(this)" onfocus="showDatePicker()">
                                                              </div>
                                                              <label for="payment_date" id="payment_date-error"
                                                                  class="error">
@@ -2912,4 +2909,17 @@ $('#emailId').on('keyup', function() {
 
 
                  </script>
+
+<script>
+    function showDatePicker() {
+        // Get the current year
+        var currentYear = new Date().getFullYear();
+
+        // Set the minimum date to January 1st of the current year
+        var minDate = currentYear + "-01-01";
+
+        // Set the minimum date for the input field
+        document.getElementById("payment_date").setAttribute("min", minDate);
+    }
+    </script>
  </body>
