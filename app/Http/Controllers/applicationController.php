@@ -92,8 +92,6 @@ class applicationController extends Controller
             $data->due_date=$due_date = Carbon::now()->addDay(15);
             $data->save();
             return  back()->with('sussess','Application has been successfully assigned to assessor');
-
-
          }
 
 
@@ -110,7 +108,7 @@ class applicationController extends Controller
             $data->assessment_type=$request->assessment_type;
             $data->due_date=$due_date = Carbon::now()->addDay(15);
             $data->save();
-            return  back()->with('sussess','Application has been successfully assigned to assessor');
+
     }
 
     }else{
@@ -133,13 +131,12 @@ class applicationController extends Controller
                     $data->save();
                 }
 
-                return  back()->with('sussess','Application has been successfully assigned to assessor');
+
             }
             else{
 
                 $assessor_id=$request->assessor_id;
                 for($i=0; $i<count($assessor_id); $i++){
-
 
                     //dd($arraycontent[0]);
 
@@ -169,12 +166,15 @@ class applicationController extends Controller
                         $data->assessment_type=$request->assessment_type;
                         $data->due_date=$due_date = Carbon::now()->addDay(15);
                         $data->save();
-                        // return  back()->with('sussess','Application has been successfully assigned to assessor');
+
                     }
+
+                    return  back()->with('sussess','Application has been successfully assigned to assessor');
+
                 }
 
 
-                return  back()->with('sussess','Application has been successfully assigned to assessor');
+                return  back()->with('error',' This application has already been assigned to this assesser ');
 
             }
     }else{

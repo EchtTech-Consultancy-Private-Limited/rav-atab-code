@@ -25,21 +25,29 @@
     <div>
 
 
-        @if(Auth::user()->role  == '1' )
+        @if(Auth::user()->role  == 1 )
 
         @include('layout.sidebar')
 
-        @elseif(Auth::user()->role  == '2')
+        @elseif(Auth::user()->role  == 2)
 
         @include('layout.siderTp')
 
-        @elseif(Auth::user()->role  == '3')
+        @elseif(Auth::user()->role  == 3)
 
         @include('layout.sideAss')
 
-        @elseif(Auth::user()->role  == '4')
+        @elseif(Auth::user()->role  == 4)
 
         @include('layout.sideprof')
+
+        @elseif(Auth::user()->role  == 5)
+
+        @include('layout.secretariat')
+
+        @elseif(Auth::user()->role  == 6)
+
+        @include('layout.sidbarAccount')
 
         @endif
 
@@ -96,12 +104,6 @@
                                                 <p>Unable to display PDF file.
                                                <a href="{{ asset('documnet'.'/'.$data) }}">Download</a> instead.</p>
                                             </object>
-
-
-
-
-
-
 
                                     </div>
                                 </div>
