@@ -118,7 +118,7 @@
                                                                 <label>Select Type</label>
                                                                 <select required class="form-control required text-center" id="show-view-doc-options" name="status">
                                                                     <option value="">--Select--</option>
-                                                                    <option value="0">NC 1</option>
+                                                                    <option value="2">NC 1</option>
                                                                     <option value="1">Close</option>
                                                                 </select>
                                                             </div>
@@ -131,7 +131,7 @@
                                                                 <label>Select Type</label>
                                                                 <select required class="form-control required text-center" id="show-view-doc-options" name="status">
                                                                     <option value="">--Select--</option>
-                                                                    <option value="0">NC 2</option>
+                                                                    <option value="2">NC 2</option>
                                                                     <option value="1">Close</option>
                                                                 </select>
                                                             </div>
@@ -301,14 +301,19 @@
 
           $('#show-view-doc-options').on('change', function(){
           var listvalue = $(this).val();
-          if(listvalue==0){
+         // alert(listvalue);
+          if(listvalue==2){
             $('#doc-comment-textarea').show();
           }
           else if(listvalue==1)
           {
                $('#doc-comment-textarea').hide();
           }
-          else if(listvalue==3)
+          else if(listvalue==2)
+          {
+              $('#doc-comment-textarea').show();
+          }
+          else if(listvalue==0)
           {
               $('#doc-comment-textarea').show();
           }

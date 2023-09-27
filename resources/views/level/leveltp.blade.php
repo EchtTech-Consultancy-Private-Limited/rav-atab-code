@@ -131,10 +131,9 @@
      }
 
      .form-control[type=file] {
-    overflow: hidden;
-    height: 3rem;
-}
-
+         overflow: hidden;
+         height: 3rem;
+     }
  </style>
  <title>RAV Accreditation</title>
  </head>
@@ -211,7 +210,7 @@
                   </li>
                   --}}
                                      <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link add-active-b @if(isset($form_step_type)) @if($form_step_type == 'add-course') active @else @endif  @endif"
+                                         <a class="nav-link add-active-b @if (isset($form_step_type)) @if ($form_step_type == 'add-course') active @else @endif  @endif"
                                              href="#new_application" data-bs-toggle="tab">New
                                              Application</a>
                                      </li>
@@ -312,8 +311,8 @@
                          </div>
                          <div role="tabpanel"
                              class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step') @endif
-@else
-active @endif"
+                                     @else
+                                     active @endif"
                              id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
@@ -410,8 +409,8 @@ active @endif"
                                      </li>
                                  </ul>
                                  <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif
-@else
-active @endif "
+                                              @else
+                                             active @endif"
                                      role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
@@ -612,8 +611,8 @@ active @endif "
                                                                              <input type="text" name="designation"
                                                                                  placeholder="Designation"
                                                                                  @isset($id)
-            value="{{ $Application->designation ?? '' }}"
-            @endisset>
+                                                                                 value="{{ $Application->designation ?? '' }}"
+                                                                                 @endisset>
                                                                          </div>
                                                                          <span class="text-danger"
                                                                              id="designation_error"></span>
@@ -700,8 +699,7 @@ active @endif "
                                                                          name="months[]" maxlength="2" required
                                                                          class="course_input preventalpha">
                                                                      <input type="text" maxlength="2"
-                                                                         placeholder="Days "
-                                                                         name="days[]" required
+                                                                         placeholder="Days " name="days[]" required
                                                                          class="course_input preventalpha">
                                                                      <input type="number" placeholder="Hours"
                                                                          name="hours[]" required class="course_input">
@@ -900,7 +898,7 @@ active @endif "
 
 
 
-                                                                        {{substr_replace($courses->course_brief ,'...',15)}}
+                                                                         {{ substr_replace($courses->course_brief, '...', 15) }}
 
 
                                                                      </td>
@@ -910,11 +908,11 @@ active @endif "
                                                                          @endif
                                                                      </td>
                                                                      <!-- <td class="center">
-                       {{ date('d F Y', strtotime($courses->created_at)) }}
-                       </td>
-                       <td class="center">
-                       {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
-                       </td> -->
+                           {{ date('d F Y', strtotime($courses->created_at)) }}
+                           </td>
+                           <td class="center">
+                           {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
+                           </td> -->
                                                                      <td class="center btn-ved">
                                                                          <a class="btn btn-tbl-delete bg-primary"
                                                                              data-bs-toggle="modal"
@@ -1128,13 +1126,13 @@ active @endif "
 
                                              <li>
 
-                                                @isset($course)
-                                                @if(count($course) > 0)
-                                                <button type="button"
-                                                     class="btn btn-primary next-step1">Next</button>
-                                                @endif
-                                                @endisset
-                                                </li>
+                                                 @isset($course)
+                                                     @if (count($course) > 0)
+                                                         <button type="button"
+                                                             class="btn btn-primary next-step1">Next</button>
+                                                     @endif
+                                                 @endisset
+                                             </li>
                                          </ul>
                                      </div>
                                  </div>
@@ -1150,15 +1148,17 @@ active @endif "
                                          </div>
                                          <div class="body">
                                              <div class="form-group">
-                                                 <div class="form-line select-box-hide-class"  style="width:25%">
+                                                 <div class="form-line select-box-hide-class" style="width:25%">
                                                      <label>Payment Mode<span class="text-danger">*</span></label>
                                                      <select name="payment" class="form-control" id="payments">
                                                          <option value="">Select Option</option>
                                                          <option value="QR-Code"
-                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR Code
+                                                             {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
+                                                             Code
                                                          </option>
                                                          <option value="Bank"
-                                                             {{ old('title') == 'Bank' ? 'selected' : '' }}>Bank Transfers
+                                                             {{ old('title') == 'Bank' ? 'selected' : '' }}>Bank
+                                                             Transfers
                                                          </option>
                                                      </select>
                                                  </div>
@@ -1224,6 +1224,7 @@ active @endif "
                                              <form action="{{ url('/new-application_payment') }}" method="post"
                                                  class="form" id="regForm" enctype="multipart/form-data">
                                                  @csrf
+
                                                  <input type="hidden" name="form_step_type"
                                                      value="application-payment">
                                                  <div class="row clearfix">
@@ -1343,7 +1344,7 @@ active @endif "
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
                                                              <div class="form-line">
-                                                                 <label>Payment Screenshot(jpg,png,jpeg,pdf) <span
+                                                                 <label>Payment Proof(jpg,png,jpeg,pdf) <span
                                                                          class="text-danger">*</span></label>
                                                                  <input type="file" name="payment_details_file"
                                                                      id="payment_details_file" required
@@ -1364,7 +1365,7 @@ active @endif "
                                                      <!--  <li><button type="button"
                class="btn btn-info preview-step mr-2">Preview</button></li> -->
                                                      <li><button type="submit"
-                                                             class="btn btn-primary btn-info-full ">Submit</button>
+                                                             class="btn btn-primary btn-info-full">Submit</button>
                                                      </li>
                                                  </ul>
                                              </form>
@@ -1450,21 +1451,21 @@ active @endif "
                                                                          class="material-icons">visibility</i></a>
                                                                  <!-- @if ($item->status == 1)
     <a href="{{ url('/upload-document' . '/' . dEncrypt($item->id)) }}"
-                                                                                                                        class="btn btn-tbl-edit bg-primary"><i
-                                                                                                                            class="fa fa-upload"></i></a>
+                                                                                                                            class="btn btn-tbl-edit bg-primary"><i
+                                                                                                                                class="fa fa-upload"></i></a>
     @endif
-                                                                                                                @if ($item->status == 2)
+                                                                                                                    @if ($item->status == 2)
     <a href="{{ url('/application-upgrade-second') }}"
-                                                                                                                        class="btn btn-tbl-edit"><i
-                                                                                                                            class="material-icons">edit</i></a>
+                                                                                                                            class="btn btn-tbl-edit"><i
+                                                                                                                                class="material-icons">edit</i></a>
     @endif -->
                                                              </td>
                                                              @if (request()->path() == 'level-first')
                                                              @elseif(request()->path() == 'level-second')
                                                                  <td class="center">
                                                                      <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                            class="btn btn-tbl-edit"><i
-                                                class="material-icons">visibility</i></a> -->
+                                                class="btn btn-tbl-edit"><i
+                                                    class="material-icons">visibility</i></a> -->
                                                                      @if ($item->status == 1)
                                                                          <a href="{{ url('/upload-document') }}"
                                                                              class="btn btn-tbl-upload"><i
@@ -1651,7 +1652,7 @@ active @endif "
                                                      <td class="center">
                                                          <a target="_blank" href="" title="Document 3"
                                                              id="docpdf3" download>
-                                                             <i class="fa fa-eye mr-2"></i> Doc 3
+                                                             <i class="fa fa-download mr-2"></i> Doc 3
                                                          </a>
                                                      </td>
                                                  </tr>
@@ -1690,7 +1691,7 @@ active @endif "
                                                          <label class="active">Course Name<span
                                                                  class="text-danger">*</span></label>
                                                          <input type="text" name="Course_Names" id="Course_Names"
-                                                             class="form-control">
+                                                             class="form-control" required>
                                                      </div>
                                                  </div>
                                              </div>
@@ -1726,7 +1727,7 @@ active @endif "
                                                  <div class="form-group">
                                                      <div class="form-line">
                                                          <label class="active">Eligibility<span> </label>
-                                                         <input type="text" name="Eligibilitys"
+                                                         <input type="text" name="Eligibilitys" required
                                                              id="Eligibilitys" class="form-control">
                                                      </div>
                                                  </div>
@@ -1737,17 +1738,17 @@ active @endif "
                                                          <label>Mode of Course <span
                                                                  class="text-danger">*</span></label>
                                                          <!--  <select class="form-control" name="mode_of_course[]"
-                                    required multiple="" style="width:160px;" id="mode_of_course_edit">
-                                    <option value="1">Online</option>
-                                    <option value="2">Offline</option>
-                                    <option value="3">Hybrid</option> -->
+                                                            required multiple="" style="width:160px;" id="mode_of_course_edit">
+                                                         <option value="1">Online</option>
+                                                         <option value="2">Offline</option>
+                                                         <option value="3">Hybrid</option> -->
                                                          <!-- <option>Select Mode of Course</option> -->
                                                          <!-- @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
 <option value="{{ $value }}">{{ $value }}</option>
 @endforeach -->
                                                          <!-- </select> -->
                                                          <select multiple name="mode_of_course[]"
-                                                             id="mode_of_course_edit">
+                                                             id="Mode_Of_Courses">
                                                              <option value="Online">Online</option>
                                                              <option value="Offline">Offline</option>
                                                              <option value="Hybrid">Hybrid</option>
@@ -1766,8 +1767,8 @@ active @endif "
                                                                  class="text-danger">*</span></label>
                                                          <!-- <input type="text" placeholder="Course Brief"
                                     name="course_brief[]" required> -->
-                                                         <textarea rows="4" cols="50" class="form-control" placeholder="Course Brief" name="course_brief"
-                                                             id="course_brief"></textarea>
+                                                         <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
+                                                             name="course_brief" id="course_brief"></textarea>
                                                      </div>
                                                      @error('course_brief')
                                                          <div class="alert alert-danger">{{ $message }}
@@ -1812,13 +1813,13 @@ active @endif "
                                                              class="form-control doc_edit_3 file_size">
                                                          <a href="" id="docpdf3ss"
                                                              title="Download Document 1" download><i
-                                                                 class="fa fa-eye mr-2"></i> Doc 3 </a>
+                                                                 class="fa fa-download mr-2"></i> Doc 3 </a>
                                                      </div>
                                                  </div>
                                              </div>
                                              <div class="col-md-12 text-center">
-                                                 <button type="submit"
-                                                     class="btn btn-primary waves-effect m-r-15">Save</button>
+                                                 <button type="submit" class="btn btn-primary waves-effect m-r-15"
+                                                     onclick="load();">Save</button>
                                              </div>
                                          </div>
                                      </form>
@@ -2302,7 +2303,7 @@ active @endif "
 
                                  //console.log(data.ApplicationCourse[0].mode_of_course);
 
-
+                                 console.log(data.ApplicationCourse[0].mode_of_course)
 
                                  var values = data.ApplicationCourse[0].mode_of_course;
                                  $.each(values, function(i, e) {
@@ -2390,31 +2391,31 @@ active @endif "
 
 
                      $.ajax({
-                                 url: "{{ url('/level-first') }}",
-                                 type: "get",
-                                 data: {
-                                     id: UserName
-                                 },
-                                 success: function(data) {
+                         url: "{{ url('/level-first') }}",
+                         type: "get",
+                         data: {
+                             id: UserName
+                         },
+                         success: function(data) {
 
 
-                                         // disable alphate
-                                         $('#postal').keypress(function(e) {
-                                             // alert('hello');
-                                             var regex = new RegExp("^[0-9_]");
-                                             var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-                                             if (regex.test(str)) {
-                                                 return true;
-                                             }
-                                             e.preventDefault();
-                                             return false;
+                             // disable alphate
+                             $('#postal').keypress(function(e) {
+                                 // alert('hello');
+                                 var regex = new RegExp("^[0-9_]");
+                                 var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                                 if (regex.test(str)) {
+                                     return true;
+                                 }
+                                 e.preventDefault();
+                                 return false;
 
 
-                                        });
+                             });
 
-                                    }
+                         }
 
-                                         });
+                     });
                  </script>
 
 
@@ -2692,6 +2693,16 @@ active @endif "
 
                          });
                      })
+                 </script>
+
+                 <script>
+                     function load() {
+                         $('.btn').prop('disabled', true);
+                         setTimeout(function() {
+                             $('.btn').prop('disabled', false);
+                         }, 10000);
+                         $("#form").submit();
+                     }
                  </script>
                  <!-- <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a> -->
                  <script src="{{ asset('assets/js/form.min.js') }} "></script>

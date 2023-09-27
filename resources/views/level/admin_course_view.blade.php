@@ -300,7 +300,7 @@
                                                 <label><a
                                                         href="{{ url('show-course-pdf/' . $ApplicationDocument[0]->document_file) }}"
                                                         target="_blank" id="docpdf1" title="Download Document 1"><i
-                                                            class="fa fa-download mr-2"></i> PDF 1
+                                                            class="fa fa-eye mr-2"></i> PDF 1
                                                     </a></label>
                                             </div>
                                         </div>
@@ -311,10 +311,10 @@
                                             <div class="form-line">
                                                 <label><strong>Course Curriculum / Material / Syllabus
                                                     </strong></label><br>
-                                                <label> <a
+                                                    <label><a
                                                         href="{{ url('show-course-pdf/' . $ApplicationDocument[1]->document_file) }}"
                                                         target="_blank" id="docpdf2" title="Download Document 2"><i
-                                                            class="fa fa-download mr-2"></i> PDF 2
+                                                            class="fa fa-eye mr-2"></i> PDF 2
                                                     </a></label>
                                             </div>
                                         </div>
@@ -476,10 +476,9 @@
                                         @if ($ApplicationPayment[0]->status == '2')
 
                                             <div class="col-sm-12 text-right">
-
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <a href="{{ url('/admin-view-document' . '/' . $ApplicationCourses->application_id . '/' . $ApplicationCourses->id) }}"
+                                                        <a href="{{ url('/admin-view-document'.'/'.$ApplicationCourses->application_id . '/' . $ApplicationCourses->id) }}"
                                                             class="btn text-white bg-primary"
                                                             style="float:right; color: #fff ; line-height: 25px;">View
                                                             Documents</a>
@@ -583,9 +582,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong>Payment Screenshot</strong></label><br>
-
-
+                                                <label><strong>Payment Proof</strong></label><br>
 
                                                 <?php
                                                 substr($ApplicationPayment->payment_details_file, -3);
@@ -597,7 +594,7 @@
                                                 @if ($data == 'pdf')
                                                     <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
                                                         target="_blank" title="Document 3" id="docpdf3" download>
-                                                        <i class="fa fa-download mr-2"></i>Payment pdf
+                                                        <i class="fa fa-download mr-2"></i>     Payment pdf
                                                     </a>
                                                 @else
                                                     @if (isset($ApplicationPayment->payment_details_file))
@@ -619,11 +616,11 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <label><strong>Payment remark </strong></label><br>
+                                                    <label><strong>Payment Remark </strong></label><br>
 
                                                     <div class="col-md-12">
-                                                        <input type="text" name="paymentremark" disabled required
-                                                            value="{{ $ApplicationPayment->payment_remark }}">
+                                                        <input type="text" name="paymentremark" disabled
+                                                            value="{{ $ApplicationPayment->payment_remark }}" required>
                                                     </div>
 
                                                 </div>
@@ -633,7 +630,7 @@
                                         <div class="col-sm-4 payment_file">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <label><strong>Payment Confirm </strong></label><br>
+                                                    <label><strong>Upload Payment Slip</strong></label><br>
 
 
                                                     {{-- {{ $ApplicationPayment->payment_slip }} --}}
@@ -678,7 +675,7 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label><strong>Payment remark </strong></label><br>
+                                                            <label><strong>Payment Remark </strong></label><br>
 
                                                             <div class="col-md-12">
                                                                 <input type="text" name="paymentremark" required
@@ -692,7 +689,7 @@
                                             <div class="col-sm-4 payment_file">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <label><strong>Payment Confirm  <span class="text-danger">*</span></strong></label><br>
+                                                        <label><strong>Upload Payment Slip <span class="text-danger">*</span></strong></label><br>
 
                                                         <div class="col-md-12">
                                                             <input type="file" name="payment_slip"
@@ -742,21 +739,21 @@
                                                         @if ($ApplicationPayment->status == '0')
                                                             <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                 onclick="return confirm_option('change status')"
-                                                                @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-secondary btn-sm"> Application Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @else @endif
+                                                                @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-primary btn-sm"> Payment Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @else @endif
                                                                 </a>
                                                         @endif
 
 
 
-                                                        @if($ApplicationPayment->payment_slip  != '')
+                                                                  @if($ApplicationPayment->payment_slip  != '')
 
                                                                     @if ($ApplicationPayment->status == '1')
                                                                         <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                             onclick="return confirm_option('change status')"
-                                                                            @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-secondary">Pending</strong></div>
+                                                                            @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-warning">Pending</strong></div>
 
                                                                     @elseif($ApplicationPayment->status == 1)
-                                                                    <div class=" col-green" ><strong class="btn btn-success">In Process</strong></div> @else @endif
+                                                                    <div class=" col-green" ><strong class="btn btn-warning">Final Approval</strong></div> @else @endif
                                                                             </a>
                                                                     @endif
 
@@ -764,7 +761,7 @@
 
                                                         @if ($ApplicationPayment->status == '1')
                                                         <a href="javascript:void(0)" class="payment_details_file" >
-                                                          <div class=" col-green" ><strong class="btn btn-success">In Process</strong></div> @else @endif
+                                                          <div class=" col-green" ><strong class="btn btn-warning">Final Approval</strong></div> @else @endif
                                                             </a>
 
                                                         @endif
@@ -776,8 +773,8 @@
                                                             @if ($ApplicationPayment->status == 1)
                                                                 <div class="badge col-green">Application Proccess</div>
                                                             @elseif($ApplicationPayment->status == 2)
-                                                                <div class=" col-green"><strong
-                                                                        class="btn btn-success">Application Payment
+                                                                <div class=" col-green" style="font-size:17px"><strong
+                                                                        class="">Application Payment
                                                                         Approved</strong>
                                                                 </div>
                                                             @else
@@ -825,7 +822,7 @@
 
     <script>
         function confirm_option() {
-            if (!confirm("Are you sure to approve the payment of this application!")) {
+            if (!confirm("Are you sure to approved the payment of this application!")) {
                 return false;
             }
 
@@ -859,14 +856,9 @@
             });
         });
 
-
-
-
             $(".payment_alert").click(function(){
                 alert('Document is pending for approval from Accounts department')
             });
-
-
     </script>
 
 <script>

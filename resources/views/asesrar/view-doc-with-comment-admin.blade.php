@@ -76,6 +76,11 @@
                         <div role="tabpanel" class="tab-pane active" id="level_information" aria-expanded="true">
                             <div class="row clearfix">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
+
+                                    @isset($doc_latest_record)
+
+
+                                    @if($doc_latest_record->notApraove_count  >= 3)
                                     <div class="card project_widget">
 
                                         <div class="body">
@@ -100,7 +105,7 @@
                                                             </div> -->
 
 
-
+{{--
                                                             @if($doc_latest_record->notApraove_count == 1)
 
                                                                 <div class="col-sm-12 col-md-4">
@@ -112,10 +117,10 @@
                                                                     </select>
                                                                 </div>
 
-                                                            @endif
+                                                            @endif --}}
 
 
-                                                            @if($doc_latest_record->notApraove_count == 2)
+                                                            {{-- @if($doc_latest_record->notApraove_count == 2)
                                                             <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
                                                                 <select required class="form-control required text-center" id="show-view-doc-options" name="status">
@@ -124,28 +129,43 @@
                                                                     <option value="1">Close</option>
                                                                 </select>
                                                             </div>
+                                                            @endif --}}
+
+
+
+                                                            @if (get_doccomment_status($doc_id) == 3)
+
+
+
+
+                                                             @else
+
+
+
+                                                          <div class="col-sm-12 col-md-4">
+                                                            <label>Select Type</label>
+                                                            <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                <option value="">--Select--</option>
+                                                                <option value="1">Close</option>
+                                                                <option value="3">Not Recommended</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                        <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
+
+                                                            <label>Add Comment</label>
+                                                            <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="show-view-doc-options1"></textarea>
+                                                        </div>
+                                                        <input type="submit" value="Add Comment" class="btn btn-primary">
+
+
+
+
+
+
                                                             @endif
 
-                                                            @if($doc_latest_record->notApraove_count  >= 3)
-                                                            <div class="col-sm-12 col-md-4">
-                                                                <label>Select Type</label>
-                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
-                                                                    <option value="">--Select--</option>
-                                                                    <option value="1">Close</option>
-                                                                    <option value="2">Not Recommended</option>
-                                                                </select>
-                                                            </div>
-                                                            @endif
-
-
-
-
-                                                            <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
-
-                                                                <label>Add Comment</label>
-                                                                <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="show-view-doc-options1"></textarea>
-                                                            </div>
-                                                            <input type="submit" value="Add Comment" class="btn btn-primary">
                                                         </div>
                                                     </form>
 
@@ -156,6 +176,8 @@
                                             </div>
 
                                     </div>
+                                    @endif
+                                    @endisset
                                 </div>
 
                             </div>
@@ -309,7 +331,10 @@
           {
               $('#doc-comment-textarea').show();
           }
-
+          else if(listvalue== 3)
+          {
+              $('#doc-comment-textarea').show();
+          }
           else if(listvalue=='')
           {
               $('#doc-comment-textarea').hide();

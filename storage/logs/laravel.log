@@ -1,0 +1,4 @@
+[2023-09-27 10:53:12] local.ERROR: Cannot redeclare encode5t() (previously declared in D:\xampp\htdocs\rav-atab-code\app\helpers.php:3) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare encode5t() (previously declared in D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3) at D:\\xampp\\htdocs\\rav-atab-code\\app\\helpers.php:3)
+[stacktrace]
+#0 {main}
+"} 

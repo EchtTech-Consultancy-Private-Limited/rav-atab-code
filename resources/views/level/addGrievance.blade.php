@@ -40,8 +40,6 @@
 
     </div>
 
-
-
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -87,7 +85,8 @@
 
                                                 @if (Auth::user()->role != '1')
                                                     <a type="button" href="{{ url('/Grievance') }}"
-                                                        class="btn btn-primary " style="float: right;line-height:25px;">+
+                                                        class="btn btn-primary "
+                                                        style="float: right;line-height:25px;">+
                                                         Add Grievance</a>
                                                 @endif
 
