@@ -148,6 +148,10 @@
     color: #fff; /* Change text color on hover */
 }
 
+.ui-datepicker-prev, .ui-datepicker-next{
+    cursor: pointer;
+}
+
  </style>
  <title>RAV Accreditation</title>
  </head>
@@ -2209,7 +2213,15 @@
                              dataType: 'json',
                              contentType: false,
                              success: function(response) {
-                                 alert('Application Created Successfully')
+                                Swal.fire({
+  position: 'center',
+  icon: 'success',
+  title: 'Success!',
+  text: 'Your application has been submitted successfully.',
+  showConfirmButton: false,
+  timer: 3000
+})
+
                                  //alert(response.id);
                                  if (response.id) {
 
