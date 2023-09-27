@@ -131,7 +131,9 @@
                                  <td class="center">{{ $item->course_count ?? '' }}</td>
                                  <td class="center">{{ $item->currency ?? '' }}{{ $item->amount ?? '' }}
                                  </td>
-                                 <td class="center">{{ $item->payment_date ?? '' }}</td>
+                                 <td class="center">{{
+                                    date('d F Y', strtotime($item->payment_date))
+                                }}</td>
                                  <td class="center">
                                     @if ($item->status == '0')
                                     <a
@@ -173,9 +175,10 @@
                                  <td class="center">
                                     <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
                                        class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
+
                                     {{-- <a data-bs-toggle="modal"  data-bs-target="#exampleModal" class="btn btn-tbl-edit bg-success">
                                     <i class="fa fa-font" aria-hidden="true"></i> </a> --}}
-                                    <?php if(checktppaymentstatustype($item->application_id) == 1 || checktppaymentstatustype($item->application_id) == 2) { ?>
+                                    <?php if(checktppaymentstatustype($item->application_id) == 2 || checktppaymentstatustype($item->application_id) == 2) { ?>
                                     <a class="btn btn-tbl-delete bg-primary font-a" data-bs-toggle="modal"
                                     data-id='{{ $item->application_id ?? '' }}'
                                     data-bs-target="#View_popup_{{ $item->application_id }}" id="view">
@@ -184,7 +187,7 @@
                                     <?php } ?>
                                     <!--Assign Secreate User -->
                                     <!-- {{checktppaymentstatustype($item->application_id)}} -->
-                                    <?php if(checktppaymentstatustype($item->application_id) == 1 || checktppaymentstatustype($item->application_id) == 2) { ?>
+                                    <?php if(checktppaymentstatustype($item->application_id) == 2 || checktppaymentstatustype($item->application_id) == 2) { ?>
                                     <a class="btn btn-tbl-delete bg-danger font-a" data-bs-toggle="modal"
                                     data-id='{{ $item->application_id ?? ''  }}'
                                     data-bs-target="#view_secreate_popup_{{ $item->application_id }}" id="view">

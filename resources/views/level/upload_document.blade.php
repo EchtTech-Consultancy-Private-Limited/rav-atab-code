@@ -3876,7 +3876,18 @@
                 success: function(response) {
                     $("#loader").addClass('d-none');
                     //$("#success-msg").addClass('d-none');
-                    alert("Document Added Successfully");
+                   if(response){
+                    Swal.fire({
+  position: 'center',
+  icon: 'success',
+  title: 'Upload Successful',
+  text: 'Your documents have been successfully uploaded.',
+  showConfirmButton: false,
+  timer: 1500
+});
+
+
+                   }
                     window.location.href = "{{ url(Request::url()) }}";
                     //$("#mydiv").load(location.href + " #mydiv");
 

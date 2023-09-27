@@ -1834,8 +1834,7 @@ class LevelController extends Controller
         return view('asesrar.view-doc-with-comment', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id'));
     }
 
-    public function admin_view_doc($doc_code, $id, $doc_id, $course_id)
-    {
+    public function admin_view_doc($doc_code, $id, $doc_id, $course_id){
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
@@ -2609,9 +2608,10 @@ class LevelController extends Controller
     public function image_app_status(Request $request, $id)
     {
 
+
         $request->validate(
             [
-                'file' => 'mimes:png,jpg,jpeg,pdf|max:2048'
+                'payment_slip' => 'mimes:jpeg,png,pdf',
             ]
 
         );
@@ -2629,6 +2629,7 @@ class LevelController extends Controller
 
         return back()->with('sussess', 'Payment Confirmation is Successfully');;
     }
+
 
 
     public function checkContactNumber(Request $request)

@@ -235,6 +235,7 @@ Route::get('document-view-accessor/{id?}',[LevelController::class, 'document_vie
 Route::post('/upgrade-level', [UpgradeLevelController::class, 'upgrade_level']);
 
 Route::post('checkContactNumber', [LevelController::class, 'checkContactNumber']);
+
 Route::post('checkEmail', [LevelController::class, 'checkEmail']);
 
 
