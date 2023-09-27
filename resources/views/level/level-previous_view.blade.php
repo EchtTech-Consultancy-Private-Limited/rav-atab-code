@@ -452,7 +452,6 @@
 
                                                     <?php
                                                     substr($ApplicationPayment->payment_details_file, -3);
-
                                                     $data = substr($ApplicationPayment->payment_details_file, -3);
                                                     ?>
 
@@ -461,13 +460,13 @@
                                                         <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
                                                             target="_blank" title="Document 3" id="docpdf3"
                                                             download>
-                                                            <i class="fa fa-download mr-2"></i>Payment pdf
+                                                            <i class="fa fa-download mr-2"></i>         Payment pdf
                                                         </a>
                                                     @else
-                                                        @if (isset($ApplicationPayment->payment_slip))
+                                                        @if (isset($ApplicationPayment->payment_details_file))
                                                             <a target="_blank" class="image-link"
-                                                                href="{{ asset('uploads/' . $ApplicationPayment->payment_slip) }}">
-                                                                <img src="{{ asset('uploads/' . $ApplicationPayment->payment_slip) }}"
+                                                                href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                                <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
                                                                     style="width:100px;height:70px;">
                                                             </a>
                                                         @endif

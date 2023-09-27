@@ -62,7 +62,7 @@
                             <li class="breadcrumb-item active"> View Previous Applications </li>
                         </ul>
 
-                        <a href="{{ URL::previous() }}" type="button" class="btn btn-primary" style="float:right;">Back
+                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
                         </a>
 
                     </div>
@@ -749,7 +749,7 @@
 
 
 
-                                                        @if ($ApplicationPayment->payment_slip != '')
+                                                        @if ($ApplicationPayment->payment_remark != '')
                                                             @if ($ApplicationPayment->status == '1')
                                                                 <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                     onclick="return confirm_option('change status')"

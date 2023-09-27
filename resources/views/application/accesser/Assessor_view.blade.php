@@ -476,7 +476,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong>Payment Screenshot</strong></label><br>
+                                                <label><strong>Payment Proof</strong></label><br>
 
 
 
@@ -490,7 +490,7 @@
                                                 @if ($data == 'pdf')
                                                     <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
                                                         target="_blank" title="Document 3" id="docpdf3" download>
-                                                        <i class="fa fa-download mr-2"></i>Payment pdf
+                                                        <i class="fa fa-download mr-2"></i>          Payment pdf
                                                     </a>
                                                 @else
                                                     @if (isset($ApplicationPayment->payment_details_file))
