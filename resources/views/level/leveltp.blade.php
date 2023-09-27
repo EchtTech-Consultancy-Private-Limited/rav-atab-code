@@ -134,24 +134,28 @@
          overflow: hidden;
          height: 3rem;
      }
+
      .btn_remove {
-    background: #fff;
-    border: 1px solid red;
-    border-radius: 5px;
-    padding: 3px 6px;
-    color: red;
-    transition: background-color 0.3s, color 0.3s; /* Add transition for smooth effect */
-}
+         background: #fff;
+         border: 1px solid red;
+         border-radius: 5px;
+         padding: 3px 6px;
+         color: red;
+         transition: background-color 0.3s, color 0.3s;
+         /* Add transition for smooth effect */
+     }
 
-.btn_remove:hover {
-    background-color: red; /* Change background color on hover */
-    color: #fff; /* Change text color on hover */
-}
+     .btn_remove:hover {
+         background-color: red;
+         /* Change background color on hover */
+         color: #fff;
+         /* Change text color on hover */
+     }
 
-.ui-datepicker-prev, .ui-datepicker-next{
-    cursor: pointer;
-}
-
+     .ui-datepicker-prev,
+     .ui-datepicker-next {
+         cursor: pointer;
+     }
  </style>
  <title>RAV Accreditation</title>
  </head>
@@ -239,8 +243,7 @@
                                      </li>
                                      <li class="nav-item tab-all">
                                          <a class="nav-link {{ isset($form_step_type) ? ($form_step_type == 'add-course' ? 'active' : '') : '' }}"
-                                         href="#pending_payment_list"
-                                             data-bs-toggle="tab">Pending Payment List</a>
+                                             href="#pending_payment_list" data-bs-toggle="tab">Pending Payment List</a>
                                      </li>
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
@@ -330,8 +333,8 @@
                          </div>
                          <div role="tabpanel"
                              class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step') @endif
-                                     @else
-                                     active @endif"
+@else
+active @endif"
                              id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
@@ -428,8 +431,8 @@
                                      </li>
                                  </ul>
                                  <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif
-                                              @else
-                                             active @endif"
+@else
+active @endif"
                                      role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
@@ -612,7 +615,8 @@
                                                                          <div class="form-line">
                                                                              <label>Email-ID<span
                                                                                      class="text-danger">*</span></label>
-                                                                             <input id="emailId" type="text" name="Email_ID"
+                                                                             <input id="emailId" type="text"
+                                                                                 name="Email_ID"
                                                                                  placeholder="Email-ID"
                                                                                  @isset($id)
             value="{{ $Application->Email_ID ?? '' }}"
@@ -660,7 +664,7 @@
                                      <div class="card">
                                          <div class="header mb-4">
                                              <h2 style="float:left; clear:none;">Level Courses </h2>
-                                              {{-- @if (count($course) > 0) --}}
+                                             {{-- @if (count($course) > 0) --}}
 
                                              <a href="javascript:void(0);" class="btn btn-outline-primary mb-0"
                                                  style="float:right; clear:none; cursor:pointer;line-height: 24px;"
@@ -668,7 +672,7 @@
                                                  <i class="fa fa-plus font-14"></i> Add More Course
                                              </a>
 
-                                              {{-- @endif --}}
+                                             {{-- @endif --}}
                                          </div>
                                          <form action="{{ url('/new-application-course') }}"
                                              enctype="multipart/form-data" method="post" class="form"
@@ -677,7 +681,10 @@
                                              <input type="hidden" name="form_step_type" value="add-course">
                                              <div class="body pb-0" id="courses_body">
                                                  <!-- level start -->
-                                                 <div class="row clearfix" id="new_course_html">
+                                                 <div class="row clearfix" id="new_course_html"  data-application-id="{{ $collections->id ?? '' }}"
+                                                    data-level-id="{{ isset($Application) ? $Application->level_id : '' }}"
+                                                    data-country="{{ $data->country ?? '' }}"
+                                                    data-state="{{ $data->state ?? '' }}">
                                                      <div class="col-sm-12 text-righ">
 
                                                          <div class="d-flex justify-content-end">
@@ -688,7 +695,7 @@
                                                              </button>
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-3">
+                                                     <div class="col-sm-4">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Course Name<span
@@ -741,7 +748,7 @@
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-3">
+                                                     <div class="col-sm-4">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Eligibility<span
@@ -755,7 +762,7 @@
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-2">
+                                                     <div class="col-sm-4">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Mode of Course <span
@@ -778,7 +785,7 @@
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-12">
+                                                     <div class="col-sm-8">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Course Brief <span
@@ -942,11 +949,11 @@
                                                                          @endif
                                                                      </td>
                                                                      <!-- <td class="center">
-                                   {{ date('d F Y', strtotime($courses->created_at)) }}
-                                   </td>
-                                   <td class="center">
-                                   {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
-                                   </td> -->
+                                           {{ date('d F Y', strtotime($courses->created_at)) }}
+                                           </td>
+                                           <td class="center">
+                                           {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
+                                           </td> -->
                                                                      <td class="center btn-ved">
                                                                          <a class="btn btn-tbl-delete bg-primary"
                                                                              data-bs-toggle="modal"
@@ -963,11 +970,10 @@
                                                                                  <i class="material-icons">edit</i>
                                                                              </a>
                                                                          @endif
-                                                                         <a onclick="return confirm_option('delete')"
-                                                                             href="{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}"
-                                                                             class="btn btn-tbl-delete bg-danger">
-                                                                             <i class="material-icons">delete</i>
-                                                                         </a>
+                                                                         <a onclick="confirmDelete('{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}')" class="btn btn-tbl-delete bg-danger">
+                                                                            <i class="material-icons">delete</i>
+                                                                        </a>
+
                                                                      </td>
                                                                  </tr>
                                                              @endforeach
@@ -976,6 +982,27 @@
                                                  </table>
                                              </div>
                                          </div>
+
+
+                                         <script>
+                                            function confirmDelete(deleteUrl) {
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "You won't be able to revert this!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#d33',
+                                                    cancelButtonColor: '#3085d6',
+                                                    confirmButtonText: 'Yes, delete it!',
+                                                    cancelButtonText: 'Cancel'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // If the user confirms, proceed with the delete operation by navigating to the delete URL
+                                                        window.location.href = deleteUrl;
+                                                    }
+                                                });
+                                            }
+                                        </script>
 
                                          <div id="add_courses" style="Display:none" class="faqs-row' + faqs_row + '">
                                              <div class="row clearfix">
@@ -1267,9 +1294,13 @@
                                                              <div class="form-line">
                                                                  <label>Payment Date <span
                                                                          class="text-danger">*</span></label>
-                                                                         <input type="text" name="payment_date" class="form-control" id="payment_date" required
-                                                                         placeholder="Payment Date" aria-label="Date" value="{{ old('payment_date') }}"
-                                                                         onfocus="focused(this)" onfocusout="defocused(this)" onfocus="showDatePicker()">
+                                                                 <input type="text" name="payment_date"
+                                                                     class="form-control" id="payment_date" required
+                                                                     placeholder="Payment Date" aria-label="Date"
+                                                                     value="{{ old('payment_date') }}"
+                                                                     onfocus="focused(this)"
+                                                                     onfocusout="defocused(this)"
+                                                                     onfocus="showDatePicker()">
                                                              </div>
                                                              <label for="payment_date" id="payment_date-error"
                                                                  class="error">
@@ -1482,21 +1513,21 @@
                                                                          class="material-icons">visibility</i></a>
                                                                  <!-- @if ($item->status == 1)
     <a href="{{ url('/upload-document' . '/' . dEncrypt($item->id)) }}"
-                                                                                                                                    class="btn btn-tbl-edit bg-primary"><i
-                                                                                                                                        class="fa fa-upload"></i></a>
+                                                                                                                                            class="btn btn-tbl-edit bg-primary"><i
+                                                                                                                                                class="fa fa-upload"></i></a>
     @endif
-                                                                                                                            @if ($item->status == 2)
+                                                                                                                                    @if ($item->status == 2)
     <a href="{{ url('/application-upgrade-second') }}"
-                                                                                                                                    class="btn btn-tbl-edit"><i
-                                                                                                                                        class="material-icons">edit</i></a>
+                                                                                                                                            class="btn btn-tbl-edit"><i
+                                                                                                                                                class="material-icons">edit</i></a>
     @endif -->
                                                              </td>
                                                              @if (request()->path() == 'level-first')
                                                              @elseif(request()->path() == 'level-second')
                                                                  <td class="center">
                                                                      <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                        class="btn btn-tbl-edit"><i
-                                                            class="material-icons">visibility</i></a> -->
+                                                                class="btn btn-tbl-edit"><i
+                                                                    class="material-icons">visibility</i></a> -->
                                                                      @if ($item->status == 1)
                                                                          <a href="{{ url('/upload-document') }}"
                                                                              class="btn btn-tbl-upload"><i
@@ -1769,16 +1800,6 @@
                                                      <div class="form-line">
                                                          <label>Mode of Course <span
                                                                  class="text-danger">*</span></label>
-                                                         <!--  <select class="form-control" name="mode_of_course[]"
-                                                            required multiple="" style="width:160px;" id="mode_of_course_edit">
-                                                         <option value="1">Online</option>
-                                                         <option value="2">Offline</option>
-                                                         <option value="3">Hybrid</option> -->
-                                                         <!-- <option>Select Mode of Course</option> -->
-                                                         <!-- @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
-<option value="{{ $value }}">{{ $value }}</option>
-@endforeach -->
-                                                         <!-- </select> -->
                                                          <select multiple name="mode_of_course[]"
                                                              id="Mode_Of_Courses">
                                                              <option value="Online">Online</option>
@@ -2140,6 +2161,7 @@
                                  $("#Course_Name").val(data.ApplicationCourse[0].course_name);
                                  $("#Eligibility").val(data.ApplicationCourse[0].eligibility);
                                  $("#Mode_Of_Course").val(data.ApplicationCourse[0].mode_of_course);
+
                                  if (data.ApplicationCourse[0].payment == "false") {
                                      $("#Payment_Status").val("Pending");
                                  }
@@ -2210,14 +2232,14 @@
                              dataType: 'json',
                              contentType: false,
                              success: function(response) {
-                                Swal.fire({
-  position: 'center',
-  icon: 'success',
-  title: 'Success!',
-  text: 'Your application has been submitted successfully.',
-  showConfirmButton: false,
-  timer: 3000
-})
+                                 Swal.fire({
+                                     position: 'center',
+                                     icon: 'success',
+                                     title: 'Success!',
+                                     text: 'Your application has been submitted successfully.',
+                                     showConfirmButton: false,
+                                     timer: 3000
+                                 })
 
                                  //alert(response.id);
                                  if (response.id) {
@@ -2355,8 +2377,9 @@
                                      .ApplicationCourse[0].id)
                                  $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                  $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                 $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
-                                 //$("#Payment_Statuss").val(data.ApplicationCourse[0].payment);
+                                  $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+
+
 
                                  if (data.ApplicationCourse[0].payment == "false") {
                                      $("#Payment_Statuss").val("Pending");
@@ -2511,7 +2534,15 @@
                              doc_payment_files == 'jpeg') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only jpg, png, jpeg ,pdf are allowed")
+
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only jpg, png, jpeg ,pdf are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.payment_details_file').val("");
                          }
 
@@ -2528,7 +2559,14 @@
                          if (doc_file1 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_1').val("");
                          }
 
@@ -2544,7 +2582,14 @@
                          if (doc_file2 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed");
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_2').val("");
                          }
 
@@ -2562,7 +2607,15 @@
                          if (doc_file3 == 'csv' || doc_file3 == 'xlsx' || doc_file3 == 'xls') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only csv,xlsx,xls  are allowed")
+                             //  alert("Only csv,xlsx,xls  are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only csv,xlsx, and xlsx are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_3').val("");
                          }
 
@@ -2580,7 +2633,14 @@
                          if (doc_file1 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_edit_1').val("");
                          }
 
@@ -2598,7 +2658,14 @@
                          if (doc_file1 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_edit_2').val("");
                          }
 
@@ -2615,7 +2682,14 @@
                          if (doc_file == 'csv' || doc_file == 'xlsx' || doc_file == 'xls') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed");
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_edit_3').val("");
                          }
 
@@ -2752,74 +2826,49 @@
 
 
                  <script>
-                     var isAppending = false; // Flag to prevent multiple append requests
+                    var isAppending = false; // Flag to prevent multiple append requests
 
-                     function addNewCourse() {
-                         if (!isAppending) {
-                             isAppending = true;
+function addNewCourse() {
+    if (!isAppending) {
+        isAppending = true;
 
-                             // Clone the template row
-                             var newRow = $('#new_course_html').clone();
+        // Clone the template row
+        var newRow = $('#new_course_html').clone();
 
-                             // Clear input fields and remove any unwanted attributes
-                             newRow.find('input, textarea').val('');
-                             newRow.find('input[type="file"]').removeAttr('id').val('');
+        // Clear input fields and remove any unwanted attributes
+        newRow.find('input, textarea').val('');
+        newRow.find('input[type="file"]').removeAttr('id').val('');
 
-                             // Remove the ID attribute from the remove button
-                             newRow.find('.remove-course').removeAttr('id');
+        // Remove the ID attribute from the remove button
+        newRow.find('.remove-course').removeAttr('id');
 
-                             // Show the remove button for the new row
-                             newRow.find('.remove-course').show();
+        // Show the remove button for the new row
+        newRow.find('.remove-course').show();
 
-                             // Add a class to the new row
-                             newRow.addClass('new-course-html');
+        // Add a class to the new row
+        newRow.addClass('new-course-html');
 
-                             // Append the new row to the container
-                             $('.new-course-row').append(newRow); // Append to the existing .new-course-row div
+        // Append the new row to the container
+        $('.new-course-row').append(newRow); // Append to the existing .new-course-row div
 
+        // Read data attributes and set hidden field values
+        var applicationId = newRow.data('application-id');
+        var levelId = newRow.data('level-id');
+        var country = newRow.data('country');
+        var state = newRow.data('state');
 
-                             // add top border
-                             $('.new-course-html:last-child').css('border-top', '1px solid #ccc');
+        // Set values for the hidden fields
+        newRow.find('input[name="application_id"]').val(applicationId);
+        newRow.find('input[name="level_id"]').val(levelId);
+        newRow.find('input[name="country"]').val(country);
+        newRow.find('input[name="state"]').val(state);
 
-                             // add bottom border
-                             $('.new-course-html:last-child').css('border-bottom', '1px solid #ccc');
+        // Initialize select2 for the cloned <select> elements
+        newRow.find('.select2').select2();
 
-                             // add left border
-                             $('.new-course-html:last-child').css('border-left', '1px solid #ccc');
-
-                             // add right border
-                             $('.new-course-html:last-child').css('border-right', '1px solid #ccc');
-
-                             // add top and bottom padding 10px;
-                             $('.new-course-html:last-child').css('padding-top', '10px');
-                             $('.new-course-html:last-child').css('padding-bottom', '10px');
-
-                             // add left and right padding 10px;
-                             $('.new-course-html:last-child').css('padding-left', '10px');
-                             $('.new-course-html:last-child').css('padding-right', '10px');
-
-                             // add top and bottom margin 10px;
-                             $('.new-course-html:last-child').css('margin-top', '10px');
-                             $('.new-course-html:last-child').css('margin-bottom', '10px');
-
-
-                             // Append the hidden input elements
-                             newRow.append(
-                                 '<input type="hidden" name="application_id" value="{{ $collections->id ?? '' }}" class="form-control" readonly>'
-                                 );
-                             newRow.append(
-                                 '<input type="hidden" placeholder="level_id" name="level_id" value="@if (isset($Application)) {{ $Application->level_id ?? '' }} @endif">'
-                                 );
-                             newRow.append('<input type="hidden" name="country" value="{{ $data->country ?? '' }}">');
-                             newRow.append('<input type="hidden" name="state" value="{{ $data->state ?? '' }}">');
-
-
-                             $('.select2').select2();
-
-                             isAppending = false; // Reset the flag
-                         }
-                     }
-
+        isAppending = false; // Reset the flag
+    }
+}
                      function removeCourse(button) {
                          // Find the parent row and remove it
                          $(button).closest('.new-course-html').remove();
@@ -2827,99 +2876,97 @@
 
 
                      $('#Contact_Number').on('keyup', function() {
-    // Get the contact number value
-    var contactNumber = $(this).val();
+                         // Get the contact number value
+                         var contactNumber = $(this).val();
 
-    // Check if the contact number is empty
-    if (contactNumber === '') {
-        // Clear the error message and exit
-        $('#contact_error').text('');
-        return;
-    }
+                         // Check if the contact number is empty
+                         if (contactNumber === '') {
+                             // Clear the error message and exit
+                             $('#contact_error').text('');
+                             return;
+                         }
 
-    // Check if the contact number is numeric and has exactly 10 digits
-    if (/^\d{10}$/.test(contactNumber)) {
-        // Send an AJAX request
-        $.ajax({
-            type: 'POST',
-            url: '/checkContactNumber', // Update with your Laravel route URL
-            data: {
-                contact_number: contactNumber,
-                _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
-            },
-            success: function(response) {
-                if (response.status === 'duplicate') {
-                    // Display the error message in the #contact_error span
-                    $('#contact_error').text('Contact number is already in use.');
-                } else {
-                    // Clear the error message if the contact number is unique
-                    $('#contact_error').text('');
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle AJAX errors if needed
-            }
-        });
-    } else {
-        // Display an error message for an invalid contact number
-        $('#contact_error').text('Contact number must be 10 digits and numeric.');
-    }
-});
-
-
-$('#emailId').on('keyup', function() {
-    // Get the email value
-    var email = $(this).val();
-
-    // Check if the email is empty
-    if (email === '') {
-        // Clear the error message and exit
-        $('#email_id_error').text('');
-        return;
-    }
-
-    // Check if the email format is valid
-    if (/^\S+@\S+\.\S+$/.test(email)) {
-        // Send an AJAX request
-        $.ajax({
-            type: 'POST',
-            url: '/checkEmail', // Update with your Laravel route URL
-            data: {
-                email: email,
-                _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
-            },
-            success: function(response) {
-                if (response.status === 'duplicate') {
-                    // Display the error message in the #email_id_error span
-                    $('#email_id_error').text('Email is already in use.');
-                } else {
-                    // Clear the error message if the email is unique
-                    $('#email_id_error').text('');
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle AJAX errors if needed
-            }
-        });
-    } else {
-        // Display an error message for an invalid email format
-        $('#email_id_error').text('Invalid email format.');
-    }
-});
+                         // Check if the contact number is numeric and has exactly 10 digits
+                         if (/^\d{10}$/.test(contactNumber)) {
+                             // Send an AJAX request
+                             $.ajax({
+                                 type: 'POST',
+                                 url: '/checkContactNumber', // Update with your Laravel route URL
+                                 data: {
+                                     contact_number: contactNumber,
+                                     _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
+                                 },
+                                 success: function(response) {
+                                     if (response.status === 'duplicate') {
+                                         // Display the error message in the #contact_error span
+                                         $('#contact_error').text('Contact number is already in use.');
+                                     } else {
+                                         // Clear the error message if the contact number is unique
+                                         $('#contact_error').text('');
+                                     }
+                                 },
+                                 error: function(xhr, status, error) {
+                                     // Handle AJAX errors if needed
+                                 }
+                             });
+                         } else {
+                             // Display an error message for an invalid contact number
+                             $('#contact_error').text('Contact number must be 10 digits and numeric.');
+                         }
+                     });
 
 
+                     $('#emailId').on('keyup', function() {
+                         // Get the email value
+                         var email = $(this).val();
+
+                         // Check if the email is empty
+                         if (email === '') {
+                             // Clear the error message and exit
+                             $('#email_id_error').text('');
+                             return;
+                         }
+
+                         // Check if the email format is valid
+                         if (/^\S+@\S+\.\S+$/.test(email)) {
+                             // Send an AJAX request
+                             $.ajax({
+                                 type: 'POST',
+                                 url: '/checkEmail', // Update with your Laravel route URL
+                                 data: {
+                                     email: email,
+                                     _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
+                                 },
+                                 success: function(response) {
+                                     if (response.status === 'duplicate') {
+                                         // Display the error message in the #email_id_error span
+                                         $('#email_id_error').text('Email is already in use.');
+                                     } else {
+                                         // Clear the error message if the email is unique
+                                         $('#email_id_error').text('');
+                                     }
+                                 },
+                                 error: function(xhr, status, error) {
+                                     // Handle AJAX errors if needed
+                                 }
+                             });
+                         } else {
+                             // Display an error message for an invalid email format
+                             $('#email_id_error').text('Invalid email format.');
+                         }
+                     });
                  </script>
 
-<script>
-    function showDatePicker() {
-        // Get the current year
-        var currentYear = new Date().getFullYear();
+                 <script>
+                     function showDatePicker() {
+                         // Get the current year
+                         var currentYear = new Date().getFullYear();
 
-        // Set the minimum date to January 1st of the current year
-        var minDate = currentYear + "-01-01";
+                         // Set the minimum date to January 1st of the current year
+                         var minDate = currentYear + "-01-01";
 
-        // Set the minimum date for the input field
-        document.getElementById("payment_date").setAttribute("min", minDate);
-    }
-    </script>
+                         // Set the minimum date for the input field
+                         document.getElementById("payment_date").setAttribute("min", minDate);
+                     }
+                 </script>
  </body>
