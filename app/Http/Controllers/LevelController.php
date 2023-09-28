@@ -2662,8 +2662,9 @@ class LevelController extends Controller
    public function newApplications(){
 
     $id = Auth::user()->id;
+    $item = LevelInformation::whereid('1')->get();
     $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-    return view('level.new_application',['data'=>$data]);
+    return view('level.new_application',['data'=>$data,'item'=>$item]);
 
    }
 
@@ -2682,9 +2683,7 @@ class LevelController extends Controller
                 'Email_ID.regex' => "Please Enter Valid Email Id",
                 'Email_ID.required' => "Please Enter Email Id",
             ]
-
         );
-
         $aplication = new Application;
         $aplication->level_id = $request->level_id;
         $aplication->user_id = $request->user_id;
@@ -2699,6 +2698,12 @@ class LevelController extends Controller
         $aplication->save();
         return back()->with('success','Application Create Successfully');
    }
+
+
+    public function applictionTable(){
+      $collection = ApplicationPayment::orderBy('id', 'desc')->whereuser_id(Auth::user()->id)->get();
+      return view('level.application_table',['collection'=>$collection]);
+    }
 
 
 

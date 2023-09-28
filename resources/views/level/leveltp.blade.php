@@ -225,8 +225,12 @@
                          <div class="profile-tab-box">
                              <div class="p-l-20">
                                  <ul class="nav ">
-
-
+                                     {{--
+                  <li class="nav-item tab-all">
+                     <a class="nav-link show  @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step')   @endif @else active  @endif" href="#general_information"
+                        data-bs-toggle="tab" >General Information</a>
+                  </li>
+                  --}}
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link add-active-b @if (isset($form_step_type)) @if ($form_step_type == 'add-course-new') active @else @endif  @endif"
                                              href="#new_application" data-bs-toggle="tab">New
@@ -266,23 +270,12 @@
                              </ul>
                          </div>
                      @endif
-                     {{--
-      @if (Session::has('success'))
-      @if (session::get('success') == 'Course  successfully  Added!!!!')
-      @php
-      $active = 'active'
-      @endphp
-      @php
-      $unactives = ''
-      @endphp
-      @endif
-      @else
-      @php
-      $unactives = 'active'
-      @endphp
-      @php   $active = ''      @endphp
-      @endif --}}
+
+
+
                      <div class="tab-content">
+
+                             {{-- pending application table --}}
                          <div role="tabpanel" class="tab-pane" id="pending_payment_list" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
@@ -327,10 +320,9 @@
                                  </div>
                              </div>
                          </div>
-                         <div role="tabpanel"
-                             class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step') @endif
-@else
-active @endif"
+
+                         {{-- Validity Structure --}}
+                         <div role="tabpanel"  class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step') @endif @else active @endif"
                              id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
@@ -404,15 +396,13 @@ active @endif"
                                  </div>
                              </div>
                          </div>
-                         <!-- <div role="tabpanel" class="tab-pane" id="timeline" aria-expanded="false">
-            </div> -->
-                         <div role="tabpanel"
-                             class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') active @else @endif  @endif"
-                             id="new_application" aria-expanded="false">
-                             {{--
-            <form action="{{ url('/new-application') }}" method="post" class="form wizard"
-               id="regForm" enctype="multipart/form-data">
-               --}}
+
+
+
+
+
+                         <div role="tabpanel"  class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') active @else @endif  @endif"  id="new_application" aria-expanded="false">
+
                              <div class="tab-content p-relative">
                                  <!-- progressbar -->
                                  <ul id="progressbar">
@@ -426,9 +416,10 @@ active @endif"
                                          Payment
                                      </li>
                                  </ul>
-                                 <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif
-@else
-active @endif"
+
+                                 {{-- new application start --}}
+
+                                 <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif @else active @endif"
                                      role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
@@ -615,8 +606,8 @@ active @endif"
                                                                                  name="Email_ID"
                                                                                  placeholder="Email-ID"
                                                                                  @isset($id)
-            value="{{ $Application->Email_ID ?? '' }}"
-            @endisset>
+                                                                                    value="{{ $Application->Email_ID ?? '' }}"
+                                                                                   @endisset>
                                                                          </div>
                                                                          <span class="text-danger"
                                                                              id="email_id_error"></span>
@@ -655,12 +646,16 @@ active @endif"
                                          </div>
                                      </div>
                                  </div>
+                                 {{-- new application end --}}
+
+
+                                 {{-- course section start --}}
                                  <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step') active @else @endif  @endif"
                                      role="tabpanel" id="step2">
                                      <div class="card">
                                          <div class="header mb-4">
                                              <h2 style="float:left; clear:none;">Level Courses </h2>
-                                             {{-- @if (count($course) > 0) --}}
+
 
                                              <a href="javascript:void(0);" class="btn btn-outline-primary mb-0"
                                                  style="float:right; clear:none; cursor:pointer;line-height: 24px;"
@@ -668,7 +663,6 @@ active @endif"
                                                  <i class="fa fa-plus font-14"></i> Add More Course
                                              </a>
 
-                                             {{-- @endif --}}
                                          </div>
                                          <form action="{{ url('/new-application-course') }}"
                                              enctype="multipart/form-data" method="post" class="form"
@@ -722,8 +716,7 @@ active @endif"
                                                              <div class="form-line">
                                                                  <label>Course Duration<span
                                                                          class="text-danger">*</span></label>
-                                                                 <!-- <input type="number" placeholder="Course Duration"
-               name="course_duration[]" required> -->
+
                                                                  <div class="course_group">
                                                                      <input type="text" placeholder="Years"
                                                                          name="years[]" maxlength="4" required
@@ -786,8 +779,7 @@ active @endif"
                                                              <div class="form-line">
                                                                  <label>Course Brief <span
                                                                          class="text-danger">*</span></label>
-                                                                 <!-- <input type="text" placeholder="Course Brief"
-               name="course_brief[]" required> -->
+
                                                                  <textarea rows="4" cols="50" class="form-control" name="course_brief[]" required></textarea>
                                                              </div>
                                                              @error('course_brief')
@@ -796,10 +788,7 @@ active @endif"
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <!-- </div>
-               <div class="row clearfix"> -->
-                                                     {{-- <!-- <form action="{{ url('/upload-document') }}" method="post" class="form" id="regForm" enctype="multipart/form-data"> -->
-            @csrf --}}
+
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
                                                              <div class="form-line">
@@ -809,12 +798,7 @@ active @endif"
                                                                      id="payment_reference_no" required
                                                                      class="form-control doc_1 file_size">
                                                              </div>
-                                                             {{-- <label for="payment_reference_no"
-               id="payment_reference_no-error" class="error">
-            @error('payment_reference_no')
-            {{ $message }}
-            @enderror
-            </label> --}}
+
                                                          </div>
                                                      </div>
                                                      <div class="col-sm-4">
@@ -826,12 +810,7 @@ active @endif"
                                                                      id="payment_reference_no" required
                                                                      class="form-control doc_2 file_size">
                                                              </div>
-                                                             {{-- <label for="payment_reference_no"
-               id="payment_reference_no-error" class="error">
-            @error('payment_reference_no')
-            {{ $message }}
-            @enderror
-            </label> --}}
+
                                                          </div>
                                                      </div>
                                                      <div class="col-sm-3">
@@ -843,12 +822,7 @@ active @endif"
                                                                      id="payment_reference_no" required
                                                                      class="form-control doc_3 file_size">
                                                              </div>
-                                                             {{-- <label for="payment_reference_no"
-               id="payment_reference_no-error" class="error">
-            @error('payment_reference_no')
-            {{ $message }}
-            @enderror
-            </label> --}}
+
                                                          </div>
                                                      </div>
                                                      @if (request()->path() == 'level-first')
@@ -881,10 +855,7 @@ active @endif"
                                                  @endif
                                                  <!-- level end -->
                                              </div>
-                                             {{--
-            @if (count($course) > 0)
-            <h2 style="float:center;"> # Do payment First</h2>
-            @else --}}
+
 
                                              <div class="row clearfix new-course-row">
 
@@ -895,6 +866,9 @@ active @endif"
                                              </div>
                                              {{-- @endif --}}
                                          </form>
+
+
+                                         {{-- course tabel --}}
                                          <div class="body mt-5">
                                              <div class="table-responsive">
                                                  <table class="table table-hover js-basic-example contact_list">
@@ -907,8 +881,7 @@ active @endif"
                                                              <th class="center"> Mode Of Course </th>
                                                              <th class="center"> Course Brief</th>
                                                              <th class="center">Payment Status</th>
-                                                             <!-- <th class="center">Valid From</th>
-               <th class="center">Valid To </th> -->
+
                                                              <th class="center">Action</th>
                                                          </tr>
                                                      </thead>
@@ -1000,182 +973,7 @@ active @endif"
                                             }
                                         </script>
 
-                                         <div id="add_courses" style="Display:none" class="faqs-row' + faqs_row + '">
-                                             <div class="row clearfix">
-                                                 <div class="col-sm-3">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Course Name<span
-                                                                     class="text-danger">*</span></label>
-                                                             <input type="text" placeholder="Course Name"
-                                                                 name="course_name[]" required>
-                                                         </div>
-                                                         @error('course_name')
-                                                             <div class="alert alert-danger">{{ $message }}</div>
-                                                         @enderror
-                                                     </div>
-                                                 </div>
 
-
-                                                 {{-- <input type="text" name="application"  class="content_id" readonly> --}}
-                                                 <input type="hidden" name="application_id"
-                                                     value="{{ $collections->id ?? '' }}" class="form-control"
-                                                     readonly>
-                                                 <input type="hidden" placeholder="level_id" name="level_id[]"
-                                                     value="{{ 1 }}">
-                                                 <div class="col-sm-4">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Course Duration<span class="text-danger">*</span>
-                                                             </label>
-                                                             <!-- <input type="number" placeholder="Course Duration"
-               name="course_duration[]" required> -->
-                                                             <div class="course_group">
-                                                                 <input type="text" placeholder="Years"
-                                                                     name="years[]" maxlength="4" required
-                                                                     class="course_input preventalpha">
-                                                                 <input type="text" placeholder="Months"
-                                                                     name="months[]" maxlength="2" required
-                                                                     class="course_input preventalpha">
-                                                                 <input type="text" maxlength="2"
-                                                                     placeholder="Days preventalpha" name="days[]"
-                                                                     required class="course_input">
-                                                                 <input type="number" placeholder="Hours"
-                                                                     name="hours[]" required class="course_input">
-                                                             </div>
-                                                         </div>
-                                                         @error('course_duration')
-                                                             <div class="alert alert-danger">{{ $message }}</div>
-                                                         @enderror
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-sm-3">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Eligibility<span
-                                                                     class="text-danger">*</span></label>
-                                                             <input type="text" placeholder="Eligibility"
-                                                                 name="eligibility[]" required>
-                                                         </div>
-                                                         @error('eligibility')
-                                                             <div class="alert alert-danger">{{ $message }}</div>
-                                                         @enderror
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-sm-2">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Mode of Course <span
-                                                                     class="text-danger">*</span></label>
-                                                             <div class="form-group default-select select2Style">
-                                                                 <select class="form-control select2 width"
-                                                                     name="mode_of_course[]">
-                                                                     <option value="" disabled>Select Mode
-                                                                     </option>
-                                                                     <option value="Online">Online</option>
-                                                                     <option value="Offline">Offline</option>
-                                                                 </select>
-                                                             </div>
-                                                         </div>
-                                                         @error('mode_of_course')
-                                                             <div class="alert alert-danger">{{ $message }}</div>
-                                                         @enderror
-                                                     </div>
-                                                 </div>
-                                                 @if (request()->path() == 'level-first')
-                                                     <input type="hidden" placeholder="level_id" name="level_id"
-                                                         value="{{ 1 }}">
-                                                 @elseif(request()->path() == 'level-second')
-                                                     <input type="hidden" placeholder="level_id" name="level_id"
-                                                         value="{{ 2 }}">
-                                                 @elseif(request()->path() == 'level-third')
-                                                     <input type="hidden" placeholder="level_id" name="level_id"
-                                                         value="{{ 3 }}">
-                                                 @elseif(request()->path() == 'level-fourth')
-                                                     <input type="hidden" placeholder="level_id" name="level_id"
-                                                         value="{{ 4 }}">
-                                                 @endif
-                                                 <!-- <div class="col-sm-3">
-               <div class="form-group">
-                   <div class="form-line">
-                       <label>Course Brief <span
-                               class="text-danger">*</span></label>
-                       <input type="text" placeholder="Course Brief"
-                           name="course_brief[]" required>
-                   </div>
-                   @error('course_brief')
-    <div class="alert alert-danger">{{ $message }}</div>
-@enderror
-               </div>
-               </div> -->
-                                                 <div class="col-sm-12">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Course Brief <span
-                                                                     class="text-danger">*</span></label>
-                                                             <!-- <input type="text" placeholder="Course Brief"
-               name="course_brief[]" required> -->
-                                                             <textarea rows="4" cols="50" class="form-control" placeholder="Course Brief" name="course_brief[]"></textarea>
-                                                         </div>
-                                                         @error('course_brief')
-                                                             <div class="alert alert-danger">{{ $message }}
-                                                             </div>
-                                                         @enderror
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-sm-3">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Declaration<span
-                                                                     class="text-danger">*</span></label>
-                                                             <input type="file" name="doc1[]"
-                                                                 id="payment_reference_no" required
-                                                                 class="form-control file_size">
-                                                         </div>
-                                                         <label for="payment_reference_no"
-                                                             id="payment_reference_no-error" class="error">
-                                                             @error('payment_reference_no')
-                                                                 {{ $message }}
-                                                             @enderror
-                                                         </label>
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-sm-3">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Course Curriculum / Material / Syllabus <span
-                                                                     class="text-danger">*</span></label>
-                                                             <input type="file" name="doc2[]"
-                                                                 id="payment_reference_no" required
-                                                                 class="form-control file_size">
-                                                         </div>
-                                                         <label for="payment_reference_no"
-                                                             id="payment_reference_no-error" class="error">
-                                                             @error('payment_reference_no')
-                                                                 {{ $message }}
-                                                             @enderror
-                                                         </label>
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-sm-3">
-                                                     <div class="form-group">
-                                                         <div class="form-line">
-                                                             <label>Course Details (Excel / CSV format) <span
-                                                                     class="text-danger">*</span></label>
-                                                             <input type="file" name="doc3[]"
-                                                                 id="payment_reference_no" required
-                                                                 class="form-control">
-                                                         </div>
-                                                         <label for="payment_reference_no"
-                                                             id="payment_reference_no-error" class="error">
-                                                             @error('payment_reference_no')
-                                                                 {{ $message }}
-                                                             @enderror
-                                                         </label>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                         </div>
                                          <ul class="list-inline pull-right mt-5">
                                              <li><button type="button"
                                                      class="btn btn-danger prev-step">Previous</button>
@@ -1193,6 +991,9 @@ active @endif"
                                          </ul>
                                      </div>
                                  </div>
+                                  {{-- course section end  --}}
+
+                                  {{-- payment section start --}}
                                  <div class="tab-pane " role="tabpanel" id="step3">
                                      <div class="card">
                                          <div class="header">
@@ -1220,7 +1021,7 @@ active @endif"
                                                      </select>
                                                  </div>
                                              </div>
-                                             <!-- payment start -->
+                                             <!-- payment start  -->
                                              <div style="text-align:center; width:100%;" id="QR">
                                                  <div
                                                      style="width:100px; height:100px; border:1px solid #ccc; float:left;">
@@ -1228,6 +1029,7 @@ active @endif"
                                                          width="100" height="100">
                                                  </div>
                                              </div>
+
                                              <div class="row clearfix" id="bank_id">
                                                  <div class="col-sm-2">
                                                      <div class="form-group">
@@ -1278,6 +1080,8 @@ active @endif"
                                                      </div>
                                                  </div>
                                              </div>
+
+
                                              <form action="{{ url('/new-application_payment') }}" method="post"
                                                  class="form" id="regForm" enctype="multipart/form-data">
                                                  @csrf
@@ -1308,20 +1112,20 @@ active @endif"
                                                      </div>
                                                      <input type='hidden' name="amount"
                                                          @isset($total_amount)
-            @if (Auth::user()->country == '101')
-            value="{{ $total_amount + $total_amount * (18 / 100) }}"
-            @else
-            value="{{ $total_amount }}"
-            @endif
-            @endisset>
+                                                            @if (Auth::user()->country == '101')
+                                                            value="{{ $total_amount + $total_amount * (18 / 100) }}"
+                                                            @else
+                                                            value="{{ $total_amount }}"
+                                                            @endif
+                                                            @endisset>
                                                      <input type='hidden' name="course_count"
                                                          @isset($course)
-            value="{{ count($course) }}">
-            @endisset
+                                                                value="{{ count($course) }}">
+                                                                @endisset
                                                          <input type='hidden' name="currency"
                                                          @isset($currency)
-            value="{{ $currency }}"
-            @endisset>
+                                                                value="{{ $currency }}"
+                                                                @endisset>
                                                      @isset($course)
                                                          @foreach ($course as $k => $courses)
                                                              <input type='hidden' name="course_id[]"
@@ -1396,9 +1200,7 @@ active @endif"
                                                      </div>
                                                      <input type="hidden" value="{{ $collections->id ?? '' }}"
                                                          name="Application_id" required class="course_input">
-                                                     <!-- <input type="hidden" placeholder="level_id"
-               value="{{ $collections->level_id ?? '' }}" name="level_id1"
-               value="{{ 1 }}"> -->
+
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
                                                              <div class="form-line">
@@ -1420,23 +1222,23 @@ active @endif"
                                                  <ul class="list-inline pull-right">
                                                      <li><button type="button"
                                                              class="btn btn-danger prev-step1">Previous</button></li>
-                                                     <!--  <li><button type="button"
-               class="btn btn-info preview-step mr-2">Preview</button></li> -->
+
                                                      <li><button type="submit"
                                                              class="btn btn-primary btn-info-full">Submit</button>
                                                      </li>
                                                  </ul>
                                              </form>
                                          </div>
-                                         <!-- payment end -->
+
                                      </div>
                                  </div>
+                                 {{-- payment section end --}}
+
                              </div>
-                             </form>
                          </div>
-                         <div role="tabpanel"
-                             class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @endif  @endif"
-                             id="preveious_application" aria-expanded="false">
+
+                         {{-- payment application tabel start --}}
+                         <div role="tabpanel"  class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @endif  @endif" id="preveious_application" aria-expanded="false">
                              <div class="card">
                                  <div class="header">
                                      <h2>Previous Applications</h2>
@@ -1475,11 +1277,11 @@ active @endif"
                                                              <td class="center">
                                                                  <a href="javascript:void(0)"
                                                                      @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
-                                 @elseif($item->status == 1)
-                                 <div class="badge col-orange">Applications In Process</div>
-                                 @elseif($item->status == 2)
-                                 <div class="badge col-green">Applications Approved</div> @endif
-                                                                     </a>
+                                                                          @elseif($item->status == 1)
+                                                                        <div class="badge col-orange">Applications In Process</div>
+                                                                           @elseif($item->status == 2)
+                                                                            <div class="badge col-green">Applications Approved</div> @endif
+                                                                    </a>
                                                              </td>
                                                              @if (check_upgrade($item->created_at) == 'true')
                                                                  @if (check_upgraded_level2($item->application_id) == 'false')
@@ -1507,16 +1309,7 @@ active @endif"
                                                                  <a href="{{ url('/previews-application-first' . '/' . $item->id . '/' . $item->application_id) }}"
                                                                      class="btn btn-tbl-edit"><i
                                                                          class="material-icons">visibility</i></a>
-                                                                 <!-- @if ($item->status == 1)
-    <a href="{{ url('/upload-document' . '/' . dEncrypt($item->id)) }}"
-                                                                                                                                            class="btn btn-tbl-edit bg-primary"><i
-                                                                                                                                                class="fa fa-upload"></i></a>
-    @endif
-                                                                                                                                    @if ($item->status == 2)
-    <a href="{{ url('/application-upgrade-second') }}"
-                                                                                                                                            class="btn btn-tbl-edit"><i
-                                                                                                                                                class="material-icons">edit</i></a>
-    @endif -->
+
                                                              </td>
                                                              @if (request()->path() == 'level-first')
                                                              @elseif(request()->path() == 'level-second')
@@ -1594,6 +1387,9 @@ active @endif"
                                  </div>
                              </div>
                          </div>
+                        {{-- payment application tabel end --}}
+
+                         {{-- faq section start --}}
                          <div role="tabpanel" class="tab-pane" id="faqs" aria-expanded="false">
                              <div class="card">
                                  <div class="header">
@@ -1620,8 +1416,13 @@ active @endif"
                                  </div>
                              </div>
                          </div>
+                         {{-- faq section end --}}
+
+
                      </div>
                  </div>
+
+
                  <!-- View Modal Popup -->
                  <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1877,6 +1678,10 @@ active @endif"
                          </div>
                      </div>
                  </div>
+
+
+
+
                  {{-- @if ($id) [{{$data->image}}] @endif --}}
                  <script>
                      function add_new_course() {
