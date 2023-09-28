@@ -2721,6 +2721,10 @@ class LevelController extends Controller
       return view('level.application_table',['collection'=>$collection]);
     }
 
+    public function faqslist(){
+        $faqs = Faq::where('category', 1)->orderby('sort_order', 'Asc')->get();
+        return view('level.applicationFaq',['faqs'=>$faqs]);
+    }
 
 
 }
