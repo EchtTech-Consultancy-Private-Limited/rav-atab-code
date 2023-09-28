@@ -25,14 +25,17 @@
 
                 <li class="{{ Request::is('dashboard')?'active':''}}" >
                     <a href="{{ url('/dashboard') }}"  >
-                        <i data-feather="monitor"></i>
+                        <!-- <i data-feather="monitor"></i> -->
+                        <i class="fa fa-television"></i>
+                        
                         <span>Dashboard</span>
                     </a>
                 </li>
 
                 <li class="{{ Request::is('profile-get')?'active':''}}">
                     <a href="{{ url('profile-get') }}" >
-                        <i data-feather="user"></i>
+                        <!-- <i data-feather="user"></i> -->
+                        <i class="fa fa-user"></i>
                         <span>Manage Profile</span>
                     </a>
                 </li>
@@ -40,7 +43,8 @@
 
                 <li class="{{ (Request::is('admin-user') || Request::is('secrete-user') || Request::is('training-provider') || Request::is('assessor-user') )?'active':''}}" || class="{{ Request::is('training-provider')?'active':''}}" || class="{{ Request::is('assessor-user')?'active':''}}"  >
                     <a href="#" onClick="return false;" class="menu-toggle">
-                        <i data-feather="users"></i>
+                        <!-- <i data-feather="users"></i> -->
+                        <i class="fa fa-users"></i>
                         <span>User Management</span>
                     </a>
                     <ul class="ml-menu">
@@ -67,7 +71,8 @@
 
                 <li  class="{{ (Request::is('nationl-page') ||  Request::is('internationl-page') )?'active':''}}" >
                     <a href="#" onClick="return false;" class="menu-toggle" >
-                        <i data-feather="file"></i>
+                        <!-- <i data-feather="file"></i> -->
+                        <i class="fa fa-file-alt"></i>
                         <span>Manage Application</span>
                     </a>
                     <ul class="ml-menu">
@@ -86,7 +91,8 @@
 
                     <li class="{{ Request::is('levels')?'active':''}}" >
                         <a href="{{ url('/levels') }}"   >
-                            <i data-feather="info"></i>
+                            <!-- <i data-feather="info"></i> -->
+                            <i class="fa fa-info"></i>
                             <span>Level Information</span>
                         </a>
                     </li>
@@ -122,7 +128,8 @@
 
                     <li>
                         <a href="{{ url('/manage-manual') }}" class="{{ Request::is('manage-manual')?'active':''}}" >
-                            <i data-feather="message-circle"></i>
+                            <!-- <i data-feather="message-circle"></i> -->
+                            <i class="fa fa-comment"></i>
                             <span>Manage Manual</span>
                         </a>
                     </li>
@@ -136,7 +143,8 @@
 
                     <li class="{{ Request::is('Grievance-list')?'active':''}}">
                         <a href="{{ url('/Grievance-list') }}">
-                            <i data-feather="clipboard"></i>
+                            <!-- <i data-feather="clipboard"></i> -->
+                            <i class="fa fa-clipboard"></i>
                             <span>Grievances</span>
                         </a>
                     </li>
@@ -158,14 +166,16 @@
 
                     <li>
                         <a href="{{ url('/get-faqs') }}" class="{{ Request::is('get-faqs')?'active':''}}" >
-                            <i data-feather="message-circle"></i>
+                            <!-- <i data-feather="message-circle"></i> -->
+                            <i class="fa fa-comments"></i>
                             <span>Manage FAQs</span>
                         </a>
                     </li>
 
                      <li class="{{ (Request::is('admin-models') || (Request::is('model-routes') || Request::is('admin-routes')))?'active':''}}">
                         <a href="#" onClick="return false;" class="menu-toggle">
-                            <i data-feather="monitor"></i>
+                            <!-- <i data-feather="monitor"></i> -->
+                            <i class="fa fa-television"></i>
                             <span>Masters</span>
                         </a>
                         <ul class="ml-menu">

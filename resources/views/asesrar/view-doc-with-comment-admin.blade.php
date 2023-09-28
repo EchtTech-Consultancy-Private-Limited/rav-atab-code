@@ -43,7 +43,7 @@
 
         @endif
 
-        @include('layout.rightbar')
+       
 
     </div>
 
