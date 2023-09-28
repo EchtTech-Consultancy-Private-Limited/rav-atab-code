@@ -17639,10 +17639,11 @@ nav.navbar {
 
 .tab-all a.active {
     background-color: #e91e63 !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2), 0 0px 8px 0px rgba(233, 30, 99, 0.6);
     color: #fff !important;
     border-radius: 30px;
-    height: 35px
+    height: 35px;
+    border:none !important;
 }
 
 .timelineImgHight {
@@ -19343,7 +19344,7 @@ nav.navbar {
 
 .buttons-copy {
     background-color: #666 !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    /* box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6); */
     color: #fff !important;
     border-radius: 30px !important;
     border: 0 !important;
@@ -19354,7 +19355,7 @@ nav.navbar {
 
 .buttons-excel {
     background-color: #59bf70 !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    /* box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6); */
     color: #fff !important;
     border-radius: 30px !important;
     border: 0 !important;
@@ -19365,7 +19366,7 @@ nav.navbar {
 
 .buttons-csv {
     background-color: #2ab9d0 !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    /* box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6); */
     color: #fff !important;
     border-radius: 30px !important;
     border: 0 !important;
@@ -19376,7 +19377,7 @@ nav.navbar {
 
 .buttons-pdf {
     background-color: #e91e63 !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    /* box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6); */
     color: #fff !important;
     border-radius: 30px !important;
     border: 0 !important;
@@ -19387,7 +19388,7 @@ nav.navbar {
 
 .buttons-print {
     background-color: #6563ef !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px #6563ef;
+    /* box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px #6563ef; */
     color: #fff !important;
     border-radius: 30px !important;
     border: 0 !important;
@@ -24132,12 +24133,13 @@ padding: 25px 15px !important;
 .modal-content .edit-popup input {
     margin-bottom: 15px !important;
     border-bottom: 1px solid #9e9e9e !important;
-    height: 2rem !important;
+    height: auto !important;
     text-align: left !important;
 }
 
 .modal-content .edit-popup textarea.form-control {
     margin-bottom: 30px;
+    height: auto;
 }
 
 .course_group {
@@ -24246,6 +24248,10 @@ ul#progressbar li.bg_green:before, #progressbar li.bg_green:after{
 li.nav-item.tab-all a.nav-link {
     font-size: 15px;
     line-height: 20px;
+    font-weight: bold;
+    border: 1px solid;
+    border-radius: 20px;
+    margin: 5px;
 }
 
 body.light.theme-cyan.menu_light.logo-white.submenu-closed.modal-open {
@@ -24309,7 +24315,7 @@ div#ui-datepicker-div{
 }
 
 .theme-black .sidebar .menu .list li.active, .sidebar .menu .list .active .menu-toggle, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active {
-    background-color: #f89d5e !important;
+    background-color: #db6513 !important;
 }
 
 .sidebar .menu .list li.active>:first-child span, .sidebar .menu .list li.active a .feather,.sidebar .menu .list li.active a i, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active a{
@@ -24380,4 +24386,30 @@ div#ui-datepicker-div{
 
 .modal-content .edit-popup .edit-m-d .select-wrapper li input {
     display: none;
+}
+
+.btn:focus, .btn-large:focus, .btn-small:focus, .btn-floating:focus {
+    background-color: #1d7d74;
+    color: #fff;
+}
+
+input.form-control.btn.btn-outline-danger.p-0 {
+    color: #000 !important;
+    background: #fb483a !important;
+}
+td#view_course_brief {
+    text-align: left;
+}
+
+
+ul.ml-menu li.active a {
+    background: #f89d5e;
+}
+
+i.fa.fa-eye {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
