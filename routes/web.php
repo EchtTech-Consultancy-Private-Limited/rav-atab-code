@@ -234,12 +234,13 @@ Route::get('document-view-accessor/{id?}',[LevelController::class, 'document_vie
 
 Route::post('/upgrade-level', [UpgradeLevelController::class, 'upgrade_level']);
 
+
+});
+
+
 Route::post('checkContactNumber', [LevelController::class, 'checkContactNumber']);
 
 Route::post('checkEmail', [LevelController::class, 'checkEmail']);
-
-
-});
 
 Route::get('view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'view_doc']);
 Route::get('admin-view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'admin_view_doc']);
