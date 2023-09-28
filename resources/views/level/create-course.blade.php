@@ -652,7 +652,7 @@
 
                                 @isset($course)
                                     @if (count($course) > 0)
-                                        <button type="button" class="btn btn-primary next-step1">Next</button>
+                                        <a href="{{ url('course-payment/'.$applicationData->id) }}" class="btn btn-primary next-step1">Next</a>
                                     @endif
                                 @endisset
                             </li>
