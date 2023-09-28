@@ -359,7 +359,7 @@ class LevelController extends Controller
     {
         return view('level.course-payment');
     }
-    
+
     public function level1tp(Request $request, $id = null)
     {
         if ($request->input('display') == 'applications') {
@@ -860,6 +860,7 @@ class LevelController extends Controller
     public function new_application_course(Request $request)
     {
 
+        // dd($request->all());
         $active = 'active';
         $course_name = $request->course_name;
         $course_duration = $request->course_duration;
@@ -2701,7 +2702,7 @@ class LevelController extends Controller
 
 
         $application = new Application;
-        $application->level_id = $request->level_id;
+        $application->level_id = 1;
         $application->user_id = $request->user_id;
         $application->state = $request->state_id;
         $application->country = $request->country_id;
