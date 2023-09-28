@@ -222,30 +222,7 @@
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
-                        <div class="profile-tab-box">
-                            <div class="p-l-20">
-                                <ul class="nav ">
-
-                                    <li class="nav-item tab-all p-l-20">
-                                        <a class="nav-link add-active-b @if (isset($form_step_type)) @if ($form_step_type == 'add-course-new') active @else @endif  @endif"
-                                            href="#new_application" data-bs-toggle="tab">New
-                                            Application</a>
-                                    </li>
-                                    <li class="nav-item tab-all p-l-20">
-                                        <a class="nav-link @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @else @endif  @endif"
-                                            href="#preveious_application" data-bs-toggle="tab">
-                                            Applications</a>
-                                    </li>
-                                    <li class="nav-item tab-all">
-                                        <a class="nav-link {{ isset($form_step_type) ? ($form_step_type == 'add-course' ? 'active' : '') : '' }}"
-                                            href="#pending_payment_list" data-bs-toggle="tab">Pending Payment List</a>
-                                    </li>
-                                    <li class="nav-item tab-all p-l-20">
-                                        <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        @include('level.inner-nav')
                     </div>
                     @if (Session::has('success'))
                         <div class="alert alert-success" style="padding: 15px;" role="alert">

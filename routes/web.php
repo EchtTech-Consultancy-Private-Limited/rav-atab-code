@@ -269,7 +269,7 @@ Route::get('new-applications/{id?}',[LevelController::class,'newApplications']);
 Route::post('new-applications',[LevelController::class,'newApplicationSave']);
 
 Route::get('appliction-list',[LevelController::class,'applictionTable']);
-Route::get('FAQs',[LevelController::class,'faqslist']);
+Route::get('faq',[LevelController::class,'faqslist']);
 
 
 

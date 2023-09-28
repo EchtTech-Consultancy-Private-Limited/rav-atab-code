@@ -86,8 +86,8 @@
                                                  Application</a>
                                          </li>
                                          <li class="nav-item tab-all p-l-20">
-                                             <a class="nav-link" href="#preveious_application"
-                                                 data-bs-toggle="tab">Previous Applications</a>
+                                             <a class="nav-link" href="{{ url('/appliction-list') }}"
+                                                 >Previous Applications</a>
                                          </li>
                                      </ul>
                                  </div>

@@ -9,7 +9,7 @@
             </li>
             <li class="nav-item tab-all ">
                 <a class="nav-link"
-                    href="{{ url('/appliction-table') }}" >
+                    href="{{ url('/appliction-list') }}" >
                     Applications</a>
             </li>
             <li class="nav-item tab-all">
@@ -17,7 +17,7 @@
                     href="#pending_payment_list" data-bs-toggle="tab">Pending Payment List</a>
             </li>
             <li class="nav-item tab-all ">
-                <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
+                <a class="nav-link" href="{{ url('faq') }}">FAQs</a>
             </li>
         </ul>
     </div>
