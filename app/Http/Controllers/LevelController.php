@@ -2643,11 +2643,25 @@ class LevelController extends Controller
     }
 
 
+    public function create_course($id=null){
+        if($id){
+            $applicationData = DB::table('applications')->where('id',$id)->first();
+        }
+
+       $course = DB::table('application_courses')->where('application_id',$id)->get();
+        return view('level.create-course',compact('applicationData','course'));
+    }
+   public function newApplications($id=null){
+    if($id){
+        $applicationData = DB::table('applications')->where('id',$id)->first();
+    }else{
+        $applicationData = null;
+    }
 
     $id = Auth::user()->id;
     $item = LevelInformation::whereid('1')->get();
     $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-    return view('level.new_application',['data'=>$data,'item'=>$item]);
+    return view('level.new_application',['data'=>$data,'applicationData'=>$applicationData,'item'=>$item]);
 
    }
 
