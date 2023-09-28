@@ -849,20 +849,6 @@ class LevelController extends Controller
     public function new_application_course(Request $request)
     {
 
-
-        // return $request->all();
-
-        //   /* $this->validate($request, [
-        //            'doc2' => 'mimes:pdf',
-
-        //     ]);*/
-
-        // $this->validate($request, [
-        //     'doc1' =>  "max:5120",
-        //     'doc2' =>  "max:5120",
-        //     'doc3' =>  "max:5120",
-        // ]);
-
         $active = 'active';
         $course_name = $request->course_name;
         $course_duration = $request->course_duration;
@@ -877,8 +863,6 @@ class LevelController extends Controller
         $months = $request->months;
         $days = $request->days;
         $hours = $request->hours;
-
-        /*  $mode_of_course=json_encode($request->mode_of_course);*/
 
         $user_id = Auth::user()->id;
 
@@ -2656,5 +2640,14 @@ class LevelController extends Controller
         }
 
         return response()->json(['status' => 'unique']);
+    }
+
+
+    public function create_course($id=null){
+        if($id){
+            $applicationData = DB::table('applications')->where('id',$id)->first();
+        }
+       $course = DB::table('application_courses')->where('application_id',$id)->get();
+        return view('level.create-course',compact('applicationData','course'));
     }
 }

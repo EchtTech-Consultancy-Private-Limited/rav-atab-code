@@ -235,6 +235,11 @@ Route::get('document-view-accessor/{id?}',[LevelController::class, 'document_vie
 Route::post('/upgrade-level', [UpgradeLevelController::class, 'upgrade_level']);
 
 
+// new routes
+
+Route::get('create-course/{id?}', [LevelController::class, 'create_course']);
+
+
 });
 
 
