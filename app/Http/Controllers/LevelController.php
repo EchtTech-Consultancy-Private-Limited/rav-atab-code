@@ -977,7 +977,7 @@ class LevelController extends Controller
 
         //return $request->level_id;
         if ($request->level_id == '1') {
-            return  redirect('level-first/' . $data->application_id)->with('success', 'Course  successfully  Added');
+            return  redirect('create-course/' . $data->application_id)->with('success', 'Course  successfully  Added');
             // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
         } elseif ($request->level_id == '2') {
@@ -992,7 +992,7 @@ class LevelController extends Controller
 
             return  redirect('level-list')->with('success', 'Course successfully Added');
         } else {
-            return  redirect('level-list')->with('success', 'Course successfully Added');
+            return  redirect('create-course/' . $data->application_id)->with('success', 'Course successfully Added');
         }
     }
 
@@ -2676,19 +2676,19 @@ class LevelController extends Controller
 
         );
 
-        $aplication = new Application;
-        $aplication->level_id = $request->level_id;
-        $aplication->user_id = $request->user_id;
-        $aplication->state = $request->state_id;
-        $aplication->country = $request->country_id;
-        $aplication->Person_Name = $request->Person_Name;
-        $aplication->Contact_Number = $request->Contact_Number;
-        $aplication->Email_ID = $request->Email_ID;
-        $aplication->city = $request->city_id;
-        $aplication->designation = $request->designation;
-        $aplication->ip = getHostByName(getHostName());
-        $aplication->save();
-        return back()->with('success','Application Create Successfully');
+        $application = new Application;
+        $application->level_id = $request->level_id;
+        $application->user_id = $request->user_id;
+        $application->state = $request->state_id;
+        $application->country = $request->country_id;
+        $application->Person_Name = $request->Person_Name;
+        $application->Contact_Number = $request->Contact_Number;
+        $application->Email_ID = $request->Email_ID;
+        $application->city = $request->city_id;
+        $application->designation = $request->designation;
+        $application->ip = getHostByName(getHostName());
+        $application->save();
+        return redirect(url('create-course/'.$application->id))->with('success','Application Create Successfully');
    }
 
 
