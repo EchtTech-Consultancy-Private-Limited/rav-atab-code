@@ -13,8 +13,8 @@
                     Applications</a>
             </li>
             <li class="nav-item tab-all">
-                <a class="nav-link {{ isset($form_step_type) ? ($form_step_type == 'add-course' ? 'active' : '') : '' }}"
-                    href="#pending_payment_list" data-bs-toggle="tab">Pending Payment List</a>
+                <a class="nav-link"
+                    href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
             </li>
             <li class="nav-item tab-all ">
                 <a class="nav-link" href="{{ url('faq') }}">FAQs</a>
