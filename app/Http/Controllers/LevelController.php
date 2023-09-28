@@ -349,6 +349,17 @@ class LevelController extends Controller
 
     /*end upgrade part*/
 
+    /**
+     * @ coursePayment method of level 1
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function coursePayment(Request $request, $id = null)
+    {
+        return view('level.course-payment');
+    }
+    
     public function level1tp(Request $request, $id = null)
     {
         if ($request->input('display') == 'applications') {

@@ -96,6 +96,8 @@ Route::get('level-list',[LevelController::class, 'level_list']);
 
 Route::get('/level-first/{id?}',[LevelController::class,'level1tp']);
 
+Route::get('/course-payment/{id?}',[LevelController::class,'coursePayment'])->name('course.payment');
+
 Route::get('/level-first-upgrade/{upgrade_application_id?}/{id?}', [LevelController::class, 'level1tp_upgrade']);
 
 
