@@ -2650,4 +2650,47 @@ class LevelController extends Controller
        $course = DB::table('application_courses')->where('application_id',$id)->get();
         return view('level.create-course',compact('applicationData','course'));
     }
+   public function newApplications(){
+
+    $id = Auth::user()->id;
+    $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+    return view('level.new_application',['data'=>$data]);
+
+   }
+
+   public function  newApplicationSave(Request $request){
+
+        $this->validate(
+            $request,
+            [
+                'Email_ID' => ['required', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
+                'Contact_Number' => 'required|numeric|min:10,mobile_no|digits:10|unique:applications',
+                'Person_Name' => 'required',
+                'designation' => 'required',
+                'Email_ID'     => 'required|unique:applications',
+            ],
+            [
+                'Email_ID.regex' => "Please Enter Valid Email Id",
+                'Email_ID.required' => "Please Enter Email Id",
+            ]
+
+        );
+
+        $aplication = new Application;
+        $aplication->level_id = $request->level_id;
+        $aplication->user_id = $request->user_id;
+        $aplication->state = $request->state_id;
+        $aplication->country = $request->country_id;
+        $aplication->Person_Name = $request->Person_Name;
+        $aplication->Contact_Number = $request->Contact_Number;
+        $aplication->Email_ID = $request->Email_ID;
+        $aplication->city = $request->city_id;
+        $aplication->designation = $request->designation;
+        $aplication->ip = getHostByName(getHostName());
+        $aplication->save();
+        return back()->with('success','Application Create Successfully');
+   }
+
+
+
 }

@@ -134,20 +134,28 @@
          overflow: hidden;
          height: 3rem;
      }
+
      .btn_remove {
-    background: #fff;
-    border: 1px solid red;
-    border-radius: 5px;
-    padding: 3px 6px;
-    color: red;
-    transition: background-color 0.3s, color 0.3s; /* Add transition for smooth effect */
-}
+         background: #fff;
+         border: 1px solid red;
+         border-radius: 5px;
+         padding: 3px 6px;
+         color: red;
+         transition: background-color 0.3s, color 0.3s;
+         /* Add transition for smooth effect */
+     }
 
-.btn_remove:hover {
-    background-color: red; /* Change background color on hover */
-    color: #fff; /* Change text color on hover */
-}
+     .btn_remove:hover {
+         background-color: red;
+         /* Change background color on hover */
+         color: #fff;
+         /* Change text color on hover */
+     }
 
+     .ui-datepicker-prev,
+     .ui-datepicker-next {
+         cursor: pointer;
+     }
  </style>
  <title>RAV Accreditation</title>
  </head>
@@ -215,30 +223,25 @@
                  <div class="col-lg-12 col-md-12">
                      <div class="card">
                          <div class="profile-tab-box">
-                             <div class="">
+                             <div class="p-l-20">
                                  <ul class="nav ">
-                                     {{--
-                  <li class="nav-item tab-all">
-                     <a class="nav-link show  @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step')   @endif @else active  @endif" href="#general_information"
-                        data-bs-toggle="tab" >General Information</a>
-                  </li>
-                  --}}
-                                     <li class="nav-item tab-all ">
+
+
+                                     <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link add-active-b @if (isset($form_step_type)) @if ($form_step_type == 'add-course-new') active @else @endif  @endif"
                                              href="#new_application" data-bs-toggle="tab">New
                                              Application</a>
                                      </li>
-                                     <li class="nav-item tab-all ">
+                                     <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @else @endif  @endif"
                                              href="#preveious_application" data-bs-toggle="tab">
                                              Applications</a>
                                      </li>
                                      <li class="nav-item tab-all">
                                          <a class="nav-link {{ isset($form_step_type) ? ($form_step_type == 'add-course' ? 'active' : '') : '' }}"
-                                         href="#pending_payment_list"
-                                             data-bs-toggle="tab">Pending Payment List</a>
+                                             href="#pending_payment_list" data-bs-toggle="tab">Pending Payment List</a>
                                      </li>
-                                     <li class="nav-item tab-all ">
+                                     <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
                                      </li>
                                  </ul>
@@ -425,7 +428,7 @@ active @endif"
                                  </ul>
                                  <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif
 @else
-active @endif "
+active @endif"
                                      role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
@@ -608,7 +611,8 @@ active @endif "
                                                                          <div class="form-line">
                                                                              <label>Email-ID<span
                                                                                      class="text-danger">*</span></label>
-                                                                             <input id="emailId" type="text" name="Email_ID"
+                                                                             <input id="emailId" type="text"
+                                                                                 name="Email_ID"
                                                                                  placeholder="Email-ID"
                                                                                  @isset($id)
             value="{{ $Application->Email_ID ?? '' }}"
@@ -626,8 +630,8 @@ active @endif "
                                                                              <input type="text" name="designation"
                                                                                  placeholder="Designation"
                                                                                  @isset($id)
-            value="{{ $Application->designation ?? '' }}"
-            @endisset>
+                                                                                 value="{{ $Application->designation ?? '' }}"
+                                                                                 @endisset>
                                                                          </div>
                                                                          <span class="text-danger"
                                                                              id="designation_error"></span>
@@ -656,7 +660,7 @@ active @endif "
                                      <div class="card">
                                          <div class="header mb-4">
                                              <h2 style="float:left; clear:none;">Level Courses </h2>
-                                              {{-- @if (count($course) > 0) --}}
+                                             {{-- @if (count($course) > 0) --}}
 
                                              <a href="javascript:void(0);" class="btn btn-outline-primary mb-0"
                                                  style="float:right; clear:none; cursor:pointer;line-height: 24px;"
@@ -664,7 +668,7 @@ active @endif "
                                                  <i class="fa fa-plus font-14"></i> Add More Course
                                              </a>
 
-                                              {{-- @endif --}}
+                                             {{-- @endif --}}
                                          </div>
                                          <form action="{{ url('/new-application-course') }}"
                                              enctype="multipart/form-data" method="post" class="form"
@@ -673,7 +677,10 @@ active @endif "
                                              <input type="hidden" name="form_step_type" value="add-course">
                                              <div class="body pb-0" id="courses_body">
                                                  <!-- level start -->
-                                                 <div class="row clearfix" id="new_course_html">
+                                                 <div class="row clearfix" id="new_course_html"  data-application-id="{{ $collections->id ?? '' }}"
+                                                    data-level-id="{{ isset($Application) ? $Application->level_id : '' }}"
+                                                    data-country="{{ $data->country ?? '' }}"
+                                                    data-state="{{ $data->state ?? '' }}">
                                                      <div class="col-sm-12 text-righ">
 
                                                          <div class="d-flex justify-content-end">
@@ -684,7 +691,7 @@ active @endif "
                                                              </button>
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-3">
+                                                     <div class="col-sm-4">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Course Name<span
@@ -737,7 +744,7 @@ active @endif "
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-3">
+                                                     <div class="col-sm-4">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Eligibility<span
@@ -751,7 +758,7 @@ active @endif "
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-2">
+                                                     <div class="col-sm-4">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Mode of Course <span
@@ -774,7 +781,7 @@ active @endif "
                                                              @enderror
                                                          </div>
                                                      </div>
-                                                     <div class="col-sm-12">
+                                                     <div class="col-sm-8">
                                                          <div class="form-group">
                                                              <div class="form-line">
                                                                  <label>Course Brief <span
@@ -938,11 +945,11 @@ active @endif "
                                                                          @endif
                                                                      </td>
                                                                      <!-- <td class="center">
-                                   {{ date('d F Y', strtotime($courses->created_at)) }}
-                                   </td>
-                                   <td class="center">
-                                   {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
-                                   </td> -->
+                                           {{ date('d F Y', strtotime($courses->created_at)) }}
+                                           </td>
+                                           <td class="center">
+                                           {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
+                                           </td> -->
                                                                      <td class="center btn-ved">
                                                                          <a class="btn btn-tbl-delete bg-primary"
                                                                              data-bs-toggle="modal"
@@ -959,11 +966,10 @@ active @endif "
                                                                                  <i class="material-icons">edit</i>
                                                                              </a>
                                                                          @endif
-                                                                         <a onclick="return confirm_option('delete')"
-                                                                             href="{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}"
-                                                                             class="btn btn-tbl-delete bg-danger">
-                                                                             <i class="material-icons">delete</i>
-                                                                         </a>
+                                                                         <a onclick="confirmDelete('{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}')" class="btn btn-tbl-delete bg-danger">
+                                                                            <i class="material-icons">delete</i>
+                                                                        </a>
+
                                                                      </td>
                                                                  </tr>
                                                              @endforeach
@@ -972,6 +978,27 @@ active @endif "
                                                  </table>
                                              </div>
                                          </div>
+
+
+                                         <script>
+                                            function confirmDelete(deleteUrl) {
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "You won't be able to revert this!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#d33',
+                                                    cancelButtonColor: '#3085d6',
+                                                    confirmButtonText: 'Yes, delete it!',
+                                                    cancelButtonText: 'Cancel'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // If the user confirms, proceed with the delete operation by navigating to the delete URL
+                                                        window.location.href = deleteUrl;
+                                                    }
+                                                });
+                                            }
+                                        </script>
 
                                          <div id="add_courses" style="Display:none" class="faqs-row' + faqs_row + '">
                                              <div class="row clearfix">
@@ -1254,6 +1281,7 @@ active @endif "
                                              <form action="{{ url('/new-application_payment') }}" method="post"
                                                  class="form" id="regForm" enctype="multipart/form-data">
                                                  @csrf
+
                                                  <input type="hidden" name="form_step_type"
                                                      value="application-payment">
                                                  <div class="row clearfix">
@@ -1264,10 +1292,11 @@ active @endif "
                                                                          class="text-danger">*</span></label>
                                                                  <input type="text" name="payment_date"
                                                                      class="form-control" id="payment_date" required
-                                                                     placeholder="Payment Date "aria-label="Date"
+                                                                     placeholder="Payment Date" aria-label="Date"
                                                                      value="{{ old('payment_date') }}"
                                                                      onfocus="focused(this)"
-                                                                     onfocusout="defocused(this)">
+                                                                     onfocusout="defocused(this)"
+                                                                     onfocus="showDatePicker()">
                                                              </div>
                                                              <label for="payment_date" id="payment_date-error"
                                                                  class="error">
@@ -1373,7 +1402,7 @@ active @endif "
                                                      <div class="col-sm-3">
                                                          <div class="form-group">
                                                              <div class="form-line">
-                                                                 <label>Payment Screenshot(jpg,png,jpeg,pdf) <span
+                                                                 <label>Payment Proof(jpg,png,jpeg,pdf) <span
                                                                          class="text-danger">*</span></label>
                                                                  <input type="file" name="payment_details_file"
                                                                      id="payment_details_file" required
@@ -1394,7 +1423,7 @@ active @endif "
                                                      <!--  <li><button type="button"
                class="btn btn-info preview-step mr-2">Preview</button></li> -->
                                                      <li><button type="submit"
-                                                             class="btn btn-primary btn-info-full ">Submit</button>
+                                                             class="btn btn-primary btn-info-full">Submit</button>
                                                      </li>
                                                  </ul>
                                              </form>
@@ -1480,21 +1509,21 @@ active @endif "
                                                                          class="material-icons">visibility</i></a>
                                                                  <!-- @if ($item->status == 1)
     <a href="{{ url('/upload-document' . '/' . dEncrypt($item->id)) }}"
-                                                                                                                                    class="btn btn-tbl-edit bg-primary"><i
-                                                                                                                                        class="fa fa-upload"></i></a>
+                                                                                                                                            class="btn btn-tbl-edit bg-primary"><i
+                                                                                                                                                class="fa fa-upload"></i></a>
     @endif
-                                                                                                                            @if ($item->status == 2)
+                                                                                                                                    @if ($item->status == 2)
     <a href="{{ url('/application-upgrade-second') }}"
-                                                                                                                                    class="btn btn-tbl-edit"><i
-                                                                                                                                        class="material-icons">edit</i></a>
+                                                                                                                                            class="btn btn-tbl-edit"><i
+                                                                                                                                                class="material-icons">edit</i></a>
     @endif -->
                                                              </td>
                                                              @if (request()->path() == 'level-first')
                                                              @elseif(request()->path() == 'level-second')
                                                                  <td class="center">
                                                                      <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                        class="btn btn-tbl-edit"><i
-                                                            class="material-icons">visibility</i></a> -->
+                                                                class="btn btn-tbl-edit"><i
+                                                                    class="material-icons">visibility</i></a> -->
                                                                      @if ($item->status == 1)
                                                                          <a href="{{ url('/upload-document') }}"
                                                                              class="btn btn-tbl-upload"><i
@@ -1642,8 +1671,9 @@ active @endif "
                                                  </tr>
                                                  <tr class="odd gradeX">
                                                      <th class="center">Course Brief</th>
-                                                     <td class="center"  id="view_course_brief">
-
+                                                     <td class="center">
+                                                         <input type="text" name="course_brief[]"
+                                                             id="view_course_brief" readonly>
                                                      </td>
                                                  </tr>
                                                  <tr class="odd gradeX">
@@ -1680,7 +1710,7 @@ active @endif "
                                                      <td class="center">
                                                          <a target="_blank" href="" title="Document 3"
                                                              id="docpdf3" download>
-                                                             <i class="fa fa-eye mr-2"></i> Doc 3
+                                                             <i class="fa fa-download mr-2"></i> Doc 3
                                                          </a>
                                                      </td>
                                                  </tr>
@@ -1719,7 +1749,7 @@ active @endif "
                                                          <label class="active">Course Name<span
                                                                  class="text-danger">*</span></label>
                                                          <input type="text" name="Course_Names" id="Course_Names"
-                                                             class="form-control">
+                                                             class="form-control" required>
                                                      </div>
                                                  </div>
                                              </div>
@@ -1756,7 +1786,7 @@ active @endif "
                                                  <div class="form-group">
                                                      <div class="form-line">
                                                          <label class="active">Eligibility<span> </label>
-                                                         <input type="text" name="Eligibilitys"
+                                                         <input type="text" name="Eligibilitys" required
                                                              id="Eligibilitys" class="form-control">
                                                      </div>
                                                  </div>
@@ -1766,18 +1796,8 @@ active @endif "
                                                      <div class="form-line">
                                                          <label>Mode of Course <span
                                                                  class="text-danger">*</span></label>
-                                                         <!--  <select class="form-control" name="mode_of_course[]"
-                                    required multiple="" style="width:160px;" id="mode_of_course_edit">
-                                    <option value="1">Online</option>
-                                    <option value="2">Offline</option>
-                                    <option value="3">Hybrid</option> -->
-                                                         <!-- <option>Select Mode of Course</option> -->
-                                                         <!-- @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
-<option value="{{ $value }}">{{ $value }}</option>
-@endforeach -->
-                                                         <!-- </select> -->
                                                          <select multiple name="mode_of_course[]"
-                                                             id="mode_of_course_edit">
+                                                             id="Mode_Of_Courses">
                                                              <option value="Online">Online</option>
                                                              <option value="Offline">Offline</option>
                                                              <option value="Hybrid">Hybrid</option>
@@ -1796,8 +1816,8 @@ active @endif "
                                                                  class="text-danger">*</span></label>
                                                          <!-- <input type="text" placeholder="Course Brief"
                                     name="course_brief[]" required> -->
-                                                         <textarea rows="4" cols="50" class="form-control" placeholder="Course Brief" name="course_brief"
-                                                             id="course_brief"></textarea>
+                                                         <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
+                                                             name="course_brief" id="course_brief"></textarea>
                                                      </div>
                                                      @error('course_brief')
                                                          <div class="alert alert-danger">{{ $message }}
@@ -1842,13 +1862,13 @@ active @endif "
                                                              class="form-control doc_edit_3 file_size">
                                                          <a href="" id="docpdf3ss"
                                                              title="Download Document 1" download><i
-                                                                 class="fa fa-eye mr-2"></i> Doc 3 </a>
+                                                                 class="fa fa-download mr-2"></i> Doc 3 </a>
                                                      </div>
                                                  </div>
                                              </div>
                                              <div class="col-md-12 text-center">
-                                                 <button type="submit"
-                                                     class="btn btn-primary waves-effect m-r-15">Save</button>
+                                                 <button type="submit" class="btn btn-primary waves-effect m-r-15"
+                                                     onclick="load();">Save</button>
                                              </div>
                                          </div>
                                      </form>
@@ -2137,6 +2157,7 @@ active @endif "
                                  $("#Course_Name").val(data.ApplicationCourse[0].course_name);
                                  $("#Eligibility").val(data.ApplicationCourse[0].eligibility);
                                  $("#Mode_Of_Course").val(data.ApplicationCourse[0].mode_of_course);
+
                                  if (data.ApplicationCourse[0].payment == "false") {
                                      $("#Payment_Status").val("Pending");
                                  }
@@ -2207,7 +2228,15 @@ active @endif "
                              dataType: 'json',
                              contentType: false,
                              success: function(response) {
-                                 alert('Application Created Successfully')
+                                 Swal.fire({
+                                     position: 'center',
+                                     icon: 'success',
+                                     title: 'Success!',
+                                     text: 'Your application has been submitted successfully.',
+                                     showConfirmButton: false,
+                                     timer: 3000
+                                 })
+
                                  //alert(response.id);
                                  if (response.id) {
 
@@ -2278,8 +2307,7 @@ active @endif "
                                  if (data.ApplicationCourse[0].payment == "false") {
                                      $("#Payment_Status").val("Pending");
                                  }
-                                 $("#view_course_brief").text((data.ApplicationCourse[0].course_brief));
-                                 console.log((data.ApplicationCourse[0].course_brief));
+                                 $("#view_course_brief").val(data.ApplicationCourse[0].course_brief);
 
                                  $("#view_years").html(data.ApplicationCourse[0].years + " Year(s)");
                                  $("#view_months").html(data.ApplicationCourse[0].months + " Month(s)");
@@ -2333,7 +2361,7 @@ active @endif "
 
                                  //console.log(data.ApplicationCourse[0].mode_of_course);
 
-
+                                 console.log(data.ApplicationCourse[0].mode_of_course)
 
                                  var values = data.ApplicationCourse[0].mode_of_course;
                                  $.each(values, function(i, e) {
@@ -2345,8 +2373,9 @@ active @endif "
                                      .ApplicationCourse[0].id)
                                  $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                  $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                 $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
-                                 //$("#Payment_Statuss").val(data.ApplicationCourse[0].payment);
+                                  $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+
+
 
                                  if (data.ApplicationCourse[0].payment == "false") {
                                      $("#Payment_Statuss").val("Pending");
@@ -2501,7 +2530,15 @@ active @endif "
                              doc_payment_files == 'jpeg') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only jpg, png, jpeg ,pdf are allowed")
+
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only jpg, png, jpeg ,pdf are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.payment_details_file').val("");
                          }
 
@@ -2518,7 +2555,14 @@ active @endif "
                          if (doc_file1 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_1').val("");
                          }
 
@@ -2534,7 +2578,14 @@ active @endif "
                          if (doc_file2 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed");
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_2').val("");
                          }
 
@@ -2552,7 +2603,15 @@ active @endif "
                          if (doc_file3 == 'csv' || doc_file3 == 'xlsx' || doc_file3 == 'xls') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only csv,xlsx,xls  are allowed")
+                             //  alert("Only csv,xlsx,xls  are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only csv,xlsx, and xlsx are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_3').val("");
                          }
 
@@ -2570,7 +2629,14 @@ active @endif "
                          if (doc_file1 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_edit_1').val("");
                          }
 
@@ -2588,7 +2654,14 @@ active @endif "
                          if (doc_file1 == 'pdf') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed")
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_edit_2').val("");
                          }
 
@@ -2605,7 +2678,14 @@ active @endif "
                          if (doc_file == 'csv' || doc_file == 'xlsx' || doc_file == 'xls') {
                              // alert("File uploaded is pdf");
                          } else {
-                             alert("Only PDF are allowed");
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'error',
+                                 title: 'Validation error!',
+                                 text: 'Only PDF files are allowed',
+                                 showConfirmButton: false,
+                                 timer: 3000
+                             })
                              $('.doc_edit_3').val("");
                          }
 
@@ -2724,6 +2804,16 @@ active @endif "
                          });
                      })
                  </script>
+
+                 <script>
+                     function load() {
+                         $('.btn').prop('disabled', true);
+                         setTimeout(function() {
+                             $('.btn').prop('disabled', false);
+                         }, 10000);
+                         $("#form").submit();
+                     }
+                 </script>
                  <!-- <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a> -->
                  <script src="{{ asset('assets/js/form.min.js') }} "></script>
                  <script src="{{ asset('assets/js/bundles/multiselect/js/jquery.multi-select.js') }}"></script>
@@ -2731,5 +2821,148 @@ active @endif "
                  <script src=" {{ asset('assets/js/pages/forms/advanced-form-elements.js') }}"></script>
 
 
+                 <script>
+                    var isAppending = false; // Flag to prevent multiple append requests
 
+function addNewCourse() {
+    if (!isAppending) {
+        isAppending = true;
+
+        // Clone the template row
+        var newRow = $('#new_course_html').clone();
+
+        // Clear input fields and remove any unwanted attributes
+        newRow.find('input, textarea').val('');
+        newRow.find('input[type="file"]').removeAttr('id').val('');
+
+        // Remove the ID attribute from the remove button
+        newRow.find('.remove-course').removeAttr('id');
+
+        // Show the remove button for the new row
+        newRow.find('.remove-course').show();
+
+        // Add a class to the new row
+        newRow.addClass('new-course-html');
+
+        // Append the new row to the container
+        $('.new-course-row').append(newRow); // Append to the existing .new-course-row div
+
+        // Read data attributes and set hidden field values
+        var applicationId = newRow.data('application-id');
+        var levelId = newRow.data('level-id');
+        var country = newRow.data('country');
+        var state = newRow.data('state');
+
+        // Set values for the hidden fields
+        newRow.find('input[name="application_id"]').val(applicationId);
+        newRow.find('input[name="level_id"]').val(levelId);
+        newRow.find('input[name="country"]').val(country);
+        newRow.find('input[name="state"]').val(state);
+
+        // Initialize select2 for the cloned <select> elements
+        newRow.find('.select2').select2();
+
+        isAppending = false; // Reset the flag
+    }
+}
+                     function removeCourse(button) {
+                         // Find the parent row and remove it
+                         $(button).closest('.new-course-html').remove();
+                     }
+
+
+                     $('#Contact_Number').on('keyup', function() {
+                         // Get the contact number value
+                         var contactNumber = $(this).val();
+
+                         // Check if the contact number is empty
+                         if (contactNumber === '') {
+                             // Clear the error message and exit
+                             $('#contact_error').text('');
+                             return;
+                         }
+
+                         // Check if the contact number is numeric and has exactly 10 digits
+                         if (/^\d{10}$/.test(contactNumber)) {
+                             // Send an AJAX request
+                             $.ajax({
+                                 type: 'POST',
+                                 url: '/checkContactNumber', // Update with your Laravel route URL
+                                 data: {
+                                     contact_number: contactNumber,
+                                     _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
+                                 },
+                                 success: function(response) {
+                                     if (response.status === 'duplicate') {
+                                         // Display the error message in the #contact_error span
+                                         $('#contact_error').text('Contact number is already in use.');
+                                     } else {
+                                         // Clear the error message if the contact number is unique
+                                         $('#contact_error').text('');
+                                     }
+                                 },
+                                 error: function(xhr, status, error) {
+                                     // Handle AJAX errors if needed
+                                 }
+                             });
+                         } else {
+                             // Display an error message for an invalid contact number
+                             $('#contact_error').text('Contact number must be 10 digits and numeric.');
+                         }
+                     });
+
+
+                     $('#emailId').on('keyup', function() {
+                         // Get the email value
+                         var email = $(this).val();
+
+                         // Check if the email is empty
+                         if (email === '') {
+                             // Clear the error message and exit
+                             $('#email_id_error').text('');
+                             return;
+                         }
+
+                         // Check if the email format is valid
+                         if (/^\S+@\S+\.\S+$/.test(email)) {
+                             // Send an AJAX request
+                             $.ajax({
+                                 type: 'POST',
+                                 url: '/checkEmail', // Update with your Laravel route URL
+                                 data: {
+                                     email: email,
+                                     _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
+                                 },
+                                 success: function(response) {
+                                     if (response.status === 'duplicate') {
+                                         // Display the error message in the #email_id_error span
+                                         $('#email_id_error').text('Email is already in use.');
+                                     } else {
+                                         // Clear the error message if the email is unique
+                                         $('#email_id_error').text('');
+                                     }
+                                 },
+                                 error: function(xhr, status, error) {
+                                     // Handle AJAX errors if needed
+                                 }
+                             });
+                         } else {
+                             // Display an error message for an invalid email format
+                             $('#email_id_error').text('Invalid email format.');
+                         }
+                     });
+                 </script>
+
+                 <script>
+                     function showDatePicker() {
+                         // Get the current year
+                         var currentYear = new Date().getFullYear();
+
+                         // Set the minimum date to January 1st of the current year
+                         var minDate = currentYear + "-01-01";
+
+                         // Set the minimum date for the input field
+                         document.getElementById("payment_date").setAttribute("min", minDate);
+                     }
+                 </script>
  </body>
