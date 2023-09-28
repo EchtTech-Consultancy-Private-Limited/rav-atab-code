@@ -2710,5 +2710,15 @@ class LevelController extends Controller
         return view('level.applicationFaq',['faqs'=>$faqs]);
     }
 
+    public function pendingPaymentlist(){
+
+        $level_list_data = DB::table('applications')
+            ->where('applications.user_id', Auth::user()->id)
+            ->where('applications.status', '0')
+            ->select('applications.*', 'countries.name as country_name')
+            ->join('countries', 'applications.country', '=', 'countries.id')->get();
+        return view('level.pendinglistApplication',['level_list_data'=>$level_list_data]);
+    }
+
 
 }
