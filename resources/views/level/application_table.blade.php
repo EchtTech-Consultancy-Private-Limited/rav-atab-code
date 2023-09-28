@@ -271,7 +271,7 @@
                     <div class="tab-content">
 
                         {{-- application payment table start --}}
-                        <div role="tabpanel"  class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @endif  @endif" id="preveious_application" aria-expanded="false">
+                        <div>
                             <div class="card">
                                 <div class="header">
                                     <h2>Previous Applications</h2>

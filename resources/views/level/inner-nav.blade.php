@@ -8,8 +8,8 @@
                     Application</a>
             </li>
             <li class="nav-item tab-all ">
-                <a class="nav-link @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @else @endif  @endif"
-                    href="#preveious_application" data-bs-toggle="tab">
+                <a class="nav-link"
+                    href="{{ url('/appliction-table') }}" >
                     Applications</a>
             </li>
             <li class="nav-item tab-all">

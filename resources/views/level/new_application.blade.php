@@ -235,8 +235,8 @@ active @endif"
                                                     <form class="form" action="{{ url('/new-applications') }}" method="post">
                                                         @csrf
                                                         @if ($applicationData)
-                                                        <input type="text" name="previous_data" value="1">
-                                                        <input type="text" name="application_id" value="{{ $applicationData->id }}">
+                                                        <input type="hidden" name="previous_data" value="1">
+                                                        <input type="hidden" name="application_id" value="{{ $applicationData->id }}">
                                                         @endif
                                                         <div class="body pb-0">
                                                             <!-- level start -->
