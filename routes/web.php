@@ -266,6 +266,20 @@ Route::get('/document-report-verified-by-assessor/{id}/{course_id}', [LevelContr
 Route::get('new-applications/{id?}',[LevelController::class,'newApplications']);
 Route::post('new-applications',[LevelController::class,'newApplicationSave']);
 
+Route::get('appliction-table',[LevelController::class,'applictionTable']);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //notification status change
 Route::get('notification',[LevelController::class,'notification']);
