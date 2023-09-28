@@ -349,6 +349,17 @@ class LevelController extends Controller
 
     /*end upgrade part*/
 
+    /**
+     * @ coursePayment method of level 1
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function coursePayment(Request $request, $id = null)
+    {
+        return view('level.course-payment');
+    }
+
     public function level1tp(Request $request, $id = null)
     {
         if ($request->input('display') == 'applications') {
@@ -849,20 +860,7 @@ class LevelController extends Controller
     public function new_application_course(Request $request)
     {
 
-
-        // return $request->all();
-
-        //   /* $this->validate($request, [
-        //            'doc2' => 'mimes:pdf',
-
-        //     ]);*/
-
-        // $this->validate($request, [
-        //     'doc1' =>  "max:5120",
-        //     'doc2' =>  "max:5120",
-        //     'doc3' =>  "max:5120",
-        // ]);
-
+        // dd($request->all());
         $active = 'active';
         $course_name = $request->course_name;
         $course_duration = $request->course_duration;
@@ -877,8 +875,6 @@ class LevelController extends Controller
         $months = $request->months;
         $days = $request->days;
         $hours = $request->hours;
-
-        /*  $mode_of_course=json_encode($request->mode_of_course);*/
 
         $user_id = Auth::user()->id;
 
@@ -993,7 +989,7 @@ class LevelController extends Controller
 
         //return $request->level_id;
         if ($request->level_id == '1') {
-            return  redirect('level-first/' . $data->application_id)->with('success', 'Course  successfully  Added');
+            return  redirect('create-course/' . $data->application_id)->with('success', 'Course  successfully  Added');
             // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
         } elseif ($request->level_id == '2') {
@@ -1008,7 +1004,7 @@ class LevelController extends Controller
 
             return  redirect('level-list')->with('success', 'Course successfully Added');
         } else {
-            return  redirect('level-list')->with('success', 'Course successfully Added');
+            return  redirect('create-course/' . $data->application_id)->with('success', 'Course successfully Added');
         }
     }
 
@@ -2657,4 +2653,89 @@ class LevelController extends Controller
 
         return response()->json(['status' => 'unique']);
     }
+
+
+    public function create_course($id=null){
+        if($id){
+            $applicationData = DB::table('applications')->where('id',$id)->first();
+        }
+
+       $course = DB::table('application_courses')->where('application_id',$id)->get();
+        return view('level.create-course',compact('applicationData','course'));
+    }
+   public function newApplications($id=null){
+    if($id){
+        $applicationData = DB::table('applications')->where('id',$id)->first();
+    }else{
+        $applicationData = null;
+    }
+
+    $id = Auth::user()->id;
+    $item = LevelInformation::whereid('1')->get();
+    $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+    return view('level.new_application',['data'=>$data,'applicationData'=>$applicationData,'item'=>$item]);
+
+   }
+
+   public function  newApplicationSave(Request $request){
+
+
+    if($request->previous_data && $request->application_id){
+        return redirect(url('create-course/'.$request->application_id))->with('success','Application Create Successfully');
+    }
+
+        $this->validate(
+            $request,
+            [
+                'Email_ID' => ['required', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
+                'Contact_Number' => 'required|numeric|min:10,mobile_no|digits:10|unique:applications',
+                'Person_Name' => 'required',
+                'designation' => 'required',
+                'Email_ID'     => 'required|unique:applications',
+            ],
+            [
+                'Email_ID.regex' => "Please Enter Valid Email Id",
+                'Email_ID.required' => "Please Enter Email Id",
+            ]
+        );
+
+
+
+        $application = new Application;
+        $application->level_id = 1;
+        $application->user_id = $request->user_id;
+        $application->state = $request->state_id;
+        $application->country = $request->country_id;
+        $application->Person_Name = $request->Person_Name;
+        $application->Contact_Number = $request->Contact_Number;
+        $application->Email_ID = $request->Email_ID;
+        $application->city = $request->city_id;
+        $application->designation = $request->designation;
+        $application->ip = getHostByName(getHostName());
+        $application->save();
+        return redirect(url('create-course/'.$application->id))->with('success','Application Create Successfully');
+   }
+
+
+    public function applictionTable(){
+      $collection = ApplicationPayment::orderBy('id', 'desc')->whereuser_id(Auth::user()->id)->get();
+      return view('level.application_table',['collection'=>$collection]);
+    }
+
+    public function faqslist(){
+        $faqs = Faq::where('category', 1)->orderby('sort_order', 'Asc')->get();
+        return view('level.applicationFaq',['faqs'=>$faqs]);
+    }
+
+    public function pendingPaymentlist(){
+
+        $level_list_data = DB::table('applications')
+            ->where('applications.user_id', Auth::user()->id)
+            ->where('applications.status', '0')
+            ->select('applications.*', 'countries.name as country_name')
+            ->join('countries', 'applications.country', '=', 'countries.id')->get();
+        return view('level.pendinglistApplication',['level_list_data'=>$level_list_data]);
+    }
+
+
 }

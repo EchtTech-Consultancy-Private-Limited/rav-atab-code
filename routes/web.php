@@ -96,6 +96,8 @@ Route::get('level-list',[LevelController::class, 'level_list']);
 
 Route::get('/level-first/{id?}',[LevelController::class,'level1tp']);
 
+Route::get('/course-payment/{id?}',[LevelController::class,'coursePayment'])->name('course.payment');
+
 Route::get('/level-first-upgrade/{upgrade_application_id?}/{id?}', [LevelController::class, 'level1tp_upgrade']);
 
 
@@ -234,12 +236,18 @@ Route::get('document-view-accessor/{id?}',[LevelController::class, 'document_vie
 
 Route::post('/upgrade-level', [UpgradeLevelController::class, 'upgrade_level']);
 
-Route::post('checkContactNumber', [LevelController::class, 'checkContactNumber']);
 
-Route::post('checkEmail', [LevelController::class, 'checkEmail']);
+// new routes
+
+Route::get('create-course/{id?}', [LevelController::class, 'create_course']);
 
 
 });
+
+
+Route::post('checkContactNumber', [LevelController::class, 'checkContactNumber']);
+
+Route::post('checkEmail', [LevelController::class, 'checkEmail']);
 
 Route::get('view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'view_doc']);
 Route::get('admin-view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'admin_view_doc']);
@@ -253,6 +261,30 @@ Route::get('/document-report-by-admin/{course_id}', [LevelController::class, 'do
 Route::post('/document-report-by-admin', [LevelController::class, 'document_report_by_admin_submit']);
 Route::get('/document-comment-admin-assessor/{course_id}', [LevelController::class, 'document_comment_admin_assessor']);
 Route::get('/document-report-verified-by-assessor/{id}/{course_id}', [LevelController::class, 'document_report_verified_by_assessor']);
+
+
+
+//new application
+Route::get('new-applications/{id?}',[LevelController::class,'newApplications']);
+Route::post('new-applications',[LevelController::class,'newApplicationSave']);
+Route::get('appliction-list',[LevelController::class,'applictionTable']);
+Route::get('faq',[LevelController::class,'faqslist']);
+Route::get('pending-payment-list',[LevelController::class,'pendingPaymentlist']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //notification status change
 Route::get('notification',[LevelController::class,'notification']);
