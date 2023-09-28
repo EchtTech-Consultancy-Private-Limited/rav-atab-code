@@ -373,8 +373,8 @@ active @endif"
                                              <br>
                                          </div>
                                          <div class="col-md-12 ml-auto" style="text-align: right">
-                                             <button class="btn btn-info" id="add-new-application">New
-                                                 Application</button>
+                                             <a href="{{ url('/new-applications') }}" class="btn btn-info">New
+                                                 Application</a>
                                          </div>
                                      </div>
                                  </div>

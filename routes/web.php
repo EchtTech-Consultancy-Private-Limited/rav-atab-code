@@ -263,7 +263,7 @@ Route::get('/document-report-verified-by-assessor/{id}/{course_id}', [LevelContr
 
 
 //new application
-Route::get('new-applications',[LevelController::class,'newApplications']);
+Route::get('new-applications/{id?}',[LevelController::class,'newApplications']);
 Route::post('new-applications',[LevelController::class,'newApplicationSave']);
 
 

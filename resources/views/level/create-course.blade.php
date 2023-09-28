@@ -645,7 +645,7 @@
                             </div>
                         </div>
                         <ul class="list-inline pull-right mt-5">
-                            <li><button type="button" class="btn btn-danger prev-step">Previous</button>
+                            <li><a href="{{ url('new-applications/'.$applicationData->id) }}" class="btn btn-danger prev-step">Previous</a>
                             </li>
 
                             <li>

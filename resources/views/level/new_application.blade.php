@@ -234,6 +234,10 @@ active @endif"
                                                 <div class="col-md-12">
                                                     <form class="form" action="{{ url('/new-applications') }}" method="post">
                                                         @csrf
+                                                        @if ($applicationData)
+                                                        <input type="text" name="previous_data" value="1">
+                                                        <input type="text" name="application_id" value="{{ $applicationData->id }}">
+                                                        @endif
                                                         <div class="body pb-0">
                                                             <!-- level start -->
                                                             <div class="row clearfix">
@@ -246,8 +250,8 @@ active @endif"
                                                                                 placeholder="Person Name"
                                                                                 class="preventnumeric"
                                                                                 id="person_name"
-                                                                                @isset($id)
-                                                                                  value="{{ $Application->Person_Name ?? '' }}"
+                                                                                @isset($applicationData)
+                                                                                  value="{{ $applicationData->Person_Name ?? '' }}"
                                                                                @endisset
                                                                                 required maxlength="30">
                                                                             <span class="text-danger"
@@ -290,8 +294,8 @@ active @endif"
                                                                                 class="preventalpha"
                                                                                 placeholder="Contact Number"
                                                                                 id="Contact_Number"
-                                                                                @isset($id)
-                                                                              value="{{ $Application->Contact_Number ?? '' }}"
+                                                                                @isset($applicationData)
+                                                                              value="{{ $applicationData->Contact_Number ?? '' }}"
                                                                               @endisset>
                                                                         </div>
                                                                         <span class="text-danger"
@@ -306,8 +310,8 @@ active @endif"
                                                                             <input id="emailId" type="text"
                                                                                 name="Email_ID"
                                                                                 placeholder="Email-ID"
-                                                                                @isset($id)
-           value="{{ $Application->Email_ID ?? '' }}"
+                                                                                @isset($applicationData)
+           value="{{ $applicationData->Email_ID ?? '' }}"
            @endisset>
                                                                         </div>
                                                                         <span class="text-danger"
@@ -321,8 +325,8 @@ active @endif"
                                                                                     class="text-danger">*</span></label>
                                                                             <input type="text" name="designation"
                                                                                 placeholder="Designation"
-                                                                                @isset($id)
-                                                                                value="{{ $Application->designation ?? '' }}"
+                                                                                @isset($applicationData)
+                                                                                value="{{ $applicationData->designation ?? '' }}"
                                                                                 @endisset>
                                                                         </div>
                                                                         <span class="text-danger"
