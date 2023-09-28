@@ -225,12 +225,8 @@
                          <div class="profile-tab-box">
                              <div class="p-l-20">
                                  <ul class="nav ">
-                                     {{--
-                  <li class="nav-item tab-all">
-                     <a class="nav-link show  @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step')   @endif @else active  @endif" href="#general_information"
-                        data-bs-toggle="tab" >General Information</a>
-                  </li>
-                  --}}
+
+
                                      <li class="nav-item tab-all p-l-20">
                                          <a class="nav-link add-active-b @if (isset($form_step_type)) @if ($form_step_type == 'add-course-new') active @else @endif  @endif"
                                              href="#new_application" data-bs-toggle="tab">New
