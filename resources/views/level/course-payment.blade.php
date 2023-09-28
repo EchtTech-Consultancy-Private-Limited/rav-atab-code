@@ -126,10 +126,6 @@
          width: 250px;
      }
 
-     .select-box-hide-class select {
-         display: none;
-     }
-
      .form-control[type=file] {
          overflow: hidden;
          height: 3rem;
@@ -348,7 +344,7 @@
                                                  <div class="form-group">
                                                      <div class="form-line">
                                                          <label>Payment Date <span class="text-danger">*</span></label>
-                                                         <input type="text" name="payment_date" class="form-control" id="payment_date" required placeholder="Payment Date" aria-label="Date" value="{{ old('payment_date') }}" onfocus="focused(this)" onfocusout="defocused(this)" onfocus="showDatePicker()">
+                                                         <input type="text" name="payment_date" class="form-control" id="payment_date" required placeholder="Payment Date" aria-label="Date" value="{{ old('payment_date') }}" onfocus="showDatePicker()">
                                                      </div>
                                                      <label for="payment_date" id="payment_date-error" class="error">
                                                          @error('payment_date')
@@ -446,27 +442,43 @@
                      </form>
                  </div>
     
-        <script src="{{ asset('assets/js/form.min.js') }} "></script>
-        <script src="{{ asset('assets/js/bundles/multiselect/js/jquery.multi-select.js') }}"></script>
-        <script src="{{ asset('assets/js/bundles/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js') }} "></script>
-        <script src=" {{ asset('assets/js/pages/forms/advanced-form-elements.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-3.6.0.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.js') }}"></script>
 
     <script>
+
+$(document).ready(function() {
+                         $(window).on("load", function() {
+                             $("#bank_id").hide();
+                             $("#QR").hide();
+                         });
+
+                         $("#payments").on('change', function() {
+                             $type = $('#payments').val();
+                             //alert($type);
+
+                             if ($type == 'QR-Code') {
+                                 // alert('hii')
+                                 $("#bank_id").hide();
+                                 $("#QR").show();
+
+                             } else if ($type == "") {
+                                 //  alert('hii1')
+                                 $("#bank_id").show();
+                                 $("#QR").show();
+
+                             } else {
+
+                                 //  alert('hii1')
+                                 $("#bank_id").show();
+                                 $("#QR").hide();
+
+                             }
+                         });
+                     });
+
          $(function() {
-            $("#payment_date").datepicker({
-                maxDate: new Date()
-            });
+            $("#payment_date").datepicker();
         });
-
-        function showDatePicker() {
-                         // Get the current year
-                         var currentYear = new Date().getFullYear();
-
-                         // Set the minimum date to January 1st of the current year
-                         var minDate = currentYear + "-01-01";
-
-                         // Set the minimum date for the input field
-                         document.getElementById("payment_date").setAttribute("min", minDate);
-                     }
     </script>
  </body>
