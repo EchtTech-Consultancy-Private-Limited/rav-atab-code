@@ -247,7 +247,7 @@
 
                      <div class="tab-content">
 
-                             {{-- pending application table --}}
+                         {{-- pending application table --}}
                          <div role="tabpanel" class="tab-pane" id="pending_payment_list" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
@@ -294,8 +294,7 @@
                          </div>
 
                          {{-- Validity Structure --}}
-                         <div role="tabpanel"  class="tab-pane active"
-                             id="general_information" aria-expanded="true">
+                         <div role="tabpanel" class="tab-pane active" id="general_information" aria-expanded="true">
                              <div class="row clearfix">
                                  <div class="col-lg-12 col-md-12 col-sm-12">
                                      <div class="card project_widget">
@@ -369,7 +368,9 @@
                              </div>
                          </div>
 
-                         <div role="tabpanel"  class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') active @else @endif  @endif"  id="new_application" aria-expanded="false">
+                         <div role="tabpanel"
+                             class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') active @else @endif  @endif"
+                             id="new_application" aria-expanded="false">
 
                              <div class="tab-content p-relative">
                                  <!-- progressbar -->
@@ -387,7 +388,9 @@
 
                                  {{-- new application start --}}
 
-                                 <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif @else active @endif"
+                                 <div class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'add-course') @else active @endif
+@else
+active @endif"
                                      role="tabpanel" id="step1">
                                      <div class="card">
                                          <div class="header">
@@ -639,10 +642,11 @@
                                              <input type="hidden" name="form_step_type" value="add-course">
                                              <div class="body pb-0" id="courses_body">
                                                  <!-- level start -->
-                                                 <div class="row clearfix" id="new_course_html"  data-application-id="{{ $collections->id ?? '' }}"
-                                                    data-level-id="{{ isset($Application) ? $Application->level_id : '' }}"
-                                                    data-country="{{ $data->country ?? '' }}"
-                                                    data-state="{{ $data->state ?? '' }}">
+                                                 <div class="row clearfix" id="new_course_html"
+                                                     data-application-id="{{ $collections->id ?? '' }}"
+                                                     data-level-id="{{ isset($Application) ? $Application->level_id : '' }}"
+                                                     data-country="{{ $data->country ?? '' }}"
+                                                     data-state="{{ $data->state ?? '' }}">
                                                      <div class="col-sm-12 text-righ">
 
                                                          <div class="d-flex justify-content-end">
@@ -886,11 +890,11 @@
                                                                          @endif
                                                                      </td>
                                                                      <!-- <td class="center">
-                                           {{ date('d F Y', strtotime($courses->created_at)) }}
-                                           </td>
-                                           <td class="center">
-                                           {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
-                                           </td> -->
+                                               {{ date('d F Y', strtotime($courses->created_at)) }}
+                                               </td>
+                                               <td class="center">
+                                               {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
+                                               </td> -->
                                                                      <td class="center btn-ved">
                                                                          <a class="btn btn-tbl-delete bg-primary"
                                                                              data-bs-toggle="modal"
@@ -907,9 +911,10 @@
                                                                                  <i class="material-icons">edit</i>
                                                                              </a>
                                                                          @endif
-                                                                         <a onclick="confirmDelete('{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}')" class="btn btn-tbl-delete bg-danger">
-                                                                            <i class="material-icons">delete</i>
-                                                                        </a>
+                                                                         <a onclick="confirmDelete('{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}')"
+                                                                             class="btn btn-tbl-delete bg-danger">
+                                                                             <i class="material-icons">delete</i>
+                                                                         </a>
 
                                                                      </td>
                                                                  </tr>
@@ -922,24 +927,24 @@
 
 
                                          <script>
-                                            function confirmDelete(deleteUrl) {
-                                                Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: "You won't be able to revert this!",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#d33',
-                                                    cancelButtonColor: '#3085d6',
-                                                    confirmButtonText: 'Yes, delete it!',
-                                                    cancelButtonText: 'Cancel'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        // If the user confirms, proceed with the delete operation by navigating to the delete URL
-                                                        window.location.href = deleteUrl;
-                                                    }
-                                                });
-                                            }
-                                        </script>
+                                             function confirmDelete(deleteUrl) {
+                                                 Swal.fire({
+                                                     title: 'Are you sure?',
+                                                     text: "You won't be able to revert this!",
+                                                     icon: 'warning',
+                                                     showCancelButton: true,
+                                                     confirmButtonColor: '#d33',
+                                                     cancelButtonColor: '#3085d6',
+                                                     confirmButtonText: 'Yes, delete it!',
+                                                     cancelButtonText: 'Cancel'
+                                                 }).then((result) => {
+                                                     if (result.isConfirmed) {
+                                                         // If the user confirms, proceed with the delete operation by navigating to the delete URL
+                                                         window.location.href = deleteUrl;
+                                                     }
+                                                 });
+                                             }
+                                         </script>
 
 
                                          <ul class="list-inline pull-right mt-5">
@@ -959,9 +964,9 @@
                                          </ul>
                                      </div>
                                  </div>
-                                  {{-- course section end  --}}
+                                 {{-- course section end  --}}
 
-                                  {{-- payment section start --}}
+                                 {{-- payment section start --}}
                                  <div class="tab-pane " role="tabpanel" id="step3">
                                      <div class="card">
                                          <div class="header">
@@ -1208,7 +1213,9 @@
 
                          {{-- payment application tabel  --}}
 
-                         <div role="tabpanel"  class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @endif  @endif" id="preveious_application" aria-expanded="false">
+                         <div role="tabpanel"
+                             class="tab-pane @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @endif  @endif"
+                             id="preveious_application" aria-expanded="false">
                              <div class="card">
                                  <div class="header">
                                      <h2>Previous Applications</h2>
@@ -1251,7 +1258,7 @@
                                                                         <div class="badge col-orange">Applications In Process</div>
                                                                            @elseif($item->status == 2)
                                                                             <div class="badge col-green">Applications Approved</div> @endif
-                                                                    </a>
+                                                                     </a>
                                                              </td>
                                                              @if (check_upgrade($item->created_at) == 'true')
                                                                  @if (check_upgraded_level2($item->application_id) == 'false')
@@ -1285,8 +1292,8 @@
                                                              @elseif(request()->path() == 'level-second')
                                                                  <td class="center">
                                                                      <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                                class="btn btn-tbl-edit"><i
-                                                                    class="material-icons">visibility</i></a> -->
+                                                                    class="btn btn-tbl-edit"><i
+                                                                        class="material-icons">visibility</i></a> -->
                                                                      @if ($item->status == 1)
                                                                          <a href="{{ url('/upload-document') }}"
                                                                              class="btn btn-tbl-upload"><i
@@ -1392,262 +1399,6 @@
                      </div>
                  </div>
 
-
-                 <!-- View Modal Popup -->
-                 <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                         <div class="modal-content">
-                             <div class="modal-header">
-                                 <h5 class="modal-title" id="exampleModalCenterTitle"> View Course Details</h5>
-                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                     <span aria-hidden="true">&times;</span>
-                                 </button>
-                             </div>
-                             <div class="modal-body">
-                                 <div class="body">
-                                     <div class="table-responsive table-con-free">
-                                         <table class="table table-hover js-basic-example contact_list table-bordered">
-                                             <tbody>
-                                                 <!-- <tr class="odd gradeX">
-                              <th class="center">S.No.</th>
-                              <td class="center">
-                                  <input type="text" id="Course_id" readonly>
-                              </td>
-
-                              </tr> -->
-                                                 <tr class="odd gradeX">
-                                                     <th class="center"> Course Name </th>
-                                                     <td class="center">
-                                                         <input type="text" id="Course_Name" readonly>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center"> Eligibility </th>
-                                                     <td class="center">
-                                                         <input type="text" id="Eligibility" required readonly>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center"> Mode Of Course </th>
-                                                     <td class="center">
-                                                         <input type="text" id="Mode_Of_Course" readonly>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center">Payment Status</th>
-                                                     <td class="center">
-                                                         <input type="text" id="Payment_Status" readonly>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center">Course Brief</th>
-                                                     <td class="center">
-                                                         <input type="text" name="course_brief[]"
-                                                             id="view_course_brief" readonly>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center">Duration</th>
-                                                     <td class="center">
-                                                         <span id="view_years"></span>
-                                                         <span id="view_months"></span>
-                                                         <span id="view_days"></span>
-                                                         <span id="view_hours"></span>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center">Declaration </th>
-                                                     <td class="center">
-                                                         <a href="" target="_blank" id="docpdf1"
-                                                             title="Download Document 1"><i
-                                                                 class="fa fa-eye mr-2"></i>
-                                                             Doc 1
-                                                         </a>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center">Course Curriculum / Material / Syllabus </th>
-                                                     <td class="center">
-                                                         <a href="" target="_blank" id="docpdf2"
-                                                             title="Download Document 2"><i
-                                                                 class="fa fa-eye mr-2"></i>
-                                                             Doc 2
-                                                         </a>
-                                                     </td>
-                                                 </tr>
-                                                 <tr class="odd gradeX">
-                                                     <th class="center">Course Details (Excel format) </th>
-                                                     <td class="center">
-                                                         <a target="_blank" href="" title="Document 3"
-                                                             id="docpdf3" download>
-                                                             <i class="fa fa-download mr-2"></i> Doc 3
-                                                         </a>
-                                                     </td>
-                                                 </tr>
-                                             </tbody>
-                                         </table>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!-- Edit Modal Poup -->
-                 <div class="modal fade" id="edit_popup">
-                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                         <div class="modal-content">
-                             <div class="modal-header">
-                                 <h5 class="modal-title" id="exampleModalCenterTitle"> Edit Details </h5>
-                                 <div class="payment-status d-flex">
-                                     <label class="active">Payment Status : </label>
-                                     <input type="text" name="Payment_Statuss" id="Payment_Statuss"
-                                         class="form-control btn btn-outline-danger p-0"
-                                         style="border-bottom: 1px solid #fb483a !important;" readonly>
-                                 </div>
-                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                     <span aria-hidden="true">&times;</span>
-                                 </button>
-                             </div>
-                             <div class="modal-body edit-popup">
-                                 <div class="body col-md-12">
-                                     <form action="" id="form_update" method="post">
-                                         @csrf
-                                         <div class="row mt-4">
-                                             <div class="col-sm-3">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label class="active">Course Name<span
-                                                                 class="text-danger">*</span></label>
-                                                         <input type="text" name="Course_Names" id="Course_Names"
-                                                             class="form-control" required>
-                                                     </div>
-                                                 </div>
-                                             </div>
-
-                                             <input type="hidden" name="form_step_type" value="add-course">
-                                             <div class="col-sm-4">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Course Duration <span class="text-danger">*</span>
-                                                         </label>
-                                                         <!-- <input type="number" placeholder="Course Duration"
-                                    name="course_duration[]" required> -->
-                                                         <div class="course_group">
-                                                             <input type="number" placeholder="Years"
-                                                                 name="years" required class="course_input"
-                                                                 id="years">
-                                                             <input type="number" placeholder="Months"
-                                                                 name="months" required class="course_input"
-                                                                 id="months">
-                                                             <input type="number" placeholder="Days"
-                                                                 name="days" required class="course_input"
-                                                                 id="days">
-                                                             <input type="number" placeholder="Hours"
-                                                                 name="hours" required class="course_input"
-                                                                 id="hours">
-                                                         </div>
-                                                     </div>
-                                                     @error('course_duration')
-                                                         <div class="alert alert-danger">{{ $message }}</div>
-                                                     @enderror
-                                                 </div>
-                                             </div>
-                                             <div class="col-sm-3">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label class="active">Eligibility<span> </label>
-                                                         <input type="text" name="Eligibilitys" required
-                                                             id="Eligibilitys" class="form-control">
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                             <div class="col-sm-2">
-                                                 <div class="form-group select-modal edit-m-d">
-                                                     <div class="form-line">
-                                                         <label>Mode of Course <span
-                                                                 class="text-danger">*</span></label>
-                                                         <select multiple name="mode_of_course[]"
-                                                             id="Mode_Of_Courses">
-                                                             <option value="Online">Online</option>
-                                                             <option value="Offline">Offline</option>
-                                                             <option value="Hybrid">Hybrid</option>
-                                                         </select>
-                                                     </div>
-                                                     @error('mode_of_course')
-                                                         <div class="alert alert-danger">{{ $message }}
-                                                         </div>
-                                                     @enderror
-                                                 </div>
-                                             </div>
-                                             <div class="col-sm-12">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Course Brief <span
-                                                                 class="text-danger">*</span></label>
-                                                         <!-- <input type="text" placeholder="Course Brief"
-                                    name="course_brief[]" required> -->
-                                                         <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
-                                                             name="course_brief" id="course_brief"></textarea>
-                                                     </div>
-                                                     @error('course_brief')
-                                                         <div class="alert alert-danger">{{ $message }}
-                                                         </div>
-                                                     @enderror
-                                                 </div>
-                                             </div>
-                                             <div class="col-sm-4">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Declaration<span class="text-danger">*</span></label>
-                                                         <input type="file" name="doc1" id="doc1_edit"
-                                                             class="form-control doc_edit_1 file_size">
-                                                         <a target="_blank" href="" id="docpdf1ss"
-                                                             title=" Document 1"><i class="fa fa-eye mr-2"></i>
-                                                             Doc 1 </a>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                             <div class="col-sm-4">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Course Curriculum / Material / Syllabus <span
-                                                                 class="text-danger">*</span></label>
-                                                         <input type="file" name="doc2"
-                                                             id="payment_reference_no"
-                                                             class="form-control doc_edit_2 file_size">
-                                                         <a target="_blank" href="" id="docpdf2ss"
-                                                             title=" Document 1"><i class="fa fa-eye mr-2"></i>
-                                                             Doc 2</a>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                             {{-- @if ($id) [{{$data->image}}] @endif --}}
-                                             <div class="col-sm-4">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Course Details (Excel format) <span
-                                                                 class="text-danger">*</span></label>
-                                                         <input type="file" name="doc3"
-                                                             id="payment_reference_no"
-                                                             class="form-control doc_edit_3 file_size">
-                                                         <a href="" id="docpdf3ss"
-                                                             title="Download Document 1" download><i
-                                                                 class="fa fa-download mr-2"></i> Doc 3 </a>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                             <div class="col-md-12 text-center">
-                                                 <button type="submit" class="btn btn-primary waves-effect m-r-15"
-                                                     onclick="load();">Save</button>
-                                             </div>
-                                         </div>
-                                     </form>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
 
 
 
@@ -2148,7 +1899,7 @@
                                      .ApplicationCourse[0].id)
                                  $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                  $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                  $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+                                 $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
 
 
 
@@ -2539,8 +2290,7 @@
                              </div>
                              <div class="modal-body">
                                  <form action="{{ url('upgrade-level') }}" method="post">
-                                     <input type="hidden" id="application_id_upgrade"
-                                         name="application_id_upgrade">
+                                     <input type="hidden" id="application_id_upgrade" name="application_id_upgrade">
                                      <input type="hidden" id="level_id_upgrade1" name="level_id_upgrade">
                                      @csrf
                                      <div class="row">
@@ -2597,49 +2347,50 @@
 
 
                  <script>
-                    var isAppending = false; // Flag to prevent multiple append requests
+                     var isAppending = false; // Flag to prevent multiple append requests
 
-function addNewCourse() {
-    if (!isAppending) {
-        isAppending = true;
+                     function addNewCourse() {
+                         if (!isAppending) {
+                             isAppending = true;
 
-        // Clone the template row
-        var newRow = $('#new_course_html').clone();
+                             // Clone the template row
+                             var newRow = $('#new_course_html').clone();
 
-        // Clear input fields and remove any unwanted attributes
-        newRow.find('input, textarea').val('');
-        newRow.find('input[type="file"]').removeAttr('id').val('');
+                             // Clear input fields and remove any unwanted attributes
+                             newRow.find('input, textarea').val('');
+                             newRow.find('input[type="file"]').removeAttr('id').val('');
 
-        // Remove the ID attribute from the remove button
-        newRow.find('.remove-course').removeAttr('id');
+                             // Remove the ID attribute from the remove button
+                             newRow.find('.remove-course').removeAttr('id');
 
-        // Show the remove button for the new row
-        newRow.find('.remove-course').show();
+                             // Show the remove button for the new row
+                             newRow.find('.remove-course').show();
 
-        // Add a class to the new row
-        newRow.addClass('new-course-html');
+                             // Add a class to the new row
+                             newRow.addClass('new-course-html');
 
-        // Append the new row to the container
-        $('.new-course-row').append(newRow); // Append to the existing .new-course-row div
+                             // Append the new row to the container
+                             $('.new-course-row').append(newRow); // Append to the existing .new-course-row div
 
-        // Read data attributes and set hidden field values
-        var applicationId = newRow.data('application-id');
-        var levelId = newRow.data('level-id');
-        var country = newRow.data('country');
-        var state = newRow.data('state');
+                             // Read data attributes and set hidden field values
+                             var applicationId = newRow.data('application-id');
+                             var levelId = newRow.data('level-id');
+                             var country = newRow.data('country');
+                             var state = newRow.data('state');
 
-        // Set values for the hidden fields
-        newRow.find('input[name="application_id"]').val(applicationId);
-        newRow.find('input[name="level_id"]').val(levelId);
-        newRow.find('input[name="country"]').val(country);
-        newRow.find('input[name="state"]').val(state);
+                             // Set values for the hidden fields
+                             newRow.find('input[name="application_id"]').val(applicationId);
+                             newRow.find('input[name="level_id"]').val(levelId);
+                             newRow.find('input[name="country"]').val(country);
+                             newRow.find('input[name="state"]').val(state);
 
-        // Initialize select2 for the cloned <select> elements
-        newRow.find('.select2').select2();
+                             // Initialize select2 for the cloned <select> elements
+                             newRow.find('.select2').select2();
 
-        isAppending = false; // Reset the flag
-    }
-}
+                             isAppending = false; // Reset the flag
+                         }
+                     }
+
                      function removeCourse(button) {
                          // Find the parent row and remove it
                          $(button).closest('.new-course-html').remove();
