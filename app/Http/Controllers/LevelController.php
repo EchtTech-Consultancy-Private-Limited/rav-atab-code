@@ -355,10 +355,7 @@ class LevelController extends Controller
      * @param  mixed $id
      * @return void
      */
-    public function coursePayment(Request $request, $id = null)
-    {
-        return view('level.course-payment');
-    }
+
 
     public function level1tp(Request $request, $id = null)
     {
@@ -2653,6 +2650,63 @@ class LevelController extends Controller
         return response()->json(['status' => 'unique']);
     }
 
+    public function coursePayment(Request $request, $id = null)
+    {
+        if($id){
+            $applicationData = DB::table('applications')->where('id',$id)->first();
+            $course = DB::table('application_courses')->where('application_id',$id)->get();
+
+            if (Auth::user()->country == $this->get_india_id()) {
+
+                if (count($course) == '0') {
+                    $currency = '₹';
+                    $total_amount = '0';
+                } elseif (count($course) <= 5) {
+                    $currency = '₹';
+                    $total_amount = '1000';
+                } elseif (count($course) <= 10) {
+                    $currency = '₹';
+                    $total_amount =  '2000';
+                } else {
+                    $currency = '₹';
+                    $total_amount =   '3000';
+                }
+            } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
+                if (count($course) == '0') {
+                    $currency = 'US $';
+                    $total_amount = '0';
+                } elseif (count($course) <= 5) {
+                    $currency = 'US $';
+                    $total_amount =  '15';
+                } elseif (count($course) <= 10) {
+                    $currency = 'US $';
+                    $total_amount = '30';
+                } else {
+                    $currency = 'US $';
+                    $total_amount =  '45';
+                }
+            } else {
+
+                if (count($course) == '0') {
+                    $currency = 'US $';
+                    $total_amount = '';
+                } elseif (count($course) <= 5) {
+                    $currency = 'US $';
+                    $total_amount = '50';
+                } elseif (count($course) <= 10) {
+                    $currency = 'US $';
+                    $total_amount = '100';
+                } else {
+                    $currency = 'US $';
+                    $total_amount =  '150';
+                }
+            }
+        }
+
+
+
+        return view('level.course-payment',compact('applicationData','course','currency','total_amount'));
+    }
 
     public function create_course($id=null){
         if($id){
