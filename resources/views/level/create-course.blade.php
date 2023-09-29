@@ -1084,12 +1084,16 @@
 
 
                                 // Append the hidden input elements
-                                newRow.append(
-                                    '<input type="hidden" name="application_id" value="{{ $collections->id ?? '' }}" class="form-control" readonly>'
-                                );
-                                newRow.append(
-                                    '<input type="hidden" placeholder="level_id" name="level_id" value="@if (isset($Application)) {{ $Application->level_id ?? '' }} @endif">'
-                                );
+                                // Manually set values for "application_id" and "level_id"
+
+                                 // Set the values for "application_id" and "level_id"
+        var applicationId = '{{ $applicationData->id ?? '' }}';
+        var levelId = '{{ $applicationData->level_id ?? '' }}';
+
+        newRow.find('input[name="application_id"]').val(applicationId);
+        newRow.find('input[name="level_id"]').val(levelId);
+
+
                                 newRow.append('<input type="hidden" name="country" value="{{ $data->country ?? '' }}">');
                                 newRow.append('<input type="hidden" name="state" value="{{ $data->state ?? '' }}">');
 

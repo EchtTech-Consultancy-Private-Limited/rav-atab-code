@@ -218,32 +218,7 @@
              <div class="row clearfix">
                  <div class="col-lg-12 col-md-12">
                      <div class="card">
-                         <div class="profile-tab-box">
-                             <div class="p-l-20">
-                                 <ul class="nav ">
-                                     {{--
-                                    <li class="nav-item tab-all">
-                                        <a class="nav-link show  @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'withour-session-step')   @endif @else active  @endif" href="#general_information"
-                                            data-bs-toggle="tab" >General Information</a>
-                                    </li>
-                                    --}}
-                                     <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link add-active-b @if (isset($form_step_type)) @if ($form_step_type == 'add-course-new') active @else @endif  @endif" href="#new_application" data-bs-toggle="tab">New
-                                             Application</a>
-                                     </li>
-                                     <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') active @else @endif  @endif" href="#preveious_application" data-bs-toggle="tab">
-                                             Applications</a>
-                                     </li>
-                                     <li class="nav-item tab-all">
-                                         <a class="nav-link {{ isset($form_step_type) ? ($form_step_type == 'add-course' ? 'active' : '') : '' }}" href="#pending_payment_list" data-bs-toggle="tab">Pending Payment List</a>
-                                     </li>
-                                     <li class="nav-item tab-all p-l-20">
-                                         <a class="nav-link" href="#faqs" data-bs-toggle="tab">FAQs</a>
-                                     </li>
-                                 </ul>
-                             </div>
-                         </div>
+                        @include('level.inner-nav')
                      </div>
                      <div class="tab-content">
                          <!-- progressbar -->
@@ -367,8 +342,13 @@
                                              <input type='hidden' name="course_id[]" value="{{ $courses->id }}">
                                              @endforeach
                                              @endisset
+
+                                             @if ($applicationData)
+                                             <input type="hidden" placeholder="level_id" name="level_id" value="{{ $applicationData->level_id ?? '' }}">
+                                             @endif
+
                                              @if (request()->path() == 'level-first')
-                                             <input type="hidden" placeholder="level_id" name="level_id" value="sasa {{ $Application->level_id ?? '' }}">
+                                             <input type="hidden" placeholder="level_id" name="level_id" value="{{ $Application->level_id ?? '' }}">
                                              @elseif(request()->path() == 'level-second')
                                              <input type="hidden" placeholder="level_id" name="level_id" value="{{ 2 }}">
                                              @elseif(request()->path() == 'level-third')
@@ -398,8 +378,8 @@
                                                      </label>
                                                  </div>
                                              </div>
-                                             <input type="hidden" name="coutry" value=" {{ $data->country ?? '' }}">
-                                             <input type="hidden" name="state" value=" {{ $data->state ?? '' }}">
+                                             <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
+                                             <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
                                              <div class="col-sm-3">
                                                  <div class="form-group">
                                                      <div class="form-line">
@@ -413,7 +393,7 @@
                                                      </label>
                                                  </div>
                                              </div>
-                                             <input type="hidden" value="{{ $collections->id ?? '' }}" name="Application_id" required class="course_input">
+                                             <input type="hidden" value="{{ $applicationData->id ?? '' }}" name="Application_id" required class="course_input">
                                              <div class="col-sm-3">
                                                  <div class="form-group">
                                                      <div class="form-line">
