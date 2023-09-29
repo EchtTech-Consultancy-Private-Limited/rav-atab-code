@@ -859,7 +859,6 @@ class LevelController extends Controller
 
     public function new_application_course(Request $request)
     {
-
         // dd($request->all());
         $active = 'active';
         $course_name = $request->course_name;
