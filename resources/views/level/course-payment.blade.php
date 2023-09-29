@@ -441,7 +441,7 @@
                      </div>
                      </form>
                  </div>
-    
+
     <script src="{{ asset('assets/js/jquery-3.6.0.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui.js') }}"></script>
 
@@ -481,4 +481,32 @@ $(document).ready(function() {
             $("#payment_date").datepicker();
         });
     </script>
+
+<script>
+    var doc_payment_file = "";
+
+    $('.payment_details_file').on('change', function() {
+
+        doc_payment_file = $(".payment_details_file").val();
+
+        var doc_payment_files = doc_payment_file.split('.').pop();
+
+        if (doc_payment_files == 'png' || doc_payment_files == 'jpg' || doc_payment_files == 'pdf' ||
+            doc_payment_files == 'jpeg') {
+            // alert("File uploaded is pdf");
+        } else {
+
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Validation error!',
+                text: 'Only jpg, png, jpeg ,pdf are allowed',
+                showConfirmButton: false,
+                timer: 3000
+            })
+            $('.payment_details_file').val("");
+        }
+
+    });
+</script>
  </body>
