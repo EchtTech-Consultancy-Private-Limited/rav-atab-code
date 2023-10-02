@@ -224,10 +224,10 @@
                          <!-- progressbar -->
                          <ul id="progressbar">
                              <li class="progress1 bg_green">Basic Information</li>
-                             <li class="progress2 @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'application-payment') bg_green @else @endif  @endif ">
+                             <li class="progress2 bg_green @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'application-payment') bg_green @else @endif  @endif ">
                                  Level Courses
                              </li>
-                             <li class="progress3 @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') bg_green @endif  @endif">
+                             <li class="progress3 bg_green @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') bg_green @endif  @endif">
                                  Payment
                              </li>
                          </ul>
