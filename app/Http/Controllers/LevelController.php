@@ -1088,7 +1088,7 @@ class LevelController extends Controller
             Session::put('session_for_redirections', $session_for_redirection);
             $session_for_redirections = Session::get('session_for_redirections');
 
-            return  redirect('level-first')->with('success', 'Payment Done successfully');
+            return  redirect('appliction-list')->with('success', 'Payment Done successfully');
 
 
             //count payment in course status true

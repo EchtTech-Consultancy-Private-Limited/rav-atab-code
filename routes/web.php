@@ -245,9 +245,9 @@ Route::get('create-course/{id?}', [LevelController::class, 'create_course']);
 });
 
 
-Route::post('checkContactNumber', [LevelController::class, 'checkContactNumber']);
+Route::post('phone-validation', [LevelController::class, 'checkContactNumber']);
 
-Route::post('checkEmail', [LevelController::class, 'checkEmail']);
+Route::post('email-validation', [LevelController::class, 'checkEmail']);
 
 Route::get('view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'view_doc']);
 Route::get('admin-view-doc/{doc_code}/{id?}/{doc_id}/{course_id}',[LevelController::class,'admin_view_doc']);
