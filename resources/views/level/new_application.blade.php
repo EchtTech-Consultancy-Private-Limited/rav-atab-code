@@ -582,7 +582,7 @@ active @endif"
                                              // Send an AJAX request
                                              $.ajax({
                                                  type: 'POST',
-                                                 url: '/checkContactNumber', // Update with your Laravel route URL
+                                                 url: '/phone-validation', // Update with your Laravel route URL
                                                  data: {
                                                      contact_number: contactNumber,
                                                      _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
@@ -623,7 +623,7 @@ active @endif"
                                              // Send an AJAX request
                                              $.ajax({
                                                  type: 'POST',
-                                                 url: '/checkEmail', // Update with your Laravel route URL
+                                                 url: '/email-validation', // Update with your Laravel route URL
                                                  data: {
                                                      email: email,
                                                      _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view

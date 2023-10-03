@@ -211,11 +211,25 @@
                     </div>
                 </div>
             </div>
+
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
                         @include('level.inner-nav')
                     </div>
+                     <div>
+                             <ul id="progressbar">
+                                     <li class="progress1 bg_green">Basic Information</li>
+                                     <li
+                                         class="progress2 bg_green @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'application-payment') bg_green @else @endif  @endif ">
+                                         Level Courses
+                                     </li>
+                                     <li
+                                         class="progress3 @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') bg_green @endif  @endif">
+                                         Payment
+                                     </li>
+                                 </ul>
+                        </div>
                     @if (Session::has('success'))
                     <div class="alert alert-success" style="padding: 15px;" role="alert">
                         {{ session::get('success') }}
@@ -236,6 +250,7 @@
                     @endif
 
                     <div class="card">
+
                         <div class="header mb-4">
                             <h2 style="float:left; clear:none;">Level Courses </h2>
                             {{-- @if (count($course) > 0) --}}
