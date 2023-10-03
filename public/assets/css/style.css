@@ -24419,3 +24419,16 @@ i.fa.fa-eye {
     color: #ff0000 !important;
     border-color: #ff0000;
 }
+
+input[type=text]:not(.browser-default):disabled{
+    color: rgba(0,0,0); 
+    border-bottom: none;
+}
+
+.payment-pending strong{
+    background: #ff5757;
+}
+
+.payment-pending strong:hover{
+    background: #ff0000;
+}
