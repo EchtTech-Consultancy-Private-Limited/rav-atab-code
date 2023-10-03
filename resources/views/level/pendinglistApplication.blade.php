@@ -280,7 +280,7 @@
                                                                         <td> {{ $item_level_list->level_id ?? '' }}</td>
                                                                         <td> {{ $item_level_list->country_name ?? '' }}
                                                                         </td>
-                                                                        <td> <a href="{{ url('/level-first' . '/' . $item_level_list->id) }}"
+                                                                        <td> <a href="{{ url('/edit-application' . '/' . $item_level_list->id) }}"
                                                                                 class="btn btn-tbl-edit bg-success"><i
                                                                                     class="fa fa-edit"></i></a></td>
                                                                     @endif
