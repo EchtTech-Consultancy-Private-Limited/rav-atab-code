@@ -859,7 +859,6 @@ class LevelController extends Controller
 
     public function new_application_course(Request $request)
     {
-        // dd($request->all());
         $active = 'active';
         $course_name = $request->course_name;
         $course_duration = $request->course_duration;
@@ -2549,7 +2548,7 @@ class LevelController extends Controller
         $session_for_redirections = Session::get('session_for_redirections');
 
         $file->save();
-        return  redirect('level-first/' . $file->application_id)->with('success', 'Course Edit successfull');
+        return  redirect('edit-application/' . $file->application_id)->with('success', 'Course Edit successfull');
 
         // return back()->with('sussess', 'level Update successfull');
 
@@ -2734,9 +2733,8 @@ class LevelController extends Controller
 
    public function  newApplicationSave(Request $request){
 
-
     if($request->previous_data && $request->application_id){
-        return redirect(url('create-course/'.$request->application_id))->with('success','Application Create Successfully');
+        return redirect(url('create-course/'.$request->application_id));
     }
 
         $this->validate(

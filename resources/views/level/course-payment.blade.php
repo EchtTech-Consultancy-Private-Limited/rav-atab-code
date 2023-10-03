@@ -317,10 +317,11 @@
                                          <div class="row clearfix">
                                              <div class="col-sm-3">
                                                  <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Payment Date <span class="text-danger">*</span></label>
-                                                         <input type="text" name="payment_date" class="form-control" id="payment_date" required placeholder="Payment Date" aria-label="Date" value="{{ old('payment_date') }}" onfocus="showDatePicker()">
-                                                     </div>
+                                                    <div class="form-line">
+                                                        <label>Payment Date <span class="text-danger">*</span></label>
+                                                        <input type="text" name="payment_date" class="form-control" id="payment_date" required placeholder="Payment Date" aria-label="Date" value="{{ old('payment_date') }}" onfocus="showDatePicker()" autocomplete="off" min="{{ date('Y-m-d') }}">
+                                                    </div>
+
                                                      <label for="payment_date" id="payment_date-error" class="error">
                                                          @error('payment_date')
                                                          {{ $message }}
@@ -369,7 +370,7 @@
                                                          <label for="payment_transaction_no">Payment
                                                              Transaction
                                                              no. <span class="text-danger">*</span></label>
-                                                         <input type="text" placeholder="Payment Transaction no." id="payment_transaction_no" required name="payment_transaction_no" minlength="9" maxlength="18" value="{{ old('payment_transaction_no') }}">
+                                                         <input type="text" placeholder="Payment Transaction no." id="payment_transaction_no" required name="payment_transaction_no" minlength="9" maxlength="18" value="{{ old('payment_transaction_no') }}" autocomplete="off">
                                                      </div>
                                                      <label for="payment_transaction_no" id="payment_transaction_no-error" class="error">
                                                          @error('payment_transaction_no')
@@ -384,7 +385,7 @@
                                                  <div class="form-group">
                                                      <div class="form-line">
                                                          <label>Payment Reference no. <span class="text-danger">*</span></label>
-                                                         <input type="text" required placeholder="Payment Reference no." name="payment_reference_no" minlength="9" maxlength="18" value="{{ old('payment_reference_no') }}">
+                                                         <input type="text" required placeholder="Payment Reference no." name="payment_reference_no" minlength="9" maxlength="18" value="{{ old('payment_reference_no') }}" autocomplete="off">
                                                      </div>
                                                      <label for="payment_reference_no" id="payment_reference_no-error" class="error">
                                                          @error('payment_reference_no')
@@ -409,7 +410,7 @@
                                              </div>
                                          </div>
                                          <ul class="list-inline pull-right">
-                                             <li><button type="button" class="btn btn-danger prev-step1">Previous</button></li>
+                                             <li><a href="{{ url('create-course/'.$applicationData->id) }}" class="btn btn-danger prev-step1">Previous</a></li>
                                              <li><button type="submit" class="btn btn-primary btn-info-full">Submit</button>
                                              </li>
                                          </ul>
@@ -487,6 +488,16 @@ $(document).ready(function() {
             $('.payment_details_file').val("");
         }
 
+    });
+</script>
+
+<script>
+    // Initialize the datepicker with options
+    var datePicker = new Datepicker(document.getElementById('payment_date'), {
+        format: 'yyyy-mm-dd',
+        autohide: true,
+        startDate: new Date(), // Start from today's date
+        endDate: new Date(2099, 12, 31) // Set an upper limit for future dates
     });
 </script>
  </body>

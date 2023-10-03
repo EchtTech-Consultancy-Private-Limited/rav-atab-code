@@ -736,13 +736,13 @@
 
                                     @if (Auth::user()->role == '6')
                                         <div class="col-sm-4">
-                                            <div class="form-group">
+                                            <div class="form-group ">
                                                 <div class="form-line">
                                                     <label><strong>Verify Payment </strong></label><br>
                                                     <label><br>
                                                         @if ($ApplicationPayment->status == '0')
-                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                                onclick="return confirm_option('change status')"
+                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}" class="payment-pending"
+                                                                onclick="return confirm_option('change status')">
                                                                 @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-primary btn-sm"> Payment Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @else @endif
                                                                 </a>
                                                         @endif
@@ -752,7 +752,7 @@
                                                         @if ($ApplicationPayment->payment_remark != '')
                                                             @if ($ApplicationPayment->status == '1')
                                                                 <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                                    onclick="return confirm_option('change status')"
+                                                                    onclick="return confirm_option('change status')">
                                                                     @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-warning">Pending</strong></div>
 
                                                                     @elseif($ApplicationPayment->status == 1)

@@ -138,7 +138,7 @@
                                     @if ($item->status == '0')
                                     <a
                                     @if ($item->status == 0)
-                                    <div class="badge col-black">Payment Pending</div>
+                                    <div class="badge col-black pending-status">Payment Pending</div>
                                     @elseif($item->status == 1)
                                     <div class="badge col-green">Payment Proccess</div>
                                     @else @endif

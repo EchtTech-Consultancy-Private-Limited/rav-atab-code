@@ -751,7 +751,7 @@
                                         <label class="active">Payment Status : </label>
                                         <input type="text" name="Payment_Statuss" id="Payment_Statuss"
                                             class="btn btn-danger shadow-none p-0"
-                                            style="border-bottom: 1px solid #fb483a !important;" readonly>
+                                            style="border-bottom: 1px solid #fb483a !important; cursor: default;" readonly>
                                     </div>
                                     <button type="button" class="close" data-bs-dismiss="modal"
                                         aria-label="Close">
