@@ -266,7 +266,7 @@ Route::get('/document-report-verified-by-assessor/{id}/{course_id}', [LevelContr
 //new application
 Route::get('new-applications/{id?}',[LevelController::class,'newApplications']);
 Route::post('new-applications',[LevelController::class,'newApplicationSave']);
-Route::get('appliction-list',[LevelController::class,'applictionTable']);
+Route::get('application-list',[LevelController::class,'applictionTable']);
 Route::get('faq',[LevelController::class,'faqslist']);
 Route::get('pending-payment-list',[LevelController::class,'pendingPaymentlist']);
 

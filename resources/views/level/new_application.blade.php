@@ -8,6 +8,40 @@
      }
  </style>
 
+<style>
+    /* Add styles for the active class */
+   .nav-active {
+        background-color: #e91e63 !important; /* Change this to your desired active background color */
+        color: #ffffff !important; /* Change this to your desired active text color */
+    }
+
+    /* Add hover effect for all nav links except the active link */
+    .custom-nav-item:not(.nav-active) .custom-nav-link:hover {
+        background-color: #e91e63; /* Change this to your desired hover background color */
+        color: #ffffff !important; /* Change this to your desired hover text color */
+        border-radius: 20px;
+    }
+
+    /* Add border-radius to all nav links */
+    .custom-nav-link {
+        border-radius: 20px !important; /* Apply border-radius to all nav links */
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+
+    /* Remove hover effect on active link */
+    .nav-active .custom-nav-link:hover {
+        background-color: inherit;
+        color: inherit !important;
+        border-radius: 20px;
+    }
+
+    /* Additional style for hover on active link */
+    .nav-active .custom-nav-link:hover {
+        background-color: #e91e63 !important; /* Change this to your desired hover background color for active link */
+        color: #ffffff !important; /* Change this to your desired hover text color for active link */
+    }
+</style>
 
  <title>RAV Accreditation</title>
 
@@ -81,12 +115,12 @@
                                      <ul class="nav ">
 
 
-                                         <li class="nav-item">
-                                             <a class="nav-link active" href="#new_application" data-bs-toggle="tab">New
+                                         <li class="custom-nav-item">
+                                             <a class="custom-nav-link nav-active" href="#new_application" data-bs-toggle="tab">New
                                                  Application </a>
                                          </li>
-                                         <li class="nav-item">
-                                             <a class="nav-link" href="{{ url('/appliction-list') }}">Previous
+                                         <li class="custom-nav-item">
+                                             <a class="custom-nav-link" href="{{ url('/application-list') }}">Previous
                                                  Applications</a>
                                          </li>
                                      </ul>
@@ -582,7 +616,7 @@ active @endif"
                                              // Send an AJAX request
                                              $.ajax({
                                                  type: 'POST',
-                                                 url: '/phone-validation', // Update with your Laravel route URL
+                                                 url: "{{ url('phone-validation') }}", // Update with your Laravel route URL
                                                  data: {
                                                      contact_number: contactNumber,
                                                      _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
@@ -623,7 +657,7 @@ active @endif"
                                              // Send an AJAX request
                                              $.ajax({
                                                  type: 'POST',
-                                                 url: '/email-validation', // Update with your Laravel route URL
+                                                 url: "{{ url('email-validation') }}", // Update with your Laravel route URL
                                                  data: {
                                                      email: email,
                                                      _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
