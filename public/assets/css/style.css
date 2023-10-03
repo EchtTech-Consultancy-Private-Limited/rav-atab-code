@@ -24112,7 +24112,8 @@ i#togglepassword,
 i#togglecpassword {
     position: absolute;
     top: 45%;
-    right: 30px;
+    display: inline-block;
+    left: 90%;
 }
 
 .modal-content input {
@@ -24374,10 +24375,10 @@ div#ui-datepicker-div{
 
 .profile-tab-box li.nav-item.tab-all a.nav-link:hover {
     background-color: #e91e63 !important;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
+    box-shadow: 0 0px 21px 0 rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(233, 30, 99, 0.6);
     color: #fff !important;
     border-radius: 30px;
-    height: 35px;
+    /* height: 35px; */
 }
 
 .table-responsive{
@@ -24412,4 +24413,9 @@ i.fa.fa-eye {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.pending-status{
+    color: #ff0000 !important;
+    border-color: #ff0000;
 }
