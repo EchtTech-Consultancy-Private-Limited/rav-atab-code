@@ -1,13 +1,13 @@
 <div>
     <ul class="nav p-2">
         <li class="custom-nav-item ">
-            <a class="custom-nav-link {{ request()->is('new-applications*') ? 'nav-active' : '' }}" href="{{ url('/new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('new-applications*') || request()->is('create-course*') ? 'nav-active' : '' }}" href="{{ url('/new-applications') }}">New Application</a>
         </li>
         <li class="custom-nav-item">
             <a class="custom-nav-link {{ request()->is('application-list*') ? 'nav-active' : '' }}" href="{{ url('/application-list') }}">Applications</a>
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('pending-payment-list*') || request()->is('edit-application*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
+            <a class="custom-nav-link {{ request()->is('pending-payment-list*') || request()->is('edit-application*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
 
         </li>
         <li class="custom-nav-item">
