@@ -1,16 +1,16 @@
 <div>
     <ul class="nav p-2">
-        <li class="custom-nav-item {{ request()->is('new-applications*') ? 'nav-active' : '' }}">
-            <a class="custom-nav-link" href="{{ url('/new-applications') }}">New Application</a>
+        <li class="custom-nav-item ">
+            <a class="custom-nav-link {{ request()->is('new-applications*') ? 'nav-active' : '' }}" href="{{ url('/new-applications') }}">New Application</a>
         </li>
-        <li class="custom-nav-item {{ request()->is('application-list*') ? 'nav-active' : '' }}">
-            <a class="custom-nav-link" href="{{ url('/application-list') }}">Applications</a>
+        <li class="custom-nav-item">
+            <a class="custom-nav-link {{ request()->is('application-list*') ? 'nav-active' : '' }}" href="{{ url('/application-list') }}">Applications</a>
         </li>
-        <li class="custom-nav-item {{ request()->is('pending-payment-list*') ? 'nav-active' : '' }}">
-            <a class="custom-nav-link" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
+        <li class="custom-nav-item">
+            <a class="custom-nav-link {{ request()->is('pending-payment-list*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
         </li>
-        <li class="custom-nav-item {{ request()->is('faq*') ? 'nav-active' : '' }}">
-            <a class="custom-nav-link" href="{{ url('faq') }}">FAQs</a>
+        <li class="custom-nav-item">
+            <a class="custom-nav-link {{ request()->is('faq*') ? 'nav-active' : '' }}" href="{{ url('faq') }}">FAQs</a>
         </li>
     </ul>
 </div>
@@ -40,6 +40,10 @@
         /* Apply border-radius to all nav links */
         margin-left: 3px;
         margin-right: 3px;
+    }
+
+    a.custom-nav-link{
+        color: #fff;
     }
 
 </style>
