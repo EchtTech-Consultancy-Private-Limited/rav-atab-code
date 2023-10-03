@@ -7,7 +7,8 @@
             <a class="custom-nav-link {{ request()->is('application-list*') ? 'nav-active' : '' }}" href="{{ url('/application-list') }}">Applications</a>
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('pending-payment-list*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
+            <a class="custom-nav-link {{ request()->is('pending-payment-list*') || request()->is('edit-application*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
+
         </li>
         <li class="custom-nav-item">
             <a class="custom-nav-link {{ request()->is('faq*') ? 'nav-active' : '' }}" href="{{ url('faq') }}">FAQs</a>
