@@ -70,7 +70,7 @@
                             <li class="breadcrumb-item active">Previous Application Details </li>
                         </ul>
 
-                        <a href="{{ url('level-first?display=applications') }}" type="button" class="btn btn-primary"
+                        <a href="{{ url('appliction-list') }}" type="button" class="btn btn-primary"
                         style="float:right;">Back </a>
                     </div>
                 </div>

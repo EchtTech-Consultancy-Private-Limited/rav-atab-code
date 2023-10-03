@@ -76,16 +76,16 @@
 
                      <div class="col-lg-12 col-md-12">
                          <div class="card">
-                             <div class="profile-tab-box">
-                                 <div class="p-l-20">
+                             <div>
+                                 <div class="p-2">
                                      <ul class="nav ">
 
 
-                                         <li class="nav-item tab-all p-l-20">
+                                         <li class="nav-item">
                                              <a class="nav-link active" href="#new_application" data-bs-toggle="tab">New
                                                  Application </a>
                                          </li>
-                                         <li class="nav-item tab-all p-l-20">
+                                         <li class="nav-item">
                                              <a class="nav-link" href="{{ url('/appliction-list') }}">Previous
                                                  Applications</a>
                                          </li>

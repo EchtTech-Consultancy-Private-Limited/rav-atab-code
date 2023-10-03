@@ -549,6 +549,9 @@ class LevelController extends Controller
     }
 
 
+
+
+
     //Code by gaurav
     public function newapplication()
     {
@@ -2624,7 +2627,7 @@ class LevelController extends Controller
 
 
 
-    public function checkContactNumber(Request $request)
+    public function phoneValidaion(Request $request)
     {
         $contactNumber = $request->contact_number;
 
@@ -2637,18 +2640,6 @@ class LevelController extends Controller
         return response()->json(['status' => 'unique']);
     }
 
-    public function checkEmail(Request $request)
-    {
-        $email = $request->email;
-
-        $existingApplication = Application::where('Email_ID', $email)->first();
-
-        if ($existingApplication) {
-            return response()->json(['status' => 'duplicate']);
-        }
-
-        return response()->json(['status' => 'unique']);
-    }
 
     public function coursePayment(Request $request, $id = null)
     {
@@ -2730,6 +2721,17 @@ class LevelController extends Controller
 
    }
 
+    public function edit_application(Request $request, $id = null)
+    {
+        if($id){
+            $applicationData = DB::table('applications')->where('id',$id)->first();
+        }
+
+       $course = DB::table('application_courses')->where('application_id',$id)->get();
+        return view('level.edit_application',compact('applicationData','course'));
+    }
+
+
    public function  newApplicationSave(Request $request){
 
 
@@ -2789,6 +2791,20 @@ class LevelController extends Controller
             ->join('countries', 'applications.country', '=', 'countries.id')->get();
         return view('level.pendinglistApplication',['level_list_data'=>$level_list_data]);
     }
+
+    public function emailValidaion(Request $request)
+    {
+        $email = $request->email;
+
+        $existingApplication = Application::where('Email_ID', $email)->first();
+
+        if ($existingApplication) {
+            return response()->json(['status' => 'duplicate']);
+        }
+
+        return response()->json(['status' => 'unique']);
+    }
+
 
 
 }
