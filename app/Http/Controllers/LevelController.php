@@ -1016,7 +1016,7 @@ class LevelController extends Controller
     public function new_application_payment(Request $request)
     {
 
-        //return $request->all();
+        // return $request->all();
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
 
@@ -1090,7 +1090,7 @@ class LevelController extends Controller
             Session::put('session_for_redirections', $session_for_redirection);
             $session_for_redirections = Session::get('session_for_redirections');
 
-            return  redirect('appliction-list')->with('success', 'Payment Done successfully');
+            return  redirect('application-list')->with('success', 'Payment Done successfully');
 
 
             //count payment in course status true
