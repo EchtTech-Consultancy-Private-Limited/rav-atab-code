@@ -290,31 +290,14 @@
                                                                          @elseif($item->status == 1)
                                                                        <div class="badge col-orange">Applications In Process</div>
                                                                           @elseif($item->status == 2)
-                                                                           <div class="badge col-green">Applications Approved</div> @endif
-                                                                   </a>
+                                                                           <div class="badge col-green">Applications In Process</div> @endif
+                                                                    </a>
                                                             </td>
-                                                            @if (check_upgrade($item->created_at) == 'true')
-                                                                @if (check_upgraded_level2($item->application_id) == 'false')
-                                                                    <td class="center">
-                                                                        <input type="hidden"
-                                                                            value="{{ $item->level_id }}"
-                                                                            id="upgrade-btn-level-id">
-                                                                        <input type="hidden"
-                                                                            value="{{ $item->application_id }}"
-                                                                            id="upgrade-btn-application-id">
-                                                                        <a data-bs-toggle="modal"
-                                                                            href="#exampleModalToggle" role="button"
-                                                                            type="btn" class="button-blinking">
-                                                                            Upgrade </a>
-                                                                    </td>
-                                                                @else
-                                                                    <td>
-                                                                    </td>
-                                                                @endif
-                                                            @else
-                                                                <td>
-                                                                </td>
-                                                            @endif
+                                                            <td>
+
+
+
+                                                            </td>
                                                             <td class="center">
                                                                 <a href="{{ url('/previews-application-first' . '/' . $item->id . '/' . $item->application_id) }}"
                                                                     class="btn btn-tbl-edit"><i
@@ -325,8 +308,8 @@
                                                             @elseif(request()->path() == 'level-second')
                                                                 <td class="center">
                                                                     <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                               class="btn btn-tbl-edit"><i
-                                                                   class="material-icons">visibility</i></a> -->
+                                                                   class="btn btn-tbl-edit"><i
+                                                                       class="material-icons">visibility</i></a> -->
                                                                     @if ($item->status == 1)
                                                                         <a href="{{ url('/upload-document') }}"
                                                                             class="btn btn-tbl-upload"><i
@@ -407,4 +390,4 @@
                 <!-- New JS -->
 
 
-       </body>
+</body>
