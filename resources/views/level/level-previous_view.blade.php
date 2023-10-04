@@ -71,7 +71,7 @@
                         </ul>
 
                         <a href="{{ url('application-list') }}" type="button" class="btn btn-primary"
-                        style="float:right;">Back </a>
+                            style="float:right;">Back </a>
                     </div>
                 </div>
             </div>
@@ -325,10 +325,29 @@
                                         </div>
                                     </div>
                                 </div>
+                               <div class="col-sm-12">
+                                <div class="row">
+                                    @if ($ApplicationCourses->documents)
+                                    @foreach ($ApplicationCourses->documents as $document)
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Doc {{ $loop->iteration }}</strong></label><br>
+                                                    <label><a
+                                                            href="{{ url('show-course-pdf/' . $document->document_file) }}"
+                                                            target="_blank" id="docpdf1"
+                                                            title="Download Document 1"><i class="fa fa-eye mr-2"></i>
+                                                            Doc 1
+                                                        </a></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                                </div>
+                               </div>
                                 <div class="col-sm-12 text-right">
                                     <div class="form-group">
-
-
 
                                         @if ($spocData->status == 1)
                                             <div class="col-sm-12 text-right">
@@ -460,7 +479,7 @@
                                                         <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
                                                             target="_blank" title="Document 3" id="docpdf3"
                                                             download>
-                                                            <i class="fa fa-download mr-2"></i>         Payment pdf
+                                                            <i class="fa fa-download mr-2"></i> Payment pdf
                                                         </a>
                                                     @else
                                                         @if (isset($ApplicationPayment->payment_details_file))
@@ -514,9 +533,9 @@
         });
 
 
-            $(".payment_alert").click(function(){
-                alert('Document is pending for approval from Accounts department')
-            });
+        $(".payment_alert").click(function() {
+            alert('Document is pending for approval from Accounts department')
+        });
     </script>
 
 

@@ -14,5 +14,9 @@ class ApplicationCourse extends Model
             'status'
     ];
 
+    public function documents(){
+        return $this->hasMany(ApplicationDocument::class,'course_number','id');
+    }
+
 
 }
