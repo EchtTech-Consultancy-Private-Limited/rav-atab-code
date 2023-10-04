@@ -236,8 +236,8 @@
                                  <div class="header">
                                      <h2 style="float:left; clear:none;">Payment</h2>
                                      <h6 style="float:right; clear:none;" id="counter">
-                                         Total Amount: 1000
-                                         </h2>
+                                        Total Amount (with 18% GST): {{ $total_amount + ($total_amount * 0.18) ?? 0 }}
+                                    </h6>
                                  </div>
                                  <div class="body">
                                      <div class="form-group">
@@ -365,35 +365,33 @@
                                              @endif
                                              @endif
                                              <div class="col-sm-3">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label for="payment_transaction_no">Payment
-                                                             Transaction
-                                                             no. <span class="text-danger">*</span></label>
-                                                         <input type="text" placeholder="Payment Transaction no." id="payment_transaction_no" required name="payment_transaction_no" minlength="9" maxlength="18" value="{{ old('payment_transaction_no') }}" autocomplete="off">
-                                                     </div>
-                                                     <label for="payment_transaction_no" id="payment_transaction_no-error" class="error">
-                                                         @error('payment_transaction_no')
-                                                         {{ $message }}
-                                                         @enderror
-                                                     </label>
-                                                 </div>
-                                             </div>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label for="payment_transaction_no">Payment Transaction no. <span class="text-danger">*</span></label>
+                                                        <input type="text" placeholder="Payment Transaction no." id="payment_transaction_no" required name="payment_transaction_no" minlength="9" maxlength="18" value="{{ old('payment_transaction_no') }}" autocomplete="off">
+                                                    </div>
+                                                    <label for="payment_transaction_no" id="payment_transaction_no-error" class="error">
+                                                        @error('payment_transaction_no')
+                                                        {{ $message }}
+                                                        @enderror
+                                                    </label>
+                                                </div>
+                                            </div>
                                              <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                              <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
                                              <div class="col-sm-3">
-                                                 <div class="form-group">
-                                                     <div class="form-line">
-                                                         <label>Payment Reference no. <span class="text-danger">*</span></label>
-                                                         <input type="text" required placeholder="Payment Reference no." name="payment_reference_no" minlength="9" maxlength="18" value="{{ old('payment_reference_no') }}" autocomplete="off">
-                                                     </div>
-                                                     <label for="payment_reference_no" id="payment_reference_no-error" class="error">
-                                                         @error('payment_reference_no')
-                                                         {{ $message }}
-                                                         @enderror
-                                                     </label>
-                                                 </div>
-                                             </div>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label for="payment_reference_no">Payment Reference no. <span class="text-danger">*</span></label>
+                                                        <input type="text" placeholder="Payment Reference no." id="payment_reference_no" required name="payment_reference_no" minlength="9" maxlength="18" value="{{ old('payment_reference_no') }}" autocomplete="off">
+                                                    </div>
+                                                    <label for="payment_reference_no" id="payment_reference_no-error" class="error">
+                                                        @error('payment_reference_no')
+                                                        {{ $message }}
+                                                        @enderror
+                                                    </label>
+                                                </div>
+                                            </div>
                                              <input type="hidden" value="{{ $applicationData->id ?? '' }}" name="Application_id" required class="course_input">
                                              <div class="col-sm-3">
                                                  <div class="form-group">
@@ -459,7 +457,11 @@ $(document).ready(function() {
                      });
 
          $(function() {
-            $("#payment_date").datepicker();
+            $("#payment_date").datepicker({
+            dateFormat: 'yy-mm-dd', // Set the date format
+            maxDate: 0, // Disable future dates
+            defaultDate: 0, // Set the default date to today
+        });
         });
     </script>
 
@@ -492,12 +494,44 @@ $(document).ready(function() {
 </script>
 
 <script>
-    // Initialize the datepicker with options
-    var datePicker = new Datepicker(document.getElementById('payment_date'), {
-        format: 'yyyy-mm-dd',
-        autohide: true,
-        startDate: new Date(), // Start from today's date
-        endDate: new Date(2099, 12, 31) // Set an upper limit for future dates
+    $('#payment_transaction_no').on('keyup', function() {
+        // Get the payment transaction number value
+        var paymentTransactionNo = $(this).val();
+
+        // Check if the payment transaction number is empty
+        if (paymentTransactionNo === '') {
+            // Clear the error message and exit
+            $('#payment_transaction_no-error').text('');
+            return;
+        }
+
+        // Check if the length of the input is less than the minimum required length
+        if (paymentTransactionNo.length < 9) {
+            $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
+        } else {
+            // Clear the error message if the length is valid
+            $('#payment_transaction_no-error').text('');
+        }
+    });
+
+    $('#payment_reference_no').on('keyup', function() {
+        // Get the payment reference number value
+        var paymentReferenceNo = $(this).val();
+
+        // Check if the payment reference number is empty
+        if (paymentReferenceNo === '') {
+            // Clear the error message and exit
+            $('#payment_reference_no-error').text('');
+            return;
+        }
+
+        // Check if the length of the input is less than the minimum required length
+        if (paymentReferenceNo.length < 9) {
+            $('#payment_reference_no-error').text('Payment Reference no. must be at least 9 characters.');
+        } else {
+            // Clear the error message if the length is valid
+            $('#payment_reference_no-error').text('');
+        }
     });
 </script>
  </body>

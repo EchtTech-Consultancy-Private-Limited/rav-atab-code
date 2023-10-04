@@ -297,8 +297,8 @@ Route::get('notification',[LevelController::class,'notification']);
     Route::get('model-dlt/{id}', [MenuController::class, 'delete_model']);
 
 
-    Route::post('phone-validation', [LevelController::class, 'phoneValidaion']);
+    Route::post('phone-validation', [LevelController::class, 'phoneValidaion'])->name('phone.validation');
 
-Route::post('email-validation', [LevelController::class, 'emailValidaion']);
+Route::post('email-validation', [LevelController::class, 'emailValidaion'])->name('email.validation');
 
 
