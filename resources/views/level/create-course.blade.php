@@ -215,7 +215,7 @@
 
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
-                    <div class="card">
+                    <div class="card nav-tab">
                         @include('level.inner-nav')
                     </div>
                     <div>
@@ -232,9 +232,17 @@
                         </ul>
                     </div>
                     @if (Session::has('success'))
-                        <div class="alert alert-success" style="padding: 15px;" role="alert">
-                            {{ session::get('success') }}
-                        </div>
+                        <script>
+                            var message = "{{ session::get('success') }}";
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Success',
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
+                        </script>
                     @elseif(Session::has('fail'))
                         <div class="alert alert-danger" role="alert">
                             {{ session::get('fail') }}
@@ -252,7 +260,7 @@
 
                     <div class="card">
 
-                        <div class="header mb-4">
+                        <div class="header">
                             <h2 style="float:left; clear:none;">Level Courses </h2>
                             {{-- @if (count($course) > 0) --}}
 
@@ -346,7 +354,8 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                    <select class="form-control select2" name="mode_of_course[]"
+                                                id="mode-of-course-edit"
+                                                    <select class="form-control select2" name="mode_of_course[1][]"
                                                         required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
@@ -468,15 +477,15 @@
                                                     <td class="center">{{ $k + 1 }}</td>
                                                     <td class="center">{{ $courses->course_name }}
                                                     </td>
-                                                    <td class="center">
-                                                        years:{{ $courses->years }},
-                                                        Months: {{ $courses->months }},
-                                                        days: {{ $courses->days }},
+                                                    <td class="center course-duration-table">
+                                                        years:{{ $courses->years }} <br>
+                                                        Months: {{ $courses->months }} <br>
+                                                        days: {{ $courses->days }} <br>
                                                         Hours: {{ $courses->hours }}
                                                     </td>
                                                     <td class="center">{{ $courses->eligibility }}
                                                     </td>
-                                                    <td class="center">
+                                                    <td class="center mode-of-course-table">
                                                         [ <?php echo get_course_mode($courses->id); ?> ]
                                                     </td>
                                                     <td class="center">
@@ -578,7 +587,7 @@
                                         <div class="form-line">
                                             <label>Mode of Course <span class="text-danger">*</span></label>
                                             <div class="form-group default-select select2Style">
-                                                <select class="form-control select2 width" name="mode_of_course[]">
+                                                <select class="form-control width"  name="mode_of_course[]">
                                                     <option value="" disabled>Select Mode
                                                     </option>
                                                     <option value="Online">Online</option>
@@ -686,7 +695,7 @@
                     <!-- View Modal Popup -->
                     <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-dialog modal-dialog-centered modal-lg modal-create-course" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalCenterTitle"> View Course Details</h5>
@@ -734,9 +743,9 @@
                                                     </tr>
                                                     <tr class="odd gradeX">
                                                         <th class="center">Course Brief</th>
-                                                        <td class="center">
-                                                            <input type="text" name="course_brief[]"
-                                                                id="view_course_brief" readonly>
+                                                        <td class="text-center" id="view_course_brief">
+                                                            <!-- <input type="text" name="course_brief[]"
+                                                                id="view_course_brief" readonly> -->
                                                         </td>
                                                     </tr>
                                                     <tr class="odd gradeX">
@@ -901,7 +910,7 @@
                                                             <input type="file" name="doc1" id="doc1_edit"
                                                                 class="form-control doc_edit_1 file_size">
                                                             <a target="_blank" href="" id="docpdf1ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2"></i>
+                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 1 </a>
                                                         </div>
                                                     </div>
@@ -915,7 +924,7 @@
                                                                 id="payment_reference_no"
                                                                 class="form-control doc_edit_2 file_size">
                                                             <a target="_blank" href="" id="docpdf2ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2"></i>
+                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 2</a>
                                                         </div>
                                                     </div>
@@ -931,7 +940,7 @@
                                                                 class="form-control doc_edit_3 file_size">
                                                             <a href="" id="docpdf3ss"
                                                                 title="Download Document 1" download><i
-                                                                    class="fa fa-download mr-2"></i> Doc 3 </a>
+                                                                    class="fa fa-download mr-2 d-inline-block w-"></i> Doc 3 </a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -986,7 +995,8 @@
                                     if (data.ApplicationCourse[0].payment == "false") {
                                         $("#Payment_Status").val("Pending");
                                     }
-                                    $("#view_course_brief").val(data.ApplicationCourse[0].course_brief);
+                                    $("#view_course_brief").text(data.ApplicationCourse[0].course_brief);
+
 
                                     $("#view_years").html(data.ApplicationCourse[0].years + " Year(s)");
                                     $("#view_months").html(data.ApplicationCourse[0].months + " Month(s)");
@@ -1092,6 +1102,7 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
+                        var cloneCounter = 1;
 
                         function addNewCourse() {
                             if (!isAppending) {
@@ -1109,6 +1120,21 @@
 
                                 // Show the remove button for the new row
                                 newRow.find('.remove-course').show();
+
+                                // Increment the cloneCounter for unique IDs
+                                cloneCounter++;
+
+                                // Update the name attribute of the mode_of_course select field
+                                var modeOfCourseSelect = newRow.find('.select2[name^="mode_of_course[1]"]');
+                                modeOfCourseSelect.attr('name', `mode_of_course[${cloneCounter}][]`);
+
+                                $("#mode-of-course-edit").select2({
+                                    placeholder: "Select a programming language",
+                                    allowClear: true
+                                });
+                                // Reset Select2 for the cloned select element
+                                modeOfCourseSelect.select2();
+                                modeOfCourseSelect.select2('destroy'); // Destroy the previous instance
 
                                 // Add a class to the new row
                                 newRow.addClass('new-course-html');

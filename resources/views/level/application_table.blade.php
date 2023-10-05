@@ -290,7 +290,7 @@
                                                                          @elseif($item->status == 1)
                                                                        <div class="badge col-orange">Applications In Process</div>
                                                                           @elseif($item->status == 2)
-                                                                           <div class="badge col-green">Applications In Process</div> @endif
+                                                                           <div class="badge col-orange">Applications In Process</div> @endif
                                                                     </a>
                                                             </td>
                                                             <td>

@@ -98,10 +98,10 @@
                                                 <h4>Create NC</h4><br><br>
 
                                                      <!--you can send comment to admin on this record only one time -->
-                                                    @if(get_doccomment_status($doc_id)==3 || get_doccomment_status($doc_id)==2)
+                                                    @if(get_doccomment_status($doc_id)==3 || get_doccomment_status($doc_id) != null && get_doccomment_status($doc_id)!=1 && get_doccomment_status($doc_id)!=2 )
                                                      <h4 class="text-center">You Have Send Comment to Admin</h4>
 
-                                                     @elseif(get_doccomment_status($doc_id)==1)
+                                                     @elseif(get_doccomment_status($doc_id)==1 || get_doccomment_status($doc_id)==2)
 
                                                      <h4 class="text-center">You Document Profile Locked Successfully</h4>
 

@@ -708,7 +708,7 @@
                                                         <td class="center">
                                                             <a href="" target="_blank" id="docpdf1"
                                                                 title="Download Document 1"><i
-                                                                    class="fa fa-eye mr-2"></i>
+                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 1
                                                             </a>
                                                         </td>
@@ -719,7 +719,7 @@
                                                         <td class="center">
                                                             <a href="" target="_blank" id="docpdf2"
                                                                 title="Download Document 2"><i
-                                                                    class="fa fa-eye mr-2"></i>
+                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 2
                                                             </a>
                                                         </td>
