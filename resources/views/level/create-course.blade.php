@@ -232,9 +232,17 @@
                         </ul>
                     </div>
                     @if (Session::has('success'))
-                        <div class="alert alert-success" style="padding: 15px;" role="alert">
-                            {{ session::get('success') }}
-                        </div>
+                        <script>
+                            var message = "{{ session::get('success') }}";
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Success',
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
+                        </script>
                     @elseif(Session::has('fail'))
                         <div class="alert alert-danger" role="alert">
                             {{ session::get('fail') }}
@@ -346,7 +354,7 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                    <select class="form-control select2" name="mode_of_course[]"
+                                                    <select class="form-control select2" name="mode_of_course[1][]"
                                                         required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
@@ -1092,6 +1100,7 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
+                        var cloneCounter = 1;
 
                         function addNewCourse() {
                             if (!isAppending) {
@@ -1109,6 +1118,17 @@
 
                                 // Show the remove button for the new row
                                 newRow.find('.remove-course').show();
+
+                                // Increment the cloneCounter for unique IDs
+                                cloneCounter++;
+
+                                // Update the name attribute of the mode_of_course select field
+                                var modeOfCourseSelect = newRow.find('.select2[name^="mode_of_course[1]"]');
+                                modeOfCourseSelect.attr('name', `mode_of_course[${cloneCounter}][]`);
+
+                                // Reset Select2 for the cloned select element
+                                modeOfCourseSelect.select2();
+                                modeOfCourseSelect.select2('destroy'); // Destroy the previous instance
 
                                 // Add a class to the new row
                                 newRow.addClass('new-course-html');
