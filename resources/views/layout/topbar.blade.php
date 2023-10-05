@@ -97,7 +97,7 @@
 
                                       <span class="menu-info">
 
-                                           <h5 id="notification" data-value='{{ $item->id }}' >{{ 'Application ID:' . $item->id. ' ,'. date('d-M-Y',strtotime($item->created_at)) }}</h5>
+                                           <h5 style="color: #000;" id="notification" data-value='{{ $item->id }}' >{{ 'Application ID:' . $item->id. ' ,'. date('d-M-Y',strtotime($item->created_at)) }}</h5>
 
                                       </span>
                                   </a>
