@@ -31,7 +31,8 @@
 
                     <li class="{{ Request::is('dashboard')?'active':''}}">
                         <a href="{{ url('/dashboard') }}" >
-                            <i data-feather="monitor"></i>
+                            <!-- <i data-feather="monitor"></i> -->
+                            <i class="fa fa-television" aria-hidden="true"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -39,6 +40,7 @@
                     <li class="{{ Request::is('profile-get')?'active':''}}">
                         <a href="{{ url('profile-get') }}" >
                             <i data-feather="user"></i>
+                            <i class="fa fa-user"></i>
                             <span>Manage Profile</span>
                         </a>
                     </li>
@@ -46,14 +48,16 @@
 
                     <li class="{{ Request::is('Akment-letter')?'active':''}}">
                         <a href="{{ url('/Akment-letter') }}"  >
-                            <i data-feather="file-text"></i>
+                            <!-- <i data-feather="file-text"></i> -->
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
                             <span>Acknowledgement Letter </span>
                         </a>
                     </li>
 
                     {{-- <li class="{{ (Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') )?'active':''; }}">
                         <a href="#" onClick="return false;" class="menu-toggle" >
-                            <i data-feather="info"></i>
+                            <!-- <i data-feather="info"></i> -->
+
                             <span>Manage Applications</span>
                         </a>
                         <ul class="ml-menu">
@@ -65,7 +69,8 @@
 
                         <li class="{{ (Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') )?'active':''}}">
                             <a href="#" onClick="return false;" class="menu-toggle" >
-                                <i data-feather="settings"></i>
+                                <!-- <i data-feather="settings"></i> -->
+                                <i class="fa fa-cog"></i>
                                 <span>Manage Applications</span>
                             </a>
                             <ul class="ml-menu">
@@ -125,7 +130,8 @@
 
                         <li class="{{ Request::is('Grievance-list')?'active':'' }}">
                             <a href="{{ url('Grievance-list') }}" >
-                                <i data-feather="clipboard"></i>
+                                <!-- <i data-feather="clipboard"></i> -->
+                                <i class="fa fa-clipboard" aria-hidden="true"></i>
                                 <span>Grievance</span>
                             </a>
                         </li>
@@ -150,7 +156,8 @@
 
                         <li>
                             <a href="{{ url('/view-faqs') }}" class="{{ Request::is('view-faqs')?'active':'' }}" >
-                                <i data-feather="message-circle"></i>
+                                <!-- <i data-feather="message-circle"></i> -->
+                                <i class="fa fa-comment" aria-hidden="true"></i>
                                 <span>FAQs</span>
                             </a>
                         </li>

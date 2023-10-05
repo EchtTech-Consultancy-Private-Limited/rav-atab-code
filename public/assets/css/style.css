@@ -4657,9 +4657,14 @@ table .checkbox [type="checkbox"]+label {
 }
 
 .light .nav>li>a {
-    color: #0d091d
+    color: #0d091d;
+   
 }
 
+.nav-tab  .nav .custom-nav-item  .custom-nav-link{
+   
+    border:1px solid #e91e63 !important;
+}
 .border-apply {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important
 }
@@ -24399,7 +24404,7 @@ input.form-control.btn.btn-outline-danger.p-0 {
     background: #fb483a !important;
 }
 td#view_course_brief {
-    text-align: left;
+    text-align: left !important;
 }
 
 
@@ -24431,4 +24436,40 @@ input[type=text]:not(.browser-default):disabled{
 
 .payment-pending strong:hover{
     background: #ff0000;
+}
+
+
+table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+    border-bottom-width: 0;
+    text-align: left;
+}
+
+.modal input[type=text]:not(.browser-default) {
+    height: 2rem !important;
+    text-align: left;
+}
+
+.modal-create-course .table tbody tr td a .fa.fa-eye {
+    width: auto;
+    height: auto;
+    display: inline-block;
+   
+}
+
+
+
+
+
+.contact_list .course-duration-table{
+  text-align: left;
+  text-transform: capitalize;
+}
+
+
+.contact_list .mode-of-course-table{
+    white-space: nowrap;
+}
+
+#Payment_Statuss{
+    text-align: center !important;
 }
