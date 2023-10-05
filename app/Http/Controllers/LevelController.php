@@ -859,12 +859,12 @@ class LevelController extends Controller
 
     public function new_application_course(Request $request)
     {
+        // dd($request->all());
         $active = 'active';
         $course_name = $request->course_name;
         $course_duration = $request->course_duration;
         $eligibility = $request->eligibility;
         $mode_of_course = $request->mode_of_course;
-
 
 
         $course_brief = $request->course_brief;
@@ -911,7 +911,7 @@ class LevelController extends Controller
             $file->country = Auth::user()->country;
             /* $file->course_duration=$course_duration[$i];*/
             $file->eligibility = $eligibility[$i];
-            $file->mode_of_course = $mode_of_course;
+            $file->mode_of_course = $mode_of_course[$i+1];
             $file->course_brief = $course_brief[$i];
             $file->valid_from = $request->created_at;
             $file->status = '0';
