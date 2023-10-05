@@ -157,6 +157,17 @@ td.text-justify {
                             <div role="tabpanel" class="tab-pane active" aria-expanded="true">
                                 <div class="row clearfix">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div>
+                                            @if(check_document_upload($course_id)==Auth::user()->id)
+                                            <a href="{{ url('document-report-toadmin/'.$course_id) }}" class="btn btn-primary">Send Document To Admin</a>
+
+                                            @else
+                                            <a href="#" class="btn btn-danger">Send Document To Admin</a>
+                                            @endif
+
+                                            <a style="float:right;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">History Log</a>
+
+                                        </div>
                                         <div class="card project_widget">
                                             <!-- <div class="header">
                                                 <h2>Upload Document</h2>
@@ -244,19 +255,7 @@ td.text-justify {
                                             <hr> -->
 
 
-                                          <div class="header">
-                                             <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
 
-                                             @if(check_document_upload($course_id)==Auth::user()->id)
-                                             <a href="{{ url('document-report-toadmin/'.$course_id) }}" class="btn btn-primary">Send Document To Admin</a>
-
-                                             @else
-                                             <a href="#" class="btn btn-danger">Send Document To Admin</a>
-                                             @endif
-
-                                             <a style="float:right;" href="{{ url('document-comment-admin-assessor/'.$course_id) }}" class="btn btn-primary">History Log</a>
-
-                                          </div>
                                             @if ($message = Session::get('success'))
                                                 <div class="alert alert-success">
                                                    <p>{{ $message }}</p>
@@ -270,6 +269,7 @@ td.text-justify {
 
                                                 <table class="table table-hover js-basic-example contact_list">
                                                     <thead>
+
                                                         <tr>
                                                             <th class="center">#S.N0</th>
                                                             <th class="center">Objective criteria</th>
@@ -279,33 +279,44 @@ td.text-justify {
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
+                                                        <tr>
+                                                            <th colspan="4">
+                                                                <div class="header">
+                                                                    <h2 class="text-center">CHAPTER 1- (VMO) VISION MISSION AND OBJECTIVES </h2>
+                                                                </div>
+                                                            </td>
 
-<!--
-                                                        @foreach ($file as $k=> $files )
-                                                            <tr class="odd gradeX">
-                                                                <td class="center">{{  $k+1 }}</td>
-                                                                 <td class="center">{{  $files->document_type_name }}</td>
-
-                                                               <td> <img src="{{ asset('documnet/'.$files->document_file) }}" width="150" height="120" /> </td>
+                                                        </tr>
 
 
-                                                                @endforeach -->
-
-                                                                <tr class="@if(isset($doc_id1->doc_file)) highlight   @if(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id1->id)==__('arrayfile.document_doc_id_chap1')[1] && get_doccomment_status($doc_id1->id)==0) highlight_nc @endif @endif">
+                                                                <tr>
                                                                     <td>VMO.1</td>
                                                                    <td class="text-justify">The institution shall have a clearly defined and documented mission and vision. </td>
-                                                                   @if(isset($doc_id1->doc_file))
-                                                                    <td>
-
-                                                                <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc_id1->doc_file.'/'.$doc_id1->id.'/'.$course_id) }}"  class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
-                                                                    </td>
-
-                                                                    <!-- <td>
-                                                                         <a href="{{ url('show-comment/'.$doc_id1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
-                                                                    @endif
+                                                                   @if(isset($doc_id1))
+                                                                   @if (count($doc_id1) == 1)
+                                                                       <td>
+                                                                           @foreach ($doc_id1 as $doc)
+                                                                               <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc->doc_file.'/'.$doc->id.'/'.$course_id) }}" class="btn text-white bg-primary btn-sm" style="color: #fff; margin:10px;" id="view_doc1">View Documents</a>
+                                                                           @endforeach
+                                                                       </td>
+                                                                   @elseif (count($doc_id1) > 1)
+                                                                       <td>
+                                                                           <div class="d-flex">
+                                                                               @foreach ($doc_id1 as $doc)
+                                                                                   <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc->doc_file.'/'.$doc->id.'/'.$course_id) }}" class="btn btn-sm btn-primary" style="color: #fff; margin:10px;" id="view_doc1">V{{ $loop->iteration }}</a>
+                                                                               @endforeach
+                                                                           </div>
+                                                                       </td>
+                                                                   @else
+                                                                       <td>
+                                                                           <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                       </td>
+                                                                   @endif
+                                                               @else
+                                                                   <td>
+                                                                       <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                   </td>
+                                                               @endif
 
                                                                     <!-- <td>
                                                                         @if(isset($doc_id1->doc_file))
@@ -320,22 +331,36 @@ td.text-justify {
 
                                                                 </tr>
 
-                                                                <tr class="@if(isset($doc_id2->doc_file)) highlight  @if(get_doc_code($doc_id2->id)==__('arrayfile.document_doc_id_chap1')[2] && get_doccomment_status($doc_id2->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id2->id)==__('arrayfile.document_doc_id_chap1')[2] && get_doccomment_status($doc_id2->id)==0) highlight_nc @endif @endif">
+                                                                <tr>
                                                                     <td>VMO.2</td>
                                                                     <td class="text-justify">The institution shall have defined objectives and measure them periodically</td>
-                                                                     @if(isset($doc_id2->doc_file))
-                                                                    <td>
 
-                                                                        <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[2].'/'.$doc_id2->doc_file.'/'.$doc_id2->id.'/'.$course_id) }}"
-                                                                        class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
-                                                                    </td>
+                                                                    @if(isset($doc_id2))
+    @if (count($doc_id2) == 1)
+        <td>
+            @foreach ($doc_id2 as $doc)
+                <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc->doc_file.'/'.$doc->id.'/'.$course_id) }}" class="btn text-white bg-primary btn-sm" style="color: #fff; margin:10px;" id="view_doc1">View Documents</a>
+            @endforeach
+        </td>
+    @elseif (count($doc_id2) > 1)
+        <td>
+            <div class="d-flex">
+                @foreach ($doc_id2 as $doc)
+                    <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[1].'/'.$doc->doc_file.'/'.$doc->id.'/'.$course_id) }}" class="btn btn-sm {{ get_doccomment_status($doc->id)==1 ? 'btn-success' : 'btn-warning' }} " style="color: #fff; margin:10px;" id="view_doc1">V{{ $loop->iteration }}</a>
+                @endforeach
+            </div>
+        </td>
+    @else
+        <td>
+            <span class="badge bg-danger text-white">Documents not uploaded</span>
+        </td>
+    @endif
+@else
+    <td>
+        <span class="badge bg-danger text-white">Documents not uploaded</span>
+    </td>
+@endif
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
-                                                                    @endif
 
 
                                                                 </tr>
@@ -349,12 +374,10 @@ td.text-justify {
                                                                         <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap1')[3].'/'.$doc_id3->doc_file.'/'.$doc_id3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
                                                                 <tr class="@if(isset($doc_id4->doc_file)) highlight   @if(get_doc_code($doc_id4->id)==__('arrayfile.document_doc_id_chap1')[4] && get_doccomment_status($doc_id4->id)==1) highlight_nc_approved @elseif(get_doc_code($doc_id4->id)==__('arrayfile.document_doc_id_chap1')[4] && get_doccomment_status($doc_id4->id)==0) highlight_nc @endif @endif">
@@ -367,11 +390,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id4->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -385,11 +407,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id5->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -403,11 +424,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id6->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -434,11 +454,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap2_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -454,12 +473,10 @@ td.text-justify {
                                                                         <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[2].'/'.$doc_id_chap2_2->doc_file.'/'.$doc_id_chap2_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap2_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -474,12 +491,10 @@ td.text-justify {
                                                                         <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[3].'/'.$doc_id_chap2_3->doc_file.'/'.$doc_id_chap2_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap2_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -494,12 +509,10 @@ td.text-justify {
                                                                         <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap2')[4].'/'.$doc_id_chap2_4->doc_file.'/'.$doc_id_chap2_4->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap2_4->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -519,12 +532,10 @@ td.text-justify {
                                                                     </td>
 
 
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap2_5->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -540,11 +551,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap2_6->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
                                                                 </tr>
 
@@ -570,11 +580,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap3_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -600,12 +609,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[1].'/'.$doc_id_chap4_1->doc_file.'/'.$doc_id_chap4_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
 
@@ -623,12 +630,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[2].'/'.$doc_id_chap4_2->doc_file.'/'.$doc_id_chap4_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
 
@@ -648,11 +653,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -670,11 +674,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_4->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -691,12 +694,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[5].'/'.$doc_id_chap4_5->doc_file.'/'.$doc_id_chap4_5->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_5->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -714,11 +715,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_6->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -736,12 +736,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap4')[7].'/'.$doc_id_chap4_7->doc_file.'/'.$doc_id_chap4_7->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                   <!--   <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap4_7->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -769,11 +767,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                 <!--     <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap5_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -790,12 +787,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[2].'/'.$doc_id_chap5_2->doc_file.'/'.$doc_id_chap5_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap5_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -812,12 +807,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap5')[3].'/'.$doc_id_chap5_3->doc_file.'/'.$doc_id_chap5_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap5_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
 
@@ -846,12 +839,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[1].'/'.$doc_id_chap6_1->doc_file.'/'.$doc_id_chap6_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap6_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
 
@@ -869,12 +860,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[2].'/'.$doc_id_chap6_2->doc_file.'/'.$doc_id_chap6_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap6_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
 
@@ -892,12 +881,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap6')[3].'/'.$doc_id_chap6_3->doc_file.'/'.$doc_id_chap6_3->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap6_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
 
@@ -926,12 +913,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap7')[1].'/'.$doc_id_chap7_1->doc_file.'/'.$doc_id_chap7_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap7_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -950,11 +935,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap7_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -972,11 +956,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap7_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -995,11 +978,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap7_4->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1016,11 +998,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap7_5->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1038,11 +1019,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap7_6->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1069,11 +1049,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                   <!--   <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap8_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1090,12 +1069,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap8')[2].'/'.$doc_id_chap8_2->doc_file.'/'.$doc_id_chap8_2->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                   <!--   <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap8_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1114,11 +1091,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap8_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1137,11 +1113,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap8_4->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1160,11 +1135,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap8_5->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1182,11 +1156,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap8_6->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1212,12 +1185,10 @@ td.text-justify {
                                                                     <a target="_blank" href="{{ url('view-doc'.'/'.__('arrayfile.document_doc_id_chap9')[1].'/'.$doc_id_chap9_1->doc_file.'/'.$doc_id_chap9_1->id.'/'.$course_id) }}"
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
-
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap9_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1235,11 +1206,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap9_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1266,11 +1236,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap10_1->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1288,11 +1257,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap10_2->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1310,11 +1278,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                    <!--  <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap10_3->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>
@@ -1332,11 +1299,10 @@ td.text-justify {
                                                                         class="btn text-white bg-primary btn-sm" style="color: #fff ;margin:10px;" id="view_doc1">View Documents</a>
                                                                     </td>
 
-                                                                     <!-- <td>
-                                                                          <a href="{{ url('show-comment/'.$doc_id_chap10_4->id) }}"
-                                                                        class="btn text-white bg-primary" style="color: #fff;margin:10px;">Comments</a>
-
-                                                                    </td> -->
+                                                                    @else
+                                                                    <td>
+                                                                        <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                    </td>
                                                                     @endif
 
                                                                 </tr>

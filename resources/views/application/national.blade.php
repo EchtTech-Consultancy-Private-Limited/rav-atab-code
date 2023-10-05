@@ -247,7 +247,7 @@
                                                    checked
                                                    @endif >
                                                    <span>
-                                                   {{ $assesorsData->firstname }}
+                                                   {{ ucfirst($assesorsData->firstname) }} {{ ucfirst($assesorsData->lastname) }} ({{ $assesorsData->email }})
                                                    </span>
                                                    </label>
                                                    <input type="hidden" name="sec_email[]" value="{{ $assesorsData->email }}">
@@ -277,7 +277,7 @@
                                                    checked
                                                    @endif >
                                                    <span>
-                                                   {{ $assesorsData->firstname }}
+                                                   {{ $assesorsData->firstname }} {{ $assesorsData->lastname }} ({{ $assesorsData->email }})
                                                    </span>
                                                    </label>
                                                    <input type="hidden" name="sec_email" value="{{ $assesorsData->email }}">

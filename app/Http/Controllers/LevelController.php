@@ -1364,11 +1364,14 @@ class LevelController extends Controller
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
-        $doc_id1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[1])->where('course_id', $course_id)->first();
+        $doc_id1 = Add_Document::orderBy('id', 'asc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[1])->where('course_id', $course_id)->get();
         // dd($doc_id1);
 
 
-        $doc_id2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[2])->where('course_id', $course_id)->first();
+        $doc_id2 = Add_Document::orderBy('id', 'asc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[2])->where('course_id', $course_id)->get();
+
+
+
         $doc_id3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[3])->where('course_id', $course_id)->first();
         $doc_id4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[4])->where('course_id', $course_id)->first();
         $doc_id5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[5])->where('course_id', $course_id)->first();
@@ -1753,27 +1756,46 @@ class LevelController extends Controller
         //dd($request->all());
 
         if ($request->add_doc_id) {
-            //dd("update");
+            // dd($request->all());
             $course = Add_Document::find($request->add_doc_id);
+
+
+            $newDoc = new Add_Document;
+            $newDoc->course_id = $request->course_id;
+            $newDoc->section_id = $request->section_id;
+            $newDoc->doc_id = $request->doc_id;
+            $newDoc->application_id = $request->application_id;
+            $newDoc->user_id = Auth::user()->id;
+
             if ($request->hasfile('fileup_update')) {
-                //dd("yes");
-                File::delete('level/' . $course->doc_file);
+
+            // delete old file
+                // File::delete('level/' . $course->doc_file);
+
+
                 $file = $request->file('fileup_update');
                 $name = $file->getClientOriginalName();
                 $filename = time() . $name;
                 $file->move('level/', $filename);
-                //dd($filename);
-                $course->doc_file = $filename;
+                $newDoc->doc_file = $filename;
+
             }
+
+            $newDoc->notApraove_count = $course->notApraove_count + 1;
+            $newDoc->save();
+
+
             $course->status = 1;
             $course->application_id = $request->application_id;
             $course->user_id = Auth::user()->id;
 
             //update document comment latest record
-            $document = DocComment::orderBy('id', 'desc')->where('doc_id', $request->add_doc_id)->first();
-            $document->status = 0;
-            $course->notApraove_count = $course->notApraove_count + 1;
-            $document->save();
+            // $document = DocComment::orderBy('id', 'desc')->where('doc_id', $request->add_doc_id)->first();
+            // $document->status = 0;
+
+            // $document->save();
+
+
         } else {
 
             $course = new Add_Document;
