@@ -39,7 +39,7 @@
 
                     <li class="{{ Request::is('profile-get')?'active':''}}">
                         <a href="{{ url('profile-get') }}" >
-                            <i data-feather="user"></i>
+                            <!-- <i data-feather="user"></i> -->
                             <i class="fa fa-user"></i>
                             <span>Manage Profile</span>
                         </a>

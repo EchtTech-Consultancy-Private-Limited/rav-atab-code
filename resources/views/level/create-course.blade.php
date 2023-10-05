@@ -354,6 +354,7 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
+                                                id="mode-of-course-edit"
                                                     <select class="form-control select2" name="mode_of_course[1][]"
                                                         required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
@@ -586,7 +587,7 @@
                                         <div class="form-line">
                                             <label>Mode of Course <span class="text-danger">*</span></label>
                                             <div class="form-group default-select select2Style">
-                                                <select class="form-control select2 width" name="mode_of_course[]">
+                                                <select class="form-control width"  name="mode_of_course[]">
                                                     <option value="" disabled>Select Mode
                                                     </option>
                                                     <option value="Online">Online</option>
@@ -1127,6 +1128,10 @@
                                 var modeOfCourseSelect = newRow.find('.select2[name^="mode_of_course[1]"]');
                                 modeOfCourseSelect.attr('name', `mode_of_course[${cloneCounter}][]`);
 
+                                $("#mode-of-course-edit").select2({
+                                    placeholder: "Select a programming language",
+                                    allowClear: true
+                                });
                                 // Reset Select2 for the cloned select element
                                 modeOfCourseSelect.select2();
                                 modeOfCourseSelect.select2('destroy'); // Destroy the previous instance
