@@ -354,7 +354,7 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                id="mode-of-course-edit"
+                                                
                                                     <select class="form-control select2" name="mode_of_course[1][]"
                                                         required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
