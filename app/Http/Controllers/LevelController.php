@@ -1539,7 +1539,8 @@ class LevelController extends Controller
 
     public function add_courses(Request $request)
     {
-            $oldFile = Add_Document::where('doc_id',$request->question_id)->where('application_id',$request->application_id)->where('course_id',$request->course_id)->first();
+            $notApprove = 0;
+            $oldFile = Add_Document::orderby('id','desc')->where('doc_id',$request->question_id)->where('application_id',$request->application_id)->where('course_id',$request->course_id)->first();
             if($oldFile){
                 $notApprove = $oldFile->notApraove_count ?? 0;
             }

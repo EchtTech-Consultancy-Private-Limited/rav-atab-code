@@ -184,7 +184,6 @@
                                                             <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                                             <th class="center">Cross reference to supporting evidence
                                                                 provided</th>
-                                                            <th>Comments</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
@@ -203,51 +202,39 @@
                                                                     <td>{{ $question->code ?? '' }}</td>
                                                                     <td>{{ $question->title }}</td>
                                                                     <td>
-                                                                            {{-- getting documents for each row --}}
-                                                                                 @if ($question->documents->isEmpty())
-                                                                                    <div>
-                                                                                        <form name="submitform_doc_form" id="submitform_doc_form_{{ $question->id }}"
-                                                                                            class="submitform_doc_form" enctype="multipart/form-data">
-                                                                                            <input type="hidden" name="previous_url" value="{{ Request::url() }}">
-                                                                                            <input type="hidden" name="application_id" value="{{ $file[0]->application_id }}">
-                                                                                            <input type="hidden" name="course_id" value="{{ $course_id }}">
-                                                                                            <input type="hidden" name="question_id" value="{{ $question->code }}">
-                                                                                            <input type="file" class="from-control-input fileup" name="fileup" id="fileup_{{ $question->id }}" data-question-id="{{ $question->id }}" />
-                                                                                        </form>
-                                                                                    </div>
-                                                                                @else
-                                                                                     @if (count($question->documents) == 1)
-                                                                                            @foreach ($question->documents as $doc)
-                                                                                            <div class="d-flex">
-                                                                                                <div>
-                                                                                                    @if (get_doccomment_status($doc->id) == 1)
-                                                                                                    <form name="submitform_doc_form" id="submitform_doc_form_{{ $question->id }}"
-                                                                                                        class="submitform_doc_form" enctype="multipart/form-data">
-                                                                                                        <input type="hidden" name="previous_url" value="{{ Request::url() }}">
-                                                                                                        <input type="hidden" name="application_id" value="{{ $file[0]->application_id }}">
-                                                                                                        <input type="hidden" name="course_id" value="{{ $course_id }}">
-                                                                                                        <input type="hidden" name="question_id" value="{{ $question->code }}">
-                                                                                                        <input type="file" class="from-control-input fileup" name="fileup" id="fileup_{{ $question->id }}" data-question-id="{{ $question->id }}" />
-                                                                                                    </form>
-                                                                                                    @endif
-                                                                                                </div>
-                                                                                                <a target="_blank" href="{{ url('show-pdf' . '/' . $doc->doc_file) }}" class="btn {{ get_doccomment_status($doc->id) == 1 ? 'btn-warning' : 'btn-primary' }}">View Document</a>
-                                                                                            </div>
-                                                                                            @endforeach
-                                                                                        @elseif (count($question->documents) > 1)
-                                                                                            @foreach ($question->documents as $doc)
-                                                                                            <a target="_blank" href="{{ url('show-pdf' . '/' . $doc->doc_file) }}" class="btn {{ get_doccomment_status($doc->id) == 1 ? 'btn-warning' : 'btn-primary' }}">V{{ $loop->iteration  }}</a>
-                                                                                            @endforeach
-                                                                                        @else
-                                                                                            <div>
-                                                                                                112<input type="file" class="from-control-input fileup" name="fileup" id="fileup" />
-                                                                                            </div>
-                                                                                     @endif
-                                                                                @endif
-                                                                             {{-- getting documents for each row end point --}}
+                                                                        {{-- getting documents for each row --}}
+                                                                            @if (count($question->documents) < 1)
+                                                                                <div>
+                                                                                    <form name="submitform_doc_form"
+                                                                                    id="submitform_doc_form_{{ $question->id }}"
+                                                                                    class="submitform_doc_form"
+                                                                                    enctype="multipart/form-data">
+                                                                                        <input type="hidden"
+                                                                                            name="previous_url"
+                                                                                            value="{{ Request::url() }}">
+                                                                                        <input type="hidden"
+                                                                                            name="application_id"
+                                                                                            value="{{ $file[0]->application_id }}">
+                                                                                        <input type="hidden"
+                                                                                            name="course_id"
+                                                                                            value="{{ $course_id }}">
+                                                                                        <input type="hidden"
+                                                                                            name="question_id"
+                                                                                            value="{{ $question->code }}">
+                                                                                        <input type="file"
+                                                                                            class="from-control-input fileup"
+                                                                                            name="fileup"
+                                                                                            id="fileup_{{ $question->id }}"
+                                                                                            data-question-id="{{ $question->id }}" />
+                                                                                    </form>
+                                                                                </div>
+                                                                            @else
+                                                                                @if (count($question->documents) == 1)
 
+                                                                                @endif
+                                                                            @endif
+                                                                        {{-- getting documents for each row end point --}}
                                                                     </td>
-                                                                    <td></td>
                                                                 </tr>
                                                             @endforeach
                                                         @endforeach
@@ -269,49 +256,51 @@
 
 
 
-<script>
-    $(document).ready(function () {
-    $('.fileup').change(function () {
-        var fileInput = $(this);
-        var questionId = fileInput.data('question-id');
-        var form = $('#submitform_doc_form_' + questionId)[0];
-        var formData = new FormData(form);
+    <script>
+        $(document).ready(function() {
+            $('.fileup').change(function() {
+                var fileInput = $(this);
+                var questionId = fileInput.data('question-id');
+                var form = $('#submitform_doc_form_' + questionId)[0];
+                var formData = new FormData(form);
 
-        $("#loader").removeClass('d-none');
+                $("#loader").removeClass('d-none');
 
-        $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ url('add-courses') }}", // Your server-side upload endpoint
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $("#loader").addClass('d-none');
+                        if (response.message == 'success') {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Upload Successful',
+                                text: 'Your documents have been successfully uploaded.',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            location.reload();
+
+
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors
+                        console.error(error);
+                    }
+                });
             });
-
-        $.ajax({
-            url: "{{ url('add-courses') }}", // Your server-side upload endpoint
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                $("#loader").addClass('d-none');
-                if(response.message == 'success'){
-                    Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Upload Successful',
-                            text: 'Your documents have been successfully uploaded.',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-
-
-                }
-            },
-            error: function (xhr, status, error) {
-                // Handle errors
-                console.error(error);
-            }
         });
-    });
-});
-</script>
+    </script>
     @include('layout.footer')
