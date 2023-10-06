@@ -354,7 +354,7 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                
+
                                                     <select class="form-control select2" name="mode_of_course[1][]"
                                                         required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
@@ -389,8 +389,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
-                                                <input type="file" name="doc1[]" id="payment_reference_no"
-                                                    required class="form-control doc_1 file_size">
+                                                <input type="file" name="doc1[]"
+                                                     class="form-control doc_1 file_size">
                                             </div>
                                         </div>
                                     </div>
@@ -399,8 +399,8 @@
                                             <div class="form-line">
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
-                                                <input type="file" name="doc2[]" id="payment_reference_no"
-                                                    required class="form-control doc_2 file_size">
+                                                <input type="file" name="doc2[]"
+                                                     class="form-control doc_2 file_size">
                                             </div>
 
                                         </div>

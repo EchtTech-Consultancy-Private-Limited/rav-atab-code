@@ -111,7 +111,7 @@
                      <div class="col-lg-12 col-md-12">
                          <div class="card">
                              <div>
-                                 <div class="p-2">
+                                 <div class="p-3">
                                      <ul class="nav ">
 
 
