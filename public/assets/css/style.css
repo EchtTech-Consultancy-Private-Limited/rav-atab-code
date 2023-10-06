@@ -4662,7 +4662,7 @@ table .checkbox [type="checkbox"]+label {
 }
 
 .nav-tab  .nav .custom-nav-item  .custom-nav-link{
-   
+    font-weight: 500;
     border:1px solid #e91e63 !important;
 }
 .border-apply {
@@ -19228,7 +19228,8 @@ nav.navbar {
 
 .table thead tr th {
     padding: 10px;
-    border-bottom: 1px solid #eee
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
 }
 
 .table-bordered {
@@ -24473,3 +24474,35 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 #Payment_Statuss{
     text-align: center !important;
 }
+
+.mfp-wrap.mfp-gallery.mfp-close-btn-in.mfp-auto-cursor.mfp-with-zoom.mfp-ready {
+    position: relative;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 99999;
+    margin: 75px;
+    
+  }
+
+
+  .mfp-wrap.mfp-gallery.mfp-close-btn-in.mfp-auto-cursor.mfp-with-zoom.mfp-ready {
+    position: relative;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 99999;
+    margin: 0;
+    background: rgba(0,0,0,0.6);
+  }
+  .mfp-figure {
+    width: 80%;
+    height: 80vh;
+    margin: 5% auto;
+    position: relative;
+  }
+
+  .mfp-close {
+    position: absolute;
+    right: 0;
+  }

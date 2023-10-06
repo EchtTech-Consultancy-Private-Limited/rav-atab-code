@@ -1,4 +1,4 @@
-<div>
+<div class="nav-tab">
     <ul class="nav p-2">
         <li class="custom-nav-item ">
             <a class="custom-nav-link {{ request()->is('new-applications*') || request()->is('create-course*') ? 'nav-active' : '' }}" href="{{ url('/new-applications') }}">New Application</a>
