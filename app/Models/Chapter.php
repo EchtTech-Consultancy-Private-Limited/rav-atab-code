@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ApplicationDocument extends Model
+class Chapter extends Model
 {
     use HasFactory;
 
-    protected $table = 'application_documents';
+    protected $table = 'chapters';
 
-
+    public function questions(){
+        return $this->hasMany(Question::class);
+    }
 }

@@ -40,6 +40,7 @@ use App\Mail\tpApplicationmail;
 
 use App\Models\Add_Document;
 use App\Models\DocComment;
+use App\Models\Chapter;
 use App\Mail\paymentSuccessMail;
 
 class LevelController extends Controller
@@ -360,10 +361,10 @@ class LevelController extends Controller
     public function level1tp(Request $request, $id = null)
     {
         if ($request->input('display') == 'applications') {
-           Session::put('session_for_redirections','application-payment');
+            Session::put('session_for_redirections', 'application-payment');
         }
-        if($id!=null){
-            Session::put('session_for_redirections','add-course');
+        if ($id != null) {
+            Session::put('session_for_redirections', 'add-course');
         }
 
         //dd("we are work on manage ");
@@ -398,7 +399,7 @@ class LevelController extends Controller
             /*$course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id(2)->get();*/
             $course = ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->get();
 
-        //   dd($course);
+            //   dd($course);
             /*$collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
 
             //we show previous application listing without copmare level below
@@ -911,7 +912,7 @@ class LevelController extends Controller
             $file->country = Auth::user()->country;
             /* $file->course_duration=$course_duration[$i];*/
             $file->eligibility = $eligibility[$i];
-            $file->mode_of_course = $mode_of_course[$i+1];
+            $file->mode_of_course = $mode_of_course[$i + 1];
             $file->course_brief = $course_brief[$i];
             $file->valid_from = $request->created_at;
             $file->status = '0';
@@ -1242,116 +1243,9 @@ class LevelController extends Controller
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
-        //return $file;
+        $chapters = Chapter::all();
 
-        $doc_id1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[1])->where('course_id', $course_id)->first();
-        $doc_id2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[2])->where('course_id', $course_id)->first();
-        $doc_id3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[3])->where('course_id', $course_id)->first();
-        $doc_id4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[4])->where('course_id', $course_id)->first();
-        $doc_id5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[5])->where('course_id', $course_id)->first();
-        $doc_id6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap2_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap2_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap2_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap2_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap2_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap2_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap3_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap3')[1])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[1])->where('course_id', $course_id)->first();
-
-        // return $doc_id_chap3_1->id;
-
-        $doc_id_chap4_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap4_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap4_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap4_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap4_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_7 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[7])->where('course_id', $course_id)->first();
-
-
-
-        $doc_id_chap5_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap5_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap5_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[3])->where('course_id', $course_id)->first();
-
-        $doc_id_chap6_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap6_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap6_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[3])->where('course_id', $course_id)->first();
-
-        $doc_id_chap7_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap7_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap7_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap7_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap7_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap7_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap8_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap8_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap8_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap8_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap8_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap8_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap9_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap9')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap9_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap9')[2])->where('course_id', $course_id)->first();
-
-        $doc_id_chap10_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap10_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap10_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap10_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[4])->where('course_id', $course_id)->first();
-
-
-        return view('level.upload_document', ['file' => $file, 'data' => $data], compact(
-            'course_id',
-            'doc_id1',
-            'doc_id2',
-            'doc_id3',
-            'doc_id4',
-            'doc_id5',
-            'doc_id6',
-            'doc_id_chap2_1',
-            'doc_id_chap2_2',
-            'doc_id_chap2_3',
-            'doc_id_chap2_4',
-            'doc_id_chap2_5',
-            'doc_id_chap2_6',
-            'doc_id_chap3_1',
-            'doc_id_chap4_1',
-            'doc_id_chap4_2',
-            'doc_id_chap4_3',
-            'doc_id_chap4_4',
-            'doc_id_chap4_5',
-            'doc_id_chap4_6',
-            'doc_id_chap4_7',
-            'doc_id_chap5_1',
-            'doc_id_chap5_2',
-            'doc_id_chap5_3',
-            'doc_id_chap6_1',
-            'doc_id_chap6_2',
-            'doc_id_chap6_3',
-            'doc_id_chap7_1',
-            'doc_id_chap7_2',
-            'doc_id_chap7_3',
-            'doc_id_chap7_4',
-            'doc_id_chap7_5',
-            'doc_id_chap7_6',
-            'doc_id_chap8_1',
-            'doc_id_chap8_2',
-            'doc_id_chap8_3',
-            'doc_id_chap8_4',
-            'doc_id_chap8_5',
-            'doc_id_chap8_6',
-            'doc_id_chap9_1',
-            'doc_id_chap9_2',
-            'doc_id_chap10_1',
-            'doc_id_chap10_2',
-            'doc_id_chap10_3',
-            'doc_id_chap10_4'
-        ))->with('success', 'Documents Update Successfully');
+        return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id'));
     }
 
 
@@ -1364,119 +1258,10 @@ class LevelController extends Controller
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
-        $doc_id1 = Add_Document::orderBy('id', 'asc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[1])->where('course_id', $course_id)->get();
-        // dd($doc_id1);
+        $chapters = Chapter::all();
 
 
-        $doc_id2 = Add_Document::orderBy('id', 'asc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[2])->where('course_id', $course_id)->get();
-
-
-
-        $doc_id3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[3])->where('course_id', $course_id)->first();
-        $doc_id4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[4])->where('course_id', $course_id)->first();
-        $doc_id5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[5])->where('course_id', $course_id)->first();
-        $doc_id6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap2_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap2_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap2_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap2_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap2_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap2_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[6])->where('course_id', $course_id)->first();
-
-
-        $doc_id_chap3_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap3')[1])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[1])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap4_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap4_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap4_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap4_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_7 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[7])->where('course_id', $course_id)->first();
-
-        $doc_id_chap5_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap5_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap5_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[3])->where('course_id', $course_id)->first();
-
-        $doc_id_chap6_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap6_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap6_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[3])->where('course_id', $course_id)->first();
-
-        $doc_id_chap7_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap7_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap7_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap7_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap7_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap7_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap8_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap8_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap8_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap8_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap8_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap8_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap9_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap9')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap9_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap9')[2])->where('course_id', $course_id)->first();
-
-        $doc_id_chap10_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap10_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap10_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap10_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[4])->where('course_id', $course_id)->first();
-
-
-
-
-        return view('asesrar.view_document', ['file' => $file, 'data' => $data], compact(
-            'course_id',
-            'doc_id1',
-            'doc_id2',
-            'doc_id3',
-            'doc_id4',
-            'doc_id5',
-            'doc_id6',
-            'doc_id_chap2_1',
-            'doc_id_chap2_2',
-            'doc_id_chap2_3',
-            'doc_id_chap2_4',
-            'doc_id_chap2_5',
-            'doc_id_chap2_6',
-            'doc_id_chap3_1',
-            'doc_id_chap4_1',
-            'doc_id_chap4_2',
-            'doc_id_chap4_3',
-            'doc_id_chap4_4',
-            'doc_id_chap4_5',
-            'doc_id_chap4_6',
-            'doc_id_chap4_7',
-            'doc_id_chap5_1',
-            'doc_id_chap5_2',
-            'doc_id_chap5_3',
-            'doc_id_chap6_1',
-            'doc_id_chap6_2',
-            'doc_id_chap6_3',
-            'doc_id_chap7_1',
-            'doc_id_chap7_2',
-            'doc_id_chap7_3',
-            'doc_id_chap7_4',
-            'doc_id_chap7_5',
-            'doc_id_chap7_6',
-            'doc_id_chap8_1',
-            'doc_id_chap8_2',
-            'doc_id_chap8_3',
-            'doc_id_chap8_4',
-            'doc_id_chap8_5',
-            'doc_id_chap8_6',
-            'doc_id_chap9_1',
-            'doc_id_chap9_2',
-            'doc_id_chap10_1',
-            'doc_id_chap10_2',
-            'doc_id_chap10_3',
-            'doc_id_chap10_4'
-        ))->with('success', 'Documents Update Successfully');
+        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id'));
     }
 
     public function document_report_verified_by_assessor($id, $course_id)
@@ -1746,65 +1531,24 @@ class LevelController extends Controller
         return view('asesrar.show-comment', compact('comment'));
     }
 
-    public function document_comment_admin_assessor($course_id){
+    public function document_comment_admin_assessor($course_id)
+    {
         $comment = DocComment::orderby('id', 'Desc')->where('course_id', $course_id)->get();
         return view('asesrar.show-comment-accr-admin', compact('comment'));
     }
 
     public function add_courses(Request $request)
     {
-        //dd($request->all());
-
-        if ($request->add_doc_id) {
-            // dd($request->all());
-            $course = Add_Document::find($request->add_doc_id);
-
-
-            $newDoc = new Add_Document;
-            $newDoc->course_id = $request->course_id;
-            $newDoc->section_id = $request->section_id;
-            $newDoc->doc_id = $request->doc_id;
-            $newDoc->application_id = $request->application_id;
-            $newDoc->user_id = Auth::user()->id;
-
-            if ($request->hasfile('fileup_update')) {
-
-            // delete old file
-                // File::delete('level/' . $course->doc_file);
-
-
-                $file = $request->file('fileup_update');
-                $name = $file->getClientOriginalName();
-                $filename = time() . $name;
-                $file->move('level/', $filename);
-                $newDoc->doc_file = $filename;
-
+            $oldFile = Add_Document::where('doc_id',$request->question_id)->where('application_id',$request->application_id)->where('course_id',$request->course_id)->first();
+            if($oldFile){
+                $notApprove = $oldFile->notApraove_count ?? 0;
             }
-
-            $newDoc->notApraove_count = $course->notApraove_count + 1;
-            $newDoc->save();
-
-
-            $course->status = 1;
-            $course->application_id = $request->application_id;
-            $course->user_id = Auth::user()->id;
-
-            //update document comment latest record
-            // $document = DocComment::orderBy('id', 'desc')->where('doc_id', $request->add_doc_id)->first();
-            // $document->status = 0;
-
-            // $document->save();
-
-
-        } else {
-
             $course = new Add_Document;
             $course->course_id = $request->course_id;
-            $course->section_id = $request->section_id;
-            $course->doc_id = $request->doc_id;
+            $course->doc_id = $request->question_id;
             $course->application_id = $request->application_id;
             $course->user_id = Auth::user()->id;
-            $course->notApraove_count = 1;
+            $course->notApraove_count = $notApprove + 1 ?? 1;
 
 
             if ($request->hasfile('fileup')) {
@@ -1815,9 +1559,10 @@ class LevelController extends Controller
                 //dd($filename);
                 $course->doc_file = $filename;
             }
-        }
+
 
         $course->save();
+
         $admin = user::where('role', '1')->orderBy('id', 'DESC')->whereNotIn('id', ['superadmin@yopmail.com'])->first();
         if ($admin) {
             $adminEmail = $admin->email;
@@ -1836,21 +1581,33 @@ class LevelController extends Controller
 
         Mail::to([$superadminEmail, $adminEmail])->send(new SendMail($mailData));
 
-
-        return redirect("$request->previous_url")->with('success', 'Documents Update Successfully');
-        //return response()->json("Course Added Successfully");
+        return response()->json(['message' => 'success']);
     }
 
     public function view_doc($doc_code, $id, $doc_id, $course_id)
     {
-        $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
-        $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
-        $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
+        // Fetch the latest comments for the document.
+        $comment = DocComment::latest('id')->where('doc_id', $doc_id)->get();
 
-        return view('asesrar.view-doc-with-comment', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id'));
+        // Count the latest comments.
+        $doc_latest_record_comment = $comment->count();
+
+        // Fetch the latest document record.
+        $doc_latest_record = Add_Document::latest('id')->find($doc_id);
+
+        return view('asesrar.view-doc-with-comment', [
+            'doc_latest_record' => $doc_latest_record,
+            'id' => $id,
+            'doc_id' => $doc_id,
+            'doc_latest_record_comment' => $doc_latest_record_comment,
+            'doc_code' => $doc_code,
+            'comment' => $comment,
+        ], compact('course_id'));
     }
 
-    public function admin_view_doc($doc_code, $id, $doc_id, $course_id){
+
+    public function admin_view_doc($doc_code, $id, $doc_id, $course_id)
+    {
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
@@ -2664,9 +2421,9 @@ class LevelController extends Controller
 
     public function coursePayment(Request $request, $id = null)
     {
-        if($id){
-            $applicationData = DB::table('applications')->where('id',$id)->first();
-            $course = DB::table('application_courses')->where('application_id',$id)->get();
+        if ($id) {
+            $applicationData = DB::table('applications')->where('id', $id)->first();
+            $course = DB::table('application_courses')->where('application_id', $id)->get();
 
             if (Auth::user()->country == $this->get_india_id()) {
 
@@ -2717,47 +2474,49 @@ class LevelController extends Controller
 
 
 
-        return view('level.course-payment',compact('applicationData','course','currency','total_amount'));
+        return view('level.course-payment', compact('applicationData', 'course', 'currency', 'total_amount'));
     }
 
-    public function create_course($id=null){
-        if($id){
-            $applicationData = DB::table('applications')->where('id',$id)->first();
+    public function create_course($id = null)
+    {
+        if ($id) {
+            $applicationData = DB::table('applications')->where('id', $id)->first();
         }
 
-       $course = DB::table('application_courses')->where('application_id',$id)->get();
-        return view('level.create-course',compact('applicationData','course'));
+        $course = DB::table('application_courses')->where('application_id', $id)->get();
+        return view('level.create-course', compact('applicationData', 'course'));
     }
-   public function newApplications($id=null){
-    if($id){
-        $applicationData = DB::table('applications')->where('id',$id)->first();
-    }else{
-        $applicationData = null;
+    public function newApplications($id = null)
+    {
+        if ($id) {
+            $applicationData = DB::table('applications')->where('id', $id)->first();
+        } else {
+            $applicationData = null;
+        }
+
+        $id = Auth::user()->id;
+        $item = LevelInformation::whereid('1')->get();
+        $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+        return view('level.new_application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
     }
-
-    $id = Auth::user()->id;
-    $item = LevelInformation::whereid('1')->get();
-    $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-    return view('level.new_application',['data'=>$data,'applicationData'=>$applicationData,'item'=>$item]);
-
-   }
 
     public function edit_application(Request $request, $id = null)
     {
-        if($id){
-            $applicationData = DB::table('applications')->where('id',$id)->first();
+        if ($id) {
+            $applicationData = DB::table('applications')->where('id', $id)->first();
         }
 
-       $course = DB::table('application_courses')->where('application_id',$id)->get();
-        return view('level.edit_application',compact('applicationData','course'));
+        $course = DB::table('application_courses')->where('application_id', $id)->get();
+        return view('level.edit_application', compact('applicationData', 'course'));
     }
 
 
-   public function  newApplicationSave(Request $request){
+    public function  newApplicationSave(Request $request)
+    {
 
-    if($request->previous_data && $request->application_id){
-        return redirect(url('create-course/'.$request->application_id));
-    }
+        if ($request->previous_data && $request->application_id) {
+            return redirect(url('create-course/' . $request->application_id));
+        }
 
         $this->validate(
             $request,
@@ -2788,28 +2547,31 @@ class LevelController extends Controller
         $application->designation = $request->designation;
         $application->ip = getHostByName(getHostName());
         $application->save();
-        return redirect(url('create-course/'.$application->id))->with('success','Application Create Successfully');
-   }
-
-
-    public function applictionTable(){
-      $collection = ApplicationPayment::orderBy('id', 'desc')->whereuser_id(Auth::user()->id)->get();
-      return view('level.application_table',['collection'=>$collection]);
+        return redirect(url('create-course/' . $application->id))->with('success', 'Application Create Successfully');
     }
 
-    public function faqslist(){
+
+    public function applictionTable()
+    {
+        $collection = ApplicationPayment::orderBy('id', 'desc')->whereuser_id(Auth::user()->id)->get();
+        return view('level.application_table', ['collection' => $collection]);
+    }
+
+    public function faqslist()
+    {
         $faqs = Faq::where('category', 1)->orderby('sort_order', 'Asc')->get();
-        return view('level.applicationFaq',['faqs'=>$faqs]);
+        return view('level.applicationFaq', ['faqs' => $faqs]);
     }
 
-    public function pendingPaymentlist(){
+    public function pendingPaymentlist()
+    {
 
         $level_list_data = DB::table('applications')
             ->where('applications.user_id', Auth::user()->id)
             ->where('applications.status', '0')
             ->select('applications.*', 'countries.name as country_name')
             ->join('countries', 'applications.country', '=', 'countries.id')->get();
-        return view('level.pendinglistApplication',['level_list_data'=>$level_list_data]);
+        return view('level.pendinglistApplication', ['level_list_data' => $level_list_data]);
     }
 
     public function emailValidaion(Request $request)
@@ -2824,7 +2586,4 @@ class LevelController extends Controller
 
         return response()->json(['status' => 'unique']);
     }
-
-
-
 }
