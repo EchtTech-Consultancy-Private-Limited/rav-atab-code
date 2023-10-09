@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Add_Document extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'id';
+
     protected $table = 'add_documents';
 
     public function question(){

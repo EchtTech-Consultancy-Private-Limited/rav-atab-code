@@ -1547,6 +1547,7 @@ class LevelController extends Controller
             $course = new Add_Document;
             $course->course_id = $request->course_id;
             $course->doc_id = $request->question_id;
+            $course->question_id = $request->question_pid;
             $course->application_id = $request->application_id;
             $course->user_id = Auth::user()->id;
             $course->notApraove_count = $notApprove + 1 ?? 1;
@@ -1595,6 +1596,7 @@ class LevelController extends Controller
 
         // Fetch the latest document record.
         $doc_latest_record = Add_Document::latest('id')->find($doc_id);
+
 
         return view('asesrar.view-doc-with-comment', [
             'doc_latest_record' => $doc_latest_record,
