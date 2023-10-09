@@ -85,6 +85,7 @@ class LevelController extends Controller
         $Application = Application::whereid(dDecrypt($id))->get();
         $ApplicationCourse = ApplicationCourse::whereapplication_id($Application[0]->id)->get();
         $ApplicationPayment = ApplicationPayment::whereapplication_id($Application[0]->id)->get();
+        // dd($ApplicationPayment);
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($Application[0]->id)->get();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
@@ -2145,23 +2146,11 @@ class LevelController extends Controller
             'attachment' => asset('acknowledgment-letter.pdf')
         ];
 
-        Mail::to($user_info->email)->send(new SendAcknowledgment($send_acknowledgment_letter));
-        //Mail sending script ends here
 
 
-        // $file=ApplicationPayment::whereid($id)->get('application_id');
-        // $file=ApplicationCourse::where('application_id',$file[0]->application_id)->get('id');
-
-
-        // foreach($file as $item)
-        // {
-        //     $ApplicationCourse=ApplicationCourse::find($item->id);
-        //     $ApplicationCourse->status=($ApplicationCourse->status==1?'0':'1');
-        //     $ApplicationCourse->update();
-        // }
-
-        //status change in application
-
+        if(url('/') != 'http://127.0.0.1:8000'){
+            Mail::to($user_info->email)->send(new SendAcknowledgment($send_acknowledgment_letter));
+        }
 
         return Redirect::back()->with('success', 'Status Changed Successfully');
     }

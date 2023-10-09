@@ -62,7 +62,8 @@
                             <li class="breadcrumb-item active"> View Previous Applications </li>
                         </ul>
 
-                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
+                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary"
+                            style="float:right;">Back
                         </a>
 
                     </div>
@@ -572,14 +573,12 @@
 
                                     {{-- @if (Auth::user()->role != '6') --}}
                                     @if ($ApplicationPayment->status == '2')
-
-
                                         <div class="col-sm-4 payment_file">
                                             <div class="form-group">
                                                 <div class="form-line">
                                                     <label><strong>Upload Payment Slip</strong></label><br>
 
-                                                <br>
+                                                    <br>
 
                                                     {{-- {{ $ApplicationPayment->payment_slip }} --}}
 
@@ -630,9 +629,8 @@
 
                                     @if (Auth::user()->role == '6')
                                         @if ($ApplicationPayment->status == '1')
-
-                                                <div class="col-sm-4 payment_file">
-                                                    <form
+                                            <div class="col-sm-4 payment_file">
+                                                <form
                                                     action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                     method="post" id="frmtypes" enctype="multipart/form-data">
                                                     @csrf
@@ -673,23 +671,23 @@
 
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4">
+                                            </div>
+                                            <div class="col-md-4">
 
-                                                    <div class="form-group">
-                                                        <div class="form-line">
-                                                            <label><strong>Payment Remark <span
-                                                                        class="text-danger">*</span></strong></label><br>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label><strong>Payment Remark <span
+                                                                    class="text-danger">*</span></strong></label><br>
 
-                                                            <div class="col-md-12">
-                                                                <input type="text" name="paymentremark" required
-                                                                    value="{{ $ApplicationPayment->payment_remark }}"
-                                                                    onchange="javascript:$('#frmtypes').submit();">
-                                                            </div>
-
+                                                        <div class="col-md-12">
+                                                            <input type="text" name="paymentremark" required
+                                                                value="{{ $ApplicationPayment->payment_remark }}"
+                                                                onchange="javascript:$('#frmtypes').submit();">
                                                         </div>
+
                                                     </div>
                                                 </div>
+                                            </div>
 
                                             </form>
                                         @endif
@@ -701,12 +699,18 @@
                                                 <div class="form-line">
                                                     <label><strong>Verify Payment </strong></label><br>
                                                     <label><br>
-                                                        @if ($ApplicationPayment->status == '0')
-                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}" class="payment-pending"
-                                                                onclick="return confirm_option('change status')">
-                                                                @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-primary btn-sm"> Payment Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @else @endif
-                                                                </a>
+                                                        @if ($ApplicationPayment->status == 0)
+                                                        <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                                            class="btn btn-primary btn-sm payment-pending btn-payment-approval"
+                                                            onclick="return confirm_option('Approve Payment & Add Remark')">Approve Payment & Add Remark</a>
+
+                                                        @elseif ($ApplicationPayment->status == 1)
+                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                                                class="btn btn-success btn-sm application-process"
+                                                                onclick="return confirm_option('change status')">Application
+                                                                Process</a>
                                                         @endif
+
 
 
 
@@ -714,11 +718,17 @@
                                                             @if ($ApplicationPayment->status == '1')
                                                                 <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                     onclick="return confirm_option('change status')">
-                                                                    @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-warning">Pending</strong></div>
-
+                                                                    @if ($ApplicationPayment->status == 0)
+                                                                        <div class="col-black"><strong
+                                                                                class="btn btn-warning">Pending</strong>
+                                                                        </div>
                                                                     @elseif($ApplicationPayment->status == 1)
-                                                                    <div class=" col-green" ><strong class="btn btn-warning">Final Approval</strong></div> @else @endif
-                                                                    </a>
+                                                                        <div class=" col-green"><strong
+                                                                                class="btn btn-warning">Final
+                                                                                Approval</strong></div>
+                                                                    @else
+                                                                    @endif
+                                                                </a>
                                                             @endif
                                                         @else
                                                             @if ($ApplicationPayment->status == '1')
@@ -788,13 +798,28 @@
 
     <script>
         function confirm_option() {
-            if (!confirm("Are you sure to approved the payment of this application!")) {
-                return false;
+        Swal.fire({
+            title: 'Do you want to approve this payment?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, approve payment & add remarks',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Place your approval, remarks, and payment receipt code here
+                // You can use AJAX to perform these actions
+
+                // After performing the actions, redirect to the anchor button's href link
+                var anchorLink = document.querySelector('.btn-payment-approval').getAttribute('href');
+                window.location.href = anchorLink;
             }
+        });
 
-            return true;
-
-        }
+        // Prevent the default link action
+        return false;
+    }
     </script>
 
     <script>

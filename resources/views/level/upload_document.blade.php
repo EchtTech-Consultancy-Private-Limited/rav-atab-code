@@ -323,7 +323,7 @@
                                                                         {{-- getting documents for each row end point --}}
                                                                     </td>
                                                                     <td>
-                                                                        @if (count($question->documents) > 0)
+                                                                        @if (isset($question->document->comment))
                                                                             <button
                                                                                 class="expand-button btn btn-primary"
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>
