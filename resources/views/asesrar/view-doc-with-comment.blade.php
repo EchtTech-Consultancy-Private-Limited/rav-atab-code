@@ -83,98 +83,92 @@
 
 
                 <div class="col-lg-12 col-md-12">
-
+                    <div>
+                        <div>
+                            <a href="{{ url('nationl-accesser')}}" type="button" class="btn btn-primary" style="float:right;">Back</a>
+                        </div>
+                    </div>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="level_information" aria-expanded="true">
                             <div class="row clearfix">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="card project_widget">
-
                                         <div class="body">
+                                            <h4>Create NC</h4><br><br>
 
-                                            <a href="{{ url('nationl-accesser')}}" type="button" class="btn btn-primary" style="float:right;">Back</a>
-
-
-                                                <h4>Create NC</h4><br><br>
-
-                                                     <!--you can send comment to admin on this record only one time -->
-                                                    @if(get_doccomment_status($doc_id)==3 || get_doccomment_status($doc_id) != null && get_doccomment_status($doc_id)!=1 && get_doccomment_status($doc_id)!=2 )
-                                                     <h4 class="text-center">You Have Send Comment to Admin</h4>
-
-                                                     @elseif(get_doccomment_status($doc_id)==1 || get_doccomment_status($doc_id)==2)
-
-                                                     <h4 class="text-center">You Document Profile Locked Successfully</h4>
-
-                                                     @else
-                                                     <form method="post" action="{{ url('add-accr-comment-view-doc') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="previous_url" value="{{ Request::url() }}">
-                                                        <input type="hidden"  value="{{$doc_id}}" name="doc_id">
-                                                        <input type="hidden"  value="{{$doc_code}}" name="doc_code">
-                                                        <input type="hidden"  value="{{$course_id}}" name="course_id">
-                                                        <div class="row">
+                                            @if (in_array(get_doccomment_status($doc_id), [1, 2]))
+                                            <h4 class="text-center">
+                                                Document not approved - Rejected with
+                                                @if (get_doccomment_status($doc_id) == 1)
+                                                    NC1
+                                                @elseif (get_doccomment_status($doc_id) == 2)
+                                                    NC2
+                                                @endif
+                                            </h4>
+                                        @elseif (get_doccomment_status($doc_id) == 3)
+                                            <h4 class="text-center">
+                                                Document not approved and this document has been sent to admin
+                                            </h4>
+                                        @elseif (get_doccomment_status($doc_id) == 4)
+                                            <h4 class="text-center">
+                                                Your Document has been approved
+                                            </h4>
 
 
-
-                                                        @if($doc_latest_record->notApraove_count == 1)
-
+                                            @else
+                                                <form method="post" action="{{ url('add-accr-comment-view-doc') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="previous_url" value="{{ Request::url() }}">
+                                                    <input type="hidden" name="doc_id" value="{{ $doc_id }}">
+                                                    <input type="hidden" name="doc_code" value="{{ $doc_code }}">
+                                                    <input type="hidden" name="course_id" value="{{ $course_id }}">
+                                                    <div class="row">
+                                                        @if ($doc_latest_record->notApraove_count == 1)
                                                             <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
-                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                <select required class="form-control required text-center" name="status">
                                                                     <option value="">--Select--</option>
-                                                                    <option value="2">NC 1</option>
-                                                                    <option value="1">Close</option>
+                                                                    <option value="1">NC 1</option>
+                                                                    <option value="4">Close</option>
                                                                 </select>
                                                             </div>
-
                                                         @endif
 
-
-                                                        @if($doc_latest_record->notApraove_count == 2)
+                                                        @if ($doc_latest_record->notApraove_count == 2)
                                                             <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
-                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                <select required class="form-control required text-center" name="status">
                                                                     <option value="">--Select--</option>
                                                                     <option value="2">NC 2</option>
-                                                                    <option value="1">Close</option>
+                                                                    <option value="4">Close</option>
                                                                 </select>
                                                             </div>
                                                         @endif
 
-                                                        @if($doc_latest_record->notApraove_count  >= 3)
+                                                        @if ($doc_latest_record->notApraove_count >= 3)
                                                             <div class="col-sm-12 col-md-4">
                                                                 <label>Select Type</label>
-                                                                <select required class="form-control required text-center" id="show-view-doc-options" name="status">
+                                                                <select required class="form-control required text-center" name="status">
                                                                     <option value="">--Select--</option>
-                                                                    <option value="1">Close</option>
-                                                                    <option value="0">Not Recommended</option>
+                                                                    <option value="4">Close</option>
+                                                                    <option value="3">Not Recommended</option>
                                                                 </select>
                                                             </div>
                                                         @endif
 
-
-                                                            <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
-
-                                                                <label>Add Comment</label>
-                                                                <textarea rows="10" cols="60" name="doc_comment" class="form-control"></textarea>
-                                                            </div>
-                                                            <input type="submit" value="Add Comment" class="btn btn-primary">
+                                                        <div class="col-sm-12 col-md-4" id="doc-comment-textarea">
+                                                            <label>Add Comment</label>
+                                                            <textarea rows="10" cols="60" name="doc_comment" class="form-control"></textarea>
                                                         </div>
-                                                    </form>
-                                                    @endif
-
-
-
-
-
-                                            </div>
-
+                                                        <input type="submit" value="Add Comment" class="btn btn-primary">
+                                                    </div>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
