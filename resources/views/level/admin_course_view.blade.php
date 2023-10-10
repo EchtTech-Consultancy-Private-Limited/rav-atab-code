@@ -2,6 +2,8 @@
 
 
 <title>RAV Accreditation Previous Applications View</title>
+<link rel="stylesheet" type="text/css"
+    href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
 {{--
 <link rel="stylesheet" type="text/css" href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
  --}}
@@ -71,22 +73,22 @@
             </div>
 
             @if (Session::has('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '{{ session('success') }}',
-        });
-    </script>
-@elseif(Session::has('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ session('error') }}',
-        });
-    </script>
-@endif
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: '{{ session('success') }}',
+                    });
+                </script>
+            @elseif(Session::has('error'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: '{{ session('error') }}',
+                    });
+                </script>
+            @endif
 
 
 
@@ -399,24 +401,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Valid From</strong></label><br>
-                                                <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at)) }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label><strong> Valid To</strong></label><br>
-                                                    <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at->addYear())) }}</label>            </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -427,17 +412,22 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        @if (count($ApplicationCourses->documents) > 0)
+                                            @foreach ($ApplicationCourses->documents as $document)
+                                                <div class="col-sm-4">
+                                                    <label for="">
+                                                        <b>Doc {{ $loop->iteration }}</b>
+                                                    </label>
+                                                    <div>
+                                                        <a target="_blank" href="{{ url('show-course-pdf/'.$document->document_file) }}">View Doc{{ $loop->iteration }}</a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
 
-
-                                    <!-- <div class="row clearfix">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Course Brief</strong></label><br>
-                                                <label>{{ $ApplicationCourses->course_brief ?? '' }}</label>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
+                                        @endif
+                                    </div>
 
 
 
@@ -590,11 +580,11 @@
 
 
 
-                                                   <div class="mt-2 text-danger">
-                                                    @if (!$ApplicationPayment->payment_slip)
-                                                    File not available!
-                                                @endif
-                                                   </div>
+                                                    <div class="mt-2 text-danger">
+                                                        @if (!$ApplicationPayment->payment_slip)
+                                                            File not available!
+                                                        @endif
+                                                    </div>
 
                                                     <?php
                                                     substr($ApplicationPayment->payment_slip, -3);
@@ -669,7 +659,6 @@
                                                                                 Payment Slip</strong></label>
                                                                         <input type="file" name="payment_slip"
                                                                             class="form-control" id="payment_slip"
-
                                                                             value="{{ $ApplicationPayment->payment_slip }}">
                                                                         <?php
                                                                         $fileExtension = substr($ApplicationPayment->payment_slip, -3);
@@ -722,35 +711,35 @@
                                         <div class="col-sm-4">
                                             <div class="form-group ">
                                                 <div class="form-line">
-                                                        @if ($ApplicationPayment->status == 0)
+                                                    @if ($ApplicationPayment->status == 0)
                                                         <label><strong>Verify Payment </strong></label><br>
                                                         <label><br>
                                                             <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
                                                                 class="btn btn-primary btn-sm payment-pending btn-payment-approval"
                                                                 onclick="return confirm_option('Approve Payment & Add Remark')">Approve
                                                                 Payment & Add Remark</a>
-
-                                                        @endif
-
+                                                    @endif
 
 
 
-                                                        @if ($ApplicationPayment->status == '2')
-                                                            {{-- <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}" --}}
-                                                            {{-- onclick="return confirm_option('change status')" --}}
-                                                            @if ($ApplicationPayment->status == 1)
-                                                                <div class="badge col-green">Application Proccess</div>
-                                                            @elseif($ApplicationPayment->status == 2)
+
+                                                    @if ($ApplicationPayment->status == '2')
+                                                        {{-- <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}" --}}
+                                                        {{-- onclick="return confirm_option('change status')" --}}
+                                                        @if ($ApplicationPayment->status == 1)
+                                                            <div class="badge col-green">Application Proccess</div>
+                                                        @elseif($ApplicationPayment->status == 2)
                                                             <label><strong>Payment Status </strong></label>
                                                             <br>
                                                             <div class="pt-2">
-                                                                <span class="bg-success text-white p-2" style="cursor: default;">Payment
-                                                                Approved</span>
+                                                                <span class="bg-success text-white p-2"
+                                                                    style="cursor: default;">Payment
+                                                                    Approved</span>
                                                             </div>
-                                                            @else
-                                                            @endif
-                                                            {{-- </a> --}}
+                                                        @else
                                                         @endif
+                                                        {{-- </a> --}}
+                                                    @endif
 
                                                 </div>
                                             </div>
@@ -805,36 +794,38 @@
             return false;
         }
     </script>
+<script>
+    $(document).ready(function() {
 
-    <script>
-        $(document).ready(function() {
+        $('.image-link').magnificPopup({
 
-            $('.image-link').magnificPopup({
+            type: 'image',
 
-                type: 'image',
+            mainClass: 'mfp-with-zoom',
 
-                mainClass: 'mfp-with-zoom',
+            gallery: {
 
-                gallery: {
+                enabled: true
 
-                    enabled: true
-
-                },
-                zoom: {
-                    enabled: true,
-                    duration: 300, // duration of the effect, in milliseconds
-                    easing: 'ease-in-out', // CSS transition easing function
-                    opener: function(openerElement) {
-                        return openerElement.is('img') ? openerElement : openerElement.find('img');
-                    }
+            },
+            zoom: {
+                enabled: true,
+                duration: 300, // duration of the effect, in milliseconds
+                easing: 'ease-in-out', // CSS transition easing function
+                opener: function(openerElement) {
+                    return openerElement.is('img') ? openerElement : openerElement.find('img');
                 }
-            });
+            }
         });
+    });
 
-        $(".payment_alert").click(function() {
-            alert('Document is pending for approval from Accounts department')
-        });
-    </script>
+
+    $(".payment_alert").click(function() {
+        alert('Document is pending for approval from Accounts department')
+    });
+</script>
+
+
 
     <script>
         $('.payment_details_file').on('click', function() {

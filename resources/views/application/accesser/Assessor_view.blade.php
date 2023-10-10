@@ -344,8 +344,7 @@
                                         </div>
                                     </div>
 
-                                    @if($spocData->status == 1)
-                                    @if($ApplicationDocument[0]->document_show == 2)
+
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -373,15 +372,14 @@
                                                 <label><strong>Course Details (Excel format) </strong></label><br>
                                                 <label>
                                                     <a  href="{{ url('documnet/'.$ApplicationDocument[2]->document_file) }}" target="_blank" title="Document 3" id="docpdf3" download>
-                                                        <i class="fa fa-download mr-2"></i> PDF 3
+                                                        <i class="fa fa-download mr-2"></i> Downloadable File
                                                     </a>
                                             </label>
                                             </div>
                                         </div>
                                     </div>
 
-                                    @endif
-                                    @endif
+
 
 
 
@@ -426,7 +424,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Date</strong></label><br>
-                                                <label>{{ $ApplicationPayment->payment_date }}</label>
+                                                <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -457,7 +456,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong>Course Count</strong></label><br>
+                                                <label><strong>Total Course</strong></label><br>
                                                 <label>{{ $ApplicationPayment->course_count ?? '' }}</label>
                                             </div>
                                         </div>

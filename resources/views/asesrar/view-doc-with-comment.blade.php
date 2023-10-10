@@ -158,7 +158,7 @@
 
                                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label>Add Comment</label>
-                                                                    <textarea rows="10" cols="60" name="doc_comment" class="form-control">This file is not approved</textarea>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control">This file is not approved</textarea>
                                                                 </div>
                                                             </div>
 
@@ -337,8 +337,10 @@
 
     <script>
         document.getElementById("status").addEventListener("change", function () {
+            var comment_text = document.getElementById("comment_text");
             var commentSection = document.getElementById("comment-section");
             if (this.value === "4") { // If "Close" is selected
+                comment_text.value = "Document has been approved";
                 commentSection.style.display = "none"; // Hide the textarea
             } else {
                 commentSection.style.display = "block"; // Show the textarea for other options

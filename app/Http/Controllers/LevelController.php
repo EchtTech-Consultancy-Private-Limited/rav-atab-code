@@ -1514,18 +1514,13 @@ class LevelController extends Controller
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
-        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id'));
+        $docByAdmin = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->where('user_id',auth()->user()->id)->first();
+
+        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id','docByAdmin'));
     }
 
     public function acc_doc_comments(Request $request)
     {
-
-        //dd("yesss");
-        /*$this->validate($request, [
-            'status' => 'required',
-        ]);*/
-        //return $request->all();
-        //return $request->course_id;
         $login_id = Auth::user()->role;
         if ($login_id == 3) {
             $request->doc_code;
