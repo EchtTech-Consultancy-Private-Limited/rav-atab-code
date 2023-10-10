@@ -2152,7 +2152,7 @@ class LevelController extends Controller
             Mail::to($user_info->email)->send(new SendAcknowledgment($send_acknowledgment_letter));
         }
 
-        return Redirect::back()->with('success', 'Status Changed Successfully');
+        return Redirect::back()->with('success', 'Payment Status Changed Successfully');
     }
 
 
@@ -2389,10 +2389,11 @@ class LevelController extends Controller
             $doc1->move('documnet/', $filename);
             $data->payment_slip = $filename;
         }
+        $data->status = $request->status ?? 1;
         $data->payment_remark = $request->paymentremark;
         $data->save();
 
-        return back()->with('sussess', 'Payment Confirmation is Successfully');;
+        return back()->with('success', 'Payment confirmation has been successfully processed.');
     }
 
 
