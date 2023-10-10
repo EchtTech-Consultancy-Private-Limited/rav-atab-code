@@ -499,7 +499,7 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Date</strong></label><br>
-                                                <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-y') }}
+                                                <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
                                                 </label>
                                             </div>
                                         </div>

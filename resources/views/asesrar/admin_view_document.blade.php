@@ -197,25 +197,31 @@
                                                                             <td>{{ $question->code ?? '' }}</td>
                                                                             <td>{{ $question->title ?? '' }}</td>
                                                                             <td>
-                                                                                <div class="d-flex">
-                                                                                    @if (count($question->documents) <= 1)
+                                                                                @if (count($question->documents) > 0)
+                                                                                    <div class="d-flex">
+                                                                                        @if (count($question->documents) <= 1)
+                                                                                                @foreach ($question->documents as $doc)
+                                                                                                <a target="_blank" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                class="btn text-white bg-primary btn-sm"
+                                                                                                style="color: #fff ;margin:10px;"
+                                                                                                id="view_doc1">View Document</a>
+                                                                                                @endforeach
+                                                                                        @else
                                                                                             @foreach ($question->documents as $doc)
-                                                                                            <a target="_blank" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                            href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                            class="btn text-white bg-primary btn-sm"
-                                                                                            style="color: #fff ;margin:10px;"
-                                                                                            id="view_doc1">View Document</a>
-                                                                                            @endforeach
-                                                                                    @else
-                                                                                        @foreach ($question->documents as $doc)
-                                                                                                    <a target="_blank" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                                    class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                    style="color: #fff ;margin:10px;"
-                                                                                                    id="view_doc1">V{{ $loop->iteration ?? '' }}</a>
-                                                                                            @endforeach
-                                                                                    @endif
-                                                                                </div>
+                                                                                                        <a target="_blank" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                        href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                        class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
+                                                                                                        style="color: #fff ;margin:10px;"
+                                                                                                        id="view_doc1">V{{ $loop->iteration ?? '' }}</a>
+                                                                                                @endforeach
+                                                                                        @endif
+                                                                                    </div>
+                                                                                @else
+                                                                                    <span class="bg-danger p-2 text-white" style="border-radius: 5px;">
+                                                                                        Documents not uploaded
+                                                                                    </span>
+                                                                                @endif
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
