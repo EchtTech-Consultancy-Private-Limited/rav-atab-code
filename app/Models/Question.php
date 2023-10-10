@@ -16,6 +16,10 @@ class Question extends Model
     }
 
     public function documents(){
-        return $this->hasMany(Add_Document::class,'doc_id','code');
+        return $this->hasMany(Add_Document::class,'question_id','id');
+    }
+
+    public function document(){
+        return $this->hasOne(Add_Document::class,'question_id','id');
     }
 }

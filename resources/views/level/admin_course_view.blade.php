@@ -62,22 +62,32 @@
                             <li class="breadcrumb-item active"> View Previous Applications </li>
                         </ul>
 
-                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
+                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary"
+                            style="float:right;">Back
                         </a>
 
                     </div>
                 </div>
             </div>
 
-            @if (Session::has('sussess'))
-                <div class="alert alert-success" role="alert">
-                    {{ session::get('sussess') }}
-                </div>
-            @elseif(Session::has('error'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session::get('error') }}
-                </div>
-            @endif
+            @if (Session::has('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+        });
+    </script>
+@elseif(Session::has('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '{{ session('error') }}',
+        });
+    </script>
+@endif
+
 
 
 
@@ -489,7 +499,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Date</strong></label><br>
-                                                <label>{{ $ApplicationPayment->payment_date }}</label>
+                                                <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-y') }}
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -522,7 +533,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong>Course Count</strong></label><br>
+                                                <label><strong>Total Courses</strong></label><br>
                                                 <label>{{ $ApplicationPayment->course_count ?? '' }}</label>
                                             </div>
                                         </div>
@@ -572,14 +583,12 @@
 
                                     {{-- @if (Auth::user()->role != '6') --}}
                                     @if ($ApplicationPayment->status == '2')
-
-
                                         <div class="col-sm-4 payment_file">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <label><strong>Upload Payment Slip</strong></label><br>
+                                                    <label><strong>Payment Slip</strong></label><br>
 
-                                                <br>
+                                                    <br>
 
                                                     {{-- {{ $ApplicationPayment->payment_slip }} --}}
 
@@ -630,68 +639,78 @@
 
                                     @if (Auth::user()->role == '6')
                                         @if ($ApplicationPayment->status == '1')
-
-                                                <div class="col-sm-4 payment_file">
-                                                    <form
+                                            <div class="col-sm-12 payment_file">
+                                                <form
                                                     action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                    method="post" id="frmtypes" enctype="multipart/form-data">
+                                                    method="post" enctype="multipart/form-data">
                                                     @csrf
-                                                    <div class="form-group">
-                                                        <div class="form-line">
-                                                            <label><strong>Upload Payment Slip </strong></label><br>
-
-                                                            <div class="col-md-12">
-                                                                <input type="file" name="payment_slip"
-                                                                    class="form-control " required
-                                                                    value="{{ $ApplicationPayment->payment_slip }}">
+                                                    <div class="card" style="border:1px solid #ccc;">
+                                                        <div class="card-header">
+                                                            <div class="d-flex justify-content-between p-2">
+                                                                <b>Payment Approval</b>
+                                                                <div>
+                                                                    @if ($ApplicationPayment->status == 1)
+                                                                        <span class="bg-warning p-2 text-dark"
+                                                                            style="border-radius: 5px;">Application In
+                                                                            Process</span>
+                                                                    @endif
+                                                                </div>
                                                             </div>
-
-                                                            {{-- {{ $ApplicationPayment->payment_slip }} --}}
-
-                                                            <?php
-                                                            substr($ApplicationPayment->payment_slip, -3);
-
-                                                            $data = substr($ApplicationPayment->payment_slip, -3);
-                                                            ?>
-
-
-                                                            @if ($data == 'pdf')
-                                                                <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
-                                                                    target="_blank" title="Document 3" id="docpdf3"
-                                                                    download>
-                                                                    <i class="fa fa-download mr-2"></i>Payment pdf
-                                                                </a>
-                                                            @else
-                                                                @if (isset($ApplicationPayment->payment_slip))
-                                                                    <a target="_blank" class="image-link"
-                                                                        href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
-                                                                        <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
-                                                                            style="width:100px;height:70px;">
-                                                                    </a>
-                                                                @endif
-                                                            @endif
-
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row pt-3">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group" style="margin-top: 10px;">
+                                                                        <label for="payment_slip"><strong>Upload
+                                                                                Payment Slip</strong></label>
+                                                                        <input type="file" name="payment_slip"
+                                                                            class="form-control" id="payment_slip"
+                                                                            required
+                                                                            value="{{ $ApplicationPayment->payment_slip }}">
+                                                                        <?php
+                                                                        $fileExtension = substr($ApplicationPayment->payment_slip, -3);
+                                                                        ?>
+                                                                        @if ($fileExtension == 'pdf')
+                                                                            <a href="{{ asset('document/' . $ApplicationPayment->payment_slip) }}"
+                                                                                target="_blank" title="Payment PDF"
+                                                                                id="docpdf3" download>
+                                                                                <i
+                                                                                    class="fa fa-download mr-2"></i>Payment
+                                                                                pdf
+                                                                            </a>
+                                                                        @else
+                                                                            @if (isset($ApplicationPayment->payment_slip))
+                                                                                <a target="_blank" class="image-link"
+                                                                                    href="{{ asset('document/' . $ApplicationPayment->payment_slip) }}">
+                                                                                    <img src="{{ asset('document/' . $ApplicationPayment->payment_slip) }}"
+                                                                                        style="width:100px;height:70px;"
+                                                                                        alt="Payment Slip">
+                                                                                </a>
+                                                                            @endif
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <div class="form-line">
+                                                                            <label><strong>Payment Remark <span
+                                                                                        class="text-danger">*</span></strong></label><br>
+                                                                            <input type="text" name="paymentremark"
+                                                                                required
+                                                                                value="{{ $ApplicationPayment->payment_remark }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer d-flex justify-content-end">
+                                                            <input type="hidden" name="status" value="2">
+                                                            <button class="btn btn-primary">Click to Approve
+                                                                Payment</button>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4">
-
-                                                    <div class="form-group">
-                                                        <div class="form-line">
-                                                            <label><strong>Payment Remark <span
-                                                                        class="text-danger">*</span></strong></label><br>
-
-                                                            <div class="col-md-12">
-                                                                <input type="text" name="paymentremark" required
-                                                                    value="{{ $ApplicationPayment->payment_remark }}"
-                                                                    onchange="javascript:$('#frmtypes').submit();">
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </form>
+                                                </form>
+                                            </div>
                                         @endif
                                     @endif
 
@@ -699,38 +718,17 @@
                                         <div class="col-sm-4">
                                             <div class="form-group ">
                                                 <div class="form-line">
-                                                    <label><strong>Verify Payment </strong></label><br>
-                                                    <label><br>
-                                                        @if ($ApplicationPayment->status == '0')
-                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}" class="payment-pending"
-                                                                onclick="return confirm_option('change status')">
-                                                                @if ($ApplicationPayment->status == 0) <div class=" col-black"><strong class="btn btn-primary btn-sm"> Payment Pending</strong></div> @elseif($ApplicationPayment->status == 1) <div class="badge col-green">Application Proccess</div> @else @endif
-                                                                </a>
+                                                        @if ($ApplicationPayment->status == 0)
+                                                        <label><strong>Verify Payment </strong></label><br>
+                                                        <label><br>
+                                                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                                                class="btn btn-primary btn-sm payment-pending btn-payment-approval"
+                                                                onclick="return confirm_option('Approve Payment & Add Remark')">Approve
+                                                                Payment & Add Remark</a>
+
                                                         @endif
 
 
-
-                                                        @if ($ApplicationPayment->payment_remark != '')
-                                                            @if ($ApplicationPayment->status == '1')
-                                                                <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                                    onclick="return confirm_option('change status')">
-                                                                    @if ($ApplicationPayment->status == 0) <div class="col-black"><strong class="btn btn-warning">Pending</strong></div>
-
-                                                                    @elseif($ApplicationPayment->status == 1)
-                                                                    <div class=" col-green" ><strong class="btn btn-warning">Final Approval</strong></div> @else @endif
-                                                                    </a>
-                                                            @endif
-                                                        @else
-                                                            @if ($ApplicationPayment->status == '1')
-                                                                <a href="javascript:void(0)"
-                                                                    class="payment_details_file">
-                                                                    <div class=" col-green"><strong
-                                                                            class="btn btn-warning">Final
-                                                                            Approval</strong></div>
-                                                                @else
-                                                            @endif
-                                                            </a>
-                                                        @endif
 
 
                                                         @if ($ApplicationPayment->status == '2')
@@ -739,7 +737,8 @@
                                                             @if ($ApplicationPayment->status == 1)
                                                                 <div class="badge col-green">Application Proccess</div>
                                                             @elseif($ApplicationPayment->status == 2)
-                                                                <div class=" col-green" style="font-size:17px"><strong
+                                                            <label><strong>Payment Status </strong></label>
+                                                                <div class="btn btn-success pt-2 shadow-none" style="font-size:14px; cursor:default;"><strong
                                                                         class="">Application Payment
                                                                         Approved</strong>
                                                                 </div>
@@ -770,13 +769,6 @@
             </div>
         @endforeach
 
-
-
-        {{-- <div class="col-lg-12 p-t-20 text-center">
-            <a href="" class="btn btn-primary waves-effect m-r-15">Approved</a>
-            <a href="{{ url()->previous() }} " class="btn btn-danger waves-effect">back</a>
-        </div> --}}
-
         </div>
     </section>
 
@@ -788,12 +780,24 @@
 
     <script>
         function confirm_option() {
-            if (!confirm("Are you sure to approved the payment of this application!")) {
-                return false;
-            }
+            Swal.fire({
+                title: 'Do you want to approve this payment?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve payment & add remarks',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-            return true;
+                    var anchorLink = document.querySelector('.btn-payment-approval').getAttribute('href');
+                    window.location.href = anchorLink;
+                }
+            });
 
+
+            return false;
         }
     </script>
 

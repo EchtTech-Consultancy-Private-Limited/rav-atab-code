@@ -24474,7 +24474,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 #Payment_Statuss{
     text-align: center !important;
 }
-
+/* 
 .mfp-wrap.mfp-gallery.mfp-close-btn-in.mfp-auto-cursor.mfp-with-zoom.mfp-ready {
     position: relative;
     max-width: 100%;
@@ -24505,4 +24505,4 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
   .mfp-close {
     position: absolute;
     right: 0;
-  }
+  } */

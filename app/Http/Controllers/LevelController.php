@@ -85,6 +85,7 @@ class LevelController extends Controller
         $Application = Application::whereid(dDecrypt($id))->get();
         $ApplicationCourse = ApplicationCourse::whereapplication_id($Application[0]->id)->get();
         $ApplicationPayment = ApplicationPayment::whereapplication_id($Application[0]->id)->get();
+        // dd($ApplicationPayment);
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($Application[0]->id)->get();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
@@ -1547,6 +1548,7 @@ class LevelController extends Controller
             $course = new Add_Document;
             $course->course_id = $request->course_id;
             $course->doc_id = $request->question_id;
+            $course->question_id = $request->question_pid;
             $course->application_id = $request->application_id;
             $course->user_id = Auth::user()->id;
             $course->notApraove_count = $notApprove + 1 ?? 1;
@@ -1595,6 +1597,7 @@ class LevelController extends Controller
 
         // Fetch the latest document record.
         $doc_latest_record = Add_Document::latest('id')->find($doc_id);
+
 
         return view('asesrar.view-doc-with-comment', [
             'doc_latest_record' => $doc_latest_record,
@@ -2143,25 +2146,13 @@ class LevelController extends Controller
             'attachment' => asset('acknowledgment-letter.pdf')
         ];
 
-        Mail::to($user_info->email)->send(new SendAcknowledgment($send_acknowledgment_letter));
-        //Mail sending script ends here
 
 
-        // $file=ApplicationPayment::whereid($id)->get('application_id');
-        // $file=ApplicationCourse::where('application_id',$file[0]->application_id)->get('id');
+        if(url('/') != 'http://127.0.0.1:8000'){
+            Mail::to($user_info->email)->send(new SendAcknowledgment($send_acknowledgment_letter));
+        }
 
-
-        // foreach($file as $item)
-        // {
-        //     $ApplicationCourse=ApplicationCourse::find($item->id);
-        //     $ApplicationCourse->status=($ApplicationCourse->status==1?'0':'1');
-        //     $ApplicationCourse->update();
-        // }
-
-        //status change in application
-
-
-        return Redirect::back()->with('success', 'Status Changed Successfully');
+        return Redirect::back()->with('success', 'Payment Status Changed Successfully');
     }
 
 
@@ -2398,10 +2389,11 @@ class LevelController extends Controller
             $doc1->move('documnet/', $filename);
             $data->payment_slip = $filename;
         }
+        $data->status = $request->status ?? 1;
         $data->payment_remark = $request->paymentremark;
         $data->save();
 
-        return back()->with('sussess', 'Payment Confirmation is Successfully');;
+        return back()->with('success', 'Payment confirmation has been successfully processed.');
     }
 
 
