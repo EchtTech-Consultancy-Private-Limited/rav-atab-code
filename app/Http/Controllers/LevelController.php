@@ -1140,6 +1140,7 @@ class LevelController extends Controller
 
         $spocData = DB::table('applications')->where('id', $application_id)->first();
 
+
         //return $item[0]->id;
 
 
@@ -1411,116 +1412,14 @@ class LevelController extends Controller
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
-        $doc_id1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[1])->where('course_id', $course_id)->first();
-        // dd($doc_id1);
-
-        //return __('arrayfile.document_doc_id_chap1')[2];
-        $doc_id2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[2])->where('course_id', $course_id)->first();
-        $doc_id3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[3])->where('course_id', $course_id)->first();
-        $doc_id4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[4])->where('course_id', $course_id)->first();
-        $doc_id5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[5])->where('course_id', $course_id)->first();
-        $doc_id6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap1')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap2_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap2_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap2_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap2_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap2_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap2_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap2')[6])->where('course_id', $course_id)->first();
-
-
-        $doc_id_chap3_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap3')[1])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[1])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap4_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap4_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap4_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap4_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap4_7 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap4')[7])->where('course_id', $course_id)->first();
-
-        $doc_id_chap5_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap5_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap5_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap5')[3])->where('course_id', $course_id)->first();
-
-        $doc_id_chap6_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap6_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap6_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap6')[3])->where('course_id', $course_id)->first();
-
-        $doc_id_chap7_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap7_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap7_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap7_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap7_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap7_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap7')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap8_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap8_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap8_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap8_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[4])->where('course_id', $course_id)->first();
-        $doc_id_chap8_5 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[5])->where('course_id', $course_id)->first();
-        $doc_id_chap8_6 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap8')[6])->where('course_id', $course_id)->first();
-
-        $doc_id_chap9_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap9')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap9_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap9')[2])->where('course_id', $course_id)->first();
-
-        $doc_id_chap10_1 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[1])->where('course_id', $course_id)->first();
-        $doc_id_chap10_2 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[2])->where('course_id', $course_id)->first();
-        $doc_id_chap10_3 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[3])->where('course_id', $course_id)->first();
-        $doc_id_chap10_4 = Add_Document::orderBy('id', 'desc')->where('doc_id', __('arrayfile.document_doc_id_chap10')[4])->where('course_id', $course_id)->first();
-
+       $chapters = Chapter::all();
 
 
 
         return view('asesrar.admin_view_document', ['file' => $file, 'data' => $data], compact(
             'application_id',
             'course_id',
-            'doc_id1',
-            'doc_id2',
-            'doc_id3',
-            'doc_id4',
-            'doc_id5',
-            'doc_id6',
-            'doc_id_chap2_1',
-            'doc_id_chap2_2',
-            'doc_id_chap2_3',
-            'doc_id_chap2_4',
-            'doc_id_chap2_5',
-            'doc_id_chap2_6',
-            'doc_id_chap3_1',
-            'doc_id_chap4_1',
-            'doc_id_chap4_2',
-            'doc_id_chap4_3',
-            'doc_id_chap4_4',
-            'doc_id_chap4_5',
-            'doc_id_chap4_6',
-            'doc_id_chap4_7',
-            'doc_id_chap5_1',
-            'doc_id_chap5_2',
-            'doc_id_chap5_3',
-            'doc_id_chap6_1',
-            'doc_id_chap6_2',
-            'doc_id_chap6_3',
-            'doc_id_chap7_1',
-            'doc_id_chap7_2',
-            'doc_id_chap7_3',
-            'doc_id_chap7_4',
-            'doc_id_chap7_5',
-            'doc_id_chap7_6',
-            'doc_id_chap8_1',
-            'doc_id_chap8_2',
-            'doc_id_chap8_3',
-            'doc_id_chap8_4',
-            'doc_id_chap8_5',
-            'doc_id_chap8_6',
-            'doc_id_chap9_1',
-            'doc_id_chap9_2',
-            'doc_id_chap10_1',
-            'doc_id_chap10_2',
-            'doc_id_chap10_3',
-            'doc_id_chap10_4',
+            'chapters',
             'check_admin'
         ))->with('success', 'Documents Update Successfully');
     }
@@ -2382,6 +2281,12 @@ class LevelController extends Controller
         );
 
         $data = ApplicationPayment::find(dDecrypt($id));
+        $applicationId = $data->application_id;
+        $applicationData = Application::find($applicationId);
+        if($applicationData){
+            $applicationData->status = 1;
+            $applicationData->update();
+        }
         if ($request->hasfile('payment_slip')) {
             $doc1 = $request->file('payment_slip');
             $name = $doc1->getClientOriginalName();

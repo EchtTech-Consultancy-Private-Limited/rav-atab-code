@@ -144,6 +144,7 @@
         border: none;
         background: inherit;
     }
+
     .btn_remove {
         background: #fff;
         border: 1px solid red;
@@ -171,13 +172,13 @@
     @include('layout.topbar')
     <div>
         @if (Auth::user()->role == '1')
-        @include('layout.sidebar')
+            @include('layout.sidebar')
         @elseif(Auth::user()->role == '2')
-        @include('layout.siderTp')
+            @include('layout.siderTp')
         @elseif(Auth::user()->role == '3')
-        @include('layout.sideAss')
+            @include('layout.sideAss')
         @elseif(Auth::user()->role == '4')
-        @include('layout.sideprof')
+            @include('layout.sideprof')
         @endif
         @include('layout.rightbar')
     </div>
@@ -198,13 +199,13 @@
                             </li>
                             <li class="breadcrumb-item active">
                                 @if (request()->path() == 'level-first')
-                                Level First
+                                    Level First
                                 @elseif(request()->path() == 'level-second')
-                                Level Second
+                                    Level Second
                                 @elseif(request()->path() == 'level-third')
-                                Level Third
+                                    Level Third
                                 @elseif(request()->path() == 'level-fourth')
-                                Level Fourth
+                                    Level Fourth
                                 @endif
                             </li>
                         </ul>
@@ -214,54 +215,65 @@
 
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
-                    <div class="card">
-                        @include('level.inner-nav',['link' => 'edit-application'])
+                    <div class="card nav-tab">
+                        @include('level.inner-nav')
                     </div>
-                     <div>
-                             <ul id="progressbar">
-                                     <li class="progress1 bg_green">Basic Information</li>
-                                     <li
-                                         class="progress2 bg_green @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'application-payment') bg_green @else @endif  @endif ">
-                                         Level Courses
-                                     </li>
-                                     <li
-                                         class="progress3 @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') bg_green @endif  @endif">
-                                         Payment
-                                     </li>
-                                 </ul>
-                        </div>
-                    @if (Session::has('success'))
-                    <div class="alert alert-success" style="padding: 15px;" role="alert">
-                        {{ session::get('success') }}
-                    </div>
-                    @elseif(Session::has('fail'))
-                    <div class="alert alert-danger" role="alert">
-                        {{ session::get('fail') }}
-                    </div>
-                    @endif
-                    @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
+                    <div>
+                        <ul id="progressbar">
+                            <li class="progress1 bg_green">Basic Information</li>
+                            <li
+                                class="progress2 bg_green @if (isset($form_step_type)) @if ($form_step_type == 'add-course' || $form_step_type == 'application-payment') bg_green @else @endif  @endif ">
+                                Level Courses
+                            </li>
+                            <li
+                                class="progress3 @if (isset($form_step_type)) @if ($form_step_type == 'application-payment') bg_green @endif  @endif">
+                                Payment
+                            </li>
                         </ul>
                     </div>
+                    @if (Session::has('success'))
+                        <script>
+                            var message = "{{ session::get('success') }}";
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Success',
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
+                        </script>
+                    @elseif(Session::has('fail'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session::get('fail') }}
+                        </div>
+                    @endif
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     @endif
 
                     <div class="card">
 
-                        <div class="header mb-4">
+                        <div class="header">
                             <h2 style="float:left; clear:none;">Level Courses </h2>
                             {{-- @if (count($course) > 0) --}}
 
-                            <a href="javascript:void(0);" class="btn btn-outline-primary mb-0" style="float:right; clear:none; cursor:pointer;line-height: 24px;" onclick="addNewCourse();">
+                            <a href="javascript:void(0);" class="btn btn-outline-primary mb-0"
+                                style="float:right; clear:none; cursor:pointer;line-height: 24px;"
+                                onclick="addNewCourse();">
                                 <i class="fa fa-plus font-14"></i> Add More Course
                             </a>
 
                             {{-- @endif --}}
                         </div>
-                        <form action="{{ url('/new-application-course') }}" enctype="multipart/form-data" method="post" class="form" id="regForm">
+                        <form action="{{ url('/new-application-course') }}" enctype="multipart/form-data" method="post"
+                            class="form" id="regForm">
                             @csrf
                             <input type="hidden" name="form_step_type" value="add-course">
                             <div class="body pb-0" id="courses_body">
@@ -270,7 +282,9 @@
                                     <div class="col-sm-12 text-righ">
 
                                         <div class="d-flex justify-content-end">
-                                            <button type="button" title="Remove course form" class="btn_remove remove-course" onclick="removeCourse(this);" style="display: none;">
+                                            <button type="button" title="Remove course form"
+                                                class="btn_remove remove-course" onclick="removeCourse(this);"
+                                                style="display: none;">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
                                         </div>
@@ -279,20 +293,23 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
-                                                <input type="text" placeholder="Course Name" name="course_name[]" required class="preventnumeric" maxlength="50">
+                                                <input type="text" placeholder="Course Name" name="course_name[]"
+                                                    required class="preventnumeric" maxlength="50">
                                             </div>
                                             @error('course_name')
-                                            <div class="alert alert-danger">{{ $message }}
-                                            </div>
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
                                             @enderror
                                         </div>
                                     </div>
                                     <input type="hidden" name="application" class="content_id" readonly>
 
-                                    <input type="hidden" name="application_id" value="{{ $applicationData->id ?? '' }}" class="form-control" readonly>
+                                    <input type="hidden" name="application_id" value="{{ $applicationData->id ?? '' }}"
+                                        class="form-control" readonly>
 
 
-                                    <input type="hidden" placeholder="level_id" name="level_id" value="@if (isset($applicationData)) {{ $applicationData->level_id ?? '' }} @endif">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="@if (isset($applicationData)) {{ $applicationData->level_id ?? '' }} @endif">
 
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
@@ -303,15 +320,19 @@
                                                 <label>Course Duration<span class="text-danger">*</span></label>
 
                                                 <div class="course_group">
-                                                    <input type="text" placeholder="Years" name="years[]" maxlength="4" required class="course_i nput preventalpha">
-                                                    <input type="text" placeholder="Months" name="months[]" maxlength="2" required class="course_input preventalpha">
-                                                    <input type="text" maxlength="2" placeholder="Days " name="days[]" required class="course_input preventalpha">
-                                                    <input type="number" placeholder="Hours" name="hours[]" required class="course_input">
+                                                    <input type="text" placeholder="Years" name="years[]"
+                                                        maxlength="4" required class="course_i nput preventalpha">
+                                                    <input type="text" placeholder="Months" name="months[]"
+                                                        maxlength="2" required class="course_input preventalpha">
+                                                    <input type="text" maxlength="2" placeholder="Days "
+                                                        name="days[]" required class="course_input preventalpha">
+                                                    <input type="number" placeholder="Hours" name="hours[]" required
+                                                        class="course_input">
                                                 </div>
                                             </div>
                                             @error('course_duration')
-                                            <div class="alert alert-danger">{{ $message }}
-                                            </div>
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
                                             @enderror
                                         </div>
                                     </div>
@@ -319,23 +340,23 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Eligibility<span class="text-danger">*</span></label>
-                                                <input type="text" placeholder="Eligibility" name="eligibility[]" required id="eligibility">
+                                                <input type="text" placeholder="Eligibility" name="eligibility[]"
+                                                    required id="eligibility">
                                             </div>
                                             @error('eligibility')
-                                            <div class="alert alert-danger">{{ $message }}
-                                            </div>
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group" style="margin-top: 5px;">
                                             <div class="form-line">
-                                                <label>Mode of Course <span
-                                                        class="text-danger">*</span></label>
+                                                <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                    <select class="form-control select2"
-                                                        name="mode_of_course[]" required
-                                                        multiple="" style="width:200px;">
+
+                                                    <select class="form-control select2" name="mode_of_course[1][]"
+                                                        required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                             <option value="{{ $value }}">
@@ -358,8 +379,8 @@
                                                 <textarea rows="4" cols="50" class="form-control" name="course_brief[]" required></textarea>
                                             </div>
                                             @error('course_brief')
-                                            <div class="alert alert-danger">{{ $message }}
-                                            </div>
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
                                             @enderror
                                         </div>
                                     </div>
@@ -368,7 +389,8 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
-                                                <input type="file" name="doc1[]" id="payment_reference_no" required class="form-control doc_1 file_size">
+                                                <input type="file" name="doc1[]"
+                                                     class="form-control doc_1 file_size">
                                             </div>
                                         </div>
                                     </div>
@@ -377,7 +399,8 @@
                                             <div class="form-line">
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
-                                                <input type="file" name="doc2[]" id="payment_reference_no" required class="form-control doc_2 file_size">
+                                                <input type="file" name="doc2[]"
+                                                     class="form-control doc_2 file_size">
                                             </div>
 
                                         </div>
@@ -385,29 +408,39 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label>Course Details (Excel format)<span class="text-danger">*</span></label>
-                                                <input type="file" name="doc3[]" id="payment_reference_no" required class="form-control doc_3 file_size">
+                                                <label>Course Details (Excel format)<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="file" name="doc3[]" id="payment_reference_no"
+                                                    required class="form-control doc_3 file_size">
                                             </div>
                                         </div>
                                     </div>
                                     @if (request()->path() == 'level-first')
-                                    <input type="hidden" placeholder="level_id" name="level_id" value="{{ 1 }}">
+                                        <input type="hidden" placeholder="level_id" name="level_id"
+                                            value="{{ 1 }}">
                                     @elseif(request()->path() == 'level-second')
-                                    <input type="hidden" placeholder="level_id" name="level_id" value="{{ 2 }}">
+                                        <input type="hidden" placeholder="level_id" name="level_id"
+                                            value="{{ 2 }}">
                                     @elseif(request()->path() == 'level-third')
-                                    <input type="hidden" placeholder="level_id" name="level_id" value="{{ 3 }}">
+                                        <input type="hidden" placeholder="level_id" name="level_id"
+                                            value="{{ 3 }}">
                                     @elseif(request()->path() == 'level-fourth')
-                                    <input type="hidden" placeholder="level_id" name="level_id" value="{{ 4 }}">
+                                        <input type="hidden" placeholder="level_id" name="level_id"
+                                            value="{{ 4 }}">
                                     @endif
                                 </div>
                                 @if (request()->path() == 'level-first')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 1 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 1 }}">
                                 @elseif(request()->path() == 'level-second')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 2 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 2 }}">
                                 @elseif(request()->path() == 'level-third')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 3 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 3 }}">
                                 @elseif(request()->path() == 'level-fourth')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 4 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 4 }}">
                                 @endif
                                 <!-- level end -->
                             </div>
@@ -444,15 +477,15 @@
                                                     <td class="center">{{ $k + 1 }}</td>
                                                     <td class="center">{{ $courses->course_name }}
                                                     </td>
-                                                    <td class="center">
-                                                        years:{{ $courses->years }},
-                                                        Months: {{ $courses->months }},
-                                                        days: {{ $courses->days }},
+                                                    <td class="center course-duration-table">
+                                                        years:{{ $courses->years }} <br>
+                                                        Months: {{ $courses->months }} <br>
+                                                        days: {{ $courses->days }} <br>
                                                         Hours: {{ $courses->hours }}
                                                     </td>
                                                     <td class="center">{{ $courses->eligibility }}
                                                     </td>
-                                                    <td class="center">
+                                                    <td class="center mode-of-course-table">
                                                         [ <?php echo get_course_mode($courses->id); ?> ]
                                                     </td>
                                                     <td class="center">
@@ -483,7 +516,8 @@
                                                                 <i class="material-icons">edit</i>
                                                             </a>
                                                         @endif
-                                                        <a onclick="confirmDelete('{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}')" class="btn btn-tbl-delete bg-danger">
+                                                        <a onclick="confirmDelete('{{ url('/delete-course' . '/' . dEncrypt($courses->id)) }}')"
+                                                            class="btn btn-tbl-delete bg-danger">
                                                             <i class="material-icons">delete</i>
                                                         </a>
                                                     </td>
@@ -501,16 +535,19 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <label>Course Name<span class="text-danger">*</span></label>
-                                            <input type="text" placeholder="Course Name" name="course_name[]" required>
+                                            <input type="text" placeholder="Course Name" name="course_name[]"
+                                                required>
                                         </div>
                                         @error('course_name')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="application_id" value="{{ $collections->id ?? '' }}" class="form-control" readonly>
-                                <input type="hidden" placeholder="level_id" name="level_id[]" value="{{ 1 }}">
+                                <input type="hidden" name="application_id" value="{{ $collections->id ?? '' }}"
+                                    class="form-control" readonly>
+                                <input type="hidden" placeholder="level_id" name="level_id[]"
+                                    value="{{ 1 }}">
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
@@ -518,14 +555,18 @@
                                             </label>
 
                                             <div class="course_group">
-                                                <input type="text" placeholder="Years" name="years[]" maxlength="4" required class="course_input preventalpha">
-                                                <input type="text" placeholder="Months" name="months[]" maxlength="2" required class="course_input preventalpha">
-                                                <input type="text" maxlength="2" placeholder="Days preventalpha" name="days[]" required class="course_input">
-                                                <input type="number" placeholder="Hours" name="hours[]" required class="course_input">
+                                                <input type="text" placeholder="Years" name="years[]"
+                                                    maxlength="4" required class="course_input preventalpha">
+                                                <input type="text" placeholder="Months" name="months[]"
+                                                    maxlength="2" required class="course_input preventalpha">
+                                                <input type="text" maxlength="2" placeholder="Days preventalpha"
+                                                    name="days[]" required class="course_input">
+                                                <input type="number" placeholder="Hours" name="hours[]" required
+                                                    class="course_input">
                                             </div>
                                         </div>
                                         @error('course_duration')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -533,10 +574,11 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <label>Eligibility<span class="text-danger">*</span></label>
-                                            <input type="text" placeholder="Eligibility" name="eligibility[]" required>
+                                            <input type="text" placeholder="Eligibility" name="eligibility[]"
+                                                required>
                                         </div>
                                         @error('eligibility')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -545,7 +587,7 @@
                                         <div class="form-line">
                                             <label>Mode of Course <span class="text-danger">*</span></label>
                                             <div class="form-group default-select select2Style">
-                                                <select class="form-control select2 width" name="mode_of_course[]">
+                                                <select class="form-control width"  name="mode_of_course[]">
                                                     <option value="" disabled>Select Mode
                                                     </option>
                                                     <option value="Online">Online</option>
@@ -554,18 +596,22 @@
                                             </div>
                                         </div>
                                         @error('mode_of_course')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 @if (request()->path() == 'level-first')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 1 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 1 }}">
                                 @elseif(request()->path() == 'level-second')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 2 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 2 }}">
                                 @elseif(request()->path() == 'level-third')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 3 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 3 }}">
                                 @elseif(request()->path() == 'level-fourth')
-                                <input type="hidden" placeholder="level_id" name="level_id" value="{{ 4 }}">
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="{{ 4 }}">
                                 @endif
 
                                 <div class="col-sm-12">
@@ -576,8 +622,8 @@
                                             <textarea rows="4" cols="50" class="form-control" placeholder="Course Brief" name="course_brief[]"></textarea>
                                         </div>
                                         @error('course_brief')
-                                        <div class="alert alert-danger">{{ $message }}
-                                        </div>
+                                            <div class="alert alert-danger">{{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -585,11 +631,13 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <label>Declaration<span class="text-danger">*</span></label>
-                                            <input type="file" name="doc1[]" id="payment_reference_no" required class="form-control file_size">
+                                            <input type="file" name="doc1[]" id="payment_reference_no" required
+                                                class="form-control file_size">
                                         </div>
-                                        <label for="payment_reference_no" id="payment_reference_no-error" class="error">
+                                        <label for="payment_reference_no" id="payment_reference_no-error"
+                                            class="error">
                                             @error('payment_reference_no')
-                                            {{ $message }}
+                                                {{ $message }}
                                             @enderror
                                         </label>
                                     </div>
@@ -597,12 +645,15 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <label>Course Curriculum / Material / Syllabus <span class="text-danger">*</span></label>
-                                            <input type="file" name="doc2[]" id="payment_reference_no" required class="form-control file_size">
+                                            <label>Course Curriculum / Material / Syllabus <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="file" name="doc2[]" id="payment_reference_no" required
+                                                class="form-control file_size">
                                         </div>
-                                        <label for="payment_reference_no" id="payment_reference_no-error" class="error">
+                                        <label for="payment_reference_no" id="payment_reference_no-error"
+                                            class="error">
                                             @error('payment_reference_no')
-                                            {{ $message }}
+                                                {{ $message }}
                                             @enderror
                                         </label>
                                     </div>
@@ -610,12 +661,15 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <label>Course Details (Excel / CSV format) <span class="text-danger">*</span></label>
-                                            <input type="file" name="doc3[]" id="payment_reference_no" required class="form-control">
+                                            <label>Course Details (Excel / CSV format) <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="file" name="doc3[]" id="payment_reference_no" required
+                                                class="form-control">
                                         </div>
-                                        <label for="payment_reference_no" id="payment_reference_no-error" class="error">
+                                        <label for="payment_reference_no" id="payment_reference_no-error"
+                                            class="error">
                                             @error('payment_reference_no')
-                                            {{ $message }}
+                                                {{ $message }}
                                             @enderror
                                         </label>
                                     </div>
@@ -641,7 +695,7 @@
                     <!-- View Modal Popup -->
                     <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-dialog modal-dialog-centered modal-lg modal-create-course" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalCenterTitle"> View Course Details</h5>
@@ -689,9 +743,9 @@
                                                     </tr>
                                                     <tr class="odd gradeX">
                                                         <th class="center">Course Brief</th>
-                                                        <td class="center">
-                                                            <input type="text" name="course_brief[]"
-                                                                id="view_course_brief" readonly>
+                                                        <td class="text-center" id="view_course_brief">
+                                                            <!-- <input type="text" name="course_brief[]"
+                                                                id="view_course_brief" readonly> -->
                                                         </td>
                                                     </tr>
                                                     <tr class="odd gradeX">
@@ -708,7 +762,7 @@
                                                         <td class="center">
                                                             <a href="" target="_blank" id="docpdf1"
                                                                 title="Download Document 1"><i
-                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
+                                                                    class="fa fa-eye mr-2"></i>
                                                                 Doc 1
                                                             </a>
                                                         </td>
@@ -719,7 +773,7 @@
                                                         <td class="center">
                                                             <a href="" target="_blank" id="docpdf2"
                                                                 title="Download Document 2"><i
-                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
+                                                                    class="fa fa-eye mr-2"></i>
                                                                 Doc 2
                                                             </a>
                                                         </td>
@@ -751,7 +805,7 @@
                                         <label class="active">Payment Status : </label>
                                         <input type="text" name="Payment_Statuss" id="Payment_Statuss"
                                             class="btn btn-danger shadow-none p-0"
-                                            style="border-bottom: 1px solid #fb483a !important; cursor: default;" readonly>
+                                            style="border-bottom: 1px solid #fb483a !important;" readonly>
                                     </div>
                                     <button type="button" class="close" data-bs-dismiss="modal"
                                         aria-label="Close">
@@ -817,13 +871,12 @@
                                                             <label>Mode of Course <span
                                                                     class="text-danger">*</span></label>
                                                             <div class="form-group default-select">
-                                                                <select class="form-control"
-                                                                    name="mode_of_course[]" required
-                                                                    multiple="" style="width:200px;">
+                                                                <select class="form-control" name="mode_of_course[]"
+                                                                    required multiple="" style="width:200px;">
                                                                     <option disabled>Select Mode of Course </option>
-                                                                   <option value="Offline">Offline</option>
-                                                                   <option value="Online">Online</option>
-                                                                   <option value="Hybrid">Hybrid</option>
+                                                                    <option value="Offline">Offline</option>
+                                                                    <option value="Online">Online</option>
+                                                                    <option value="Hybrid">Hybrid</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -857,7 +910,7 @@
                                                             <input type="file" name="doc1" id="doc1_edit"
                                                                 class="form-control doc_edit_1 file_size">
                                                             <a target="_blank" href="" id="docpdf1ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2"></i>
+                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 1 </a>
                                                         </div>
                                                     </div>
@@ -871,7 +924,7 @@
                                                                 id="payment_reference_no"
                                                                 class="form-control doc_edit_2 file_size">
                                                             <a target="_blank" href="" id="docpdf2ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2"></i>
+                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 2</a>
                                                         </div>
                                                     </div>
@@ -887,7 +940,7 @@
                                                                 class="form-control doc_edit_3 file_size">
                                                             <a href="" id="docpdf3ss"
                                                                 title="Download Document 1" download><i
-                                                                    class="fa fa-download mr-2"></i> Doc 3 </a>
+                                                                    class="fa fa-download mr-2 d-inline-block w-"></i> Doc 3 </a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -909,9 +962,9 @@
                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
                     <script>
-                       $(document).ready(function() {
-    $('.select2').select2();
-});
+                        $(document).ready(function() {
+                            $('.select2').select2();
+                        });
                         $(document).on("click", "#view", function() {
 
                             var UserName = $(this).data('id');
@@ -942,7 +995,8 @@
                                     if (data.ApplicationCourse[0].payment == "false") {
                                         $("#Payment_Status").val("Pending");
                                     }
-                                    $("#view_course_brief").val(data.ApplicationCourse[0].course_brief);
+                                    $("#view_course_brief").text(data.ApplicationCourse[0].course_brief);
+
 
                                     $("#view_years").html(data.ApplicationCourse[0].years + " Year(s)");
                                     $("#view_months").html(data.ApplicationCourse[0].months + " Month(s)");
@@ -1007,7 +1061,7 @@
                                         .ApplicationCourse[0].id)
                                     $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                     $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                     $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+                                    $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
 
 
 
@@ -1048,6 +1102,7 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
+                        var cloneCounter = 1;
 
                         function addNewCourse() {
                             if (!isAppending) {
@@ -1065,6 +1120,21 @@
 
                                 // Show the remove button for the new row
                                 newRow.find('.remove-course').show();
+
+                                // Increment the cloneCounter for unique IDs
+                                cloneCounter++;
+
+                                // Update the name attribute of the mode_of_course select field
+                                var modeOfCourseSelect = newRow.find('.select2[name^="mode_of_course[1]"]');
+                                modeOfCourseSelect.attr('name', `mode_of_course[${cloneCounter}][]`);
+
+                                $("#mode-of-course-edit").select2({
+                                    placeholder: "Select a programming language",
+                                    allowClear: true
+                                });
+                                // Reset Select2 for the cloned select element
+                                modeOfCourseSelect.select2();
+                                modeOfCourseSelect.select2('destroy'); // Destroy the previous instance
 
                                 // Add a class to the new row
                                 newRow.addClass('new-course-html');
@@ -1101,12 +1171,12 @@
                                 // Append the hidden input elements
                                 // Manually set values for "application_id" and "level_id"
 
-                                 // Set the values for "application_id" and "level_id"
-        var applicationId = '{{ $applicationData->id ?? '' }}';
-        var levelId = '{{ $applicationData->level_id ?? '' }}';
+                                // Set the values for "application_id" and "level_id"
+                                var applicationId = '{{ $applicationData->id ?? '' }}';
+                                var levelId = '{{ $applicationData->level_id ?? '' }}';
 
-        newRow.find('input[name="application_id"]').val(applicationId);
-        newRow.find('input[name="level_id"]').val(levelId);
+                                newRow.find('input[name="application_id"]').val(applicationId);
+                                newRow.find('input[name="level_id"]').val(levelId);
 
 
                                 newRow.append('<input type="hidden" name="country" value="{{ $data->country ?? '' }}">');
@@ -1147,87 +1217,87 @@
                         }
 
                         // select2 multiple
-                        $(document).ready(function(){
+                        $(document).ready(function() {
                             var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
                                 removeItemButton: true,
-                                maxItemCount:3,
-                                searchResultLimit:5,
-                                renderChoiceLimit:5
+                                maxItemCount: 3,
+                                searchResultLimit: 5,
+                                renderChoiceLimit: 5
                             });
 
                         });
                     </script>
 
-<script>
-    var doc_file1 = "";
+                    <script>
+                        var doc_file1 = "";
 
-    $('.doc_1').on('change', function() {
+                        $('.doc_1').on('change', function() {
 
-        doc_file1 = $(".doc_1").val();
-        console.log(doc_file1);
-        var doc_file1 = doc_file1.split('.').pop();
-        if (doc_file1 == 'pdf') {
-            // alert("File uploaded is pdf");
-        } else {
-            Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: 'Validation error!',
-                text: 'Only PDF files are allowed',
-                showConfirmButton: false,
-                timer: 3000
-            })
-            $('.doc_1').val("");
-        }
+                            doc_file1 = $(".doc_1").val();
+                            console.log(doc_file1);
+                            var doc_file1 = doc_file1.split('.').pop();
+                            if (doc_file1 == 'pdf') {
+                                // alert("File uploaded is pdf");
+                            } else {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'Validation error!',
+                                    text: 'Only PDF files are allowed',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                })
+                                $('.doc_1').val("");
+                            }
 
-    });
-</script>
-<script>
-    var doc_file2 = "";
-    $('.doc_2').on('change', function() {
+                        });
+                    </script>
+                    <script>
+                        var doc_file2 = "";
+                        $('.doc_2').on('change', function() {
 
-        doc_file2 = $(".doc_2").val();
-        console.log(doc_file2);
-        var doc_file2 = doc_file2.split('.').pop();
-        if (doc_file2 == 'pdf') {
-            // alert("File uploaded is pdf");
-        } else {
-            Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: 'Validation error!',
-                text: 'Only PDF files are allowed',
-                showConfirmButton: false,
-                timer: 3000
-            })
-            $('.doc_2').val("");
-        }
+                            doc_file2 = $(".doc_2").val();
+                            console.log(doc_file2);
+                            var doc_file2 = doc_file2.split('.').pop();
+                            if (doc_file2 == 'pdf') {
+                                // alert("File uploaded is pdf");
+                            } else {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'Validation error!',
+                                    text: 'Only PDF files are allowed',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                })
+                                $('.doc_2').val("");
+                            }
 
-    });
-</script>
-<script>
-    var doc_file3 = "";
-    $('.doc_3').on('change', function() {
+                        });
+                    </script>
+                    <script>
+                        var doc_file3 = "";
+                        $('.doc_3').on('change', function() {
 
-        doc_file3 = $(".doc_3").val();
-        console.log(doc_file3);
-        var doc_file3 = doc_file3.split('.').pop();
+                            doc_file3 = $(".doc_3").val();
+                            console.log(doc_file3);
+                            var doc_file3 = doc_file3.split('.').pop();
 
 
-        if (doc_file3 == 'csv' || doc_file3 == 'xlsx' || doc_file3 == 'xls') {
-            // alert("File uploaded is pdf");
-        } else {
-            //  alert("Only csv,xlsx,xls  are allowed")
-            Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: 'Validation error!',
-                text: 'Only csv,xlsx, and xlsx are allowed',
-                showConfirmButton: false,
-                timer: 3000
-            })
-            $('.doc_3').val("");
-        }
+                            if (doc_file3 == 'csv' || doc_file3 == 'xlsx' || doc_file3 == 'xls') {
+                                // alert("File uploaded is pdf");
+                            } else {
+                                //  alert("Only csv,xlsx,xls  are allowed")
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'Validation error!',
+                                    text: 'Only csv,xlsx, and xlsx are allowed',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                })
+                                $('.doc_3').val("");
+                            }
 
-    });
-</script>
+                        });
+                    </script>

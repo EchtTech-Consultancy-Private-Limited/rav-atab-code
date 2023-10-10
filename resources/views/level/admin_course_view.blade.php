@@ -588,9 +588,13 @@
                                                 <div class="form-line">
                                                     <label><strong>Payment Slip</strong></label><br>
 
-                                                    <br>
 
-                                                    {{-- {{ $ApplicationPayment->payment_slip }} --}}
+
+                                                   <div class="mt-2 text-danger">
+                                                    @if (!$ApplicationPayment->payment_slip)
+                                                    File not available!
+                                                @endif
+                                                   </div>
 
                                                     <?php
                                                     substr($ApplicationPayment->payment_slip, -3);
@@ -665,7 +669,7 @@
                                                                                 Payment Slip</strong></label>
                                                                         <input type="file" name="payment_slip"
                                                                             class="form-control" id="payment_slip"
-                                                                            required
+
                                                                             value="{{ $ApplicationPayment->payment_slip }}">
                                                                         <?php
                                                                         $fileExtension = substr($ApplicationPayment->payment_slip, -3);
@@ -738,10 +742,11 @@
                                                                 <div class="badge col-green">Application Proccess</div>
                                                             @elseif($ApplicationPayment->status == 2)
                                                             <label><strong>Payment Status </strong></label>
-                                                                <div class="btn btn-success pt-2 shadow-none" style="font-size:14px; cursor:default;"><strong
-                                                                        class="">Application Payment
-                                                                        Approved</strong>
-                                                                </div>
+                                                            <br>
+                                                            <div class="pt-2">
+                                                                <span class="bg-success text-white p-2" style="cursor: default;">Payment
+                                                                Approved</span>
+                                                            </div>
                                                             @else
                                                             @endif
                                                             {{-- </a> --}}
