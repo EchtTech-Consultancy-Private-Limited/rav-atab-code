@@ -97,7 +97,7 @@
 
                 <?php
 
-                $data= "Account"
+                $data= "Accountant"
 
                 ?>
 
@@ -113,7 +113,7 @@
                                 </a>
                             </div>
 
-                            <h3>Sign Into Your Account  {{ $data }}   </h3>
+                            <h3>Sign Into {{ $data }}   </h3>
 
 
                             @if(Session::has('success'))
@@ -173,7 +173,7 @@
 
 
                                 <div class="d-flex">
-                                    <div class="form-group w-40">
+                                    <div class="form-group w-60">
                                         {{-- <input name="Captcha" type="text" class="form-control" placeholder="Enter Captcha" aria-label="Captcha Code"> --}}
                                         <input id="captcha" type="text" class="form-control"  aria-label="Captcha Code" placeholder="Enter Captcha" id="captcha" name="captcha">
 
