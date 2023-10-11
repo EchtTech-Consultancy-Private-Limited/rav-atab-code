@@ -2370,6 +2370,7 @@ class LevelController extends Controller
         $course = DB::table('application_courses')->where('application_id', $id)->get();
         return view('level.create-course', compact('applicationData', 'course'));
     }
+    
     public function newApplications($id = null)
     {
         if ($id) {

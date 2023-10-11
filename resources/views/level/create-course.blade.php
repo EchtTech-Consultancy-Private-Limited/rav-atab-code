@@ -294,7 +294,7 @@
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
-                                                    required class="preventnumeric" maxlength="50">
+                                                     class="preventnumeric" maxlength="50" required>
                                             </div>
                                             @error('course_name')
                                                 <div class="alert alert-danger">{{ $message }}
@@ -390,7 +390,7 @@
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc1[]"
-                                                     class="form-control doc_1 file_size">
+                                                     class="form-control doc_1 file_size" required>
                                             </div>
                                         </div>
                                     </div>
@@ -400,7 +400,7 @@
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc2[]"
-                                                     class="form-control doc_2 file_size">
+                                                     class="form-control doc_2 file_size" required>
                                             </div>
 
                                         </div>
