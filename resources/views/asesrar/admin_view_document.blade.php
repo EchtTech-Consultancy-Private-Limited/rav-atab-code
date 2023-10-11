@@ -204,7 +204,7 @@
                                                                                                 <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
                                                                                                     href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                                    class="btn text-white bg-primary btn-sm"
+                                                                                                    class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
                                                                                                     id="view_doc1">View
                                                                                                     Document</a>

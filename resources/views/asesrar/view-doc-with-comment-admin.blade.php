@@ -92,6 +92,7 @@
 
                                                     @endif
                                                 @else
+                                                    @if (isset($doc_latest_record->comment))
                                                     @if ($doc_latest_record->comment->status == 3)
                                                     <div class="card project_widget">
                                                             <div class="body">
@@ -144,6 +145,7 @@
 
                                                         </div>
 
+                                                    @endif
                                                     @endif
                                                 @endif
                                             @endif
