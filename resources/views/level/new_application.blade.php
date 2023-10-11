@@ -376,7 +376,7 @@ active @endif"
                                              </div>
                                              <!-- basic end -->
                                              <ul class="list-inline pull-right">
-                                                 <li><button type="submit" class="btn btn-primary next-step">
+                                                 <li><button id="nextBtn" type="submit" class="btn btn-primary next-step">
                                                          Next</button></li>
                                              </ul>
                                              </form>
@@ -625,9 +625,11 @@ active @endif"
                                                      if (response.status === 'duplicate') {
                                                          // Display the error message in the #contact_error span
                                                          $('#contact_error').text('Contact number is already in use.');
+                                                         $('#nextBtn').prop('disabled', true);
                                                      } else {
                                                          // Clear the error message if the contact number is unique
                                                          $('#contact_error').text('');
+                                                         $('#nextBtn').prop('disabled', false);
                                                      }
                                                  },
                                                  error: function(xhr, status, error) {
@@ -666,9 +668,11 @@ active @endif"
                                                      if (response.status === 'duplicate') {
                                                          // Display the error message in the #email_id_error span
                                                          $('#email_id_error').text('Email is already in use.');
+                                                         $('#nextBtn').prop('disabled', true);
                                                      } else {
                                                          // Clear the error message if the email is unique
                                                          $('#email_id_error').text('');
+                                                         $('#nextBtn').prop('disabled', false);
                                                      }
                                                  },
                                                  error: function(xhr, status, error) {
