@@ -170,97 +170,16 @@
 
                                         </div>
                                         <div class="card project_widget">
-                                            <!-- <div class="header">
-                                                <h2>Upload Document</h2>
-
-                                                <form method="post" action="{{ url('upload-document') }}"
-                                                    id="regForm" enctype="multipart/form-data">
-
-                                                    @csrf
-                                                    <div class="body">
-                                                        <div class="row clearfix">
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    <div class="form-line">
-                                                                        <label>document type<span
-                                                                                class="text-danger">*</span></label>
-                                                                        <select name="document_type_id" required
-                                                                            class="form-control" id="title">
-                                                                            <option value="">Select Type </option>
-                                                                            <option value="Infrastructure Details">
-                                                                                Infrastructure Details</option>
-                                                                            <option
-                                                                                value="Re-evaluation of unsuccessful candidates">
-                                                                                Re-evaluation of unsuccessful candidates
-                                                                            </option>
-                                                                            <option
-                                                                                value="Details of Manpower along with Qualification and Experience">
-                                                                                Details of Manpower along with
-                                                                                Qualification and Experience</option>
-                                                                            <option
-                                                                                value="Details of outsourced facilities">
-                                                                                Details of outsourced facilities
-                                                                            </option>
-                                                                            <option value="Lists of courses applid for">
-                                                                                Lists of courses applid for</option>
-                                                                            <option value="Detailed syllabus">Detailed
-                                                                                syllabus</option>
-                                                                            <option value="Exam pattern">Exam pattern
-                                                                            </option>
-                                                                            <option value="Policy and procedures">Policy
-                                                                                and procedures</option>
-                                                                        </select>
-                                                                    </div>
-
-                                                                    <label for="title" id="title-error"
-                                                                        class="error"></label>
-
-                                                                </div>
-                                                            </div>
-
-
-                                                            <input type="hidden" name="application_id" value="{{ $data[0]->application_id }}">
-                                                            <input type="hidden" name="level_id" value="{{ $data[0]->level_id }}">
-
-
-
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    <div class="form-line">
-                                                                        <label class="active">Upload pdf<span
-                                                                                class="text-danger">*</span></label>
-                                                                        <input type="file" required
-                                                                            class="special_no valid form-control"
-                                                                            name="file">
-                                                                    </div>
-
-
-                                                                    <label for="lastname" id="lastname-error"
-                                                                        class="error" style="display: none;">
-                                                                    </label>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-lg-12 p-t-20 text-center">
-                                                                <button type="submit"
-                                                                    class="btn btn-primary waves-effect m-r-10">Submit</button>
-                                                                <a href="http://localhost/Accreditation/rav-accr/public/dashboard"
-                                                                    class="btn btn-danger waves-effect">Back</a>
-
-                                                            </div>
-                                                        </div>
-                                                </form>
-                                            </div>
-
-                                            <hr> -->
-
-
-
                                             @if ($message = Session::get('success'))
-                                                <div class="alert alert-success">
-                                                    <p>{{ $message }}</p>
-                                                </div>
+                                                <script>
+                                                    Swal.fire({
+                                                        position: 'center',
+                                                        icon: 'success',
+                                                        title: "{{ $message }}",
+                                                        showConfirmButton: false,
+                                                        timer: 3000
+                                                    })
+                                                </script>
                                             @endif
                                             <div id="success-msg" class="alert alert-success d-none" role="alert">
                                                 <p class=" msg-none ">Documents Update Successfully</p>
@@ -294,40 +213,43 @@
                                                                     </td>
                                                                     <td>
                                                                         @if ($question->documents->isEmpty())
-                                                                            <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                            <span
+                                                                                class="badge bg-danger text-white">Documents
+                                                                                not uploaded</span>
                                                                         @else
                                                                             @if ($question->documents)
                                                                                 @if (count($question->documents) == 1)
                                                                                     @foreach ($question->documents as $doc)
-                                                                                    @if ($doc->application_id == $application_id)
-                                                                                    <div>
-                                                                                        <a class="btn btn-primary btn-sm" target="_blank"
-                                                                                        href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}">View
-                                                                                        Document</a>
-                                                                                    </div>
-                                                                                    @else
-                                                                                    <span class="badge bg-danger text-white">Documents not uploaded</span>
-                                                                                    @endif
+                                                                                        @if ($doc->application_id == $application_id)
+                                                                                            <div>
+                                                                                                <a class="btn {{ checkDocumentCommentStatus($doc->id) }}" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                    target="_blank"
+                                                                                                    href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}">View
+                                                                                                    Document</a>
+                                                                                            </div>
+                                                                                        @else
+                                                                                            <span
+                                                                                                class="badge bg-danger text-white">Documents
+                                                                                                not uploaded</span>
+                                                                                        @endif
                                                                                     @endforeach
-                                                                                @elseif (count($question->documents) > 1)
+                                                                                    @elseif(count($question->documents) > 1)
                                                                                     <div class="d-flex">
                                                                                         @foreach ($question->documents as $doc)
-                                                                                        @if ($doc->application_id == $application_id)
-                                                                                            <a target="_blank"
-                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                            class="btn btn-sm @if (get_doccomment_status($doc->id) == 1) btn-warning @elseif (get_doccomment_status($doc->id) == 2) btn-warning @elseif (get_doccomment_status($doc->id) == 3) btn-danger @elseif (get_doccomment_status($doc->id) == 4) btn-success
-                                                                                                @elseif (get_doccomment_status($doc->id) == 0)
-                                                                                                    btn-primary
-                                                                                                @endif"
-                                                                                            style="color: #fff; margin: 10px;"
-                                                                                            id="view_doc1"
-                                                                                            title="@if (get_doccomment_status($doc->id) == 1) NC1 @elseif (get_doccomment_status($doc->id) == 2) NC2 @elseif (get_doccomment_status($doc->id) == 3) Not Recommended @elseif (get_doccomment_status($doc->id) == 4) Document Approved @endif">V{{ $loop->iteration }}</a>
-                                                                                        @endif
+                                                                                            @if ($doc->application_id == $application_id)
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                    class="btn {{ checkDocumentCommentStatus($doc->id) }}" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                    style="color: #fff; margin: 10px;"
+                                                                                                    id="view_doc1">V{{ $loop->iteration }}</a>
+                                                                                            @endif
                                                                                         @endforeach
                                                                                     </div>
                                                                                 @endif
                                                                             @else
-                                                                                <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                                <span
+                                                                                    class="badge bg-danger text-white">Documents
+                                                                                    not uploaded</span>
                                                                             @endif
                                                                         @endif
                                                                     </td>

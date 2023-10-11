@@ -6,15 +6,7 @@
 </head>
 
 <body class="light">
-    <!-- Page Loader -->
-    {{-- <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="m-t-30">
-                <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
-            </div>
-            <p>Please wait...</p>
-        </div>
-    </div> --}}
+
     @if (count($errors) > 0)
         <div class="alert alert-danger">
             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -31,10 +23,7 @@
     <!-- #END# Overlay For Sidebars -->
 
     @include('layout.topbar')
-
     <div>
-
-
         @if (Auth::user()->role == '1')
             @include('layout.sidebar')
         @elseif(Auth::user()->role == '2')
@@ -44,116 +33,122 @@
         @elseif(Auth::user()->role == '4')
             @include('layout.sideprof')
         @endif
-
         @include('layout.rightbar')
-
     </div>
-
 
     <section class="content">
         <div class="container-fluid">
 
-
             @if (Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session::get('success') }}
-                </div>
+                <script>
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: "{{ session::get('success') }}",
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                </script>
             @elseif(Session::has('fail'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session::get('fail') }}
-                </div>
+                <script>
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: "{{ session::get('success') }}",
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                </script>
             @endif
-
-
-
-
-
-            <div class="row ">
-
-
-                <div class="row clearfix">
-
-
-                    <div class="col-lg-12 col-md-12">
-                        <div>
+            @if (!get_doccomment_status($doc_id))
+                <div class="row ">
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12">
                             <div>
-                                <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
-                                    style="float:right;">Back</a>
+                                <div>
+                                    <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
+                                        style="float:right;">Back</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="tab-content">
-                            <div>
-                                <form method="post"
-                                                        action="{{ url('add-accr-comment-view-doc') }}">
-                                                        @csrf
-                                <div class="row clearfix">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="card project_widget">
-                                            <div class="card-header">
-                                                <h4>Create NC</h4>
-                                            </div>
-                                            <div class="body">
+                            <div class="tab-content">
+                                <div>
+                                    <form method="post" action="{{ url('add-accr-comment-view-doc') }}">
+                                        @csrf
+                                        <div class="row clearfix">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <div class="card project_widget">
+                                                    <div class="card-header">
+                                                        <h4>Create NC</h4>
+                                                    </div>
+                                                    <div class="body">
 
 
-                                                @if (in_array(get_doccomment_status($doc_id), [1, 2]))
-                                                    <h4 class="text-center">
-                                                        Document not approved - Rejected with
-                                                        @if (get_doccomment_status($doc_id) == 1)
-                                                            NC1
-                                                        @elseif (get_doccomment_status($doc_id) == 2)
-                                                            NC2
-                                                        @endif
-                                                    </h4>
-                                                @elseif (get_doccomment_status($doc_id) == 3)
-                                                    <h4 class="text-center">
-                                                        Document not approved and this document has been sent to admin
-                                                    </h4>
-                                                @elseif (get_doccomment_status($doc_id) == 4)
-                                                    <h4 class="text-center">
-                                                        Your Document has been approved
-                                                    </h4>
-                                                @else
-
-                                                        <input type="hidden" name="previous_url"
-                                                            value="{{ Request::url() }}">
-                                                        <input type="hidden" name="doc_id"
-                                                            value="{{ $doc_id }}">
-                                                        <input type="hidden" name="doc_code"
-                                                            value="{{ $doc_code }}">
-                                                        <input type="hidden" name="course_id"
-                                                            value="{{ $course_id }}">
+                                                        @if (in_array(get_doccomment_status($doc_id), [1, 2]))
+                                                            <h4 class="text-center">
+                                                                Document not approved - Rejected with
+                                                                @if (get_doccomment_status($doc_id) == 1)
+                                                                    NC1
+                                                                @elseif (get_doccomment_status($doc_id) == 2)
+                                                                    NC2
+                                                                @endif
+                                                            </h4>
+                                                        @elseif (get_doccomment_status($doc_id) == 3)
+                                                            <h4 class="text-center">
+                                                                Document not approved and this document has been sent to
+                                                                admin
+                                                            </h4>
+                                                        @elseif (get_doccomment_status($doc_id) == 4)
+                                                            <h4 class="text-center">
+                                                                Your Document has been approved
+                                                            </h4>
+                                                        @else
+                                                            <input type="hidden" name="previous_url"
+                                                                value="{{ Request::url() }}">
+                                                            <input type="hidden" name="doc_id"
+                                                                value="{{ $doc_id }}">
+                                                            <input type="hidden" name="doc_code"
+                                                                value="{{ $doc_code }}">
+                                                            <input type="hidden" name="course_id"
+                                                                value="{{ $course_id }}">
                                                             <div class="row">
                                                                 @if ($doc_latest_record->notApraove_count == 1)
-                                                                <div class="col-sm-12 col-md-4">
-                                                                    <label>Select Type</label>
-                                                                    <select required class="form-control required text-center" name="status" id="status">
-                                                                        <option value="">--Select--</option>
-                                                                        <option value="1">NC 1</option>
-                                                                        <option value="4">Close</option>
-                                                                    </select>
-                                                                </div>
+                                                                    <div class="col-sm-12 col-md-4">
+                                                                        <label>Select Type</label>
+                                                                        <select required
+                                                                            class="form-control required text-center"
+                                                                            name="status" id="status">
+                                                                            <option value="">--Select--</option>
+                                                                            <option value="1">NC 1</option>
+                                                                            <option value="4">Close</option>
+                                                                        </select>
+                                                                    </div>
                                                                 @endif
 
                                                                 @if ($doc_latest_record->notApraove_count == 2)
-                                                                <div class="col-sm-12 col-md-4">
-                                                                    <label>Select Type</label>
-                                                                    <select required class="form-control required text-center" name="status" id="status">
-                                                                        <option value="">--Select--</option>
-                                                                        <option value="2">NC 2</option>
-                                                                        <option value="4">Close</option>
-                                                                    </select>
-                                                                </div>
+                                                                    <div class="col-sm-12 col-md-4">
+                                                                        <label>Select Type</label>
+                                                                        <select required
+                                                                            class="form-control required text-center"
+                                                                            name="status" id="status">
+                                                                            <option value="">--Select--</option>
+                                                                            <option value="2">NC 2</option>
+                                                                            <option value="4">Close</option>
+                                                                        </select>
+                                                                    </div>
                                                                 @endif
 
                                                                 @if ($doc_latest_record->notApraove_count >= 3)
-                                                                <div class="col-sm-12 col-md-4">
-                                                                    <label>Select Type</label>
-                                                                    <select required class="form-control required text-center" name="status" id="status">
-                                                                        <option value="">--Select--</option>
-                                                                        <option value="4">Close</option>
-                                                                        <option value="3">Not Recommended</option>
-                                                                    </select>
-                                                                </div>
+                                                                    <div class="col-sm-12 col-md-4">
+                                                                        <label>Select Type</label>
+                                                                        <select required
+                                                                            class="form-control required text-center"
+                                                                            name="status" id="status">
+                                                                            <option value="">--Select--</option>
+                                                                            <option value="4">Close</option>
+                                                                            <option value="3">Not Recommended
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
                                                                 @endif
 
                                                                 <div class="col-sm-12" id="comment-section">
@@ -163,22 +158,50 @@
                                                             </div>
 
 
-                                                @endif
-                                            </div>
+                                                        @endif
+                                                    </div>
 
-                                            <div class="card-footer">
-                                                <input type="submit" value="Add Comment" class="btn btn-primary">
-                                           </div>
+                                                    <div class="card-footer">
+                                                        <input type="submit" value="Add Comment"
+                                                            class="btn btn-primary">
+                                                    </div>
 
-                                        </form>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="card">
+                    <div class="card-body">
+                        @if (in_array(get_doccomment_status($doc_id), [1, 2]))
+                    <h4 class="text-center">
+                        Document not approved - Rejected with
+                        @if (get_doccomment_status($doc_id) == 1)
+                            NC1
+                        @elseif (get_doccomment_status($doc_id) == 2)
+                            NC2
+                        @endif
+                    </h4>
+                @elseif (get_doccomment_status($doc_id) == 3)
+                    <h4 class="text-center">
+                        Document not approved and this document has been sent to
+                        admin
+                    </h4>
+                @elseif (get_doccomment_status($doc_id) == 4)
+                    <h4 class="text-center">
+                        Your Document has been approved
+                    </h4>
+                @else
+                    Something went wrong! Please contact administrator.
+                @endif
+                    </div>
+                </div>
+            @endif
+        </div>
+        </div>
+        </div>
         </div>
 
 
@@ -208,8 +231,8 @@
                                                     </th>
 
                                                     <th class="center sorting sorting_asc" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
+                                                        aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
                                                         aria-label=" No : activate to sort column descending"> User
                                                     </th>
 
@@ -312,7 +335,8 @@
                                                 <object data="{{ url('level' . '/' . $id) }}" type="application/pdf"
                                                     width="100%" height="500px">
                                                     <p>Unable to display PDF file. <a
-                                                            href="{{ url('level' . '/' . $id) }}">Download</a> instead.
+                                                            href="{{ url('level' . '/' . $id) }}">Download</a>
+                                                        instead.
                                                     </p>
                                                 </object>
 
@@ -336,7 +360,7 @@
     </section>
 
     <script>
-        document.getElementById("status").addEventListener("change", function () {
+        document.getElementById("status").addEventListener("change", function() {
             var comment_text = document.getElementById("comment_text");
             var commentSection = document.getElementById("comment-section");
             if (this.value === "4") { // If "Close" is selected

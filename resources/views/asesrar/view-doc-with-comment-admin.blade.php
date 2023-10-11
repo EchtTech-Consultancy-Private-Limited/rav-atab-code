@@ -69,81 +69,78 @@
                             <div>
                                 <div class="row clearfix">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
-
-                                        @isset($doc_latest_record)
-
-
+                                        @if ($doc_latest_record)
                                             @if ($doc_latest_record->notApraove_count >= 3)
-                                                @if(isset($docByAdmin))
+                                                @if (isset($docByAdmin))
                                                     @if ($docByAdmin->status == 3)
-                                                    <div class="card">
-                                                        <div class="card-body text-center">
-                                                            <h3>
-                                                               This document is rejected by admin. This document is currently blocked.
-                                                            </h3>
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <h3>
+                                                                    This document is rejected by admin. This document is
+                                                                    currently blocked.
+                                                                </h3>
+                                                            </div>
                                                         </div>
-                                                    </div>
-
                                                     @endif
                                                 @else
                                                     @if (isset($doc_latest_record->comment))
-                                                    @if ($doc_latest_record->comment->status == 3)
-                                                    <div class="card project_widget">
-                                                            <div class="body">
-
-
-                                                                <h4>Create NC</h4>
-
-                                                                <div>
-                                                                    <form method="post"
-                                                                        action="{{ url('add-accr-comment-view-doc') }}">
-                                                                        @csrf
-                                                                        <input type="hidden" name="previous_url"
-                                                                            value="{{ Request::url() }}">
-                                                                        <input type="hidden"
-                                                                            value="{{ $doc_id }}" name="doc_id">
-                                                                        <input type="hidden"
-                                                                            value="{{ $doc_code }}" name="doc_code">
-                                                                        <input type="hidden"
-                                                                            value="{{ $course_id }}"
-                                                                            name="course_id">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-4">
-                                                                                <label
-                                                                                    for="show-view-doc-options">Status</label>
-                                                                                <select required
-                                                                                    class="form-control text-center"
-                                                                                    id="show-view-doc-options"
-                                                                                    name="status">
-                                                                                    <option value="">Select status
-                                                                                    </option>
-                                                                                    <option value="4">Approved
-                                                                                    </option>
-                                                                                    <option value="3">Not Approved
-                                                                                    </option>
-                                                                                </select>
+                                                        @if ($doc_latest_record->comment->status == 3)
+                                                            <div class="card project_widget">
+                                                                <div class="body">
+                                                                    <h4>Create NC</h4>
+                                                                    <div>
+                                                                        <form method="post"
+                                                                            action="{{ url('add-accr-comment-view-doc') }}">
+                                                                            @csrf
+                                                                            <input type="hidden" name="previous_url"
+                                                                                value="{{ Request::url() }}">
+                                                                            <input type="hidden"
+                                                                                value="{{ $doc_id }}"
+                                                                                name="doc_id">
+                                                                            <input type="hidden"
+                                                                                value="{{ $doc_code }}"
+                                                                                name="doc_code">
+                                                                            <input type="hidden"
+                                                                                value="{{ $course_id }}"
+                                                                                name="course_id">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-md-4">
+                                                                                    <label
+                                                                                        for="show-view-doc-options">Status</label>
+                                                                                    <select required
+                                                                                        class="form-control text-center"
+                                                                                        id="show-view-doc-options"
+                                                                                        name="status">
+                                                                                        <option value="">Select
+                                                                                            status
+                                                                                        </option>
+                                                                                        <option value="4">Approved
+                                                                                        </option>
+                                                                                        <option value="3">Not
+                                                                                            Approved
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="col-sm-12"
+                                                                                    id="doc-comment-textarea">
+                                                                                    <label
+                                                                                        for="show-view-doc-options1">Add
+                                                                                        Comment</label>
+                                                                                    <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="doc_comment_textarea"></textarea>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="col-sm-12"
-                                                                                id="doc-comment-textarea">
-                                                                                <label for="show-view-doc-options1">Add
-                                                                                    Comment</label>
-                                                                                <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="show-view-doc-options1"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                        <input type="submit" value="Add Comment"
-                                                                            class="btn btn-primary">
-                                                                    </form>
+                                                                            <input type="submit" value="Add Comment"
+                                                                                class="btn btn-primary">
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
-
                                                             </div>
-
-                                                        </div>
-
-                                                    @endif
+                                                        @endif
                                                     @endif
                                                 @endif
                                             @endif
-                                        @endisset
+                                        @else
+                                        @endif
                                     </div>
 
                                 </div>
@@ -271,7 +268,8 @@
                     <div class="col-lg-12 col-md-12">
 
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="level_information" aria-expanded="true">
+                            <div role="tabpanel" class="tab-pane active" id="level_information"
+                                aria-expanded="true">
                                 <div class="row clearfix">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="card project_widget">
@@ -281,7 +279,8 @@
                                                 <object data="{{ url('level' . '/' . $id) }}" type="application/pdf"
                                                     width="100%" height="500px">
                                                     <p>Unable to display PDF file. <a
-                                                            href="{{ url('level' . '/' . $id) }}">Download</a> instead.
+                                                            href="{{ url('level' . '/' . $id) }}">Download</a>
+                                                        instead.
                                                     </p>
                                                 </object>
 
@@ -305,33 +304,33 @@
     </section>
 
 
-
-    <br><br><br><br><br><br><br><br>
     <script>
         $(document).ready(function() {
-            $('#doc-comment-textarea').hide();
-
-        });
-
-        $('#show-view-doc-options').on('change', function() {
-
-            var listvalue = $(this).val();
-            // alert(listvalue);
-            if (listvalue == 2) {
-                $('#doc-comment-textarea').show();
-            } else if (listvalue == 1) {
-                $('#doc-comment-textarea').hide();
-            } else if (listvalue == 0) {
-                $('#doc-comment-textarea').show();
-            } else if (listvalue == 3) {
-                $('#doc-comment-textarea').show();
-            } else if (listvalue == '') {
-                $('#doc-comment-textarea').hide();
-            }
-
-
+            $('#doc_comment_textarea').hide();
+    
+            $('#show-view-doc-options').on('change', function() {
+                var selectedValue = $(this).val();
+                var docCommentTextarea = $('#doc_comment_textarea');
+    
+                if (selectedValue === '3') {
+                    docCommentTextarea.show();
+                    docCommentTextarea.val(''); // Clear any existing text
+                    docCommentTextarea.val('Document rejected by admin.');
+                } else if (selectedValue === '4') {
+                    docCommentTextarea.show();
+                    // Add the "Document approved by admin" text
+                    // You can change the text as needed
+                    docCommentTextarea.val('Document approved by admin');
+                } else {
+                    docCommentTextarea.hide();
+                    docCommentTextarea.val(''); // Clear any existing text
+                    docCommentTextarea.val('Document rejected by admin.');
+                }
+            });
         });
     </script>
+    
+    
     <script>
         $('#show-view-doc-options1').bind('input', function() {
             var c = this.selectionStart,
