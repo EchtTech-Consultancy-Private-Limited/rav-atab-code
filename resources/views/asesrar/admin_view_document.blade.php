@@ -226,13 +226,6 @@
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
                                                                                                     id="view_doc1">V{{ $loop->iteration ?? '' }}</a>
-                                                                                            @else
-                                                                                                <span
-                                                                                                    class="bg-danger p-2 text-white"
-                                                                                                    style="border-radius: 5px; font-size:12px;">
-                                                                                                    Documents not
-                                                                                                    uploaded
-                                                                                                </span>
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif

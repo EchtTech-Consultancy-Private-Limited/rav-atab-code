@@ -415,7 +415,7 @@ function showstate($id)
 
 function checkDocumentCommentStatus($id)
 {
-    $commentData = DB::table('doc_comments')->where('doc_id', $id)->first();
+    $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
 
     if ($commentData) {
         if ($commentData->status == 4) {
@@ -430,7 +430,7 @@ function checkDocumentCommentStatus($id)
 
 function checkDocumentCommentStatusreturnText($id)
 {
-    $commentData = DB::table('doc_comments')->where('doc_id', $id)->first();
+    $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
 
     if ($commentData) {
         if ($commentData->status == 4) {
