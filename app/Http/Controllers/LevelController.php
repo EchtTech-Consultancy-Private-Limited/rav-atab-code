@@ -2053,15 +2053,6 @@ class LevelController extends Controller
     public function  uploads_document(Request $request)
     {
 
-        // dd($request->all());
-        // if($request->hasfile('file'))
-        // {
-        //     $img = $request->file('file');
-        //     $name =$img->getClientOriginalName();
-        //     $filename = time().$name;
-        //     $img->move('profile/',$filename);
-        //     $data->file=$filename;
-        // }
 
         $aplication = Application::whereuser_id(Auth::user()->id)->wherelevel_id($request->level_id)->get();
         if (count($aplication) == 0) {

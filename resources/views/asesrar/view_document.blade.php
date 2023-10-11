@@ -299,15 +299,20 @@
                                                                             @if ($question->documents)
                                                                                 @if (count($question->documents) == 1)
                                                                                     @foreach ($question->documents as $doc)
-                                                                                        <div>
-                                                                                            <a class="btn btn-primary btn-sm" target="_blank"
-                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}">View
-                                                                                            Document</a>
-                                                                                        </div>
+                                                                                    @if ($doc->application_id == $application_id)
+                                                                                    <div>
+                                                                                        <a class="btn btn-primary btn-sm" target="_blank"
+                                                                                        href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}">View
+                                                                                        Document</a>
+                                                                                    </div>
+                                                                                    @else
+                                                                                    <span class="badge bg-danger text-white">Documents not uploaded</span>
+                                                                                    @endif
                                                                                     @endforeach
                                                                                 @elseif (count($question->documents) > 1)
                                                                                     <div class="d-flex">
                                                                                         @foreach ($question->documents as $doc)
+                                                                                        @if ($doc->application_id == $application_id)
                                                                                             <a target="_blank"
                                                                                             href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                             class="btn btn-sm @if (get_doccomment_status($doc->id) == 1) btn-warning @elseif (get_doccomment_status($doc->id) == 2) btn-warning @elseif (get_doccomment_status($doc->id) == 3) btn-danger @elseif (get_doccomment_status($doc->id) == 4) btn-success
@@ -317,6 +322,7 @@
                                                                                             style="color: #fff; margin: 10px;"
                                                                                             id="view_doc1"
                                                                                             title="@if (get_doccomment_status($doc->id) == 1) NC1 @elseif (get_doccomment_status($doc->id) == 2) NC2 @elseif (get_doccomment_status($doc->id) == 3) Not Recommended @elseif (get_doccomment_status($doc->id) == 4) Document Approved @endif">V{{ $loop->iteration }}</a>
+                                                                                        @endif
                                                                                         @endforeach
                                                                                     </div>
                                                                                 @endif
