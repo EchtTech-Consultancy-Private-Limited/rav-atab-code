@@ -1587,12 +1587,19 @@ class LevelController extends Controller
             Mail::to([$asses_email])->send(new SendMail($mailData));
             //Mail sending script ends here
 
-        } elseif ($login_id == 1) {      //return $request->course_id;
+        } elseif ($login_id == 1) {
+              //return $request->course_id;
+                $txt = "";
+              if($request->status == 4){
+                $txt = "Document has been approved";
+              }else{
+                $txt = $request->doc_comment;
+              }
             $comment = new DocComment;
             $comment->doc_id = $request->doc_id;
             $comment->doc_code = $request->doc_code;
             $comment->status = $request->status;
-            $comment->comments = $request->doc_comment;
+            $comment->comments = $txt;
             $comment->course_id = $request->course_id;
             $comment->user_id = Auth::user()->id;
             $comment->save();
@@ -2370,7 +2377,7 @@ class LevelController extends Controller
         $course = DB::table('application_courses')->where('application_id', $id)->get();
         return view('level.create-course', compact('applicationData', 'course'));
     }
-    
+
     public function newApplications($id = null)
     {
         if ($id) {
