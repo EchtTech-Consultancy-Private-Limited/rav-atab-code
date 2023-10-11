@@ -139,7 +139,7 @@
                             <div class="inner-box">
                                 <a href="{{ url('/login/account') }}">
                                     <img src="{{ asset('landing_page/account.png')}}" alt="admin-login">
-                                    <h4>Account Login<i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
+                                    <h4>Accountant Login<i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
                                 </a>
                             </div>
                         </div>
