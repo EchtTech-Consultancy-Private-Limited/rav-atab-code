@@ -88,7 +88,9 @@
                                  {{-- @if (Checknotification(Auth::user()->id) == 0) --}}
                                      {{-- <h5 >{{ 'Assign ID Numbe:'.Checknotification(Auth::user()->id) }}</h5> --}}
                                  {{-- @endif --}}
-                              
+                                @if(Checknotification(Auth::user()->id))
+                                    
+                                
 
                                  @foreach (Checknotification(Auth::user()->id) as $item)
                                  <li class="p-2">
@@ -111,7 +113,7 @@
                                  </li>
                                 @endforeach
 
-
+                                @endif
                              </ul>
                          </li>
                          <li class="footer">
