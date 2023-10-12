@@ -418,51 +418,70 @@
         }
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('.fileup').change(function() {
-                var fileInput = $(this);
-                var questionId = fileInput.data('question-id');
-                var form = $('#submitform_doc_form_' + questionId)[0];
-                var formData = new FormData(form);
 
-                $("#loader").removeClass('d-none');
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+<script>
+    $(document).ready(function() {
+        $('.fileup').change(function() {
+            var fileInput = $(this);
+            var questionId = fileInput.data('question-id');
+            var form = $('#submitform_doc_form_' + questionId)[0];
+            var formData = new FormData(form);
+            var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+    
+            var uploadedFileName = fileInput.val();
+            var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+    
+            if (allowedExtensions.indexOf(fileExtension) === -1) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Invalid File Type',
+                    text: 'Please upload a PDF or DOC file.',
+                    showConfirmButton: true
                 });
-
-                $.ajax({
-                    url: "{{ url('add-courses') }}", // Your server-side upload endpoint
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        $("#loader").addClass('d-none');
-                        if (response.message == 'success') {
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Upload Successful',
-                                text: 'Your documents have been successfully uploaded.',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-
-                            location.reload();
-
-
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors
-                        console.error(error);
+    
+                // Clear the file input
+                fileInput.val('');
+                return;
+            }
+    
+            $("#loader").removeClass('d-none');
+    
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+    
+            $.ajax({
+                url: "{{ url('add-courses') }}", // Your server-side upload endpoint
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $("#loader").addClass('d-none');
+                    if (response.message == 'success') {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Upload Successful',
+                            text: 'Your documents have been successfully uploaded.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+    
+                        location.reload();
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    console.error(error);
+                }
             });
         });
+    });
     </script>
+    
+
     @include('layout.footer')
