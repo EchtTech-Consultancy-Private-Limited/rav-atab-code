@@ -138,7 +138,7 @@
                                     @if ($item->status == '0')
                                     <a
                                     @if ($item->status == 0)
-                                    <div class="badge col-black pending-status">Payment Pending</div>
+                                    <div class="badge text-dark">Payment Pending</div>
                                     @elseif($item->status == 1)
                                     <div class="badge col-green">Payment Proccess</div>
                                     @else @endif
@@ -150,7 +150,7 @@
                                  @if ($item->status == 0)
                                  <div class="badge col-black">Payment Pending</div>
                                  @elseif($item->status == 1)
-                                 <div class="badge col-green">Payment Proccess</div>
+                                 <div class="badge text-dark">Payment Proccess</div>
                                  @else @endif
                                  </a>
                                  </td>
@@ -158,9 +158,9 @@
                                  @if ($item->status == '2')
                                  <a
                                  @if ($item->status == 1)
-                                 <div class="badge col-green">Payment Proccess</div>
+                                 <div class="badge text-dark">Payment Proccess</div>
                                  @elseif($item->status == 2)
-                                 <div class="badge col-green">Payment Approved</div>
+                                 <div class="badge text-dark">Payment Approved</div>
                                  @else @endif
                                  </a>
                                  </td>

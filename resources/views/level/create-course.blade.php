@@ -294,7 +294,7 @@
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
-                                                     class="preventnumeric" maxlength="50" required>
+                                                    class="preventnumeric" maxlength="50" required>
                                             </div>
                                             @error('course_name')
                                                 <div class="alert alert-danger">{{ $message }}
@@ -390,7 +390,7 @@
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc1[]"
-                                                     class="form-control doc_1 file_size" required>
+                                                    class="form-control doc_1 file_size" required>
                                             </div>
                                         </div>
                                     </div>
@@ -400,7 +400,7 @@
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc2[]"
-                                                     class="form-control doc_2 file_size" required>
+                                                    class="form-control doc_2 file_size" required>
                                             </div>
 
                                         </div>
@@ -587,7 +587,7 @@
                                         <div class="form-line">
                                             <label>Mode of Course <span class="text-danger">*</span></label>
                                             <div class="form-group default-select select2Style">
-                                                <select class="form-control width"  name="mode_of_course[]">
+                                                <select class="form-control width" name="mode_of_course[]">
                                                     <option value="" disabled>Select Mode
                                                     </option>
                                                     <option value="Online">Online</option>
@@ -710,13 +710,6 @@
                                             <table
                                                 class="table table-hover js-basic-example contact_list table-bordered">
                                                 <tbody>
-                                                    <!-- <tr class="odd gradeX">
-                          <th class="center">S.No.</th>
-                          <td class="center">
-                              <input type="text" id="Course_id" readonly>
-                          </td>
-
-                          </tr> -->
                                                     <tr class="odd gradeX">
                                                         <th class="center"> Course Name </th>
                                                         <td class="center">
@@ -805,7 +798,8 @@
                                         <label class="active">Payment Status : </label>
                                         <input type="text" name="Payment_Statuss" id="Payment_Statuss"
                                             class="btn btn-danger shadow-none p-0"
-                                            style="border-bottom: 1px solid #fb483a !important;" readonly>
+                                            style="border-bottom: 1px solid #fb483a !important; cursor: default !important;"
+                                            readonly>
                                     </div>
                                     <button type="button" class="close" data-bs-dismiss="modal"
                                         aria-label="Close">
@@ -834,8 +828,6 @@
                                                         <div class="form-line">
                                                             <label>Course Duration <span class="text-danger">*</span>
                                                             </label>
-                                                            <!-- <input type="number" placeholder="Course Duration"
-                                name="course_duration[]" required> -->
                                                             <div class="course_group">
                                                                 <input type="number" placeholder="Years"
                                                                     name="years" required class="course_input"
@@ -891,8 +883,6 @@
                                                         <div class="form-line">
                                                             <label>Course Brief <span
                                                                     class="text-danger">*</span></label>
-                                                            <!-- <input type="text" placeholder="Course Brief"
-                                name="course_brief[]" required> -->
                                                             <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
                                                                 name="course_brief" id="course_brief"></textarea>
                                                         </div>
@@ -910,7 +900,8 @@
                                                             <input type="file" name="doc1" id="doc1_edit"
                                                                 class="form-control doc_edit_1 file_size">
                                                             <a target="_blank" href="" id="docpdf1ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
+                                                                title=" Document 1"><i
+                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 1 </a>
                                                         </div>
                                                     </div>
@@ -924,12 +915,12 @@
                                                                 id="payment_reference_no"
                                                                 class="form-control doc_edit_2 file_size">
                                                             <a target="_blank" href="" id="docpdf2ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
+                                                                title=" Document 1"><i
+                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 2</a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {{-- @if ($id) [{{$data->image}}] @endif --}}
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <div class="form-line">
@@ -940,7 +931,8 @@
                                                                 class="form-control doc_edit_3 file_size">
                                                             <a href="" id="docpdf3ss"
                                                                 title="Download Document 1" download><i
-                                                                    class="fa fa-download mr-2 d-inline-block w-"></i> Doc 3 </a>
+                                                                    class="fa fa-download mr-2 d-inline-block w-"></i>
+                                                                Doc 3 </a>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -9,4 +9,8 @@ class asessor_application extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
+    public function application(){
+        return $this->belongsTo(Application::class,'application_id','id');
+    }
 }

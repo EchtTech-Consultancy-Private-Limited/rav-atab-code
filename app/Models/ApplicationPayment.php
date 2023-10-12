@@ -11,4 +11,8 @@ class ApplicationPayment extends Model
     protected $fillable = [
         'payment_details_file',
     ];
+
+    public function application(){
+        return $this->belongsTo(Application::class,'application_id','id');
+    }
 }
