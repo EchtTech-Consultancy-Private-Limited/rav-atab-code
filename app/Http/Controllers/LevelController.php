@@ -1029,7 +1029,8 @@ class LevelController extends Controller
         $item->amount = $request->amount;
         $item->payment_date = date("Y-m-d", strtotime($request->payment_date));
 
-        $item->payment_details = $request->payment_transaction_no;
+        $item->transaction_no = $request->transaction_no;
+        $item->reference_no = $request->reference_no;
         $item->course_count = $request->course_count;
         $item->currency = $request->currency;
         $item->country = $request->coutry;
@@ -1412,7 +1413,7 @@ class LevelController extends Controller
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
-       $chapters = Chapter::all();
+        $chapters = Chapter::all();
 
 
 
@@ -1439,28 +1440,28 @@ class LevelController extends Controller
 
     public function add_courses(Request $request)
     {
-            $notApprove = 0;
-            $oldFile = Add_Document::orderby('id','desc')->where('doc_id',$request->question_id)->where('application_id',$request->application_id)->where('course_id',$request->course_id)->first();
-            if($oldFile){
-                $notApprove = $oldFile->notApraove_count ?? 0;
-            }
-            $course = new Add_Document;
-            $course->course_id = $request->course_id;
-            $course->doc_id = $request->question_id;
-            $course->question_id = $request->question_pid;
-            $course->application_id = $request->application_id;
-            $course->user_id = Auth::user()->id;
-            $course->notApraove_count = $notApprove + 1 ?? 1;
+        $notApprove = 0;
+        $oldFile = Add_Document::orderby('id', 'desc')->where('doc_id', $request->question_id)->where('application_id', $request->application_id)->where('course_id', $request->course_id)->first();
+        if ($oldFile) {
+            $notApprove = $oldFile->notApraove_count ?? 0;
+        }
+        $course = new Add_Document;
+        $course->course_id = $request->course_id;
+        $course->doc_id = $request->question_id;
+        $course->question_id = $request->question_pid;
+        $course->application_id = $request->application_id;
+        $course->user_id = Auth::user()->id;
+        $course->notApraove_count = $notApprove + 1 ?? 1;
 
 
-            if ($request->hasfile('fileup')) {
-                $file = $request->file('fileup');
-                $name = $file->getClientOriginalName();
-                $filename = time() . $name;
-                $file->move('level/', $filename);
-                //dd($filename);
-                $course->doc_file = $filename;
-            }
+        if ($request->hasfile('fileup')) {
+            $file = $request->file('fileup');
+            $name = $file->getClientOriginalName();
+            $filename = time() . $name;
+            $file->move('level/', $filename);
+            //dd($filename);
+            $course->doc_file = $filename;
+        }
 
 
         $course->save();
@@ -1514,9 +1515,9 @@ class LevelController extends Controller
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
-        $docByAdmin = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->where('user_id',auth()->user()->id)->first();
+        $docByAdmin = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->where('user_id', auth()->user()->id)->first();
 
-        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id','docByAdmin'));
+        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id', 'docByAdmin'));
     }
 
     public function acc_doc_comments(Request $request)
@@ -1588,13 +1589,13 @@ class LevelController extends Controller
             //Mail sending script ends here
 
         } elseif ($login_id == 1) {
-              //return $request->course_id;
-                $txt = "";
-              if($request->status == 4){
+            //return $request->course_id;
+            $txt = "";
+            if ($request->status == 4) {
                 $txt = "Document has been approved";
-              }else{
+            } else {
                 $txt = $request->doc_comment;
-              }
+            }
             $comment = new DocComment;
             $comment->doc_id = $request->doc_id;
             $comment->doc_code = $request->doc_code;
@@ -2049,7 +2050,7 @@ class LevelController extends Controller
 
 
 
-        if(url('/') != 'http://127.0.0.1:8000'){
+        if (url('/') != 'http://127.0.0.1:8000') {
             Mail::to($user_info->email)->send(new SendAcknowledgment($send_acknowledgment_letter));
         }
 
@@ -2276,7 +2277,7 @@ class LevelController extends Controller
         $data = ApplicationPayment::find(dDecrypt($id));
         $applicationId = $data->application_id;
         $applicationData = Application::find($applicationId);
-        if($applicationData){
+        if ($applicationData) {
             $applicationData->status = 1;
             $applicationData->update();
         }
@@ -2477,5 +2478,33 @@ class LevelController extends Controller
         }
 
         return response()->json(['status' => 'unique']);
+    }
+
+    public function paymentTransactionValidation(Request $request)
+    {
+        $transactionNumber = DB::table('application_payments')->where('transaction_no', $request->transaction_no)->first();
+
+        if ($transactionNumber) {
+            // Transaction number already exists
+            return response()->json(['status' => 'error', 'message' => 'This transaction ID is already used']);
+        } else {
+            // Transaction number doesn't exist, you can proceed or return a success message
+            // For example, you can return a success message like this:
+            return response()->json(['status' => 'success', 'message' => 'Transaction ID is available']);
+        }
+    }
+
+    public function paymentReferenceValidation(Request $request)
+    {
+        $transactionNumber = DB::table('application_payments')->where('reference_no', $request->reference_no)->first();
+
+        if ($transactionNumber) {
+            // Transaction number already exists
+            return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);
+        } else {
+            // Transaction number doesn't exist, you can proceed or return a success message
+            // For example, you can return a success message like this:
+            return response()->json(['status' => 'success', 'message' => 'Reference ID is available']);
+        }
     }
 }

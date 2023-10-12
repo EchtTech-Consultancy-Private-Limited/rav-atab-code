@@ -8,40 +8,47 @@
      }
  </style>
 
-<style>
-    /* Add styles for the active class */
-   .nav-active {
-        background-color: #e91e63 !important; /* Change this to your desired active background color */
-        color: #ffffff !important; /* Change this to your desired active text color */
-    }
+ <style>
+     /* Add styles for the active class */
+     .nav-active {
+         background-color: #e91e63 !important;
+         /* Change this to your desired active background color */
+         color: #ffffff !important;
+         /* Change this to your desired active text color */
+     }
 
-    /* Add hover effect for all nav links except the active link */
-    .custom-nav-item:not(.nav-active) .custom-nav-link:hover {
-        background-color: #e91e63; /* Change this to your desired hover background color */
-        color: #ffffff !important; /* Change this to your desired hover text color */
-        border-radius: 20px;
-    }
+     /* Add hover effect for all nav links except the active link */
+     .custom-nav-item:not(.nav-active) .custom-nav-link:hover {
+         background-color: #e91e63;
+         /* Change this to your desired hover background color */
+         color: #ffffff !important;
+         /* Change this to your desired hover text color */
+         border-radius: 20px;
+     }
 
-    /* Add border-radius to all nav links */
-    .custom-nav-link {
-        border-radius: 20px !important; /* Apply border-radius to all nav links */
-        margin-left: 3px;
-        margin-right: 3px;
-    }
+     /* Add border-radius to all nav links */
+     .custom-nav-link {
+         border-radius: 20px !important;
+         /* Apply border-radius to all nav links */
+         margin-left: 3px;
+         margin-right: 3px;
+     }
 
-    /* Remove hover effect on active link */
-    .nav-active .custom-nav-link:hover {
-        background-color: inherit;
-        color: inherit !important;
-        border-radius: 20px;
-    }
+     /* Remove hover effect on active link */
+     .nav-active .custom-nav-link:hover {
+         background-color: inherit;
+         color: inherit !important;
+         border-radius: 20px;
+     }
 
-    /* Additional style for hover on active link */
-    .nav-active .custom-nav-link:hover {
-        background-color: #e91e63 !important; /* Change this to your desired hover background color for active link */
-        color: #ffffff !important; /* Change this to your desired hover text color for active link */
-    }
-</style>
+     /* Additional style for hover on active link */
+     .nav-active .custom-nav-link:hover {
+         background-color: #e91e63 !important;
+         /* Change this to your desired hover background color for active link */
+         color: #ffffff !important;
+         /* Change this to your desired hover text color for active link */
+     }
+ </style>
 
  <title>RAV Accreditation</title>
 
@@ -116,7 +123,8 @@
 
 
                                          <li class="custom-nav-item">
-                                             <a class="custom-nav-link nav-active" href="#new_application" data-bs-toggle="tab">New
+                                             <a class="custom-nav-link nav-active" href="#new_application"
+                                                 data-bs-toggle="tab">New
                                                  Application </a>
                                          </li>
                                          <li class="custom-nav-item">
@@ -267,8 +275,8 @@ active @endif"
 
                                                  </div>
                                                  <div class="col-md-12">
-                                                     <form class="form" action="{{ url('/new-applications') }}"
-                                                         method="post">
+                                                    <form class="form" id="spocForm" action="{{ url('/new-applications') }}" method="post">
+
                                                          @csrf
                                                          @if ($applicationData)
                                                              <input type="hidden" name="previous_data" value="1">
@@ -285,8 +293,7 @@ active @endif"
                                                                                      class="text-danger">*</span></label>
                                                                              <input type="text" name="Person_Name"
                                                                                  placeholder="Person Name"
-                                                                                 class="preventnumeric"
-                                                                                 id="person_name"
+                                                                                 class="preventnumeric" id="person_name"
                                                                                  @isset($applicationData)
                                                                                   value="{{ $applicationData->Person_Name ?? '' }}"
                                                                                @endisset
@@ -328,9 +335,7 @@ active @endif"
                                                                                      class="text-danger">*</span></label>
                                                                              <input type="text" required="required"
                                                                                  maxlength="10" name="Contact_Number"
-                                                                                 class="preventalpha"
-                                                                                 placeholder="Contact Number"
-                                                                                 id="Contact_Number"
+                                                                                 class="preventalpha" placeholder="Contact Number" id="Contact_Number"
                                                                                  @isset($applicationData)
                                                                               value="{{ $applicationData->Contact_Number ?? '' }}"
                                                                               @endisset>
@@ -347,9 +352,7 @@ active @endif"
                                                                              <input id="emailId" type="text"
                                                                                  name="Email_ID"
                                                                                  placeholder="Email-ID"
-                                                                                 @isset($applicationData)
-           value="{{ $applicationData->Email_ID ?? '' }}"
-           @endisset>
+                                                                                 @isset($applicationData) value="{{ $applicationData->Email_ID ?? '' }}" @endisset>
                                                                          </div>
                                                                          <span class="text-danger"
                                                                              id="email_id_error"></span>
@@ -358,8 +361,10 @@ active @endif"
                                                                  <div class="col-sm-3">
                                                                      <div class="form-group">
                                                                          <div class="form-line">
-                                                                             <label>Designation<span
-                                                                                     class="text-danger">*</span></label>
+                                                                             <label>
+                                                                                 Designation
+                                                                                 <span class="text-danger">*</span>
+                                                                             </label>
                                                                              <input type="text" name="designation"
                                                                                  placeholder="Designation"
                                                                                  @isset($applicationData)
@@ -376,8 +381,12 @@ active @endif"
                                              </div>
                                              <!-- basic end -->
                                              <ul class="list-inline pull-right">
-                                                 <li><button id="nextBtn" type="submit" class="btn btn-primary next-step">
-                                                         Next</button></li>
+                                                 <li>
+                                                     <button id="nextBtn" type="submit"
+                                                         class="btn btn-primary next-step" disabled>
+                                                         Next
+                                                     </button>
+                                                 </li>
                                              </ul>
                                              </form>
                                          </div>
@@ -597,7 +606,40 @@ active @endif"
                                          });
                                      });
                                  </script>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var spocForm = document.getElementById('spocForm');
+        var nextBtn = document.getElementById('nextBtn');
+        var personNameInput = document.getElementById('person_name');
+        var contactNumberInput = document.getElementById('Contact_Number');
+        var emailInput = document.getElementById('emailId');
+        var designationInput = document.querySelector('input[name="designation"]');
+    
+        // Function to check if all fields are filled
+        function checkForm() {
+            if (
+                personNameInput.value.trim() !== '' &&
+                contactNumberInput.value.trim() !== '' &&
+                emailInput.value.trim() !== '' &&
+                designationInput.value.trim() !== ''
+            ) {
+                nextBtn.removeAttribute('disabled');
+            } else {
+                nextBtn.setAttribute('disabled', 'disabled');
+            }
+        }
+    
+        // Attach an event listener to each input to check the form on input change
+        personNameInput.addEventListener('input', checkForm);
+        contactNumberInput.addEventListener('input', checkForm);
+        emailInput.addEventListener('input', checkForm);
+        designationInput.addEventListener('input', checkForm);
+    
+        // Initial check when the page loads
+        checkForm();
+    });
+    </script>
+    
 
                                  <script>
                                      $('#Contact_Number').on('keyup', function() {
@@ -625,11 +667,12 @@ active @endif"
                                                      if (response.status === 'duplicate') {
                                                          // Display the error message in the #contact_error span
                                                          $('#contact_error').text('Contact number is already in use.');
-                                                         $('#nextBtn').prop('disabled', true);
+                                                         nextBtn.setAttribute('disabled', 'disabled');
+                                                         
                                                      } else {
                                                          // Clear the error message if the contact number is unique
                                                          $('#contact_error').text('');
-                                                         $('#nextBtn').prop('disabled', false);
+                                                         
                                                      }
                                                  },
                                                  error: function(xhr, status, error) {
@@ -668,11 +711,12 @@ active @endif"
                                                      if (response.status === 'duplicate') {
                                                          // Display the error message in the #email_id_error span
                                                          $('#email_id_error').text('Email is already in use.');
-                                                         $('#nextBtn').prop('disabled', true);
+                                                         nextBtn.setAttribute('disabled', 'disabled');
+                                                         
                                                      } else {
                                                          // Clear the error message if the email is unique
                                                          $('#email_id_error').text('');
-                                                         $('#nextBtn').prop('disabled', false);
+                                                         
                                                      }
                                                  },
                                                  error: function(xhr, status, error) {

@@ -225,14 +225,21 @@
                         @include('level.inner-nav')
                     </div>
                     @if (Session::has('success'))
-                        <div class="alert alert-success" style="padding: 15px;" role="alert">
-                            {{ session::get('success') }}
-                        </div>
-                    @elseif(Session::has('fail'))
+                        <script>
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: '{{ session('success') }}',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        </script>
+                    @elseif (Session::has('fail'))
                         <div class="alert alert-danger" role="alert">
-                            {{ session::get('fail') }}
+                            {{ session('fail') }}
                         </div>
                     @endif
+
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <ul>
@@ -308,8 +315,8 @@
                                                             @elseif(request()->path() == 'level-second')
                                                                 <td class="center">
                                                                     <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                                   class="btn btn-tbl-edit"><i
-                                                                       class="material-icons">visibility</i></a> -->
+                                                                       class="btn btn-tbl-edit"><i
+                                                                           class="material-icons">visibility</i></a> -->
                                                                     @if ($item->status == 1)
                                                                         <a href="{{ url('/upload-document') }}"
                                                                             class="btn btn-tbl-upload"><i
