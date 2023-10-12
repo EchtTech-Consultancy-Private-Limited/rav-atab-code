@@ -302,3 +302,30 @@ Route::post('email-validation', [LevelController::class, 'emailValidaion'])->nam
 Route::post('payment-transaction-validation', [LevelController::class, 'paymentTransactionValidation'])->name('transaction_validation');
 
 Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
+
+
+Route::get('clear-some-tables', function () {
+    try {
+        // List of tables to truncate
+        $tables = [
+            'add_documents',
+            'applications',
+            'application_courses',
+            'application_documents',
+            'application_payments',
+            'asessor_applications',
+            'doc_comments',
+        ];
+
+        // Truncate each table
+        foreach ($tables as $table) {
+            DB::table($table)->truncate();
+        }
+
+        // Return a success response
+        return "Tables truncated successfully.";
+    } catch (\Exception $e) {
+        // Handle any exceptions that may occur during truncation
+        return "An error occurred: " . $e->getMessage();
+    }
+});
