@@ -400,12 +400,15 @@ function Checknotification($id = 0)
 
     foreach ($assessors as $assesor) {
         $applicationData = DB::table('applications')->select('id','application_uid')->where('id',$assesor->id)->first();
+
+       if($applicationData){
         $assesorWithApplicationData[] = [
-            'application_uid' => $applicationData->application_uid,
+            'application_uid' => $applicationData->application_uid ?? 0,
             'id' => $assesor->id,
             'created_at' => $assesor->created_at,
             'application_id' => $assesor->application_id
         ];
+       }
     }
 
     if ($assesorWithApplicationData != NULL) {
