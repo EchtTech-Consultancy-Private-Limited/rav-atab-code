@@ -306,6 +306,9 @@ Route::post('payment-reference-validation', [LevelController::class, 'paymentRef
 
 Route::get('clear-some-tables', function () {
     try {
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
         // List of tables to truncate
         $tables = [
             'add_documents',
@@ -322,10 +325,13 @@ Route::get('clear-some-tables', function () {
             DB::table($table)->truncate();
         }
 
+        // Enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         // Return a success response
-        return "Tables truncated successfully.";
+        return "Tables truncated successfully with foreign key checks disabled.";
     } catch (\Exception $e) {
-        // Handle any exceptions that may occur during truncation
+        // Handle any exceptions that may occur during the process
         return "An error occurred: " . $e->getMessage();
     }
 });
