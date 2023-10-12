@@ -155,6 +155,9 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" aria-expanded="true">
                                 <div class="row clearfix">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="{{ url('Assessor-view/'.dEncrypt($application_id)) }}" class="btn btn-primary btn-sm">Back</a>
+                                    </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div>
                                             @if (check_document_upload($course_id) == Auth::user()->id)

@@ -88,18 +88,25 @@
                                  {{-- @if (Checknotification(Auth::user()->id) == 0) --}}
                                      {{-- <h5 >{{ 'Assign ID Numbe:'.Checknotification(Auth::user()->id) }}</h5> --}}
                                  {{-- @endif --}}
-
+                              
 
                                  @foreach (Checknotification(Auth::user()->id) as $item)
-                                 <li>
+                                 <li class="p-2">
 
-                                  <a href="#" onClick="return false;">
+                                  <a href="#" onClick="return false;" class="bg-secondary text-white" style="border-radius: 10px;">
+                                        <div class="d-flex justify-content-between" style="font-size: 12px;">
+                                            <div>
+                                                <span  id="notification" data-value='{{ $item['id'] }}' >{{ 'Application ID:' . $item['application_uid']}}</span>
+                                            </div>
+                                            <div>
+                                                <span>
+                                                    {{ date('d-M-Y',strtotime($item['created_at'])) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                           
 
-                                      <span class="menu-info">
-
-                                           <h5 style="color: #000;" id="notification" data-value='{{ $item->id }}' >{{ 'Application ID:' . $item->id. ' ,'. date('d-M-Y',strtotime($item->created_at)) }}</h5>
-
-                                      </span>
+                                     
                                   </a>
                                  </li>
                                 @endforeach

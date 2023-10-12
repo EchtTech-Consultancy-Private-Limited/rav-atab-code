@@ -289,7 +289,7 @@
 
     </section>
 
-    <section class="content">
+    <section class="content" style="margin-top: 5px !important;">
         <div class="container-fluid">
             <div class="block-header">
                 <div class="row">

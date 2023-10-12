@@ -378,7 +378,7 @@ class applicationController extends Controller
 
    public function nationl_accesser()
    {
-        $collection = DB::table('asessor_applications')
+        $collection = DB::table('asessor_applications')->orderByDesc('asessor_applications.id')
         ->join('applications', 'asessor_applications.application_id', '=', 'applications.id')
         ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
         ->where('asessor_applications.assessor_id','=',Auth::user()->id)
@@ -387,6 +387,8 @@ class applicationController extends Controller
             if(count($collection)){
             return view('application.accesser.national_accesser',['collection'=>$collection]);
             }
+
+            
         return view('application.accesser.national_accesser');
    }
 

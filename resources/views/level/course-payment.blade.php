@@ -245,7 +245,7 @@
                                     <div class="form-group">
                                         <div class="form-line select-box-hide-class" style="width:25%">
                                             <label>Payment Mode<span class="text-danger">*</span></label>
-                                            <select name="payment" class="form-control" id="payments">
+                                            <select name="payment" class="form-control payment_mode" id="payments">
                                                 <option value="">Select Option</option>
                                                 <option value="QR-Code"
                                                     {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
@@ -633,10 +633,11 @@
                     function checkAllValidation() {
                         // var paymentDate = $('.paymentDate').val();
                         var transactionNo = $('.transactionNo').val();
+                        var payment_mode = $('.payment_mode').val();
                         var referenceNo = $('.referenceNo').val();
                         var paymentProof = $('.paymentProof').val();
                         
-                        if ( transactionNo.trim() !== '' && referenceNo.trim() !== '' && paymentProof.trim() !== '') {
+                        if ( transactionNo.trim() !== '' && referenceNo.trim() !== '' && paymentProof.trim() !== '' && payment_mode.trim() !== '') {
                             // All fields are filled, enable the submit button
                             $('#submitBtn').prop('disabled', false);
                         } else {

@@ -282,7 +282,7 @@
                                                         <tr class="odd gradeX">
                                                             <td class="center">{{ $k + 1 }}</td>
                                                             <td class="center">
-                                                                RAVAP-{{ 4000 + $item->application_id }}
+                                                            {{  $item->application->application_uid }}
                                                             </td>
                                                             <td class="center level-id">{{ $item->level_id }}
                                                             </td>

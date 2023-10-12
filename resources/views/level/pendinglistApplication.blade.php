@@ -274,7 +274,7 @@
                                                             <tr>
                                                                 @foreach ($level_list_data as $item_level_list)
                                                                     @if (checktppaymentstatus($item_level_list->id) == 0)
-                                                                        <td> RAVAP-{{ 4000 + $item_level_list->id }}</td>
+                                                                        <td>{{ $item_level_list->application_uid }}</td>
                                                                         </td>
                                                                         <!-- <td class="center">{{ $item_level_list->user_id ?? '' }}</td>-->
                                                                         <td> {{ $item_level_list->level_id ?? '' }}</td>

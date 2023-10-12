@@ -325,27 +325,45 @@
                                         </div>
                                     </div>
                                 </div>
-                               <div class="col-sm-12">
-                                <div class="row">
-                                    @if ($ApplicationCourses->documents)
-                                    @foreach ($ApplicationCourses->documents as $document)
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label><strong>Doc {{ $loop->iteration }}</strong></label><br>
-                                                    <label><a
-                                                            href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                            target="_blank" id="docpdf1"
-                                                            title="Download Document 1"><i class="fa fa-eye mr-2"></i>
-                                                            Doc 1
-                                                        </a></label>
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        @if ($ApplicationCourses->documents)
+                                            @foreach ($ApplicationCourses->documents as $document)
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <div class="form-line">
+                                                            <label><strong>Doc
+                                                                    {{ $loop->iteration }}</strong></label><br>
+
+                                                            @php
+                                                                $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
+                                                            @endphp
+
+                                                            @if (in_array($extension, ['xls', 'csv']))
+                                                                <label>
+                                                                    <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
+                                                                        target="_blank" id="docpdf1"
+                                                                        title="Download Document 1">
+                                                                        <i class="fa fa-download mr-2"></i> Download
+                                                                        Document 1
+                                                                    </a>
+                                                                </label>
+                                                            @elseif ($extension === 'pdf')
+                                                                <label>
+                                                                    <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
+                                                                        target="_blank" id="docpdf1"
+                                                                        title="View Document 1">
+                                                                        <i class="fa fa-eye mr-2"></i> View Document 1
+                                                                    </a>
+                                                                </label>
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
+                                            @endforeach
+                                        @endif
+                                    </div>
                                 </div>
-                               </div>
                                 <div class="col-sm-12 text-right">
                                     <div class="form-group">
 
@@ -408,7 +426,10 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Date</strong></label><br>
-                                                <label>{{ $ApplicationPayment->payment_date }}</label>
+                                                <label>
+                                                    {{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -534,7 +555,14 @@
 
 
         $(".payment_alert").click(function() {
-            alert('Document is pending for approval from Accounts department')
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Document is pending for approval from Accounts department',
+                showConfirmButton: true,
+                timer: 5000
+            });
+
         });
     </script>
 
