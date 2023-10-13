@@ -4,6 +4,34 @@
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+<style>
+    .custom-button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-button input[type="checkbox"] {
+    display: none;
+}
+
+/* .custom-button input[type="checkbox"]:checked + .checkbox-label {
+    background-color: #81a1c4;
+    color: #fff;
+    border: 1px solid #007bff;
+} */
+
+.checkbox-label {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+</style>
 
 <style>
     .button-blinking {
@@ -289,7 +317,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
@@ -314,7 +342,7 @@
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Duration<span class="text-danger">*</span></label>
@@ -336,7 +364,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Eligibility<span class="text-danger">*</span></label>
@@ -349,7 +377,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group" style="margin-top: 5px;">
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
@@ -371,7 +399,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Brief <span class="text-danger">*</span></label>
@@ -811,7 +839,7 @@
                                         <form action="" id="form_update" method="post">
                                             @csrf
                                             <div class="row mt-4">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label class="active">Course Name<span
@@ -823,7 +851,7 @@
                                                 </div>
 
                                                 <input type="hidden" name="form_step_type" value="add-course">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label>Course Duration <span class="text-danger">*</span>
@@ -848,7 +876,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 pt-3">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label class="active">Eligibility<span> </label>
@@ -857,28 +885,33 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group select-modal edit-m-d">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group" style="margin-top: 5px;">
                                                         <div class="form-line">
-                                                            <label>Mode of Course <span
-                                                                    class="text-danger">*</span></label>
-                                                            <div class="form-group default-select">
-                                                                <select class="form-control" name="mode_of_course[]"
-                                                                    required multiple="" style="width:200px;">
-                                                                    <option disabled>Select Mode of Course </option>
-                                                                    <option value="Offline">Offline</option>
-                                                                    <option value="Online">Online</option>
-                                                                    <option value="Hybrid">Hybrid</option>
-                                                                </select>
+                                                            <label>Mode of Course <span class="text-danger">*</span></label>
+                                                            <div class="custom-checkbox-group">
+                                                                <label class="custom-button">
+                                                                    <input type="checkbox" name="mode_of_course[]" id="offline_checkbox" value="Offline">
+                                                                    <span class="checkbox-label">Offline</span>
+                                                                </label>
+                                                                <label class="custom-button">
+                                                                    <input type="checkbox" name="mode_of_course[]" id="online_checkbox" value="Online">
+                                                                    <span class="checkbox-label">Online</span>
+                                                                </label>
+                                                                <label class="custom-button">
+                                                                    <input type="checkbox" name="mode_of_course[]" id="hybrid_checkbox" value="Hybrid">
+                                                                    <span class="checkbox-label">Hybrid</span>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         @error('mode_of_course')
-                                                            <div class="alert alert-danger">{{ $message }}
-                                                            </div>
+                                                        <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
+                                                    
+
                                                 </div>
-                                                <div class="col-sm-8">
+                                                <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label>Course Brief <span
@@ -952,11 +985,13 @@
                     @include('layout.footer')
 
                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
                     <script>
                         $(document).ready(function() {
                             $('.select2').select2();
                         });
+                    </script>
+
+                    <script>
                         $(document).on("click", "#view", function() {
 
                             var UserName = $(this).data('id');
@@ -1021,6 +1056,10 @@
                     <script>
                         $(document).on("click", "#edit_course", function() {
 
+                            var offline_checkbox = $('#offline_checkbox').val();
+                            var online_checkbox = $('#online_checkbox').val();
+                            var hybrid_checkbox = $('#hybrid_checkbox').val();
+
                             //alert("edit course second 2420");
                             var UserName = $(this).data('id');
                             console.log(UserName);
@@ -1039,9 +1078,7 @@
                                 },
                                 success: function(data) {
 
-                                    //console.log(data.ApplicationCourse[0].mode_of_course);
-
-                                    console.log(data.ApplicationCourse[0].mode_of_course)
+                                   
 
                                     var values = data.ApplicationCourse[0].mode_of_course;
                                     $.each(values, function(i, e) {
@@ -1053,7 +1090,18 @@
                                         .ApplicationCourse[0].id)
                                     $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                     $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                    $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+
+                                    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="mode_of_course[]"]');
+                                    var modeOfCourseItems = data.ApplicationCourse[0].mode_of_course;
+
+                                    checkboxes.forEach(checkbox => {
+    if (modeOfCourseItems.includes(checkbox.value)) {
+        checkbox.checked = true;
+    } else {
+        checkbox.checked = false;
+    }
+});
+
 
 
 

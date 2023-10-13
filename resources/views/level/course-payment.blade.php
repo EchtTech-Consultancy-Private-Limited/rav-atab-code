@@ -325,11 +325,11 @@
                                                 <div class="form-group">
                                                     <div class="form-line">
                                                         <label>Payment Date <span class="text-danger">*</span></label>
-                                                        <input type="text" name="payment_date" class="form-control paymentDate"
-                                                            id="payment_date" required placeholder="Payment Date"
-                                                            aria-label="Date" value="{{ old('payment_date') }}"
-                                                            onfocus="showDatePicker()" autocomplete="off"
-                                                            min="{{ date('Y-m-d') }}">
+                                                        <input type="text" name="payment_date"
+                                                            class="form-control paymentDate" id="payment_date" required
+                                                            placeholder="Payment Date" aria-label="Date"
+                                                            value="{{ old('payment_date') }}" onfocus="showDatePicker()"
+                                                            autocomplete="off" min="{{ date('Y-m-d') }}">
                                                     </div>
 
                                                     <label for="payment_date" id="payment_date-error" class="error">
@@ -463,8 +463,22 @@
                     </form>
                 </div>
 
+                @include('layout.footer')
                 <script src="{{ asset('assets/js/jquery-3.6.0.js') }}"></script>
                 <script src="{{ asset('assets/js/jquery-ui.js') }}"></script>
+
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const form = document.getElementById("regForm"); // Change this to your form's actual ID
+                        const submitBtn = document.getElementById("submitBtn"); // Change this to your button's actual ID
+                
+                        form.addEventListener("submit", function () {
+                            submitBtn.disabled = true; // Disable the button when the form is submitted
+                        });
+                    });
+                </script>
+                
 
                 <script>
                     $(document).ready(function() {
@@ -506,35 +520,37 @@
                     });
                 </script>
 
+
                 <script>
-                    var doc_payment_file = "";
+                    $(document).ready(function() {
 
-                    $('.payment_details_file').on('change', function() {
 
-                        doc_payment_file = $(".payment_details_file").val();
 
-                        var doc_payment_files = doc_payment_file.split('.').pop();
+                        var doc_payment_file = "";
 
-                        if (doc_payment_files == 'png' || doc_payment_files == 'jpg' || doc_payment_files == 'pdf' ||
-                            doc_payment_files == 'jpeg') {
-                            // alert("File uploaded is pdf");
-                            checkAllValidation();
-                        } else {
+                        $('#payment_details_file').on('change', function() {
+                            doc_payment_file = $(this).val();
 
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'error',
-                                title: 'Validation error!',
-                                text: 'Only jpg, png, jpeg ,pdf are allowed',
-                                showConfirmButton: false,
-                                timer: 3000
-                            })
-                            $('.payment_details_file').val("");
-                        }
+                            var doc_payment_files = doc_payment_file.split('.').pop();
 
+                            if (doc_payment_files === 'png' || doc_payment_files === 'jpg' || doc_payment_files ===
+                                'pdf' || doc_payment_files === 'jpeg') {
+                                    $('#submitBtn').attr('disabled', false);
+                            } else {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: 'Validation error!',
+                                    text: 'Only jpg, png, jpeg, pdf are allowed',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                                $(this).val(""); // Clear the input field
+                                $('#submitBtn').attr('disabled', true);
+                            }
+                        });
                     });
                 </script>
-
                 <script>
                     $('#payment_transaction_no').on('keyup', function() {
                         // Get the payment transaction number value
@@ -551,7 +567,7 @@
                         if (paymentTransactionNo.length < 9) {
                             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
                         } else {
-                            
+
                             $.ajax({
                                 type: 'POST', // or 'GET' based on your route
                                 url: '{{ route('transaction_validation') }}',
@@ -562,14 +578,16 @@
                                 success: function(response) {
                                     // Handle the response from the server
                                     if (response.status === 'error') {
-                                        $('#payment_transaction_no-error').html('<p class="text-danger">' + response.message +
+                                        $('#payment_transaction_no-error').html('<p class="text-danger">' + response
+                                            .message +
                                             '</p>');
-                                            $('#submitBtn').attr('disabled', true);
+                                        $('#submitBtn').attr('disabled', true);
                                     } else if (response.status === 'success') {
-                                        $('#payment_transaction_no-error').html('<p class="text-success">' + response.message +
+                                        $('#payment_transaction_no-error').html('<p class="text-success">' +
+                                            response.message +
                                             '</p>');
-                                            checkAllValidation();
-                                            
+
+
                                     }
                                 },
                                 error: function(xhr, status, error) {
@@ -608,13 +626,15 @@
                                 success: function(response) {
                                     // Handle the response from the server
                                     if (response.status === 'error') {
-                                        $('#payment_reference_no-error').html('<p class="text-danger">' + response.message +
+                                        $('#payment_reference_no-error').html('<p class="text-danger">' + response
+                                            .message +
                                             '</p>');
-                                            $('#submitBtn').attr('disabled', true);
+                                        $('#submitBtn').attr('disabled', true);
                                     } else if (response.status === 'success') {
-                                        $('#payment_reference_no-error').html('<p class="text-success">' + response.message +
+                                        $('#payment_reference_no-error').html('<p class="text-success">' + response
+                                            .message +
                                             '</p>');
-                                            checkAllValidation();
+
                                     }
                                 },
                                 error: function(xhr, status, error) {
@@ -626,24 +646,5 @@
                             $('#payment_reference_no-error').text('');
                         }
                     });
-
-                    $('#regForm').mouseenter(function() {
-    checkAllValidation();
-});
-                    function checkAllValidation() {
-                        // var paymentDate = $('.paymentDate').val();
-                        var transactionNo = $('.transactionNo').val();
-                        var payment_mode = $('.payment_mode').val();
-                        var referenceNo = $('.referenceNo').val();
-                        var paymentProof = $('.paymentProof').val();
-                        
-                        if ( transactionNo.trim() !== '' && referenceNo.trim() !== '' && paymentProof.trim() !== '' && payment_mode.trim() !== '') {
-                            // All fields are filled, enable the submit button
-                            $('#submitBtn').prop('disabled', false);
-                        } else {
-                            // At least one field is not filled, disable the submit button
-                            $('#submitBtn').prop('disabled', true);
-                        }
-                    }
                 </script>
 </body>

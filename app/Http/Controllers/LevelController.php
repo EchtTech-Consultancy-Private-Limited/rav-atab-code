@@ -2490,7 +2490,7 @@ class LevelController extends Controller
         } else {
             // Transaction number doesn't exist, you can proceed or return a success message
             // For example, you can return a success message like this:
-            return response()->json(['status' => 'success', 'message' => 'Transaction ID is available']);
+            return response()->json(['status' => 'success', 'message' => '']);
         }
     }
 
@@ -2504,7 +2504,7 @@ class LevelController extends Controller
         } else {
             // Transaction number doesn't exist, you can proceed or return a success message
             // For example, you can return a success message like this:
-            return response()->json(['status' => 'success', 'message' => 'Reference ID is available']);
+            return response()->json(['status' => 'success', 'message' => '']);
         }
     }
 }

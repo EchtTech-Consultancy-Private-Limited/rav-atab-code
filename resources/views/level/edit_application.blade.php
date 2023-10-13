@@ -4,6 +4,34 @@
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+<style>
+    .custom-button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-button input[type="checkbox"] {
+    display: none;
+}
+
+/* .custom-button input[type="checkbox"]:checked + .checkbox-label {
+    background-color: #81a1c4;
+    color: #fff;
+    border: 1px solid #007bff;
+} */
+
+.checkbox-label {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+</style>
 
 <style>
     .button-blinking {
@@ -289,12 +317,12 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
-                                                    required class="preventnumeric" maxlength="50">
+                                                    class="preventnumeric" maxlength="50" required>
                                             </div>
                                             @error('course_name')
                                                 <div class="alert alert-danger">{{ $message }}
@@ -314,7 +342,7 @@
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Duration<span class="text-danger">*</span></label>
@@ -336,7 +364,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Eligibility<span class="text-danger">*</span></label>
@@ -349,7 +377,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group" style="margin-top: 5px;">
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
@@ -371,7 +399,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Brief <span class="text-danger">*</span></label>
@@ -390,7 +418,7 @@
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc1[]"
-                                                     class="form-control doc_1 file_size">
+                                                    class="form-control doc_1 file_size" required>
                                             </div>
                                         </div>
                                     </div>
@@ -400,7 +428,7 @@
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc2[]"
-                                                     class="form-control doc_2 file_size">
+                                                    class="form-control doc_2 file_size" required>
                                             </div>
 
                                         </div>
@@ -587,7 +615,7 @@
                                         <div class="form-line">
                                             <label>Mode of Course <span class="text-danger">*</span></label>
                                             <div class="form-group default-select select2Style">
-                                                <select class="form-control width"  name="mode_of_course[]">
+                                                <select class="form-control width" name="mode_of_course[]">
                                                     <option value="" disabled>Select Mode
                                                     </option>
                                                     <option value="Online">Online</option>
@@ -710,13 +738,6 @@
                                             <table
                                                 class="table table-hover js-basic-example contact_list table-bordered">
                                                 <tbody>
-                                                    <!-- <tr class="odd gradeX">
-                          <th class="center">S.No.</th>
-                          <td class="center">
-                              <input type="text" id="Course_id" readonly>
-                          </td>
-
-                          </tr> -->
                                                     <tr class="odd gradeX">
                                                         <th class="center"> Course Name </th>
                                                         <td class="center">
@@ -805,7 +826,8 @@
                                         <label class="active">Payment Status : </label>
                                         <input type="text" name="Payment_Statuss" id="Payment_Statuss"
                                             class="btn btn-danger shadow-none p-0"
-                                            style="border-bottom: 1px solid #fb483a !important;" readonly>
+                                            style="border-bottom: 1px solid #fb483a !important; cursor: default !important;"
+                                            readonly>
                                     </div>
                                     <button type="button" class="close" data-bs-dismiss="modal"
                                         aria-label="Close">
@@ -817,7 +839,7 @@
                                         <form action="" id="form_update" method="post">
                                             @csrf
                                             <div class="row mt-4">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label class="active">Course Name<span
@@ -829,13 +851,11 @@
                                                 </div>
 
                                                 <input type="hidden" name="form_step_type" value="add-course">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label>Course Duration <span class="text-danger">*</span>
                                                             </label>
-                                                            <!-- <input type="number" placeholder="Course Duration"
-                                name="course_duration[]" required> -->
                                                             <div class="course_group">
                                                                 <input type="number" placeholder="Years"
                                                                     name="years" required class="course_input"
@@ -856,7 +876,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 pt-3">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label class="active">Eligibility<span> </label>
@@ -865,34 +885,37 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group select-modal edit-m-d">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group" style="margin-top: 5px;">
                                                         <div class="form-line">
-                                                            <label>Mode of Course <span
-                                                                    class="text-danger">*</span></label>
-                                                            <div class="form-group default-select">
-                                                                <select class="form-control" name="mode_of_course[]"
-                                                                    required multiple="" style="width:200px;">
-                                                                    <option disabled>Select Mode of Course </option>
-                                                                    <option value="Offline">Offline</option>
-                                                                    <option value="Online">Online</option>
-                                                                    <option value="Hybrid">Hybrid</option>
-                                                                </select>
+                                                            <label>Mode of Course <span class="text-danger">*</span></label>
+                                                            <div class="custom-checkbox-group">
+                                                                <label class="custom-button">
+                                                                    <input type="checkbox" name="mode_of_course[]" id="offline_checkbox" value="Offline">
+                                                                    <span class="checkbox-label">Offline</span>
+                                                                </label>
+                                                                <label class="custom-button">
+                                                                    <input type="checkbox" name="mode_of_course[]" id="online_checkbox" value="Online">
+                                                                    <span class="checkbox-label">Online</span>
+                                                                </label>
+                                                                <label class="custom-button">
+                                                                    <input type="checkbox" name="mode_of_course[]" id="hybrid_checkbox" value="Hybrid">
+                                                                    <span class="checkbox-label">Hybrid</span>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         @error('mode_of_course')
-                                                            <div class="alert alert-danger">{{ $message }}
-                                                            </div>
+                                                        <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
+                                                    
+
                                                 </div>
-                                                <div class="col-sm-8">
+                                                <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label>Course Brief <span
                                                                     class="text-danger">*</span></label>
-                                                            <!-- <input type="text" placeholder="Course Brief"
-                                name="course_brief[]" required> -->
                                                             <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
                                                                 name="course_brief" id="course_brief"></textarea>
                                                         </div>
@@ -910,7 +933,8 @@
                                                             <input type="file" name="doc1" id="doc1_edit"
                                                                 class="form-control doc_edit_1 file_size">
                                                             <a target="_blank" href="" id="docpdf1ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
+                                                                title=" Document 1"><i
+                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 1 </a>
                                                         </div>
                                                     </div>
@@ -924,12 +948,12 @@
                                                                 id="payment_reference_no"
                                                                 class="form-control doc_edit_2 file_size">
                                                             <a target="_blank" href="" id="docpdf2ss"
-                                                                title=" Document 1"><i class="fa fa-eye mr-2 d-inline-block w-auto"></i>
+                                                                title=" Document 1"><i
+                                                                    class="fa fa-eye mr-2 d-inline-block w-auto"></i>
                                                                 Doc 2</a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {{-- @if ($id) [{{$data->image}}] @endif --}}
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <div class="form-line">
@@ -940,7 +964,8 @@
                                                                 class="form-control doc_edit_3 file_size">
                                                             <a href="" id="docpdf3ss"
                                                                 title="Download Document 1" download><i
-                                                                    class="fa fa-download mr-2 d-inline-block w-"></i> Doc 3 </a>
+                                                                    class="fa fa-download mr-2 d-inline-block w-"></i>
+                                                                Doc 3 </a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -960,11 +985,13 @@
                     @include('layout.footer')
 
                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
                     <script>
                         $(document).ready(function() {
                             $('.select2').select2();
                         });
+                    </script>
+
+                    <script>
                         $(document).on("click", "#view", function() {
 
                             var UserName = $(this).data('id');
@@ -1029,6 +1056,10 @@
                     <script>
                         $(document).on("click", "#edit_course", function() {
 
+                            var offline_checkbox = $('#offline_checkbox').val();
+                            var online_checkbox = $('#online_checkbox').val();
+                            var hybrid_checkbox = $('#hybrid_checkbox').val();
+
                             //alert("edit course second 2420");
                             var UserName = $(this).data('id');
                             console.log(UserName);
@@ -1047,9 +1078,7 @@
                                 },
                                 success: function(data) {
 
-                                    //console.log(data.ApplicationCourse[0].mode_of_course);
-
-                                    console.log(data.ApplicationCourse[0].mode_of_course)
+                                   
 
                                     var values = data.ApplicationCourse[0].mode_of_course;
                                     $.each(values, function(i, e) {
@@ -1061,7 +1090,18 @@
                                         .ApplicationCourse[0].id)
                                     $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                     $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
-                                    $("#Mode_Of_Courses").val(data.ApplicationCourse[0].mode_of_course);
+
+                                    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="mode_of_course[]"]');
+                                    var modeOfCourseItems = data.ApplicationCourse[0].mode_of_course;
+
+                                    checkboxes.forEach(checkbox => {
+    if (modeOfCourseItems.includes(checkbox.value)) {
+        checkbox.checked = true;
+    } else {
+        checkbox.checked = false;
+    }
+});
+
 
 
 
