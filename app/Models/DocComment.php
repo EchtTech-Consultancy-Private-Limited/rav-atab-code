@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class DocComment extends Model
 {
     use HasFactory;
+    
 }

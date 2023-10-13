@@ -465,7 +465,7 @@ function getComments($id = null)
 
     $docIds = $documents->pluck('id');
 
-    $comments = DB::table('doc_comments')->whereIn('doc_id', $docIds)->get();
+    $comments = DB::table('doc_comments')->orderByDesc('id')->whereIn('doc_id', $docIds)->get();
 
     $html = "";
     if ($comments) {
@@ -475,16 +475,26 @@ function getComments($id = null)
             <tr>
                 <th>Sr. No.</th>
                 <th>Document Code</th>
+                <th>Date</th>
                 <th>Comments</th>
+                <th>Approved/Rejected By</th>
             </tr>
         </thead>
         <tbody>";
-
+        $class = "";
         foreach ($comments as $comment) {
-            $html .= "<tr>";
-            $html .= "<td>" . $num++ . "</td>";
-            $html .= "<td>" . $comment->doc_code . "</td>";
+
+            if($comment->status == 4){
+                $html .= "<tr class='text-success' style='border-left:3px solid green'>";
+            }else{
+                $html .= "<tr class='text-danger' style='border-left:3px solid red'>" ;
+            }
+           
+            $html .= "<td width='60'>" . $num++ . "</td>";
+            $html .= "<td width='130'>" . $comment->doc_code . "</td>";
+            $html .= "<td width='120'>" . \Carbon\Carbon::parse($comment->created_at)->format('d-m-Y') . "</td>";
             $html .= "<td>" . $comment->comments . "</td>";
+            $html .= "<td>".getUserDetails($comment->user_id)."</td>";
             $html .= "</tr>";
         }
 
@@ -493,4 +503,10 @@ function getComments($id = null)
     }
 
     return $html;
+}
+
+
+function getUserDetails($userId){
+    $user =  DB::table('users')->where('id',$userId)->first();
+    return $user->firstname.' '.$user->lastname; 
 }
