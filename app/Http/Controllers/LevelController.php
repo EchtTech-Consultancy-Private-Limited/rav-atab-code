@@ -2490,7 +2490,7 @@ class LevelController extends Controller
         } else {
             // Transaction number doesn't exist, you can proceed or return a success message
             // For example, you can return a success message like this:
-            return response()->json(['status' => 'success', 'message' => 'Transaction ID is available']);
+            return response()->json(['status' => 'success', 'message' => '']);
         }
     }
 
@@ -2504,7 +2504,68 @@ class LevelController extends Controller
         } else {
             // Transaction number doesn't exist, you can proceed or return a success message
             // For example, you can return a success message like this:
-            return response()->json(['status' => 'success', 'message' => 'Reference ID is available']);
+            return response()->json(['status' => 'success', 'message' => '']);
         }
     }
+
+    //  upgrade application logic //
+
+    
+
+    // public function upgradeApplicationLevel(Request $request){
+    //     $application_id = $request->application_id;
+    //     $user_id = auth()->user()->id;
+    
+    //     // Find the application
+    //     $applicationData = Application::where('id', $application_id)
+    //         ->where('user_id', $user_id)
+    //         ->first();
+    
+    //     if ($applicationData) {
+    //         $levelId = $applicationData->level_id;
+            
+    //         // Increment the level_id
+    //         $applicationData->level_id = $levelId + 1;
+    
+    //         // Update the created_at date (add 1 year)
+    //         $applicationData->created_at = now();
+    
+    //         // Save the changes to the application
+    //         $applicationData->save();
+    
+    //         // Update related tables manually
+    //         DB::table('application_payments')
+    //             ->where('user_id', $user_id)
+    //             ->where('application_id', $application_id)
+    //             ->update([
+    //                 'level_id' => $applicationData->level_id,
+    //                 'created_at' => $applicationData->created_at,
+    //             ]);
+    
+    //         DB::table('application_documents')
+    //             ->where('user_id', $user_id)
+    //             ->where('application_id', $application_id)
+    //             ->update([
+    //                 'level_id' => $applicationData->level_id,
+    //                 'created_at' => $applicationData->created_at,
+    //             ]);
+    
+    //         DB::table('application_courses')
+    //             ->where('user_id', $user_id)
+    //             ->where('application_id', $application_id)
+    //             ->update([
+    //                 'level_id' => $applicationData->level_id,
+    //                 'created_at' => $applicationData->created_at,
+    //             ]);
+    
+    //         return redirect()->back()->with('success', 'Your application has been upgraded from level ' . $levelId . ' to ' . $applicationData->level_id);
+    //     } else {
+    //         return redirect()->back()->with('fail', 'Something went wrong!');
+    //     }
+    // }
+
+
+
+     //  upgrade application logic //
+    
 }

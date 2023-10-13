@@ -184,7 +184,7 @@
                                                             <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                                             <th class="center">Cross reference to supporting evidence
                                                                 provided</th>
-                                                            <th></th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center">
@@ -370,6 +370,8 @@
                                                                             <button
                                                                                 class="expand-button btn btn-primary"
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>
+                                                                        @else
+                                                                            <span class="text-danger" style="font-size: 12px; padding:5px; border-radius:5px;">No comments available!</span>
                                                                         @endif
                                                                     </td>
                                                                 </tr>

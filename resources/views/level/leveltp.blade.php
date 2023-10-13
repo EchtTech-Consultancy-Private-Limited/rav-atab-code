@@ -302,48 +302,51 @@
                                          </div>
                                          <div class="body">
                                              <div class="row">
-                                                 <div class="col-md-4 col-6 b-r">
+                                                 <div class="col-md-4 ">
                                                      <h5> <strong>Validity </strong></h5>
                                                      <p class="text-muted">{{ $item[0]->validity }}</p>
                                                  </div>
-                                                 <div class="col-md-4 col-6 b-r">
+                                                 <div class="col-md-4 ">
                                                      <h5> <strong>Fee Structure </strong></h5>
                                                      <p class="text-muted">{{ $item[0]->fee_structure }}</p>
-                                                     <br>
-                                                     @if ($item[0]->Fee_Structure_pdf != '')
-                                                         <a target="_blank"
-                                                             href="{{ url('show-pdf' . '/' . $item[0]->Fee_Structure_pdf) }}"
-                                                             title="level Information pdf"><i
-                                                                 class="fa fa-eye mr-2"></i> PDF Fee Structure
-                                                             pdf</a>
-                                                     @endif
-                                                     <br>
+                                                     <div class="d-flex align-item-center">
+                                                        @if ($item[0]->Fee_Structure_pdf != '')
+                                                        <a target="_blank"
+                                                            href="{{ url('show-pdf' . '/' . $item[0]->Fee_Structure_pdf) }}"
+                                                            title="level Information pdf">PDF Fee Structure </a>
+                                                            
+                                                    @endif
+                                                     </div>
                                                  </div>
-                                                 <div class="col-md-4 col-6 b-r">
+                                                 <div class="col-md-4 ">
                                                      <h5> <strong>Timelines </strong></h5>
                                                      <p class="text-muted"> {{ $item[0]->timelines }}</p>
                                                  </div>
+                                                 <div class="col-sm-4">
+                                                     <h5>Level Information</h5>
+                                                     <p>{{ $item[0]->level_Information }}</p>
+                                                     <br>
+                                                     @if ($item[0]->level_Information_pdf != '')
+                                                         <a target="_blank"
+                                                             href="{{ url('show-pdf' . '/' . $item[0]->level_Information_pdf) }}"
+                                                             title="level Information pdf">
+                                                             PDF level Information </a>
+                                                     @endif
+                                                 </div>
                                              </div>
                                              <br>
-                                             <h5>Level Information</h5>
-                                             <p>{{ $item[0]->level_Information }}</p>
-                                             <br>
-                                             @if ($item[0]->level_Information_pdf != '')
-                                                 <a target="_blank"
-                                                     href="{{ url('show-pdf' . '/' . $item[0]->level_Information_pdf) }}"
-                                                     title="level Information pdf"><i class="fa fa-eye mr-2"></i>
-                                                     PDF level Information pdf </a>
-                                             @endif
+
+
                                              <br><br>
                                              <h5>Prerequisites</h5>
                                              <p>{{ $item[0]->Prerequisites }}</p>
                                              <br>
                                              <br>
                                              @if ($item[0]->Prerequisites_pdf != '')
-                                                 <a target="_blank"
+                                                 <a target="_blank" 
                                                      href="{{ url('show-pdf' . '/' . $item[0]->Prerequisites_pdf) }}"
-                                                     title="level Information pdf"><i class="fa fa-eye mr-2"></i>
-                                                     PDF Prerequisites pdf </a>
+                                                     title="level Information pdf">
+                                                     PDF Prerequisites  </a>
                                              @endif
                                              <br>
                                              <br>
@@ -355,7 +358,7 @@
                                                  <a target="_blank"
                                                      href="{{ url('show-pdf' . '/' . $item[0]->documents_required_pdf) }}"
                                                      title="level Information pdf"><i class="fa fa-download mr-2"></i>
-                                                     PDF Documents Required pdf </a>
+                                                     PDF Documents Required </a>
                                              @endif
                                              <br>
                                          </div>
@@ -890,11 +893,11 @@ active @endif"
                                                                          @endif
                                                                      </td>
                                                                      <!-- <td class="center">
-                                               {{ date('d F Y', strtotime($courses->created_at)) }}
-                                               </td>
-                                               <td class="center">
-                                               {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
-                                               </td> -->
+                                                   {{ date('d F Y', strtotime($courses->created_at)) }}
+                                                   </td>
+                                                   <td class="center">
+                                                   {{ date('d F Y', strtotime($courses->created_at->addYear())) }}
+                                                   </td> -->
                                                                      <td class="center btn-ved">
                                                                          <a class="btn btn-tbl-delete bg-primary"
                                                                              data-bs-toggle="modal"

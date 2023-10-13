@@ -1,6 +1,19 @@
 @include('layout.header')
 <!-- New CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/form.min.css') }}" class="js">
+
+<style>
+    /* Customize the appearance of the tooltip */
+    .custom-tooltip {
+        background-color: #007bff;
+        /* Blue background color */
+        color: #fff;
+        /* White text color */
+        border: 2px solid #0056b3;
+        /* Darker blue border */
+    }
+</style>
+
 <style>
     .button-blinking {
         background-color: #004A7F;
@@ -265,24 +278,24 @@
                                         <table class="table table-hover js-basic-example contact_list">
                                             <thead>
                                                 <tr>
-                                                    <th class="center">#Sr.N0</th>
+                                                    <th class="center">Sr.No</th>
                                                     <th class="center">Application No</th>
                                                     <th class="center">Level ID</th>
-                                                    <th class="center">Total Course</th>
+                                                    <th class="center">Courses</th>
                                                     <th class="center">Total Fee</th>
                                                     <th class="center"> Payment Date </th>
                                                     <th class="center">Status</th>
-                                                    <th class="center">Upgrade Button</th>
+                                                    <th class="center">Upgrade</th>
                                                     <th class="center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @isset($collection)
                                                     @foreach ($collection as $k => $item)
-                                                        <tr class="odd gradeX">
+                                                        <tr class="odd gradeX align-item-center" style="font-size: 13px !important;">
                                                             <td class="center">{{ $k + 1 }}</td>
                                                             <td class="center">
-                                                            {{  $item->application->application_uid }}
+                                                                {{ $item->application->application_uid }}
                                                             </td>
                                                             <td class="center level-id">{{ $item->level_id }}
                                                             </td>
@@ -300,10 +313,33 @@
                                                                            <div class="badge col-orange">Applications In Process</div> @endif
                                                                     </a>
                                                             </td>
-                                                            <td>
+                                                            <td width="180">
+                                                                @php
+                                                                    $createdDate = \Carbon\Carbon::parse($item->created_at);
+                                                                    $expiryDate = $createdDate->addYear();
+                                                                    $currentDate = \Carbon\Carbon::now();
 
+                                                                    // Calculate the difference in days between the current date and the expiry date
+                                                                    $daysRemaining = $currentDate->diffInDays($expiryDate);
+                                                                @endphp
 
-
+                                                                @if ($daysRemaining <= 15)
+                                                               
+                                                                    <form action="#" method="post">
+                                                                        @csrf
+                                                                        <button type="button" class="btn btn-primary"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            data-html="true" title='
+                                                                                Upgrade Recommended:
+                                                                                Your course expiry date is approaching,
+                                                                                and you have only {{ $daysRemaining }} days left to upgrade your course.
+                                                                            '>Upgrade
+                                                                            Now</button>
+                                                                    </form>
+                                                                @else
+                                                                    <span
+                                                                        title="Expiry Date">{{ $expiryDate->format('d-m-Y') }}</span>
+                                                                @endif
                                                             </td>
                                                             <td class="center">
                                                                 <a href="{{ url('/previews-application-first' . '/' . $item->id . '/' . $item->application_id) }}"
@@ -315,8 +351,8 @@
                                                             @elseif(request()->path() == 'level-second')
                                                                 <td class="center">
                                                                     <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                                       class="btn btn-tbl-edit"><i
-                                                                           class="material-icons">visibility</i></a> -->
+                                                                               class="btn btn-tbl-edit"><i
+                                                                                   class="material-icons">visibility</i></a> -->
                                                                     @if ($item->status == 1)
                                                                         <a href="{{ url('/upload-document') }}"
                                                                             class="btn btn-tbl-upload"><i
@@ -395,6 +431,12 @@
 
                 @include('layout.footer')
                 <!-- New JS -->
-
+                <script>
+                    $(document).ready(function() {
+                        $('[data-toggle="tooltip"]').each(function() {
+                            $(this).tooltip();
+                        });
+                    });
+                </script>
 
 </body>

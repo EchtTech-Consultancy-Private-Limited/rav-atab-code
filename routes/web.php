@@ -145,6 +145,10 @@ Route::group(['middleware' => ['auth']], function () {
     //payment status
     Route::get('paymentstatus/{id?}', [LevelController::class, 'paymentstatus']);
 
+
+    // upgrade application 
+    // Route::post('upgrade-application',[LevelController::class,"upgradeApplicationLevel"]);
+
     //previews-application upgrade
     Route::get('/application-upgrade-second', [LevelController::class, 'application_upgrade2']);
     Route::get('/application-upgrade-third', [LevelController::class, 'application_upgrade3']);
