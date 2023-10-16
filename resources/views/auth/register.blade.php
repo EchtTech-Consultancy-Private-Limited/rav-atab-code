@@ -541,8 +541,10 @@
                     <input type="hidden" placeholder="role" name="role" value="{{ 2 }}">
                 @elseif(request()->path() == 'login/Accessor/register')
                     <input type="hidden" placeholder="role" name="role" value="{{ 3 }}">
-                @elseif(request()->path() == 'login/professional/register')
+                @elseif(request()->path() == 'login/secretariat/register')
                     <input type="hidden" placeholder="role" name="role" value="{{ 4 }}">
+                    @elseif(request()->path() == 'login/professional/register')
+                    <input type="hidden" placeholder="role" name="role" value="{{ 5 }}">
                 @endif
 
 

@@ -120,8 +120,8 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                <div class="row p-3">
+                    <div class="col-sm-6">
                         <ul class="breadcrumb breadcrumb-style ">
                             <li class="breadcrumb-item">
                                 <h4 class="page-title">Upload Documents</h4>
@@ -135,12 +135,13 @@
 
                         </ul>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                        <ul class="breadcrumb breadcrumb-style ">
-                            <a href="{{ url()->previous() }}" type="button" class="btn btn-primary"
-                                style="float:right;">Back To Documents</a>
-                        </ul>
+                    <div class="col-sm-6">
+                        <div class="pr-2">
+                            <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
+                                style="float:right;">Back</a>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -366,7 +367,8 @@
                                                                         {{-- getting documents for each row end point --}}
                                                                     </td>
                                                                     <td>
-                                                                        @if (isset($question->document->comment))
+                                                                        
+                                                                        @if (checkCommentsExist($question->id,$file[0]->application_id) == true)
                                                                             <button
                                                                                 class="expand-button btn btn-primary"
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>

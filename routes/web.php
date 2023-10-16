@@ -15,8 +15,7 @@ use App\Http\Controllers\FaqController; #SKP
 use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
-use App\Models\DocComment;
-use Illuminate\Support\Facades\DB;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -308,17 +307,3 @@ Route::post('payment-transaction-validation', [LevelController::class, 'paymentT
 
 Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
 
-Route::get('doc-comments',function(){
-    $comments = DB::table('doc_comments')->get();
-    return view('doc-comments',compact('comments'));
-});
-
-Route::get('delete-single-comment/{id}', function ($id) {
-    $comment = DocComment::find($id); // Use Eloquent to find the comment by its ID
-
-    if ($comment) {
-        $comment->delete();
-    }
-
-    return redirect()->back()->with('success', 'Deleted');
-})->name('delete-single-comment');

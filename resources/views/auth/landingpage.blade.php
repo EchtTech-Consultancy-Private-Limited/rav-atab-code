@@ -19,6 +19,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .form {
             width: 40%;
@@ -38,7 +40,23 @@
 </head>
 
 <body class="body-bg">
-
+    @if (Session::has('success'))
+                        <script>
+                            var message = "{{ session::get('success') }}";
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Success',
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
+                        </script>
+                    @elseif(Session::has('fail'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session::get('fail') }}
+                        </div>
+                    @endif
     <section class="landing-page-main">
         <div class="container width-80">
             <div class="row align-item-center d-m-flex">

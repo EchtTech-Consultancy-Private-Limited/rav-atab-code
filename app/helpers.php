@@ -510,3 +510,27 @@ function getUserDetails($userId){
     $user =  DB::table('users')->where('id',$userId)->first();
     return $user->firstname.' '.$user->lastname; 
 }
+
+function checkCommentsExist($id = null,$applicationId=null)
+{
+    $authId = auth()->user()->id;
+
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id',$authId)->where('application_id',$applicationId)->get();
+
+
+    if ($documents) {
+        $docIds = $documents->pluck('id');
+
+    $comments = DB::table('doc_comments')->orderByDesc('id')->whereIn('doc_id', $docIds)->get();
+    
+    if (count($comments) > 0) {
+        return true;
+    }else{
+        return false;
+    }
+    
+    }
+    
+    
+}
+
