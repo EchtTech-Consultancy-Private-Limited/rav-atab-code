@@ -597,3 +597,14 @@ function commentsCountForTP($id,$applicationID){
     }
 }
 
+
+function checkApproveComment($doc_id){
+    $comment = DocComment::where('doc_id',$doc_id)->first();
+    
+    if($comment->status == 4){
+        return 4;
+    }else{
+        return 0;
+    }
+}
+
