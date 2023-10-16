@@ -332,30 +332,30 @@
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label><strong>Doc
-                                                                    {{ $loop->iteration }}</strong></label><br>
-
+                                                            <label><strong>Doc {{ $loop->iteration }}</strong></label><br>
+                                    
                                                             @php
                                                                 $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
                                                             @endphp
-
-                                                            @if (in_array($extension, ['xls', 'csv']))
-                                                                <label>
-                                                                    <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                                        target="_blank" id="docpdf1"
-                                                                        title="Download Document 1">
-                                                                        <i class="fa fa-download mr-2"></i> Download
-                                                                        Document 1
-                                                                    </a>
-                                                                </label>
-                                                            @elseif ($extension === 'pdf')
-                                                                <label>
-                                                                    <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                                        target="_blank" id="docpdf1"
-                                                                        title="View Document 1">
-                                                                        <i class="fa fa-eye mr-2"></i> View Document 1
-                                                                    </a>
-                                                                </label>
+                                    
+                                                            @if (in_array($extension, ['xls', 'csv', 'pdf']))
+                                                                @if (in_array($extension, ['xls', 'csv']))
+                                                                    <label>
+                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                           title="Download Document {{ $loop->iteration }}">
+                                                                            <i class="fa fa-download mr-2"></i> Download Document {{ $loop->iteration }}
+                                                                        </a>
+                                                                    </label>
+                                                                @elseif ($extension === 'pdf')
+                                                                    <label>
+                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                           title="View Document {{ $loop->iteration }}">
+                                                                            <i class="fa fa-eye mr-2"></i> View Document {{ $loop->iteration }}
+                                                                        </a>
+                                                                    </label>
+                                                                @endif
+                                                            @else
+                                                                <label><i class="fa fa-info-circle mr-2"></i> Unsupported File Format</label>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -363,6 +363,7 @@
                                             @endforeach
                                         @endif
                                     </div>
+                                    
                                 </div>
                                 <div class="col-sm-12 text-right">
                                     <div class="form-group">
