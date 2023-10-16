@@ -434,7 +434,7 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Transaction no</strong></label><br>
-                                                {{ $ApplicationPayment->payment_details ?? '' }}
+                                                {{ $ApplicationPayment->transaction_no ?? '' }}
                                             </div>
                                         </div>
                                     </div>
@@ -444,7 +444,7 @@
 
                                                 <label><strong>Payment Reference no</strong></label><br>
 
-                                                <label>{{ $ApplicationPayment->payment_details ?? '' }}</label>
+                                                <label>{{ $ApplicationPayment->reference_no ?? '' }}</label>
 
                                             </div>
                                         </div>

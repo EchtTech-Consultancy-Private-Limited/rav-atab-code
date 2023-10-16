@@ -420,18 +420,15 @@
                                                         <b>Doc {{ $loop->iteration }}</b>
                                                     </label>
                                                     <div>
-                                                        <a target="_blank" href="{{ url('show-course-pdf/'.$document->document_file) }}">View Doc{{ $loop->iteration }}</a>
+                                                        <a target="_blank"
+                                                            href="{{ url('show-course-pdf/' . $document->document_file) }}">View
+                                                            Doc{{ $loop->iteration }}</a>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         @else
-
                                         @endif
                                     </div>
-
-
-
-
 
                                     @if (Auth::user()->role != '6')
                                         @if ($ApplicationPayment[0]->status == '2')
@@ -499,7 +496,7 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Payment Transaction no</strong></label><br>
-                                                {{ $ApplicationPayment->payment_details ?? '' }}
+                                                {{ $ApplicationPayment->transaction_no ?? '' }}
                                             </div>
                                         </div>
                                     </div>
@@ -509,7 +506,7 @@
 
                                                 <label><strong>Payment Reference no</strong></label><br>
 
-                                                <label>{{ $ApplicationPayment->payment_details ?? '' }}</label>
+                                                <label>{{ $ApplicationPayment->reference_no ?? '' }}</label>
 
                                             </div>
                                         </div>
@@ -546,7 +543,7 @@
 
                                                 <?php
                                                 substr($ApplicationPayment->payment_details_file, -3);
-
+                                                
                                                 $data = substr($ApplicationPayment->payment_details_file, -3);
                                                 ?>
 
@@ -588,7 +585,7 @@
 
                                                     <?php
                                                     substr($ApplicationPayment->payment_slip, -3);
-
+                                                    
                                                     $data = substr($ApplicationPayment->payment_slip, -3);
                                                     ?>
 
@@ -794,36 +791,36 @@
             return false;
         }
     </script>
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-        $('.image-link').magnificPopup({
+            $('.image-link').magnificPopup({
 
-            type: 'image',
+                type: 'image',
 
-            mainClass: 'mfp-with-zoom',
+                mainClass: 'mfp-with-zoom',
 
-            gallery: {
+                gallery: {
 
-                enabled: true
+                    enabled: true
 
-            },
-            zoom: {
-                enabled: true,
-                duration: 300, // duration of the effect, in milliseconds
-                easing: 'ease-in-out', // CSS transition easing function
-                opener: function(openerElement) {
-                    return openerElement.is('img') ? openerElement : openerElement.find('img');
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300, // duration of the effect, in milliseconds
+                    easing: 'ease-in-out', // CSS transition easing function
+                    opener: function(openerElement) {
+                        return openerElement.is('img') ? openerElement : openerElement.find('img');
+                    }
                 }
-            }
+            });
         });
-    });
 
 
-    $(".payment_alert").click(function() {
-        alert('Document is pending for approval from Accounts department')
-    });
-</script>
+        $(".payment_alert").click(function() {
+            alert('Document is pending for approval from Accounts department')
+        });
+    </script>
 
 
 

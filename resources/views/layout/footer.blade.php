@@ -218,8 +218,6 @@
 </script>
 
 
-{{-- city dropdown --}}
-
 <script>
 
     $(document).ready(function(){
@@ -238,8 +236,6 @@
 
         var myVars=$("#state").val();
 
-
-       //  alert(myVars);
 
             $.ajax({
             url: "{{url('/city-list')}}",
@@ -316,22 +312,6 @@ $("document").ready(function(){
 
 </script>
 
-{{-- back button  disable  --}}
-{{--
-<script>
-    $(document).ready(function() {
-        function disableBack() {
-            window.history.forward()
-        }
-        window.onload = disableBack();
-        window.onpageshow = function(e) {
-            if (e.persisted)
-                disableBack();
-        }
-    });
-</script> --}}
-
-
 
 <script>
     // disable alphate
@@ -356,12 +336,6 @@ $("document").ready(function(){
 <script src="{{asset('assets/js/bundles/apexcharts/apexcharts.min.js')}}"></script>
 <script src="{{asset('assets/js/pages/index.js')}}"></script>
 <script src="{{asset('assets/js/pages/todo/todo.js')}}"></script>
-
-
-{{-- <script src="../../assets/js/table.min.js"></script>
-<!-- Custom Js -->
-<script src="../../assets/js/admin.js"></script>
-<script src="../../assets/js/pages/tables/jquery-datatable.js"></script> --}}
 
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->

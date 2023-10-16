@@ -399,7 +399,7 @@ function Checknotification($id = 0)
     $assesorWithApplicationData = [];
 
     foreach ($assessors as $assesor) {
-        $applicationData = DB::table('applications')->select('id','application_uid')->where('id',$assesor->id)->first();
+        $applicationData = DB::table('applications')->select('id','application_uid')->where('id',$assesor->application_id)->first();
 
        if($applicationData){
         $assesorWithApplicationData[] = [

@@ -135,6 +135,7 @@
                 </div>
             </div>
 
+           
             @if (Session::has('sussess'))
                 <div class="alert alert-success" role="alert">
                     {{ session::get('success') }}
@@ -150,7 +151,32 @@
                 <div class="row clearfix">
 
                     <div class="col-lg-12 col-md-12">
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ URL::previous() }}" class="btn btn-primary">Go Back   </a>
+                        </div>
+                        <div class="header">
+                            
 
+                            @if (check_acknowledgement($course_id) == $course_id)
+                                <a class="btn btn-danger">Final Approval Done</a>
+                            @else
+                                @if (count_document_record($course_id) == 44)
+                                    <a href="{{ url('document-report-by-admin/' . $course_id) }}"
+                                        class="btn btn-primary">Final Approval</a>
+                                @else
+                                    <a class="btn btn-danger">All Document Not Uploaded</a>
+                                @endif
+                            @endif
+
+
+                            <a style="float:right;margin:10px;"
+                                href="{{ url('document-report-verified-by-assessor/' . $application_id . '/' . $course_id) }}"
+                                class="btn btn-info"> Verified Report</a>
+
+                            <a style="float:right;margin:10px;"
+                                href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
+                                class="btn btn-success">Assessor & Admin Conversation</a>
+                        </div>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" aria-expanded="true">
                                 <div class="row clearfix">

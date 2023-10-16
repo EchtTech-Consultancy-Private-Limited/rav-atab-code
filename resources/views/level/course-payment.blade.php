@@ -327,7 +327,7 @@
                                                         <label>Payment Date <span class="text-danger">*</span></label>
                                                         <input type="text" name="payment_date"
                                                             class="form-control paymentDate" id="payment_date" required
-                                                            placeholder="Payment Date" aria-label="Date"
+                                                            placeholder="Payment Date (DD-MM-YY)" aria-label="Date"
                                                             value="{{ old('payment_date') }}" onfocus="showDatePicker()"
                                                             autocomplete="off" min="{{ date('Y-m-d') }}">
                                                     </div>
@@ -479,43 +479,38 @@
                     });
                 </script>
                 
-
                 <script>
                     $(document).ready(function() {
-                        $(window).on("load", function() {
-                            $("#bank_id").hide();
-                            $("#QR").hide();
-                        });
-
+                        // Hide elements on page load
+                        $("#bank_id").hide();
+                        $("#QR").hide();
+            
+                        // Handle the 'change' event on the payment type dropdown
                         $("#payments").on('change', function() {
-                            $type = $('#payments').val();
-                            //alert($type);
-
-                            if ($type == 'QR-Code') {
-                                // alert('hii')
+                            var type = $('#payments').val();
+            
+                            if (type === 'QR-Code') {
                                 $("#bank_id").hide();
                                 $("#QR").show();
-
-                            } else if ($type == "") {
-                                //  alert('hii1')
+                            } else if (type === '') {
                                 $("#bank_id").show();
                                 $("#QR").show();
-
                             } else {
-
-                                //  alert('hii1')
                                 $("#bank_id").show();
                                 $("#QR").hide();
-
                             }
                         });
-                    });
-
-                    $(function() {
+            
+                        // Initialize datepicker for payment_date field
                         $("#payment_date").datepicker({
-                            dateFormat: 'yy-mm-dd', // Set the date format
+                            dateFormat: 'dd-mm-yy',
                             maxDate: 0, // Disable future dates
                             defaultDate: 0, // Set the default date to today
+                        });
+            
+                        // Disable manual typing in the date field
+                        $("#payment_date").on('keydown', function(e) {
+                            e.preventDefault();
                         });
                     });
                 </script>

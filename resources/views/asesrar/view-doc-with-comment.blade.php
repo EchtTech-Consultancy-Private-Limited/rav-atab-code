@@ -153,7 +153,7 @@
 
                                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label>Add Comment</label>
-                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control">This file is not approved</textarea>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control"></textarea>
                                                                 </div>
                                                             </div>
 
@@ -368,6 +368,7 @@
                 commentSection.style.display = "none"; // Hide the textarea
             } else {
                 commentSection.style.display = "block"; // Show the textarea for other options
+                comment_text.value = "Document Not approved!";
             }
         });
     </script>

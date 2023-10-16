@@ -51,10 +51,10 @@
                                  Assessor
                              @elseif(Auth::user()->role == 4)
                                  Professional
-                              @elseif(Auth::user()->role == 5)
-                                Secretariat
-                              @elseif(Auth::user()->role == 6)
-                               Accountant
+                             @elseif(Auth::user()->role == 5)
+                                 Secretariat
+                             @elseif(Auth::user()->role == 6)
+                                 Accountant
                              @endif
 
 
@@ -71,56 +71,50 @@
                  <!-- #END# Full Screen Button -->
                  <!-- #START# Notifications-->
                  @if (Auth::user()->role == 3)
-                 <li class="dropdown">
-                     <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
-                         role="button">
-                         <i class="far fa-bell"></i>
-                         <span class="notify"></span>
-                         <span class="heartbeat"></span>
-                     </a>
+                     <li class="dropdown">
+                         <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
+                             role="button">
+                             <i class="far fa-bell"></i>
+                             <span class="notify"></span>
+                             <span class="heartbeat"></span>
+                         </a>
 
 
-                     <ul class="dropdown-menu pullDown placeholder_input">
-                         <li class="header">NOTIFICATIONS </li>
-                         <li class="body col-md-12">
-                             <ul class="menu">
+                         <ul class="dropdown-menu pullDown placeholder_input">
+                             <li class="header">NOTIFICATIONS </li>
+                             <li class="body col-md-12">
+                                 <ul class="menu">
 
-                                 {{-- @if (Checknotification(Auth::user()->id) == 0) --}}
-                                     {{-- <h5 >{{ 'Assign ID Numbe:'.Checknotification(Auth::user()->id) }}</h5> --}}
-                                 {{-- @endif --}}
-                                @if(Checknotification(Auth::user()->id))
-                                    
-                                
-
-                                 @foreach (Checknotification(Auth::user()->id) as $item)
-                                 <li class="p-2">
-
-                                  <a href="#" onClick="return false;" class="bg-secondary text-white" style="border-radius: 10px;">
-                                        <div class="d-flex justify-content-between" style="font-size: 12px;">
-                                            <div>
-                                                <span  id="notification" data-value='{{ $item['id'] }}' >{{ 'Application ID:' . $item['application_uid']}}</span>
-                                            </div>
-                                            <div>
-                                                <span>
-                                                    {{ date('d-M-Y',strtotime($item['created_at'])) }}
-                                                </span>
-                                            </div>
-                                        </div>
+                                     @if (Checknotification(Auth::user()->id))
                                            
+                                         @foreach (Checknotification(Auth::user()->id) as $item)
+                                             <li class="p-2">
 
-                                     
-                                  </a>
-                                 </li>
-                                @endforeach
-
-                                @endif
-                             </ul>
-                         </li>
-                         <li class="footer">
-                             <a href="#" onClick="return false;">View All Notifications</a>
-                         </li>
-                     </ul>
-                 </li>
+                                                 <a href="#" onClick="return false;"
+                                                     class="bg-secondary text-white" style="border-radius: 10px;">
+                                                     <div class="d-flex justify-content-between"
+                                                         style="font-size: 12px;">
+                                                         <div>
+                                                             <span id="notification"
+                                                                 data-value='{{ $item['id'] }}'>{{ 'Application ID:' . $item['application_uid'] }}</span>
+                                                         </div>
+                                                         <div>
+                                                             <span>
+                                                                 {{ date('d-M-Y', strtotime($item['created_at'])) }}
+                                                             </span>
+                                                         </div>
+                                                     </div>
+                                                 </a>
+                                             </li>
+                                         @endforeach
+                                     @endif
+                                 </ul>
+                             </li>
+                             <li class="footer">
+                                 <a href="#" onClick="return false;">View All Notifications</a>
+                             </li>
+                         </ul>
+                     </li>
                  @endif
                  <!-- #END# Notifications-->
                  <li class="dropdown user_profile">
@@ -161,7 +155,7 @@
  <script>
      $(".placeholder_input").mousedown(function() {
 
-           var myData = ($(this).find("h5").data("value"));
+         var myData = ($(this).find("h5").data("value"));
 
          $.ajaxSetup({
              headers: {
@@ -183,3 +177,4 @@
          });
      });
  </script>
+
