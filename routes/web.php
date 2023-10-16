@@ -15,7 +15,8 @@ use App\Http\Controllers\FaqController; #SKP
 use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
-
+use App\Models\DocComment;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -307,35 +308,17 @@ Route::post('payment-transaction-validation', [LevelController::class, 'paymentT
 
 Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
 
-
-Route::get('clear-some-tables', function () {
-    try {
-        // Disable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-
-        // List of tables to truncate
-        $tables = [
-            'add_documents',
-            'applications',
-            'application_courses',
-            'application_documents',
-            'application_payments',
-            'asessor_applications',
-            'doc_comments',
-        ];
-
-        // Truncate each table
-        foreach ($tables as $table) {
-            DB::table($table)->truncate();
-        }
-
-        // Enable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
-        // Return a success response
-        return "Tables truncated successfully with foreign key checks disabled.";
-    } catch (\Exception $e) {
-        // Handle any exceptions that may occur during the process
-        return "An error occurred: " . $e->getMessage();
-    }
+Route::get('doc-comments',function(){
+    $comments = DB::table('doc_comments')->get();
+    return view('doc-comments',compact('comments'));
 });
+
+Route::get('delete-single-comment/{id}', function ($id) {
+    $comment = DocComment::find($id); // Use Eloquent to find the comment by its ID
+
+    if ($comment) {
+        $comment->delete();
+    }
+
+    return redirect()->back()->with('success', 'Deleted');
+})->name('delete-single-comment');
