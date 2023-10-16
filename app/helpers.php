@@ -395,12 +395,12 @@ function show_btn($date)
 function Checknotification($id = 0)
 {
 
-    $assessors = DB::table('asessor_applications')->orderByDesc('id')->select('id', 'created_at','application_id')->where('notification_id', '0')->where('assessor_id', $id)->get();
+    $assessors = DB::table('asessor_applications')->orderBy('id','desc')->select('id', 'created_at','application_id')->where('notification_id', '0')->where('assessor_id', $id)->get();
     
     $assesorWithApplicationData = [];
 
     foreach ($assessors as $assesor) {
-        $applicationData = DB::table('applications')->select('id','application_uid')->where('id',$assesor->application_id)->first();
+        $applicationData = DB::table('applications')->orderBy('id','desc')->select('id','application_uid')->where('id',$assesor->application_id)->first();
 
        if($applicationData){
         $assesorWithApplicationData[] = [

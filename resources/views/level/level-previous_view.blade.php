@@ -338,8 +338,8 @@
                                                                 $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
                                                             @endphp
                                     
-                                                            @if (in_array($extension, ['xls', 'csv', 'pdf']))
-                                                                @if (in_array($extension, ['xls', 'csv']))
+                                                            @if (in_array($extension, ['xls', 'csv', 'pdf','xlsx']))
+                                                                @if (in_array($extension, ['xls', 'csv','xlsx']))
                                                                     <label>
                                                                         <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
                                                                            title="Download Document {{ $loop->iteration }}">
