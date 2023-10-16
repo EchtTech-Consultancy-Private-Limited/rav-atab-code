@@ -64,12 +64,7 @@
                 <div class="row ">
                     <div class="row clearfix">
                         <div class="col-lg-12 col-md-12">
-                            <div>
-                                <div>
-                                    <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
-                                        style="float:right;">Back</a>
-                                </div>
-                            </div>
+                           
                             <div class="tab-content">
                                 <div>
                                     <form method="post" action="{{ url('add-accr-comment-view-doc') }}">

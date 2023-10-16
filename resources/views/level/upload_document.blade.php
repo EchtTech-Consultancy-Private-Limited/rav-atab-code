@@ -221,7 +221,7 @@
                                                                                     @endforeach
                                                                                 @endif
                                                                                 @if (count($documentsData) == 2)
-                                                                                    @if (count(commentsCountForTP($question->id, $application_id)) == 2)
+                                                                                    @if (count(commentsCountForTP($question->id, $application_id)) == 2 &&  checkApproveComment($documentsData[1]->id) !== 4)
                                                                                         <div>
                                                                                             <form
                                                                                                 name="submitform_doc_form"
@@ -261,7 +261,7 @@
                                                                                     @endforeach
                                                                                 @endif
                                                                                 @if (count($documentsData) == 1)
-                                                                                    @if (checkCommentsExist($question->id, $file[0]->application_id) == true)
+                                                                                    @if (checkCommentsExist($question->id, $file[0]->application_id,$documentsData[0]) == true && checkApproveComment($documentsData[0]->id) !== 4)
                                                                                         <div>
                                                                                             <form
                                                                                                 name="submitform_doc_form"

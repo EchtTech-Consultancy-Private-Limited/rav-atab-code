@@ -90,7 +90,7 @@
                                          @foreach (Checknotification(Auth::user()->id) as $item)
                                              <li class="p-2">
 
-                                                 <a href="#" onClick="return false;"
+                                                 <a href="{{ url('Assessor-view/'.dEncrypt($item['id'])) }}"
                                                      class="bg-secondary text-white" style="border-radius: 10px;">
                                                      <div class="d-flex justify-content-between"
                                                          style="font-size: 12px;">

@@ -232,7 +232,7 @@
 
     </section>
 
-    <section class="content">
+    <section class="content" style="margin-top: 10px !important;">
         <div class="container-fluid">
             <div class="block-header">
                 <div class="row">
