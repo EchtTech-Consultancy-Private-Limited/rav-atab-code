@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DocComment;
 use Illuminate\Support\Facades\DB;
 
 function encode5t($str)
@@ -459,9 +460,9 @@ function checkDocumentCommentStatusreturnText($id)
 }
 
 
-function getComments($id = null)
+function getComments($id = null,$applicationID)
 {
-    $documents = DB::table('add_documents')->where('question_id', $id)->get();
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id',$applicationID)->get();
 
     $docIds = $documents->pluck('id');
 
@@ -532,5 +533,54 @@ function checkCommentsExist($id = null,$applicationId=null)
     }
     
     
+}
+
+function getDocument($questionID,$applicationId){
+    $authId = auth()->user()->id;
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id',$authId)->where('application_id',$applicationId)->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+
+}
+
+function getAssessorDocument($questionID,$applicationId){
+  
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id',$applicationId)->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+
+}
+
+function getAssessorComments($docID){
+    $comments = DocComment::where('doc_id',$docID)->get();
+    if (count($comments) > 0) {
+        return $comments;
+    } else {
+        return [];
+    }
+    
+}
+
+function commentsCountForTP($id,$applicationID){
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id',$applicationID)->get();
+
+    $docIds = $documents->pluck('id');
+
+    $comments = DB::table('doc_comments')->orderByDesc('id')->whereIn('doc_id', $docIds)->get();
+    if (count($comments) > 0) {
+        return $comments;
+    } else {
+        return [];
+    }
 }
 

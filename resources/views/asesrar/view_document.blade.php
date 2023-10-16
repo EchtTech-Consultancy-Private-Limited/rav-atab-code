@@ -156,7 +156,8 @@
                             <div role="tabpanel" class="tab-pane active" aria-expanded="true">
                                 <div class="row clearfix">
                                     <div class="col-sm-12 d-flex justify-content-end">
-                                        <a href="{{ url('Assessor-view/'.dEncrypt($application_id)) }}" class="btn btn-primary btn-sm">Back</a>
+                                        <a href="{{ url('Assessor-view/' . dEncrypt($application_id)) }}"
+                                            class="btn btn-primary btn-sm">Back</a>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div>
@@ -220,34 +221,40 @@
                                                                                 class="badge bg-danger text-white">Documents
                                                                                 not uploaded</span>
                                                                         @else
-                                                                            @if ($question->documents)
-                                                                                @if (count($question->documents) == 1)
-                                                                                    @foreach ($question->documents as $doc)
-                                                                                        @if ($doc->application_id == $application_id)
-                                                                                            <div>
-                                                                                                <a class="btn {{ checkDocumentCommentStatus($doc->id) }}" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    target="_blank"
-                                                                                                    href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}">View
-                                                                                                    Document</a>
-                                                                                            </div>
-                                                                                        @else
-                                                                                            <span
-                                                                                                class="badge bg-danger text-white">Documents
-                                                                                                not uploaded</span>
-                                                                                        @endif
+                                                                            @if (count(getAssessorDocument($question->id, $application_id)) > 0)
+                                                                                @php
+                                                                                    $documentData = getAssessorDocument($question->id, $application_id);
+                                                                                @endphp
+                                                                                @if (count(getAssessorDocument($question->id, $application_id)) == 1)
+                                                                                    @if (count(getAssessorComments($documentData[0]->id)))
+                                                                                        <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }}"
+                                                                                            title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
+                                                                                            target="_blank"
+                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">View
+                                                                                            Document</a>
+                                                                                    @else
+                                                                                        <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }}"
+                                                                                            title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
+                                                                                            target="_blank"
+                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">View
+                                                                                            Document</a>
+                                                                                    @endif
+                                                                                @endif
+                                                                                @if (count(getAssessorDocument($question->id, $application_id)) == 2)
+                                                                                    @foreach ($documentData as $docItem)
+                                                                                        <a class="btn {{ checkDocumentCommentStatus($docItem->id) }}"
+                                                                                            title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
+                                                                                            target="_blank"
+                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">V{{ $loop->iteration }}</a>
                                                                                     @endforeach
-                                                                                    @elseif(count($question->documents) > 1)
-                                                                                    <div class="d-flex">
-                                                                                        @foreach ($question->documents as $doc)
-                                                                                            @if ($doc->application_id == $application_id)
-                                                                                                <a target="_blank"
-                                                                                                    href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                                    class="btn {{ checkDocumentCommentStatus($doc->id) }}" title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    style="color: #fff; margin: 10px;"
-                                                                                                    id="view_doc1">V{{ $loop->iteration }}</a>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </div>
+                                                                                @endif
+                                                                                @if (count(getAssessorDocument($question->id, $application_id)) == 3)
+                                                                                    @foreach ($documentData as $docItem)
+                                                                                        <a class="btn {{ checkDocumentCommentStatus($docItem->id) }}"
+                                                                                            title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
+                                                                                            target="_blank"
+                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">V{{ $loop->iteration }}</a>
+                                                                                    @endforeach
                                                                                 @endif
                                                                             @else
                                                                                 <span

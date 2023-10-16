@@ -204,138 +204,106 @@
                                                                     <td>{{ $question->code ?? '' }}</td>
                                                                     <td>{{ $question->title }}</td>
                                                                     <td>
+                                                                        @php
+                                                                            $documentsData = getDocument($question->id, $file[0]->application_id) ?? 0;
+                                                                        @endphp
                                                                         {{-- getting documents for each row --}}
-                                                                        @if (count($question->documents) > 0)
+                                                                        @if (count($documentsData) > 0)
                                                                             <div class="d-flex">
-                                                                                @if (count($question->documents) == 3)
-                                                                                    @foreach ($question->documents as $document)
-                                                                                        @if ($document->application_id == $application_id)
+                                                                                @if (count($documentsData) >= 3)
+                                                                                    @foreach ($documentsData as $docItem)
+                                                                                        <div>
                                                                                             <a target="_blank"
-                                                                                                title="{{ checkDocumentCommentStatusreturnText($document->id) }}"
-                                                                                                href="{{ url('show-pdf' . '/' . $question->document->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} m-1">V{{ $loop->iteration }}</a>
-                                                                                        @endif
+                                                                                                title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
+                                                                                                href="{{ url('show-pdf' . '/' . $docItem->doc_file) }}"
+                                                                                                class="btn {{ checkDocumentCommentStatus($docItem->id) }} m-1">V{{ $loop->iteration }}</a>
+                                                                                        </div>
                                                                                     @endforeach
-                                                                                @elseif(count($question->documents) == 2)
-                                                                                    @foreach ($question->documents as $document)
-                                                                                        @if ($document->application_id == $application_id)
+                                                                                @endif
+                                                                                @if (count($documentsData) == 2)
+                                                                                    @if (count(commentsCountForTP($question->id, $application_id)) == 2)
+                                                                                        <div>
+                                                                                            <form
+                                                                                                name="submitform_doc_form"
+                                                                                                id="submitform_doc_form_{{ $question->id }}"
+                                                                                                class="submitform_doc_form"
+                                                                                                enctype="multipart/form-data">
+                                                                                                <input type="hidden"
+                                                                                                    name="previous_url"
+                                                                                                    value="{{ Request::url() }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="application_id"
+                                                                                                    value="{{ $file[0]->application_id }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="course_id"
+                                                                                                    value="{{ $course_id }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="question_id"
+                                                                                                    value="{{ $question->code }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="question_pid"
+                                                                                                    value="{{ $question->id }}">
+                                                                                                <input type="file"
+                                                                                                    class="from-control fileup"
+                                                                                                    name="fileup"
+                                                                                                    id="fileup_{{ $question->id }}"
+                                                                                                    data-question-id="{{ $question->id }}" />
+                                                                                            </form>
+                                                                                        </div>
+                                                                                    @endif
+                                                                                    @foreach ($documentsData as $docItem)
+                                                                                        <div>
                                                                                             <a target="_blank"
-                                                                                                title="{{ checkDocumentCommentStatusreturnText($document->id) }}"
-                                                                                                href="{{ url('show-pdf' . '/' . $question->document->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} m-1">V{{ $loop->iteration }}</a>
-                                                                                            @isset($document->comment)
-                                                                                                @if ($loop->iteration == 2 && $document->comment->status != 4)
-                                                                                                    {{-- Upload form --}}
-                                                                                                    <form
-                                                                                                        name="submitform_doc_form"
-                                                                                                        id="submitform_doc_form_{{ $question->id }}"
-                                                                                                        class="submitform_doc_form"
-                                                                                                        enctype="multipart/form-data">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="previous_url"
-                                                                                                            value="{{ Request::url() }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="application_id"
-                                                                                                            value="{{ $file[0]->application_id }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="course_id"
-                                                                                                            value="{{ $course_id }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="question_id"
-                                                                                                            value="{{ $question->code }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="question_pid"
-                                                                                                            value="{{ $question->id }}">
-                                                                                                        <input
-                                                                                                            type="file"
-                                                                                                            class="from-control fileup"
-                                                                                                            name="fileup"
-                                                                                                            id="fileup_{{ $question->id }}"
-                                                                                                            data-question-id="{{ $question->id }}" />
-                                                                                                    </form>
-                                                                                                    {{-- Upload form end --}}
-                                                                                                @endif
-                                                                                            @endisset
-                                                                                        @endif
+                                                                                                title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
+                                                                                                href="{{ url('show-pdf' . '/' . $docItem->doc_file) }}"
+                                                                                                class="btn {{ checkDocumentCommentStatus($docItem->id) }} m-1">V{{ $loop->iteration }}</a>
+                                                                                        </div>
                                                                                     @endforeach
-                                                                                @elseif(count($question->documents) == 1)
-                                                                                    @foreach ($question->documents as $document)
-                                                                                        @if ($document->application_id == $application_id)
-                                                                                            @isset($document->comment)
-                                                                                                @if ($loop->iteration == 1 && $document->comment->status != 4)
-                                                                                                    {{-- Upload form --}}
-                                                                                                    <form
-                                                                                                        name="submitform_doc_form"
-                                                                                                        id="submitform_doc_form_{{ $question->id }}"
-                                                                                                        class="submitform_doc_form"
-                                                                                                        enctype="multipart/form-data">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="previous_url"
-                                                                                                            value="{{ Request::url() }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="application_id"
-                                                                                                            value="{{ $file[0]->application_id }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="course_id"
-                                                                                                            value="{{ $course_id }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="question_id"
-                                                                                                            value="{{ $question->code }}">
-                                                                                                        <input
-                                                                                                            type="hidden"
-                                                                                                            name="question_pid"
-                                                                                                            value="{{ $question->id }}">
-                                                                                                        <input
-                                                                                                            type="file"
-                                                                                                            class="from-control fileup"
-                                                                                                            name="fileup"
-                                                                                                            id="fileup_{{ $question->id }}"
-                                                                                                            data-question-id="{{ $question->id }}" />
-                                                                                                    </form>
-                                                                                                    {{-- Upload form end --}}
-                                                                                                @endif
-                                                                                            @endisset
+                                                                                @endif
+                                                                                @if (count($documentsData) == 1)
+                                                                                    @if (checkCommentsExist($question->id, $file[0]->application_id) == true)
+                                                                                        <div>
+                                                                                            <form
+                                                                                                name="submitform_doc_form"
+                                                                                                id="submitform_doc_form_{{ $question->id }}"
+                                                                                                class="submitform_doc_form"
+                                                                                                enctype="multipart/form-data">
+                                                                                                <input type="hidden"
+                                                                                                    name="previous_url"
+                                                                                                    value="{{ Request::url() }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="application_id"
+                                                                                                    value="{{ $file[0]->application_id }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="course_id"
+                                                                                                    value="{{ $course_id }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="question_id"
+                                                                                                    value="{{ $question->code }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="question_pid"
+                                                                                                    value="{{ $question->id }}">
+                                                                                                <input type="file"
+                                                                                                    class="from-control fileup"
+                                                                                                    name="fileup"
+                                                                                                    id="fileup_{{ $question->id }}"
+                                                                                                    data-question-id="{{ $question->id }}" />
+                                                                                            </form>
+                                                                                        </div>
+                                                                                        <div>
                                                                                             <a target="_blank"
-                                                                                                title="{{ checkDocumentCommentStatusreturnText($document->id) }}"
-                                                                                                href="{{ url('show-pdf' . '/' . $question->document->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} m-1">View
+                                                                                                title="{{ checkDocumentCommentStatusreturnText($documentsData[0]->id) }}"
+                                                                                                href="{{ url('show-pdf' . '/' . $documentsData[0]->doc_file) }}"
+                                                                                                class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} m-1">View
                                                                                                 Document</a>
-                                                                                        @else
-                                                                                        <form name="submitform_doc_form"
-                                                                                        id="submitform_doc_form_{{ $question->id }}"
-                                                                                        class="submitform_doc_form"
-                                                                                        enctype="multipart/form-data">
-                                                                                        <input type="hidden"
-                                                                                            name="previous_url"
-                                                                                            value="{{ Request::url() }}">
-                                                                                        <input type="hidden"
-                                                                                            name="application_id"
-                                                                                            value="{{ $file[0]->application_id }}">
-                                                                                        <input type="hidden" name="course_id"
-                                                                                            value="{{ $course_id }}">
-                                                                                        <input type="hidden"
-                                                                                            name="question_id"
-                                                                                            value="{{ $question->code }}">
-                                                                                        <input type="hidden"
-                                                                                            name="question_pid"
-                                                                                            value="{{ $question->id }}">
-                                                                                        <input type="file"
-                                                                                            class="from-control fileup"
-                                                                                            name="fileup"
-                                                                                            id="fileup_{{ $question->id }}"
-                                                                                            data-question-id="{{ $question->id }}" />
-                                                                                    </form>
-                                                                                        @endif
-                                                                                    @endforeach
+                                                                                        </div>
+                                                                                    @else
+                                                                                        <a target="_blank"
+                                                                                            title="{{ checkDocumentCommentStatusreturnText($documentsData[0]->id) }}"
+                                                                                            href="{{ url('show-pdf' . '/' . $documentsData[0]->doc_file) }}"
+                                                                                            class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} m-1">View
+                                                                                            Document</a>
+                                                                                    @endif
                                                                                 @endif
                                                                             </div>
                                                                         @else
@@ -367,20 +335,22 @@
                                                                         {{-- getting documents for each row end point --}}
                                                                     </td>
                                                                     <td>
-                                                                        
-                                                                        @if (checkCommentsExist($question->id,$file[0]->application_id) == true)
+
+                                                                        @if (checkCommentsExist($question->id, $file[0]->application_id) == true)
                                                                             <button
                                                                                 class="expand-button btn btn-primary"
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>
                                                                         @else
-                                                                            <span class="text-danger" style="font-size: 12px; padding:5px; border-radius:5px;">No comments available!</span>
+                                                                            <span class="text-danger"
+                                                                                style="font-size: 12px; padding:5px; border-radius:5px;">No
+                                                                                comments available!</span>
                                                                         @endif
                                                                     </td>
                                                                 </tr>
 
                                                                 <tr class="document-details" style="display: none;">
                                                                     <td colspan="4">
-                                                                        {!! getComments($question->id) !!}
+                                                                        {!! getComments($question->id, $file[0]->application_id) !!}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -423,69 +393,69 @@
     </script>
 
 
-<script>
-    $(document).ready(function() {
-        $('.fileup').change(function() {
-            var fileInput = $(this);
-            var questionId = fileInput.data('question-id');
-            var form = $('#submitform_doc_form_' + questionId)[0];
-            var formData = new FormData(form);
-            var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
-    
-            var uploadedFileName = fileInput.val();
-            var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
-    
-            if (allowedExtensions.indexOf(fileExtension) === -1) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    title: 'Invalid File Type',
-                    text: 'Please upload a PDF or DOC file.',
-                    showConfirmButton: true
-                });
-    
-                // Clear the file input
-                fileInput.val('');
-                return;
-            }
-    
-            $("#loader").removeClass('d-none');
-    
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    <script>
+        $(document).ready(function() {
+            $('.fileup').change(function() {
+                var fileInput = $(this);
+                var questionId = fileInput.data('question-id');
+                var form = $('#submitform_doc_form_' + questionId)[0];
+                var formData = new FormData(form);
+                var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+
+                var uploadedFileName = fileInput.val();
+                var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+
+                if (allowedExtensions.indexOf(fileExtension) === -1) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Please upload a PDF or DOC file.',
+                        showConfirmButton: true
+                    });
+
+                    // Clear the file input
+                    fileInput.val('');
+                    return;
                 }
-            });
-    
-            $.ajax({
-                url: "{{ url('add-courses') }}", // Your server-side upload endpoint
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    $("#loader").addClass('d-none');
-                    if (response.message == 'success') {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Upload Successful',
-                            text: 'Your documents have been successfully uploaded.',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-    
-                        location.reload();
+
+                $("#loader").removeClass('d-none');
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors
-                    console.error(error);
-                }
+                });
+
+                $.ajax({
+                    url: "{{ url('add-courses') }}", // Your server-side upload endpoint
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $("#loader").addClass('d-none');
+                        if (response.message == 'success') {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Upload Successful',
+                                text: 'Your documents have been successfully uploaded.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors
+                        console.error(error);
+                    }
+                });
             });
         });
-    });
     </script>
-    
+
 
     @include('layout.footer')
