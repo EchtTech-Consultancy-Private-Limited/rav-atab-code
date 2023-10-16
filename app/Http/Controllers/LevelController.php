@@ -2459,7 +2459,7 @@ class LevelController extends Controller
     public function pendingPaymentlist()
     {
 
-        $level_list_data = DB::table('applications')
+        $level_list_data = DB::table('applications')->orderBy('id','desc')
             ->where('applications.user_id', Auth::user()->id)
             ->where('applications.status', '0')
             ->select('applications.*', 'countries.name as country_name')
