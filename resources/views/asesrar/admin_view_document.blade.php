@@ -135,7 +135,7 @@
                 </div>
             </div>
 
-           
+
             @if (Session::has('sussess'))
                 <div class="alert alert-success" role="alert">
                     {{ session::get('success') }}
@@ -152,10 +152,10 @@
 
                     <div class="col-lg-12 col-md-12">
                         <div class="d-flex justify-content-end">
-                            <a href="{{ URL::previous() }}" class="btn btn-primary">Go Back   </a>
+                            <a href="{{ URL::previous() }}" class="btn btn-primary">Go Back </a>
                         </div>
                         <div class="header">
-                            
+
 
                             @if (check_acknowledgement($course_id) == $course_id)
                                 <a class="btn btn-danger">Final Approval Done</a>
@@ -222,10 +222,13 @@
                                                                         <td>{{ $question->code ?? '' }}</td>
                                                                         <td>{{ $question->title ?? '' }}</td>
                                                                         <td>
-                                                                            @if (count($question->documents) > 0)
+                                                                            @php
+                                                                                $documentsData = getAdminDocument($question->id, $file[0]->application_id) ?? 0;
+                                                                            @endphp
+                                                                            @if (count($documentsData) > 0)
                                                                                 <div class="d-flex">
-                                                                                    @if (count($question->documents) <= 1)
-                                                                                        @foreach ($question->documents as $doc)
+                                                                                    @if (count($documentsData) <= 1)
+                                                                                        @foreach ($documentsData as $doc)
                                                                                             @if ($doc->application_id == $application_id)
                                                                                                 <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
@@ -244,7 +247,7 @@
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @else
-                                                                                        @foreach ($question->documents as $doc)
+                                                                                        @foreach ($documentsData as $doc)
                                                                                             @if ($doc->application_id == $application_id)
                                                                                                 <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"

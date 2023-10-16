@@ -561,6 +561,19 @@ function getAssessorDocument($questionID,$applicationId){
 
 }
 
+function getAdminDocument($questionID,$applicationId){
+  
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id',$applicationId)->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+
+}
+
 function getAssessorComments($docID){
     $comments = DocComment::where('doc_id',$docID)->get();
     if (count($comments) > 0) {
