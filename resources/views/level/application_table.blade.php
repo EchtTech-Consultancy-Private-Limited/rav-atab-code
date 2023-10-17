@@ -246,6 +246,16 @@
                             timer: 3000
                         });
                     </script>
+                    @elseif (Session::has('payment_fail'))
+                    <script>
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'warning',
+                            title: '{{ session('fail') }}',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    </script>
                     @endif
 
                     @if (count($errors) > 0)

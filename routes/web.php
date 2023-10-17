@@ -307,3 +307,5 @@ Route::post('payment-transaction-validation', [LevelController::class, 'paymentT
 
 Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
 
+Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateCheck"])->name('payment.duplicate');
+

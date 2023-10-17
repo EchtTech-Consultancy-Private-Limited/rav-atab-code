@@ -1,5 +1,5 @@
 <div class="nav-tab">
-    <ul class="nav p-2">
+    <ul class="nav p-3">
         <li class="custom-nav-item ">
             <a class="custom-nav-link {{ request()->is('new-applications*') || request()->is('create-course*') ? 'nav-active' : '' }}" href="{{ url('/new-applications') }}">New Application</a>
         </li>
@@ -45,6 +45,9 @@
 
     a.custom-nav-link{
         color: #fff;
+    }
+    .custom-nav-item {
+        margin-left: 10px;
     }
 
 </style>

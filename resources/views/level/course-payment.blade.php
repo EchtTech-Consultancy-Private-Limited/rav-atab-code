@@ -642,4 +642,44 @@
                         }
                     });
                 </script>
+
+              
+
+<script>
+    $(document).ready(function() {
+     
+
+            // Get the application_id from your input field or other source.
+            var applicationId =  {{ $applicationData->id }};
+
+            // Send an AJAX request to check for payment duplicacy.
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('payment.duplicate') }}',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'application_id': applicationId
+                },
+                success: function(response) {
+                    if (response.paymentExist) {
+                        Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Payment has already been submitted for this application.',
+                showConfirmButton: true,
+                timer: 5000
+            });
+                        window.location.href = '{{ url('application-list') }}';
+                    } else {
+                        // Payment does not exist; you can perform another action or show a message.
+                    }
+                },
+                error: function(error) {
+                    console.error('An error occurred: ' + error);
+                }
+            });
+        
+    });
+</script>
+
 </body>

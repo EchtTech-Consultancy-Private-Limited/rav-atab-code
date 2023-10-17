@@ -230,13 +230,13 @@
                                                                                         <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }}"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                             target="_blank"
-                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">View
+                                                                                            href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">View
                                                                                             Document</a>
                                                                                     @else
                                                                                         <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }}"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                             target="_blank"
-                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">View
+                                                                                            href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">View
                                                                                             Document</a>
                                                                                     @endif
                                                                                 @endif
@@ -245,7 +245,7 @@
                                                                                         <a class="btn {{ checkDocumentCommentStatus($docItem->id) }}"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                             target="_blank"
-                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">V{{ $loop->iteration }}</a>
+                                                                                            href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">V{{ $loop->iteration }}</a>
                                                                                     @endforeach
                                                                                 @endif
                                                                                 @if (count(getAssessorDocument($question->id, $application_id)) == 3)
@@ -253,7 +253,7 @@
                                                                                         <a class="btn {{ checkDocumentCommentStatus($docItem->id) }}"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                             target="_blank"
-                                                                                            href="{{ url('view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">V{{ $loop->iteration }}</a>
+                                                                                            href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">V{{ $loop->iteration }}</a>
                                                                                     @endforeach
                                                                                 @endif
                                                                             @else
