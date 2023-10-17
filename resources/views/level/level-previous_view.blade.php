@@ -11,7 +11,10 @@
     <!-- #END# Overlay For Sidebars -->
 
     @include('layout.topbar')
+
     <div>
+
+
 
         @if (Auth::user()->role == 1)
             @include('layout.sidebar')
@@ -26,6 +29,7 @@
         @elseif(Auth::user()->role == 6)
             @include('layout.sidbarAccount')
         @endif
+
 
 
 
@@ -316,46 +320,44 @@
                                                     <div class="form-group">
                                                         <div class="form-line">
                                                             <label><strong>
-                                                                    @if ($loop->iteration == 1)
-                                                                        Declaration
-                                                                    @elseif ($loop->iteration == 2)
-                                                                        Course Curriculum / Material / Syllabus
-                                                                    @elseif ($loop->iteration == 3)
-                                                                        Course Details (Excel format)
-                                                                    @endif
-                                                                </strong></label><br>
-
+                                                                @if ($loop->iteration == 1)
+                                                                Declaration
+                                                            @elseif ($loop->iteration == 2)
+                                                                Course Curriculum / Material / Syllabus
+                                                            @elseif ($loop->iteration == 3)
+                                                                Course Details (Excel format)
+                                                            @endif    
+                                                            </strong></label><br>
+                                    
                                                             @php
                                                                 $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
                                                             @endphp
-
-                                                            @if (in_array($extension, ['xls', 'csv', 'pdf', 'xlsx']))
-                                                                @if (in_array($extension, ['xls', 'csv', 'xlsx']))
+                                    
+                                                            @if (in_array($extension, ['xls', 'csv', 'pdf','xlsx']))
+                                                                @if (in_array($extension, ['xls', 'csv','xlsx']))
                                                                     <label>
-                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                                            target="_blank" title="Download Document">
-                                                                            <i class="fa fa-download mr-2"></i>&nbsp;
-                                                                            Download Document
+                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                           title="Download Document">
+                                                                            <i class="fa fa-download mr-2"></i>&nbsp; Download Document 
                                                                         </a>
                                                                     </label>
                                                                 @elseif ($extension === 'pdf')
                                                                     <label>
-                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                                            target="_blank" title="View Document}">
-                                                                            <div class="d-flex align-items-center ">
+                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                           title="View Document}">
+                                                                           <div class="d-flex align-items-center ">
                                                                                 <div>
-                                                                                    <i class="fa fa-eye mr-2"></i>
+                                                                                    <i class="fa fa-eye mr-2"></i> 
                                                                                 </div>
                                                                                 <div>
-                                                                                    &nbsp; Document
+                                                                                   &nbsp;  Document 
                                                                                 </div>
-                                                                            </div>
+                                                                           </div>
                                                                         </a>
                                                                     </label>
                                                                 @endif
                                                             @else
-                                                                <label><i class="fa fa-info-circle mr-2"></i>
-                                                                    Unsupported File Format</label>
+                                                                <label><i class="fa fa-info-circle mr-2"></i> Unsupported File Format</label>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -363,7 +365,7 @@
                                             @endforeach
                                         @endif
                                     </div>
-
+                                    
                                 </div>
                                 <div class="col-sm-12 text-right">
                                     <div class="form-group">
@@ -529,9 +531,45 @@
         @endforeach
         </div>
     </section>
-   
-    <script src="{{ asset('custom/new-application-script.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('.image-link').magnificPopup({
+
+                type: 'image',
+
+                mainClass: 'mfp-with-zoom',
+
+                gallery: {
+
+                    enabled: true
+
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300, // duration of the effect, in milliseconds
+                    easing: 'ease-in-out', // CSS transition easing function
+                    opener: function(openerElement) {
+                        return openerElement.is('img') ? openerElement : openerElement.find('img');
+                    }
+                }
+            });
+        });
+
+
+        $(".payment_alert").click(function() {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Document is pending for approval from Accounts department',
+                showConfirmButton: true,
+                timer: 5000
+            });
+
+        });
+    </script>
+
 
 
     @include('layout.footer')
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>

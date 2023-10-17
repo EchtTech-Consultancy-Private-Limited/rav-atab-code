@@ -1018,6 +1018,10 @@ class LevelController extends Controller
     public function new_application_payment(Request $request)
     {
 
+        $checkPaymentAlready = DB::table('application_payments')->where('application_id', $request->Application_id)->first();
+        if ($checkPaymentAlready) {
+            return redirect(url('application-list'))->with('fail', 'Payment has already been submitted for this application.');
+        }
         // return $request->all();
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
@@ -2313,6 +2317,10 @@ class LevelController extends Controller
 
     public function coursePayment(Request $request, $id = null)
     {
+        $checkPaymentAlready = DB::table('application_payments')->where('application_id', $id)->first();
+        if ($checkPaymentAlready) {
+            return redirect(url('application-list'))->with('success', 'Payment has already been submitted for this application.');
+        }
         if ($id) {
             $applicationData = DB::table('applications')->where('id', $id)->first();
             $course = DB::table('application_courses')->where('application_id', $id)->get();
