@@ -237,9 +237,15 @@
                             });
                         </script>
                     @elseif (Session::has('fail'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('fail') }}
-                        </div>
+                    <script>
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: '{{ session('fail') }}',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    </script>
                     @endif
 
                     @if (count($errors) > 0)
