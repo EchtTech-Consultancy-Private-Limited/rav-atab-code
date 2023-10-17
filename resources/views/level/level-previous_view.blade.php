@@ -332,7 +332,15 @@
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label><strong>Doc {{ $loop->iteration }}</strong></label><br>
+                                                            <label><strong>
+                                                                @if ($loop->iteration == 1)
+                                                                Declaration
+                                                            @elseif ($loop->iteration == 2)
+                                                                Course Curriculum / Material / Syllabus
+                                                            @elseif ($loop->iteration == 3)
+                                                                Course Details (Excel format)
+                                                            @endif    
+                                                            </strong></label><br>
                                     
                                                             @php
                                                                 $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
@@ -342,15 +350,22 @@
                                                                 @if (in_array($extension, ['xls', 'csv','xlsx']))
                                                                     <label>
                                                                         <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
-                                                                           title="Download Document {{ $loop->iteration }}">
-                                                                            <i class="fa fa-download mr-2"></i> Download Document {{ $loop->iteration }}
+                                                                           title="Download Document">
+                                                                            <i class="fa fa-download mr-2"></i>&nbsp; Download Document 
                                                                         </a>
                                                                     </label>
                                                                 @elseif ($extension === 'pdf')
                                                                     <label>
                                                                         <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
-                                                                           title="View Document {{ $loop->iteration }}">
-                                                                            <i class="fa fa-eye mr-2"></i> View Document {{ $loop->iteration }}
+                                                                           title="View Document}">
+                                                                           <div class="d-flex align-items-center ">
+                                                                                <div>
+                                                                                    <i class="fa fa-eye mr-2"></i> 
+                                                                                </div>
+                                                                                <div>
+                                                                                   &nbsp; View Document 
+                                                                                </div>
+                                                                           </div>
                                                                         </a>
                                                                     </label>
                                                                 @endif
