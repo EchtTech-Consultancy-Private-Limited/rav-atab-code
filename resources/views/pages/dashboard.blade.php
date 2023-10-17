@@ -99,9 +99,9 @@
     <div class="page-loader-wrapper">
         <div class="loader">
             <div class="m-t-30">
-                <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
+                <img class="loading-img-spin" style="width: 100px !important; height:100px !important;" src="{{asset('assets/images/loading-screen-logo.png')}}" alt="admin">
             </div>
-            <p>Please wait...</p>
+            {{-- <p>Please wait...</p> --}}
         </div>
     </div>
     <!-- #END# Page Loader -->

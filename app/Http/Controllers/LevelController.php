@@ -2319,7 +2319,7 @@ class LevelController extends Controller
     {
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $id)->first();
         if ($checkPaymentAlready) {
-            return redirect(url('application-list'))->with('success', 'Payment has already been submitted for this application.');
+            return redirect(url('application-list'))->with('payment_fail', 'Payment has already been submitted for this application.');
         }
         if ($id) {
             $applicationData = DB::table('applications')->where('id', $id)->first();
@@ -2514,6 +2514,15 @@ class LevelController extends Controller
             // For example, you can return a success message like this:
             return response()->json(['status' => 'success', 'message' => '']);
         }
+    }
+
+    public function paymentDuplicateCheck(Request $request){
+        $id = $request->application_id;
+        $checkPaymentAlready = DB::table('application_payments')->where('application_id', $id)->first();
+        if ($checkPaymentAlready) {
+            return response()->json(['paymentExist'=>true]);
+        }
+
     }
 
     //  upgrade application logic //

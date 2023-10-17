@@ -560,7 +560,7 @@
         $(".payment_alert").click(function() {
             Swal.fire({
                 position: 'center',
-                icon: 'success',
+                icon: 'warning',
                 title: 'Document is pending for approval from Accounts department',
                 showConfirmButton: true,
                 timer: 5000

@@ -625,7 +625,7 @@ active @endif"
             ) {
                 nextBtn.removeAttribute('disabled');
             } else {
-                nextBtn.setAttribute('disabled', 'disabled');
+                nextBtn.setAttribute('disabled', true);
             }
         }
     
@@ -667,7 +667,7 @@ active @endif"
                                                      if (response.status === 'duplicate') {
                                                          // Display the error message in the #contact_error span
                                                          $('#contact_error').text('Contact number is already in use.');
-                                                         nextBtn.setAttribute('disabled', 'disabled');
+                                                         nextBtn.setAttribute('disabled', true);
                                                          
                                                      } else {
                                                          // Clear the error message if the contact number is unique
