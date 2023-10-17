@@ -363,7 +363,7 @@
                                                                                     <i class="fa fa-eye mr-2"></i> 
                                                                                 </div>
                                                                                 <div>
-                                                                                   &nbsp; View Document 
+                                                                                   &nbsp;  Document 
                                                                                 </div>
                                                                            </div>
                                                                         </a>

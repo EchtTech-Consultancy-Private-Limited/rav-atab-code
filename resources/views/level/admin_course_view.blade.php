@@ -415,16 +415,52 @@
                                     <div class="row">
                                         @if (count($ApplicationCourses->documents) > 0)
                                             @foreach ($ApplicationCourses->documents as $document)
-                                                <div class="col-sm-4">
-                                                    <label for="">
-                                                        <b>Doc {{ $loop->iteration }}</b>
-                                                    </label>
-                                                    <div>
-                                                        <a target="_blank"
-                                                            href="{{ url('show-course-pdf/' . $document->document_file) }}">View
-                                                            Doc{{ $loop->iteration }}</a>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label><strong>
+                                                            @if ($loop->iteration == 1)
+                                                            Declaration
+                                                        @elseif ($loop->iteration == 2)
+                                                            Course Curriculum / Material / Syllabus
+                                                        @elseif ($loop->iteration == 3)
+                                                            Course Details (Excel format)
+                                                        @endif    
+                                                        </strong></label><br>
+                                
+                                                        @php
+                                                            $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
+                                                        @endphp
+                                
+                                                        @if (in_array($extension, ['xls', 'csv', 'pdf','xlsx']))
+                                                            @if (in_array($extension, ['xls', 'csv','xlsx']))
+                                                                <label>
+                                                                    <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                       title="Download Document">
+                                                                        <i class="fa fa-download mr-2"></i>&nbsp; Download Document 
+                                                                    </a>
+                                                                </label>
+                                                            @elseif ($extension === 'pdf')
+                                                                <label>
+                                                                    <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                       title="View Document}">
+                                                                       <div class="d-flex align-items-center ">
+                                                                            <div>
+                                                                                <i class="fa fa-eye mr-2"></i> 
+                                                                            </div>
+                                                                            <div>
+                                                                               &nbsp;  Document 
+                                                                            </div>
+                                                                       </div>
+                                                                    </a>
+                                                                </label>
+                                                            @endif
+                                                        @else
+                                                            <label><i class="fa fa-info-circle mr-2"></i> Unsupported File Format</label>
+                                                        @endif
                                                     </div>
                                                 </div>
+                                            </div>
                                             @endforeach
                                         @else
                                         @endif

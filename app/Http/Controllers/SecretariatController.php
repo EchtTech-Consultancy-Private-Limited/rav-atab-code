@@ -14,13 +14,6 @@ class SecretariatController extends Controller
     public function nationl_secretariat()
    {
 
-        /*$collection = DB::table('asessor_applications')
-        ->join('applications', 'asessor_applications.application_id', '=', 'applications.id')
-        ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
-        ->where('asessor_applications.assessor_id','=',Auth::user()->id)
-        ->where('applications.country','=',101)
-        ->get();*/
-
         $collection = DB::table('secretariat')
         ->join('applications', 'secretariat.application_id', '=', 'applications.id')
         ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
