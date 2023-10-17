@@ -6,24 +6,11 @@
 </head>
 
 <body class="light">
-    <!-- Page Loader -->
-    {{-- <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="m-t-30">
-                <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
-            </div>
-            <p>Please wait...</p>
-        </div>
-    </div> --}}
-    <!-- #END# Page Loader -->
-    <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
-    <!-- #END# Overlay For Sidebars -->
 
     @include('layout.topbar')
 
     <div>
-
 
         @if (Auth::user()->role == '1')
             @include('layout.sidebar')
@@ -35,28 +22,29 @@
             @include('layout.sideprof')
         @endif
 
-
-
     </div>
 
 
     <section class="content">
         <div class="container-fluid">
 
-
             @if (Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session::get('success') }}
-                </div>
-            @elseif(Session::has('fail'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session::get('fail') }}
-                </div>
-            @endif
-
-
-
-
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                });
+            </script>
+        @elseif (Session::has('fail'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('fail') }}',
+                });
+            </script>
+        @endif
 
             <div class="row ">
 
@@ -90,7 +78,7 @@
                                                                     <h4>Create NC</h4>
                                                                     <div>
                                                                         <form method="post"
-                                                                            action="{{ url('add-accr-comment-view-doc') }}">
+                                                                            action="{{ url('add-accr-comment-view-doc') }}" id="adminNcForm">
                                                                             @csrf
                                                                             <input type="hidden" name="previous_url"
                                                                                 value="{{ Request::url() }}">
@@ -129,7 +117,7 @@
                                                                                     <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="doc_comment_textarea"></textarea>
                                                                                 </div>
                                                                             </div>
-                                                                            <input type="submit" value="Add Comment"
+                                                                            <input id="adminSubmitBtn" type="submit" value="Add Comment"
                                                                                 class="btn btn-primary">
                                                                         </form>
                                                                     </div>
@@ -295,52 +283,7 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-
-
-
     </section>
-
-
-    <script>
-        $(document).ready(function() {
-            $('#doc_comment_textarea').hide();
-    
-            $('#show-view-doc-options').on('change', function() {
-                var selectedValue = $(this).val();
-                var docCommentTextarea = $('#doc_comment_textarea');
-    
-                if (selectedValue === '3') {
-                    docCommentTextarea.show();
-                    docCommentTextarea.val(''); // Clear any existing text
-                    docCommentTextarea.val('Document rejected by admin.');
-                } else if (selectedValue === '4') {
-                    docCommentTextarea.show();
-                    // Add the "Document approved by admin" text
-                    // You can change the text as needed
-                    docCommentTextarea.val('Document approved by admin');
-                } else {
-                    docCommentTextarea.hide();
-                    docCommentTextarea.val(''); // Clear any existing text
-                    docCommentTextarea.val('Document rejected by admin.');
-                }
-            });
-        });
-    </script>
-    
-    
-    <script>
-        $('#show-view-doc-options1').bind('input', function() {
-            var c = this.selectionStart,
-                r = /[^a-z0-9 .]/gi,
-                v = $(this).val();
-            if (r.test(v)) {
-                $(this).val(v.replace(r, ''));
-                c--;
-            }
-            this.setSelectionRange(c, c);
-        });
-    </script>
+    <script src="{{ asset('admin-assets/js/admin-js-script.js') }}"></script>
     @include('layout.footer')

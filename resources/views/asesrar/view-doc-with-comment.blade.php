@@ -47,7 +47,7 @@
                         title: "{{ session::get('success') }}",
                         showConfirmButton: false,
                         timer: 3000
-                    })
+                    })  
                 </script>
             @elseif(Session::has('fail'))
                 <script>
@@ -67,7 +67,7 @@
                            
                             <div class="tab-content">
                                 <div>
-                                    <form method="post" action="{{ url('add-accr-comment-view-doc') }}">
+                                    <form method="post" action="{{ url('add-accr-comment-view-doc') }}" id="ncForm">
                                         @csrf
                                         <div class="row clearfix">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
@@ -157,7 +157,7 @@
                                                     </div>
 
                                                     <div class="card-footer">
-                                                        <input type="submit" value="Add Comment"
+                                                        <input id="submitBtn" type="submit" value="Add Comment"
                                                             class="btn btn-primary">
                                                     </div>
 
@@ -367,5 +367,16 @@
             }
         });
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("ncForm"); // Change this to your form's actual ID
+        const submitBtn = document.getElementById("submitBtn"); // Change this to your button's actual ID
+
+        form.addEventListener("submit", function () {
+            submitBtn.disabled = true; // Disable the button when the form is submitted
+        });
+    });
+</script>
 
     @include('layout.footer')
