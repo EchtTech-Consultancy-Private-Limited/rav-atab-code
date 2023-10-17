@@ -14,8 +14,6 @@
     <!-- You can choose a theme from css/styles instead of getting all themes -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles/all-themes.css') }}">
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ" crossorigin="anonymous"></script>
 
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}">
