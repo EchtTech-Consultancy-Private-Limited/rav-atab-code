@@ -2229,7 +2229,7 @@ class LevelController extends Controller
         // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
+        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment,'applicationData'=>$Application]);
     }
 
     public function secretariat_view($id)

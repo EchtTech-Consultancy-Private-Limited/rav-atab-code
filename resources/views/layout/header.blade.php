@@ -14,11 +14,9 @@
     <!-- You can choose a theme from css/styles instead of getting all themes -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles/all-themes.css') }}">
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ" crossorigin="anonymous"></script>
 
     <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}">
 
     <!-- Template CSS -->
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/plugins/dataTables.bootstrap4.min.css') }}"> --}}
@@ -29,10 +27,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- FullCalendar CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.0.3/fullcalendar.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}">
 
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
 
     <!-- DataTables Buttons CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/buttons.dataTables.min.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/magnific-popup.css') }}">
