@@ -55,15 +55,7 @@
  </head>
 
  <body class="light">
-     <!-- Page Loader -->
-     {{-- <div class="page-loader-wrapper">
-         <div class="loader">
-             <div class="m-t-30">
-                 <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
-             </div>
-             <p>Please wait...</p>
-         </div>
-     </div> --}}
+  
      <!-- #END# Page Loader -->
      <!-- Overlay For Sidebars -->
      <div class="overlay"></div>
@@ -91,7 +83,15 @@
 
      </div>
 
-
+     @if (Session::has('success'))
+         <div class="alert alert-success" style="padding: 15px;" role="alert">
+             {{ session::get('success') }}
+         </div>
+     @elseif(Session::has('fail'))
+         <div class="alert alert-danger" role="alert">
+             {{ session::get('fail') }}
+         </div>
+     @endif
 
      <section class="content">
          <div class="container-fluid">
@@ -136,15 +136,7 @@
                              </div>
                          </div>
 
-                         @if (Session::has('success'))
-                             <div class="alert alert-success" style="padding: 15px;" role="alert">
-                                 {{ session::get('success') }}
-                             </div>
-                         @elseif(Session::has('fail'))
-                             <div class="alert alert-danger" role="alert">
-                                 {{ session::get('fail') }}
-                             </div>
-                         @endif
+
 
                          <div>
                              <div class="tab-content p-relative">
@@ -275,7 +267,8 @@ active @endif"
 
                                                  </div>
                                                  <div class="col-md-12">
-                                                    <form class="form" id="spocForm" action="{{ url('/new-applications') }}" method="post">
+                                                     <form class="form" id="spocForm"
+                                                         action="{{ url('/new-applications') }}" method="post">
 
                                                          @csrf
                                                          @if ($applicationData)
@@ -293,7 +286,8 @@ active @endif"
                                                                                      class="text-danger">*</span></label>
                                                                              <input type="text" name="Person_Name"
                                                                                  placeholder="Person Name"
-                                                                                 class="preventnumeric" id="person_name"
+                                                                                 class="preventnumeric"
+                                                                                 id="person_name"
                                                                                  @isset($applicationData)
                                                                                   value="{{ $applicationData->Person_Name ?? '' }}"
                                                                                @endisset
@@ -335,7 +329,9 @@ active @endif"
                                                                                      class="text-danger">*</span></label>
                                                                              <input type="text" required="required"
                                                                                  maxlength="10" name="Contact_Number"
-                                                                                 class="preventalpha" placeholder="Contact Number" id="Contact_Number"
+                                                                                 class="preventalpha"
+                                                                                 placeholder="Contact Number"
+                                                                                 id="Contact_Number"
                                                                                  @isset($applicationData)
                                                                               value="{{ $applicationData->Contact_Number ?? '' }}"
                                                                               @endisset>
@@ -395,340 +391,9 @@ active @endif"
 
 
                                  <script>
-                                     function add_new_course() {
-                                         $("#courses_body").append($("#add_courses").html());
-                                     }
+                                     var routePhoneValidation = "{{ route('phone.validation') }}";
+                                     var routeEmailValidation = "{{ route('email.validation') }}";
+                                     var csrfToken = "{{ csrf_token() }}";
                                  </script>
-
-                                 {{-- button click count --}}
-                                 <script>
-                                     $(document).ready(function() {
-                                         var count = 0;
-
-                                         $(window).on('load', function() {
-                                             $data = $('#Country').val();
-                                             // alert($data);
-
-                                         });
-
-
-                                         $("#count").click(function() {
-                                             count++;
-                                             //  alert(count)
-                                             if (count <= 4) {
-
-                                                 if ($data == '101') {
-                                                     rupess = 1000;
-                                                     //   alert(rupess)
-                                                     $("#counter").html("Total Amount:₹." + rupess);
-                                                     $("#counters").html("value=" + rupess);
-
-
-                                                 } else if ($data == '167' || $data == '208' || $data == '19' || $data == '1' || $data ==
-                                                     '133') {
-
-                                                     rupess = 15;
-                                                     //alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-
-
-                                                 } else {
-
-                                                     rupess = 50;
-                                                     // alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-                                                 }
-
-                                             } else if (count <= 9) {
-                                                 if ($data == '101') {
-                                                     rupess = 2000;
-                                                     //   alert(rupess)
-                                                     $("#counter").html("Total Amount:₹." + rupess);
-
-                                                 } else if ($data == '167' || $data == '208' || $data == '19' || $data == '1' || $data ==
-                                                     '133') {
-
-                                                     rupess = 30;
-                                                     //  alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-
-
-                                                 } else {
-
-                                                     rupess = 100;
-                                                     //   alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-                                                 }
-                                             } else {
-                                                 if ($data == '101') {
-                                                     rupess = 3000;
-                                                     //  alert(rupess)
-                                                     $("#counter").html("Total Amount:₹." + rupess);
-
-                                                 } else if ($data == '167' || $data == '208' || $data == '19' || $data == '1' || $data ==
-                                                     '133') {
-
-                                                     rupess = 45;
-                                                     // alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-
-
-                                                 } else {
-
-                                                     rupess = 150;
-                                                     //  alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-                                                 }
-                                             }
-                                         });
-                                     });
-                                 </script>
-
-
-
-                                 <script>
-                                     $(document).ready(function() {
-
-
-
-                                         $(window).on("load", function() {
-                                             $("#bank_id").hide();
-                                             $("#QR").hide();
-                                         });
-
-                                         $("#payments").on('change', function() {
-                                             $type = $('#payments').val();
-                                             //alert($type);
-
-                                             if ($type == 'QR-Code') {
-                                                 // alert('hii')
-                                                 $("#bank_id").hide();
-                                                 $("#QR").show();
-
-                                             } else if ($type == "") {
-                                                 //  alert('hii1')
-                                                 $("#bank_id").hide();
-                                                 $("#QR").hide();
-
-                                             } else {
-
-                                                 //  alert('hii1')
-                                                 $("#bank_id").show();
-                                                 $("#QR").hide();
-
-                                             }
-                                         });
-                                     });
-                                 </script>
-
-
-                                 {{-- second payment section   --}}
-
-                                 <script>
-                                     $(document).ready(function() {
-                                         var count = 0;
-
-                                         $(window).on('load', function() {
-                                             $data = $('#Country').val();
-                                             // alert($data);
-
-                                         });
-
-
-                                         $("#count_second").click(function() {
-                                             count++;
-                                             //  alert(count)
-                                             if (count <= 4) {
-
-                                                 if ($data == '101') {
-                                                     rupess = 2500;
-                                                     //   alert(rupess)
-                                                     $("#counter").html("Total Amount:₹." + rupess);
-                                                     $("#counters").html("value=" + rupess);
-
-
-                                                 } else if ($data == '167' || $data == '208' || $data == '19' || $data == '1' || $data ==
-                                                     '133') {
-
-                                                     rupess = 35;
-                                                     //alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-
-
-                                                 } else {
-
-                                                     rupess = 100;
-                                                     // alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-                                                 }
-
-                                             } else if (count <= 9) {
-                                                 if ($data == '101') {
-                                                     rupess = 5000;
-                                                     //   alert(rupess)
-                                                     $("#counter").html("Total Amount:₹." + rupess);
-
-                                                 } else if ($data == '167' || $data == '208' || $data == '19' || $data == '1' || $data ==
-                                                     '133') {
-
-                                                     rupess = 75;
-                                                     //  alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-
-
-                                                 } else {
-
-                                                     rupess = 200;
-                                                     //   alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-                                                 }
-                                             } else {
-                                                 if ($data == '101') {
-                                                     rupess = 10000;
-                                                     //  alert(rupess)
-                                                     $("#counter").html("Total Amount:₹." + rupess);
-
-                                                 } else if ($data == '167' || $data == '208' || $data == '19' || $data == '1' || $data ==
-                                                     '133') {
-
-                                                     rupess = 150;
-                                                     // alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-
-
-                                                 } else {
-
-                                                     rupess = 400;
-                                                     //  alert(rupess)
-                                                     $("#counter").html("Total Amount:US $." + rupess);
-                                                 }
-                                             }
-                                         });
-                                     });
-                                 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var spocForm = document.getElementById('spocForm');
-        var nextBtn = document.getElementById('nextBtn');
-        var personNameInput = document.getElementById('person_name');
-        var contactNumberInput = document.getElementById('Contact_Number');
-        var emailInput = document.getElementById('emailId');
-        var designationInput = document.querySelector('input[name="designation"]');
-    
-        // Function to check if all fields are filled
-        function checkForm() {
-            if (
-                personNameInput.value.trim() !== '' &&
-                contactNumberInput.value.trim() !== '' &&
-                emailInput.value.trim() !== '' &&
-                designationInput.value.trim() !== ''
-            ) {
-                nextBtn.removeAttribute('disabled');
-            } else {
-                nextBtn.setAttribute('disabled', true);
-            }
-        }
-    
-        // Attach an event listener to each input to check the form on input change
-        personNameInput.addEventListener('input', checkForm);
-        contactNumberInput.addEventListener('input', checkForm);
-        emailInput.addEventListener('input', checkForm);
-        designationInput.addEventListener('input', checkForm);
-    
-        // Initial check when the page loads
-        checkForm();
-    });
-    </script>
-    
-
-                                 <script>
-                                     $('#Contact_Number').on('keyup', function() {
-                                         // Get the contact number value
-                                         var contactNumber = $(this).val();
-
-                                         // Check if the contact number is empty
-                                         if (contactNumber === '') {
-                                             // Clear the error message and exit
-                                             $('#contact_error').text('');
-                                             return;
-                                         }
-
-                                         // Check if the contact number is numeric and has exactly 10 digits
-                                         if (/^\d{10}$/.test(contactNumber)) {
-                                             // Send an AJAX request
-                                             $.ajax({
-                                                 type: 'POST',
-                                                 url: "{{ route('phone.validation') }}", // Update with your Laravel route URL
-                                                 data: {
-                                                     contact_number: contactNumber,
-                                                     _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
-                                                 },
-                                                 success: function(response) {
-                                                     if (response.status === 'duplicate') {
-                                                         // Display the error message in the #contact_error span
-                                                         $('#contact_error').text('Contact number is already in use.');
-                                                         nextBtn.setAttribute('disabled', true);
-                                                         
-                                                     } else {
-                                                         // Clear the error message if the contact number is unique
-                                                         $('#contact_error').text('');
-                                                         
-                                                     }
-                                                 },
-                                                 error: function(xhr, status, error) {
-                                                     // Handle AJAX errors if needed
-                                                 }
-                                             });
-                                         } else {
-                                             // Display an error message for an invalid contact number
-                                             $('#contact_error').text('Contact number must be 10 digits and numeric.');
-                                         }
-                                     });
-
-
-                                     $('#emailId').on('keyup', function() {
-                                         // Get the email value
-                                         var email = $(this).val();
-
-                                         // Check if the email is empty
-                                         if (email === '') {
-                                             // Clear the error message and exit
-                                             $('#email_id_error').text('');
-                                             return;
-                                         }
-
-                                         // Check if the email format is valid
-                                         if (/^\S+@\S+\.\S+$/.test(email)) {
-                                             // Send an AJAX request
-                                             $.ajax({
-                                                 type: 'POST',
-                                                 url: "{{ route('email.validation') }}", // Update with your Laravel route URL
-                                                 data: {
-                                                     email: email,
-                                                     _token: '{{ csrf_token() }}' // Replace with the way you generate CSRF token in your Blade view
-                                                 },
-                                                 success: function(response) {
-                                                     if (response.status === 'duplicate') {
-                                                         // Display the error message in the #email_id_error span
-                                                         $('#email_id_error').text('Email is already in use.');
-                                                         nextBtn.setAttribute('disabled', 'disabled');
-                                                         
-                                                     } else {
-                                                         // Clear the error message if the email is unique
-                                                         $('#email_id_error').text('');
-                                                         
-                                                     }
-                                                 },
-                                                 error: function(xhr, status, error) {
-                                                     // Handle AJAX errors if needed
-                                                 }
-                                             });
-                                         } else {
-                                             // Display an error message for an invalid email format
-                                             $('#email_id_error').text('Invalid email format.');
-                                         }
-                                     });
-                                 </script>
-
-
+                                 <script src="{{ asset('assets/js/new-application-form-validation.js') }}"></script>
                                  @include('layout.footer')

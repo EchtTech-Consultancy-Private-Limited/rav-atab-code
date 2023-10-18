@@ -245,7 +245,7 @@
                                     <div class="form-group">
                                         <div class="form-line select-box-hide-class" style="width:25%">
                                             <label>Payment Mode<span class="text-danger">*</span></label>
-                                            <select name="payment" class="form-control payment_mode" id="payments">
+                                            <select name="payment" class="form-control payment_mode" id="payments" required>
                                                 <option value="">Select Option</option>
                                                 <option value="QR-Code"
                                                     {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
@@ -464,7 +464,7 @@
                 </div>
 
                 @include('layout.footer')
-                <script src="{{ asset('assets/js/jquery-3.6.0.js') }}"></script>
+            
                 <script src="{{ asset('assets/js/jquery-ui.js') }}"></script>
 
 
@@ -492,11 +492,11 @@
                             if (type === 'QR-Code') {
                                 $("#bank_id").hide();
                                 $("#QR").show();
-                            } else if (type === '') {
+                            } else if (type === 'Bank') {
                                 $("#bank_id").show();
-                                $("#QR").show();
+                                $("#QR").hide();
                             } else {
-                                $("#bank_id").show();
+                                $("#bank_id").hide();
                                 $("#QR").hide();
                             }
                         });
