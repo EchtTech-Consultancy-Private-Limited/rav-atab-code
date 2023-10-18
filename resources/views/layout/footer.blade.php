@@ -332,7 +332,7 @@ $("document").ready(function(){
 <script src="{{asset('assets/js/chart.min.js')}}"></script>
 <!-- Custom Js -->
 <script src="{{asset('assets/js/admin.js')}}"></script>
-<script src="{{asset('assets/js/bundles/echart/echarts.js')}}"></script>
+{{-- <script src="{{asset('assets/js/bundles/echart/echarts.js')}}"></script> --}}
 <script src="{{asset('assets/js/bundles/apexcharts/apexcharts.min.js')}}"></script>
 <script src="{{asset('assets/js/pages/index.js')}}"></script>
 <script src="{{asset('assets/js/pages/todo/todo.js')}}"></script>
@@ -355,7 +355,7 @@ $("document").ready(function(){
 
     <script src="{{ asset('assets/js/atab-dataTables.buttons.min.js') }} "></script>
     <script src="{{ asset('assets/js/atab-jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/js/atab-pdfmake.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/atab-pdfmake.min.js') }}"></script> --}}
     <script src="{{ asset('assets/js/atab-vfs_fonts.js') }}"></script>
     <script src="{{ asset('assets/js/atab-buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script>

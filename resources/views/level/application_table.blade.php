@@ -308,7 +308,7 @@
                                                             <td class="center">
                                                                 {{ $item->currency }}{{ $item->amount }}
                                                             </td>
-                                                            <td class="center">{{ $item->payment_date }}</td>
+                                                            <td class="center">{{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}</td>
                                                             <td class="center">
                                                                 <a href="javascript:void(0)"
                                                                     @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
