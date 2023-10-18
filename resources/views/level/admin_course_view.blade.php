@@ -669,7 +669,7 @@
                                             <div class="col-sm-12 payment_file">
                                                 <form
                                                     action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                    method="post" enctype="multipart/form-data">
+                                                    method="post" enctype="multipart/form-data" id="paymentApproveForm">
                                                     @csrf
                                                     <div class="card" style="border:1px solid #ccc;">
                                                         <div class="card-header">
@@ -731,7 +731,7 @@
                                                         </div>
                                                         <div class="card-footer d-flex justify-content-end">
                                                             <input type="hidden" name="status" value="2">
-                                                            <button class="btn btn-primary">Click to Approve
+                                                            <button class="btn btn-primary" type="submit" id="paymentApproveButton">Click to Approve
                                                                 Payment</button>
                                                         </div>
                                                     </div>
@@ -802,7 +802,16 @@
 
 
 
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("paymentApproveForm"); // Change this to your form's actual ID
+            const submitBtn = document.getElementById("paymentApproveButton"); // Change this to your button's actual ID
+    
+            form.addEventListener("submit", function () {
+                submitBtn.disabled = true; // Disable the button when the form is submitted
+            });
+        });
+    </script>
 
 
     <script>
@@ -817,7 +826,7 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-
+                    $('.btn-payment-approval').attr('disabled', true);
                     var anchorLink = document.querySelector('.btn-payment-approval').getAttribute('href');
                     window.location.href = anchorLink;
                 }
