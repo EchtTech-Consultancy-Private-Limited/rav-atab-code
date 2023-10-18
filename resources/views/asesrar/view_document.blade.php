@@ -160,7 +160,7 @@
                                             class="btn btn-primary btn-sm">Back</a>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div>
+                                        {{-- <div>
                                             @if (check_document_upload($course_id) == Auth::user()->id)
                                                 <a href="{{ url('document-report-toadmin/' . $course_id) }}"
                                                     class="btn btn-primary">Send Document To Admin</a>
@@ -172,7 +172,7 @@
                                                 href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
                                                 class="btn btn-primary">History Log</a>
 
-                                        </div>
+                                        </div> --}}
                                         <div class="card project_widget">
                                             @if ($message = Session::get('success'))
                                                 <script>
