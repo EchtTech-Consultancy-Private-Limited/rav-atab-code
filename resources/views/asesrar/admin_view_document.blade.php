@@ -232,7 +232,7 @@
                                                                                             @if ($doc->application_id == $application_id)
                                                                                                 <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                    href="{{ url('admin-view-doc' . '/' .$doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
                                                                                                     id="view_doc1">View
@@ -251,7 +251,7 @@
                                                                                             @if ($doc->application_id == $application_id)
                                                                                                 <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    href="{{ url('admin-view-doc' . '/' . __('arrayfile.document_doc_id_chap1')[1] . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                    href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
                                                                                                     id="view_doc1">V{{ $loop->iteration ?? '' }}</a>
