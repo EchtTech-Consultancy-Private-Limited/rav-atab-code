@@ -49,7 +49,7 @@
                             <li class="breadcrumb-item active"> Assessor View Applications </li>
                         </ul>
 
-                        <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary"
+                        <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
                             style="float:right;">Back </a>
                     </div>
                 </div>
