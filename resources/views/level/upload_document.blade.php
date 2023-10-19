@@ -296,15 +296,13 @@
                                                                                             <a target="_blank"
                                                                                                 title="{{ checkDocumentCommentStatusreturnText($documentsData[0]->id) }}"
                                                                                                 href="{{ url('show-pdf' . '/' . $documentsData[0]->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} btn-sm m-1">View
-                                                                                                Document</a>
+                                                                                                class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} btn-sm m-1">{{ getButtonText($documentsData[0]->id) }}</a>
                                                                                         </div>
                                                                                     @else
                                                                                         <a target="_blank"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($documentsData[0]->id) }}"
                                                                                             href="{{ url('show-pdf' . '/' . $documentsData[0]->doc_file) }}"
-                                                                                            class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} btn-sm m-1">View
-                                                                                            Document</a>
+                                                                                            class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} btn-sm m-1">{{ getButtonText($documentsData[0]->id) }}</a>
                                                                                     @endif
                                                                                 @endif
                                                                             </div>
