@@ -166,18 +166,7 @@
 </head>
 
 <body class="light">
-    <!-- Page Loader -->
-    {{--
-  <div class="page-loader-wrapper">
-     <div class="loader">
-        <div class="m-t-30">
-           <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
-        </div>
-        <p>Please wait...</p>
-     </div>
-  </div>
-  --}}
-    <!-- #END# Page Loader -->
+   
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
@@ -276,7 +265,6 @@
                                                                     @if (checktppaymentstatus($item_level_list->id) == 0)
                                                                         <td>{{ $item_level_list->application_uid }}</td>
                                                                         </td>
-                                                                        <!-- <td class="center">{{ $item_level_list->user_id ?? '' }}</td>-->
                                                                         <td> {{ $item_level_list->level_id ?? '' }}</td>
                                                                         <td> {{ $item_level_list->country_name ?? '' }}
                                                                         </td>

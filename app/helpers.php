@@ -173,7 +173,7 @@ function checkmanualtype($type)
 
 function checktppaymentstatus($id)
 {
-    $application_tp_payment = DB::table('application_payments')->where('application_id', '=', $id)->get();
+    $application_tp_payment = DB::table('application_payments')->where('application_id', $id)->get();
 
     $count = count($application_tp_payment);
     return $count;

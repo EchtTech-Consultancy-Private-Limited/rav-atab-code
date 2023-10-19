@@ -857,16 +857,16 @@
                                                             <label>Course Duration <span class="text-danger">*</span>
                                                             </label>
                                                             <div class="course_group">
-                                                                <input type="number" placeholder="Years"
+                                                               Y <input type="number" placeholder="Years"
                                                                     name="years" required class="course_input"
                                                                     id="years">
-                                                                <input type="number" placeholder="Months"
+                                                               M <input type="number" placeholder="Months"
                                                                     name="months" required class="course_input"
                                                                     id="months">
-                                                                <input type="number" placeholder="Days"
+                                                               D <input type="number" placeholder="Days"
                                                                     name="days" required class="course_input"
                                                                     id="days">
-                                                                <input type="number" placeholder="Hours"
+                                                               H <input type="number" placeholder="Hours"
                                                                     name="hours" required class="course_input"
                                                                     id="hours">
                                                             </div>
