@@ -216,7 +216,7 @@
                                                                                             <a target="_blank"
                                                                                                 title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                 href="{{ url('show-pdf' . '/' . $docItem->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($docItem->id) }} m-1">V{{ $loop->iteration }}</a>
+                                                                                                class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm m-1"> {{ getButtonText($docItem->id) }}</a>
                                                                                         </div>
                                                                                     @endforeach
                                                                                 @endif
@@ -256,7 +256,9 @@
                                                                                             <a target="_blank"
                                                                                                 title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                 href="{{ url('show-pdf' . '/' . $docItem->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($docItem->id) }} m-1">V{{ $loop->iteration }}</a>
+                                                                                                class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm m-1">
+                                                                                                {{ getButtonText($docItem->id) }}
+                                                                                            </a>
                                                                                         </div>
                                                                                     @endforeach
                                                                                 @endif
@@ -294,14 +296,14 @@
                                                                                             <a target="_blank"
                                                                                                 title="{{ checkDocumentCommentStatusreturnText($documentsData[0]->id) }}"
                                                                                                 href="{{ url('show-pdf' . '/' . $documentsData[0]->doc_file) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} m-1">View
+                                                                                                class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} btn-sm m-1">View
                                                                                                 Document</a>
                                                                                         </div>
                                                                                     @else
                                                                                         <a target="_blank"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($documentsData[0]->id) }}"
                                                                                             href="{{ url('show-pdf' . '/' . $documentsData[0]->doc_file) }}"
-                                                                                            class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} m-1">View
+                                                                                            class="btn {{ checkDocumentCommentStatus($documentsData[0]->id) }} btn-sm m-1">View
                                                                                             Document</a>
                                                                                     @endif
                                                                                 @endif
@@ -338,7 +340,7 @@
 
                                                                         @if (checkCommentsExist($question->id, $file[0]->application_id) == true)
                                                                             <button
-                                                                                class="expand-button btn btn-primary"
+                                                                                class="expand-button btn btn-primary btn-sm mt-3"
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>
                                                                         @else
                                                                             <span class="text-danger"

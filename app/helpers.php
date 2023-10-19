@@ -478,12 +478,28 @@ function getComments($id = null,$applicationID)
                 <th>Document Code</th>
                 <th>Date</th>
                 <th>Comments</th>
+                <th>Status Code</th>
                 <th>Approved/Rejected By</th>
             </tr>
         </thead>
         <tbody>";
         $class = "";
         foreach ($comments as $comment) {
+
+            $statusCode = "";
+            if ($comment->status == 4) {
+                $statusCode = "Close";
+            }elseif ($comment->status == 3) {
+                $statusCode = "Not Recommended";
+            } elseif($comment->status == 2){
+                $statusCode = "NC2";
+            }elseif ($comment->status == 1) {
+                $statusCode = "NC1";
+            }
+            else {
+                $statusCode = "Close";
+            }
+            
 
             if($comment->status == 4){
                 $html .= "<tr class='text-success' style='border-left:3px solid green'>";
@@ -495,6 +511,7 @@ function getComments($id = null,$applicationID)
             $html .= "<td width='130'>" . $comment->doc_code . "</td>";
             $html .= "<td width='120'>" . \Carbon\Carbon::parse($comment->created_at)->format('d-m-Y') . "</td>";
             $html .= "<td>" . $comment->comments . "</td>";
+            $html .= "<td>" . $statusCode ?? '' . "</td>";
             $html .= "<td>".getUserDetails($comment->user_id)."</td>";
             $html .= "</tr>";
         }
@@ -605,6 +622,29 @@ function checkApproveComment($doc_id){
         return 4;
     }else{
         return 0;
+    }
+}
+
+function getButtonText($id){
+    $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
+
+    if ($commentData) {
+        if ($commentData->status == 4) {
+            return "File Approved";
+        }  elseif ($commentData->status == 3) {
+            return "Not Recommended";
+        }
+        elseif ($commentData->status == 2) {
+            return "NC2";
+        }
+        elseif ($commentData->status == 1) {
+            return "NC1";
+        }
+        else {
+            return "File not approved";
+        }
+    } else {
+        return "View Document";
     }
 }
 
