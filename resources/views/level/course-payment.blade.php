@@ -242,82 +242,84 @@
                                     </h6>
                                 </div>
                                 <div class="body">
-                                    <div class="form-group">
-                                        <div class="form-line select-box-hide-class" style="width:25%">
-                                            <label>Payment Mode<span class="text-danger">*</span></label>
-                                            <select name="payment" class="form-control payment_mode" id="payments" required>
-                                                <option value="">Select Option</option>
-                                                <option value="QR-Code"
-                                                    {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
-                                                    Code
-                                                </option>
-                                                <option value="Bank" {{ old('title') == 'Bank' ? 'selected' : '' }}>
-                                                    Bank
-                                                    Transfers
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- payment start -->
-                                    <div style="text-align:center; width:100%;" id="QR">
-                                        <div style="width:100px; height:100px; border:1px solid #ccc; float:left;">
-                                            <img src="{{ asset('/assets/images/demo-qrcode.png') }}" width="100"
-                                                height="100">
-                                        </div>
-                                    </div>
-                                    <div class="row clearfix" id="bank_id">
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label><strong>Bank Name</strong></label>
-                                                    <p>Punjab National Bank</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label> <strong>Branch Name</strong> </label>
-                                                    <p>Main Market, Punjabi Bagh, New Delhi</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label> <strong>IFSC Code</strong> </label>
-                                                    <p>PUNB00987</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label> <strong>Accounts Number</strong> </label>
-                                                    <p>112233234400987</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label> <strong>CIF</strong> </label>
-                                                    <p>112233234400987</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <div class="form-line">
-                                                    <label> <strong>MICR Number</strong> </label>
-                                                    <p>112233234400987</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <form action="{{ url('/new-application_payment') }}" method="post" class="form"
                                         id="regForm" enctype="multipart/form-data">
                                         @csrf
+                                        <div class="form-group">
+                                            <div class="form-line select-box-hide-class" style="width:25%">
+                                                <label>Payment Mode<span class="text-danger">*</span></label>
+                                                <select name="payment" class="form-control payment_mode" id="payments"
+                                                    required>
+                                                    <option value="">Select Option</option>
+                                                    <option value="QR-Code"
+                                                        {{ old('QR-Code') == 'QR-Code' ? 'selected' : '' }}>QR
+                                                        Code
+                                                    </option>
+                                                    <option value="Bank"
+                                                        {{ old('title') == 'Bank' ? 'selected' : '' }}>
+                                                        Bank
+                                                        Transfers
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- payment start -->
+                                        <div style="text-align:center; width:100%;" id="QR">
+                                            <div style="width:100px; height:100px; border:1px solid #ccc; float:left;">
+                                                <img src="{{ asset('/assets/images/demo-qrcode.png') }}" width="100"
+                                                    height="100">
+                                            </div>
+                                        </div>
+                                        <div class="row clearfix" id="bank_id">
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label><strong>Bank Name</strong></label>
+                                                        <p>Punjab National Bank</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label> <strong>Branch Name</strong> </label>
+                                                        <p>Main Market, Punjabi Bagh, New Delhi</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label> <strong>IFSC Code</strong> </label>
+                                                        <p>PUNB00987</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label> <strong>Accounts Number</strong> </label>
+                                                        <p>112233234400987</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label> <strong>CIF</strong> </label>
+                                                        <p>112233234400987</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <label> <strong>MICR Number</strong> </label>
+                                                        <p>112233234400987</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <input type="hidden" name="form_step_type" value="application-payment">
                                         <div class="row clearfix">
@@ -438,9 +440,9 @@
                                                             id="payment_details_file" required class="paymentProof"
                                                             class="form-control payment_details_file  file_size">
                                                     </div>
-                                                    <label for="payment_reference_no" id="payment_reference_no-error"
+                                                    <label for="paymentProofError" id="paymentProofError"
                                                         class="error">
-                                                        @error('payment_reference_no')
+                                                        @error('paymentProofError')
                                                             {{ $message }}
                                                         @enderror
                                                     </label>
@@ -464,31 +466,31 @@
                 </div>
 
                 @include('layout.footer')
-            
+
                 <script src="{{ asset('assets/js/jquery-ui.js') }}"></script>
 
 
                 <script>
-                    document.addEventListener("DOMContentLoaded", function () {
+                    document.addEventListener("DOMContentLoaded", function() {
                         const form = document.getElementById("regForm"); // Change this to your form's actual ID
                         const submitBtn = document.getElementById("submitBtn"); // Change this to your button's actual ID
-                
-                        form.addEventListener("submit", function () {
+
+                        form.addEventListener("submit", function() {
                             submitBtn.disabled = true; // Disable the button when the form is submitted
                         });
                     });
                 </script>
-                
+
                 <script>
                     $(document).ready(function() {
                         // Hide elements on page load
                         $("#bank_id").hide();
                         $("#QR").hide();
-            
+
                         // Handle the 'change' event on the payment type dropdown
                         $("#payments").on('change', function() {
                             var type = $('#payments').val();
-            
+
                             if (type === 'QR-Code') {
                                 $("#bank_id").hide();
                                 $("#QR").show();
@@ -500,14 +502,14 @@
                                 $("#QR").hide();
                             }
                         });
-            
+
                         // Initialize datepicker for payment_date field
                         $("#payment_date").datepicker({
                             dateFormat: 'dd-mm-yy',
                             maxDate: 0, // Disable future dates
                             defaultDate: 0, // Set the default date to today
                         });
-            
+
                         // Disable manual typing in the date field
                         $("#payment_date").on('keydown', function(e) {
                             e.preventDefault();
@@ -530,7 +532,7 @@
 
                             if (doc_payment_files === 'png' || doc_payment_files === 'jpg' || doc_payment_files ===
                                 'pdf' || doc_payment_files === 'jpeg') {
-                                    $('#submitBtn').attr('disabled', false);
+                                $('#submitBtn').attr('disabled', false);
                             } else {
                                 Swal.fire({
                                     position: 'center',
@@ -558,6 +560,13 @@
                             return;
                         }
 
+                        // Check if the input contains special characters
+                        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                            $('#payment_transaction_no-error').text(
+                                'Payment Transaction no. must not contain special characters.');
+                            return;
+                        }
+
                         // Check if the length of the input is less than the minimum required length
                         if (paymentTransactionNo.length < 9) {
                             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
@@ -574,15 +583,11 @@
                                     // Handle the response from the server
                                     if (response.status === 'error') {
                                         $('#payment_transaction_no-error').html('<p class="text-danger">' + response
-                                            .message +
-                                            '</p>');
+                                            .message + '</p>');
                                         $('#submitBtn').attr('disabled', true);
                                     } else if (response.status === 'success') {
                                         $('#payment_transaction_no-error').html('<p class="text-success">' +
-                                            response.message +
-                                            '</p>');
-
-
+                                            response.message + '</p>');
                                     }
                                 },
                                 error: function(xhr, status, error) {
@@ -590,7 +595,7 @@
                                     console.error(error);
                                 }
                             });
-                            // Clear the error message if the length is valid
+                            // Clear the error message if the length and format are valid
                             $('#payment_transaction_no-error').text('');
                         }
                     });
@@ -603,6 +608,13 @@
                         if (paymentReferenceNo === '') {
                             // Clear the error message and exit
                             $('#payment_reference_no-error').text('');
+                            return;
+                        }
+
+                         // Check if the input contains special characters
+                         if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                            $('#payment_reference_no-error').text(
+                                'Payment Reference no. must not contain special characters.');
                             return;
                         }
 
@@ -643,43 +655,43 @@
                     });
                 </script>
 
-              
 
-<script>
-    $(document).ready(function() {
-     
 
-            // Get the application_id from your input field or other source.
-            var applicationId =  {{ $applicationData->id }};
+                <script>
+                    $(document).ready(function() {
 
-            // Send an AJAX request to check for payment duplicacy.
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('payment.duplicate') }}',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'application_id': applicationId
-                },
-                success: function(response) {
-                    if (response.paymentExist) {
-                        Swal.fire({
-                position: 'center',
-                icon: 'warning',
-                title: 'Payment has already been submitted for this application.',
-                showConfirmButton: true,
-                timer: 5000
-            });
-                        window.location.href = '{{ url('application-list') }}';
-                    } else {
-                        // Payment does not exist; you can perform another action or show a message.
-                    }
-                },
-                error: function(error) {
-                    console.error('An error occurred: ' + error);
-                }
-            });
-        
-    });
-</script>
+
+                        // Get the application_id from your input field or other source.
+                        var applicationId = {{ $applicationData->id }};
+
+                        // Send an AJAX request to check for payment duplicacy.
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('payment.duplicate') }}',
+                            data: {
+                                '_token': '{{ csrf_token() }}',
+                                'application_id': applicationId
+                            },
+                            success: function(response) {
+                                if (response.paymentExist) {
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'warning',
+                                        title: 'Payment has already been submitted for this application.',
+                                        showConfirmButton: true,
+                                        timer: 5000
+                                    });
+                                    window.location.href = '{{ url('application-list') }}';
+                                } else {
+                                    // Payment does not exist; you can perform another action or show a message.
+                                }
+                            },
+                            error: function(error) {
+                                console.error('An error occurred: ' + error);
+                            }
+                        });
+
+                    });
+                </script>
 
 </body>

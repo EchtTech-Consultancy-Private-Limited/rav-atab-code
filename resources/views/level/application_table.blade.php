@@ -237,25 +237,25 @@
                             });
                         </script>
                     @elseif (Session::has('fail'))
-                    <script>
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'error',
-                            title: '{{ session('fail') }}',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                    </script>
+                        <script>
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: '{{ session('fail') }}',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        </script>
                     @elseif (Session::has('payment_fail'))
-                    <script>
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'warning',
-                            title: '{{ session('fail') }}',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                    </script>
+                        <script>
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: '{{ session('fail') }}',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        </script>
                     @endif
 
                     @if (count($errors) > 0)
@@ -297,7 +297,8 @@
                                             <tbody>
                                                 @isset($collection)
                                                     @foreach ($collection as $k => $item)
-                                                        <tr class="odd gradeX align-item-center" style="font-size: 13px !important;">
+                                                        <tr class="odd gradeX align-item-center"
+                                                            style="font-size: 13px !important;">
                                                             <td class="center">{{ $k + 1 }}</td>
                                                             <td class="center">
                                                                 {{ $item->application->application_uid }}
@@ -308,7 +309,9 @@
                                                             <td class="center">
                                                                 {{ $item->currency }}{{ $item->amount }}
                                                             </td>
-                                                            <td class="center">{{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}</td>
+                                                            <td class="center">
+                                                                {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
+                                                            </td>
                                                             <td class="center">
                                                                 <a href="javascript:void(0)"
                                                                     @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
@@ -329,12 +332,12 @@
                                                                 @endphp
 
                                                                 @if ($daysRemaining <= 15)
-                                                               
                                                                     <form action="#" method="post">
                                                                         @csrf
                                                                         <button type="button" class="btn btn-primary"
                                                                             data-toggle="tooltip" data-placement="top"
-                                                                            data-html="true" title='
+                                                                            data-html="true"
+                                                                            title='
                                                                                 Upgrade Recommended:
                                                                                 Your course expiry date is approaching,
                                                                                 and you have only {{ $daysRemaining }} days left to upgrade your course.
@@ -356,8 +359,8 @@
                                                             @elseif(request()->path() == 'level-second')
                                                                 <td class="center">
                                                                     <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                                               class="btn btn-tbl-edit"><i
-                                                                                   class="material-icons">visibility</i></a> -->
+                                                                                   class="btn btn-tbl-edit"><i
+                                                                                       class="material-icons">visibility</i></a> -->
                                                                     @if ($item->status == 1)
                                                                         <a href="{{ url('/upload-document') }}"
                                                                             class="btn btn-tbl-upload"><i

@@ -1243,10 +1243,9 @@ class LevelController extends Controller
     }
     public function upload_document($id, $course_id)
     {
-        //dd("yes");
         $application_id = $id;
         $course_id = $course_id;
-        // dd(dDecrypt($id));
+
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
@@ -1258,10 +1257,9 @@ class LevelController extends Controller
 
     public function accr_upload_document($id, $course_id)
     {
-
         $application_id = $id;
         $course_id = $course_id;
-        // dd(dDecrypt($id));
+        
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
@@ -2454,7 +2452,7 @@ class LevelController extends Controller
 
     public function applictionTable()
     {
-        $collection = ApplicationPayment::orderBy('id', 'desc')->whereuser_id(Auth::user()->id)->get();
+        $collection = ApplicationPayment::orderBy('application_id', 'desc')->whereuser_id(Auth::user()->id)->get();
         return view('level.application_table', ['collection' => $collection]);
     }
 
@@ -2467,7 +2465,7 @@ class LevelController extends Controller
     public function pendingPaymentlist()
     {
 
-        $level_list_data = DB::table('applications')->orderBy('id','desc')
+        $level_list_data = DB::table('applications')->orderby('applications.application_uid','desc')
             ->where('applications.user_id', Auth::user()->id)
             ->where('applications.status', '0')
             ->select('applications.*', 'countries.name as country_name')

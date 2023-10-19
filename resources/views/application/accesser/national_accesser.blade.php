@@ -146,7 +146,7 @@
                                         <tr class="odd gradeX">
                                             <td class="center">{{ $k+1 }}</td>
                                             <td class="center">{{ $item->level_id  }}</td>
-                                            <td class="center">RAVAP-{{(4000+$item->application_id)}}</td>
+                                            <td class="center">{{($item->application_uid ?? 'something went wrong!')}}</td>
                                             <td class="center">{{  $item->course_count  }}</td>
                                             <td class="center">{{application_submission_date($item->application_id,$assessor_id)}}</td>
                                             <td class="center">{{assessor_assign_date($item->application_id,$assessor_id)}}</td>

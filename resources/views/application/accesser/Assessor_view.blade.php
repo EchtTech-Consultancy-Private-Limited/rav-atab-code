@@ -372,7 +372,7 @@
                                                 <label><strong>Course Details (Excel format) </strong></label><br>
                                                 <label>
                                                     <a  href="{{ url('documnet/'.$ApplicationDocument[2]->document_file) }}" target="_blank" title="Document 3" id="docpdf3" download>
-                                                        <i class="fa fa-download mr-2"></i> Downloadable File
+                                                        <i class="fa fa-download mr-2"></i> Download Doc
                                                     </a>
                                             </label>
                                             </div>
