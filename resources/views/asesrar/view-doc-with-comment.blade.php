@@ -37,7 +37,7 @@
     </div>
 
     <section class="content">
-        <div >
+        <div>
 
             @if (Session::has('success'))
                 <script>
@@ -47,7 +47,7 @@
                         title: "{{ session::get('success') }}",
                         showConfirmButton: false,
                         timer: 3000
-                    })  
+                    })
                 </script>
             @elseif(Session::has('fail'))
                 <script>
@@ -64,7 +64,7 @@
                 <div class="row ">
                     <div class="row clearfix">
                         <div class="col-lg-12 col-md-12">
-                           
+
                             <div class="tab-content">
                                 <div>
                                     <form method="post" action="{{ url('add-accr-comment-view-doc') }}" id="ncForm">
@@ -106,49 +106,53 @@
                                                             <input type="hidden" name="course_id"
                                                                 value="{{ $course_id }}">
                                                             <div class="row">
-                                                                @if ($doc_latest_record->notApraove_count == 1)
-                                                                    <div class="col-sm-12 col-md-4">
-                                                                        <label>Select Type</label>
-                                                                        <select required
-                                                                            class="form-control required text-center"
-                                                                            name="status" id="status">
-                                                                            <option value="">--Select--</option>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <label>Select Type</label>
+
+                                                                    <select required
+                                                                        class="form-control required text-center"
+                                                                        name="status" id="status">
+                                                                        <option value="">--Select--</option>
+                                                                        @if ($doc_latest_record->notApraove_count == 1)
                                                                             <option value="1">NC 1</option>
-                                                                            <option value="4">Close</option>
-                                                                        </select>
-                                                                    </div>
-                                                                @endif
-
-                                                                @if ($doc_latest_record->notApraove_count == 2)
-                                                                    <div class="col-sm-12 col-md-4">
-                                                                        <label>Select Type</label>
-                                                                        <select required
-                                                                            class="form-control required text-center"
-                                                                            name="status" id="status">
-                                                                            <option value="">--Select--</option>
+                                                                        @elseif ($doc_latest_record->notApraove_count == 2)
                                                                             <option value="2">NC 2</option>
-                                                                            <option value="4">Close</option>
-                                                                        </select>
-                                                                    </div>
-                                                                @endif
-
-                                                                @if ($doc_latest_record->notApraove_count >= 3)
-                                                                    <div class="col-sm-12 col-md-4">
-                                                                        <label>Select Type</label>
-                                                                        <select required
-                                                                            class="form-control required text-center"
-                                                                            name="status" id="status">
-                                                                            <option value="">--Select--</option>
-                                                                            <option value="4">Close</option>
+                                                                        @elseif ($doc_latest_record->notApraove_count == 3)
                                                                             <option value="3">Not Recommended
                                                                             </option>
-                                                                        </select>
-                                                                    </div>
-                                                                @endif
+                                                                        @elseif ($doc_latest_record->notApraove_count == 4)
+                                                                            <option value="6">NC3</option>
+                                                                        @endif
+                                                                        <option value="4">Close</option>
+                                                                    </select>
+
+                                                                </div>
+
 
                                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label>Add Comment</label>
                                                                     <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control"></textarea>
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    <div>
+                                                                        <div class="bg-warning p-2">
+                                                                            @if ($doc_latest_record->notApraove_count == 4)
+                                                                                <p>
+                                                                                    <strong>Final Approval
+                                                                                        Request</strong>
+                                                                                </p>
+                                                                                <p>
+                                                                                    <small>This request has been
+                                                                                        received from the admin, and it
+                                                                                        marks the last opportunity for
+                                                                                        review. If this file is found to
+                                                                                        be incorrect, the user will not
+                                                                                        be able to upload another file
+                                                                                        after this point.</small>
+                                                                                </p>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
 
@@ -170,27 +174,29 @@
             @else
                 <div class="card">
                     <div class="card-body">
-                        @if (in_array(get_doccomment_status($doc_id), [1, 2]))
-                    <h4 class="text-center">
-                        Document not approved - Rejected with
-                        @if (get_doccomment_status($doc_id) == 1)
-                            NC1
-                        @elseif (get_doccomment_status($doc_id) == 2)
-                            NC2
+                        @if (in_array(get_doccomment_status($doc_id), [1, 2,6]))
+                            <h4 class="text-center">
+                                Document not approved - Rejected with
+                                @if (get_doccomment_status($doc_id) == 1)
+                                    NC1
+                                @elseif (get_doccomment_status($doc_id) == 2)
+                                    NC2
+                                    @elseif (get_doccomment_status($doc_id) == 6)
+                                    NC3
+                                @endif
+                            </h4>
+                        @elseif (get_doccomment_status($doc_id) == 3)
+                            <h4 class="text-center">
+                                Document not approved and this document has been sent to
+                                admin
+                            </h4>
+                        @elseif (get_doccomment_status($doc_id) == 4)
+                            <h4 class="text-center">
+                                Your Document has been approved
+                            </h4>
+                        @else
+                            Something went wrong! Please contact administrator.
                         @endif
-                    </h4>
-                @elseif (get_doccomment_status($doc_id) == 3)
-                    <h4 class="text-center">
-                        Document not approved and this document has been sent to
-                        admin
-                    </h4>
-                @elseif (get_doccomment_status($doc_id) == 4)
-                    <h4 class="text-center">
-                        Your Document has been approved
-                    </h4>
-                @else
-                    Something went wrong! Please contact administrator.
-                @endif
                     </div>
                 </div>
             @endif
@@ -209,7 +215,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table
-                                            class="table table-hover js-basic-example contact_list dataTable no-footer"
+                                            class="table"
                                             id="DataTables_Table_0" role="grid"
                                             aria-describedby="DataTables_Table_0_info">
                                             <thead>
@@ -226,8 +232,8 @@
                                                     </th>
 
                                                     <th class="center sorting sorting_asc" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
+                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                        aria-sort="ascending"
                                                         aria-label=" No : activate to sort column descending"> User
                                                     </th>
 
@@ -285,8 +291,8 @@
     </section>
 
     <section class="content" style="margin-top: 5px !important;">
-        <div >
-           
+        <div>
+
 
             @if (Session::has('sussess'))
                 <div class="alert alert-success" role="alert">
@@ -353,15 +359,15 @@
         });
     </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("ncForm"); // Change this to your form's actual ID
-        const submitBtn = document.getElementById("submitBtn"); // Change this to your button's actual ID
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("ncForm"); // Change this to your form's actual ID
+            const submitBtn = document.getElementById("submitBtn"); // Change this to your button's actual ID
 
-        form.addEventListener("submit", function () {
-            submitBtn.disabled = true; // Disable the button when the form is submitted
+            form.addEventListener("submit", function() {
+                submitBtn.disabled = true; // Disable the button when the form is submitted
+            });
         });
-    });
-</script>
+    </script>
 
     @include('layout.footer')

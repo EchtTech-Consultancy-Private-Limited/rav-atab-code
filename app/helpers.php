@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DocComment;
+use App\Models\Question;
 use Illuminate\Support\Facades\DB;
 
 function encode5t($str)
@@ -496,6 +497,12 @@ function getComments($id = null,$applicationID)
             }elseif ($comment->status == 1) {
                 $statusCode = "NC1";
             }
+            elseif ($comment->status == 5) {
+                $statusCode = "Request final approval";
+            }
+            elseif ($comment->status == 6) {
+                $statusCode = "NC3";
+            }
             else {
                 $statusCode = "Close";
             }
@@ -630,7 +637,7 @@ function getButtonText($id){
 
     if ($commentData) {
         if ($commentData->status == 4) {
-            return "File Approved";
+            return "Approved";
         }  elseif ($commentData->status == 3) {
             return "Not Recommended";
         }
@@ -640,11 +647,30 @@ function getButtonText($id){
         elseif ($commentData->status == 1) {
             return "NC1";
         }
+        elseif ($commentData->status == 6) {
+            return "NC3";
+        }
         else {
-            return "File not approved";
+            return "Not Approved";
         }
     } else {
-        return "View Document";
+        return "View";
     }
+}
+function getCommentsData($docID){
+    $comment = DocComment::where('doc_id',$docID)->latest()->first();
+    return $comment ?? [];
+}
+
+function totalQuestionsCount(){
+    $questions = Question::all()->count();
+    return $questions;
+}
+
+
+function totalDocumentsCount($applicationId){
+    $totalDocuments = DB::table('add_documents')->where('application_id',$applicationId)->get()->count();
+
+    return $totalDocuments;
 }
 

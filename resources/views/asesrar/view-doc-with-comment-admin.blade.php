@@ -29,22 +29,22 @@
         <div class="container-fluid">
 
             @if (Session::has('success'))
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: '{{ session('success') }}',
-                });
-            </script>
-        @elseif (Session::has('fail'))
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ session('fail') }}',
-                });
-            </script>
-        @endif
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: '{{ session('success') }}',
+                    });
+                </script>
+            @elseif (Session::has('fail'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: '{{ session('fail') }}',
+                    });
+                </script>
+            @endif
 
             <div class="row ">
 
@@ -78,7 +78,8 @@
                                                                     <h4>Create NC</h4>
                                                                     <div>
                                                                         <form method="post"
-                                                                            action="{{ url('add-accr-comment-view-doc') }}" id="adminNcForm">
+                                                                            action="{{ url('add-accr-comment-view-doc') }}"
+                                                                            id="adminNcForm">
                                                                             @csrf
                                                                             <input type="hidden" name="previous_url"
                                                                                 value="{{ Request::url() }}">
@@ -107,18 +108,20 @@
                                                                                         <option value="3">Not
                                                                                             Approved
                                                                                         </option>
+                                                                                        <option value="5">Request
+                                                                                            for final approval</option>
                                                                                     </select>
                                                                                 </div>
                                                                                 <div class="col-sm-12"
                                                                                     id="doc-comment-textarea">
                                                                                     <label
-                                                                                        for="show-view-doc-options1">Add
-                                                                                        Comment</label>
+                                                                                        for="show-view-doc-options1">Write
+                                                                                        comment</label>
                                                                                     <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="doc_comment_textarea"></textarea>
                                                                                 </div>
                                                                             </div>
-                                                                            <input id="adminSubmitBtn" type="submit" value="Add Comment"
-                                                                                class="btn btn-primary">
+                                                                            <input id="adminSubmitBtn" type="submit"
+                                                                                value="Submit" class="btn btn-primary">
                                                                         </form>
                                                                     </div>
                                                                 </div>
@@ -151,9 +154,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table
-                                            class="table table-hover js-basic-example contact_list dataTable no-footer"
-                                            id="DataTables_Table_0" role="grid"
+                                        <table class="table table-hover " role="grid"
                                             aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr role="row">
@@ -173,6 +174,7 @@
                                                         aria-sort="ascending"
                                                         aria-label=" No : activate to sort column descending"> User
                                                     </th>
+                                                    <th>Status Code</th>
 
                                                     <th class="center sorting" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
@@ -199,6 +201,21 @@
                                                                         Assessor )
                                                                     @endif
                                                                 </b></a></td>
+                                                        <td>
+                                                            @if ($comments->status == 1)
+                                                                NC1
+                                                            @elseif($comments->status == 2)
+                                                                NC2
+                                                            @elseif($comments->status == 3)
+                                                                Not Recommended
+                                                            @elseif($comments->status == 4)
+                                                                Approved
+                                                            @elseif($comments->status == 5)
+                                                                NC3
+                                                                @else
+                                                                    Not Found!
+                                                            @endif
+                                                        </td>
                                                         <td class="center">
                                                             <a>{{ date('d F Y', strtotime($comments->created_at)) }}</a>
                                                         </td>
@@ -222,7 +239,7 @@
 
     <section class="content" style="margin-top: 10px !important;">
         <div class="container-fluid">
-      
+
 
             @if (Session::has('sussess'))
                 <div class="alert alert-success" role="alert">
