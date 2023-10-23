@@ -131,7 +131,7 @@
                                                     class="odd gradeX @if ($item->status == '2') approved_status @elseif($item->status == '1') process_status @elseif($item->status == '0') pending_status @endif">
                                                     <td class="center">{{ $k + 1 }}</td>
                                                     <td class="center">{{ $item->level_id ?? '' }}</td>
-                                                    <td class="center">RAVAP-{{ 4000 + $item->application_id }}</td>
+                                                    <td class="center">{{ $item->application_uid }}</td>
                                                     <td class="center">{{ $item->course_count ?? '' }}</td>
                                                     <td class="center">
                                                         {{ $item->currency ?? '' }}{{ $item->amount ?? '' }}
@@ -177,6 +177,10 @@
                                                         <i class="material-icons">visibility</i>
                                                     </a>
 
+                                                    @if (totalDocumentsCount($item->application_id) >= totalQuestionsCount())
+                                                        
+                                                   
+
                                                     @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
                                                         <a class="btn btn-tbl-delete bg-primary font-a"
                                                             data-bs-toggle="modal" data-id="{{ $item->application_id }}"
@@ -193,6 +197,8 @@
                                                             id="view">
                                                             <i class="fa fa-scribd" aria-hidden="true" title=""></i>
                                                         </a>
+                                                    @endif
+
                                                     @endif
                                                 </td>
                                             @endif
@@ -443,7 +449,7 @@
                         }).then(() => {
                             location.reload(true);
                         });
-                    } 
+                    }
 
 
                 }

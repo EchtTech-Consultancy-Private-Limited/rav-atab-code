@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DocComment;
+use App\Models\Question;
 use Illuminate\Support\Facades\DB;
 
 function encode5t($str)
@@ -659,5 +660,17 @@ function getButtonText($id){
 function getCommentsData($docID){
     $comment = DocComment::where('doc_id',$docID)->latest()->first();
     return $comment ?? [];
+}
+
+function totalQuestionsCount(){
+    $questions = Question::all()->count();
+    return $questions;
+}
+
+
+function totalDocumentsCount($applicationId){
+    $totalDocuments = DB::table('add_documents')->where('application_id',$applicationId)->get()->count();
+
+    return $totalDocuments;
 }
 

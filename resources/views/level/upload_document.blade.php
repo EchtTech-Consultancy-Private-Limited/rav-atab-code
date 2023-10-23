@@ -67,6 +67,9 @@
     td.text-justify {
         text-align: left;
     }
+    .table th, .table td {
+    padding: 4px !important; /* Adjust this value to your preference */
+  }
 </style>
 
 </head>
@@ -155,14 +158,14 @@
                 </div>
             @endif
 
-            <div class="row ">
+            <div>
 
                 <div class="row clearfix">
 
                     <div class="col-lg-12 col-md-12">
 
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" aria-expanded="true">
+                        <div>
+                            <div>
                                 <div class="row clearfix">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="card project_widget">
@@ -175,9 +178,9 @@
                                                 <p class=" msg-none ">Documents Update Successfully</p>
                                             </div>
                                             <!-- table-striped  -->
-                                            <div class="table-responsive mt-3">
+                                            <div class="table-responsive">
 
-                                                <table class="table table-bordered">
+                                                <table class="table table-bordered someCustomStyleForTable">
                                                     <thead>
                                                         <tr>
                                                             <th class="center">#S.N0</th>
