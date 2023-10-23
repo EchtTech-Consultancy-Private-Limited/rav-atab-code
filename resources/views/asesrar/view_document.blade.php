@@ -246,7 +246,7 @@
                                                                                             href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
                                                                                     @endforeach
                                                                                 @endif
-                                                                                @if (count(getAssessorDocument($question->id, $application_id)) == 3)
+                                                                                @if (count(getAssessorDocument($question->id, $application_id)) >= 3)
                                                                                     @foreach ($documentData as $docItem)
                                                                                         <a class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
