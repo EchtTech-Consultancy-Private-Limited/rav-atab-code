@@ -395,7 +395,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong>Mode of Course</strong></label><br>
+                                                <label><strong>Mode of Course</strong></label>
                                                 <label> <?php echo get_course_mode($ApplicationCourses->id); ?></label>
                                             </div>
                                         </div>
