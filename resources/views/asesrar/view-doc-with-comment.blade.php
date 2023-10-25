@@ -130,9 +130,11 @@
 
 
                                                                 <div class="col-sm-12" id="comment-section">
-                                                                    <label>Add Comment</label>
+                                                                    <label for="comment_text">Remark</label>
                                                                     <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control"></textarea>
+                                                                    <small id="char-count-info">0/100 characters</small>
                                                                 </div>
+                                                                @if ($doc_latest_record->notApraove_count == 4)
                                                                 <div class="col-sm-12">
                                                                     <div>
                                                                         <div class="bg-warning p-2">
@@ -154,6 +156,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                @endif
                                                             </div>
 
 
@@ -161,7 +164,7 @@
                                                     </div>
 
                                                     <div class="card-footer">
-                                                        <input id="submitBtn" type="submit" value="Add Comment"
+                                                        <input id="submitBtn" type="submit" value="Submit"
                                                             class="btn btn-primary">
                                                     </div>
 
@@ -369,5 +372,37 @@
             });
         });
     </script>
+
+<script>
+    // Get a reference to the comment text area
+    var commentTextArea = document.getElementById('comment_text');
+    
+    // Get a reference to the character count info
+    var charCountInfo = document.getElementById('char-count-info');
+
+     // Get a reference to the submit button
+     var submitButton = document.getElementById('submitBtn');
+    
+    // Add an input event listener to the text area
+    commentTextArea.addEventListener('input', function () {
+        var currentCharCount = commentTextArea.value.length;
+        
+        // Update the character count info
+        charCountInfo.textContent = currentCharCount + '/100 characters';
+        
+        // Check if the limit is reached
+      // Check if the limit is reached
+      if (currentCharCount > 100) {
+            // Truncate the text to 100 characters
+            commentTextArea.value = commentTextArea.value.substring(0, 100);
+            charCountInfo.textContent = '100/100 characters (maximum reached)';
+            charCountInfo.style.color = 'red'; // Set text color to red
+            submitButton.disabled = true; // Disable the submit button
+        } else {
+            charCountInfo.style.color = '#000'; // Reset text color to the default
+            submitButton.disabled = false; // Enable the submit button
+        }
+    });
+</script>
 
     @include('layout.footer')

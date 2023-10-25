@@ -54,7 +54,7 @@ class applicationController extends Controller
     public function Assigan_application(Request $request)
     {
        
-        
+
         if ($request->assessment_type == 2) {
 
             $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_radio)->count()  > 0;
@@ -142,6 +142,7 @@ class applicationController extends Controller
 
                 Mail::to($assessor_email)->send(new SendMail($mailData));
             }
+            
 
             return redirect()->back()->with('success', 'Application assigned successfully');
         }
@@ -368,7 +369,6 @@ class applicationController extends Controller
 
     public function nationl_page()
     {
-        //dd("yes");
         $Application = DB::table('applications')
             ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
             ->where('applications.country', '=', 101)
@@ -381,21 +381,12 @@ class applicationController extends Controller
 
             $secretariatdata = user::where('role', '5')->orderBy('id', 'DESC')->get();
 
-            // return $secretariatdata;
-            //code for event date
-
             $begin = Carbon::now();
             $end = Carbon::now()->addDays(15);
-            /* $begin = new DateTime('2023-07-19');
-             $end = new DateTime('2023-07-30');*/
-
-
+        
 
             $fifteenthDaysadd = Carbon::now()->addDays(15)->format('Y-m-d');
             $events = Event::select('start')->where('asesrar_id', 76)->whereDate('start', '<=', $fifteenthDaysadd)->where('availability', 2)->get();
-            //return count($events);
-            //dd($events);
-            //return  $events;
 
             return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata]);
         }

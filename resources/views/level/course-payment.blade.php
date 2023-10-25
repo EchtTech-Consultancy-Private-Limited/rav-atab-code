@@ -561,11 +561,16 @@
                         }
 
                         // Check if the input contains special characters
+                        // Remove spaces and special characters
+                        paymentTransactionNo = paymentTransactionNo.replace(/[^a-zA-Z0-9]/g, '');
+
                         if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
                             $('#payment_transaction_no-error').text(
-                                'Payment Transaction no. must not contain special characters.');
+                                'Payment Transaction no. must not contain spaces or special characters.');
                             return;
                         }
+
+
 
                         // Check if the length of the input is less than the minimum required length
                         if (paymentTransactionNo.length < 9) {
@@ -611,8 +616,8 @@
                             return;
                         }
 
-                         // Check if the input contains special characters
-                         if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                        // Check if the input contains special characters
+                        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
                             $('#payment_reference_no-error').text(
                                 'Payment Reference no. must not contain special characters.');
                             return;
