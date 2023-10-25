@@ -30,40 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
   emailInput.addEventListener('input', checkForm);
   designationInput.addEventListener('input', checkForm);
 
-  // Check contact number duplicacy
-  function checkContactNumberDuplicacy(contactNumber) {
-    if (/^\d{10}$/.test(contactNumber)) {
-      // Send an AJAX request
-      $.ajax({
-        type: 'POST',
-        url: routePhoneValidation, // Update with your Laravel route URL
-        data: {
-          contact_number: contactNumber,
-          _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
-        },
-        success: function (response) {
-          if (response.status === 'duplicate') {
-            // Display the error message in the #contact_error span
-            contactError.textContent = 'Contact number is already in use.';
-          } else {
-            // Clear the error message if the contact number is unique
-            contactError.textContent = '';
-          }
-          checkForm();
-        },
-        error: function (xhr, status, error) {
-          // Handle AJAX errors if needed
-        }
-      });
-    } else {
-      // Display an error message for an invalid contact number
-      contactError.textContent = 'Contact number must be 10 digits and numeric.';
-      checkForm();
-    }
-  }
-
-  // Check email duplicacy
-  function checkEmailDuplicacy(email) {
+   // Check email duplicacy
+   function checkEmailDuplicacy(email) {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (emailRegex.test(email)) {
       if (email.includes('@@')) {
@@ -97,6 +65,40 @@ document.addEventListener('DOMContentLoaded', function () {
       checkForm();
     }
   }
+
+  // Check contact number duplicacy
+  function checkContactNumberDuplicacy(contactNumber) {
+    if (/^\d{10}$/.test(contactNumber)) {
+      // Send an AJAX request
+      $.ajax({
+        type: 'POST',
+        url: routePhoneValidation, // Update with your Laravel route URL
+        data: {
+          contact_number: contactNumber,
+          _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
+        },
+        success: function (response) {
+          if (response.status === 'duplicate') {
+            // Display the error message in the #contact_error span
+            contactError.textContent = 'Contact number is already in use.';
+          } else {
+            // Clear the error message if the contact number is unique
+            contactError.textContent = '';
+          }
+          checkForm();
+        },
+        error: function (xhr, status, error) {
+          // Handle AJAX errors if needed
+        }
+      });
+    } else {
+      // Display an error message for an invalid contact number
+      contactError.textContent = 'Contact number must be 10 digits and numeric.';
+      checkForm();
+    }
+  }
+
+ 
 
   // Event listeners for contact number and email input fields
   contactNumberInput.addEventListener('keyup', function () {
