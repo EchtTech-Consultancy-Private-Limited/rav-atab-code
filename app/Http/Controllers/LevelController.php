@@ -1008,15 +1008,11 @@ class LevelController extends Controller
         }
     }
 
-
-
-
-
-    //couser payment
-
-
     public function new_application_payment(Request $request)
     {
+
+        $transactionNumber = trim($request->transaction_no);
+        $referenceNumber = trim($request->reference_no);
 
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $request->Application_id)->first();
         if ($checkPaymentAlready) {
@@ -1033,8 +1029,8 @@ class LevelController extends Controller
         $item->amount = $request->amount;
         $item->payment_date = date("Y-m-d", strtotime($request->payment_date));
 
-        $item->transaction_no = $request->transaction_no;
-        $item->reference_no = $request->reference_no;
+        $item->transaction_no = $transactionNumber;
+        $item->reference_no = $referenceNumber;
         $item->course_count = $request->course_count;
         $item->currency = $request->currency;
         $item->country = $request->coutry;

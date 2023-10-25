@@ -235,8 +235,7 @@
                                                                                                     href="{{ url('admin-view-doc' . '/' .$doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
-                                                                                                    id="view_doc1">View
-                                                                                                    Document</a>
+                                                                                                    id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
                                                                                             @else
                                                                                                 <span
                                                                                                     class="bg-danger p-2 text-white"

@@ -482,6 +482,7 @@
                 </script>
 
                 <script>
+                    const submitBtn = document.getElementById("submitBtn");
                     $(document).ready(function() {
                         // Hide elements on page load
                         $("#bank_id").hide();
@@ -494,12 +495,15 @@
                             if (type === 'QR-Code') {
                                 $("#bank_id").hide();
                                 $("#QR").show();
+                                submitBtn.disabled = false;
                             } else if (type === 'Bank') {
                                 $("#bank_id").show();
                                 $("#QR").hide();
+                                submitBtn.disabled = false;
                             } else {
                                 $("#bank_id").hide();
                                 $("#QR").hide();
+                                submitBtn.disabled = true;
                             }
                         });
 
@@ -560,17 +564,17 @@
                             return;
                         }
 
-                        // Check if the input contains special characters
-                        // Remove spaces and special characters
-                        paymentTransactionNo = paymentTransactionNo.replace(/[^a-zA-Z0-9]/g, '');
+                        var paymentTransactionNo = $(this).val().replace(/\s/g, '');
 
+                        // Update the input value
+                        $(this).val(paymentTransactionNo);
+
+                        // Check if the input contains special characters
                         if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
                             $('#payment_transaction_no-error').text(
-                                'Payment Transaction no. must not contain spaces or special characters.');
+                                'Payment Transaction no. must not contain special characters.');
                             return;
                         }
-
-
 
                         // Check if the length of the input is less than the minimum required length
                         if (paymentTransactionNo.length < 9) {
@@ -616,8 +620,13 @@
                             return;
                         }
 
+                        var paymentReferenceNo = $(this).val().replace(/\s/g, '');
+
+                        // Update the input value
+                        $(this).val(paymentReferenceNo);
+
                         // Check if the input contains special characters
-                        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                        if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
                             $('#payment_reference_no-error').text(
                                 'Payment Reference no. must not contain special characters.');
                             return;
