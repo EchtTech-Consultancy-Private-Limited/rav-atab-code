@@ -639,7 +639,7 @@ function getButtonText($id){
     if ($commentData) {
         if ($commentData->status == 4) {
             return "Approved";
-        }  elseif ($commentData->status == 3) {
+        }  elseif ($commentData->status == 3 || $commentData->status == 5) {
             return "Not Recommended";
         }
         elseif ($commentData->status == 2) {
