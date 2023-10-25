@@ -1010,6 +1010,13 @@ class LevelController extends Controller
 
     public function new_application_payment(Request $request)
     {
+        $request->validate([
+            'transaction_no' => 'required|unique:application_payments,transaction_no',
+            'reference_no' => 'required|unique:application_payments,reference_no',
+            'payment' => 'required',
+        ],[
+            'payment.required' => 'Select payment mode'
+        ]);
 
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);

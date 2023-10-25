@@ -261,6 +261,11 @@
                                                         Transfers
                                                     </option>
                                                 </select>
+                                                <label for="payment" id="payment-error" class="error">
+                                                    @error('payment')
+                                                        {{ $message }}
+                                                    @enderror
+                                                </label>
                                             </div>
                                         </div>
                                         <!-- payment start -->
@@ -395,12 +400,12 @@
                                                         <input type="text" placeholder="Payment Transaction no."
                                                             id="payment_transaction_no" required name="transaction_no"
                                                             minlength="9" maxlength="18" class="transactionNo"
-                                                            value="{{ old('payment_transaction_no') }}"
+                                                            value="{{ old('transaction_no') }}"
                                                             autocomplete="off">
                                                     </div>
                                                     <label for="payment_transaction_no"
                                                         id="payment_transaction_no-error" class="error">
-                                                        @error('payment_transaction_no')
+                                                        @error('transaction_no')
                                                             {{ $message }}
                                                         @enderror
                                                     </label>
@@ -418,12 +423,12 @@
                                                         <input type="text" placeholder="Payment Reference no."
                                                             id="payment_reference_no" required name="reference_no"
                                                             minlength="9" maxlength="18" class="referenceNo"
-                                                            value="{{ old('payment_reference_no') }}"
+                                                            value="{{ old('reference_no') }}"
                                                             autocomplete="off">
                                                     </div>
                                                     <label for="payment_reference_no" id="payment_reference_no-error"
                                                         class="error">
-                                                        @error('payment_reference_no')
+                                                        @error('reference_no')
                                                             {{ $message }}
                                                         @enderror
                                                     </label>

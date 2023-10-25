@@ -191,7 +191,7 @@
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody class="text-center">
+                                                    <tbody>
                                                         @foreach ($chapters as $chapter)
                                                             <tr>
                                                                 <th colspan="4">
@@ -205,7 +205,7 @@
                                                             @foreach ($chapter->questions as $question)
                                                                 <tr class="document-row">
                                                                     <td>{{ $question->code ?? '' }}</td>
-                                                                    <td>{{ $question->title }}</td>
+                                                                    <td style="text-align: left;">{{ $question->title }}</td>
                                                                     <td>
                                                                         @php
                                                                         $documentsData = [];
@@ -381,8 +381,7 @@
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>
                                                                         @else
                                                                             <span class="text-danger"
-                                                                                style="font-size: 12px; padding:5px; border-radius:5px;">No
-                                                                                comments available!</span>
+                                                                                style="font-size: 12px; padding:5px; border-radius:5px;">Comment pending!</span>
                                                                         @endif
                                                                     </td>
                                                                 </tr>
