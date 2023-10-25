@@ -336,7 +336,7 @@
                                                             @if (in_array($extension, ['xls', 'csv', 'pdf','xlsx']))
                                                                 @if (in_array($extension, ['xls', 'csv','xlsx']))
                                                                     <label>
-                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}" target="_blank"
+                                                                        <a href="{{ url('show-course-pdf/' . $document->document_file) }}" download
                                                                            title="Download Document">
                                                                             <i class="fa fa-download mr-2"></i>&nbsp; Download Document 
                                                                         </a>

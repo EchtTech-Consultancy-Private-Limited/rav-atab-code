@@ -83,10 +83,16 @@
                     </div>
                 </div>
             </div>
-            @if (Session::has('sussess'))
-                <div class="alert alert-success" role="alert">
-                    {{ session::get('sussess') }}
-                </div>
+            @if (Session::has('success'))
+            <script>
+                 Swal.fire({
+                    title: "Success",
+                    icon: "success",
+                    text:"{{ session('success') }}",
+                    timer: 3000, // Time in milliseconds (2 seconds in this example)
+                    showConfirmButton: false,
+                });
+            </script>
             @elseif(Session::has('fail'))
                 <div class="alert alert-danger" role="alert">
                     {{ session::get('fail') }}
@@ -300,10 +306,10 @@
                                                                 </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
+                                                            <button type="button" onclick="cancelAssign()" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Close</button>
                                                             <button type="submit"
-                                                                class="btn btn-primary my-button">Save</button>
+                                                                class="btn btn-primary my-button">Submit</button>
                                                         </div>
                                                     </div>
                                                     </form>
@@ -457,5 +463,9 @@
             });
 
         });
+
+        function cancelAssign(){
+            location.reload(true);
+        }
     </script>
     @include('layout.footer')

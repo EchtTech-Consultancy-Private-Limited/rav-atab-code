@@ -177,8 +177,8 @@
                                 href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
                                 class="btn btn-success">Assessor & Admin Conversation</a>
                         </div>
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" aria-expanded="true">
+                        <div>
+                            <div>
                                 <div class="row clearfix">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="card project_widget">
@@ -195,7 +195,7 @@
                                                     <p class=" msg-none ">Documents Update Successfully</p>
                                                 </div>
                                                 <!-- table-striped  -->
-                                                <div class="table-responsive mt-3">
+                                                <div class="table-responsive" style="margin-top:-10px;">
 
 
                                                     <table class="table table-hover js-basic-example contact_list">
@@ -254,7 +254,7 @@
                                                                                                     href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
-                                                                                                    id="view_doc1">V{{ $loop->iteration ?? '' }}</a>
+                                                                                                    id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif
