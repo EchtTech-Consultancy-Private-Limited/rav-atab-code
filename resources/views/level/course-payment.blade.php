@@ -243,7 +243,7 @@
                                 </div>
                                 <div class="body">
                                     <form action="{{ url('/new-application_payment') }}" method="post" class="form"
-                                        id="regForm" enctype="multipart/form-data">
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group">
                                             <div class="form-line select-box-hide-class" style="width:25%">
@@ -484,6 +484,9 @@
                 <script>
                     const submitBtn = document.getElementById("submitBtn");
                     $(document).ready(function() {
+
+
+
                         // Hide elements on page load
                         $("#bank_id").hide();
                         $("#QR").hide();
@@ -552,19 +555,61 @@
                         });
                     });
                 </script>
+
+
                 <script>
-                    $('#payment_transaction_no').on('keyup', function() {
+                    $(document).ready(function() {
+
+
+                        // Get the application_id from your input field or other source.
+                        var applicationId = {{ $applicationData->id }};
+
+                        // Send an AJAX request to check for payment duplicacy.
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('payment.duplicate') }}',
+                            data: {
+                                '_token': '{{ csrf_token() }}',
+                                'application_id': applicationId
+                            },
+                            success: function(response) {
+                                if (response.paymentExist) {
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'warning',
+                                        title: 'Payment has already been submitted for this application.',
+                                        showConfirmButton: true,
+                                        timer: 5000
+                                    });
+                                    window.location.href = '{{ url('application-list') }}';
+                                } else {
+                                    // Payment does not exist; you can perform another action or show a message.
+                                }
+                            },
+                            error: function(error) {
+                                console.error('An error occurred: ' + error);
+                            }
+                        });
+
+                    });
+                </script>
+
+                <script>
+                    $('#payment_transaction_no').on('keyup focusout', function() {
                         // Get the payment transaction number value
                         var paymentTransactionNo = $(this).val();
 
                         // Check if the payment transaction number is empty
                         if (paymentTransactionNo === '') {
-                            // Clear the error message and exit
+                            // Clear the error message
                             $('#payment_transaction_no-error').text('');
+                            // Disable the button
+                            $('#submitBtn').attr('disabled', true);
                             return;
                         }
 
-                        var paymentTransactionNo = $(this).val().replace(/\s/g, '');
+                        // Remove whitespace from the input
+                        paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
 
                         // Update the input value
                         $(this).val(paymentTransactionNo);
@@ -572,41 +617,45 @@
                         // Check if the input contains special characters
                         if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
                             $('#payment_transaction_no-error').text(
-                                'Payment Transaction no. must not contain special characters.');
+                                'Payment Transaction no. must not contain special characters');
+                            // Disable the button
+                            $('#submitBtn').attr('disabled', true);
                             return;
                         }
 
                         // Check if the length of the input is less than the minimum required length
                         if (paymentTransactionNo.length < 9) {
-                            $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
-                        } else {
-
-                            $.ajax({
-                                type: 'POST', // or 'GET' based on your route
-                                url: '{{ route('transaction_validation') }}',
-                                data: {
-                                    _token: $('input[name="_token"]').val(),
-                                    transaction_no: paymentTransactionNo
-                                },
-                                success: function(response) {
-                                    // Handle the response from the server
-                                    if (response.status === 'error') {
-                                        $('#payment_transaction_no-error').html('<p class="text-danger">' + response
-                                            .message + '</p>');
-                                        $('#submitBtn').attr('disabled', true);
-                                    } else if (response.status === 'success') {
-                                        $('#payment_transaction_no-error').html('<p class="text-success">' +
-                                            response.message + '</p>');
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    // Handle AJAX errors if any
-                                    console.error(error);
-                                }
-                            });
-                            // Clear the error message if the length and format are valid
-                            $('#payment_transaction_no-error').text('');
+                            $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters');
+                            // Disable the button
+                            $('#submitBtn').attr('disabled', true);
+                            return;
                         }
+
+                        $.ajax({
+                            type: 'POST', // or 'GET' based on your route
+                            url: '{{ route('transaction_validation') }}',
+                            data: {
+                                _token: $('input[name="_token"]').val(),
+                                transaction_no: paymentTransactionNo
+                            },
+                            success: function(response) {
+                                // Handle the response from the server
+                                if (response.status == 'error') {
+                                    $('#payment_transaction_no-error').html('<p class="text-danger">' + response
+                                        .message + '</p');
+                                    // Disable the button
+                                    $('#submitBtn').attr('disabled', true);
+                                } else if (response.status == 'success') {
+                                    $('#payment_transaction_no-error').html('<p class="text-success">' + response
+                                        .message + '</p');
+                                    
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle AJAX errors if any
+                                console.error(error);
+                            }
+                        });
                     });
 
                     $('#payment_reference_no').on('keyup', function() {
@@ -670,42 +719,5 @@
                 </script>
 
 
-
-                <script>
-                    $(document).ready(function() {
-
-
-                        // Get the application_id from your input field or other source.
-                        var applicationId = {{ $applicationData->id }};
-
-                        // Send an AJAX request to check for payment duplicacy.
-                        $.ajax({
-                            type: 'POST',
-                            url: '{{ route('payment.duplicate') }}',
-                            data: {
-                                '_token': '{{ csrf_token() }}',
-                                'application_id': applicationId
-                            },
-                            success: function(response) {
-                                if (response.paymentExist) {
-                                    Swal.fire({
-                                        position: 'center',
-                                        icon: 'warning',
-                                        title: 'Payment has already been submitted for this application.',
-                                        showConfirmButton: true,
-                                        timer: 5000
-                                    });
-                                    window.location.href = '{{ url('application-list') }}';
-                                } else {
-                                    // Payment does not exist; you can perform another action or show a message.
-                                }
-                            },
-                            error: function(error) {
-                                console.error('An error occurred: ' + error);
-                            }
-                        });
-
-                    });
-                </script>
 
 </body>
