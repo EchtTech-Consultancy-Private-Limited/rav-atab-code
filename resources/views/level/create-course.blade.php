@@ -301,7 +301,7 @@
                             {{-- @endif --}}
                         </div>
                         <form action="{{ url('/new-application-course') }}" enctype="multipart/form-data" method="post"
-                            class="form" id="regForm">
+                            class="form">
                             @csrf
                             <input type="hidden" name="form_step_type" value="add-course">
                             <div class="body pb-0" id="courses_body">
