@@ -1243,9 +1243,10 @@ class LevelController extends Controller
         $course_id = $course_id;
 
         $data = ApplicationPayment::whereapplication_id($id)->get();
-        $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
+        $file = DB::table('add_documents')->where('application_id',$application_id)->where('course_id',$course_id)->get();
 
         $chapters = Chapter::all();
+        
 
         return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id'));
     }

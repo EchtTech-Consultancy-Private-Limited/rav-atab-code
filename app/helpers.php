@@ -560,10 +560,10 @@ function checkCommentsExist($id = null,$applicationId=null)
     
 }
 
-function getDocument($questionID,$applicationId){
+function getDocument($questionID,$applicationId,$course_id){
     $authId = auth()->user()->id;
 
-    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id',$authId)->where('application_id',$applicationId)->get();
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id',$authId)->where('application_id',$applicationId)->where('course_id',$course_id)->get();
 
     if (count($documents) > 0) {
         return $documents;

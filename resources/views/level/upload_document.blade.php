@@ -208,7 +208,10 @@
                                                                     <td>{{ $question->title }}</td>
                                                                     <td>
                                                                         @php
-                                                                            $documentsData = getDocument($question->id, $file[0]->application_id) ?? 0;
+                                                                        $documentsData = [];
+                                                                            if (isset($file[0])) {
+                                                                                $documentsData = getDocument($question->id, $application_id,$course_id) ?? 0;
+                                                                            }
                                                                         @endphp
                                                                         {{-- getting documents for each row --}}
                                                                         @if (count($documentsData) > 0)
@@ -235,7 +238,7 @@
                                                                                                     value="{{ Request::url() }}">
                                                                                                 <input type="hidden"
                                                                                                     name="application_id"
-                                                                                                    value="{{ $file[0]->application_id }}">
+                                                                                                    value="{{ $application_id }}">
                                                                                                 <input type="hidden"
                                                                                                     name="course_id"
                                                                                                     value="{{ $course_id }}">
@@ -269,7 +272,7 @@
                                                                                                     value="{{ Request::url() }}">
                                                                                                 <input type="hidden"
                                                                                                     name="application_id"
-                                                                                                    value="{{ $file[0]->application_id }}">
+                                                                                                    value="{{ $application_id }}">
                                                                                                 <input type="hidden"
                                                                                                     name="course_id"
                                                                                                     value="{{ $course_id }}">
@@ -299,7 +302,7 @@
                                                                                     @endforeach
                                                                                 @endif
                                                                                 @if (count($documentsData) == 1)
-                                                                                    @if (checkCommentsExist($question->id, $file[0]->application_id,$documentsData[0]) == true && checkApproveComment($documentsData[0]->id) !== 4)
+                                                                                    @if (checkCommentsExist($question->id, $application_id,$documentsData[0]) == true && checkApproveComment($documentsData[0]->id) !== 4)
                                                                                         <div>
                                                                                             <form
                                                                                                 name="submitform_doc_form"
@@ -311,7 +314,7 @@
                                                                                                     value="{{ Request::url() }}">
                                                                                                 <input type="hidden"
                                                                                                     name="application_id"
-                                                                                                    value="{{ $file[0]->application_id }}">
+                                                                                                    value="{{ $application_id }}">
                                                                                                 <input type="hidden"
                                                                                                     name="course_id"
                                                                                                     value="{{ $course_id }}">
@@ -352,7 +355,7 @@
                                                                                     value="{{ Request::url() }}">
                                                                                 <input type="hidden"
                                                                                     name="application_id"
-                                                                                    value="{{ $file[0]->application_id }}">
+                                                                                    value="{{ $application_id }}">
                                                                                 <input type="hidden" name="course_id"
                                                                                     value="{{ $course_id }}">
                                                                                 <input type="hidden"
@@ -372,7 +375,7 @@
                                                                     </td>
                                                                     <td>
 
-                                                                        @if (checkCommentsExist($question->id, $file[0]->application_id) == true)
+                                                                        @if (checkCommentsExist($question->id, $application_id) == true)
                                                                             <button
                                                                                 class="expand-button btn btn-primary btn-sm mt-3"
                                                                                 onclick="toggleDocumentDetails(this)">Comments</button>
@@ -386,7 +389,7 @@
 
                                                                 <tr class="document-details" style="display: none;">
                                                                     <td colspan="4">
-                                                                        {!! getComments($question->id, $file[0]->application_id) !!}
+                                                                        {!! getComments($question->id, $application_id) !!}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
