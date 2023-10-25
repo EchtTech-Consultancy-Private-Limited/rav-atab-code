@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ApplicationCourse;
 use App\Models\DocComment;
 use App\Models\Question;
 use Illuminate\Support\Facades\DB;
@@ -662,8 +663,10 @@ function getCommentsData($docID){
     return $comment ?? [];
 }
 
-function totalQuestionsCount(){
+function totalQuestionsCount($applicationId){
+    $courses = ApplicationCourse::where('application_id',$applicationId)->get()->count();
     $questions = Question::all()->count();
+    $questions = $questions*$courses;
     return $questions;
 }
 

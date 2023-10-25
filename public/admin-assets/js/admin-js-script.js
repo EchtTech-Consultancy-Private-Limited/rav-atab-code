@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#doc_comment_textarea').hide();
+   
 
     $('#show-view-doc-options').on('change', function () {
         var selectedValue = $(this).val();
@@ -36,7 +36,7 @@ $(document).ready(function () {
             });
         } 
         else {
-            docCommentTextarea.hide();
+            docCommentTextarea.show();
             docCommentTextarea.val(''); // Clear any existing text
             docCommentTextarea.val('Document rejected by admin.');
         }

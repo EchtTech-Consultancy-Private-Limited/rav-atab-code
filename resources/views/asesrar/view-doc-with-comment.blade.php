@@ -131,7 +131,7 @@
 
                                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label for="comment_text">Remark</label>
-                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control"></textarea>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
                                                                     <small id="char-count-info">0/100 characters</small>
                                                                 </div>
                                                                 @if ($doc_latest_record->notApraove_count == 4)
@@ -355,6 +355,7 @@
             if (this.value === "4") { // If "Close" is selected
                 comment_text.value = "Document has been approved";
                 commentSection.style.display = "none"; // Hide the textarea
+                
             } else {
                 commentSection.style.display = "block"; // Show the textarea for other options
                 comment_text.value = "Document Not approved!";

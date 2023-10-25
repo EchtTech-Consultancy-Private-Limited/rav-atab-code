@@ -117,7 +117,7 @@
                                                                                     <label
                                                                                         for="show-view-doc-options1">Write
                                                                                         comment</label>
-                                                                                    <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="doc_comment_textarea"></textarea>
+                                                                                    <textarea rows="10" cols="60" name="doc_comment" class="form-control" id="doc_comment_textarea" required></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <input id="adminSubmitBtn" type="submit"
