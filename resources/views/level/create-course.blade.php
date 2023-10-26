@@ -286,18 +286,20 @@
                     @endif
 
                     <div class="card">
-
-                        <div class="header">
-                            <h2 style="float:left; clear:none;">Level Courses </h2>
-                            {{-- @if (count($course) > 0) --}}
-
-                            <button id="add-course-button" class="btn btn-outline-primary mb-0"
-                                style="float:right; clear:none; cursor:pointer;line-height: 24px;"
-                                onclick="addNewCourse();">
-                                <i class="fa fa-plus font-14"></i> Add More Course
-                            </button>
-
-                            {{-- @endif --}}
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="card-title">Create Courses </h4>
+                                </div>
+                                <div>
+                                    <span class="btn btn-primary btn-sm" id="formCount" style="margin-bottom: 0px !important; cursor: default;"></span>
+                                    <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
+                                        data-placement="top" title="You can create a maximum of 10 courses at one time"
+                                        onclick="addNewCourse();">
+                                        <i class="fa fa-plus"></i> Add More Course 
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <form action="{{ url('/new-application-course') }}" enctype="multipart/form-data" method="post"
                             class="form">
@@ -712,21 +714,25 @@
                                 </div>
                             </div>
                         </div>
-                        <ul class="list-inline pull-right mt-5">
-                            <li><a href="{{ url('new-applications/' . $applicationData->id) }}"
-                                    class="btn btn-danger prev-step">Previous</a>
-                            </li>
-
-                            <li>
-
-                                @isset($course)
+                       <div>
+                        <div>
+                            <hr>
+                        </div>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div>
+                                    <a href="{{ url('new-applications/' . $applicationData->id) }}"
+                                        class="btn btn-danger prev-step">Previous</a>
+                                </div>
+                                <div>
+                                    @isset($course)
                                     @if (count($course) > 0)
                                         <a href="{{ url('course-payment/' . $applicationData->id) }}"
-                                            class="btn btn-primary next-step1">Next</a>
+                                            class="btn btn-primary next-step1 mr-2">Next</a>
                                     @endif
                                 @endisset
-                            </li>
-                        </ul>
+                                </div>
+                            </div>
+                       </div>
                     </div>
                     <!-- View Modal Popup -->
                     <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
@@ -1158,6 +1164,11 @@
                         var cloneCounter = 1;
                         var maxClones = 10;
 
+                        function updateCloneCount() {
+                            // Update the formCount span with the current clone count
+                            $('#formCount').text(cloneCounter);
+                        }
+
                         function addNewCourse() {
                             if (!isAppending && cloneCounter <= maxClones) {
                                 isAppending = true;
@@ -1181,6 +1192,8 @@
                                 if (cloneCounter >= maxClones) {
                                     // If the maximum limit is reached, disable the button
                                     $('#add-course-button').prop('disabled', true);
+                                   // Change the background color of the #formCount span to red
+    $('#formCount').css('background-color', 'red');
                                     Swal.fire({
                                         title: "Warning",
                                         text: "You've reached the maximum limit of " + maxClones +
@@ -1190,6 +1203,8 @@
                                         timer: 3000
                                     });
                                 }
+
+                                updateCloneCount();
 
                                 // Update the name attribute of the mode_of_course select field
                                 var modeOfCourseSelect = newRow.find('.select2[name^="mode_of_course[1]"]');
@@ -1264,6 +1279,10 @@
                             // Find the parent row and remove it
                             $(button).closest('.new-course-html').remove();
                         }
+
+                        $(document).ready(function() {
+                            updateCloneCount();
+                        });
                     </script>
 
                     <script>
