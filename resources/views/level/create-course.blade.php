@@ -285,14 +285,14 @@
                         </div>
                     @endif
 
-                    <div class="card">
+                    <div class="card shadow-md">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h4 class="card-title">Create Courses </h4>
                                 </div>
                                 <div>
-                                    <span class="btn btn-primary btn-sm" id="formCount" style="margin-bottom: 0px !important; cursor: default;"></span>
+                                    <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span>
                                     <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
                                         data-placement="top" title="You can create a maximum of 10 courses at one time"
                                         onclick="addNewCourse();">
