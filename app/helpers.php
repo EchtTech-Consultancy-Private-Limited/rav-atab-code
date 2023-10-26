@@ -3,6 +3,7 @@
 use App\Models\ApplicationCourse;
 use App\Models\DocComment;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 function encode5t($str)
@@ -675,5 +676,10 @@ function totalDocumentsCount($applicationId){
     $totalDocuments = DB::table('add_documents')->where('application_id',$applicationId)->get()->count();
 
     return $totalDocuments;
+}
+
+function getUserDetail($userId){
+    $user = User::find($userId);
+    return $user;
 }
 

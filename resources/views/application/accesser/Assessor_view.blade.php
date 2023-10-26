@@ -59,7 +59,7 @@
                 @if ($alreadyPicked)
                     <div class="bg-warning p-2 border-radius-per-5">
                         <h4>Working someone</h4>
-                        <p>{{ $alreadyPicked->user->firstname ?? 'Firstname' }} {{ $alreadyPicked->user->lastname ?? 'Lastname' }} working on this application.</p>
+                        <p>{{ getUserDetail($alreadyPicked->read_by)->firstname ?? 'Firstname' }} {{ getUserDetail($alreadyPicked->read_by)->lastname ?? 'Lastname' }} working on this application.</p>
                     </div>
                 @endif
                 <div class="row clearfix">
