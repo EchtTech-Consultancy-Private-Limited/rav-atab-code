@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (emailRegex.test(email)) {
       if (email.includes('@@')) {
         emailError.textContent = 'Invalid email format.';
+        $('#backendError').text = '';
+        nextBtn.setAttribute('disabled', true);
       }else{
         $.ajax({
           type: 'POST',
@@ -47,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
           success: function (response) {
             if (response.status === 'duplicate') {
               // Display the error message in the #email_id_error span
+              $('#backendError').text = '';
               emailError.textContent = 'Email is already in use.';
             } else {
               // Clear the error message if the email is unique

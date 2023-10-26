@@ -42,6 +42,7 @@ use App\Models\Add_Document;
 use App\Models\DocComment;
 use App\Models\Chapter;
 use App\Mail\paymentSuccessMail;
+use App\Models\AssessorApplication;
 
 class LevelController extends Controller
 {
@@ -1011,11 +1012,19 @@ class LevelController extends Controller
     public function new_application_payment(Request $request)
     {
         $request->validate([
-            'transaction_no' => 'required|unique:application_payments,transaction_no',
-            'reference_no' => 'required|unique:application_payments,reference_no',
+            'transaction_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,transaction_no',
+            'reference_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,reference_no',
             'payment' => 'required',
-        ],[
-            'payment.required' => 'Select payment mode'
+        ], [
+            'transaction_no.required' => 'The transaction number is required.',
+            'transaction_no.unique' => 'The transaction number is already in use.',
+            'transaction_no.regex' => 'The transaction number must not contain special characters or spaces.',
+        
+            'reference_no.required' => 'The reference number is required.',
+            'reference_no.unique' => 'The reference number is already in use.',
+            'reference_no.regex' => 'The reference number must not contain special characters or spaces.',
+        
+            'payment.required' => 'Please select a payment mode.'
         ]);
 
         $transactionNumber = trim($request->transaction_no);
@@ -1250,10 +1259,10 @@ class LevelController extends Controller
         $course_id = $course_id;
 
         $data = ApplicationPayment::whereapplication_id($id)->get();
-        $file = DB::table('add_documents')->where('application_id',$application_id)->where('course_id',$course_id)->get();
+        $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
 
         $chapters = Chapter::all();
-        
+
 
         return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id'));
     }
@@ -1263,7 +1272,7 @@ class LevelController extends Controller
     {
         $application_id = $id;
         $course_id = $course_id;
-        
+
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
 
@@ -2226,6 +2235,32 @@ class LevelController extends Controller
 
     public function Assessor_view($id)
     {
+        $appId = dDecrypt($id);
+        $assesorId = auth()->user()->id;
+        $notifications = AssessorApplication::where('application_id', $appId)->where('notification_status', 0)->where('read_by', 0)->get();
+        $alreadyPicked = [];
+        if (count($notifications) > 0) {
+            foreach ($notifications as $notification) {
+                $notification->update([
+                    'notification_status' => 1,
+                    'read_by' => $assesorId
+                ]);
+            }
+        }else{
+            $notifications = AssessorApplication::where('application_id', $appId)->get();
+           
+            foreach ($notifications as $item) {
+                if ($item->read_by !== $assesorId) {
+                    $alreadyPicked = 1;
+                }
+            }
+
+            if($alreadyPicked === 1){
+                $alreadyPicked = AssessorApplication::where('application_id', $appId)->first();
+            }
+        }
+
+
         $Application = Application::whereid(dDecrypt($id))->get();
         $ApplicationCourse = ApplicationCourse::whereapplication_id($Application[0]->id)->get();
         $ApplicationPayment = ApplicationPayment::whereapplication_id($Application[0]->id)->get();
@@ -2235,7 +2270,7 @@ class LevelController extends Controller
         // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment,'applicationData'=>$Application]);
+        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application,'alreadyPicked' => $alreadyPicked]);
     }
 
     public function secretariat_view($id)
@@ -2424,17 +2459,17 @@ class LevelController extends Controller
         $this->validate(
             $request,
             [
-                'Email_ID' => ['required', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
-                'Contact_Number' => 'required|numeric|min:10,mobile_no|digits:10|unique:applications',
+                'Email_ID' => ['required', 'regex:/^(?!.*[@]{2,})(?!.*\s)[a-zA-Z0-9\+_\-]+(\.[a-zA-Z0-9\+_\-]+)*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,6}$/i', 'unique:applications,Email_ID'],
+                'Contact_Number' => 'required|numeric|min:10|digits:10|unique:applications,Contact_Number',
                 'Person_Name' => 'required',
                 'designation' => 'required',
-                'Email_ID'     => 'required|unique:applications',
             ],
             [
-                'Email_ID.regex' => "Please Enter Valid Email Id",
-                'Email_ID.required' => "Please Enter Email Id",
+                'Email_ID.regex' => "Please Enter a Valid Email Id.",
+                'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
+        
 
 
 
@@ -2518,40 +2553,40 @@ class LevelController extends Controller
         }
     }
 
-    public function paymentDuplicateCheck(Request $request){
+    public function paymentDuplicateCheck(Request $request)
+    {
         $id = $request->application_id;
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $id)->first();
         if ($checkPaymentAlready) {
-            return response()->json(['paymentExist'=>true]);
+            return response()->json(['paymentExist' => true]);
         }
-
     }
 
     //  upgrade application logic //
 
-    
+
 
     // public function upgradeApplicationLevel(Request $request){
     //     $application_id = $request->application_id;
     //     $user_id = auth()->user()->id;
-    
+
     //     // Find the application
     //     $applicationData = Application::where('id', $application_id)
     //         ->where('user_id', $user_id)
     //         ->first();
-    
+
     //     if ($applicationData) {
     //         $levelId = $applicationData->level_id;
-            
+
     //         // Increment the level_id
     //         $applicationData->level_id = $levelId + 1;
-    
+
     //         // Update the created_at date (add 1 year)
     //         $applicationData->created_at = now();
-    
+
     //         // Save the changes to the application
     //         $applicationData->save();
-    
+
     //         // Update related tables manually
     //         DB::table('application_payments')
     //             ->where('user_id', $user_id)
@@ -2560,7 +2595,7 @@ class LevelController extends Controller
     //                 'level_id' => $applicationData->level_id,
     //                 'created_at' => $applicationData->created_at,
     //             ]);
-    
+
     //         DB::table('application_documents')
     //             ->where('user_id', $user_id)
     //             ->where('application_id', $application_id)
@@ -2568,7 +2603,7 @@ class LevelController extends Controller
     //                 'level_id' => $applicationData->level_id,
     //                 'created_at' => $applicationData->created_at,
     //             ]);
-    
+
     //         DB::table('application_courses')
     //             ->where('user_id', $user_id)
     //             ->where('application_id', $application_id)
@@ -2576,7 +2611,7 @@ class LevelController extends Controller
     //                 'level_id' => $applicationData->level_id,
     //                 'created_at' => $applicationData->created_at,
     //             ]);
-    
+
     //         return redirect()->back()->with('success', 'Your application has been upgraded from level ' . $levelId . ' to ' . $applicationData->level_id);
     //     } else {
     //         return redirect()->back()->with('fail', 'Something went wrong!');
@@ -2585,6 +2620,6 @@ class LevelController extends Controller
 
 
 
-     //  upgrade application logic //
-    
+    //  upgrade application logic //
+
 }

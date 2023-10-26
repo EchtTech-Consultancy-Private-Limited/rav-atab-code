@@ -55,7 +55,13 @@
                 </div>
             </div>
 
-            <div class="row ">
+            <div>
+                @if ($alreadyPicked)
+                    <div class="bg-warning p-2 border-radius-per-5">
+                        <h4>Working someone</h4>
+                        <p>{{ $alreadyPicked->user->firstname ?? 'Firstname' }} {{ $alreadyPicked->user->lastname ?? 'Lastname' }} working on this application.</p>
+                    </div>
+                @endif
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
@@ -63,7 +69,7 @@
                                 <h2>Basic Information</h2>
                             </div>
                             <div class="body">
-
+                                
                                 <div class="row clearfix">
                                     <div class="col-sm-4">
                                         <div class="form-group">
