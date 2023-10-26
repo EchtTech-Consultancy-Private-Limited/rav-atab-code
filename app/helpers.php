@@ -573,10 +573,10 @@ function getDocument($questionID,$applicationId,$course_id){
 
 }
 
-function getAssessorDocument($questionID,$applicationId){
+function getAssessorDocument($questionID,$applicationId,$course_id){
   
 
-    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id',$applicationId)->get();
+    $documents = DB::table('add_documents')->where('course_id',$course_id)->where('question_id', $questionID)->where('application_id',$applicationId)->get();
 
     if (count($documents) > 0) {
         return $documents;
