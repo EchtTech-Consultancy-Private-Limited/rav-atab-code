@@ -175,7 +175,8 @@
                                                         <i class="material-icons">visibility</i>
                                                     </a>
 
-                                                    @if (totalDocumentsCount($item->application_id) >= totalQuestionsCount($item->application_id))
+                                                    {{-- @if (totalDocumentsCount($item->application_id) >= totalQuestionsCount($item->application_id)) --}}
+                                                    @if (totalDocumentsCount($item->application_id) >= 2)
                                                         
                                                    
 

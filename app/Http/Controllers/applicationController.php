@@ -73,8 +73,10 @@ class applicationController extends Controller
                     $data->status = 1;
                     $data->assessment_type = $request->assessment_type;
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
+                    $data->notification_status = 0;
+                    $data->read_by = 0;
                     $data->save();
-                    return  back()->with('sussess', 'Application has been successfully assigned to assessor');
+                    return  back()->with('success', 'Application has been successfully assigned to assessor');
                 } else {
                     $item = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->first();
 
@@ -84,8 +86,10 @@ class applicationController extends Controller
                     $data->status = 1;
                     $data->assessment_type = $request->assessment_type;
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
+                    $data->notification_status = 0;
+                    $data->read_by = 0;
                     $data->save();
-                    return  back()->with('sussess', 'Application has been successfully assigned to assessor');
+                    return  back()->with('success', 'Application has been successfully assigned to assessor');
                 }
             } else {
 
@@ -99,6 +103,8 @@ class applicationController extends Controller
                 $data->status = 1;
                 $data->assessment_type = $request->assessment_type;
                 $data->due_date = $due_date = Carbon::now()->addDay(15);
+                $data->notification_status = 0;
+                $data->read_by = 0;
                 $data->save();
             }
         } else {
@@ -114,6 +120,8 @@ class applicationController extends Controller
                     $newApplicationAssign->assessment_type = $request->assessment_type;
                     $newApplicationAssign->assessor_id = $value;
                     $newApplicationAssign->status = 1;
+                    $newApplicationAssign->notification_status = 0;
+                    $newApplicationAssign->read_by = 0;
                     $newApplicationAssign->save();
                 }
             }

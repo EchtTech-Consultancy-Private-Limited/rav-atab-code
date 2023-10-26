@@ -75,8 +75,10 @@
                          <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
                              role="button">
                              <i class="far fa-bell"></i>
+                             @if (Checknotification(Auth::user()->id))
                              <span class="notify"></span>
                              <span class="heartbeat"></span>
+                             @endif
                          </a>
 
 
@@ -107,12 +109,21 @@
                                                  </a>
                                              </li>
                                          @endforeach
+                                         @else
+                                             <li class="text-center">
+                                                <div class="p-3">
+                                                    <img style="height: 100px;" src="{{ asset('assets/images/no-alarm.png') }}" alt="">
+                                                </div>
+                                                No Notification Yet
+                                             </li>
                                      @endif
                                  </ul>
                              </li>
+                             @if (Checknotification(Auth::user()->id))
                              <li class="footer">
                                  <a href="#" onClick="return false;">View All Notifications</a>
                              </li>
+                             @endif
                          </ul>
                      </li>
                  @endif

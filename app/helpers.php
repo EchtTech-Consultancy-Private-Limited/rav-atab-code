@@ -397,7 +397,7 @@ function show_btn($date)
 function Checknotification($id = 0)
 {
 
-    $assessors = DB::table('asessor_applications')->orderBy('id','desc')->select('id', 'created_at','application_id')->where('notification_id', '0')->where('assessor_id', $id)->get();
+    $assessors = DB::table('asessor_applications')->orderBy('id','desc')->select('id', 'created_at','application_id')->where('notification_status', 0)->where('assessor_id', $id)->get();
     
     $assesorWithApplicationData = [];
 

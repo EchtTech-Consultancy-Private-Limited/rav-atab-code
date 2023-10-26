@@ -211,9 +211,11 @@
                                                             @elseif($comments->status == 4)
                                                                 Approved
                                                             @elseif($comments->status == 5)
+                                                                Final Request Approval
+                                                            @elseif($comments->status == 6)
                                                                 NC3
-                                                                @else
-                                                                    Not Found!
+                                                            @else
+                                                                Not Found!
                                                             @endif
                                                         </td>
                                                         <td class="center">

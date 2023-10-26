@@ -348,13 +348,20 @@
                                                 <label>Course Duration<span class="text-danger">*</span></label>
 
                                                 <div class="course_group">
-                                                    <input type="text" placeholder="Years" name="years[]"
-                                                        maxlength="4" required class="course_i nput preventalpha">
+                                                
+                                                    <span style="margin-top:10px; margin-right:5px;">Y</span>
+                                                     <input type="text" placeholder="Years" name="years[]"
+                                                    maxlength="4" required class="course_i nput preventalpha">
+                                                 
+                                                    <span style="margin-top:10px; margin-right:5px;">M</span>
                                                     <input type="text" placeholder="Months" name="months[]"
                                                         maxlength="2" required class="course_input preventalpha">
-                                                    <input type="text" maxlength="2" placeholder="Days "
+
+
+                                                        <span style="margin-top:10px; margin-right:5px;">D</span> <input type="text" maxlength="2" placeholder="Days "
                                                         name="days[]" required class="course_input preventalpha">
-                                                    <input type="number" placeholder="Hours" name="hours[]" required
+
+                                                        <span style="margin-top:10px; margin-right:5px;">H</span><input type="number" placeholder="Hours" name="hours[]" required
                                                         class="course_input">
                                                 </div>
                                             </div>

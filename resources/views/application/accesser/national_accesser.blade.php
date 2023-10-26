@@ -151,25 +151,6 @@
                                             <td class="center">{{application_submission_date($item->application_id,$assessor_id)}}</td>
                                             <td class="center">{{assessor_assign_date($item->application_id,$assessor_id)}}</td>
                                             <td class="center">{{ showstate($item->state)}}</td>
-                                             {{-- <td class="center">{{ $item->state}}</td> --}}
-
-                                            <!-- <td class="center">{{assessor_due_date($item->application_id,$assessor_id)}}</td>
-                                             -->
-
-
-                                              <!-- {{assessor_due_date($item->application_id,$assessor_id)}} -->
-
-
-                                               <!-- @if(show_btn($item->due_date) == 0)
-                                              <td class="center"><button type="submit" class="button blinking-btn">Click me!</button></td>
-                                               @endif -->
-
-
-
-
-
-
-
 
                                             <td class="center">
                                                 <a href="{{ url('/Assessor-view/'.dEncrypt($item->application_id)) }}" class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
