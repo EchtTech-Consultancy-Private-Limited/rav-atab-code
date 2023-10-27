@@ -2509,6 +2509,29 @@ class LevelController extends Controller
             ->where('applications.status', '0')
             ->select('applications.*', 'countries.name as country_name')
             ->join('countries', 'applications.country', '=', 'countries.id')->latest()->get();
+
+            $level_list_data = [];
+        foreach ($level_list_data as $item) {
+            $level_list_data = ApplicationPayment::where('application_id',$item->id)->first();
+            if (!$level_list_data) {
+                $level_list_data[] = [
+                    'id' => $item->id,
+                    'application_uid' => $item->application_uid,
+                    'level_id' => $item->level_id,
+                    'user_id ' => $item->user_id ,
+                    'Person_Name' => $item->Person_Name,
+                    'Contact_Number' => $item->Contact_Number,
+                    'Email_ID' => $item->Email_ID,
+                    'designation' => $item->designation,
+                    'city' => $item->city,
+                    'state' => $item->state,
+                    'country' => $item->country,
+                    'status' => $item->status,
+
+                ];
+            }
+        }
+        
         return view('level.pendinglistApplication', ['level_list_data' => $level_list_data]);
     }
 

@@ -282,8 +282,8 @@
                                     <h4 class="header-title mt-2"> Applications</h4>
                                 </div>
                                 <div class="body">
-                                    <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
-                                        <table class="table display nowrap" style="width:100%; overflow:hidden;" id="dataTableMain">
+                                    <div class="table-responsive" style="width:100%; overflow-x:hidden; padding-bottom:20px;">
+                                        <table class="table table-responsive" style="width:100%; overflow:hidden;" id="dataTableMain">
                                             <thead>
                                                 <tr>
                                                     <th class="center">Sr.No</th>
