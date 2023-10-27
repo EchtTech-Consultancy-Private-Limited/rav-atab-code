@@ -259,9 +259,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @isset($level_list_data)
-                                                            <tr>
+                                                       
+                                                           
                                                                 @foreach ($level_list_data as $item_level_list)
+                                                                 <tr>
                                                                     @if (checktppaymentstatus($item_level_list->id) == 0)
 
                                                                         <td>{{ $item_level_list->application_uid }}</td>
@@ -275,10 +276,14 @@
                                                                                 class="btn btn-tbl-edit bg-success"><i
                                                                                     class="fa fa-edit"></i></a>
                                                                         </td>
+                                                                        @else
+                                                                        <td></td>
+                                                                        <td style="padding-left: 250px;">Data not available</td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                     @endif
                                                             </tr>
                                                             @endforeach
-                                                        @endisset
                                                     </tbody>
                                                 </table>
                                             </div>

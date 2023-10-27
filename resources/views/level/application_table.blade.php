@@ -175,6 +175,39 @@
 
 <body class="light">
 
+    @if (Session::has('success'))
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@elseif (Session::has('fail'))
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: '{{ session('fail') }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@elseif (Session::has('payment_fail'))
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: '{{ session('fail') }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@endif
+
+
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
@@ -226,37 +259,7 @@
                     <div class="card">
                         @include('level.inner-nav')
                     </div>
-                    @if (Session::has('success'))
-                        <script>
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: '{{ session('success') }}',
-                                showConfirmButton: false,
-                                timer: 3000
-                            });
-                        </script>
-                    @elseif (Session::has('fail'))
-                        <script>
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'error',
-                                title: '{{ session('fail') }}',
-                                showConfirmButton: false,
-                                timer: 3000
-                            });
-                        </script>
-                    @elseif (Session::has('payment_fail'))
-                        <script>
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: '{{ session('fail') }}',
-                                showConfirmButton: false,
-                                timer: 3000
-                            });
-                        </script>
-                    @endif
+                   
 
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">

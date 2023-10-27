@@ -53,7 +53,7 @@ class applicationController extends Controller
 
     public function Assigan_application(Request $request)
     {
-       
+
 
         if ($request->assessment_type == 2) {
 
@@ -61,7 +61,111 @@ class applicationController extends Controller
 
 
             if ($data == false) {
-               
+
+
+                $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->count() > 0;
+
+                if ($value == false) {
+
+                    $data = new asessor_application();
+                    $data->assessor_id = $request->assessor_radio;
+                    $data->application_id = $request->application_id;
+                    $data->status = 1;
+                    $data->assessment_type = $request->assessment_type;
+                    $data->due_date = $due_date = Carbon::now()->addDay(15);
+                    $data->notification_status = 0;
+                    $data->read_by = 0;
+                    $data->save();
+                    return  back()->with('success', 'Application has been successfully assigned to assessor');
+                } else {
+                    $item = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->first();
+
+                    $data = asessor_application::find($item->id);
+                    $data->assessor_id = $request->assessor_radio;
+                    $data->application_id = $request->application_id;
+                    $data->status = 1;
+                    $data->assessment_type = $request->assessment_type;
+                    $data->due_date = $due_date = Carbon::now()->addDay(15);
+                    $data->notification_status = 0;
+                    $data->read_by = 0;
+                    $data->save();
+                    return  back()->with('success', 'Application has been successfully assigned to assessor');
+                }
+            } else {
+
+
+                $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_radio)->first();
+
+                //dd($value);
+                $data = asessor_application::find($value->id);
+                $data->assessor_id = $request->assessor_radio;
+                $data->application_id = $request->application_id;
+                $data->status = 1;
+                $data->assessment_type = $request->assessment_type;
+                $data->due_date = $due_date = Carbon::now()->addDay(15);
+                $data->notification_status = 0;
+                $data->read_by = 0;
+                $data->save();
+            }
+        } else {
+
+            AssessorApplication::where('application_id',$request->application_id)->delete();
+
+            $assessor = $request->assessor_id;
+
+            $newApplicationAssign = new AssessorApplication;
+            $newApplicationAssign->application_id = $request->application_id;
+            $newApplicationAssign->assessment_type = $request->assessment_type;
+            $newApplicationAssign->assessor_id = $assessor;
+            $newApplicationAssign->status = 1;
+
+            $newApplicationAssign->notification_status = 0;
+            $newApplicationAssign->read_by = 0;
+
+
+
+            $newApplicationAssign->save();
+            $superadminEmail = 'superadmin@yopmail.com';
+            $adminEmail = 'admin@yopmail.com';
+
+            $mailData = [
+                'from' => "Admin",
+                'applicationNo' => $request->application_id,
+                'applicationStatus' => "Admin Assigned Application to Assessor Successfully",
+                'subject' => "Application Assigned",
+            ];
+
+            Mail::to([$superadminEmail, $adminEmail])->send(new SendMail($mailData));
+
+           
+                $assessor_email = User::select('email')->where('id', $assessor)->first();
+
+                $mailData = [
+                    'from' => "Admin",
+                    'applicationNo' => $request->application_id,
+                    'applicationStatus' => "Admin Assigned Application to Assessor Successfully",
+                    'subject' => "Application Assigned",
+                ];
+
+                Mail::to($assessor_email)->send(new SendMail($mailData));
+            
+
+
+            return redirect()->back()->with('success', 'Application assigned successfully');
+        }
+    }
+
+    public function Assigan_application_old_27_10_2023(Request $request)
+    {
+
+
+        if ($request->assessment_type == 2) {
+
+            $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_radio)->count()  > 0;
+
+
+            if ($data == false) {
+
 
                 $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->count() > 0;
 
@@ -110,8 +214,9 @@ class applicationController extends Controller
         } else {
 
             $assessors = $request->assessor_id;
-
+           
             foreach ($assessors as $key => $value) {
+                $alreadyWorking = AssessorApplication::where('application_id', $request->application_id)->latest()->first();
 
                 $exist = AssessorApplication::where('application_id', $request->application_id)->where('assessor_id', $value)->first();
                 if (!$exist) {
@@ -120,8 +225,21 @@ class applicationController extends Controller
                     $newApplicationAssign->assessment_type = $request->assessment_type;
                     $newApplicationAssign->assessor_id = $value;
                     $newApplicationAssign->status = 1;
-                    $newApplicationAssign->notification_status = 0;
-                    $newApplicationAssign->read_by = 0;
+                    if ($alreadyWorking) {
+                        
+                        if ($alreadyWorking->notification_status > 0 && $alreadyWorking->read_by > 0) {
+                            $newApplicationAssign->notification_status = $alreadyWorking->notification_status;
+                            $newApplicationAssign->read_by = $alreadyWorking->read_by;
+                        } else {
+                            $newApplicationAssign->notification_status = 0;
+                            $newApplicationAssign->read_by = 0;
+                        }
+                    } else {
+                        $newApplicationAssign->notification_status = 0;
+                        $newApplicationAssign->read_by = 0;
+                    }
+
+
                     $newApplicationAssign->save();
                 }
             }
@@ -150,7 +268,7 @@ class applicationController extends Controller
 
                 Mail::to($assessor_email)->send(new SendMail($mailData));
             }
-            
+
 
             return redirect()->back()->with('success', 'Application assigned successfully');
         }
@@ -391,7 +509,7 @@ class applicationController extends Controller
 
             $begin = Carbon::now();
             $end = Carbon::now()->addDays(15);
-        
+
 
             $fifteenthDaysadd = Carbon::now()->addDays(15)->format('Y-m-d');
             $events = Event::select('start')->where('asesrar_id', 76)->whereDate('start', '<=', $fifteenthDaysadd)->where('availability', 2)->get();
@@ -403,12 +521,29 @@ class applicationController extends Controller
 
     public function assigin_check_delete(Request $request)
     {
-      
-            
+
+
         $existData = DB::table('asessor_applications')
             ->where('application_id', $request->id)
             ->where('assessor_id', $request->assessor_id)
             ->delete();
+
+            $assignedToThisUser =  DB::table('asessor_applications')
+            ->where('application_id', $request->id)
+            ->where('assessor_id', $request->assessor_id)
+            ->where('read_by',$request->assessor_id)
+            ->first();
+
+            if( $assignedToThisUser){
+                DB::table('asessor_applications')
+                ->where('application_id', $request->id)
+                ->update([
+                    'notification_status' => 0,
+                    'read_by' => 0,
+                ]);
+            }
+
+       
 
         if ($existData) {
             return response()->json('success');
