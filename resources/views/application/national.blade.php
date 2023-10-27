@@ -242,9 +242,9 @@
 
                                                                             <label>
 
-                                                                                <input type="checkbox" id="assesorsid"
+                                                                                <input type="radio" id="assesorsid"
                                                                                     class="d-none assesorsid "
-                                                                                    name="assessor_id[]"
+                                                                                    name="assessor_id"
                                                                                     data-application-id="{{ $item->application_id }}"
                                                                                     value="{{ $assesorsData->id }}"
                                                                                     @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>

@@ -286,10 +286,10 @@
                     @endif
 
                     <div class="card shadow-md">
-                        <div class="card-header">
+                        <div class="card-header text-dark bg-white">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="card-title">Create Courses </h4>
+                                    <h4 class="card-title mt-2">Create Courses </h4>
                                 </div>
                                 <div>
                                     {{-- <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span> --}}
