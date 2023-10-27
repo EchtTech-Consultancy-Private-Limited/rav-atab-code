@@ -249,7 +249,7 @@
                                         </div>
                                         <div class="body">
                                             <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
-                                                <table class="table display nowrap" style="width:100%; overflow:hidden;" id="dataTableMain">
+                                                <table class="table table-responsive" style="width:100%; overflow:hidden;" id="dataTableMain">
                                                     <thead>
                                                         <tr>
                                                             <th> Application ID </th>
@@ -263,7 +263,7 @@
                                                            
                                                                 @foreach ($level_list_data as $item_level_list)
                                                                  <tr>
-                                                                    @if (checktppaymentstatus($item_level_list->id) == 0)
+                                                                    {{-- @if (checktppaymentstatus($item_level_list->id) <= 0) --}}
 
                                                                         <td>{{ $item_level_list->application_uid }}</td>
 
@@ -276,9 +276,8 @@
                                                                                 class="btn btn-tbl-edit bg-success"><i
                                                                                     class="fa fa-edit"></i></a>
                                                                         </td>
-                                                                        @else
-                                                                    @endif
-                                                                    </tr>
+                                                                    {{-- @endif --}}
+                                                                </tr>
                                                             @endforeach
                                                     </tbody>
                                                 </table>

@@ -166,6 +166,49 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div>
+                                <h5>Single Point of Contact Details (SPoC) Details</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Person Name</strong></label><br>
+                                            <label>{{ $spocData->Person_Name }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Contact Number</strong></label><br>
+                                            {{ $spocData->Contact_Number ?? '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Designation</strong></label><br>
+                                            {{ $spocData->designation ?? '' }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+
+                                            <label><strong>Email</strong></label><br>
+
+                                            <label>{{ $spocData->Email_ID ?? '' }}</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
