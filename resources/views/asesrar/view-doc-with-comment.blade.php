@@ -323,9 +323,9 @@
 
                                                 <object data="{{ url('level' . '/' . $id) }}" type="application/pdf"
                                                     width="100%" height="500px">
-                                                    <p>Unable to display PDF file. <a
-                                                            href="{{ url('level' . '/' . $id) }}">Download</a>
-                                                        instead.
+                                                    <p>
+                                                        <a href="{{ url('level' . '/' . $id) }}">Download</a>
+                                                        
                                                     </p>
                                                 </object>
 

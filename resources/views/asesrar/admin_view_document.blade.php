@@ -230,12 +230,17 @@
                                                                                     @if (count($documentsData) <= 1)
                                                                                         @foreach ($documentsData as $doc)
                                                                                             @if ($doc->application_id == $application_id)
+                                                                                               <div>
                                                                                                 <a target="_blank"
-                                                                                                    title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    href="{{ url('admin-view-doc' . '/' .$doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                                    class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                    style="color: #fff ;margin:10px;"
-                                                                                                    id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                href="{{ url('admin-view-doc' . '/' .$doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
+                                                                                                style="color: #fff ;margin:10px;"
+                                                                                                id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                <div>
+                                                                                                    {{ checkFinalRequest($doc->id) }}
+                                                                                                </div>
+                                                                                               </div>
                                                                                             @else
                                                                                                 <span
                                                                                                     class="bg-danger p-2 text-white"
@@ -248,12 +253,17 @@
                                                                                     @else
                                                                                         @foreach ($documentsData as $doc)
                                                                                             @if ($doc->application_id == $application_id)
-                                                                                                <a target="_blank"
+                                                                                                <div>
+                                                                                                    <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
                                                                                                     href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
                                                                                                     id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                    <div>
+                                                                                                        {{ checkFinalRequest($doc->id) }}
+                                                                                                    </div>
+                                                                                                </div>
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif

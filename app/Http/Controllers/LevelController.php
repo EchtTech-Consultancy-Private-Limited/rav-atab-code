@@ -2510,11 +2510,13 @@ class LevelController extends Controller
             ->select('applications.*', 'countries.name as country_name')
             ->join('countries', 'applications.country', '=', 'countries.id')->latest()->get();
 
-            $level_list_data = [];
+       
+
+            $finalData = [];
         foreach ($level_list_data as $item) {
-            $level_list_data = ApplicationPayment::where('application_id',$item->id)->first();
-            if (!$level_list_data) {
-                $level_list_data[] = [
+            $paymentData = DB::table('application_payments')->where('application_id',$item->id)->first();
+            if (!$paymentData) {
+                $finalData[] = [
                     'id' => $item->id,
                     'application_uid' => $item->application_uid,
                     'level_id' => $item->level_id,
@@ -2531,6 +2533,8 @@ class LevelController extends Controller
                 ];
             }
         }
+
+        $level_list_data = $finalData;
         
         return view('level.pendinglistApplication', ['level_list_data' => $level_list_data]);
     }

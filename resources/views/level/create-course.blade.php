@@ -258,7 +258,7 @@
                             </li>
                         </ul>
                     </div>
-                    @if (Session::has('success'))
+                    @if (Session::flash('success'))
                         <script>
                             var message = "{{ session::get('success') }}";
                             Swal.fire({
