@@ -292,7 +292,8 @@
                                     <h4 class="card-title">Create Courses </h4>
                                 </div>
                                 <div>
-                                    <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span>
+                                    {{-- <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span> --}}
+
                                     <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
                                         data-placement="top" title="You can create a maximum of 10 courses at one time"
                                         onclick="addNewCourse();">
@@ -499,10 +500,10 @@
                                         <tr>
                                             <th class="center">S.No.</th>
                                             <th class="center"> Course Name </th>
-                                            <th class="center"> Course Duration </th>
+                                            <th class="center"> Duration </th>
                                             <th class="center"> Eligibility </th>
-                                            <th class="center"> Mode Of Course </th>
-                                            <th class="center"> Course Brief</th>
+                                            <th class="center"> Mode </th>
+                                            <th class="center">  Brief</th>
                                             <th class="center">Payment Status</th>
 
                                             <th class="center">Action</th>
@@ -1166,7 +1167,7 @@
 
                         function updateCloneCount() {
                             // Update the formCount span with the current clone count
-                            $('#formCount').text(cloneCounter);
+                            // $('#formCount').text(cloneCounter);
                         }
 
                         function addNewCourse() {
@@ -1197,7 +1198,7 @@
                                     Swal.fire({
                                         title: "Warning",
                                         text: "You've reached the maximum limit of " + maxClones +
-                                            " clones, including the original form.",
+                                            " courses, including the original course form.",
                                         icon: "warning",
                                         showConfirmButton: false,
                                         timer: 3000

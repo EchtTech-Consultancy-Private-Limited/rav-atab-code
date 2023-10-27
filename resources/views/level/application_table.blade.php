@@ -275,12 +275,12 @@
                         {{-- application payment table start --}}
                         <div>
                             <div class="card">
-                                <div class="header">
-                                    <h2>Previous Applications</h2>
+                                <div class="card-header bg-white text-dark">
+                                    <h4 class="header-title mt-2"> Applications</h4>
                                 </div>
                                 <div class="body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover js-basic-example contact_list">
+                                    <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
+                                        <table class="table display nowrap" style="width:100%; overflow:hidden;" id="dataTableMain">
                                             <thead>
                                                 <tr>
                                                     <th class="center">Sr.No</th>
