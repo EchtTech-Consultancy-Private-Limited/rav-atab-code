@@ -277,12 +277,8 @@
                                                                                     class="fa fa-edit"></i></a>
                                                                         </td>
                                                                         @else
-                                                                        <td></td>
-                                                                        <td style="padding-left: 250px;">Data not available</td>
-                                                                        <td></td>
-                                                                        <td></td>
                                                                     @endif
-                                                            </tr>
+                                                                    </tr>
                                                             @endforeach
                                                     </tbody>
                                                 </table>
