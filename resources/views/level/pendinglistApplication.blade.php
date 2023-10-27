@@ -166,7 +166,7 @@
 </head>
 
 <body class="light">
-   
+
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
@@ -216,7 +216,7 @@
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
-                       @include('level.inner-nav')
+                        @include('level.inner-nav')
                     </div>
                     @if (Session::has('success'))
                         <div class="alert alert-success" style="padding: 15px;" role="alert">
@@ -237,22 +237,22 @@
                         </div>
                     @endif
 
-                    <div class="tab-content">
+                    <div>
 
-                            {{-- pending application table start --}}
+                        {{-- pending application table start --}}
                         <div>
                             <div class="row clearfix">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="card project_widget">
-                                        <div class="header">
+                                        <div class="card-header bg-white text-dark">
+                                            <h4 class="header-title mt-2">Pending Applications</h4>
                                         </div>
                                         <div class="body">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover js-basic-example contact_list">
+                                            <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
+                                                <table class="table display nowrap" style="width:100%; overflow:hidden;" id="dataTableMain">
                                                     <thead>
                                                         <tr>
                                                             <th> Application ID </th>
-                                                            <!--<th class="center"> Create User ID </th>-->
                                                             <th> Level ID </th>
                                                             <th> Country </th>
                                                             <th> Action </th>
@@ -263,14 +263,18 @@
                                                             <tr>
                                                                 @foreach ($level_list_data as $item_level_list)
                                                                     @if (checktppaymentstatus($item_level_list->id) == 0)
+
                                                                         <td>{{ $item_level_list->application_uid }}</td>
-                                                                        </td>
+
+
                                                                         <td> {{ $item_level_list->level_id ?? '' }}</td>
-                                                                        <td> {{ $item_level_list->country_name ?? '' }}
-                                                                        </td>
+
+                                                                        <td> {{ $item_level_list->country_name ?? '' }}</td>
+
                                                                         <td> <a href="{{ url('/edit-application' . '/' . $item_level_list->id) }}"
                                                                                 class="btn btn-tbl-edit bg-success"><i
-                                                                                    class="fa fa-edit"></i></a></td>
+                                                                                    class="fa fa-edit"></i></a>
+                                                                        </td>
                                                                     @endif
                                                             </tr>
                                                             @endforeach
@@ -283,10 +287,10 @@
                                 </div>
                             </div>
                         </div>
-                            {{-- pending application table end--}}
+                        {{-- pending application table end --}}
                     </div>
                 </div>
 
-       @include('layout.footer')
-       <!-- New JS -->
+                @include('layout.footer')
+                <!-- New JS -->
 </body>

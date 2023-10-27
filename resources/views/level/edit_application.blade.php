@@ -6,31 +6,30 @@
 
 <style>
     .custom-button {
-    display: inline-block;
-    padding: 5px 10px;
-    margin-right: 10px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
+        display: inline-block;
+        padding: 5px 10px;
+        margin-right: 10px;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
 
-.custom-button input[type="checkbox"] {
-    display: none;
-}
+    .custom-button input[type="checkbox"] {
+        display: none;
+    }
 
-/* .custom-button input[type="checkbox"]:checked + .checkbox-label {
+    /* .custom-button input[type="checkbox"]:checked + .checkbox-label {
     background-color: #81a1c4;
     color: #fff;
     border: 1px solid #007bff;
 } */
 
-.checkbox-label {
-    display: inline-block;
-    vertical-align: middle;
-    cursor: pointer;
-}
-
+    .checkbox-label {
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+    }
 </style>
 
 <style>
@@ -286,22 +285,25 @@
                         </div>
                     @endif
 
-                    <div class="card">
+                    <div class="card shadow-md">
+                        <div class="card-header text-dark bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="card-title mt-2">Create Courses </h4>
+                                </div>
+                                <div>
+                                    {{-- <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span> --}}
 
-                        <div class="header">
-                            <h2 style="float:left; clear:none;">Level Courses </h2>
-                            {{-- @if (count($course) > 0) --}}
-
-                            <a href="javascript:void(0);" class="btn btn-outline-primary mb-0"
-                                style="float:right; clear:none; cursor:pointer;line-height: 24px;"
-                                onclick="addNewCourse();">
-                                <i class="fa fa-plus font-14"></i> Add More Course
-                            </a>
-
-                            {{-- @endif --}}
+                                    <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
+                                        data-placement="top" title="You can create a maximum of 10 courses at one time"
+                                        onclick="addNewCourse();">
+                                        <i class="fa fa-plus"></i> Add More Course 
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <form action="{{ url('/new-application-course') }}" enctype="multipart/form-data" method="post"
-                            class="form" id="regForm">
+                            class="form">
                             @csrf
                             <input type="hidden" name="form_step_type" value="add-course">
                             <div class="body pb-0" id="courses_body">
@@ -348,13 +350,22 @@
                                                 <label>Course Duration<span class="text-danger">*</span></label>
 
                                                 <div class="course_group">
+
+                                                    <span style="margin-top:10px; margin-right:5px;">Y</span>
                                                     <input type="text" placeholder="Years" name="years[]"
                                                         maxlength="4" required class="course_i nput preventalpha">
+
+                                                    <span style="margin-top:10px; margin-right:5px;">M</span>
                                                     <input type="text" placeholder="Months" name="months[]"
                                                         maxlength="2" required class="course_input preventalpha">
-                                                    <input type="text" maxlength="2" placeholder="Days "
+
+
+                                                    <span style="margin-top:10px; margin-right:5px;">D</span> <input
+                                                        type="text" maxlength="2" placeholder="Days "
                                                         name="days[]" required class="course_input preventalpha">
-                                                    <input type="number" placeholder="Hours" name="hours[]" required
+
+                                                    <span style="margin-top:10px; margin-right:5px;">H</span><input
+                                                        type="number" placeholder="Hours" name="hours[]" required
                                                         class="course_input">
                                                 </div>
                                             </div>
@@ -489,10 +500,10 @@
                                         <tr>
                                             <th class="center">S.No.</th>
                                             <th class="center"> Course Name </th>
-                                            <th class="center"> Course Duration </th>
+                                            <th class="center"> Duration </th>
                                             <th class="center"> Eligibility </th>
-                                            <th class="center"> Mode Of Course </th>
-                                            <th class="center"> Course Brief</th>
+                                            <th class="center"> Mode </th>
+                                            <th class="center">  Brief</th>
                                             <th class="center">Payment Status</th>
 
                                             <th class="center">Action</th>
@@ -704,21 +715,25 @@
                                 </div>
                             </div>
                         </div>
-                        <ul class="list-inline pull-right mt-5">
-                            <li><a href="{{ url('new-applications/' . $applicationData->id) }}"
-                                    class="btn btn-danger prev-step">Previous</a>
-                            </li>
-
-                            <li>
-
-                                @isset($course)
+                       <div>
+                        <div>
+                            <hr>
+                        </div>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div>
+                                    <a href="{{ url('new-applications/' . $applicationData->id) }}"
+                                        class="btn btn-danger prev-step">Previous</a>
+                                </div>
+                                <div>
+                                    @isset($course)
                                     @if (count($course) > 0)
                                         <a href="{{ url('course-payment/' . $applicationData->id) }}"
-                                            class="btn btn-primary next-step1">Next</a>
+                                            class="btn btn-primary next-step1 mr-2">Next</a>
                                     @endif
                                 @endisset
-                            </li>
-                        </ul>
+                                </div>
+                            </div>
+                       </div>
                     </div>
                     <!-- View Modal Popup -->
                     <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
@@ -857,16 +872,16 @@
                                                             <label>Course Duration <span class="text-danger">*</span>
                                                             </label>
                                                             <div class="course_group">
-                                                                <input type="number" placeholder="Years"
+                                                                Y <input type="number" placeholder="Years"
                                                                     name="years" required class="course_input"
                                                                     id="years">
-                                                                <input type="number" placeholder="Months"
+                                                                M <input type="number" placeholder="Months"
                                                                     name="months" required class="course_input"
                                                                     id="months">
-                                                                <input type="number" placeholder="Days"
+                                                                D <input type="number" placeholder="Days"
                                                                     name="days" required class="course_input"
                                                                     id="days">
-                                                                <input type="number" placeholder="Hours"
+                                                                H <input type="number" placeholder="Hours"
                                                                     name="hours" required class="course_input"
                                                                     id="hours">
                                                             </div>
@@ -888,27 +903,31 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group" style="margin-top: 5px;">
                                                         <div class="form-line">
-                                                            <label>Mode of Course <span class="text-danger">*</span></label>
+                                                            <label>Mode of Course <span
+                                                                    class="text-danger">*</span></label>
                                                             <div class="custom-checkbox-group">
                                                                 <label class="custom-button">
-                                                                    <input type="checkbox" name="mode_of_course[]" id="offline_checkbox" value="Offline">
+                                                                    <input type="checkbox" name="mode_of_course[]"
+                                                                        id="offline_checkbox" value="Offline">
                                                                     <span class="checkbox-label">Offline</span>
                                                                 </label>
                                                                 <label class="custom-button">
-                                                                    <input type="checkbox" name="mode_of_course[]" id="online_checkbox" value="Online">
+                                                                    <input type="checkbox" name="mode_of_course[]"
+                                                                        id="online_checkbox" value="Online">
                                                                     <span class="checkbox-label">Online</span>
                                                                 </label>
                                                                 <label class="custom-button">
-                                                                    <input type="checkbox" name="mode_of_course[]" id="hybrid_checkbox" value="Hybrid">
+                                                                    <input type="checkbox" name="mode_of_course[]"
+                                                                        id="hybrid_checkbox" value="Hybrid">
                                                                     <span class="checkbox-label">Hybrid</span>
                                                                 </label>
                                                             </div>
                                                         </div>
                                                         @error('mode_of_course')
-                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                            <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    
+
 
                                                 </div>
                                                 <div class="col-sm-12">
@@ -1078,7 +1097,7 @@
                                 },
                                 success: function(data) {
 
-                                   
+
 
                                     var values = data.ApplicationCourse[0].mode_of_course;
                                     $.each(values, function(i, e) {
@@ -1091,16 +1110,17 @@
                                     $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                     $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
 
-                                    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="mode_of_course[]"]');
+                                    const checkboxes = document.querySelectorAll(
+                                        'input[type="checkbox"][name="mode_of_course[]"]');
                                     var modeOfCourseItems = data.ApplicationCourse[0].mode_of_course;
 
                                     checkboxes.forEach(checkbox => {
-    if (modeOfCourseItems.includes(checkbox.value)) {
-        checkbox.checked = true;
-    } else {
-        checkbox.checked = false;
-    }
-});
+                                        if (modeOfCourseItems.includes(checkbox.value)) {
+                                            checkbox.checked = true;
+                                        } else {
+                                            checkbox.checked = false;
+                                        }
+                                    });
 
 
 
@@ -1143,9 +1163,15 @@
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
                         var cloneCounter = 1;
+                        var maxClones = 10;
+
+                        function updateCloneCount() {
+                            // Update the formCount span with the current clone count
+                            // $('#formCount').text(cloneCounter);
+                        }
 
                         function addNewCourse() {
-                            if (!isAppending) {
+                            if (!isAppending && cloneCounter <= maxClones) {
                                 isAppending = true;
 
                                 // Clone the template row
@@ -1163,6 +1189,23 @@
 
                                 // Increment the cloneCounter for unique IDs
                                 cloneCounter++;
+
+                                if (cloneCounter >= maxClones) {
+                                    // If the maximum limit is reached, disable the button
+                                    $('#add-course-button').prop('disabled', true);
+                                   // Change the background color of the #formCount span to red
+    $('#formCount').css('background-color', 'red');
+                                    Swal.fire({
+                                        title: "Warning",
+                                        text: "You've reached the maximum limit of " + maxClones +
+                                            " courses, including the original course form.",
+                                        icon: "warning",
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+
+                                updateCloneCount();
 
                                 // Update the name attribute of the mode_of_course select field
                                 var modeOfCourseSelect = newRow.find('.select2[name^="mode_of_course[1]"]');
@@ -1228,6 +1271,8 @@
 
 
                                 isAppending = false; // Reset the flag
+
+
                             }
                         }
 
@@ -1235,6 +1280,10 @@
                             // Find the parent row and remove it
                             $(button).closest('.new-course-html').remove();
                         }
+
+                        $(document).ready(function() {
+                            updateCloneCount();
+                        });
                     </script>
 
                     <script>

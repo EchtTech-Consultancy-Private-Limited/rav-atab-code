@@ -102,20 +102,20 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="header">
-                            <h2>
-                                <strong></strong> NATIONAL
+                        <div class="card-header bg-white text-dark">
+                            <h4 class="header-title mt-2">
+                               National Applications
                             </h2>
                         </div>
                         <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-hover js-basic-example contact_list">
+                            <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
+                                <table class="table table-responsive" style="width:100%;" id="dataTableMain">
                                     <thead>
                                         <tr>
                                             <th class="center">Sr.No</th>
                                             <th class="center">Level </th>
-                                            <th class="center">Application Number</th>
-                                            <th class="center">Total Course</th>
+                                            <th class="center">Application No. </th>
+                                            <th class="center">Courses</th>
                                             <th class="center">Total Fee</th>
                                             <th class="center"> Payment Date </th>
                                             <th class="center">Status</th>
