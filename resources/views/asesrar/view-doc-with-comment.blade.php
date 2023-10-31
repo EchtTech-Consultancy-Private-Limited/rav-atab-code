@@ -44,7 +44,8 @@
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
-                        title: "{{ session::get('success') }}",
+                        title: "Success",
+                        text: "{{ session::get('success') }}",
                         showConfirmButton: false,
                         timer: 3000
                     })
@@ -54,7 +55,8 @@
                     Swal.fire({
                         position: 'center',
                         icon: 'warning',
-                        title: "{{ session::get('success') }}",
+                        title: "Warning",
+                        text: "{{ session::get('success') }}",
                         showConfirmButton: false,
                         timer: 3000
                     })
@@ -121,9 +123,9 @@
                                                                             <option value="3">Not Recommended
                                                                             </option>
                                                                         @elseif ($doc_latest_record->notApraove_count == 4)
-                                                                            <option value="6">NC3</option>
+                                                                            <option value="6">Not Approve</option>
                                                                         @endif
-                                                                        <option value="4">Close</option>
+                                                                        <option value="4">Approve</option>
                                                                     </select>
 
                                                                 </div>
@@ -135,27 +137,32 @@
                                                                     <small id="char-count-info">0/100 characters</small>
                                                                 </div>
                                                                 @if ($doc_latest_record->notApraove_count == 4)
-                                                                <div class="col-sm-12">
-                                                                    <div>
-                                                                        <div class="bg-warning p-2">
-                                                                            @if ($doc_latest_record->notApraove_count == 4)
-                                                                                <p>
-                                                                                    <strong>Final Approval
-                                                                                        Request</strong>
-                                                                                </p>
-                                                                                <p>
-                                                                                    <small>This request has been
-                                                                                        received from the admin, and it
-                                                                                        marks the last opportunity for
-                                                                                        review. If this file is found to
-                                                                                        be incorrect, the user will not
-                                                                                        be able to upload another file
-                                                                                        after this point.</small>
-                                                                                </p>
-                                                                            @endif
+                                                                    <div class="col-sm-12">
+                                                                        <div>
+                                                                            <div class="bg-warning p-2">
+                                                                                @if ($doc_latest_record->notApraove_count == 4)
+                                                                                    <p>
+                                                                                        <strong>Final Approval
+                                                                                            Request</strong>
+                                                                                    </p>
+                                                                                    <p>
+                                                                                        <small>This request has been
+                                                                                            received from the admin, and
+                                                                                            it
+                                                                                            marks the last opportunity
+                                                                                            for
+                                                                                            review. If this file is
+                                                                                            found to
+                                                                                            be incorrect, the user will
+                                                                                            not
+                                                                                            be able to upload another
+                                                                                            file
+                                                                                            after this point.</small>
+                                                                                    </p>
+                                                                                @endif
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
                                                                 @endif
                                                             </div>
 
@@ -177,15 +184,17 @@
             @else
                 <div class="card">
                     <div class="card-body">
-                        @if (in_array(get_doccomment_status($doc_id), [1, 2,6]))
+                        @if (in_array(get_doccomment_status($doc_id), [1, 2, 6, 5]))
                             <h4 class="text-center">
-                                Document not approved - Rejected with
+
                                 @if (get_doccomment_status($doc_id) == 1)
-                                    NC1
+                                    Document not approved - Rejected with NC1
                                 @elseif (get_doccomment_status($doc_id) == 2)
-                                    NC2
-                                    @elseif (get_doccomment_status($doc_id) == 6)
-                                    NC3
+                                    Document not approved - Rejected with NC2
+                                @elseif (get_doccomment_status($doc_id) == 6)
+                                    Document not approved - Rejected with NC3
+                                @elseif (get_doccomment_status($doc_id) == 5)
+                                    Request for final approval!
                                 @endif
                             </h4>
                         @elseif (get_doccomment_status($doc_id) == 3)
@@ -217,9 +226,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table
-                                            class="table"
-                                            id="DataTables_Table_0" role="grid"
+                                        <table class="table" id="DataTables_Table_0" role="grid"
                                             aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr role="row">
@@ -307,42 +314,31 @@
                 </div>
             @endif
 
-            <div class="row ">
-
-                <div class="row clearfix">
-
-                    <div class="col-lg-12 col-md-12">
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="level_information"
-                                aria-expanded="true">
-                                <div class="row clearfix">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="card project_widget">
-
-                                            <div class="body">
-
-                                                <object data="{{ url('level' . '/' . $id) }}" type="application/pdf"
-                                                    width="100%" height="500px">
-                                                    <p>
-                                                        <a href="{{ url('level' . '/' . $id) }}">Download</a>
-                                                        
-                                                    </p>
-                                                </object>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
         </div>
+
+        <div class="container">
+            <div class="card project-widget">
+                <div class="card-body">
+                    @php
+                        $pdfUrl = url('level' . '/' . $id);
+                        $fileExtension = pathinfo($pdfUrl, PATHINFO_EXTENSION);
+                    @endphp
+
+                    @if ($fileExtension === 'pdf')
+                        <object data="{{ $pdfUrl }}" type="application/pdf" width="100%" height="500px">
+                            <p>Unable to display PDF. <a href="{{ $pdfUrl }}" target="_blank">Download
+                                    Document</a> </p>
+                        </object>
+                    @else
+                        <a class="btn btn-info btn-sm" href="{{ $pdfUrl }}" target="_blank">Download
+                            Document</a>
+                    @endif
+                </div>
+            </div>
+        </div>
+
 
 
 
@@ -355,7 +351,7 @@
             if (this.value === "4") { // If "Close" is selected
                 comment_text.value = "Document has been approved";
                 commentSection.style.display = "none"; // Hide the textarea
-                
+
             } else {
                 commentSection.style.display = "block"; // Show the textarea for other options
                 comment_text.value = "Document Not approved!";
@@ -374,36 +370,36 @@
         });
     </script>
 
-<script>
-    // Get a reference to the comment text area
-    var commentTextArea = document.getElementById('comment_text');
-    
-    // Get a reference to the character count info
-    var charCountInfo = document.getElementById('char-count-info');
+    <script>
+        // Get a reference to the comment text area
+        var commentTextArea = document.getElementById('comment_text');
 
-     // Get a reference to the submit button
-     var submitButton = document.getElementById('submitBtn');
-    
-    // Add an input event listener to the text area
-    commentTextArea.addEventListener('input', function () {
-        var currentCharCount = commentTextArea.value.length;
-        
-        // Update the character count info
-        charCountInfo.textContent = currentCharCount + '/100 characters';
-        
-        // Check if the limit is reached
-      // Check if the limit is reached
-      if (currentCharCount > 100) {
-            // Truncate the text to 100 characters
-            commentTextArea.value = commentTextArea.value.substring(0, 100);
-            charCountInfo.textContent = '100/100 characters (maximum reached)';
-            charCountInfo.style.color = 'red'; // Set text color to red
-            submitButton.disabled = true; // Disable the submit button
-        } else {
-            charCountInfo.style.color = '#000'; // Reset text color to the default
-            submitButton.disabled = false; // Enable the submit button
-        }
-    });
-</script>
+        // Get a reference to the character count info
+        var charCountInfo = document.getElementById('char-count-info');
+
+        // Get a reference to the submit button
+        var submitButton = document.getElementById('submitBtn');
+
+        // Add an input event listener to the text area
+        commentTextArea.addEventListener('input', function() {
+            var currentCharCount = commentTextArea.value.length;
+
+            // Update the character count info
+            charCountInfo.textContent = currentCharCount + '/100 characters';
+
+            // Check if the limit is reached
+            // Check if the limit is reached
+            if (currentCharCount > 100) {
+                // Truncate the text to 100 characters
+                commentTextArea.value = commentTextArea.value.substring(0, 100);
+                charCountInfo.textContent = '100/100 characters (maximum reached)';
+                charCountInfo.style.color = 'red'; // Set text color to red
+                submitButton.disabled = true; // Disable the submit button
+            } else {
+                charCountInfo.style.color = '#000'; // Reset text color to the default
+                submitButton.disabled = false; // Enable the submit button
+            }
+        });
+    </script>
 
     @include('layout.footer')

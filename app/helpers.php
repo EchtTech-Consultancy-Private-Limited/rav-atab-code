@@ -230,7 +230,7 @@ function get_doc_code($id = 0)
 
 function get_doccomment_status($id = 0)
 {
-    //return $id;
+   
     $doc_code = App\Models\DocComment::orderBy('id', 'desc')->where('doc_id', $id)->first();
     if ($doc_code) {
         $doc_comment_status = $doc_code->status;
