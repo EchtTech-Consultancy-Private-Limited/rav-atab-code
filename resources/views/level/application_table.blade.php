@@ -180,7 +180,8 @@
         Swal.fire({
             position: 'center',
             icon: 'success',
-            title: '{{ session('success') }}',
+            title:'Success',
+            text: '{{ session('success') }}',
             showConfirmButton: false,
             timer: 3000
         });
@@ -190,7 +191,8 @@
         Swal.fire({
             position: 'center',
             icon: 'error',
-            title: '{{ session('fail') }}',
+            title:'Success',
+            text: '{{ session('fail') }}',
             showConfirmButton: false,
             timer: 3000
         });
@@ -200,7 +202,8 @@
         Swal.fire({
             position: 'center',
             icon: 'warning',
-            title: '{{ session('fail') }}',
+            title:'Warning'
+            text: '{{ session('fail') }}',
             showConfirmButton: false,
             timer: 3000
         });

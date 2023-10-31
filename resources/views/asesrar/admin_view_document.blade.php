@@ -7,8 +7,13 @@
 <style>
     table th,
     table td {
-        text-align: center;
+        text-align: left;
         border: 1px solid #eee;
+    }
+
+    table th{
+        padding: 10px !important;
+    padding-top: 20px !important;
     }
 
     .highlight {
@@ -65,19 +70,7 @@
 </head>
 
 <body class="light">
-    <!-- Page Loader -->
-    {{-- <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="m-t-30">
-                <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
-            </div>
-            <p>Please wait...</p>
-        </div>
-    </div> --}}
-    <!-- #END# Page Loader -->
 
-
-    <!-- Progressbar Modal Poup -->
     <div class="loading-img d-none" id="loader">
         <div class="box">
             <img src="{{ asset('assets/img/VAyR.gif') }}">
@@ -126,11 +119,7 @@
 
                         </ul>
                     </div>
-                    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                        <ul class="breadcrumb breadcrumb-style ">
-                             <a href="{{ url()->previous() }}" type="button" class="btn btn-primary" style="float:right;">Back To Documents</a>
-                        </ul>
-                    </div> -->
+                 
 
                 </div>
             </div>
@@ -198,17 +187,15 @@
                                                 <div class="table-responsive" style="margin-top:-10px;">
 
 
-                                                    <table class="table table-hover js-basic-example contact_list">
+                                                    <table class="table table-responsive">
                                                         <thead>
                                                             <tr>
-                                                                <th class="center">#Sr.N0</th>
-                                                                <th class="center">Objective criteria</th>
-                                                                <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
-                                                                <th class="center">View Documents</th>
-                                                                <!--  <th>Comments</th> -->
+                                                                <th>Sr.No.</th>
+                                                                <th>Objective criteria</th>
+                                                                <th>Documents</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="text-center">
+                                                        <tbody>
 
                                                             @foreach ($chapters as $chapter)
                                                                 <tr>
@@ -220,7 +207,7 @@
                                                                 @foreach ($chapter->questions as $question)
                                                                     <tr>
                                                                         <td>{{ $question->code ?? '' }}</td>
-                                                                        <td>{{ $question->title ?? '' }}</td>
+                                                                        <td class="text-left">{{ $question->title ?? '' }}</td>
                                                                         <td>
                                                                             @php
                                                                                 $documentsData = getAdminDocument($question->id, $file[0]->application_id) ?? 0;
@@ -230,12 +217,17 @@
                                                                                     @if (count($documentsData) <= 1)
                                                                                         @foreach ($documentsData as $doc)
                                                                                             @if ($doc->application_id == $application_id)
+                                                                                               <div>
                                                                                                 <a target="_blank"
-                                                                                                    title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    href="{{ url('admin-view-doc' . '/' .$doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
-                                                                                                    class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                    style="color: #fff ;margin:10px;"
-                                                                                                    id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                href="{{ url('admin-view-doc' . '/' .$doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
+                                                                                                style="color: #fff ;margin:10px;"
+                                                                                                id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                <div>
+                                                                                                    {{ checkFinalRequest($doc->id) }}
+                                                                                                </div>
+                                                                                               </div>
                                                                                             @else
                                                                                                 <span
                                                                                                     class="bg-danger p-2 text-white"
@@ -248,12 +240,17 @@
                                                                                     @else
                                                                                         @foreach ($documentsData as $doc)
                                                                                             @if ($doc->application_id == $application_id)
-                                                                                                <a target="_blank"
+                                                                                                <div>
+                                                                                                    <a target="_blank"
                                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
                                                                                                     href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                     class="btn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                     style="color: #fff ;margin:10px;"
                                                                                                     id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                    <div>
+                                                                                                        {{ checkFinalRequest($doc->id) }}
+                                                                                                    </div>
+                                                                                                </div>
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif

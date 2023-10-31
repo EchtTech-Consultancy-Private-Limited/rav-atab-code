@@ -230,7 +230,7 @@ function get_doc_code($id = 0)
 
 function get_doccomment_status($id = 0)
 {
-    //return $id;
+   
     $doc_code = App\Models\DocComment::orderBy('id', 'desc')->where('doc_id', $id)->first();
     if ($doc_code) {
         $doc_comment_status = $doc_code->status;
@@ -439,6 +439,8 @@ function checkDocumentCommentStatus($id)
     if ($commentData) {
         if ($commentData->status == 4) {
             return "btn-success";
+        }elseif($commentData->status == 5){
+            return "btn-warning";
         } else {
             return "btn-danger";
         }
@@ -634,12 +636,23 @@ function checkApproveComment($doc_id){
     }
 }
 
+function checkFinalRequest($id){
+    $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
+    if ($commentData) {
+       if ( $commentData->status == 5) {
+            return "Request for final approval!";
+        }
+    } else {
+        return "";
+    }
+}
+
 function getButtonText($id){
     $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
 
     if ($commentData) {
         if ($commentData->status == 4) {
-            return "Approved";
+            return "Accepted";
         }  elseif ($commentData->status == 3 || $commentData->status == 5) {
             return "Not Recommended";
         }
@@ -659,6 +672,7 @@ function getButtonText($id){
         return "View";
     }
 }
+
 function getCommentsData($docID){
     $comment = DocComment::where('doc_id',$docID)->latest()->first();
     return $comment ?? [];
