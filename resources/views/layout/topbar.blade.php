@@ -48,7 +48,7 @@
                              @elseif(Auth::user()->role == 2)
                                  Training Provider
                              @elseif(Auth::user()->role == 3)
-                                 Assessor
+                                 Assessor(<small>{{ Auth::user()->assessment == 1 ? "Desktop" : "On-Site" }}</small>)
                              @elseif(Auth::user()->role == 4)
                                  Professional
                              @elseif(Auth::user()->role == 5)

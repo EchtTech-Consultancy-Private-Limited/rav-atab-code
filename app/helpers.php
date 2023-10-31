@@ -652,7 +652,7 @@ function getButtonText($id){
 
     if ($commentData) {
         if ($commentData->status == 4) {
-            return "Approved";
+            return "Accepted";
         }  elseif ($commentData->status == 3 || $commentData->status == 5) {
             return "Not Recommended";
         }
