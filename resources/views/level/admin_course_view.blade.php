@@ -263,7 +263,7 @@
                                     </div>
                                 </div>
                                 <div class="header">
-                                    <h2>Single Point of Contact Details (SPoC) Details</h2>
+                                    <h2>Single Point of Contact Details (SPoC)</h2>
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-4">

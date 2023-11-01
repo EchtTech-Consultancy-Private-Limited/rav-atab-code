@@ -109,7 +109,7 @@ class applicationController extends Controller
             }
         } else {
 
-            AssessorApplication::where('application_id',$request->application_id)->delete();
+            AssessorApplication::where('application_id', $request->application_id)->delete();
 
             $assessor = $request->assessor_id;
 
@@ -137,18 +137,18 @@ class applicationController extends Controller
 
             Mail::to([$superadminEmail, $adminEmail])->send(new SendMail($mailData));
 
-           
-                $assessor_email = User::select('email')->where('id', $assessor)->first();
 
-                $mailData = [
-                    'from' => "Admin",
-                    'applicationNo' => $request->application_id,
-                    'applicationStatus' => "Admin Assigned Application to Assessor Successfully",
-                    'subject' => "Application Assigned",
-                ];
+            $assessor_email = User::select('email')->where('id', $assessor)->first();
 
-                Mail::to($assessor_email)->send(new SendMail($mailData));
-            
+            $mailData = [
+                'from' => "Admin",
+                'applicationNo' => $request->application_id,
+                'applicationStatus' => "Admin Assigned Application to Assessor Successfully",
+                'subject' => "Application Assigned",
+            ];
+
+            Mail::to($assessor_email)->send(new SendMail($mailData));
+
 
 
             return redirect()->back()->with('success', 'Application assigned successfully');
@@ -214,7 +214,7 @@ class applicationController extends Controller
         } else {
 
             $assessors = $request->assessor_id;
-           
+
             foreach ($assessors as $key => $value) {
                 $alreadyWorking = AssessorApplication::where('application_id', $request->application_id)->latest()->first();
 
@@ -226,7 +226,7 @@ class applicationController extends Controller
                     $newApplicationAssign->assessor_id = $value;
                     $newApplicationAssign->status = 1;
                     if ($alreadyWorking) {
-                        
+
                         if ($alreadyWorking->notification_status > 0 && $alreadyWorking->read_by > 0) {
                             $newApplicationAssign->notification_status = $alreadyWorking->notification_status;
                             $newApplicationAssign->read_by = $alreadyWorking->read_by;
@@ -528,27 +528,36 @@ class applicationController extends Controller
             ->where('assessor_id', $request->assessor_id)
             ->delete();
 
-            $assignedToThisUser =  DB::table('asessor_applications')
+        $assignedToThisUser =  DB::table('asessor_applications')
             ->where('application_id', $request->id)
             ->where('assessor_id', $request->assessor_id)
-            ->where('read_by',$request->assessor_id)
+            ->where('read_by', $request->assessor_id)
             ->first();
 
-            if( $assignedToThisUser){
-                DB::table('asessor_applications')
+        if ($assignedToThisUser) {
+            DB::table('asessor_applications')
                 ->where('application_id', $request->id)
                 ->update([
                     'notification_status' => 0,
                     'read_by' => 0,
                 ]);
-            }
+        }
 
-       
+
 
         if ($existData) {
             return response()->json('success');
         } else {
             return false;
         }
+    }
+
+
+    public function applicationDetailData(Request $request){
+        $application_id = $request->id ?? 0;
+
+        $applicationData = Application::find($application_id);
+
+       return $applicationData;
     }
 }

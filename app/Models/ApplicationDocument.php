@@ -11,5 +11,9 @@ class ApplicationDocument extends Model
 
     protected $table = 'application_documents';
 
+    public function comments(){
+        return $this->hasMany(DocComment::class,"doc_id","id");
+    }
+
 
 }

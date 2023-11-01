@@ -2515,6 +2515,7 @@ class LevelController extends Controller
             $finalData = [];
         foreach ($level_list_data as $item) {
             $paymentData = DB::table('application_payments')->where('application_id',$item->id)->first();
+            $country = DB::table('countries')->where('id',$item->country)->orderBy('id','desc')->first();
             if (!$paymentData) {
                 $finalData[] = [
                     'id' => $item->id,
@@ -2527,7 +2528,7 @@ class LevelController extends Controller
                     'designation' => $item->designation,
                     'city' => $item->city,
                     'state' => $item->state,
-                    'country' => $item->country,
+                    'country_name' => $country->name,
                     'status' => $item->status,
 
                 ];
@@ -2648,5 +2649,44 @@ class LevelController extends Controller
 
 
     //  upgrade application logic //
+
+
+    public function uploadVerificationDocuments(Request $request){
+        // dd($request->all());
+        $fileExtension = $request->file->getClientOriginalExtension();
+
+        if ($fileExtension === 'pdf' || $fileExtension === 'jpg') {
+
+            $document = Add_Document::where('question_id',$request->questionId)->where('application_id',$request->applicationId)->where('course_id',$request->courseId)->first();
+
+                if ($document) {
+                    $doc1 = $request->file('file');
+                    $name = $doc1->getClientOriginalName();
+                    $filename = time() . $name;
+                    $doc1->move('documnet/', $filename);
+                    $fileName = $filename;
+                    
+                    $document->on_site_assessor_Id = auth()->user()->id;
+                    if ($request->documentType === 'document') {
+                        $document->verified_document = $fileName;
+                    } elseif($request->documentType === 'photograph') {
+                        $document->photograph = $fileName;
+                    }else{
+                        return response()->json(['error' => 'Document Type Mismatch!']);
+                    }
+                    
+                   $document->update();
+                   return response()->json(['success' => 'File uploaded successfully.']);
+                   
+                } else {
+                    return response()->json(['error' => 'Record not find.']);
+                }
+                
+
+        } else {
+            // Invalid file extension
+            return response()->json(['error' => 'Invalid file extension. Only PDF and JPG files are allowed.']);
+        }
+    }
 
 }
