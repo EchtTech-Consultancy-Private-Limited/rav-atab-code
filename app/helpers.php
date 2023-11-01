@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Add_Document;
 use App\Models\ApplicationCourse;
 use App\Models\DocComment;
 use App\Models\Question;
@@ -695,5 +696,28 @@ function totalDocumentsCount($applicationId){
 function getUserDetail($userId){
     $user = User::find($userId);
     return $user;
+}
+
+function checkVerifiedDocumentUploaded($applicationId,$courseId,$assessorid,$questionId){
+   
+    $document = Add_Document::where('question_id',$applicationId)->where('application_id',$questionId)->where('course_id',$courseId)->where('on_site_assessor_Id',$assessorid)->first(['verified_document']);
+   
+    if ($document) {
+        return $document;
+    } else {
+       return false;
+    }
+    
+}
+
+
+function checkVerifiedPhotographUploaded($applicationId,$courseId,$assessorid,$questionId){
+    $document = Add_Document::where('question_id',$applicationId)->where('application_id',$questionId)->where('course_id',$courseId)->where('on_site_assessor_Id',$assessorid)->first(['photograph']);
+    if ($document) {
+        return $document;
+    } else {
+       return false;
+    }
+    
 }
 

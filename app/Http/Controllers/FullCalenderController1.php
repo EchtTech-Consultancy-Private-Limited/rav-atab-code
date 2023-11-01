@@ -82,17 +82,6 @@ class FullCalenderController extends Controller
      */
     public function ajax(Request $request)
     {
-        //dd($request->event_type);
-        /*if( $request->availability==1)
-          {
-
-            $request->event_class=="available";
-            dd("$request->event_class");
-          }
-          elseif($request->availability==2)
-          {
-             $request->event_class=="unavailable";
-          }*/
 
         switch ($request->type) {
            case 'add':
@@ -135,17 +124,7 @@ class FullCalenderController extends Controller
 
      public function fullcalenderAjax_onsite(Request $request)
     {
-        //dd($request->event_type);
-        /*if( $request->availability==1)
-          {
-
-            $request->event_class=="available";
-            dd("$request->event_class");
-          }
-          elseif($request->availability==2)
-          {
-             $request->event_class=="unavailable";
-          }*/
+      
 
         switch ($request->type) {
            case 'add':

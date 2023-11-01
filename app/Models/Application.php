@@ -34,4 +34,12 @@ class Application extends Model
         });
     }
 
+    public function assignees(){
+        return $this->hasMany(AssessorApplication::class,"application_id","id");
+    }
+
+    public function courses(){
+        return $this->hasMany(ApplicationCourse::class,"application_id","id");
+    }
+
 }

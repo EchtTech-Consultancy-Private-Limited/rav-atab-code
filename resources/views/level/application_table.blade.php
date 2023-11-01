@@ -327,7 +327,7 @@
                                                                            <div class="badge col-orange">Applications In Process</div> @endif
                                                                     </a>
                                                             </td>
-                                                            <td width="180">
+                                                            <td class="text-center">
                                                                 @php
                                                                     $createdDate = \Carbon\Carbon::parse($item->created_at);
                                                                     $expiryDate = $createdDate->addYear();

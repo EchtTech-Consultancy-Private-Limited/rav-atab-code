@@ -248,8 +248,10 @@
                                             <h4 class="header-title mt-2">Pending Applications</h4>
                                         </div>
                                         <div class="body">
-                                            <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
-                                                <table class="table table-responsive" style="width:100%; overflow:hidden;" id="dataTableMain">
+                                            <div class="table-responsive"
+                                                style="width:100%; overflow:hidden; padding-bottom:20px;">
+                                                <table class="table table-responsive"
+                                                    style="width:100%; overflow:hidden;" id="dataTableMain">
                                                     <thead>
                                                         <tr>
                                                             <th> Application ID </th>
@@ -259,26 +261,24 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                       
-                                                           
-                                                                @foreach ($level_list_data as $item_level_list)
-                                                                 <tr>
-                                                                    {{-- @if (checktppaymentstatus($item_level_list->id) <= 0) --}}
 
-                                                                        <td>{{ $item_level_list['application_uid'] }}</td>
+                                                        @foreach ($level_list_data as $item_level_list)
+                                                            <tr>
+
+                                                                <td>{{ $item_level_list['application_uid'] }}</td>
 
 
-                                                                        <td> {{ $item_level_list['level_id'] ?? '' }}</td>
+                                                                <td> {{ $item_level_list['level_id'] ?? '' }}</td>
 
-                                                                        <td> {{ $item_level_list['country_name'] ?? '' }}</td>
+                                                                <td> {{ $item_level_list['country_name'] ?? '' }}</td>
 
-                                                                        <td> <a href="{{ url('/edit-application' . '/' . $item_level_list['id']) }}"
-                                                                                class="btn btn-tbl-edit bg-success"><i
-                                                                                    class="fa fa-edit"></i></a>
-                                                                        </td>
-                                                                    {{-- @endif --}}
-                                                                </tr>
-                                                            @endforeach
+                                                                <td> <a href="{{ url('/edit-application' . '/' . $item_level_list['id']) }}"
+                                                                        class="btn btn-tbl-edit bg-success"><i
+                                                                            class="fa fa-edit"></i></a>
+                                                                </td>
+
+                                                            </tr>
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -293,4 +293,3 @@
 
                 @include('layout.footer')
                 <!-- New JS -->
-</body>

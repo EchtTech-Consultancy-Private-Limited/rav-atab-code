@@ -34,7 +34,7 @@
 
 
     <section class="content">
-        <div class="container-fluid">
+        <div >
             <div class="block-header">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -65,13 +65,13 @@
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
-                            <div class="header">
-                                <h2>Basic Information</h2>
+                            <div class="card-header bg-white text-dark">
+                                <h4 class="mt-2">Basic Information</h4>
                             </div>
                             <div class="body">
                                 
                                 <div class="row clearfix">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Title</strong></label><br>
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>First Name</strong></label><br>
@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <div class="form-line">
 
@@ -218,19 +218,19 @@
                                         </div>
                                     </div>
                                 </div><div class="header">
-                                    <h2>Single Point of Contact Details (SPoC) Details</h2>
+                                    <h2>Single Point of Contact Details (SPoC)</h2>
                                 </div>
                                  <div class="row clearfix">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                      <div class="form-group">
                                         <div class="form-line">
                                            <label ><strong>Person Name</strong></label><br>
-                                               <label >{{ $spocData->Person_Name  }}</label>
+                                               <label >{{ Str::ucfirst($spocData->Person_Name)  }}</label>
                                         </div>
                                      </div>
                                     </div>
 
-                                  <div class="col-sm-4">
+                                  <div class="col-sm-3">
                                      <div class="form-group">
                                         <div class="form-line">
                                            <label><strong>Contact Number</strong></label><br>
@@ -238,7 +238,7 @@
                                         </div>
                                      </div>
                                   </div>
-                                  <div class="col-sm-4">
+                                  <div class="col-sm-3">
                                      <div class="form-group">
                                         <div class="form-line">
 
@@ -248,6 +248,15 @@
 
                                         </div>
                                      </div>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label for="designation"><strong>Designation</strong></label>
+                                            <br>
+                                            <label>{{ Str::ucfirst($spocData->designation) }}</label>
+                                        </div>
+                                    </div>
                                   </div>
                                 </div>
                                 <!-- basic end -->
@@ -265,12 +274,12 @@
         {{-- course detail  --}}
 
         @foreach ($ApplicationCourse as $k => $ApplicationCourses)
-            <div class="row ">
+            <div>
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
-                            <div class="header">
-                                <h2>View Course Information Record No: {{ $k + 1 }}</h2>
+                            <div class="card-header text-dark bg-white">
+                                <h4 class="mt-2">View Course Information Record No: {{ $k + 1 }}</h4>
                             </div>
                             <div class="body">
 
@@ -416,12 +425,12 @@
 
         @isset($ApplicationPayment)
         @foreach ($ApplicationPayment as $ApplicationPayment)
-            <div class="row ">
+            <div>
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
-                            <div class="header">
-                                <h2>Payment Information</h2>
+                            <div class="card-header text-dark bg-white">
+                                <h4 class="mt-2">Payment Information</h4>
                             </div>
                             <div class="body">
 
