@@ -11,6 +11,18 @@ class Application extends Model
     protected $fillable = [
         'user_id',
         'level_id',
+        'gps_pic',
+        'final_remark',
+        'application_uid',
+        'Person_Name',
+        'Contact_Number',
+        'Email_ID',
+        'designation',
+        'city',
+        'state',
+        'country',
+        'ip',
+        'status'
     ];
 
 

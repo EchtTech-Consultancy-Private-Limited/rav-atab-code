@@ -267,7 +267,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('get-application-details/{id}',[applicationController::class,"applicationDetailData"]);
 
-    Route::post('/upload-document-by-assessor',[LevelController::class,"uploadVerificationDocuments"]);
+    Route::post('/upload-document-by-assessor',[LevelController::class,"uploadVerificationDocuments"])->name('upload-document-by-onsite-assessor');
+
+    Route::get('submit-final-report/{id}',[LevelController::class,"submitFinalReport"]);
+    Route::post('submit-final-report/{id}',[LevelController::class,"submitFinalReportPost"]);
 
 });
 

@@ -65,7 +65,7 @@
         margin-right: 10px !important;
     }
 
- 
+
 
     .file-upload {
         display: flex;
@@ -240,11 +240,14 @@
                                                                                 style="border-bottom: 1px solid #ddd; padding:3px; font-size:11px;">
                                                                                 Desktop Assessor
                                                                             </div>
-                                                                            <div class="d-flex" style="padding: 8px;">
+                                                                            <div class="d-flex justify-content-center"
+                                                                                style="padding: 8px; text-align:center;">
                                                                                 @if ($question->documents->isEmpty())
-                                                                                    <span
-                                                                                        class="badge bg-danger text-white">Documents
-                                                                                        not uploaded</span>
+                                                                                    <div class="text-center">
+                                                                                        <span
+                                                                                            class="badge bg-danger text-white">Documents
+                                                                                            not uploaded</span>
+                                                                                    </div>
                                                                                 @else
                                                                                     @if (count(getAssessorDocument($question->id, $application_id, $course_id)) > 0)
                                                                                         @php
@@ -257,7 +260,7 @@
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
-                                                                                                        <div
+                                                                                                    <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
                                                                                                     </div>
@@ -268,7 +271,7 @@
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
-                                                                                                        <div
+                                                                                                    <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
                                                                                                     </div>
@@ -282,7 +285,7 @@
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
-                                                                                                        <div
+                                                                                                    <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
                                                                                                     </div>
@@ -412,6 +415,13 @@
 
 
                                             </div>
+                                            @if ($applicationData->gps_pic == "" || $applicationData->gps_pic == null)
+                                            @if (totalDocumentsCount($application_id) >= 2)
+                                            <div class="d-flex justify-content-end">
+                                             <a href="{{ url('submit-final-report/'.$application_id) }}" class="btn btn-success" style="margin-right: 10px;">Submit Final Report</a>
+                                            </div>
+                                         @endif
+                                            @endif
 
                                         </div>
                                     </div>
@@ -528,8 +538,8 @@
                 });
 
                 $.ajax({
-                    url: '/upload-document-by-assessor', // Your server route
-                    method: 'POST',
+                    url: "{{ route('upload-document-by-onsite-assessor') }}", // Your server route
+                    method:"POST",
                     data: formData,
                     contentType: false,
                     processData: false,
