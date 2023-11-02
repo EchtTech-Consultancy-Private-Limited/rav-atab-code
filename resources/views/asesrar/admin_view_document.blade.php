@@ -225,7 +225,7 @@
                                                                 @foreach ($chapter->questions as $question)
                                                                     <tr>
                                                                         <td>{{ $question->code ?? '' }}</td>
-                                                                        <td class="text-left">
+                                                                        <td width="500" class="text-left">
                                                                             {{ $question->title ?? '' }}</td>
                                                                         <td>
                                                                             <div class="cardContainer">
