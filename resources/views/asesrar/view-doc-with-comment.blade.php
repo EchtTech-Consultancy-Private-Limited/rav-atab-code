@@ -147,7 +147,7 @@
                                                                                     </p>
                                                                                     <p>
                                                                                         <small>This request has been
-                                                                                            received from the admin, and
+                                                                                            received, and
                                                                                             it
                                                                                             marks the last opportunity
                                                                                             for

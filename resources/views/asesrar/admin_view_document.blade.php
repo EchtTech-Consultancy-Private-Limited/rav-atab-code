@@ -225,14 +225,14 @@
                                                                 @foreach ($chapter->questions as $question)
                                                                     <tr>
                                                                         <td>{{ $question->code ?? '' }}</td>
-                                                                        <td class="text-left">
+                                                                        <td width="500" class="text-left">
                                                                             {{ $question->title ?? '' }}</td>
                                                                         <td>
                                                                             <div class="cardContainer">
                                                                                 <div class="cardHeader">
                                                                                     Desktop
                                                                                 </div>
-                                                                                <div class="cardBody">
+                                                                                <div class="cardBody d-flex justify-content-center">
                                                                                     @php
                                                                                         $documentsData = getAdminDocument($question->id, $file[0]->application_id) ?? 0;
                                                                                     @endphp
