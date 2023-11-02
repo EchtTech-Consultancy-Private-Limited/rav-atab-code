@@ -22,6 +22,7 @@ use App\Mail\secretariatadminapplicationmail;
 use App\Mail\assessoradminapplicationmail;
 use App\Mail\assessorapplicationmail;
 use App\Models\AssessorApplication;
+use App\Models\Chapter;
 use App\Models\User;
 use App\Models\Event;
 use Mail;
@@ -553,11 +554,9 @@ class applicationController extends Controller
     }
 
 
-    public function applicationDetailData(Request $request){
-        $application_id = $request->id ?? 0;
-
-        $applicationData = Application::find($application_id);
-
-       return $applicationData;
+    public function applicationDetailData($id){
+        $applicationDetails = Application::find($id);
+        $chapters = Chapter::all();
+       return view('application.application-show',compact('applicationDetails','chapters'));
     }
 }

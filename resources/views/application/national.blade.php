@@ -29,7 +29,7 @@
         line-height: 20px !important;
     }
 
-    .buttonBadge{
+    .buttonBadge {
         font-size: 12px;
         border-radius: 5px;
     }
@@ -114,344 +114,321 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
-                            
-                                
-                                  <!-- The Modal -->
-                                  <div class="modal" id="myModal">
+
+
+                                <!-- The Modal -->
+                                <div class="modal" id="myModal">
                                     <div class="modal-dialog">
-                                      <div class="modal-content">
-                                      
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Modal Heading</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Modal Heading</h4>
+                                                <button type="button" class="close"
+                                                    data-dismiss="modal">&times;</button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                Modal body..
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+
                                         </div>
-                                        
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                          Modal body..
-                                        </div>
-                                        
-                                        <!-- Modal footer -->
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        </div>
-                                        
-                                      </div>
                                     </div>
-                                  </div>
-                                  
                                 </div>
-                                
-                                <table class="table table-responsive" style="width:100%;" id="dataTableMain">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Level </th>
-                                            <th>Application No. </th>
-                                            <th>Courses</th>
-                                            <th>Total Fee</th>
-                                            <th> Payment Date </th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @isset($collection)
-                                            @foreach ($collection as $k => $item)
-                                                <tr
-                                                    class="odd gradeX @if ($item->status == '2') approved_status @elseif($item->status == '1') process_status @elseif($item->status == '0') pending_status @endif">
-                                                    <td>{{ $k + 1 }}</td>
-                                                    <td>{{ $item->level_id ?? '' }}</td>
-                                                    <td>{{ $item->application_uid }}</td>
-                                                    <td>{{ $item->course_count ?? '' }}</td>
+
+                            </div>
+
+                            <table class="table table-responsive" style="width:100%;" id="dataTableMain">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No</th>
+                                        <th>Level </th>
+                                        <th>Application No. </th>
+                                        <th>Courses</th>
+                                        <th>Total Fee</th>
+                                        <th> Payment Date </th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($collection)
+                                        @foreach ($collection as $k => $item)
+                                            <tr
+                                                class="odd gradeX @if ($item->status == '2') approved_status @elseif($item->status == '1') process_status @elseif($item->status == '0') pending_status @endif">
+                                                <td>{{ $k + 1 }}</td>
+                                                <td>{{ $item->level_id ?? '' }}</td>
+                                                <td>{{ $item->application_uid }}</td>
+                                                <td>{{ $item->course_count ?? '' }}</td>
+                                                <td>
+                                                    {{ $item->currency ?? '' }}{{ $item->amount ?? '' }}
+                                                </td>
+                                                <td>{{ date('d F Y', strtotime($item->payment_date)) }}
+                                                </td>
+                                                <td>
+                                                    @if ($item->status == '0')
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
+                                                    @elseif($item->status == 1)
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-light bg-warning">Payment
+                                                            Proccess</a>
+                                                    @elseif ($item->status == '2')
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-primary">Payment
+                                                            Approved</a>
+                                                    @endif
+                                                </td>
+
+                                                @if (Auth::user()->role == 6)
                                                     <td>
-                                                        {{ $item->currency ?? '' }}{{ $item->amount ?? '' }}
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
+                                                            class="btn btn-tbl-edit"><i
+                                                                class="material-icons">visibility</i></a>
                                                     </td>
-                                                    <td>{{ date('d F Y', strtotime($item->payment_date)) }}
-                                                    </td>
+                                                @endif
+                                                @if (Auth::user()->role == 1)
                                                     <td>
-                                                        @if ($item->status == '0')
-                                                            <a type="button" onclick="showApplicationDetail({{ $item->id }})" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
-                                                        @elseif($item->status == 1)
-                                                            <a type="button" onclick="showApplicationDetail({{ $item->id }})" class="p-2 buttonBadge text-light bg-warning">Payment Proccess</a>
-                                                        @elseif ($item->status == '2')
-                                                            <a type="button" onclick="showApplicationDetail({{ $item->id }})" class="p-2 buttonBadge text-white bg-primary">Payment Approved</a>
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
+                                                            class="btn btn-tbl-edit">
+                                                            <i class="material-icons">visibility</i>
+                                                        </a>
+
+                                                        {{-- @if (totalDocumentsCount($item->application_id) >= totalQuestionsCount($item->application_id)) --}}
+                                                        @if (totalDocumentsCount($item->application_id) >= 2)
+                                                            @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
+                                                                <a class="btn btn-tbl-delete bg-primary font-a"
+                                                                    data-bs-toggle="modal"
+                                                                    data-id="{{ $item->application_id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->application_id }}"
+                                                                    id="view">
+                                                                    <i class="fa fa-font" aria-hidden="true"
+                                                                        title=""></i>
+                                                                </a>
+                                                            @endif
+
+                                                            @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
+                                                                <a class="btn btn-tbl-delete bg-danger font-a"
+                                                                    data-bs-toggle="modal"
+                                                                    data-id="{{ $item->application_id }}"
+                                                                    data-bs-target="#view_secreate_popup_{{ $item->application_id }}"
+                                                                    id="view">
+                                                                    <i class="fa fa-scribd" aria-hidden="true"
+                                                                        title=""></i>
+                                                                </a>
+                                                            @endif
                                                         @endif
                                                     </td>
-
-                                                    @if (Auth::user()->role == 6)
-                                                        <td>
-                                                            <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
-                                                                class="btn btn-tbl-edit"><i
-                                                                    class="material-icons">visibility</i></a>
-                                                        </td>
-                                                    @endif
-                                                    @if (Auth::user()->role == 1)
-                                                        <td>
-                                                            <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
-                                                                class="btn btn-tbl-edit">
-                                                                <i class="material-icons">visibility</i>
-                                                            </a>
-
-                                                            {{-- @if (totalDocumentsCount($item->application_id) >= totalQuestionsCount($item->application_id)) --}}
-                                                            @if (totalDocumentsCount($item->application_id) >= 2)
-                                                                @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
-                                                                    <a class="btn btn-tbl-delete bg-primary font-a"
-                                                                        data-bs-toggle="modal"
-                                                                        data-id="{{ $item->application_id }}"
-                                                                        data-bs-target="#View_popup_{{ $item->application_id }}"
-                                                                        id="view">
-                                                                        <i class="fa fa-font" aria-hidden="true"
-                                                                            title=""></i>
-                                                                    </a>
-                                                                @endif
-
-                                                                @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
-                                                                    <a class="btn btn-tbl-delete bg-danger font-a"
-                                                                        data-bs-toggle="modal"
-                                                                        data-id="{{ $item->application_id }}"
-                                                                        data-bs-target="#view_secreate_popup_{{ $item->application_id }}"
-                                                                        id="view">
-                                                                        <i class="fa fa-scribd" aria-hidden="true"
-                                                                            title=""></i>
-                                                                    </a>
-                                                                @endif
-                                                            @endif
-                                                        </td>
-                                                    @endif
-                                                    {{-- popup form --}}
-                                                    <div class="modal fade" id="View_popup_{{ $item->application_id }}"
-                                                        tabindex="-1" role="dialog"
-                                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered modal-lg"
-                                                            role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                                        Assign an
-                                                                        Assessor to the application from the below list
-                                                                    </h5>
-                                                                    <button type="button" class="close"
-                                                                        data-bs-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body mod-css">
-                                                                    <form action="{{ url('/Assigan-application') }}"
-                                                                        method="post">
-                                                                        @csrf
-                                                                        <input type="hidden" name="application_id"
-                                                                            value="{{ $item->application_id }}">
-                                                                        <?php
-                                                                        $application_assessor_arr = listofapplicationassessor($item->application_id);
-                                                                        $assessment_type = checkapplicationassessmenttype($item->application_id);
-                                                                        ?>
-                                                                        <br>
-                                                                        <label class="mb-3"><b>Assessment
-                                                                                Type</b></label><br>
-                                                                        <select name="assessment_type" required
-                                                                            class="form-control assessment_type">
-                                                                            <option value="0">Select Assessment Type
-                                                                            </option>
-                                                                            <option value="1">Desktop Assessment
-                                                                            </option>
-                                                                            <option value="2">On-Site Assessment
-                                                                            </option>
-
-                                                                        </select>
-                                                                        <div class="destop-id"
-                                                                            data-id="{{ $item->application_id }}">
-                                                                            @foreach ($assesors as $k => $assesorsData)
-                                                                                @if ($assesorsData->assessment == 1)
-                                                                                    <br>
-
-                                                                                    <label>
-
-                                                                                        <input type="radio"
-                                                                                            id="assesorsid"
-                                                                                            class="d-none assesorsid "
-                                                                                            name="assessor_id"
-                                                                                            data-application-id="{{ $item->application_id }}"
-                                                                                            value="{{ $assesorsData->id }}"
-                                                                                            @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
-                                                                                        <span>
-                                                                                            {{ ucfirst($assesorsData->firstname) }}
-                                                                                            {{ ucfirst($assesorsData->lastname) }}
-                                                                                            ({{ $assesorsData->email }})
-                                                                                        </span>
-                                                                                    </label>
-                                                                                    <input type="hidden" name="sec_email[]"
-                                                                                        value="{{ $assesorsData->email }}">
-                                                                                    <div>
-                                                                                        <?php
-                                                         foreach(get_accessor_date($assesorsData->id) as $date){
-                                                         ?>
-                                                                                        {!! $date !!}
-                                                                                        <?php }   ?>
-                                                                                    </div>
-                                                                                    <input type="hidden"
-                                                                                        name="application_id"
-                                                                                        value="{{ $item->application_id ?? '' }}">
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </div>
-                                                                        <div class="onsite-id">
-                                                                            @foreach ($assesors as $k => $assesorsData)
-                                                                                @if ($assesorsData->assessment == 2)
-                                                                                    <br>
-                                                                                    <label>
-                                                                                        <input type="radio"
-                                                                                            id="assesorsid"
-                                                                                            class="d-none "
-                                                                                            name="assessor_radio"
-                                                                                            value="{{ $assesorsData->id }}"
-                                                                                            @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
-                                                                                        <span>
-                                                                                            {{ $assesorsData->firstname }}
-                                                                                            {{ $assesorsData->lastname }}
-                                                                                            ({{ $assesorsData->email }})
-                                                                                        </span>
-                                                                                    </label>
-                                                                                    <input type="hidden" name="sec_email"
-                                                                                        value="{{ $assesorsData->email }}">
-                                                                                    <div>
-                                                                                        <?php
-                                                         foreach(get_accessor_date($assesorsData->id) as $date){
-                                                         ?>
-                                                                                        {!! $date !!}
-                                                                                        <?php }   ?>
-                                                                                    </div>
-                                                                                    <input type="hidden"
-                                                                                        name="application_id"
-                                                                                        value="{{ $item->application_id ?? '' }}">
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" onclick="cancelAssign()"
-                                                                        class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary my-button">Submit</button>
-                                                                </div>
+                                                @endif
+                                                {{-- popup form --}}
+                                                <div class="modal fade" id="View_popup_{{ $item->application_id }}"
+                                                    tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg"
+                                                        role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                                    Assign an
+                                                                    Assessor to the application from the below list
+                                                                </h5>
+                                                                <button type="button" class="close"
+                                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
                                                             </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <!-- secreate user popup-->
-                                                    <div class="modal fade"
-                                                        id="view_secreate_popup_{{ $item->application_id }}"
-                                                        tabindex="-1" role="dialog"
-                                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered modal-lg"
-                                                            role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                                        Assign
-                                                                        an Secretariat to the application from the below
-                                                                        list </h5>
-                                                                    <button type="button" class="close"
-                                                                        data-bs-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form
-                                                                    action="{{ url('/assigan-secretariat-application') }}"
+                                                            <div class="modal-body mod-css">
+                                                                <form action="{{ url('/Assigan-application') }}"
                                                                     method="post">
                                                                     @csrf
+                                                                    <input type="hidden" name="application_id"
+                                                                        value="{{ $item->application_id }}">
                                                                     <?php
-                                                                    $application_assessor_arr = listofapplicationsecretariat($item->application_id);
+                                                                    $application_assessor_arr = listofapplicationassessor($item->application_id);
                                                                     $assessment_type = checkapplicationassessmenttype($item->application_id);
                                                                     ?>
                                                                     <br>
+                                                                    <label class="mb-3"><b>Assessment
+                                                                            Type</b></label><br>
+                                                                    <select name="assessment_type" required
+                                                                        class="form-control assessment_type">
+                                                                        <option value="0">Select Assessment Type
+                                                                        </option>
+                                                                        <option value="1">Desktop Assessment
+                                                                        </option>
+                                                                        <option value="2">On-Site Assessment
+                                                                        </option>
 
-                                                                    <div class="modal-body mod-css">
-                                                                        @foreach ($secretariatdata as $k => $assesorsData)
-                                                                            <br>
-                                                                            <label>
-                                                                                <input type="checkbox" id="assesorsid"
-                                                                                    class="d-none" name="secretariat_id[]"
-                                                                                    value="{{ $assesorsData->id }}"
-                                                                                    @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
-                                                                                <span>
-                                                                                    {{ $assesorsData->firstname }}
-                                                                                </span>
-                                                                            </label>
-                                                                            <input type="hidden" name="sec_email"
-                                                                                value="{{ $assesorsData->email }}">
+                                                                    </select>
+                                                                    <div class="destop-id"
+                                                                        data-id="{{ $item->application_id }}">
+                                                                        @foreach ($assesors as $k => $assesorsData)
+                                                                            @if ($assesorsData->assessment == 1)
+                                                                                <br>
 
-                                                                            <input type="hidden" name="application_id"
-                                                                                class="application_id"
-                                                                                value="{{ $item->application_id ?? '' }}">
+                                                                                <label>
+
+                                                                                    <input type="radio" id="assesorsid"
+                                                                                        class="d-none assesorsid "
+                                                                                        name="assessor_id"
+                                                                                        data-application-id="{{ $item->application_id }}"
+                                                                                        value="{{ $assesorsData->id }}"
+                                                                                        @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
+                                                                                    <span>
+                                                                                        {{ ucfirst($assesorsData->firstname) }}
+                                                                                        {{ ucfirst($assesorsData->lastname) }}
+                                                                                        ({{ $assesorsData->email }})
+                                                                                    </span>
+                                                                                </label>
+                                                                                <input type="hidden" name="sec_email[]"
+                                                                                    value="{{ $assesorsData->email }}">
+                                                                                <div>
+                                                                                    <?php
+                                                         foreach(get_accessor_date($assesorsData->id) as $date){
+                                                         ?>
+                                                                                    {!! $date !!}
+                                                                                    <?php }   ?>
+                                                                                </div>
+                                                                                <input type="hidden"
+                                                                                    name="application_id"
+                                                                                    value="{{ $item->application_id ?? '' }}">
+                                                                            @endif
                                                                         @endforeach
                                                                     </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary"
-                                                                            data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit"
-                                                                            class="btn btn-primary">Save</button>
+                                                                    <div class="onsite-id">
+                                                                        @foreach ($assesors as $k => $assesorsData)
+                                                                            @if ($assesorsData->assessment == 2)
+                                                                                <br>
+                                                                                <label>
+                                                                                    <input type="radio" id="assesorsid"
+                                                                                        class="d-none "
+                                                                                        name="assessor_radio"
+                                                                                        value="{{ $assesorsData->id }}"
+                                                                                        @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
+                                                                                    <span>
+                                                                                        {{ $assesorsData->firstname }}
+                                                                                        {{ $assesorsData->lastname }}
+                                                                                        ({{ $assesorsData->email }})
+                                                                                    </span>
+                                                                                </label>
+                                                                                <input type="hidden" name="sec_email"
+                                                                                    value="{{ $assesorsData->email }}">
+                                                                                <div>
+                                                                                    <?php
+                                                         foreach(get_accessor_date($assesorsData->id) as $date){
+                                                         ?>
+                                                                                    {!! $date !!}
+                                                                                    <?php }   ?>
+                                                                                </div>
+                                                                                <input type="hidden"
+                                                                                    name="application_id"
+                                                                                    value="{{ $item->application_id ?? '' }}">
+                                                                            @endif
+                                                                        @endforeach
                                                                     </div>
                                                             </div>
-                                                            </form>
+                                                            <div class="modal-footer">
+                                                                <button type="button" onclick="cancelAssign()"
+                                                                    class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary my-button">Submit</button>
+                                                            </div>
                                                         </div>
+                                                        </form>
                                                     </div>
-                                                </tr>
-                                            @endforeach
-                                        @endisset
-                                    </tbody>
-                                </table>
-                            </div>
+                                                </div>
+                                                <!-- secreate user popup-->
+                                                <div class="modal fade"
+                                                    id="view_secreate_popup_{{ $item->application_id }}" tabindex="-1"
+                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg"
+                                                        role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                                    Assign
+                                                                    an Secretariat to the application from the below
+                                                                    list </h5>
+                                                                <button type="button" class="close"
+                                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="{{ url('/assigan-secretariat-application') }}"
+                                                                method="post">
+                                                                @csrf
+                                                                <?php
+                                                                $application_assessor_arr = listofapplicationsecretariat($item->application_id);
+                                                                $assessment_type = checkapplicationassessmenttype($item->application_id);
+                                                                ?>
+                                                                <br>
+
+                                                                <div class="modal-body mod-css">
+                                                                    @foreach ($secretariatdata as $k => $assesorsData)
+                                                                        <br>
+                                                                        <label>
+                                                                            <input type="checkbox" id="assesorsid"
+                                                                                class="d-none" name="secretariat_id[]"
+                                                                                value="{{ $assesorsData->id }}"
+                                                                                @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
+                                                                            <span>
+                                                                                {{ $assesorsData->firstname }}
+                                                                            </span>
+                                                                        </label>
+                                                                        <input type="hidden" name="sec_email"
+                                                                            value="{{ $assesorsData->email }}">
+
+                                                                        <input type="hidden" name="application_id"
+                                                                            class="application_id"
+                                                                            value="{{ $item->application_id ?? '' }}">
+                                                                    @endforeach
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Save</button>
+                                                                </div>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                        @endforeach
+                                    @endisset
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         </div>
+        </div>
     </section>
-    <div class="modal fade" id="applicationModalAndData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="applicationModalAndData" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content p-0 m-0">
-            <div class="modal-body p-0 m-0">
-                <div class="card m-0">
-                    <div class="card-header bg-white text-dark">
-                        <h5>Application Detail</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="applicationDetailContainer"></div>
+            <div class="modal-content p-0 m-0">
+                <div class="modal-body p-0 m-0">
+                    <div class="card m-0">
+                        <div class="card-header bg-white text-dark">
+                            <h5>Application Detail</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="applicationDetailContainer"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-          </div>
         </div>
-      </div>
-      
-
-    <script>
-        function showApplicationDetail(id){
-            let applicationModalBodyContainer = $("#applicationDetailContainer");
-            $('#applicationModalAndData').modal('show');
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('/get-application-details') }}",
-                type: "get",
-                data:{
-                    id:id
-                },
-                success: function(data){
-                    applicationModalBodyContainer.html(data);
-                }
-            });
-        }
-    </script>
+    </div>
 
     <script>
         $('.assessment_type').on('change', function() {
@@ -540,5 +517,5 @@
         }
     </script>
 
-    
+
     @include('layout.footer')

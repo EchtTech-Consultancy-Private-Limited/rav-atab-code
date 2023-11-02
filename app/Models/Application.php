@@ -42,4 +42,8 @@ class Application extends Model
         return $this->hasMany(ApplicationCourse::class,"application_id","id");
     }
 
+    public function payment(){
+        return $this->hasOne(ApplicationPayment::class,"application_id","id");
+    }
+
 }

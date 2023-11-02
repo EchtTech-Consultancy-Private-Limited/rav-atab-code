@@ -62,12 +62,10 @@
     }
 
     .btnDiv a {
-        margin-right: 5px !important;
+        margin-right: 10px !important;
     }
 
-    .btnDiv div {
-        margin-top: -10px;
-    }
+ 
 
     .file-upload {
         display: flex;
@@ -242,7 +240,7 @@
                                                                                 style="border-bottom: 1px solid #ddd; padding:3px; font-size:11px;">
                                                                                 Desktop Assessor
                                                                             </div>
-                                                                            <div class="d-flex" style="padding: 5px;">
+                                                                            <div class="d-flex" style="padding: 8px;">
                                                                                 @if ($question->documents->isEmpty())
                                                                                     <span
                                                                                         class="badge bg-danger text-white">Documents
@@ -255,7 +253,7 @@
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) == 1)
                                                                                             @if (count(getAssessorComments($documentData[0]->id)))
                                                                                                 <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
@@ -266,7 +264,7 @@
                                                                                                 </div>
                                                                                             @else
                                                                                                 <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
@@ -280,7 +278,7 @@
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) == 2)
                                                                                             @foreach ($documentData as $docItem)
                                                                                                 <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
@@ -294,7 +292,7 @@
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) >= 3)
                                                                                             @foreach ($documentData as $docItem)
                                                                                                 <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
@@ -321,7 +319,7 @@
                                                                                     style="padding: 3px; font-size: 11px; border-bottom: 1px solid #ddd;">
                                                                                     On-Site Assessor
                                                                                 </div>
-                                                                                <div style="padding: 5px;">
+                                                                                <div style="padding: 8px;">
                                                                                     <div
                                                                                         class="d-flex justify-content-center">
 
@@ -336,13 +334,13 @@
                                                                                             @if ($fileExtension === 'pdf')
                                                                                                 <a target="_blank"
                                                                                                     href="{{ url('show-course-pdf/' . $verifiedDocument->verified_document) }}"
-                                                                                                    class="btn btn-primary btn-sm mb-0"
+                                                                                                    class="docBtn btn-primary btn-sm mb-0"
                                                                                                     style="margin-right: 10px !important; ">View
                                                                                                     Document </a>
                                                                                             @else
                                                                                                 <a target="_blank"
                                                                                                     href="{{ asset('documnet/' . $verifiedDocument->verified_document) }}"
-                                                                                                    class="btn btn-primary btn-sm mb-0"
+                                                                                                    class="docBtn btn-primary btn-sm mb-0"
                                                                                                     style="margin-right: 10px !important; ">View
                                                                                                     Document </a>
                                                                                             @endif
@@ -374,12 +372,12 @@
                                                                                             @if ($fileExtension === 'pdf')
                                                                                                 <a target="_blank"
                                                                                                     href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
-                                                                                                    class="btn btn-info btn-sm mb-0">View
+                                                                                                    class="docBtn btn-info btn-sm mb-0">View
                                                                                                     Photograph </a>
                                                                                             @else
                                                                                                 <a target="_blank"
                                                                                                     href="{{ asset('documnet/' . $verifiedPhotograph->photograph) }}"
-                                                                                                    class="btn btn-secondary btn-sm mb-0">View
+                                                                                                    class="docBtn btn-secondary btn-sm mb-0">View
                                                                                                     Photograph </a>
                                                                                             @endif
                                                                                         @else

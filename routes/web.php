@@ -265,7 +265,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('faq', [LevelController::class, 'faqslist']);
     Route::get('pending-payment-list', [LevelController::class, 'pendingPaymentlist']);
 
-    Route::get('get-application-details',[applicationController::class,"applicationDetailData"]);
+    Route::get('get-application-details/{id}',[applicationController::class,"applicationDetailData"]);
 
     Route::post('/upload-document-by-assessor',[LevelController::class,"uploadVerificationDocuments"]);
 
