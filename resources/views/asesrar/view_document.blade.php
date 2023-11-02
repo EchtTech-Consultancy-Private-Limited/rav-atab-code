@@ -62,12 +62,10 @@
     }
 
     .btnDiv a {
-        margin-right: 5px !important;
+        margin-right: 10px !important;
     }
 
-    .btnDiv div {
-        margin-top: -10px;
-    }
+
 
     .file-upload {
         display: flex;
@@ -242,11 +240,14 @@
                                                                                 style="border-bottom: 1px solid #ddd; padding:3px; font-size:11px;">
                                                                                 Desktop Assessor
                                                                             </div>
-                                                                            <div class="d-flex" style="padding: 5px;">
+                                                                            <div class="d-flex justify-content-center"
+                                                                                style="padding: 8px; text-align:center;">
                                                                                 @if ($question->documents->isEmpty())
-                                                                                    <span
-                                                                                        class="badge bg-danger text-white">Documents
-                                                                                        not uploaded</span>
+                                                                                    <div class="text-center">
+                                                                                        <span
+                                                                                            class="badge bg-danger text-white">Documents
+                                                                                            not uploaded</span>
+                                                                                    </div>
                                                                                 @else
                                                                                     @if (count(getAssessorDocument($question->id, $application_id, $course_id)) > 0)
                                                                                         @php
@@ -254,24 +255,24 @@
                                                                                         @endphp
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) == 1)
                                                                                             @if (count(getAssessorComments($documentData[0]->id)))
-                                                                                                <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
+                                                                                                <div>
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
                                                                                                     </div>
                                                                                                 </div>
                                                                                             @else
-                                                                                                <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
+                                                                                                <div>
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
                                                                                                     </div>
                                                                                                 </div>
@@ -279,13 +280,13 @@
                                                                                         @endif
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) == 2)
                                                                                             @foreach ($documentData as $docItem)
-                                                                                                <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
+                                                                                                <div>
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
                                                                                                     <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
                                                                                                     </div>
                                                                                                 </div>
@@ -293,13 +294,13 @@
                                                                                         @endif
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) >= 3)
                                                                                             @foreach ($documentData as $docItem)
-                                                                                                <div class="btnDiv">
-                                                                                                    <a class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
+                                                                                                <div>
+                                                                                                    <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
                                                                                                     <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
                                                                                                     </div>
                                                                                                 </div>
@@ -321,18 +322,31 @@
                                                                                     style="padding: 3px; font-size: 11px; border-bottom: 1px solid #ddd;">
                                                                                     On-Site Assessor
                                                                                 </div>
-                                                                                <div style="padding: 5px;">
+                                                                                <div style="padding: 8px;">
                                                                                     <div
                                                                                         class="d-flex justify-content-center">
 
                                                                                         @php
-                                                                                            $verifiedDocument = checkVerifiedDocumentUploaded($application_id, $course_id, auth()->user()->id, $question->id);
+                                                                                            $verifiedDocument = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
                                                                                         @endphp
-                                                                                        @if ($verifiedDocument)
-                                                                                            <a href=""
-                                                                                                class="btn btn-primary btn-sm mb-0"
-                                                                                                style="margin-right: 10px !important; ">View
-                                                                                                Document</a>
+                                                                                        @if (isset($verifiedDocument->verified_document) && !empty($verifiedDocument->verified_document))
+                                                                                            @php
+                                                                                                $fileExtension = pathinfo($verifiedDocument->verified_document, PATHINFO_EXTENSION);
+                                                                                            @endphp
+
+                                                                                            @if ($fileExtension === 'pdf')
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ url('show-course-pdf/' . $verifiedDocument->verified_document) }}"
+                                                                                                    class="docBtn btn-primary btn-sm mb-0"
+                                                                                                    style="margin-right: 10px !important; ">View
+                                                                                                    Document </a>
+                                                                                            @else
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ asset('documnet/' . $verifiedDocument->verified_document) }}"
+                                                                                                    class="docBtn btn-primary btn-sm mb-0"
+                                                                                                    style="margin-right: 10px !important; ">View
+                                                                                                    Document </a>
+                                                                                            @endif
                                                                                         @else
                                                                                             <div class="file-upload"
                                                                                                 style="margin-right: 5px !important;">
@@ -350,13 +364,25 @@
                                                                                                     onchange="uploadFile('document-upload-{{ $question->id }}', 'document-label-{{ $question->id }}','{{ $question->id }}','{{ $application_id }}','{{ $course_id }}','document')">
                                                                                             </div>
                                                                                         @endif
+                                                                                        @php
+                                                                                            $verifiedPhotograph = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
+                                                                                        @endphp
+                                                                                        @if (isset($verifiedPhotograph->photograph) && !empty($verifiedPhotograph->photograph))
                                                                                             @php
-                                                                                                $verifiedPhotograph = checkVerifiedPhotographUploaded($application_id, $course_id, auth()->user()->id, $question->id);
+                                                                                                $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
                                                                                             @endphp
-                                                                                        @if ($verifiedPhotograph)
-                                                                                            <a href=""
-                                                                                                class="btn btn-info btn-sm mb-0">View
-                                                                                                Photograph</a>
+
+                                                                                            @if ($fileExtension === 'pdf')
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
+                                                                                                    class="docBtn btn-info btn-sm mb-0">View
+                                                                                                    Photograph </a>
+                                                                                            @else
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ asset('documnet/' . $verifiedPhotograph->photograph) }}"
+                                                                                                    class="docBtn btn-secondary btn-sm mb-0">View
+                                                                                                    Photograph </a>
+                                                                                            @endif
                                                                                         @else
                                                                                             <div class="file-upload">
                                                                                                 <label
@@ -389,6 +415,13 @@
 
 
                                             </div>
+                                            @if ($applicationData->gps_pic == "" || $applicationData->gps_pic == null)
+                                            @if (totalDocumentsCount($application_id) >= 2)
+                                            <div class="d-flex justify-content-end">
+                                             <a href="{{ url('submit-final-report/'.$application_id) }}" class="btn btn-success" style="margin-right: 10px;">Submit Final Report</a>
+                                            </div>
+                                         @endif
+                                            @endif
 
                                         </div>
                                     </div>
@@ -505,8 +538,8 @@
                 });
 
                 $.ajax({
-                    url: '/upload-document-by-assessor', // Your server route
-                    method: 'POST',
+                    url: "{{ route('upload-document-by-onsite-assessor') }}", // Your server route
+                    method:"POST",
                     data: formData,
                     contentType: false,
                     processData: false,

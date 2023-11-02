@@ -11,6 +11,18 @@ class Application extends Model
     protected $fillable = [
         'user_id',
         'level_id',
+        'gps_pic',
+        'final_remark',
+        'application_uid',
+        'Person_Name',
+        'Contact_Number',
+        'Email_ID',
+        'designation',
+        'city',
+        'state',
+        'country',
+        'ip',
+        'status'
     ];
 
 
@@ -40,6 +52,10 @@ class Application extends Model
 
     public function courses(){
         return $this->hasMany(ApplicationCourse::class,"application_id","id");
+    }
+
+    public function payment(){
+        return $this->hasOne(ApplicationPayment::class,"application_id","id");
     }
 
 }

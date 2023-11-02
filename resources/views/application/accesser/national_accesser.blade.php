@@ -20,7 +20,7 @@
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
 
-       @include('layout.topbar')
+    @include('layout.topbar')
 
     <div>
 
@@ -41,52 +41,78 @@
 
     </div>
 
-<style>
+    <style>
+        .blinking-btn {
+            background-color: #004A7F;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            border: none;
+            color: #FFFFFF;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Arial;
+            font-size: 15px;
+            padding: 3px 7px;
+            text-align: center;
+            text-decoration: none;
+            -webkit-animation: glowing 1500ms infinite;
+            -moz-animation: glowing 1500ms infinite;
+        }
 
-.blinking-btn{
-    background-color: #004A7F;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  border: none;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Arial;
-  font-size: 15px;
-    padding: 3px 7px;
-  text-align: center;
-  text-decoration: none;
-  -webkit-animation: glowing 1500ms infinite;
-  -moz-animation: glowing 1500ms infinite;
-}
+        @-webkit-keyframes glowing {
+            0% {
+                background-color: #B20000;
+                -webkit-box-shadow: 0 0 3px #B20000;
+            }
 
-@-webkit-keyframes glowing {
-  0% { background-color: #B20000; -webkit-box-shadow: 0 0 3px #B20000; }
-  50% { background-color: #FF0000; -webkit-box-shadow: 0 0 40px #FF0000; }
-  100% { background-color: #B20000; -webkit-box-shadow: 0 0 3px #B20000; }
-}
+            50% {
+                background-color: #FF0000;
+                -webkit-box-shadow: 0 0 40px #FF0000;
+            }
 
-@-moz-keyframes glowing {
-  0% { background-color: #B20000; -moz-box-shadow: 0 0 3px #B20000; }
-  50% { background-color: #FF0000; -moz-box-shadow: 0 0 40px #FF0000; }
-  100% { background-color: #B20000; -moz-box-shadow: 0 0 3px #B20000; }
-}
-/*
-@-o-keyframes glowing {
-  0% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
-  50% { background-color: #FF0000; box-shadow: 0 0 40px #FF0000; }
-  100% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
-}
+            100% {
+                background-color: #B20000;
+                -webkit-box-shadow: 0 0 3px #B20000;
+            }
+        }
 
-@keyframes glowing {
-  0% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
-  50% { background-color: #FF0000; box-shadow: 0 0 40px #FF0000; }
-  100% { background-color: #B20000; box-shadow: 0 0 3px #B20000; }
-} */
+        @-moz-keyframes glowing {
+            0% {
+                background-color: #B20000;
+                -moz-box-shadow: 0 0 3px #B20000;
+            }
 
-</style>
+            50% {
+                background-color: #FF0000;
+                -moz-box-shadow: 0 0 40px #FF0000;
+            }
 
+            100% {
+                background-color: #B20000;
+                -moz-box-shadow: 0 0 3px #B20000;
+            }
+        }
 
+    
+    </style>
+
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        </script>
+    @elseif(Session::has('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+            });
+        </script>
+    @endif
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -97,7 +123,7 @@
                                 <h4 class="page-title">National Applications</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
-                                <a href="{{url('/dashboard')}}">
+                                <a href="{{ url('/dashboard') }}">
                                     <i class="fas fa-home"></i> Home</a>
                             </li>
                             <li class="breadcrumb-item bcrumb-2">
@@ -117,7 +143,8 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
-                                <table class="table display nowrap" style="width:100%; overflow:hidden;" id="dataTableMain">
+                                <table class="table display nowrap" style="width:100%; overflow:hidden;"
+                                    id="dataTableMain">
                                     <thead>
                                         <tr>
                                             <th class="center">Sr.No</th>
@@ -136,39 +163,43 @@
                                     </thead>
                                     <tbody>
                                         @isset($collection)
-                                        @foreach ($collection as $k=> $item)
+                                            @foreach ($collection as $k => $item)
+                                                <?php
+                                                $assessor_id = listofapplicationassessor($item->application_id);
+                                                ?>
 
-                                        <?php
-                                        $assessor_id = listofapplicationassessor($item->application_id);
-                                        ?>
+                                                <tr class="odd gradeX">
+                                                    <td class="center">{{ $k + 1 }}</td>
+                                                    <td class="center">{{ $item->level_id }}</td>
+                                                    <td class="center">
+                                                        {{ $item->application_uid ?? 'something went wrong!' }}</td>
+                                                    <td class="center">{{ $item->course_count }}</td>
+                                                    <td class="center">
+                                                        {{ application_submission_date($item->application_id, $assessor_id) }}
+                                                    </td>
+                                                    <td class="center">
+                                                        {{ assessor_assign_date($item->application_id, $assessor_id) }}</td>
+                                                    <td class="center">{{ showstate($item->state) }}</td>
 
-                                        <tr class="odd gradeX">
-                                            <td class="center">{{ $k+1 }}</td>
-                                            <td class="center">{{ $item->level_id  }}</td>
-                                            <td class="center">{{($item->application_uid ?? 'something went wrong!')}}</td>
-                                            <td class="center">{{  $item->course_count  }}</td>
-                                            <td class="center">{{application_submission_date($item->application_id,$assessor_id)}}</td>
-                                            <td class="center">{{assessor_assign_date($item->application_id,$assessor_id)}}</td>
-                                            <td class="center">{{ showstate($item->state)}}</td>
+                                                    <td class="center">
+                                                        <a href="{{ url('/Assessor-view/' . dEncrypt($item->application_id)) }}"
+                                                            class="btn btn-tbl-edit"><i
+                                                                class="material-icons">visibility</i></a>
 
-                                            <td class="center">
-                                                <a href="{{ url('/Assessor-view/'.dEncrypt($item->application_id)) }}" class="btn btn-tbl-edit"><i class="material-icons">visibility</i></a>
-
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @endisset
-                                 </tbody>
+                                    </tbody>
                                 </table>
                             </div>
 
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        </div>
     </section>
 
     @include('layout.footer')
-

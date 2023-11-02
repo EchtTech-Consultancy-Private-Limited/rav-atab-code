@@ -41,5 +41,17 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/magnific-popup.css') }}">
+    <style>
+       .docBtn{
+        padding: 6px;
+        color: #fff;
+       
+        border-radius: 4px;
+        margin-right: 5px;
+    }
+    .docBtn:hover{
+        color: #fff;
+    }
+    </style>
 
     

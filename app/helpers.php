@@ -721,3 +721,31 @@ function checkVerifiedPhotographUploaded($applicationId,$courseId,$assessorid,$q
     
 }
 
+
+function checkVerifiedDocumentAvailable($application_id,$course_id,$assessor_id,$question_id)
+    {
+        $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
+            ->where('course_id', $course_id)
+            ->where('on_site_assessor_Id', $assessor_id)
+            ->first();
+
+        if ($document) {
+            return $document;
+        } else {
+            return false;
+        }
+    }
+
+    function checkVerifiedDocumentAvailableForAdmin($application_id,$course_id,$question_id)
+    {
+        $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
+            ->where('course_id', $course_id)
+            ->first();
+
+        if ($document) {
+            return $document;
+        } else {
+            return false;
+        }
+    }
+

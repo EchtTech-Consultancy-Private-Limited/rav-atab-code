@@ -84,13 +84,14 @@ class LevelController extends Controller
     public function admin_view($id)
     {
         $Application = Application::whereid(dDecrypt($id))->get();
+        $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($Application[0]->id)->get();
         $ApplicationPayment = ApplicationPayment::whereapplication_id($Application[0]->id)->get();
         // dd($ApplicationPayment);
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($Application[0]->id)->get();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
+        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $applicationData]);
     }
 
     public function level_view($id)
@@ -1019,11 +1020,11 @@ class LevelController extends Controller
             'transaction_no.required' => 'The transaction number is required.',
             'transaction_no.unique' => 'The transaction number is already in use.',
             'transaction_no.regex' => 'The transaction number must not contain special characters or spaces.',
-        
+
             'reference_no.required' => 'The reference number is required.',
             'reference_no.unique' => 'The reference number is already in use.',
             'reference_no.regex' => 'The reference number must not contain special characters or spaces.',
-        
+
             'payment.required' => 'Please select a payment mode.'
         ]);
 
@@ -1278,8 +1279,10 @@ class LevelController extends Controller
 
         $chapters = Chapter::all();
 
+        $applicationData = Application::find($id);
 
-        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id'));
+
+        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id','applicationData'));
     }
 
     public function document_report_verified_by_assessor($id, $course_id)
@@ -2246,16 +2249,16 @@ class LevelController extends Controller
                     'read_by' => $assesorId
                 ]);
             }
-        }else{
+        } else {
             $notifications = AssessorApplication::where('application_id', $appId)->get();
-           
+
             foreach ($notifications as $item) {
                 if ($item->read_by !== $assesorId) {
                     $alreadyPicked = 1;
                 }
             }
 
-            if($alreadyPicked === 1){
+            if ($alreadyPicked === 1) {
                 $alreadyPicked = AssessorApplication::where('application_id', $appId)->first();
             }
         }
@@ -2270,7 +2273,7 @@ class LevelController extends Controller
         // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application,'alreadyPicked' => $alreadyPicked]);
+        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application, 'alreadyPicked' => $alreadyPicked]);
     }
 
     public function secretariat_view($id)
@@ -2469,7 +2472,7 @@ class LevelController extends Controller
                 'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
-        
+
 
 
 
@@ -2510,18 +2513,18 @@ class LevelController extends Controller
             ->select('applications.*', 'countries.name as country_name')
             ->join('countries', 'applications.country', '=', 'countries.id')->latest()->get();
 
-       
 
-            $finalData = [];
+
+        $finalData = [];
         foreach ($level_list_data as $item) {
-            $paymentData = DB::table('application_payments')->where('application_id',$item->id)->first();
-            $country = DB::table('countries')->where('id',$item->country)->orderBy('id','desc')->first();
+            $paymentData = DB::table('application_payments')->where('application_id', $item->id)->first();
+            $country = DB::table('countries')->where('id', $item->country)->orderBy('id', 'desc')->first();
             if (!$paymentData) {
                 $finalData[] = [
                     'id' => $item->id,
                     'application_uid' => $item->application_uid,
                     'level_id' => $item->level_id,
-                    'user_id ' => $item->user_id ,
+                    'user_id ' => $item->user_id,
                     'Person_Name' => $item->Person_Name,
                     'Contact_Number' => $item->Contact_Number,
                     'Email_ID' => $item->Email_ID,
@@ -2536,7 +2539,7 @@ class LevelController extends Controller
         }
 
         $level_list_data = $finalData;
-        
+
         return view('level.pendinglistApplication', ['level_list_data' => $level_list_data]);
     }
 
@@ -2651,42 +2654,79 @@ class LevelController extends Controller
     //  upgrade application logic //
 
 
-    public function uploadVerificationDocuments(Request $request){
+    public function uploadVerificationDocuments(Request $request)
+    {
         // dd($request->all());
         $fileExtension = $request->file->getClientOriginalExtension();
 
         if ($fileExtension === 'pdf' || $fileExtension === 'jpg') {
 
-            $document = Add_Document::where('question_id',$request->questionId)->where('application_id',$request->applicationId)->where('course_id',$request->courseId)->first();
+            $document = Add_Document::where('question_id', $request->questionId)->where('application_id', $request->applicationId)->where('course_id', $request->courseId)->first();
 
-                if ($document) {
-                    $doc1 = $request->file('file');
-                    $name = $doc1->getClientOriginalName();
-                    $filename = time() . $name;
-                    $doc1->move('documnet/', $filename);
-                    $fileName = $filename;
-                    
-                    $document->on_site_assessor_Id = auth()->user()->id;
-                    if ($request->documentType === 'document') {
-                        $document->verified_document = $fileName;
-                    } elseif($request->documentType === 'photograph') {
-                        $document->photograph = $fileName;
-                    }else{
-                        return response()->json(['error' => 'Document Type Mismatch!']);
-                    }
-                    
-                   $document->update();
-                   return response()->json(['success' => 'File uploaded successfully.']);
-                   
+            if ($document) {
+                $doc1 = $request->file('file');
+                $name = $doc1->getClientOriginalName();
+                $filename = time() . $name;
+                $doc1->move('documnet/', $filename);
+                $fileName = $filename;
+
+                $document->on_site_assessor_Id = auth()->user()->id;
+                if ($request->documentType === 'document') {
+                    $document->verified_document = $fileName;
+                } elseif ($request->documentType === 'photograph') {
+                    $document->photograph = $fileName;
                 } else {
-                    return response()->json(['error' => 'Record not find.']);
+                    return response()->json(['error' => 'Document Type Mismatch!']);
                 }
-                
 
+                $document->update();
+                return response()->json(['success' => 'File uploaded successfully.']);
+            } else {
+                return response()->json(['error' => 'Record not find.']);
+            }
         } else {
             // Invalid file extension
             return response()->json(['error' => 'Invalid file extension. Only PDF and JPG files are allowed.']);
         }
     }
 
+    public function submitFinalReport($id)
+    {
+        $applicationData = Application::find($id);
+        return view('application.submit-final-report', compact('applicationData'));
+    }
+
+    public function submitFinalReportPost(Request $request, $id)
+    {
+        $request->validate([
+            'gps_pic' => 'required|image|mimes:jpg,png|max:2048', // Adjust the image size limit as needed
+            'remark' => 'required|max:500',
+        ], [
+            'gps_pic.required' => 'The GPS picture is required.',
+            'gps_pic.image' => 'The GPS picture must be an image (jpg or png).',
+            'gps_pic.mimes' => 'The GPS picture must be in jpg or png format.',
+            'gps_pic.max' => 'The GPS picture must not be larger than 2MB.',
+            'remark.required' => 'The remark field is required.',
+            'remark.max' => 'The remark must not exceed 500 characters.',
+        ]);
+
+        $doc1 = $request->file('gps_pic');
+        $name = $doc1->getClientOriginalName();
+        $filename = time() . $name;
+        $doc1->move('documnet/', $filename);
+        $fileName = $filename;
+
+        $applicationData = Application::find($id);
+
+        $update = $applicationData->update([
+            'final_remark' => $request->remark,
+            'gps_pic' => $fileName
+        ]);
+
+        if ($update) {
+            return redirect(url('nationl-accesser'))->with('success',"Report submit successfully");
+        }else{
+            return "fail";
+        }
+    }
 }
