@@ -173,15 +173,19 @@
                                                 <td>{{ date('d F Y', strtotime($item->payment_date)) }}
                                                 </td>
                                                 <td>
-                                                    @if ($item->status == '0')
-                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
-                                                    @elseif($item->status == 1)
-                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-light bg-warning">Payment
-                                                            Proccess</a>
-                                                    @elseif ($item->status == '2')
-                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-primary">Payment
-                                                            Approved</a>
-                                                    @endif
+                                                   @if (totalDocumentsCount($item->application_id) > 0)
+                                                   <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-danger">Application In Processing</a>
+                                                   @else
+                                                   @if ($item->status == '0')
+                                                   <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
+                                               @elseif($item->status == 1)
+                                                   <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-light bg-warning">Payment
+                                                       Proccess</a>
+                                               @elseif ($item->status == '2')
+                                                   <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-primary">Payment
+                                                       Approved</a>
+                                               @endif
+                                                   @endif
                                                 </td>
 
                                                 @if (Auth::user()->role == 6)

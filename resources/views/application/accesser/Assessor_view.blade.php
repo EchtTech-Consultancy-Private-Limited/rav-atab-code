@@ -56,12 +56,12 @@
             </div>
 
             <div>
-                @if ($alreadyPicked)
+                {{-- @if ($alreadyPicked)
                     <div class="bg-warning p-2 border-radius-per-5">
                         <h4>Working someone</h4>
                         <p>{{ getUserDetail($alreadyPicked->read_by)->firstname ?? 'Firstname' }} {{ getUserDetail($alreadyPicked->read_by)->lastname ?? 'Lastname' }} working on this application.</p>
                     </div>
-                @endif
+                @endif --}}
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
