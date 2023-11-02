@@ -252,24 +252,24 @@
                                                                                         @endphp
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) == 1)
                                                                                             @if (count(getAssessorComments($documentData[0]->id)))
-                                                                                                <div class="btnDiv">
+                                                                                                <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
-                                                                                                    <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        <div
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
                                                                                                     </div>
                                                                                                 </div>
                                                                                             @else
-                                                                                                <div class="btnDiv">
+                                                                                                <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
-                                                                                                    <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        <div
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
                                                                                                     </div>
                                                                                                 </div>
@@ -277,13 +277,13 @@
                                                                                         @endif
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) == 2)
                                                                                             @foreach ($documentData as $docItem)
-                                                                                                <div class="btnDiv">
+                                                                                                <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
-                                                                                                    <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        <div
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
                                                                                                     </div>
                                                                                                 </div>
@@ -291,13 +291,13 @@
                                                                                         @endif
                                                                                         @if (count(getAssessorDocument($question->id, $application_id, $course_id)) >= 3)
                                                                                             @foreach ($documentData as $docItem)
-                                                                                                <div class="btnDiv">
+                                                                                                <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
                                                                                                     <div
-                                                                                                        style="font-size: 10px;">
+                                                                                                        style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
                                                                                                     </div>
                                                                                                 </div>

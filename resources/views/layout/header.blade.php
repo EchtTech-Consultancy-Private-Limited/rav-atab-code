@@ -45,8 +45,9 @@
        .docBtn{
         padding: 6px;
         color: #fff;
-        font-size: 13px;
+       
         border-radius: 4px;
+        margin-right: 5px;
     }
     .docBtn:hover{
         color: #fff;
