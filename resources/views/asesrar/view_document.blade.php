@@ -326,13 +326,13 @@
                                                                                         class="d-flex justify-content-center">
 
                                                                                         @php
-                                                                                            $verifiedDocument = checkVerifiedDocumentUploaded($application_id, $course_id, auth()->user()->id, $question->id);
+                                                                                            $verifiedDocument = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
                                                                                         @endphp
-                                                                                        @if ($verifiedDocument)
-                                                                                            <a href=""
+                                                                                        @if (isset($verifiedDocument->verified_document))
+                                                                                            <a target="_blank" href="{{  url('show-course-pdf/'.$verifiedDocument->verified_document) }}"
                                                                                                 class="btn btn-primary btn-sm mb-0"
                                                                                                 style="margin-right: 10px !important; ">View
-                                                                                                Document</a>
+                                                                                                Document </a>
                                                                                         @else
                                                                                             <div class="file-upload"
                                                                                                 style="margin-right: 5px !important;">
@@ -350,13 +350,13 @@
                                                                                                     onchange="uploadFile('document-upload-{{ $question->id }}', 'document-label-{{ $question->id }}','{{ $question->id }}','{{ $application_id }}','{{ $course_id }}','document')">
                                                                                             </div>
                                                                                         @endif
-                                                                                            @php
-                                                                                                $verifiedPhotograph = checkVerifiedPhotographUploaded($application_id, $course_id, auth()->user()->id, $question->id);
-                                                                                            @endphp
-                                                                                        @if ($verifiedPhotograph)
-                                                                                            <a href=""
+                                                                                        @php
+                                                                                            $verifiedPhotograph = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
+                                                                                        @endphp
+                                                                                        @if (isset($verifiedPhotograph->photograph))
+                                                                                            <a href="{{ url('show-course-pdf/'.$verifiedPhotograph->photograph) }}"
                                                                                                 class="btn btn-info btn-sm mb-0">View
-                                                                                                Photograph</a>
+                                                                                                Photograph </a>
                                                                                         @else
                                                                                             <div class="file-upload">
                                                                                                 <label
