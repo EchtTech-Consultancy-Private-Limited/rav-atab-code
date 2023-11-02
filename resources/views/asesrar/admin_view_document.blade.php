@@ -232,7 +232,7 @@
                                                                                 <div class="cardHeader">
                                                                                     Desktop
                                                                                 </div>
-                                                                                <div class="cardBody">
+                                                                                <div class="cardBody d-flex justify-content-center">
                                                                                     @php
                                                                                         $documentsData = getAdminDocument($question->id, $file[0]->application_id) ?? 0;
                                                                                     @endphp
