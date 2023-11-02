@@ -328,11 +328,24 @@
                                                                                         @php
                                                                                             $verifiedDocument = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
                                                                                         @endphp
-                                                                                        @if (isset($verifiedDocument->verified_document))
-                                                                                            <a target="_blank" href="{{  url('show-course-pdf/'.$verifiedDocument->verified_document) }}"
-                                                                                                class="btn btn-primary btn-sm mb-0"
-                                                                                                style="margin-right: 10px !important; ">View
-                                                                                                Document </a>
+                                                                                        @if (isset($verifiedDocument->verified_document) && !empty($verifiedDocument->verified_document))
+                                                                                            @php
+                                                                                                $fileExtension = pathinfo($verifiedDocument->verified_document, PATHINFO_EXTENSION);
+                                                                                            @endphp
+
+                                                                                            @if ($fileExtension === 'pdf')
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ url('show-course-pdf/' . $verifiedDocument->verified_document) }}"
+                                                                                                    class="btn btn-primary btn-sm mb-0"
+                                                                                                    style="margin-right: 10px !important; ">View
+                                                                                                    Document </a>
+                                                                                            @else
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ asset('documnet/' . $verifiedDocument->verified_document) }}"
+                                                                                                    class="btn btn-primary btn-sm mb-0"
+                                                                                                    style="margin-right: 10px !important; ">View
+                                                                                                    Document </a>
+                                                                                            @endif
                                                                                         @else
                                                                                             <div class="file-upload"
                                                                                                 style="margin-right: 5px !important;">
@@ -353,10 +366,22 @@
                                                                                         @php
                                                                                             $verifiedPhotograph = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
                                                                                         @endphp
-                                                                                        @if (isset($verifiedPhotograph->photograph))
-                                                                                            <a href="{{ url('show-course-pdf/'.$verifiedPhotograph->photograph) }}"
-                                                                                                class="btn btn-info btn-sm mb-0">View
-                                                                                                Photograph </a>
+                                                                                        @if (isset($verifiedPhotograph->photograph) && !empty($verifiedPhotograph->photograph))
+                                                                                            @php
+                                                                                                $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
+                                                                                            @endphp
+
+                                                                                            @if ($fileExtension === 'pdf')
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
+                                                                                                    class="btn btn-info btn-sm mb-0">View
+                                                                                                    Photograph </a>
+                                                                                            @else
+                                                                                                <a target="_blank"
+                                                                                                    href="{{ asset('documnet/' . $verifiedPhotograph->photograph) }}"
+                                                                                                    class="btn btn-secondary btn-sm mb-0">View
+                                                                                                    Photograph </a>
+                                                                                            @endif
                                                                                         @else
                                                                                             <div class="file-upload">
                                                                                                 <label
