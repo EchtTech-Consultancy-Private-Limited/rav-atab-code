@@ -213,8 +213,9 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sr.No.</th>
-                                                            <th>Objective criteria</th>
+                                                            <th width="400">Objective criteria</th>
                                                             <th> Documents</th>
+                                                            <th>Remarks</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -298,7 +299,8 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                                         target="_blank"
-                                                                                                        href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
+                                                                                                        href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}
+                                                                                                    </a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
@@ -407,6 +409,10 @@
 
 
                                                                     </td>
+                                                                    <td>
+                                                                        <a target="_blank" href="{{ url('remarks/' . $applicationData->id . '/' . $course_id . '/' . $question->id) }}"
+                                                                            class="btn btn-info btn-sm p-2 mb-0"><i class="fa fa-comments"></i> Remarks</a>
+                                                                    </td>
                                                                 </tr>
                                                             @endforeach
                                                         @endforeach
@@ -415,12 +421,16 @@
 
 
                                             </div>
-                                            @if ($applicationData->gps_pic == "" || $applicationData->gps_pic == null)
-                                            @if (totalDocumentsCount($application_id) >= 2)
-                                            <div class="d-flex justify-content-end">
-                                             <a href="{{ url('submit-final-report/'.$application_id) }}" class="btn btn-success" style="margin-right: 10px;">Submit Final Report</a>
-                                            </div>
-                                         @endif
+                                            @if (auth()->user()->assessment == 2)
+                                                @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
+                                                    @if (totalDocumentsCount($application_id) >= 2)
+                                                        <div class="d-flex justify-content-end">
+                                                            <a href="{{ url('submit-final-report/' . $application_id) }}"
+                                                                class="btn btn-success"
+                                                                style="margin-right: 10px;">Submit</a>
+                                                        </div>
+                                                    @endif
+                                                @endif
                                             @endif
 
                                         </div>
@@ -539,7 +549,7 @@
 
                 $.ajax({
                     url: "{{ route('upload-document-by-onsite-assessor') }}", // Your server route
-                    method:"POST",
+                    method: "POST",
                     data: formData,
                     contentType: false,
                     processData: false,

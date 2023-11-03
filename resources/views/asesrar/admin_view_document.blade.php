@@ -419,7 +419,7 @@
         $('#show_view_doc_options').on('change', function() {
 
             var listvalue = $(this).val();
-            //alert(listvalue);
+           
             if (listvalue == 1) {
                 $("#view_doc").show();
                 $("#show_comments").show();

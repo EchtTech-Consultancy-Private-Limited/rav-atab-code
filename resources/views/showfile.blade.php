@@ -3,20 +3,16 @@
 
 <title>RAV Accreditation</title>
 
+<style>
+    .remarkTable th, td{
+        padding: 10px !important;
+    }
+</style>
+
 </head>
 
 <body class="light">
-    <!-- Page Loader -->
-    {{-- <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="m-t-30">
-                <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
-            </div>
-            <p>Please wait...</p>
-        </div>
-    </div> --}}
-    <!-- #END# Page Loader -->
-    <!-- Overlay For Sidebars -->
+   
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
 
@@ -63,6 +59,64 @@
             </div>
             @endif
 
+            @if (auth()->user()->role == 2 || auth()->user()->role == 3)
+            <form action="{{ url('submit-remark') }}" method="post">
+                @csrf
+                <input type="hidden" name="document_id" value="{{ $document_id ?? 0 }}">
+                <input type="hidden" name="application_id" value="{{ $application_id ?? 0 }}">
+                <input type="hidden" name="tpId" value="{{ $tpId ?? 0 }}">
+                <div class="card">
+                    <div class="card-header bg-white text-dark">
+                        <h5 class="mt-2">
+                           Write Remark
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="remark">Remark</label>
+                            <textarea name="remark" class="form-control" placeholder="Write remark..."></textarea>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary mb-0">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @if (!$remarks->isEmpty())
+            <div class="card">
+                <div class="card-header bg-white text-dark">
+                    <h5 class="mt-2">
+                        Remark History
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover remarkTable mb-0">
+                        <thead>
+                            <th>Sr.No</th>
+                            <th>Remark</th>
+                            <th>Added By</th>
+                        </thead>
+                        <tbody>
+                            @foreach ($remarks as $remark)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $remark->remark }}</td>
+                                    <td>{{ $remark->user->firstname ?? '' }} {{ $remark->user->middlename ?? '' }} {{ $remark->user->lastname ?? '' }}{{ $remark->created_by === auth()->user()->id ? '(You)' : ''}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+
+            @endif
+          
             <div class="row ">
 
             <div class="row clearfix">

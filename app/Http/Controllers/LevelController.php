@@ -1264,8 +1264,9 @@ class LevelController extends Controller
 
         $chapters = Chapter::all();
 
+        $applicationData = Application::find($application_id);
 
-        return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id'));
+        return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id','applicationData'));
     }
 
 
@@ -2724,7 +2725,7 @@ class LevelController extends Controller
         ]);
 
         if ($update) {
-            return redirect(url('nationl-accesser'))->with('success',"Report submit successfully");
+            return redirect()->back()->with('success',"Report submit successfully");
         }else{
             return "fail";
         }
