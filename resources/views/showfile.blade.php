@@ -60,7 +60,7 @@
             @endif
 
             @if (auth()->user()->role == 2 || auth()->user()->role == 3)
-            <form action="{{ url('submit-remark') }}" method="post">
+            <form action="{{ url('submit-remark') }}" method="post" id="remarkForm">
                 @csrf
                 <input type="hidden" name="document_id" value="{{ $document_id ?? 0 }}">
                 <input type="hidden" name="application_id" value="{{ $application_id ?? 0 }}">
@@ -68,13 +68,15 @@
                 <div class="card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">
-                           Write Remark
+                            Write Remark
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
                             <label for="remark">Remark</label>
-                            <textarea name="remark" class="form-control" placeholder="Write remark..."></textarea>
+                            <textarea name="remark" class="form-control" id="remark" placeholder="Write remark..." maxlength="100"></textarea>
+                            <span id="charCount" class="text-muted"><br/>0 characters</span> <br/><!-- Added character count element -->
+                            <span id="charLimitWarning" class="text-danger"></span>  <br/><!-- Added warning message element -->
                         </div>
                     </div>
                     <div class="card-footer bg-white">
@@ -86,6 +88,7 @@
                     </div>
                 </div>
             </form>
+            
 
             @if (!$remarks->isEmpty())
             <div class="card">
@@ -152,6 +155,37 @@
 
     </section>
 
-
+    <script>
+        $(document).ready(function () {
+            $('#remark').on('input', function () {
+                // Get the current character count
+                let currentCharCount = $(this).val().length;
+                
+                // Update the character count
+                $('#charCount').text(currentCharCount + ' characters');
+    
+                // Check if the character limit is exceeded
+                if (currentCharCount > 100) {
+                    // Trim the text to the maximum allowed characters (100)
+                    $(this).val($(this).val().substring(0, 100));
+                    $('#charLimitWarning').text('Character limit reached');
+                } else {
+                    $('#charLimitWarning').text(''); // Clear the warning message
+                }
+            });
+    
+            $('#remarkForm').submit(function (event) {
+                // Reset any previous validation messages
+                $('.text-danger').remove();
+    
+                // Validate the Remark field
+                let remark = $('#remark').val();
+                if (remark.length === 0) {
+                    event.preventDefault();
+                    $('#remark').after('<span class="text-danger">Remark is required</span>');
+                }
+            });
+        });
+    </script>
     @include('layout.footer')
 
