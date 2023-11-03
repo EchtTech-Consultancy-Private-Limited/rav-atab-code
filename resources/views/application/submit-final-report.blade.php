@@ -36,6 +36,7 @@
                 <h5>Application Summary</h5>
             </div>
         </div>
+        @if ($applicationData->gps_pic == "" || $applicationData->gps_pic == null || $applicationData->final_remark == "" || $applicationData->final_remark == null)
         <div class="card mt-4">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
@@ -51,29 +52,109 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <form action="{{ url('submit-final-report/' . $applicationData->id) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('submit-final-report/' . $applicationData->id) }}" method="post"
+                            enctype="multipart/form-data" id="finalReportForm">
                             @csrf
                             <div class="form-group">
-                                <label for="">Remark</label>
-                                <textarea name="remark" class="form-control" placeholder="Write remarks...">{{ old('remark') }}</textarea>
+                                <label for="remark">Remark</label>
+                                <textarea name="remark" class="form-control" id="remark" placeholder="Write remarks..." maxlength="500">{{ old('remark') }}</textarea>
+                                <span id="charCount" class="text-muted">500 characters remaining</span><br />
+                                <span id="charLimitWarning" class="text-danger"></span>
+                                <!-- Added warning message element -->
                                 @error('remark')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+
                             <div class="form-group">
-                                <label for="" class="txtBold">Upload GPS Location Picture</label><br>
-                                <input type="file" name="gps_pic">
+                                <label for="gps_pic" class="txtBold">Upload GPS Location Picture</label><br>
+                                <input type="file" name="gps_pic" id="gps_pic"><br/>
+                                <span id="gps_pic_error" class="text-danger"></span>
+                                <!-- Define the error element here -->
                                 @error('gps_pic')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
                             <div>
-                                <button class="btn btn-primary btn-sm">Submit</button>
+                                <button class="btn btn-primary btn-sm" type="submit" id="submitBtn">
+                                    <i class="fa fa-paper-plane"></i> Submit Final Report
+                                </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
+        @else
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center">
+                    <i class="fas fa-check-circle fa-5x text-success"></i>
+                    <h5 class="mt-3">Report Successfully Submitted</h5>
+                </div>
+            </div>
+        </div>
+        
+        @endif
+       
     </section>
+
+    <script>
+        $(document).ready(function() {
+            $('#remark').on('input', function() {
+                let charCount = 500 - $(this).val().length;
+                $('#charCount').text(charCount + ' characters remaining');
+
+                if (charCount <= 0) {
+                    $('#charLimitWarning').text('Character limit reached').removeClass().addClass(
+                        'text-primary');
+
+                    // Automatically hide the message after 5 seconds
+                    setTimeout(function() {
+                        $('#charLimitWarning').text('');
+                    }, 5000);
+                } else {
+                    $('#charLimitWarning').text(''); // Clear the warning message
+                }
+            });
+
+            $('#finalReportForm').submit(function(event) {
+                // Reset any previous validation messages
+                $('.text-danger').remove();
+
+                // Validate the Remark field
+                let remark = $('#remark').val();
+                if (remark.length > 500) {
+                    event.preventDefault();
+                    $('#remark').after(
+                        '<span class="text-danger">Remark cannot exceed 500 characters</span>');
+                }
+            });
+
+            // Add an event listener to the file input for immediate feedback
+            $('#gps_pic').on('change', function() {
+                let gpsPic = $(this).val();
+                if (!gpsPic) {
+                    $('#gps_pic_error').text('GPS Location Picture is required');
+                } else {
+                    // Check the file extension
+                    let allowedExtensions = ['jpg', 'jpeg', 'png'];
+                    let fileExtension = gpsPic.split('.').pop().toLowerCase();
+                    if (allowedExtensions.indexOf(fileExtension) === -1) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Invalid File Extension",
+                            text: 'Allowed file extensions are .jpg, .jpeg, and .png'
+                        });
+                        $('#gps_pic_error').text('Allowed file extensions are .jpg, .jpeg, and .png');
+                    }else{
+                        $('#gps_pic_error').text('');
+                    }
+                }
+            });
+        });
+    </script>
     @include('layout.footer')

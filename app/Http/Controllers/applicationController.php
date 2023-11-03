@@ -21,8 +21,10 @@ use App\Mail\secretariatadminapplicationmail;
 
 use App\Mail\assessoradminapplicationmail;
 use App\Mail\assessorapplicationmail;
+use App\Models\Add_Document;
 use App\Models\AssessorApplication;
 use App\Models\Chapter;
+use App\Models\DocumentRemark;
 use App\Models\User;
 use App\Models\Event;
 use Mail;
@@ -43,6 +45,61 @@ class applicationController extends Controller
         // dd("$data");
 
         return view('showfile', ['data' => $data]);
+    }
+
+    public function remarksData($applicationId,$courseId,$questionId){
+     
+
+        $applicationData = Application::find($applicationId);
+
+        $documents = Add_Document::where('question_id',$questionId)->where('application_id',$applicationId)->where('course_id',$courseId)->get();
+
+        $remarks = DocumentRemark::where('application_id',$applicationId)->where('assessor_id',auth()->user()->id)->get();
+
+        return view('remarks-index', compact('applicationData','documents','remarks'));
+    }
+
+    public function documentDetails($name,$applicationId,$document_id)
+    {
+        $data = $name;
+
+        $remarks = DocumentRemark::where('document_id',$document_id)->where('application_id',$applicationId)->get();
+
+        $tpId = Application::find($applicationId);
+        $tpId = $tpId->user_id;
+
+        return view('showfile', ['data' => $data,'remarks'=>$remarks,'application_id'=>$applicationId,'document_id'=>$document_id,'tpId'=>$tpId]);
+    }
+
+    public function saveRemark(Request $request){
+        $request->validate([
+            'remark' => 'required|max:100',
+        ]);
+
+       if (auth()->user()->role == 2) {
+        $assessorId = DB::table('asessor_applications')->where('application_id',$request->application_id)->where('assessment_type',1)->first(['assessor_id']);
+       $assessorId = $assessorId->assessor_id;
+       } else {
+        $assessorId = auth()->user()->id;
+       }
+       
+        
+
+        $saved = DocumentRemark::create([
+            'application_id' => $request->application_id,
+            'document_id' => $request->document_id,
+            'assessor_id' => $assessorId,
+            'tp_id' => $request->tpId,
+            'remark' => $request->remark,
+            'created_by' => auth()->user()->id
+        ]);
+
+        if ($saved) {
+            return redirect()->back()->with('success','Remark Added Successfully');
+        } else {
+            return redirect()->back()->with('error','Something went wrong! Please try again.');
+        }
+        
     }
 
     public function show_course_pdf($name)

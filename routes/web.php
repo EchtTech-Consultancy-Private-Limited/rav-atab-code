@@ -213,6 +213,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('Email-domoin-delete/{id?}', [DashboardController::class, 'email_domoin_delete']);
 
     Route::get('show-pdf/{id?}', [applicationController::class, 'show_pdf']);
+    Route::get('document-detail/{document_name}/{application_id}/{document_id}', [applicationController::class, 'documentDetails']);
+    Route::get('remarks/{application_id}/{course_id}/{question_id}', [applicationController::class, 'remarksData']);
+    Route::post('submit-remark',[applicationController::class,"saveRemark"]);
     Route::get('show-course-pdf/{id?}', [applicationController::class, 'show_course_pdf']);
 
     // Accor Routes
