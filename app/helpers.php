@@ -535,6 +535,76 @@ function getComments($id = null,$applicationID)
     return $html;
 }
 
+function getCommentsForAdmin($id = null,$applicationID)
+{
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id',$applicationID)->get();
+
+    $docIds = $documents->pluck('id');
+
+    $comments = DB::table('doc_comments')->orderByDesc('id')->whereIn('doc_id', $docIds)->get();
+
+    $html = "";
+    if ($comments) {
+        $num = 1;
+        $html = "<table class='table table-bordered'>
+     
+            <tr>
+                <th>Sr. No.</th>
+                <th>Document Code</th>
+                <th>Date</th>
+                <th>Comments</th>
+                <th>Status Code</th>
+                <th>Approved/Rejected By</th>
+            </tr>
+      
+        <tbody>";
+        $class = "";
+        foreach ($comments as $comment) {
+
+            $statusCode = "";
+            if ($comment->status == 4) {
+                $statusCode = "Close";
+            }elseif ($comment->status == 3) {
+                $statusCode = "Not Recommended";
+            } elseif($comment->status == 2){
+                $statusCode = "NC2";
+            }elseif ($comment->status == 1) {
+                $statusCode = "NC1";
+            }
+            elseif ($comment->status == 5) {
+                $statusCode = "Request final approval";
+            }
+            elseif ($comment->status == 6) {
+                $statusCode = "NC3";
+            }
+            else {
+                $statusCode = "Close";
+            }
+            
+
+            if($comment->status == 4){
+                $html .= "<tr class='text-success' style='border-left:3px solid green'>";
+            }else{
+                $html .= "<tr class='text-danger' style='border-left:3px solid red'>" ;
+            }
+           
+            $html .= "<td width='60'>" . $num++ . "</td>";
+            $html .= "<td width='130'>" . $comment->doc_code . "</td>";
+            $html .= "<td width='120'>" . \Carbon\Carbon::parse($comment->created_at)->format('d-m-Y') . "</td>";
+            $html .= "<td>" . $comment->comments . "</td>";
+            $html .= "<td>" . $statusCode ?? '' . "</td>";
+            $html .= "<td>".getUserDetails($comment->user_id)."</td>";
+            $html .= "</tr>";
+        }
+
+        $html .= "</tbody>
+        </table>";
+    }
+
+    return $html;
+}
+
+
 
 function getUserDetails($userId){
     $user =  DB::table('users')->where('id',$userId)->first();
