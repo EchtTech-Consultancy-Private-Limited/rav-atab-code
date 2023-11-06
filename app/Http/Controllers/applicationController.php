@@ -625,4 +625,11 @@ class applicationController extends Controller
         
         return view('admin.application.document-summary',compact('chapters','applicationDetails'));
     }
+
+    public function applicationDocumentsSummaryTP($application_id){
+        $applicationDetails = Application::find($application_id);
+        $chapters = Chapter::all();
+        
+        return view('tp.application-summary',compact('chapters','applicationDetails'));
+    }
 }

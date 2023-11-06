@@ -173,19 +173,25 @@
                                                 <td>{{ date('d F Y', strtotime($item->payment_date)) }}
                                                 </td>
                                                 <td>
-                                                   @if (totalDocumentsCount($item->application_id) > 0)
-                                                   <a href="{{  auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-white bg-warning">Application In Processing</a>
-                                                   @else
-                                                   @if ($item->status == '0')
-                                                   <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
-                                               @elseif($item->status == 1)
-                                                   <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-light bg-warning">Payment
-                                                       Proccess</a>
-                                               @elseif ($item->status == '2')
-                                                   <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-white bg-primary">Payment
-                                                       Approved</a>
-                                               @endif
-                                                   @endif
+                                                    @if (totalDocumentsCount($item->application_id) > 0)
+                                                        <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                            class="p-2 buttonBadge text-white bg-warning">Application In
+                                                            Processing</a>
+                                                    @else
+                                                        @if ($item->status == '0')
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                                class="p-2 buttonBadge text-white bg-danger">Payment
+                                                                Pending</a>
+                                                        @elseif($item->status == 1)
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                                class="p-2 buttonBadge text-light bg-warning">Payment
+                                                                Proccess</a>
+                                                        @elseif ($item->status == '2')
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                                class="p-2 buttonBadge text-white bg-primary">Payment
+                                                                Approved</a>
+                                                        @endif
+                                                    @endif
                                                 </td>
 
                                                 @if (Auth::user()->role == 6)
