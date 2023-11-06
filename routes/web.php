@@ -275,6 +275,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('submit-final-report/{id}',[LevelController::class,"submitFinalReport"]);
     Route::post('submit-final-report/{id}',[LevelController::class,"submitFinalReportPost"]);
+    Route::get('application/summary/{id}',[applicationController::class,"applicationDocumentsSummaryTP"]);
 
 });
 

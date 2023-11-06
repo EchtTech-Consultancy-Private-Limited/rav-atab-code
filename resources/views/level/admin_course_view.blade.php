@@ -54,7 +54,11 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    <a  class="btn btn-info" href="{{ url('admin/application/documents/'.$applicationData->id.'/summary') }}">Document Summary</a>
+                    @if (auth()->user()->role == 1)
+                        <a class="btn btn-info"
+                            href="{{ url('admin/application/documents/' . $applicationData->id . '/summary') }}">Document
+                            Summary</a>
+                    @endif
                     <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
                     </a>
 
@@ -605,7 +609,6 @@
 
 
                                         @if ($ApplicationPayment->status == '2')
-                                          
                                             @if ($ApplicationPayment->status == 1)
                                                 <div class="badge col-green">Application Proccess</div>
                                             @elseif($ApplicationPayment->status == 2)
@@ -618,7 +621,6 @@
                                                 </div>
                                             @else
                                             @endif
-                                          
                                         @endif
 
                                     </div>

@@ -319,7 +319,7 @@
                                                                 {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
                                                             </td>
                                                             <td class="center">
-                                                                <a href="javascript:void(0)"
+                                                                <a href="{{ url('application/summary/'.$item->application_id) }}"
                                                                     @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
                                                                          @elseif($item->status == 1)
                                                                        <div class="badge col-orange">Applications In Process</div>
