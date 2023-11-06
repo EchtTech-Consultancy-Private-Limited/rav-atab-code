@@ -174,7 +174,7 @@
                                                 </td>
                                                 <td>
                                                    @if (totalDocumentsCount($item->application_id) > 0)
-                                                   <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-danger">Application In Processing</a>
+                                                   <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-warning">Application In Processing</a>
                                                    @else
                                                    @if ($item->status == '0')
                                                    <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>

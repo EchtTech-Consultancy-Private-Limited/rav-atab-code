@@ -209,6 +209,24 @@
         @endif
         @include('layout.rightbar')
     </div>
+
+    @if (Session::flash('success'))
+        <script>
+            var message = "{{ session::get('success') }}";
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Success',
+                text: message,
+                showConfirmButton: false,
+                timer: 3000
+            })
+        </script>
+    @elseif(Session::has('fail'))
+        <div class="alert alert-danger" role="alert">
+            {{ session::get('fail') }}
+        </div>
+    @endif
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -258,23 +276,7 @@
                             </li>
                         </ul>
                     </div>
-                    @if (Session::has('success'))
-                        <script>
-                            var message = "{{ session::get('success') }}";
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Success',
-                                text: message,
-                                showConfirmButton: false,
-                                timer: 3000
-                            })
-                        </script>
-                    @elseif(Session::has('fail'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session::get('fail') }}
-                        </div>
-                    @endif
+
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <ul>
@@ -294,10 +296,11 @@
                                 <div>
                                     {{-- <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span> --}}
 
-                                    <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
+                                    <button id="add-course-button" class="btn btn-primary btn-sm"
+                                        style="margin-bottom: 0px !important;" data-toggle="tooltip"
                                         data-placement="top" title="You can create a maximum of 10 courses at one time"
                                         onclick="addNewCourse();">
-                                        <i class="fa fa-plus"></i> Add More Course 
+                                        <i class="fa fa-plus"></i> Add More Course
                                     </button>
                                 </div>
                             </div>
@@ -503,7 +506,7 @@
                                             <th class="center"> Duration </th>
                                             <th class="center"> Eligibility </th>
                                             <th class="center"> Mode </th>
-                                            <th class="center">  Brief</th>
+                                            <th class="center"> Brief</th>
                                             <th class="center">Payment Status</th>
 
                                             <th class="center">Action</th>
@@ -715,10 +718,10 @@
                                 </div>
                             </div>
                         </div>
-                       <div>
                         <div>
-                            <hr>
-                        </div>
+                            <div>
+                                <hr>
+                            </div>
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
                                     <a href="{{ url('new-applications/' . $applicationData->id) }}"
@@ -726,14 +729,14 @@
                                 </div>
                                 <div>
                                     @isset($course)
-                                    @if (count($course) > 0)
-                                        <a href="{{ url('course-payment/' . $applicationData->id) }}"
-                                            class="btn btn-primary next-step1 mr-2">Next</a>
-                                    @endif
-                                @endisset
+                                        @if (count($course) > 0)
+                                            <a href="{{ url('course-payment/' . $applicationData->id) }}"
+                                                class="btn btn-primary next-step1 mr-2">Next</a>
+                                        @endif
+                                    @endisset
                                 </div>
                             </div>
-                       </div>
+                        </div>
                     </div>
                     <!-- View Modal Popup -->
                     <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
@@ -1193,8 +1196,8 @@
                                 if (cloneCounter >= maxClones) {
                                     // If the maximum limit is reached, disable the button
                                     $('#add-course-button').prop('disabled', true);
-                                   // Change the background color of the #formCount span to red
-    $('#formCount').css('background-color', 'red');
+                                    // Change the background color of the #formCount span to red
+                                    $('#formCount').css('background-color', 'red');
                                     Swal.fire({
                                         title: "Warning",
                                         text: "You've reached the maximum limit of " + maxClones +
