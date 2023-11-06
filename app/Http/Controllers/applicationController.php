@@ -618,4 +618,11 @@ class applicationController extends Controller
         $chapters = Chapter::all();
        return view('application.application-show',compact('applicationDetails','chapters'));
     }
+
+    public function applicationDocumentsSummary($application_id){
+        $applicationDetails = Application::find($application_id);
+        $chapters = Chapter::all();
+        
+        return view('admin.application.document-summary',compact('chapters','applicationDetails'));
+    }
 }

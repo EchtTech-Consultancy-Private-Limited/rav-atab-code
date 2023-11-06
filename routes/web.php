@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     //admin view section
     Route::get('/admin-view/{id}', [LevelController::class, 'admin_view']);
+    Route::get('admin/application/documents/{id}/summary',[applicationController::class,"applicationDocumentsSummary"]);
     Route::get('/delete-course/{id}', [LevelController::class, 'delete_course']);
     Route::post('/Assigan-application', [applicationController::class, 'Assigan_application']);
     Route::post('/assigan-secretariat-application', [applicationController::class, 'assigan_secretariat_application']);
