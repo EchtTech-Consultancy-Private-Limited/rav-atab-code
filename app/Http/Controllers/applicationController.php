@@ -55,7 +55,7 @@ class applicationController extends Controller
         $documents = Add_Document::where('question_id',$questionId)->where('application_id',$applicationId)->where('course_id',$courseId)->get();
 
         $remarks = DocumentRemark::where('application_id',$applicationId)->where('assessor_id',auth()->user()->id)->get();
-
+        
         return view('remarks-index', compact('applicationData','documents','remarks'));
     }
 
@@ -68,7 +68,9 @@ class applicationController extends Controller
         $tpId = Application::find($applicationId);
         $tpId = $tpId->user_id;
 
-        return view('showfile', ['data' => $data,'remarks'=>$remarks,'application_id'=>$applicationId,'document_id'=>$document_id,'tpId'=>$tpId]);
+        $documentData = Add_Document::find($document_id);
+
+        return view('showfile', ['data' => $data,'remarks'=>$remarks,'application_id'=>$applicationId,'document_id'=>$document_id,'tpId'=>$tpId,'documentData'=>$documentData]);
     }
 
     public function saveRemark(Request $request){

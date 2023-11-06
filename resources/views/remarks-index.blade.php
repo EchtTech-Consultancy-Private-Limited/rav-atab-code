@@ -156,19 +156,28 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="">Select Document</label>
-                            <select name="document_id" class="form-control" style="width: 250px;">
+                        <div>
+
+                            <label for="document_id">Select Document for Remarks</label><br/><small class="text-muted">Only
+                                documents that have been rejected or approved will be displayed in the
+                                dropdown.</small>
+                            <select name="document_id" class="form-control mb-2 mt-1" style="width: 250px;" required>
                                 <option value="">Select Document</option>
                                 @foreach ($documents as $item)
-                                    <option value="">{{ getButtonText($item->id) }}</option>
+                                    @if (getButtonText($item->id) !== 'View' && getButtonText($item->id) !== 'Accepted')
+                                        <option value="{{ $item->id }}">{{ getButtonText($item->id) }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="remark">Remark</label>
-                            <textarea name="remark" class="form-control" placeholder="Write remark..."></textarea>
+                            <textarea name="remark" class="form-control" id="remarkField" placeholder="Write remark..." required></textarea>
+                            <small id="charCount" class="text-muted">0/100 characters</small>
+                            <small id="charCountWarning" class="text-danger" style="display: none;">You have exceeded
+                                the character limit (100 characters).</small>
                         </div>
+
 
                     </div>
                     <div class="card-footer bg-white">
@@ -225,5 +234,25 @@
 
         @endif
     </section>
+    <script>
+        const textarea = document.getElementById('remarkField');
+        const charCount = document.getElementById('charCount');
+        const charCountWarning = document.getElementById('charCountWarning');
+
+        textarea.addEventListener('input', function() {
+            const currentCount = textarea.value.length;
+            charCount.textContent = currentCount + '/100 characters';
+
+            if (currentCount > 100) {
+                textarea.value = textarea.value.substring(0, 100);
+                charCount.style.display = 'none';
+                charCountWarning.style.display = 'inline';
+            } else {
+                charCount.style.display = 'inline';
+                charCountWarning.style.display = 'none';
+            }
+        });
+    </script>
+
 
     @include('layout.footer')

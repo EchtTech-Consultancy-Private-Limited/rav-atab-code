@@ -59,7 +59,11 @@
             </div>
             @endif
 
+            
+
             @if (auth()->user()->role == 2 || auth()->user()->role == 3)
+
+            @if ($documentData->comment->status != 4)
             <form action="{{ url('submit-remark') }}" method="post" id="remarkForm">
                 @csrf
                 <input type="hidden" name="document_id" value="{{ $document_id ?? 0 }}">
@@ -88,6 +92,8 @@
                     </div>
                 </div>
             </form>
+            @endif
+          
             
 
             @if (!$remarks->isEmpty())
