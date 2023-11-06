@@ -172,56 +172,57 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                               <table>
-                                <tr>
-                                    @if (count($item->documents) > 0)
-                                        @foreach ($item->documents as $document)
-                                            <th>
-                                                @if ($loop->iteration == 1)
-                                                    Declaration
-                                                @elseif ($loop->iteration == 2)
-                                                    Course Curriculum / Material / Syllabus
-                                                @elseif ($loop->iteration == 3)
-                                                    Course Details (Excel format)
-                                                @endif
-                                            </th>
-                                            <td>
-                                                @php
-                                                    $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
-                                                @endphp
-        
-                                                @if (in_array($extension, ['xls', 'csv', 'pdf', 'xlsx']))
-                                                    @if (in_array($extension, ['xls', 'csv', 'xlsx']))
-                                                        <label>
-                                                            <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                                download title="Download Document">
-                                                                <i class="fa fa-download mr-2"></i>&nbsp; Download Document
-                                                            </a>
-                                                        </label>
-                                                    @elseif ($extension === 'pdf')
-                                                        <label>
-                                                            <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
-                                                                target="_blank" title="View Document}">
-                                                                <div class="d-flex align-items-center ">
-                                                                    <div>
-                                                                        <i class="fa fa-eye mr-2"></i>
-                                                                    </div>
-                                                                    <div>
-                                                                        &nbsp; Document
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        </label>
+                                <table>
+                                    <tr>
+                                        @if (count($item->documents) > 0)
+                                            @foreach ($item->documents as $document)
+                                                <th>
+                                                    @if ($loop->iteration == 1)
+                                                        Declaration
+                                                    @elseif ($loop->iteration == 2)
+                                                        Course Curriculum / Material / Syllabus
+                                                    @elseif ($loop->iteration == 3)
+                                                        Course Details (Excel format)
                                                     @endif
-                                                @else
-                                                    <label><i class="fa fa-info-circle mr-2"></i> Unsupported File
-                                                        Format</label>
-                                                @endif
-                                            </td>
-                                        @endforeach
-                                    @endif
-                                </tr>
-                               </table>
+                                                </th>
+                                                <td>
+                                                    @php
+                                                        $extension = pathinfo($document->document_file, PATHINFO_EXTENSION);
+                                                    @endphp
+
+                                                    @if (in_array($extension, ['xls', 'csv', 'pdf', 'xlsx']))
+                                                        @if (in_array($extension, ['xls', 'csv', 'xlsx']))
+                                                            <label>
+                                                                <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
+                                                                    download title="Download Document">
+                                                                    <i class="fa fa-download mr-2"></i>&nbsp; Download
+                                                                    Document
+                                                                </a>
+                                                            </label>
+                                                        @elseif ($extension === 'pdf')
+                                                            <label>
+                                                                <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
+                                                                    target="_blank" title="View Document}">
+                                                                    <div class="d-flex align-items-center ">
+                                                                        <div>
+                                                                            <i class="fa fa-eye mr-2"></i>
+                                                                        </div>
+                                                                        <div>
+                                                                            &nbsp; Document
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </label>
+                                                        @endif
+                                                    @else
+                                                        <label><i class="fa fa-info-circle mr-2"></i> Unsupported File
+                                                            Format</label>
+                                                    @endif
+                                                </td>
+                                            @endforeach
+                                        @endif
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                     </table>
@@ -371,6 +372,37 @@
                 </div>
             </div>
         @endforeach
+
+        <div class="card">
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                    Remark by on-site assessor
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (
+                    $applicationDetails->gps_pic == '' ||
+                        $applicationDetails->gps_pic == null ||
+                        $applicationDetails->final_remark == '' ||
+                        $applicationDetails->final_remark == null)
+                    Data not available!
+                @else
+                    <div>
+                        <span>GPS Picture</span>
+                        <div>
+                            <img src="{{ asset('documnet/' . $applicationDetails->gps_pic) }}" alt="">
+                        </div>
+                    </div>
+                    <div>
+                        <span>Remark</span>
+                        <div>
+                            {{ $applicationDetails->final_remark }}
+                        </div>
+                    </div>
+                @endif
+
+            </div>
+        </div>
     </section>
 
 
