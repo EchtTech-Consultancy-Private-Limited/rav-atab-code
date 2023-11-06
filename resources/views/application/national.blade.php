@@ -174,15 +174,15 @@
                                                 </td>
                                                 <td>
                                                    @if (totalDocumentsCount($item->application_id) > 0)
-                                                   <a href="{{ url('admin/application/documents/'.$item->application_id.'/summary') }}" class="p-2 buttonBadge text-white bg-warning">Application In Processing</a>
+                                                   <a href="{{  auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-white bg-warning">Application In Processing</a>
                                                    @else
                                                    @if ($item->status == '0')
-                                                   <a href="{{ url('admin/application/documents/'.$item->application_id.'/summary') }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
+                                                   <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-white bg-danger">Payment Pending</a>
                                                @elseif($item->status == 1)
-                                                   <a href="{{ url('admin/application/documents/'.$item->application_id.'/summary') }}" class="p-2 buttonBadge text-light bg-warning">Payment
+                                                   <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-light bg-warning">Payment
                                                        Proccess</a>
                                                @elseif ($item->status == '2')
-                                                   <a href="{{ url('admin/application/documents/'.$item->application_id.'/summary') }}" class="p-2 buttonBadge text-white bg-primary">Payment
+                                                   <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/'.$item->application_id.'/summary') : '' }}" class="p-2 buttonBadge text-white bg-primary">Payment
                                                        Approved</a>
                                                @endif
                                                    @endif
