@@ -60,7 +60,7 @@
                         <li class="breadcrumb-item active">Application Summary</li>
                     </ul>
 
-                    <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
+                    <a href="{{ url('application-list') }}" type="button" class="btn btn-primary" style="float:right;">Back
                     </a>
 
                 </div>
