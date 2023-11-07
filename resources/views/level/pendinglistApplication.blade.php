@@ -256,7 +256,6 @@
                                                         <tr>
                                                             <th> Application ID </th>
                                                             <th> Level ID </th>
-                                                            <th> Country </th>
                                                             <th> Action </th>
                                                         </tr>
                                                     </thead>
@@ -270,7 +269,7 @@
 
                                                                 <td> {{ $item_level_list['level_id'] ?? '' }}</td>
 
-                                                                <td> {{ $item_level_list['country_name'] ?? '' }}</td>
+                                                              
 
                                                                 <td> <a href="{{ url('/edit-application' . '/' . $item_level_list['id']) }}"
                                                                         class="btn btn-tbl-edit bg-success"><i

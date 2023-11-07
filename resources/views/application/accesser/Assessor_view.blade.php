@@ -56,12 +56,6 @@
             </div>
 
             <div>
-                {{-- @if ($alreadyPicked)
-                    <div class="bg-warning p-2 border-radius-per-5">
-                        <h4>Working someone</h4>
-                        <p>{{ getUserDetail($alreadyPicked->read_by)->firstname ?? 'Firstname' }} {{ getUserDetail($alreadyPicked->read_by)->lastname ?? 'Lastname' }} working on this application.</p>
-                    </div>
-                @endif --}}
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
@@ -217,51 +211,61 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div><div class="header">
-                                    <h2>Single Point of Contact Details (SPoC)</h2>
                                 </div>
-                                 <div class="row clearfix">
-                                    <div class="col-sm-3">
-                                     <div class="form-group">
-                                        <div class="form-line">
-                                           <label ><strong>Person Name</strong></label><br>
-                                               <label >{{ Str::ucfirst($spocData->Person_Name)  }}</label>
-                                        </div>
-                                     </div>
-                                    </div>
-
-                                  <div class="col-sm-3">
-                                     <div class="form-group">
-                                        <div class="form-line">
-                                           <label><strong>Contact Number</strong></label><br>
-                                            {{ $spocData->Contact_Number ??'' }}
-                                        </div>
-                                     </div>
-                                  </div>
-                                  <div class="col-sm-3">
-                                     <div class="form-group">
-                                        <div class="form-line">
-
-                                            <label><strong>Email Id</strong></label><br>
-
-                                              <label>{{ $spocData->Email_ID ??'' }}</label>
-
-                                        </div>
-                                     </div>
-                                  </div>
-                                  <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <label for="designation"><strong>Designation</strong></label>
-                                            <br>
-                                            <label>{{ Str::ucfirst($spocData->designation) }}</label>
-                                        </div>
-                                    </div>
-                                  </div>
-                                </div>
+                               
                                 <!-- basic end -->
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-white text-dark">
+                    <h5 class="mt-2">
+                        Single Point of Contact Details (SPoC)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                       
+                            <div class="col-sm-3">
+                             <div class="form-group">
+                                <div class="form-line">
+                                   <label ><strong>Person Name</strong></label><br>
+                                       <label >{{ Str::ucfirst($spocData->Person_Name)  }}</label>
+                                </div>
+                             </div>
+                            </div>
+
+                          <div class="col-sm-3">
+                             <div class="form-group">
+                                <div class="form-line">
+                                   <label><strong>Contact Number</strong></label><br>
+                                    {{ $spocData->Contact_Number ??'' }}
+                                </div>
+                             </div>
+                          </div>
+                          <div class="col-sm-3">
+                             <div class="form-group">
+                                <div class="form-line">
+
+                                    <label><strong>Email Id</strong></label><br>
+
+                                      <label>{{ $spocData->Email_ID ??'' }}</label>
+
+                                </div>
+                             </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="designation"><strong>Designation</strong></label>
+                                    <br>
+                                    <label>{{ Str::ucfirst($spocData->designation) }}</label>
+                                </div>
+                            </div>
+                          </div>
+                       
                     </div>
                 </div>
             </div>
