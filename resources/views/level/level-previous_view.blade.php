@@ -168,7 +168,7 @@
                         </div>
                         <div class="col-sm-12">
                             <div>
-                                <h5>Single Point of Contact Details (SPoC) Details</h5>
+                                <h5>Single Point of Contact Details (SPoC)</h5>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">

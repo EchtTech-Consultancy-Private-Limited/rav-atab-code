@@ -204,7 +204,7 @@
                             </h4>
                         @elseif (get_doccomment_status($doc_id) == 4)
                             <h4 class="text-center">
-                                Your Document has been approved
+                                 Document has been approved
                             </h4>
                         @else
                             Something went wrong! Please contact administrator.

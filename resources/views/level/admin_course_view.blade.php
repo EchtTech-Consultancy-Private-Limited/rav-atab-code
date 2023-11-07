@@ -192,11 +192,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <h5>Single Point of Contact Details (SPoC)</h5>
-
-                    </div>
-                    <div class="col-sm-4">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                    Single Point of Contact Details (SPoC)
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Person Name</strong></label><br>
@@ -204,8 +212,8 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
+    
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Contact Number</strong></label><br>
@@ -213,7 +221,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Designation</strong></label><br>
@@ -221,14 +229,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
-
+    
                                 <label><strong>Email Id</strong></label><br>
-
+    
                                 <label>{{ $spocData->Email_ID ?? '' }}</label>
-
+    
                             </div>
                         </div>
                     </div>
