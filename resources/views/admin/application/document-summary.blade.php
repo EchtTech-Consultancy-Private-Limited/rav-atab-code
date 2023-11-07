@@ -388,14 +388,16 @@
                     Data not available!
                 @else
                     <div>
-                        <span>GPS Picture</span>
+                        <span style="font-weight: bold;">GPS Picture</span>
                         <div>
-                            <img src="{{ asset('documnet/' . $applicationDetails->gps_pic) }}" alt="">
+                            <a href="{{ asset('documnet/' . $applicationDetails->gps_pic) }}" target="_blank">
+                                <img style="width: 200px; padding-top:10px; padding-bottom:20px;" src="{{ asset('documnet/' . $applicationDetails->gps_pic) }}" alt="">
+                            </a>
                         </div>
                     </div>
                     <div>
-                        <span>Remark</span>
-                        <div>
+                        <span style="font-weight: bold;">Remark</span>
+                        <div style="font-size: 12px;">
                             {{ $applicationDetails->final_remark }}
                         </div>
                     </div>

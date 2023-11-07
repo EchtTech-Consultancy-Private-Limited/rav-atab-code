@@ -262,7 +262,7 @@
                                                                             <div>
                                                                                 <a target="_blank"
                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                    href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $item->id) }}"
+                                                                                    href="{{ url('document-detail' . '/' . $doc->doc_file.'/'.$applicationDetails->id.'/'.$doc->id) }}"
                                                                                     class="docBtn text-size-11 text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                     style="color: #fff ;margin:10px;"
                                                                                     id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
@@ -286,7 +286,7 @@
                                                                             <div>
                                                                                 <a target="_blank"
                                                                                     title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                    href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $item->id) }}"
+                                                                                    href="{{ url('document-detail' . '/' . $doc->doc_file.'/'.$applicationDetails->id.'/'.$doc->id) }}"
                                                                                     class="docBtn text-size-11 text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                     style="color: #fff ;margin:10px;"
                                                                                     id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>

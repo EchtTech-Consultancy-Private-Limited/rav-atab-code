@@ -69,11 +69,11 @@
 
                             <div class="form-group">
                                 <label for="gps_pic" class="txtBold">Upload GPS Location Picture</label><br>
-                                <input type="file" name="gps_pic" id="gps_pic"><br/>
+                                <input type="file" name="gps_pic" id="gps_pic" required><br/>
                                 <span id="gps_pic_error" class="text-danger"></span>
                                 <!-- Define the error element here -->
                                 @error('gps_pic')
-                                    <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger" id="gps_pic_server_side_error_msg">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -152,6 +152,7 @@
                         $('#gps_pic_error').text('Allowed file extensions are .jpg, .jpeg, and .png');
                     }else{
                         $('#gps_pic_error').text('');
+                        $('#gps_pic_server_side_error_msg').text('');
                     }
                 }
             });
