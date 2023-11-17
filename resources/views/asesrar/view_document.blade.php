@@ -410,8 +410,10 @@
 
                                                                     </td>
                                                                     <td>
-                                                                        <a target="_blank" href="{{ url('remarks/' . $applicationData->id . '/' . $course_id . '/' . $question->id) }}"
-                                                                            class="btn btn-info btn-sm p-2 mb-0"><i class="fa fa-comments"></i> Remarks</a>
+                                                                        <a target="_blank"
+                                                                            href="{{ url('remarks/' . $applicationData->id . '/' . $course_id . '/' . $question->id) }}"
+                                                                            class="btn btn-info btn-sm p-2 mb-0"><i
+                                                                                class="fa fa-comments"></i> Remarks</a>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -432,6 +434,35 @@
                                                     @endif
                                                 @endif
                                             @endif
+
+                                            @if (auth()->user()->assessment == 1)
+                                                @php
+                                                    $applicationCompletedCount = applicationDocuments($application_id);
+
+                                                @endphp
+
+
+                                                @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
+                                                    @if ($applicationCompletedCount == true)
+                                                        <div class="d-flex justify-content-end">
+                                                            <form
+                                                                action="{{ route('submit-final-report-by-desktop') }}"
+                                                                method="post">
+                                                                @csrf
+                                                                <input type="text" name="applicationID"
+                                                                    value="{{ $application_id }}">
+                                                                <button class="btn btn-success"
+                                                                    style="margin-right: 10px;">Submit</button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                    @else
+                                                    <div class="text-center">
+                                                        <h5>Report Submitted By Desktop Assessor</h5>
+                                                    </div>
+                                                @endif
+                                            @endif
+
 
                                         </div>
                                     </div>

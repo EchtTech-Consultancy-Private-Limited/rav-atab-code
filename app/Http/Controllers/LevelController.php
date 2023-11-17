@@ -2730,4 +2730,73 @@ class LevelController extends Controller
             return "fail";
         }
     }
+
+    public function submitFinalReportByDesktopAssessor(Request $request){
+        $application = Application::find($request->applicationID);
+        $updated = $application->update([
+            'desktop_status' => 1
+        ]);
+        if ($updated) {
+            return redirect()->back()->with('success',"Report submit successfully");
+        }else{
+            return "fail";
+        }
+
+    }
+
+    public function pendingPayments($application_id){
+
+        $applicationData = DB::table('applications')->where('id', $application_id)->first();
+
+        $course = DB::table('application_courses')->where('application_id', $application_id)->get();
+
+        if (Auth::user()->country == $this->get_india_id()) {
+
+            if (count($course) == '0') {
+                $currency = '₹';
+                $total_amount = '0';
+            } elseif (count($course) <= 5) {
+                $currency = '₹';
+                $total_amount = '1000';
+            } elseif (count($course) <= 10) {
+                $currency = '₹';
+                $total_amount =  '2000';
+            } else {
+                $currency = '₹';
+                $total_amount =   '3000';
+            }
+        } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
+            if (count($course) == '0') {
+                $currency = 'US $';
+                $total_amount = '0';
+            } elseif (count($course) <= 5) {
+                $currency = 'US $';
+                $total_amount =  '15';
+            } elseif (count($course) <= 10) {
+                $currency = 'US $';
+                $total_amount = '30';
+            } else {
+                $currency = 'US $';
+                $total_amount =  '45';
+            }
+        } else {
+
+            if (count($course) == '0') {
+                $currency = 'US $';
+                $total_amount = '';
+            } elseif (count($course) <= 5) {
+                $currency = 'US $';
+                $total_amount = '50';
+            } elseif (count($course) <= 10) {
+                $currency = 'US $';
+                $total_amount = '100';
+            } else {
+                $currency = 'US $';
+                $total_amount =  '150';
+            }
+        }
+
+        $payments = ApplicationPayment::where('application_id',$application_id)->get();
+        return view('application.final-payments',compact('total_amount','payments'));
+    }
 }

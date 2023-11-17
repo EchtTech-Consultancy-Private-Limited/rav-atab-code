@@ -48,7 +48,7 @@
                              @elseif(Auth::user()->role == 2)
                                  Training Provider
                              @elseif(Auth::user()->role == 3)
-                                 Assessor(<small>{{ Auth::user()->assessment == 1 ? "Desktop" : "On-Site" }}</small>)
+                                 Assessor(<small>{{ Auth::user()->assessment == 1 ? 'Desktop' : 'On-Site' }}</small>)
                              @elseif(Auth::user()->role == 4)
                                  Professional
                              @elseif(Auth::user()->role == 5)
@@ -68,6 +68,38 @@
                          <i class="fas fa-expand"></i>
                      </a>
                  </li>
+
+                 @if (Auth::user()->role == 2)
+                     <li class="dropdown">
+                         <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
+                             role="button">
+                             <i class="far fa-bell"></i>
+                             @if (getApplicationPaymentNotificationStatus())
+                        <span class="notify" style="    background-color: #ff5722 !important;"></span>
+                        <span class="heartbeat" style="    background-color: #ff5722 !important;"></span>
+                        @endif
+                         </a>
+
+                         @php
+                             $applications = getVerifiedApplications();
+                         @endphp
+                         <ul class="dropdown-menu pullDown placeholder_input">
+                             <li class="header">NOTIFICATIONS </li>
+                             <li class="body col-md-12">
+                                 <ul class="text-dark menu" style="padding: 0px !important;">
+                                     @foreach ($applications as $application)
+                                     <li>
+                                        <a href="{{ url('pending-payments/'.$application->id) }}" style="color: #000;">
+                                            Application ID {{ $application->application_uid }}
+                                            
+                                        </a>
+                                     </li>
+                                     @endforeach
+                                 </ul>
+                             </li>
+                         </ul>
+                 @endif
+
                  <!-- #END# Full Screen Button -->
                  <!-- #START# Notifications-->
                  @if (Auth::user()->role == 3)
@@ -76,8 +108,8 @@
                              role="button">
                              <i class="far fa-bell"></i>
                              @if (Checknotification(Auth::user()->id))
-                             <span class="notify"></span>
-                             <span class="heartbeat"></span>
+                                 <span class="notify"></span>
+                                 <span class="heartbeat"></span>
                              @endif
                          </a>
 
@@ -88,11 +120,11 @@
                                  <ul class="menu">
 
                                      @if (Checknotification(Auth::user()->id))
-                                           
+
                                          @foreach (Checknotification(Auth::user()->id) as $item)
                                              <li class="p-2">
 
-                                                 <a href="{{ url('Assessor-view/'.dEncrypt($item['application_id'])) }}"
+                                                 <a href="{{ url('Assessor-view/' . dEncrypt($item['application_id'])) }}"
                                                      class="bg-secondary text-white" style="border-radius: 10px;">
                                                      <div class="d-flex justify-content-between"
                                                          style="font-size: 12px;">
@@ -109,20 +141,21 @@
                                                  </a>
                                              </li>
                                          @endforeach
-                                         @else
-                                             <li class="text-center">
-                                                <div class="p-3">
-                                                    <img style="height: 100px;" src="{{ asset('assets/images/no-alarm.png') }}" alt="">
-                                                </div>
-                                                No Notification Yet
-                                             </li>
+                                     @else
+                                         <li class="text-center">
+                                             <div class="p-3">
+                                                 <img style="height: 100px;"
+                                                     src="{{ asset('assets/images/no-alarm.png') }}" alt="">
+                                             </div>
+                                             No Notification Yet
+                                         </li>
                                      @endif
                                  </ul>
                              </li>
                              @if (Checknotification(Auth::user()->id))
-                             <li class="footer">
-                                 <a href="#" onClick="return false;">View All Notifications</a>
-                             </li>
+                                 <li class="footer">
+                                     <a href="#" onClick="return false;">View All Notifications</a>
+                                 </li>
                              @endif
                          </ul>
                      </li>
@@ -163,5 +196,4 @@
  <!-- #Top Bar -->
 
 
-<script src="{{ asset('assets/js/atab-top-bar.js') }}"></script>
-
+ <script src="{{ asset('assets/js/atab-top-bar.js') }}"></script>

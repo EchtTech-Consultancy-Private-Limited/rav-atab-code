@@ -22,7 +22,9 @@ class Application extends Model
         'state',
         'country',
         'ip',
-        'status'
+        'status',
+        'desktop_status',
+        'onsite_status'
     ];
 
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Add_Document;
+use App\Models\Application;
 use App\Models\ApplicationCourse;
 use App\Models\DocComment;
 use App\Models\Question;
@@ -231,7 +232,7 @@ function get_doc_code($id = 0)
 
 function get_doccomment_status($id = 0)
 {
-   
+
     $doc_code = App\Models\DocComment::orderBy('id', 'desc')->where('doc_id', $id)->first();
     if ($doc_code) {
         $doc_comment_status = $doc_code->status;
@@ -399,21 +400,21 @@ function show_btn($date)
 function Checknotification($id = 0)
 {
 
-    $assessors = DB::table('asessor_applications')->orderBy('id','desc')->select('id', 'created_at','application_id')->where('notification_status', 0)->where('assessor_id', $id)->get();
-    
+    $assessors = DB::table('asessor_applications')->orderBy('id', 'desc')->select('id', 'created_at', 'application_id')->where('notification_status', 0)->where('assessor_id', $id)->get();
+
     $assesorWithApplicationData = [];
 
     foreach ($assessors as $assesor) {
-        $applicationData = DB::table('applications')->orderBy('id','desc')->select('id','application_uid')->where('id',$assesor->application_id)->first();
+        $applicationData = DB::table('applications')->orderBy('id', 'desc')->select('id', 'application_uid')->where('id', $assesor->application_id)->first();
 
-       if($applicationData){
-        $assesorWithApplicationData[] = [
-            'application_uid' => $applicationData->application_uid ?? 0,
-            'id' => $assesor->id,
-            'created_at' => $assesor->created_at,
-            'application_id' => $assesor->application_id
-        ];
-       }
+        if ($applicationData) {
+            $assesorWithApplicationData[] = [
+                'application_uid' => $applicationData->application_uid ?? 0,
+                'id' => $assesor->id,
+                'created_at' => $assesor->created_at,
+                'application_id' => $assesor->application_id
+            ];
+        }
     }
 
     if ($assesorWithApplicationData != NULL) {
@@ -440,7 +441,7 @@ function checkDocumentCommentStatus($id)
     if ($commentData) {
         if ($commentData->status == 4) {
             return "btn-success";
-        }elseif($commentData->status == 5){
+        } elseif ($commentData->status == 5) {
             return "btn-warning";
         } else {
             return "btn-danger";
@@ -466,9 +467,9 @@ function checkDocumentCommentStatusreturnText($id)
 }
 
 
-function getComments($id = null,$applicationID)
+function getComments($id = null, $applicationID)
 {
-    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id',$applicationID)->get();
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
     $docIds = $documents->pluck('id');
 
@@ -495,36 +496,33 @@ function getComments($id = null,$applicationID)
             $statusCode = "";
             if ($comment->status == 4) {
                 $statusCode = "Close";
-            }elseif ($comment->status == 3) {
+            } elseif ($comment->status == 3) {
                 $statusCode = "Not Recommended";
-            } elseif($comment->status == 2){
+            } elseif ($comment->status == 2) {
                 $statusCode = "NC2";
-            }elseif ($comment->status == 1) {
+            } elseif ($comment->status == 1) {
                 $statusCode = "NC1";
-            }
-            elseif ($comment->status == 5) {
+            } elseif ($comment->status == 5) {
                 $statusCode = "Request final approval";
-            }
-            elseif ($comment->status == 6) {
+            } elseif ($comment->status == 6) {
                 $statusCode = "NC3";
-            }
-            else {
+            } else {
                 $statusCode = "Close";
             }
-            
 
-            if($comment->status == 4){
+
+            if ($comment->status == 4) {
                 $html .= "<tr class='text-success' style='border-left:3px solid green'>";
-            }else{
-                $html .= "<tr class='text-danger' style='border-left:3px solid red'>" ;
+            } else {
+                $html .= "<tr class='text-danger' style='border-left:3px solid red'>";
             }
-           
+
             $html .= "<td width='60'>" . $num++ . "</td>";
             $html .= "<td width='130'>" . $comment->doc_code . "</td>";
             $html .= "<td width='120'>" . \Carbon\Carbon::parse($comment->created_at)->format('d-m-Y') . "</td>";
             $html .= "<td>" . $comment->comments . "</td>";
             $html .= "<td>" . $statusCode ?? '' . "</td>";
-            $html .= "<td>".getUserDetails($comment->user_id)."</td>";
+            $html .= "<td>" . getUserDetails($comment->user_id) . "</td>";
             $html .= "</tr>";
         }
 
@@ -535,9 +533,9 @@ function getComments($id = null,$applicationID)
     return $html;
 }
 
-function getCommentsForAdmin($id = null,$applicationID)
+function getCommentsForAdmin($id = null, $applicationID)
 {
-    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id',$applicationID)->get();
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
     $docIds = $documents->pluck('id');
 
@@ -564,36 +562,33 @@ function getCommentsForAdmin($id = null,$applicationID)
             $statusCode = "";
             if ($comment->status == 4) {
                 $statusCode = "Close";
-            }elseif ($comment->status == 3) {
+            } elseif ($comment->status == 3) {
                 $statusCode = "Not Recommended";
-            } elseif($comment->status == 2){
+            } elseif ($comment->status == 2) {
                 $statusCode = "NC2";
-            }elseif ($comment->status == 1) {
+            } elseif ($comment->status == 1) {
                 $statusCode = "NC1";
-            }
-            elseif ($comment->status == 5) {
+            } elseif ($comment->status == 5) {
                 $statusCode = "Request final approval";
-            }
-            elseif ($comment->status == 6) {
+            } elseif ($comment->status == 6) {
                 $statusCode = "NC3";
-            }
-            else {
+            } else {
                 $statusCode = "Close";
             }
-            
 
-            if($comment->status == 4){
+
+            if ($comment->status == 4) {
                 $html .= "<tr class='text-success' style='border-left:3px solid green'>";
-            }else{
-                $html .= "<tr class='text-danger' style='border-left:3px solid red'>" ;
+            } else {
+                $html .= "<tr class='text-danger' style='border-left:3px solid red'>";
             }
-           
+
             $html .= "<td width='60'>" . $num++ . "</td>";
             $html .= "<td width='130'>" . $comment->doc_code . "</td>";
             $html .= "<td width='120'>" . \Carbon\Carbon::parse($comment->created_at)->format('d-m-Y') . "</td>";
             $html .= "<td>" . $comment->comments . "</td>";
             $html .= "<td>" . $statusCode ?? '' . "</td>";
-            $html .= "<td>".getUserDetails($comment->user_id)."</td>";
+            $html .= "<td>" . getUserDetails($comment->user_id) . "</td>";
             $html .= "</tr>";
         }
 
@@ -606,85 +601,84 @@ function getCommentsForAdmin($id = null,$applicationID)
 
 
 
-function getUserDetails($userId){
-    $user =  DB::table('users')->where('id',$userId)->first();
-    return $user->firstname.' '.$user->lastname; 
+function getUserDetails($userId)
+{
+    $user =  DB::table('users')->where('id', $userId)->first();
+    return $user->firstname . ' ' . $user->lastname;
 }
 
-function checkCommentsExist($id = null,$applicationId=null)
+function checkCommentsExist($id = null, $applicationId = null)
 {
     $authId = auth()->user()->id;
 
-    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id',$authId)->where('application_id',$applicationId)->get();
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id', $authId)->where('application_id', $applicationId)->get();
 
 
     if ($documents) {
         $docIds = $documents->pluck('id');
 
-    $comments = DB::table('doc_comments')->orderByDesc('id')->whereIn('doc_id', $docIds)->get();
-    
-    if (count($comments) > 0) {
-        return true;
-    }else{
-        return false;
+        $comments = DB::table('doc_comments')->orderByDesc('id')->whereIn('doc_id', $docIds)->get();
+
+        if (count($comments) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
-    }
-    
-    
 }
 
-function getDocument($questionID,$applicationId,$course_id){
+function getDocument($questionID, $applicationId, $course_id)
+{
     $authId = auth()->user()->id;
 
-    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id',$authId)->where('application_id',$applicationId)->where('course_id',$course_id)->get();
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id', $authId)->where('application_id', $applicationId)->where('course_id', $course_id)->get();
 
     if (count($documents) > 0) {
         return $documents;
     } else {
         return $documents = [];
     }
-
 }
 
-function getAssessorDocument($questionID,$applicationId,$course_id){
-  
+function getAssessorDocument($questionID, $applicationId, $course_id)
+{
 
-    $documents = DB::table('add_documents')->where('course_id',$course_id)->where('question_id', $questionID)->where('application_id',$applicationId)->get();
+
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->get();
 
     if (count($documents) > 0) {
         return $documents;
     } else {
         return $documents = [];
     }
-
 }
 
-function getAdminDocument($questionID,$applicationId){
-  
+function getAdminDocument($questionID, $applicationId)
+{
 
-    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id',$applicationId)->get();
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->get();
 
     if (count($documents) > 0) {
         return $documents;
     } else {
         return $documents = [];
     }
-
 }
 
-function getAssessorComments($docID){
-    $comments = DocComment::where('doc_id',$docID)->get();
+function getAssessorComments($docID)
+{
+    $comments = DocComment::where('doc_id', $docID)->get();
     if (count($comments) > 0) {
         return $comments;
     } else {
         return [];
     }
-    
 }
 
-function commentsCountForTP($id,$applicationID){
-    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id',$applicationID)->get();
+function commentsCountForTP($id, $applicationID)
+{
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
     $docIds = $documents->pluck('id');
 
@@ -697,20 +691,22 @@ function commentsCountForTP($id,$applicationID){
 }
 
 
-function checkApproveComment($doc_id){
-    $comment = DocComment::where('doc_id',$doc_id)->first();
-    
-    if($comment->status == 4){
+function checkApproveComment($doc_id)
+{
+    $comment = DocComment::where('doc_id', $doc_id)->first();
+
+    if ($comment->status == 4) {
         return 4;
-    }else{
+    } else {
         return 0;
     }
 }
 
-function checkFinalRequest($id){
+function checkFinalRequest($id)
+{
     $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
     if ($commentData) {
-       if ( $commentData->status == 5) {
+        if ($commentData->status == 5) {
             return "Request for final approval!";
         }
     } else {
@@ -718,25 +714,22 @@ function checkFinalRequest($id){
     }
 }
 
-function getButtonText($id){
+function getButtonText($id)
+{
     $commentData = DB::table('doc_comments')->where('doc_id', $id)->latest()->first();
 
     if ($commentData) {
         if ($commentData->status == 4) {
             return "Accepted";
-        }  elseif ($commentData->status == 3 || $commentData->status == 5) {
+        } elseif ($commentData->status == 3 || $commentData->status == 5) {
             return "Not Recommended";
-        }
-        elseif ($commentData->status == 2) {
+        } elseif ($commentData->status == 2) {
             return "NC2";
-        }
-        elseif ($commentData->status == 1) {
+        } elseif ($commentData->status == 1) {
             return "NC1";
-        }
-        elseif ($commentData->status == 6) {
+        } elseif ($commentData->status == 6) {
             return "NC3";
-        }
-        else {
+        } else {
             return "Not Approved";
         }
     } else {
@@ -744,78 +737,108 @@ function getButtonText($id){
     }
 }
 
-function getCommentsData($docID){
-    $comment = DocComment::where('doc_id',$docID)->latest()->first();
+function getCommentsData($docID)
+{
+    $comment = DocComment::where('doc_id', $docID)->latest()->first();
     return $comment ?? [];
 }
 
-function totalQuestionsCount($applicationId){
-    $courses = ApplicationCourse::where('application_id',$applicationId)->get()->count();
+function totalQuestionsCount($applicationId)
+{
+    $courses = ApplicationCourse::where('application_id', $applicationId)->get()->count();
     $questions = Question::all()->count();
-    $questions = $questions*$courses;
+    $questions = $questions * $courses;
     return $questions;
 }
 
 
-function totalDocumentsCount($applicationId){
-    $totalDocuments = DB::table('add_documents')->where('application_id',$applicationId)->get()->count();
+function totalDocumentsCount($applicationId)
+{
+    $totalDocuments = DB::table('add_documents')->where('application_id', $applicationId)->get()->count();
 
     return $totalDocuments;
 }
 
-function getUserDetail($userId){
+function getUserDetail($userId)
+{
     $user = User::find($userId);
     return $user;
 }
 
-function checkVerifiedDocumentUploaded($applicationId,$courseId,$assessorid,$questionId){
-   
-    $document = Add_Document::where('question_id',$applicationId)->where('application_id',$questionId)->where('course_id',$courseId)->where('on_site_assessor_Id',$assessorid)->first(['verified_document']);
-   
+function checkVerifiedDocumentUploaded($applicationId, $courseId, $assessorid, $questionId)
+{
+
+    $document = Add_Document::where('question_id', $applicationId)->where('application_id', $questionId)->where('course_id', $courseId)->where('on_site_assessor_Id', $assessorid)->first(['verified_document']);
+
     if ($document) {
         return $document;
     } else {
-       return false;
+        return false;
     }
-    
 }
 
 
-function checkVerifiedPhotographUploaded($applicationId,$courseId,$assessorid,$questionId){
-    $document = Add_Document::where('question_id',$applicationId)->where('application_id',$questionId)->where('course_id',$courseId)->where('on_site_assessor_Id',$assessorid)->first(['photograph']);
+function checkVerifiedPhotographUploaded($applicationId, $courseId, $assessorid, $questionId)
+{
+    $document = Add_Document::where('question_id', $applicationId)->where('application_id', $questionId)->where('course_id', $courseId)->where('on_site_assessor_Id', $assessorid)->first(['photograph']);
     if ($document) {
         return $document;
     } else {
-       return false;
+        return false;
     }
-    
 }
 
 
-function checkVerifiedDocumentAvailable($application_id,$course_id,$assessor_id,$question_id)
-    {
-        $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
-            ->where('course_id', $course_id)
-            ->where('on_site_assessor_Id', $assessor_id)
-            ->first();
+function checkVerifiedDocumentAvailable($application_id, $course_id, $assessor_id, $question_id)
+{
+    $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
+        ->where('course_id', $course_id)
+        ->where('on_site_assessor_Id', $assessor_id)
+        ->first();
 
-        if ($document) {
-            return $document;
-        } else {
-            return false;
-        }
+    if ($document) {
+        return $document;
+    } else {
+        return false;
     }
+}
 
-    function checkVerifiedDocumentAvailableForAdmin($application_id,$course_id,$question_id)
-    {
-        $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
-            ->where('course_id', $course_id)
-            ->first();
+function checkVerifiedDocumentAvailableForAdmin($application_id, $course_id, $question_id)
+{
+    $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
+        ->where('course_id', $course_id)
+        ->first();
 
-        if ($document) {
-            return $document;
-        } else {
-            return false;
-        }
+    if ($document) {
+        return $document;
+    } else {
+        return false;
     }
+}
 
+function applicationDocuments($applicationId)
+{
+    $documents = Add_Document::where('application_id', $applicationId)->whereHas('comments', function ($query) {
+        $query->where('status', 4);
+    })
+        ->get();
+
+    $questions = Question::all();
+
+    if (3 == count($documents)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getVerifiedApplications()
+{
+    $applications = Application::where('user_id', auth()->user()->id)->where('desktop_status', '!=', null)->get();
+    return $applications;
+}
+
+function getApplicationPaymentNotificationStatus(){
+    $applications = Application::where('user_id', auth()->user()->id)->where('desktop_status', '!=', null)->where('is_read',null)->get();
+    return $applications;
+}

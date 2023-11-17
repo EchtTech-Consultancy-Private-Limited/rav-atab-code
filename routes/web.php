@@ -277,6 +277,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('submit-final-report/{id}',[LevelController::class,"submitFinalReportPost"]);
     Route::get('application/summary/{id}',[applicationController::class,"applicationDocumentsSummaryTP"]);
 
+    Route::post('submit-final-report-by-desktop',[LevelController::class,"submitFinalReportByDesktopAssessor"])->name('submit-final-report-by-desktop');
+
+    Route::get('pending-payments/{id}',[LevelController::class,"pendingPayments"])->name('pending-payments');
+
 });
 
 
