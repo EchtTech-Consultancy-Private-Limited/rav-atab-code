@@ -466,7 +466,8 @@ class applicationController extends Controller
         //     ->where('applications.country', '=', 101)
         //     ->get();
 
-            $collection = Application::latest()->get();
+            $collectionIds = AssessorApplication::where('assessor_id',Auth::user()->id)->get(['application_id']);
+            $collection = Application::whereIn('id',$collectionIds)->latest()->get();
             $filteredApplications = [];
         
             foreach ($collection as $application) {
