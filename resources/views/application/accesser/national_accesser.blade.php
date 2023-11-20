@@ -165,7 +165,7 @@
                                         @isset($collection)
                                             @foreach ($collection as $k => $item)
                                                 <?php
-                                                $assessor_id = listofapplicationassessor($item->application_id);
+                                                $assessor_id = listofapplicationassessor($item->id);
                                                 ?>
 
                                                 <tr class="odd gradeX">
@@ -173,16 +173,16 @@
                                                     <td class="center">{{ $item->level_id }}</td>
                                                     <td class="center">
                                                         {{ $item->application_uid ?? 'something went wrong!' }}</td>
-                                                    <td class="center">{{ $item->course_count }}</td>
+                                                    <td class="center">{{ count($item->courses) }}</td>
                                                     <td class="center">
-                                                        {{ application_submission_date($item->application_id, $assessor_id) }}
+                                                        {{ application_submission_date($item->id, $assessor_id) }}
                                                     </td>
                                                     <td class="center">
-                                                        {{ assessor_assign_date($item->application_id, $assessor_id) }}</td>
+                                                        {{ assessor_assign_date($item->id, $assessor_id) }}</td>
                                                     <td class="center">{{ showstate($item->state) }}</td>
 
                                                     <td class="center">
-                                                        <a href="{{ url('/Assessor-view/' . dEncrypt($item->application_id)) }}"
+                                                        <a href="{{ url('/Assessor-view/' . dEncrypt($item->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
 

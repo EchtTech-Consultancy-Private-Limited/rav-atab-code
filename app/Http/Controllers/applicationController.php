@@ -459,12 +459,27 @@ class applicationController extends Controller
 
     public function nationl_accesser()
     {
-        $collection = DB::table('asessor_applications')->orderByDesc('asessor_applications.id')
-            ->join('applications', 'asessor_applications.application_id', '=', 'applications.id')
-            ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
-            ->where('asessor_applications.assessor_id', '=', Auth::user()->id)
-            ->where('applications.country', '=', 101)
-            ->get();
+        // $collection = DB::table('asessor_applications')->orderByDesc('asessor_applications.id')
+        //     ->join('applications', 'asessor_applications.application_id', '=', 'applications.id')
+        //     ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
+        //     ->where('asessor_applications.assessor_id', '=', Auth::user()->id)
+        //     ->where('applications.country', '=', 101)
+        //     ->get();
+
+            $collectionIds = AssessorApplication::where('assessor_id',Auth::user()->id)->get(['application_id']);
+            $collection = Application::whereIn('id',$collectionIds)->latest()->get();
+            $filteredApplications = [];
+        
+            foreach ($collection as $application) {
+                $paymentAvailable = ApplicationPayment::where('application_id', $application->id)->first();
+        
+                if (isset($paymentAvailable)) {
+                    $filteredApplications[] = $application;
+                }
+            }
+
+            $collection = $filteredApplications;
+
         if (count($collection)) {
             return view('application.accesser.national_accesser', ['collection' => $collection]);
         }
@@ -555,9 +570,7 @@ class applicationController extends Controller
 
     public function nationl_page()
     {
-        $Application = DB::table('applications')
-            ->join('application_payments', 'application_payments.application_id', '=', 'applications.id')
-            ->where('applications.country', '=', 101)
+        $Application = Application::where('applications.country', '=', 101)
             ->orderBy('applications.id', 'DESC')
             ->get();
 

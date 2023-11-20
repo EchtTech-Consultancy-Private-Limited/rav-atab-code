@@ -166,28 +166,41 @@
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>{{ $item->level_id ?? '' }}</td>
                                                 <td>{{ $item->application_uid }}</td>
-                                                <td>{{ $item->course_count ?? '' }}</td>
+                                                <td>{{ $item->courses->count() ?? '' }}</td>
                                                 <td>
-                                                    {{ $item->currency ?? '' }}{{ $item->amount ?? '' }}
+                                                    @php
+                                                        $totalAmount = 0;
+                                                        $paymentNumbers = [];
+                                                    @endphp
+                                                    @foreach ($item->payments as $payment)
+                                                        @php
+                                                            $totalAmount += $payment->amount;
+                                                            $paymentNumbers[] = $loop->iteration;
+                                                        @endphp
+                                                        @if ($loop->iteration === 1)
+                                                            {{ $payment->currency }}
+                                                        @endif
+                                                    @endforeach
+                                                    {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
                                                 </td>
                                                 <td>{{ date('d F Y', strtotime($item->payment_date)) }}
                                                 </td>
                                                 <td>
-                                                    @if (totalDocumentsCount($item->application_id) > 0)
-                                                        <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                    @if (totalDocumentsCount($item->id) > 0)
+                                                        <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                             class="p-2 buttonBadge text-white bg-warning">Application In
                                                             Processing</a>
                                                     @else
                                                         @if ($item->status == '0')
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                                 class="p-2 buttonBadge text-white bg-danger">Payment
                                                                 Pending</a>
                                                         @elseif($item->status == 1)
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                                 class="p-2 buttonBadge text-light bg-warning">Payment
                                                                 Proccess</a>
                                                         @elseif ($item->status == '2')
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->application_id . '/summary') : '' }}"
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                                 class="p-2 buttonBadge text-white bg-primary">Payment
                                                                 Approved</a>
                                                         @endif
@@ -196,36 +209,34 @@
 
                                                 @if (Auth::user()->role == 6)
                                                     <td>
-                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                     </td>
                                                 @endif
                                                 @if (Auth::user()->role == 1)
                                                     <td>
-                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_id)) }}"
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->id)) }}"
                                                             class="btn btn-tbl-edit">
                                                             <i class="material-icons">visibility</i>
                                                         </a>
 
-                                                        {{-- @if (totalDocumentsCount($item->application_id) >= totalQuestionsCount($item->application_id)) --}}
-                                                        @if (totalDocumentsCount($item->application_id) >= 2)
-                                                            @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
+                                                        {{-- @if (totalDocumentsCount($item->id) >= totalQuestionsCount($item->id)) --}}
+                                                        @if (totalDocumentsCount($item->id) >= 2)
+                                                            @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
-                                                                    data-bs-toggle="modal"
-                                                                    data-id="{{ $item->application_id }}"
-                                                                    data-bs-target="#View_popup_{{ $item->application_id }}"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->id }}"
                                                                     id="view">
                                                                     <i class="fa fa-font" aria-hidden="true"
                                                                         title=""></i>
                                                                 </a>
                                                             @endif
 
-                                                            @if (in_array(checktppaymentstatustype($item->application_id), [2, 3]))
+                                                            @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
                                                                 <a class="btn btn-tbl-delete bg-danger font-a"
-                                                                    data-bs-toggle="modal"
-                                                                    data-id="{{ $item->application_id }}"
-                                                                    data-bs-target="#view_secreate_popup_{{ $item->application_id }}"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->id }}"
+                                                                    data-bs-target="#view_secreate_popup_{{ $item->id }}"
                                                                     id="view">
                                                                     <i class="fa fa-scribd" aria-hidden="true"
                                                                         title=""></i>
@@ -235,8 +246,8 @@
                                                     </td>
                                                 @endif
                                                 {{-- popup form --}}
-                                                <div class="modal fade" id="View_popup_{{ $item->application_id }}"
-                                                    tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                <div class="modal fade" id="View_popup_{{ $item->id }}" tabindex="-1"
+                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
                                                     aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered modal-lg"
                                                         role="document">
@@ -256,10 +267,10 @@
                                                                     method="post">
                                                                     @csrf
                                                                     <input type="hidden" name="application_id"
-                                                                        value="{{ $item->application_id }}">
+                                                                        value="{{ $item->id }}">
                                                                     <?php
-                                                                    $application_assessor_arr = listofapplicationassessor($item->application_id);
-                                                                    $assessment_type = checkapplicationassessmenttype($item->application_id);
+                                                                    $application_assessor_arr = listofapplicationassessor($item->id);
+                                                                    $assessment_type = checkapplicationassessmenttype($item->id);
                                                                     ?>
                                                                     <br>
                                                                     <label class="mb-3"><b>Assessment
@@ -270,12 +281,13 @@
                                                                         </option>
                                                                         <option value="1">Desktop Assessment
                                                                         </option>
-                                                                        <option value="2">On-Site Assessment
-                                                                        </option>
+                                                                        @if ($item->desktop_status == 1 && count($item->payments) > 1)
+                                                                            <option value="2">On-Site Assessment
+                                                                            </option>
+                                                                        @endif
 
                                                                     </select>
-                                                                    <div class="destop-id"
-                                                                        data-id="{{ $item->application_id }}">
+                                                                    <div class="destop-id" data-id="{{ $item->id }}">
                                                                         @foreach ($assesors as $k => $assesorsData)
                                                                             @if ($assesorsData->assessment == 1)
                                                                                 <br>
@@ -285,7 +297,7 @@
                                                                                     <input type="radio" id="assesorsid"
                                                                                         class="d-none assesorsid "
                                                                                         name="assessor_id"
-                                                                                        data-application-id="{{ $item->application_id }}"
+                                                                                        data-application-id="{{ $item->id }}"
                                                                                         value="{{ $assesorsData->id }}"
                                                                                         @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
                                                                                     <span>
@@ -305,7 +317,7 @@
                                                                                 </div>
                                                                                 <input type="hidden"
                                                                                     name="application_id"
-                                                                                    value="{{ $item->application_id ?? '' }}">
+                                                                                    value="{{ $item->id ?? '' }}">
                                                                             @endif
                                                                         @endforeach
                                                                     </div>
@@ -336,7 +348,7 @@
                                                                                 </div>
                                                                                 <input type="hidden"
                                                                                     name="application_id"
-                                                                                    value="{{ $item->application_id ?? '' }}">
+                                                                                    value="{{ $item->id ?? '' }}">
                                                                             @endif
                                                                         @endforeach
                                                                     </div>
@@ -353,10 +365,9 @@
                                                     </div>
                                                 </div>
                                                 <!-- secreate user popup-->
-                                                <div class="modal fade"
-                                                    id="view_secreate_popup_{{ $item->application_id }}" tabindex="-1"
-                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
-                                                    aria-hidden="true">
+                                                <div class="modal fade" id="view_secreate_popup_{{ $item->id }}"
+                                                    tabindex="-1" role="dialog"
+                                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered modal-lg"
                                                         role="document">
                                                         <div class="modal-content">
@@ -374,8 +385,8 @@
                                                                 method="post">
                                                                 @csrf
                                                                 <?php
-                                                                $application_assessor_arr = listofapplicationsecretariat($item->application_id);
-                                                                $assessment_type = checkapplicationassessmenttype($item->application_id);
+                                                                $application_assessor_arr = listofapplicationsecretariat($item->id);
+                                                                $assessment_type = checkapplicationassessmenttype($item->id);
                                                                 ?>
                                                                 <br>
 
@@ -396,7 +407,7 @@
 
                                                                         <input type="hidden" name="application_id"
                                                                             class="application_id"
-                                                                            value="{{ $item->application_id ?? '' }}">
+                                                                            value="{{ $item->id ?? '' }}">
                                                                     @endforeach
                                                                 </div>
                                                                 <div class="modal-footer">

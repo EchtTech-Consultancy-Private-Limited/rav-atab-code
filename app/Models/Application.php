@@ -22,7 +22,9 @@ class Application extends Model
         'state',
         'country',
         'ip',
-        'status'
+        'status',
+        'desktop_status',
+        'onsite_status'
     ];
 
 
@@ -56,6 +58,10 @@ class Application extends Model
 
     public function payment(){
         return $this->hasOne(ApplicationPayment::class,"application_id","id");
+    }
+
+    public function payments(){
+        return $this->hasMany(ApplicationPayment::class,"application_id","id");
     }
 
     public function user(){
