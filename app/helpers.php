@@ -840,5 +840,10 @@ function getVerifiedApplications()
 
 function getApplicationPaymentNotificationStatus(){
     $applications = Application::where('user_id', auth()->user()->id)->where('desktop_status', '!=', null)->where('is_read',null)->get();
-    return $applications;
+    if (count($applications) > 0) {
+        return true;
+    } else {
+        return false;
+    }
+    
 }

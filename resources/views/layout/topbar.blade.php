@@ -87,6 +87,7 @@
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
+                                    @if (getApplicationPaymentNotificationStatus())
                                      @foreach ($applications as $application)
                                      <li>
                                         <a href="{{ url('pending-payments/'.$application->id) }}" style="color: #000;">
@@ -95,6 +96,11 @@
                                         </a>
                                      </li>
                                      @endforeach
+                                     @else
+                                     <li class="text-center">
+                                        No New Notifications!
+                                     </li>
+                                     @endif
                                  </ul>
                              </li>
                          </ul>

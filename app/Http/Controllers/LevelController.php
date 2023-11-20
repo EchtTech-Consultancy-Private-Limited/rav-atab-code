@@ -1032,9 +1032,11 @@ class LevelController extends Controller
         $referenceNumber = trim($request->reference_no);
 
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $request->Application_id)->first();
+       if (!$request->coursePayment) {
         if ($checkPaymentAlready) {
             return redirect(url('application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
+       }
         // return $request->all();
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
@@ -1145,7 +1147,7 @@ class LevelController extends Controller
 
     //level information view page 4 url
 
-    public function previews_application1($ids, $application_id)
+    public function previews_application1($application_id)
     {
 
         $id = Auth::user()->id;
@@ -1157,25 +1159,25 @@ class LevelController extends Controller
             ->first();
 
         $spocData = DB::table('applications')->where('id', $application_id)->first();
-
+        $applicationData = Application::find($application_id);
 
         //return $item[0]->id;
 
 
-        $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($ids)->wherelevel_id($item[0]->id)->get();
-        $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($ids)->wherelevel_id($item[0]->id)->get();
+        $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($application_id)->wherelevel_id($item[0]->id)->get();
+        $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id($item[0]->id)->get();
 
-        $check_payment = ApplicationPayment::where('id', $ids)->first();
+        $check_payment = ApplicationPayment::where('id', $application_id)->first();
         if ($check_payment->level_id == 2) {
-            $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($ids)->wherelevel_id(2)->get();
-            $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($ids)->wherelevel_id(2)->get();
+            $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($application_id)->wherelevel_id(2)->get();
+            $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id(2)->get();
         }
 
 
         //return $ApplicationPayment;
 
 
-        return view('level.level-previous_view', ['spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
+        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData,'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
     }
 
     public function previews_application2($ids)
@@ -2495,8 +2497,18 @@ class LevelController extends Controller
 
     public function applictionTable()
     {
-        $collection = ApplicationPayment::orderBy('application_id', 'desc')->whereuser_id(Auth::user()->id)->get();
-        return view('level.application_table', ['collection' => $collection]);
+        // $collection = ApplicationPayment::orderBy('application_id', 'desc')->whereuser_id(Auth::user()->id)->get();
+        $collection = Application::latest()->get();
+        $filteredApplications = [];
+    
+        foreach ($collection as $application) {
+            $paymentAvailable = ApplicationPayment::where('application_id', $application->id)->first();
+    
+            if (isset($paymentAvailable)) {
+                $filteredApplications[] = $application;
+            }
+        }
+        return view('level.application_table', ['collection' => $filteredApplications]);
     }
 
     public function faqslist()
@@ -2746,9 +2758,17 @@ class LevelController extends Controller
 
     public function pendingPayments($application_id){
 
+
         $applicationData = DB::table('applications')->where('id', $application_id)->first();
 
+        if ($applicationData->is_read == 1) {
+            return redirect(url('application-list'))->with('warning', 'Payment has already been made.');
+        }
+
+        DB::table('applications')->where('id', $application_id)->update(['is_read'=>1]);
+
         $course = DB::table('application_courses')->where('application_id', $application_id)->get();
+    
 
         if (Auth::user()->country == $this->get_india_id()) {
 
@@ -2797,6 +2817,6 @@ class LevelController extends Controller
         }
 
         $payments = ApplicationPayment::where('application_id',$application_id)->get();
-        return view('application.final-payments',compact('total_amount','payments'));
+        return view('application.final-payments',compact('total_amount','payments','applicationData','course','currency'));
     }
 }

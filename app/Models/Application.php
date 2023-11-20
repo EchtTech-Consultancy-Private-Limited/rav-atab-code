@@ -60,6 +60,10 @@ class Application extends Model
         return $this->hasOne(ApplicationPayment::class,"application_id","id");
     }
 
+    public function payments(){
+        return $this->hasMany(ApplicationPayment::class,"application_id","id");
+    }
+
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }

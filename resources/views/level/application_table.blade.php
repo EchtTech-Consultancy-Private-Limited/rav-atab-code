@@ -180,7 +180,7 @@
         Swal.fire({
             position: 'center',
             icon: 'success',
-            title:'Success',
+            title: 'Success',
             text: '{{ session('success') }}',
             showConfirmButton: false,
             timer: 3000
@@ -191,7 +191,7 @@
         Swal.fire({
             position: 'center',
             icon: 'error',
-            title:'Success',
+            title: 'Error', // Corrected title
             text: '{{ session('fail') }}',
             showConfirmButton: false,
             timer: 3000
@@ -202,14 +202,24 @@
         Swal.fire({
             position: 'center',
             icon: 'warning',
-            title:'Warning'
-            text: '{{ session('fail') }}',
+            title: 'Payment Warning', // Corrected title
+            text: '{{ session('payment_fail') }}', // Corrected session key
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@elseif (Session::has('warning'))
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Warning',
+            text: '{{ session('warning') }}',
             showConfirmButton: false,
             timer: 3000
         });
     </script>
 @endif
-
 
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -262,7 +272,7 @@
                     <div class="card">
                         @include('level.inner-nav')
                     </div>
-                   
+
 
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
@@ -285,8 +295,10 @@
                                     <h4 class="header-title mt-2"> Applications</h4>
                                 </div>
                                 <div class="body">
-                                    <div class="table-responsive" style="width:100%; overflow-x:hidden; padding-bottom:20px;">
-                                        <table class="table table-responsive" style="width:100%; overflow:hidden;" id="dataTableMain">
+                                    <div class="table-responsive"
+                                        style="width:100%; overflow-x:hidden; padding-bottom:20px;">
+                                        <table class="table table-responsive" style="width:100%; overflow:hidden;"
+                                            id="dataTableMain">
                                             <thead>
                                                 <tr>
                                                     <th class="center">Sr.No</th>
@@ -307,19 +319,34 @@
                                                             style="font-size: 13px !important;">
                                                             <td class="center">{{ $k + 1 }}</td>
                                                             <td class="center">
-                                                                {{ $item->application->application_uid }}
+                                                                {{ $item->application_uid }}
                                                             </td>
                                                             <td class="center level-id">{{ $item->level_id }}
                                                             </td>
-                                                            <td class="center">{{ $item->course_count }}</td>
                                                             <td class="center">
-                                                                {{ $item->currency }}{{ $item->amount }}
+                                                                {{ count($item->courses) }}
+                                                            </td>
+                                                            <td class="center">
+                                                                @php
+                                                                    $totalAmount = 0;
+                                                                    $paymentNumbers = [];
+                                                                @endphp
+                                                                @foreach ($item->payments as $payment)
+                                                                    @php
+                                                                        $totalAmount += $payment->amount;
+                                                                        $paymentNumbers[] = $loop->iteration;
+                                                                    @endphp
+                                                                    @if ($loop->iteration === 1)
+                                                                        {{ $payment->currency }}
+                                                                    @endif
+                                                                @endforeach
+                                                                {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
                                                             </td>
                                                             <td class="center">
                                                                 {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
                                                             </td>
                                                             <td class="center">
-                                                                <a href="{{ url('application/summary/'.$item->application_id) }}"
+                                                                <a href="{{ url('application/summary/' . $item->application_id) }}"
                                                                     @if ($item->status == 0) <div class="badge col-red">Applications Pending</div>
                                                                          @elseif($item->status == 1)
                                                                        <div class="badge col-orange">Applications In Process</div>
@@ -356,7 +383,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class="center">
-                                                                <a href="{{ url('/previews-application-first' . '/' . $item->id . '/' . $item->application_id) }}"
+                                                                <a href="{{ url('previews-application-first/' . $item->id) }}"
                                                                     class="btn btn-tbl-edit"><i
                                                                         class="material-icons">visibility</i></a>
 
@@ -365,8 +392,8 @@
                                                             @elseif(request()->path() == 'level-second')
                                                                 <td class="center">
                                                                     <!-- <a href="{{ url('/previews-application-second' . '/' . $item->id) }}"
-                                                                                   class="btn btn-tbl-edit"><i
-                                                                                       class="material-icons">visibility</i></a> -->
+                                                                                               class="btn btn-tbl-edit"><i
+                                                                                                   class="material-icons">visibility</i></a> -->
                                                                     @if ($item->status == 1)
                                                                         <a href="{{ url('/upload-document') }}"
                                                                             class="btn btn-tbl-upload"><i

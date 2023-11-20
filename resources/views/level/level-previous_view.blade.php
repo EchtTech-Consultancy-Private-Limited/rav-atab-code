@@ -343,13 +343,13 @@
                 </div>
             @endforeach
 
-            @foreach ($ApplicationPayment as $ApplicationPayment)
+            @foreach ($applicationData->payments as $ApplicationPayment)
                 <div class="card">
                     <div class="card-header bg-white text-dark">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h5 class="mt-2">
-                                    Payment Information
+                                    Payment Information {{ $loop->iteration }}
                                 </h5>
                             </div>
                             <div>
