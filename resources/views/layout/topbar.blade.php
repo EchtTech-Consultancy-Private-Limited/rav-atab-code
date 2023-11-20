@@ -75,9 +75,9 @@
                              role="button">
                              <i class="far fa-bell"></i>
                              @if (getApplicationPaymentNotificationStatus())
-                        <span class="notify" style="    background-color: #ff5722 !important;"></span>
-                        <span class="heartbeat" style="    background-color: #ff5722 !important;"></span>
-                        @endif
+                                 <span class="notify" style="    background-color: #ff5722 !important;"></span>
+                                 <span class="heartbeat" style="    background-color: #ff5722 !important;"></span>
+                             @endif
                          </a>
 
                          @php
@@ -87,19 +87,28 @@
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
-                                    @if (getApplicationPaymentNotificationStatus())
-                                     @foreach ($applications as $application)
-                                     <li>
-                                        <a href="{{ url('pending-payments/'.$application->id) }}" style="color: #000;">
-                                            Application ID {{ $application->application_uid }}
-                                            
-                                        </a>
-                                     </li>
-                                     @endforeach
+                                     @if (getApplicationPaymentNotificationStatus())
+                                         @foreach ($applications as $application)
+                                             <li>
+                                                 @if ($application->notification_type == 'document')
+                                                     <a href="{{ url('previews-application-first/' . $application->application->id.'/'.$application->id) }}"
+                                                         style="color: #000;">
+                                                         Application ID {{ $application->application->application_uid }}
+
+                                                     </a>
+                                                 @else
+                                                     <a href="{{ url('pending-payments/' . $application->application->id) }}"
+                                                         style="color: #000;">
+                                                         Application ID {{ $application->application->application_uid }}
+
+                                                     </a>
+                                                 @endif
+                                             </li>
+                                         @endforeach
                                      @else
-                                     <li class="text-center">
-                                        No New Notifications!
-                                     </li>
+                                         <li class="text-center">
+                                             No New Notifications!
+                                         </li>
                                      @endif
                                  </ul>
                              </li>

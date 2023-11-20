@@ -107,6 +107,7 @@
                                                                 value="{{ $doc_code }}">
                                                             <input type="hidden" name="course_id"
                                                                 value="{{ $course_id }}">
+                                                                <input type="hidden" name="application_id" value="{{ $application_id }}">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">
                                                                     <label>Select Type</label>

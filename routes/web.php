@@ -129,7 +129,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/assigan-secretariat-application', [applicationController::class, 'assigan_secretariat_application']);
     Route::get('/assigin-check-delete', [applicationController::class, 'assigin_check_delete']);
     //previews-application view page
-    Route::get('/previews-application-first/{application_id}', [LevelController::class, 'previews_application1']);
+    Route::get('/previews-application-first/{application_id}/{notificationId?}', [LevelController::class, 'previews_application1']);
     Route::get('/previews-application-second/{id?}', [LevelController::class, 'previews_application2']);
     Route::get('/previews-application-third/{id?}', [LevelController::class, 'previews_application3']);
     Route::get('/previews-application-fourth/{id?}', [LevelController::class, 'previews_application4']);

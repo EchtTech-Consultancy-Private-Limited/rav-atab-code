@@ -42,6 +42,7 @@ use App\Models\Add_Document;
 use App\Models\DocComment;
 use App\Models\Chapter;
 use App\Mail\paymentSuccessMail;
+use App\Models\ApplicationNotification;
 use App\Models\AssessorApplication;
 
 class LevelController extends Controller
@@ -83,14 +84,15 @@ class LevelController extends Controller
 
     public function admin_view($id)
     {
+     
         $Application = Application::whereid(dDecrypt($id))->get();
         $applicationData = Application::find(dDecrypt($id));
-        $ApplicationCourse = ApplicationCourse::whereapplication_id($Application[0]->id)->get();
-        $ApplicationPayment = ApplicationPayment::whereapplication_id($Application[0]->id)->get();
+        $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
+        $ApplicationPayment = ApplicationPayment::whereapplication_id($applicationData->id)->get();
         // dd($ApplicationPayment);
-        $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
-        $ApplicationDocument = ApplicationDocument::whereapplication_id($Application[0]->id)->get();
-        $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+        $spocData = DB::table('applications')->where('id', $applicationData->id)->first();
+        $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
+        $data = DB::table('users')->where('users.id', $applicationData->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $applicationData]);
     }
 
@@ -1032,11 +1034,11 @@ class LevelController extends Controller
         $referenceNumber = trim($request->reference_no);
 
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $request->Application_id)->first();
-       if (!$request->coursePayment) {
-        if ($checkPaymentAlready) {
-            return redirect(url('application-list'))->with('fail', 'Payment has already been submitted for this application.');
+        if (!$request->coursePayment) {
+            if ($checkPaymentAlready) {
+                return redirect(url('application-list'))->with('fail', 'Payment has already been submitted for this application.');
+            }
         }
-       }
         // return $request->all();
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
@@ -1147,8 +1149,13 @@ class LevelController extends Controller
 
     //level information view page 4 url
 
-    public function previews_application1($application_id)
+    public function previews_application1($application_id,$notificationId = 0)
     {
+
+        if($notificationId > 0){
+            $notification = ApplicationNotification::find($notificationId);
+            $notification->update(['is_read' => 1]);
+        }
 
         $id = Auth::user()->id;
         $item = LevelInformation::whereid('1')->get();
@@ -1177,7 +1184,7 @@ class LevelController extends Controller
         //return $ApplicationPayment;
 
 
-        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData,'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
+        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
     }
 
     public function previews_application2($ids)
@@ -1268,7 +1275,7 @@ class LevelController extends Controller
 
         $applicationData = Application::find($application_id);
 
-        return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id','applicationData'));
+        return view('level.upload_document', compact('chapters', 'file', 'data', 'course_id', 'application_id', 'applicationData'));
     }
 
 
@@ -1285,7 +1292,7 @@ class LevelController extends Controller
         $applicationData = Application::find($id);
 
 
-        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id','applicationData'));
+        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData'));
     }
 
     public function document_report_verified_by_assessor($id, $course_id)
@@ -1527,6 +1534,7 @@ class LevelController extends Controller
             'doc_latest_record_comment' => $doc_latest_record_comment,
             'doc_code' => $doc_code,
             'comment' => $comment,
+            'application_id' => $course_id
         ], compact('course_id'));
     }
 
@@ -1560,6 +1568,16 @@ class LevelController extends Controller
             $comment->course_id = $request->course_id;
             $comment->user_id = Auth::user()->id;
             $comment->save();
+           
+            if ($request->status != 4) {
+                ApplicationNotification::create([
+                    'application_id' => $request->application_id,
+                    'is_read' => 0,
+                    'notification_type' => 'document'
+                ]);
+            }
+           
+            
 
             if ($request->status == 1) {
                 $mailstatus = "Approved";
@@ -2500,10 +2518,10 @@ class LevelController extends Controller
         // $collection = ApplicationPayment::orderBy('application_id', 'desc')->whereuser_id(Auth::user()->id)->get();
         $collection = Application::latest()->get();
         $filteredApplications = [];
-    
+
         foreach ($collection as $application) {
             $paymentAvailable = ApplicationPayment::where('application_id', $application->id)->first();
-    
+
             if (isset($paymentAvailable)) {
                 $filteredApplications[] = $application;
             }
@@ -2737,38 +2755,49 @@ class LevelController extends Controller
         ]);
 
         if ($update) {
-            return redirect()->back()->with('success',"Report submit successfully");
-        }else{
+            return redirect()->back()->with('success', "Report submit successfully");
+        } else {
             return "fail";
         }
     }
 
-    public function submitFinalReportByDesktopAssessor(Request $request){
+    public function submitFinalReportByDesktopAssessor(Request $request)
+    {
         $application = Application::find($request->applicationID);
         $updated = $application->update([
             'desktop_status' => 1
         ]);
+
+        ApplicationNotification::create([
+            'application_id' => $request->applicationID,
+            'is_read' => 0,
+            'notification_type' => 'payment'
+        ]);
+
         if ($updated) {
-            return redirect()->back()->with('success',"Report submit successfully");
-        }else{
+            return redirect()->back()->with('success', "Report submit successfully");
+        } else {
             return "fail";
         }
-
     }
 
-    public function pendingPayments($application_id){
+    public function pendingPayments($application_id)
+    {
 
 
-        $applicationData = DB::table('applications')->where('id', $application_id)->first();
+        $applicationData = Application::find($application_id);
 
-        if ($applicationData->is_read == 1) {
+        if (count($applicationData->payments) > 1 && $applicationData->is_read == 1) {
             return redirect(url('application-list'))->with('warning', 'Payment has already been made.');
         }
 
-        DB::table('applications')->where('id', $application_id)->update(['is_read'=>1]);
+        DB::table('applications')->where('id', $application_id)->update(['is_read' => 1]);
 
         $course = DB::table('application_courses')->where('application_id', $application_id)->get();
-    
+
+       $applicationNotification =  ApplicationNotification::where('application_id', $application_id)->first();
+
+       $applicationNotification->update(['is_read' => 1]);
 
         if (Auth::user()->country == $this->get_india_id()) {
 
@@ -2816,7 +2845,7 @@ class LevelController extends Controller
             }
         }
 
-        $payments = ApplicationPayment::where('application_id',$application_id)->get();
-        return view('application.final-payments',compact('total_amount','payments','applicationData','course','currency'));
+        $payments = ApplicationPayment::where('application_id', $application_id)->get();
+        return view('application.final-payments', compact('total_amount', 'payments', 'applicationData', 'course', 'currency'));
     }
 }

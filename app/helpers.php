@@ -3,6 +3,7 @@
 use App\Models\Add_Document;
 use App\Models\Application;
 use App\Models\ApplicationCourse;
+use App\Models\ApplicationNotification;
 use App\Models\DocComment;
 use App\Models\Question;
 use App\Models\User;
@@ -68,13 +69,16 @@ function application_submission_date($application_id, $secretariat_id)
 }
 function assessor_assign_date($application_id, $asessor_id)
 {
+    // dd($application_id, $asessor_id);
     $applications = DB::table('asessor_applications')->where('application_id', '=', $application_id)->where('assessor_id', '=', $asessor_id)->first();
 
 
+  if ($applications) {
     $application_assign_date = date('d-m-Y', strtotime($applications->created_at));
+  }
 
     //  dd( $application_assign_date);
-    return $application_assign_date;
+    return $application_assign_date ?? '';
 }
 
 function secretariat_assign_date($application_id, $secretariat_id)
@@ -153,6 +157,7 @@ function listofapplicationassessor($application_id)
         return $assessorid;
     }
 }
+
 function checkapplicationassessmenttype($application_id)
 {
     $application_assess_type = DB::table('asessor_applications')->where('application_id', '=', $application_id)->first();
@@ -834,12 +839,14 @@ function applicationDocuments($applicationId)
 
 function getVerifiedApplications()
 {
-    $applications = Application::where('user_id', auth()->user()->id)->where('desktop_status', '!=', null)->get();
+    $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
+    $applications = ApplicationNotification::whereIn('application_id',$applicationsIds)->where('is_read',0)->get();
     return $applications;
 }
 
 function getApplicationPaymentNotificationStatus(){
-    $applications = Application::where('user_id', auth()->user()->id)->where('desktop_status', '!=', null)->where('is_read',null)->get();
+    $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
+    $applications = ApplicationNotification::whereIn('application_id',$applicationsIds)->where('is_read',0)->get();
     if (count($applications) > 0) {
         return true;
     } else {

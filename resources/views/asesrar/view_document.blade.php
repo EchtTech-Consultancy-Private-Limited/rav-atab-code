@@ -449,7 +449,7 @@
                                                                 action="{{ route('submit-final-report-by-desktop') }}"
                                                                 method="post">
                                                                 @csrf
-                                                                <input type="text" name="applicationID"
+                                                                <input type="hidden" name="applicationID"
                                                                     value="{{ $application_id }}">
                                                                 <button class="btn btn-success"
                                                                     style="margin-right: 10px;">Submit</button>

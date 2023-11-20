@@ -353,8 +353,10 @@
                                 </h5>
                             </div>
                             <div>
-                                @if ($spocData->status == 1)
+                                @if ($ApplicationPayment->status == 2)
                                     <span class="text-white bg-success p-2">Payment Approved</span>
+                                @elseif ($ApplicationPayment->status == 1)
+                                    <span class="text-white bg-warning p-2">Payment Processing</span>
                                 @else
                                     <span class="text-white bg-danger p-2">Payment approval is pending!</span>
                                 @endif
