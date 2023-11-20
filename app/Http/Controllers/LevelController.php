@@ -1178,10 +1178,12 @@ class LevelController extends Controller
        
 
         $check_payment = ApplicationPayment::where('id', $application_id)->first();
+       if (isset($check_payment->level_id)) {
         if ($check_payment->level_id == 2) {
             $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($application_id)->wherelevel_id(2)->get();
             $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id(2)->get();
         }
+       }
 
 
         //return $ApplicationPayment;
