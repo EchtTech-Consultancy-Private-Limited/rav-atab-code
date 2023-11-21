@@ -409,7 +409,8 @@ opacity: 1;
 }
 
 .gif-box img {
-  width: 220px;
+  width: 160px;
+  margin-bottom: 20px;
 }
 
 .inner-box {
