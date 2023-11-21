@@ -642,7 +642,7 @@ h6,
 
 .login-2 .form-section {
     text-align: center;
-    padding: 70px 90px;
+    padding: 70px 70px;
     /* background:url('../img/log_bg12.png'); */
     background-color: #fff;
     border-radius: 20px 0 0 20px;
@@ -675,8 +675,10 @@ h6,
 }
 
 .login-2 .logo-2 img {
-    margin-bottom: 20px;
-    height: 150px;
+    margin-bottom: 30px;
+    height: 100px;
+    margin-top: 33px;
+    border-radius: 16px;
 }
 
 .login-2 .form-section .thembo {
@@ -1107,7 +1109,8 @@ h6,
         font-size: 22px;
     }
     .login-2 .logo-2 img {
-        height: 130px;
+        height: 90px;
+        border-radius: 0px;
     }
     .login-2 .form-info {
         width: 100%;
