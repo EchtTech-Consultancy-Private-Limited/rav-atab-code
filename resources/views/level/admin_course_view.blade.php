@@ -66,6 +66,9 @@
             </div>
         </div>
 
+        <div>
+            <span style="font-weight: bold;">Application ID:</span> {{ $applicationData->application_uid }}
+        </div>
         <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
@@ -590,7 +593,7 @@
                                             </div>
                                             <div class="card-footer d-flex justify-content-end">
                                                 <input type="hidden" name="status" value="2">
-                                                <button class="btn btn-primary" type="submit"
+                                                <button class="btn btn-primary mt-0" type="submit"
                                                     id="paymentApproveButton">Click to Approve
                                                     Payment</button>
                                             </div>
