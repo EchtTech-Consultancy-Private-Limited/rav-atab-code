@@ -181,9 +181,9 @@
                                                             {{ $payment->currency }}
                                                         @endif
                                                     @endforeach
-                                                   @if ($totalAmount !== 0)
-                                                   {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
-                                                   @endif
+                                                    @if ($totalAmount !== 0)
+                                                        {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
@@ -192,33 +192,42 @@
                                                     @if (totalDocumentsCount($item->id) > 0)
                                                         <div class="d-flex">
                                                             <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                class="p-2 buttonBadge text-white bg-warning" style="margin-right: 5px;">Application In
+                                                                class="p-2 buttonBadge text-white bg-warning"
+                                                                style="margin-right: 5px;">Application In
                                                                 Processing</a>
-                                                                @if ($item->is_payment_acknowledge !== 1)
-                                                                <form action="{{ route('payment.acknowledge') }}" method="post">
+                                                            @if ($item->is_payment_acknowledge !== 1)
+                                                                <form action="{{ route('payment.acknowledge') }}"
+                                                                    method="post">
                                                                     @csrf
-                                                                    <input type="hidden" name="applicationID" value="{{ $item->id }}">
-                                                                    <button class="btn btn-primary btn-sm mb-0 p-2">Acknowledge Payment</button>
+                                                                    <input type="hidden" name="applicationID"
+                                                                        value="{{ $item->id }}">
+                                                                    <button
+                                                                        class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
+                                                                        Payment</button>
                                                                 </form>
-                                                                @endif
-                                                               
+                                                            @endif
+
                                                         </div>
                                                     @else
-                                                       @if ($item->payment != null)
-                                                       @if ($item->payment->status == '0')
-                                                       <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                           class="p-2 buttonBadge text-white bg-danger">Payment
-                                                           Pending</a>
-                                                   @elseif($item->payment->status == 1)
-                                                       <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                           class="p-2 buttonBadge text-light bg-warning">Payment
-                                                           Proccess</a>
-                                                   @elseif ($item->payment->status == '2')
-                                                       <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                           class="p-2 buttonBadge text-white bg-primary">Payment
-                                                           Approved</a>
-                                                   @endif
-                                                       @endif
+                                                        @if ($item->payment != null)
+                                                            @if ($item->payment->status == '0')
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                                    class="p-2 buttonBadge text-white bg-danger">Payment
+                                                                    Pending</a>
+                                                            @elseif($item->payment->status == 1)
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                                    class="p-2 buttonBadge text-light bg-warning">Payment
+                                                                    Proccess</a>
+                                                            @elseif ($item->payment->status == '2')
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                                    class="p-2 buttonBadge text-white bg-primary">Payment
+                                                                    Approved</a>
+                                                            @endif
+                                                            @else
+                                                            <a 
+                                                                class="p-2 buttonBadge text-white bg-danger">Payment
+                                                                Pending</a>
+                                                        @endif
                                                     @endif
                                                 </td>
 
@@ -295,8 +304,8 @@
                                                                         <option value="0">Select Assessment Type
                                                                         </option>
                                                                         @if ($item->desktop_status !== 1 && count($item->payments) == 1)
-                                                                        <option value="1">Desktop Assessment
-                                                                        </option>
+                                                                            <option value="1">Desktop Assessment
+                                                                            </option>
                                                                         @endif
                                                                         @if ($item->desktop_status == 1 && count($item->payments) > 1)
                                                                             <option value="2">On-Site Assessment
