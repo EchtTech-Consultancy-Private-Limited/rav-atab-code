@@ -198,7 +198,7 @@
                                                                 <form action="{{ route('payment.acknowledge') }}" method="post">
                                                                     @csrf
                                                                     <input type="hidden" name="applicationID" value="{{ $item->id }}">
-                                                                    <button class="btn btn-primary btn-sm mb-0 p-2">Acknowledge</button>
+                                                                    <button class="btn btn-primary btn-sm mb-0 p-2">Acknowledge Payment</button>
                                                                 </form>
                                                                 @endif
                                                                
