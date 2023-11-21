@@ -390,7 +390,114 @@
             </div>
         @endforeach
 
+        <div class="card">
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                    Payment Information
+                </h5>
+            </div>
+<div class="card-body">
+    
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                S.No.
+               </th> 
+           <th>
+            Payment Date
+           </th>
+           <th>
+            Payment Transaction no
+           </th>
+           <th>
+            Payment Reference no
+           </th>
+           <th>Total Courses</th>
+           <th>Amount</th>
+           <th>Payment Proof</th>
+           <th>Payment Slip</th>
+           <th>Remarks</th>
+        </tr>
         @foreach ($ApplicationPayment as $ApplicationPayment)
+        <tr>
+            
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}</td>
+            <td>{{ $ApplicationPayment->transaction_no ?? '' }}</td>
+            <td>{{ $ApplicationPayment->reference_no ?? '' }}</td>
+            <td>{{ $ApplicationPayment->course_count ?? '' }}</td>
+            <td>{{ $ApplicationPayment->currency ?? '' }}
+                {{ $ApplicationPayment->amount }}</td>
+            <td><?php
+                                        substr($ApplicationPayment->payment_details_file, -3);
+                                        
+                                        $data = substr($ApplicationPayment->payment_details_file, -3);
+                                        ?>
+    
+    
+                                        @if ($data == 'pdf')
+                                            <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                target="_blank" title="Document 3" id="docpdf3" download>
+                                                <i class="fa fa-download mr-2"></i> Payment pdf
+                                            </a>
+                                        @else
+                                            @if (isset($ApplicationPayment->payment_details_file))
+                                                <a target="_blank" class="image-link"
+                                                    href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                    <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                        style="width:100px;height:70px;">
+                                                </a>
+                                            @endif
+                                        @endif</td>
+            <td>
+                @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 0)
+                    Pending Payment Approval!
+                @endif
+                @if ($ApplicationPayment->status == '2')
+                    @if (!$ApplicationPayment->payment_slip)
+                        File not available!
+                    @endif
+                    <?php
+                    substr($ApplicationPayment->payment_slip, -3);
+                    
+                    $data = substr($ApplicationPayment->payment_slip, -3);
+                    ?>
+    
+    
+                    @if ($data == 'pdf')
+                        <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                            target="_blank" title="Document 3" id="docpdf3" download>
+                            <i class="fa fa-download mr-2"></i>Payment pdf
+                        </a>
+                    @else
+                        @if (isset($ApplicationPayment->payment_slip))
+                            <a target="_blank" class="image-link"
+                                href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
+                                <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                    style="width:100px;height:70px;">
+                            </a>
+                        @endif
+                    @endif
+                    @endif
+            </td>
+            <td>
+                @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 0)
+               Remark not available!
+                @else
+                {{ $ApplicationPayment->payment_remark }}
+            @endif
+               </td>
+            
+        </tr>
+        @endforeach
+    </table>
+</div>
+</div>
+
+        </div>
+
+        {{-- @foreach ($ApplicationPayment as $ApplicationPayment)
             <div class="card">
                 <div class="card-header bg-white text-dark">
                     <h5 class="mt-2">
@@ -641,7 +748,7 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @endforeach --}}
     </section>
 
 
