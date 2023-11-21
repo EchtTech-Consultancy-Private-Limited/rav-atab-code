@@ -95,7 +95,7 @@
          <div class="row pt-lg-60">
             <div class="col-md-5">
                <div class="gif-box">
-                  <img src="{{ asset('landing_page/medical.gif')}}" alt="title">
+                  <img src="{{ asset('landing_page/ayurveda.png')}}" alt="title">
                   <h2 class="text-title-l"> About Us </h2>
                   <p class="sub-text-l">
                      ATAB Has Been Set Up By The Ministry Of Ayush For Accreditation Of Ayurveda Courses
