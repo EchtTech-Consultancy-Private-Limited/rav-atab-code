@@ -183,23 +183,34 @@
                                                     @endforeach
                                                     {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
                                                 </td>
-                                                <td>{{ date('d F Y', strtotime($item->payment_date)) }}
+                                                <td>
+                                                    {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
                                                 </td>
                                                 <td>
                                                     @if (totalDocumentsCount($item->id) > 0)
-                                                        <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                            class="p-2 buttonBadge text-white bg-warning">Application In
-                                                            Processing</a>
+                                                        <div class="d-flex">
+                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                                class="p-2 buttonBadge text-white bg-warning" style="margin-right: 5px;">Application In
+                                                                Processing</a>
+                                                                @if ($item->is_payment_acknowledge !== 1)
+                                                                <form action="{{ route('payment.acknowledge') }}" method="post">
+                                                                    @csrf
+                                                                    <input type="hidden" name="applicationID" value="{{ $item->id }}">
+                                                                    <button class="btn btn-primary btn-sm mb-0 p-2">Acknowledge</button>
+                                                                </form>
+                                                                @endif
+                                                               
+                                                        </div>
                                                     @else
-                                                        @if ($item->status == '0')
+                                                        @if ($item->payment->status == '0')
                                                             <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                                 class="p-2 buttonBadge text-white bg-danger">Payment
                                                                 Pending</a>
-                                                        @elseif($item->status == 1)
+                                                        @elseif($item->payment->status == 1)
                                                             <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                                 class="p-2 buttonBadge text-light bg-warning">Payment
                                                                 Proccess</a>
-                                                        @elseif ($item->status == '2')
+                                                        @elseif ($item->payment->status == '2')
                                                             <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
                                                                 class="p-2 buttonBadge text-white bg-primary">Payment
                                                                 Approved</a>
@@ -222,7 +233,7 @@
                                                         </a>
 
                                                         {{-- @if (totalDocumentsCount($item->id) >= totalQuestionsCount($item->id)) --}}
-                                                        @if (totalDocumentsCount($item->id) >= 2)
+                                                        @if (totalDocumentsCount($item->id) >= 2 && $item->acknowledged_by != null && $item->is_payment_acknowledge == 1)
                                                             @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->id }}"
@@ -279,8 +290,10 @@
                                                                         class="form-control assessment_type">
                                                                         <option value="0">Select Assessment Type
                                                                         </option>
+                                                                        @if ($item->desktop_status !== 1 && count($item->payments) == 1)
                                                                         <option value="1">Desktop Assessment
                                                                         </option>
+                                                                        @endif
                                                                         @if ($item->desktop_status == 1 && count($item->payments) > 1)
                                                                             <option value="2">On-Site Assessment
                                                                             </option>

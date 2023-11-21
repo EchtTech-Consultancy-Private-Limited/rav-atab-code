@@ -84,7 +84,7 @@ class LevelController extends Controller
 
     public function admin_view($id)
     {
-     
+
         $Application = Application::whereid(dDecrypt($id))->get();
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
@@ -1149,10 +1149,9 @@ class LevelController extends Controller
 
     //level information view page 4 url
 
-    public function previews_application1($application_id,$notificationId = 0)
+    public function previews_application1($application_id, $notificationId = 0)
     {
-
-        if($notificationId > 0){
+        if ($notificationId > 0) {
             $notification = ApplicationNotification::find($notificationId);
             $notification->update(['is_read' => 1]);
         }
@@ -1171,19 +1170,19 @@ class LevelController extends Controller
         //return $item[0]->id;
 
 
-        $ApplicationCourse = ApplicationCourse::where('user_id', $id)->where('application_id',$application_id)->wherelevel_id($item[0]->id)->get();
-       
+        $ApplicationCourse = ApplicationCourse::where('user_id', $id)->where('application_id', $application_id)->wherelevel_id($item[0]->id)->get();
+
         $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id($item[0]->id)->get();
 
-       
+
 
         $check_payment = ApplicationPayment::where('id', $application_id)->first();
-       if (isset($check_payment->level_id)) {
-        if ($check_payment->level_id == 2) {
-            $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($application_id)->wherelevel_id(2)->get();
-            $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id(2)->get();
+        if (isset($check_payment->level_id)) {
+            if ($check_payment->level_id == 2) {
+                $ApplicationCourse = ApplicationCourse::where('user_id', $id)->wherepayment($application_id)->wherelevel_id(2)->get();
+                $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id(2)->get();
+            }
         }
-       }
 
 
         //return $ApplicationPayment;
@@ -1484,6 +1483,9 @@ class LevelController extends Controller
         $course->question_id = $request->question_pid;
         $course->application_id = $request->application_id;
         $course->user_id = Auth::user()->id;
+        if ($oldFile->on_site_assessor_Id != null) {
+            $course->on_site_assessor_Id = $oldFile->on_site_assessor_Id;
+        }
         $course->notApraove_count = $notApprove + 1 ?? 1;
 
 
@@ -1573,7 +1575,7 @@ class LevelController extends Controller
             $comment->course_id = $request->course_id;
             $comment->user_id = Auth::user()->id;
             $comment->save();
-           
+
             if ($request->status != 4) {
                 ApplicationNotification::create([
                     'application_id' => $request->application_id,
@@ -1581,8 +1583,8 @@ class LevelController extends Controller
                     'notification_type' => 'document'
                 ]);
             }
-           
-            
+
+
 
             if ($request->status == 1) {
                 $mailstatus = "Approved";
@@ -2800,9 +2802,9 @@ class LevelController extends Controller
 
         $course = DB::table('application_courses')->where('application_id', $application_id)->get();
 
-       $applicationNotification =  ApplicationNotification::where('application_id', $application_id)->first();
+        $applicationNotification =  ApplicationNotification::where('application_id', $application_id)->first();
 
-       $applicationNotification->update(['is_read' => 1]);
+        $applicationNotification->update(['is_read' => 1]);
 
         if (Auth::user()->country == $this->get_india_id()) {
 

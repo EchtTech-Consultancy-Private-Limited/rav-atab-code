@@ -62,7 +62,9 @@
                     </div>
                 </div>
             </div>
-
+            <div>
+                <span style="font-weight: bold;">Application ID:</span> {{ $applicationData->application_uid }}
+            </div>
             <div class="card">
                 <div class="card-header bg-white text-dark">
                     <h5 class="mt-2">

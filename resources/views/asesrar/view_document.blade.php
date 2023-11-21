@@ -191,13 +191,18 @@
                                                 class="btn btn-primary">History Log</a>
 
                                         </div>
+                                        <div>
+                                            <span style="font-weight: bold;">Application ID:</span>
+                                            {{ $applicationData->application_uid }}
+                                        </div>
                                         <div class="card project_widget">
                                             @if ($message = Session::get('success'))
                                                 <script>
                                                     Swal.fire({
                                                         position: 'center',
                                                         icon: 'success',
-                                                        title: "{{ $message }}",
+                                                        title: "Success",
+                                                        text: "{{ $message }}",
                                                         showConfirmButton: false,
                                                         timer: 3000
                                                     })
@@ -207,6 +212,7 @@
                                                 <p class=" msg-none ">Documents Update Successfully</p>
                                             </div>
                                             <!-- table-striped  -->
+
                                             <div class="table-responsive">
 
                                                 <table class="table table-hover js-basic-example contact_list">
@@ -318,6 +324,20 @@
                                                                         </div>
 
                                                                         @if (auth()->user()->assessment == 2)
+                                                                            @php
+                                                                                $documentData = getAssessorDocument($question->id, $application_id, $course_id);
+                                                                                $approvedDocumentID = 0;
+                                                                                foreach ($documentData as $document) {
+                                                                                    $comments = getAssessorComments($document->id);
+                                                                                    foreach ($comments as $comment) {
+                                                                                       if ($comment->status == 4) {
+                                                                                        $approvedDocumentID = $document->id;
+                                                                                       }
+                                                                                    }
+                                                                                }
+
+                                                                             
+                                                                            @endphp
                                                                             <div class="bg-white text-dark mt-1"
                                                                                 style="border-radius: 10px;">
                                                                                 <div
@@ -325,84 +345,24 @@
                                                                                     On-Site Assessor
                                                                                 </div>
                                                                                 <div style="padding: 8px;">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-center">
-
-                                                                                        @php
-                                                                                            $verifiedDocument = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
-                                                                                        @endphp
-                                                                                        @if (isset($verifiedDocument->verified_document) && !empty($verifiedDocument->verified_document))
-                                                                                            @php
-                                                                                                $fileExtension = pathinfo($verifiedDocument->verified_document, PATHINFO_EXTENSION);
-                                                                                            @endphp
-
-                                                                                            @if ($fileExtension === 'pdf')
-                                                                                                <a target="_blank"
-                                                                                                    href="{{ url('show-course-pdf/' . $verifiedDocument->verified_document) }}"
-                                                                                                    class="docBtn btn-primary btn-sm mb-0"
-                                                                                                    style="margin-right: 10px !important; ">View
-                                                                                                    Document </a>
-                                                                                            @else
-                                                                                                <a target="_blank"
-                                                                                                    href="{{ asset('documnet/' . $verifiedDocument->verified_document) }}"
-                                                                                                    class="docBtn btn-primary btn-sm mb-0"
-                                                                                                    style="margin-right: 10px !important; ">View
-                                                                                                    Document </a>
-                                                                                            @endif
-                                                                                        @else
-                                                                                            <div class="file-upload"
-                                                                                                style="margin-right: 5px !important;">
-                                                                                                <label
-                                                                                                    for="document-upload-{{ $question->id }}"
-                                                                                                    class="file-label">
-                                                                                                    <span
-                                                                                                        id="document-label-{{ $question->id }}">Upload
-                                                                                                        Document</span>
-                                                                                                </label>
-                                                                                                <input type="file"
-                                                                                                    id="document-upload-{{ $question->id }}"
-                                                                                                    name="document"
-                                                                                                    class="file-input"
-                                                                                                    onchange="uploadFile('document-upload-{{ $question->id }}', 'document-label-{{ $question->id }}','{{ $question->id }}','{{ $application_id }}','{{ $course_id }}','document')">
-                                                                                            </div>
-                                                                                        @endif
-                                                                                        @php
-                                                                                            $verifiedPhotograph = checkVerifiedDocumentAvailable($application_id, $course_id, auth()->user()->id, $question->id);
-                                                                                        @endphp
-                                                                                        @if (isset($verifiedPhotograph->photograph) && !empty($verifiedPhotograph->photograph))
-                                                                                            @php
-                                                                                                $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
-                                                                                            @endphp
-
-                                                                                            @if ($fileExtension === 'pdf')
-                                                                                                <a target="_blank"
-                                                                                                    href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
-                                                                                                    class="docBtn btn-info btn-sm mb-0">View
-                                                                                                    Photograph </a>
-                                                                                            @else
-                                                                                                <a target="_blank"
-                                                                                                    href="{{ asset('documnet/' . $verifiedPhotograph->photograph) }}"
-                                                                                                    class="docBtn btn-secondary btn-sm mb-0">View
-                                                                                                    Photograph </a>
-                                                                                            @endif
-                                                                                        @else
-                                                                                            <div class="file-upload">
-                                                                                                <label
-                                                                                                    for="photograph-upload-{{ $question->id }}"
-                                                                                                    class="file-label">
-                                                                                                    <span
-                                                                                                        id="photograph-label-{{ $question->id }}">Upload
-                                                                                                        Photograph</span>
-                                                                                                </label>
-                                                                                                <input type="file"
-                                                                                                    id="photograph-upload-{{ $question->id }}"
-                                                                                                    name="photograph"
-                                                                                                    class="file-input"
-                                                                                                    onchange="uploadFile('photograph-upload-{{ $question->id }}', 'photograph-label-{{ $question->id }}','{{ $question->id }}','{{ $application_id }}','{{ $course_id }}','photograph')">
-                                                                                            </div>
-                                                                                        @endif
-
+                                                                                    @php
+                                                                                        $documents = getOnSiteAssessorDocument($question->id, $applicationData->id, $course_id);
+                                                                                    @endphp
+                                                                                    @if ($documents !== null)
+                                                                                        @foreach ($documents as $document)
+                                                                                            <a href="" class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm">{{ getButtonText($document->id) }}</a>
+                                                                                        @endforeach
+                                                                                    @endif
+                                                                                    <div class="d-flex justify-content-center">
+                                                                                        <div>
+                                                                                            <a href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}" class="btn btn-primary btn-sm">Upload Document</a>&nbsp;
+                                                                                        </div>
+                                                                                        &nbsp;
+                                                                                        <div>
+                                                                                            <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}" class="btn btn-info btn-sm">Upload Photograph</a>
+                                                                                        </div>
                                                                                     </div>
+                                                                                    
                                                                                 </div>
                                                                             </div>
                                                                         @endif
@@ -442,21 +402,23 @@
                                                 @endphp
 
 
+                                                {{-- Desktop Assessor --}}
                                                 @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
                                                     @if ($applicationCompletedCount == true)
                                                         <div class="d-flex justify-content-end">
-                                                            <form
+                                                            <form id="submitForm"
                                                                 action="{{ route('submit-final-report-by-desktop') }}"
                                                                 method="post">
                                                                 @csrf
                                                                 <input type="hidden" name="applicationID"
                                                                     value="{{ $application_id }}">
-                                                                <button class="btn btn-success"
-                                                                    style="margin-right: 10px;">Submit</button>
+                                                                <button type="button" class="btn btn-success"
+                                                                    style="margin-right: 10px;"
+                                                                    onclick="confirmSubmit()">Submit</button>
                                                             </form>
                                                         </div>
                                                     @endif
-                                                    @else
+                                                @else
                                                     <div class="text-center">
                                                         <h5>Report Submitted By Desktop Assessor</h5>
                                                     </div>
@@ -477,7 +439,24 @@
         </div>
     </section>
 
-
+    <script>
+        function confirmSubmit() {
+            Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to submit the report?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user confirms, manually submit the form
+                    document.getElementById('submitForm').submit();
+                }
+            });
+        }
+    </script>
 
     <script>
         $('.fileup').on('change', function(e) {

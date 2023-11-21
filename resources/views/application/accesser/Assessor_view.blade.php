@@ -34,7 +34,7 @@
 
 
     <section class="content">
-        <div >
+        <div>
             <div class="block-header">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -63,9 +63,9 @@
                                 <h4 class="mt-2">Basic Information</h4>
                             </div>
                             <div class="body">
-                                
+
                                 <div class="row clearfix">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Title</strong></label><br>
@@ -74,7 +74,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>First Name</strong></label><br>
@@ -82,7 +82,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
 
@@ -212,7 +212,7 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <!-- basic end -->
                             </div>
                         </div>
@@ -227,36 +227,36 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                       
-                            <div class="col-sm-3">
-                             <div class="form-group">
-                                <div class="form-line">
-                                   <label ><strong>Person Name</strong></label><br>
-                                       <label >{{ Str::ucfirst($spocData->Person_Name)  }}</label>
-                                </div>
-                             </div>
-                            </div>
 
-                          <div class="col-sm-3">
-                             <div class="form-group">
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <div class="form-line">
-                                   <label><strong>Contact Number</strong></label><br>
-                                    {{ $spocData->Contact_Number ??'' }}
+                                    <label><strong>Person Name</strong></label><br>
+                                    <label>{{ Str::ucfirst($spocData->Person_Name) }}</label>
                                 </div>
-                             </div>
-                          </div>
-                          <div class="col-sm-3">
-                             <div class="form-group">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label><strong>Contact Number</strong></label><br>
+                                    {{ $spocData->Contact_Number ?? '' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <div class="form-line">
 
                                     <label><strong>Email Id</strong></label><br>
 
-                                      <label>{{ $spocData->Email_ID ??'' }}</label>
+                                    <label>{{ $spocData->Email_ID ?? '' }}</label>
 
                                 </div>
-                             </div>
-                          </div>
-                          <div class="col-sm-3">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="form-line">
                                     <label for="designation"><strong>Designation</strong></label>
@@ -264,8 +264,8 @@
                                     <label>{{ Str::ucfirst($spocData->designation) }}</label>
                                 </div>
                             </div>
-                          </div>
-                       
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -301,8 +301,10 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Course Duration</strong></label><br>
-                                                {{ $ApplicationCourses->years ??'' }} Year(s) {{ $ApplicationCourses->months ??'' }} Month(s) {{ $ApplicationCourses->days ??'' }} Day(s)
-                                            {{ $ApplicationCourses->hours ??'' }} Hour(s)
+                                                {{ $ApplicationCourses->years ?? '' }} Year(s)
+                                                {{ $ApplicationCourses->months ?? '' }} Month(s)
+                                                {{ $ApplicationCourses->days ?? '' }} Day(s)
+                                                {{ $ApplicationCourses->hours ?? '' }} Hour(s)
                                             </div>
                                         </div>
                                     </div>
@@ -336,7 +338,7 @@
                                                 <label><strong> Valid To</strong></label><br>
 
                                                 <label>{{ date('d F Y', strtotime($ApplicationCourses->created_at)) }}</label>
-                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -369,8 +371,11 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label><strong>Declaration</strong></label><br>
-                                                <label><a href="{{ url('show-course-pdf/'.$ApplicationDocument[0]->document_file) }}" target="_blank" id="docpdf1" title="Download Document 1" ><i class="fa fa-download mr-2"></i> PDF 1
-                                                </a></label>
+                                                <label><a
+                                                        href="{{ url('show-course-pdf/' . $ApplicationDocument[0]->document_file) }}"
+                                                        target="_blank" id="docpdf1" title="Download Document 1"><i
+                                                            class="fa fa-download mr-2"></i> PDF 1
+                                                    </a></label>
                                             </div>
                                         </div>
                                     </div>
@@ -378,9 +383,13 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label><strong>Course Curriculum / Material / Syllabus </strong></label><br>
-                                                <label> <a href="{{ url('show-course-pdf/'.$ApplicationDocument[1]->document_file) }}" target="_blank" id="docpdf2" title="Download Document 2" ><i class="fa fa-download mr-2"></i> PDF 2
-                                                </a></label>
+                                                <label><strong>Course Curriculum / Material / Syllabus
+                                                    </strong></label><br>
+                                                <label> <a
+                                                        href="{{ url('show-course-pdf/' . $ApplicationDocument[1]->document_file) }}"
+                                                        target="_blank" id="docpdf2" title="Download Document 2"><i
+                                                            class="fa fa-download mr-2"></i> PDF 2
+                                                    </a></label>
                                             </div>
                                         </div>
                                     </div>
@@ -390,10 +399,11 @@
                                             <div class="form-line">
                                                 <label><strong>Course Details (Excel format) </strong></label><br>
                                                 <label>
-                                                    <a  href="{{ url('documnet/'.$ApplicationDocument[2]->document_file) }}" target="_blank" title="Document 3" id="docpdf3" download>
+                                                    <a href="{{ url('documnet/' . $ApplicationDocument[2]->document_file) }}"
+                                                        target="_blank" title="Document 3" id="docpdf3" download>
                                                         <i class="fa fa-download mr-2"></i> Download Doc
                                                     </a>
-                                            </label>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -405,12 +415,14 @@
 
 
                                     <div class="col-sm-12 text-right">
-                                       <div class="form-group">
-                                          <div class="form-line">
-                                             <a href="{{ url('/accr-view-document' . '/' .$ApplicationCourses->application_id.'/'.$ApplicationCourses->id) }}"
-                                      class="btn text-white bg-primary" style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
-                                          </div>
-                                       </div>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <a href="{{ url('/accr-view-document' . '/' . $ApplicationCourses->application_id . '/' . $ApplicationCourses->id) }}"
+                                                    class="btn text-white bg-primary mb-0"
+                                                    style="float:right; color: #fff ; line-height: 25px;">View
+                                                    Documents</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- basic end -->
@@ -428,120 +440,120 @@
 
 
         @isset($ApplicationPayment)
-        @foreach ($ApplicationPayment as $ApplicationPayment)
-            <div>
-                <div class="row clearfix">
-                    <div class="col-lg-12 col-md-12">
-                        <div class="card">
-                            <div class="card-header text-dark bg-white">
-                                <h4 class="mt-2">Payment Information</h4>
-                            </div>
-                            <div class="body">
-
-                                <div class="row clearfix">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Payment Date</strong></label><br>
-                                                <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Payment Transaction no</strong></label><br>
-                                                {{ $ApplicationPayment->transaction_no ?? '' }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-
-                                                <label><strong>Payment Reference no</strong></label><br>
-
-                                                <label>{{ $ApplicationPayment->reference_no ?? '' }}</label>
-
-                                            </div>
-                                        </div>
-                                    </div>
+            @foreach ($ApplicationPayment as $ApplicationPayment)
+                <div>
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="card">
+                                <div class="card-header text-dark bg-white">
+                                    <h4 class="mt-2">Payment Information</h4>
                                 </div>
+                                <div class="body">
 
+                                    <div class="row clearfix">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Payment Date</strong></label><br>
+                                                    <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                <div class="row clearfix">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Total Course</strong></label><br>
-                                                <label>{{ $ApplicationPayment->course_count ?? '' }}</label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Payment Transaction no</strong></label><br>
+                                                    {{ $ApplicationPayment->transaction_no ?? '' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+
+                                                    <label><strong>Payment Reference no</strong></label><br>
+
+                                                    <label>{{ $ApplicationPayment->reference_no ?? '' }}</label>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Amount</strong></label><br>
-                                                <label>{{ $ApplicationPayment->currency ?? '' }}
-                                                    {{ $ApplicationPayment->amount }}</label>
+
+                                    <div class="row clearfix">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Total Course</strong></label><br>
+                                                    <label>{{ $ApplicationPayment->course_count ?? '' }}</label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <label><strong>Payment Proof</strong></label><br>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Amount</strong></label><br>
+                                                    <label>{{ $ApplicationPayment->currency ?? '' }}
+                                                        {{ $ApplicationPayment->amount }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <label><strong>Payment Proof</strong></label><br>
 
 
 
-                                                <?php
-                                                substr($ApplicationPayment->payment_details_file, -3);
+                                                    <?php
+                                                    substr($ApplicationPayment->payment_details_file, -3);
+                                                    
+                                                    $data = substr($ApplicationPayment->payment_details_file, -3);
+                                                    ?>
 
-                                                $data = substr($ApplicationPayment->payment_details_file, -3);
-                                                ?>
 
-
-                                                @if ($data == 'pdf')
-                                                    <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
-                                                        target="_blank" title="Document 3" id="docpdf3" download>
-                                                        <i class="fa fa-download mr-2"></i>          Payment pdf
-                                                    </a>
-                                                @else
-                                                    @if (isset($ApplicationPayment->payment_details_file))
-                                                        <a target="_blank" class="image-link"
-                                                            href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
-                                                            <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
-                                                                style="width:100px;height:70px;">
+                                                    @if ($data == 'pdf')
+                                                        <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                            target="_blank" title="Document 3" id="docpdf3" download>
+                                                            <i class="fa fa-download mr-2"></i> Payment pdf
                                                         </a>
+                                                    @else
+                                                        @if (isset($ApplicationPayment->payment_details_file))
+                                                            <a target="_blank" class="image-link"
+                                                                href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                                <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                                    style="width:100px;height:70px;">
+                                                            </a>
+                                                        @endif
                                                     @endif
-                                                @endif
+                                                </div>
                                             </div>
                                         </div>
+
+
+
                                     </div>
-
-
-
+                                    <!-- basic end -->
                                 </div>
-                                <!-- basic end -->
                             </div>
+
+
                         </div>
-
-
                     </div>
                 </div>
-            </div>
-            </div>
-            </div>
-            </div>
-        @endforeach
+                </div>
+                </div>
+                </div>
+            @endforeach
         @endisset
 
 
-{{--
+        {{--
         <div class="col-lg-12 p-t-20 text-center">
             <a href="" class="btn btn-primary waves-effect m-r-15">Approved</a>
             <a href="{{ url()->previous() }} " class="btn btn-danger waves-effect">back</a>

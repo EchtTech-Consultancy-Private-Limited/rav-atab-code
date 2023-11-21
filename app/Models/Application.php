@@ -24,7 +24,9 @@ class Application extends Model
         'ip',
         'status',
         'desktop_status',
-        'onsite_status'
+        'onsite_status',
+        'is_payment_acknowledge',
+        'acknowledged_by'
     ];
 
 
