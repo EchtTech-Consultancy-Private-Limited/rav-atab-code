@@ -11,8 +11,20 @@ class Add_Document extends Model
     use HasFactory;
 
     protected $primaryKey = 'id';
+    
 
     protected $table = 'add_documents';
+
+    protected $fillable = [
+        'question_id',
+        'application_id',
+        'course_id',
+        'doc_id',
+        'doc_file',
+        'user_id',
+        'on_site_assessor_Id',
+    ];
+    
 
     public function question(){
         return $this->belongsTo(Question::class,'');

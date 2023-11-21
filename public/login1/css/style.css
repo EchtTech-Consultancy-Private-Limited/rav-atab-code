@@ -479,22 +479,30 @@ footer.footer p {
 }
 
 
+.logo-atab.logo-m img {
+  width: 220px;
+}
+
 @media (max-width: 768px) {
   footer.footer{
     position: static;
   }
 
   .col-md-3.order-logo-1, .col-md-3.order-logo-2 {
-    width: 30%;
+    width: 50%;
 }
 
 .col-md-6.order-logo-3 {
-  width: 40%;
+  width: 0%;
   padding: 0px;
 }
 
 .order-logo-1 .logo-rav.logo-m a img, .order-logo-2 .logo-atab.logo-m a img {
   width: 80px;
+}
+
+.logo-atab.logo-m img {
+  width: 120px !important;
 }
 
 .logo-center a img {
@@ -524,3 +532,4 @@ h2.text-main{
 
 
 }
+

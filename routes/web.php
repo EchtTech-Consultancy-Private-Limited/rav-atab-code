@@ -281,6 +281,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('pending-payments/{id}',[LevelController::class,"pendingPayments"])->name('pending-payments');
 
+    Route::get('on-site/upload-document/{applicationID}/{courseID}/{questionID}/{documentID}', [applicationController::class, "uploadDocumentByOnSiteAssessor"])->name('on-site.upload-document');
+    Route::post('on-site/upload-document', [applicationController::class, "uploadDocumentByOnSiteAssessorPost"])->name('on-site.upload-document.post');
+
+    Route::get('on-site/upload-photograph/{applicationID}/{courseID}/{questionID}/{documentID}', [applicationController::class, "uploadPhotographByOnSiteAssessor"])->name('on-site.upload-photograph');
+    
+    Route::post('payment/acknowledge',[applicationController::class,"paymentAcknowledge"])->name('payment.acknowledge');
+
 });
 
 

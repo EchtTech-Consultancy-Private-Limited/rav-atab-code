@@ -73,9 +73,9 @@ function assessor_assign_date($application_id, $asessor_id)
     $applications = DB::table('asessor_applications')->where('application_id', '=', $application_id)->where('assessor_id', '=', $asessor_id)->first();
 
 
-  if ($applications) {
-    $application_assign_date = date('d-m-Y', strtotime($applications->created_at));
-  }
+    if ($applications) {
+        $application_assign_date = date('d-m-Y', strtotime($applications->created_at));
+    }
 
     //  dd( $application_assign_date);
     return $application_assign_date ?? '';
@@ -649,7 +649,20 @@ function getAssessorDocument($questionID, $applicationId, $course_id)
 {
 
 
-    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->get();
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id',null)->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
+function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
+{
+
+
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id','!=',null)->get();
 
     if (count($documents) > 0) {
         return $documents;
@@ -660,7 +673,6 @@ function getAssessorDocument($questionID, $applicationId, $course_id)
 
 function getAdminDocument($questionID, $applicationId)
 {
-
 
     $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->get();
 
@@ -840,17 +852,33 @@ function applicationDocuments($applicationId)
 function getVerifiedApplications()
 {
     $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
-    $applications = ApplicationNotification::whereIn('application_id',$applicationsIds)->where('is_read',0)->get();
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
     return $applications;
 }
 
-function getApplicationPaymentNotificationStatus(){
+function getApplicationPaymentNotificationStatus()
+{
     $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
-    $applications = ApplicationNotification::whereIn('application_id',$applicationsIds)->where('is_read',0)->get();
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
     if (count($applications) > 0) {
         return true;
     } else {
         return false;
     }
-    
+}
+
+function checkOnSiteDoc($applicationID, $questionID, $courseID, $assesorID)
+{
+    $document = Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)
+        ->where('on_site_assessor_Id', $assesorID)->orderBy('id', 'desc')->first();
+
+        
+    return $document;
+}
+
+function getLastComment($docID){
+    $comment = DocComment::where('doc_id',$docID)->orderBy('id','desc')->first();
+    return $comment;
 }

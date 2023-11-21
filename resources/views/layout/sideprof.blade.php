@@ -3,7 +3,7 @@
         <aside id="leftsidebar" class="sidebar">
         <div class="logo-brand">
                     <img src="{{ asset('assets/images/rav-logo.png') }}" alt="" />
-                    <p class="logo-name">Accreditation </p>
+                    <!-- <p class="logo-name">Accreditation </p> -->
                 </div>
             <!-- Menu -->
             <div class="menu">

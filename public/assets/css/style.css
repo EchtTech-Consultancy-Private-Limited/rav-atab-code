@@ -24049,6 +24049,12 @@ html.ie11 .bs-searchbox .form-control {
     text-align: center;
 }
 
+.sidebar .logo-brand img {
+    text-align: center;
+    width: 155px !important;
+    margin-top: 10px;
+}
+
 .modal .modal-content {
     border-radius: 10px!important;
 }
