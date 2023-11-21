@@ -204,19 +204,21 @@
                                                                
                                                         </div>
                                                     @else
-                                                        @if ($item->payment->status == '0')
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                class="p-2 buttonBadge text-white bg-danger">Payment
-                                                                Pending</a>
-                                                        @elseif($item->payment->status == 1)
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                class="p-2 buttonBadge text-light bg-warning">Payment
-                                                                Proccess</a>
-                                                        @elseif ($item->payment->status == '2')
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                class="p-2 buttonBadge text-white bg-primary">Payment
-                                                                Approved</a>
-                                                        @endif
+                                                       @if ($item->payment != null)
+                                                       @if ($item->payment->status == '0')
+                                                       <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                           class="p-2 buttonBadge text-white bg-danger">Payment
+                                                           Pending</a>
+                                                   @elseif($item->payment->status == 1)
+                                                       <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                           class="p-2 buttonBadge text-light bg-warning">Payment
+                                                           Proccess</a>
+                                                   @elseif ($item->payment->status == '2')
+                                                       <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                           class="p-2 buttonBadge text-white bg-primary">Payment
+                                                           Approved</a>
+                                                   @endif
+                                                       @endif
                                                     @endif
                                                 </td>
 
