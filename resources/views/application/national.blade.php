@@ -181,7 +181,9 @@
                                                             {{ $payment->currency }}
                                                         @endif
                                                     @endforeach
-                                                    {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
+                                                   @if ($totalAmount !== 0)
+                                                   {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
+                                                   @endif
                                                 </td>
                                                 <td>
                                                     {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
