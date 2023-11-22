@@ -195,7 +195,7 @@
                                                                 class="p-2 buttonBadge text-white bg-warning"
                                                                 style="margin-right: 5px;">Application In
                                                                 Processing</a>
-                                                            @if ($item->is_payment_acknowledge !== 1 || $item->is_payment_acknowledge == null)
+                                                            @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
                                                                 <form action="{{ route('payment.acknowledge') }}"
                                                                     method="post">
                                                                     @csrf
