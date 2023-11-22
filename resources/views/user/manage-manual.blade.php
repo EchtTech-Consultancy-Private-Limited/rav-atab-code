@@ -54,10 +54,6 @@
               </div>
            </div>
 
-
-
-
-
            @if ($message = Session::get('success'))
            <div class="alert alert-success">
               <p>{{ $message }}</p>
@@ -82,7 +78,6 @@
                     <div class="body">
 
                      <div class="row">
-
                         <form method="post" action="{{ url('/save-manual') }}"
                             class="javavoid(0) validation-form123" id="regForm" enctype="multipart/form-data">
                             @csrf
@@ -107,10 +102,6 @@
 
                                         </div>
                                     </div>
-
-
-
-
 
                                     <div class="col-sm-4">
                                         <div class="form-group mb-0">
@@ -163,7 +154,6 @@
                           <table class="table table-hover js-basic-example contact_list">
                              <thead>
                                 <tr>
-
                                    <th class="center"> S.No. </th>
                                    <th class="center"> Manual Type </th>
                                    <th class="center"> Description </th>

@@ -2929,7 +2929,7 @@
         -ms-transform: rotate(360deg);
         -o-transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
-        transform: rotate(360deg)
+        transform: scale(1.5);
     }
 }
 
@@ -4584,7 +4584,7 @@ table .checkbox [type="checkbox"]+label {
     margin: -60px 0 20px -20px;
     -webkit-animation: spin 1.5s linear infinite;
     -moz-animation: spin 1.5s linear infinite;
-    animation: spin 1.5s linear infinite
+    animation: spin 4s linear infinite
 }
 
 .shadow-style {
@@ -21690,7 +21690,8 @@ span.badge {
 
 .page-loader-wrapper .loader {
     position: relative;
-    top: calc(50% - 30px)
+    top: calc(40% - 30px);
+    left: 48%;
 }
 
 .pager {
@@ -24521,3 +24522,141 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
   nav{
     background: #064888;
   }
+
+
+  
+   /* pre lodel */
+#pageloader {
+    display: none;
+    backdrop-filter: blur(10px);
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    z-index: 999999999999;
+    background: #2125292b;
+}
+
+#top {
+    position: fixed;
+    left: 48%;
+    top: 40%;
+    z-index: 9999999999999;
+}
+.loader {
+    width: 75px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(#f25e20 50px, transparent 0),
+        linear-gradient(#1275a8 50px, transparent 0),
+        linear-gradient(#f25e20 50px, transparent 0),
+        linear-gradient(#1275a8 50px, transparent 0),
+        linear-gradient(#f25e20 50px, transparent 0);
+    background-size: 8px 100%;
+    background-position: 0px 90px, 15px 78px, 30px 66px, 45px 58px, 60px 50px;
+    animation: pillerPushUp 4s linear infinite;
+    position: absolute;
+}
+
+.loader:after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: #1275a8;
+    border-radius: 50%;
+    animation: ballStepUp 4s linear infinite;
+}
+@keyframes pillerPushUp {
+    0%,
+    40%,
+    100% {
+        background-position: 0px 90px, 15px 78px, 30px 66px, 45px 58px,
+            60px 50px;
+    }
+
+    50%,
+    90% {
+        background-position: 0px 50px, 15px 58px, 30px 66px, 45px 78px,
+            60px 90px;
+    }
+}
+
+@keyframes ballStepUp {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    5% {
+        transform: translate(8px, -14px);
+    }
+
+    10% {
+        transform: translate(15px, -10px);
+    }
+
+    17% {
+        transform: translate(23px, -24px);
+    }
+
+    20% {
+        transform: translate(30px, -20px);
+    }
+
+    27% {
+        transform: translate(38px, -34px);
+    }
+
+    30% {
+        transform: translate(45px, -30px);
+    }
+
+    37% {
+        transform: translate(53px, -44px);
+    }
+
+    40% {
+        transform: translate(60px, -40px);
+    }
+
+    50% {
+        transform: translate(60px, 0);
+    }
+
+    57% {
+        transform: translate(53px, -14px);
+    }
+
+    60% {
+        transform: translate(45px, -10px);
+    }
+
+    67% {
+        transform: translate(37px, -24px);
+    }
+
+    70% {
+        transform: translate(30px, -20px);
+    }
+
+    77% {
+        transform: translate(22px, -34px);
+    }
+
+    80% {
+        transform: translate(15px, -30px);
+    }
+
+    87% {
+        transform: translate(7px, -44px);
+    }
+
+    90% {
+        transform: translate(0, -40px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}

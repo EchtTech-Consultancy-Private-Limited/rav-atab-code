@@ -50,7 +50,7 @@
     background-image: url("{{asset('assets/images/fa-india.png')}}")!important;
     background-repeat: no-repeat;
     background-size: 100px 100px;
-    heigth:100px !important;
+    height:100px !important;
     width:100px !important;
     display: inline-block;
     font-size: 90px;
