@@ -24126,6 +24126,9 @@ i#togglecpassword {
     top: 45%;
     display: inline-block;
     left: 90%;
+    width: auto;
+    height: auto;
+    cursor: pointer;
 }
 
 .modal-content input {
@@ -24298,7 +24301,8 @@ div#QR > div {
 }
 
 .navbar.nav-Tp {
-    background-color: #01d8da !important;
+    background-color: #47acd3 !important;
+    /* background-color: #01d8da !important; */
 }
 
 .navbar.nav-Ass  {
@@ -24328,7 +24332,8 @@ div#ui-datepicker-div{
 }
 
 .theme-black .sidebar .menu .list li.active, .sidebar .menu .list .active .menu-toggle, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active {
-    background-color: #db6513 !important;
+    /* background-color: #db6513 !important; */
+    background-color: #064888 !important;
 }
 
 .sidebar .menu .list li.active>:first-child span, .sidebar .menu .list li.active a .feather,.sidebar .menu .list li.active a i, .theme-black .sidebar .menu .list li.active ul.ml-menu li.active a{
@@ -24512,3 +24517,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     position: absolute;
     right: 0;
   } */
+
+  nav{
+    background: #064888;
+  }

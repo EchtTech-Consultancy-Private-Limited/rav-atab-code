@@ -60,11 +60,12 @@
 .info-box-5 .card-icon-large .fa {
     height: 100px;
 }
-.mergin-left{}
+
 .span-width{width:70px;}
 
 .nav-Tp .navbar {
-    background-color: #01d8da !important;
+    background-color: #47acd3 !important;
+    /* background-color: #01d8da !important; */
 }
 
 .nav-Ass .navbar {

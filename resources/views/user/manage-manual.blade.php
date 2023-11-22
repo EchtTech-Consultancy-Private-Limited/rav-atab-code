@@ -12,7 +12,7 @@
                 <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
             </div>
             <p>Please wait...</p>
-        </div>
+        </div> 
     </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
@@ -39,15 +39,9 @@
            <div class="block-header">
               <div class="row">
                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-
-
-
-
                     <ul class="breadcrumb breadcrumb-style ">
                        <li class="breadcrumb-item">
                           <h4 class="page-title">Manage Manual</h4>
-
                        </li>
                        <li class="breadcrumb-item bcrumb-1">
                           <a href="{{url('/dashboard')}}">
