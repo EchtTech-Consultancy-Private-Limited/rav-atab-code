@@ -330,13 +330,12 @@
                                                                                 foreach ($documentData as $document) {
                                                                                     $comments = getAssessorComments($document->id);
                                                                                     foreach ($comments as $comment) {
-                                                                                       if ($comment->status == 4) {
-                                                                                        $approvedDocumentID = $document->id;
-                                                                                       }
+                                                                                        if ($comment->status == 4) {
+                                                                                            $approvedDocumentID = $document->id;
+                                                                                        }
                                                                                     }
                                                                                 }
 
-                                                                             
                                                                             @endphp
                                                                             <div class="bg-white text-dark mt-1"
                                                                                 style="border-radius: 10px;">
@@ -350,19 +349,28 @@
                                                                                     @endphp
                                                                                     @if ($documents !== null)
                                                                                         @foreach ($documents as $document)
-                                                                                            <a href="" class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm">{{ getButtonText($document->id) }}</a>
+                                                                                            <a href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm">{{ getButtonText($document->id) }}</a>
                                                                                         @endforeach
                                                                                     @endif
-                                                                                    <div class="d-flex justify-content-center">
+                                                                                    <div
+                                                                                        class="d-flex justify-content-center">
+                                                                                        @if (count($documents) == 0)
+                                                                                            <div>
+                                                                                                <a href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                    class="btn btn-primary btn-sm">Upload
+                                                                                                    Document</a>&nbsp;
+                                                                                            </div>
+                                                                                            &nbsp;
+                                                                                        @endif
+
                                                                                         <div>
-                                                                                            <a href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}" class="btn btn-primary btn-sm">Upload Document</a>&nbsp;
-                                                                                        </div>
-                                                                                        &nbsp;
-                                                                                        <div>
-                                                                                            <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}" class="btn btn-info btn-sm">Upload Photograph</a>
+                                                                                            <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                class="btn btn-info btn-sm">Upload
+                                                                                                Photograph</a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    
+
                                                                                 </div>
                                                                             </div>
                                                                         @endif

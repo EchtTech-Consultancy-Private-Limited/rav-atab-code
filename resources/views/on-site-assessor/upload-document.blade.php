@@ -85,7 +85,7 @@
                     $comment = getLastComment($document->id);
                 @endphp
 
-             
+
                 <div class="card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">
@@ -129,8 +129,8 @@
                                 <label for="status">Select Status</label>
                                 <select class="selectINputBox form-control" id="status" name="status">
                                     <option value="">Select</option>
-                                    <option value="1">NC1</option>
-                                    <option value="4">Approve</option>
+                                    <option value="11">NC1</option>
+                                    <option value="14">Approve</option>
                                 </select>
                             </div>
                             <div class="form-group">
