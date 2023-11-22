@@ -1,7 +1,8 @@
 @include('layout.header')
 
 
-<title>RAV Accreditation Previous Applications View</title>
+<title>
+    RAV Accreditation Previous Applications View</title>
 <link rel="stylesheet" type="text/css"
     href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
 {{--
@@ -195,7 +196,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -215,7 +216,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
@@ -235,11 +236,11 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
-    
+
                                 <label><strong>Email Id</strong></label><br>
-    
+
                                 <label>{{ $spocData->Email_ID ?? '' }}</label>
-    
+
                             </div>
                         </div>
                     </div>
@@ -360,7 +361,7 @@
                         </div>
 
                         @if (Auth::user()->role != '6')
-                            @if ($ApplicationPayment[0]->status == '2')
+                            @if ($ApplicationPayments[0]->status == '2')
                                 <div class="col-sm-12 text-right">
                                     <div class="form-group">
                                         <div class="form-line">
@@ -389,115 +390,7 @@
             </div>
             </div>
         @endforeach
-
-        <div class="card">
-            <div class="card-header bg-white text-dark">
-                <h5 class="mt-2">
-                    Payment Information
-                </h5>
-            </div>
-<div class="card-body">
-    
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <tr>
-            <th>
-                S.No.
-               </th> 
-           <th>
-            Payment Date
-           </th>
-           <th>
-            Payment Transaction no
-           </th>
-           <th>
-            Payment Reference no
-           </th>
-           <th>Total Courses</th>
-           <th>Amount</th>
-           <th>Payment Proof</th>
-           <th>Payment Slip</th>
-           <th>Remarks</th>
-        </tr>
-        @foreach ($ApplicationPayment as $ApplicationPayment)
-        <tr>
-            
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}</td>
-            <td>{{ $ApplicationPayment->transaction_no ?? '' }}</td>
-            <td>{{ $ApplicationPayment->reference_no ?? '' }}</td>
-            <td>{{ $ApplicationPayment->course_count ?? '' }}</td>
-            <td>{{ $ApplicationPayment->currency ?? '' }}
-                {{ $ApplicationPayment->amount }}</td>
-            <td><?php
-                                        substr($ApplicationPayment->payment_details_file, -3);
-                                        
-                                        $data = substr($ApplicationPayment->payment_details_file, -3);
-                                        ?>
-    
-    
-                                        @if ($data == 'pdf')
-                                            <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
-                                                target="_blank" title="Document 3" id="docpdf3" download>
-                                                <i class="fa fa-download mr-2"></i> Payment pdf
-                                            </a>
-                                        @else
-                                            @if (isset($ApplicationPayment->payment_details_file))
-                                                <a target="_blank" class="image-link"
-                                                    href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
-                                                    <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
-                                                        style="width:100px;height:70px;">
-                                                </a>
-                                            @endif
-                                        @endif</td>
-            <td>
-                @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 0)
-                    Pending Payment Approval!
-                @endif
-                @if ($ApplicationPayment->status == '2')
-                    @if (!$ApplicationPayment->payment_slip)
-                        File not available!
-                    @endif
-                    <?php
-                    substr($ApplicationPayment->payment_slip, -3);
-                    
-                    $data = substr($ApplicationPayment->payment_slip, -3);
-                    ?>
-    
-    
-                    @if ($data == 'pdf')
-                        <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
-                            target="_blank" title="Document 3" id="docpdf3" download>
-                            <i class="fa fa-download mr-2"></i>Payment pdf
-                        </a>
-                    @else
-                        @if (isset($ApplicationPayment->payment_slip))
-                            <a target="_blank" class="image-link"
-                                href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
-                                <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
-                                    style="width:100px;height:70px;">
-                            </a>
-                        @endif
-                    @endif
-                    @endif
-            </td>
-            <td>
-                @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 0)
-               Remark not available!
-                @else
-                {{ $ApplicationPayment->payment_remark }}
-            @endif
-               </td>
-            
-        </tr>
-        @endforeach
-    </table>
-</div>
-</div>
-
-        </div>
-
-        {{-- @foreach ($ApplicationPayment as $ApplicationPayment)
+        @if (Auth::user()->role != '6' || Auth::user()->role != 6)
             <div class="card">
                 <div class="card-header bg-white text-dark">
                     <h5 class="mt-2">
@@ -505,250 +398,346 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label><strong>Payment Date</strong></label><br>
-                                    <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label><strong>Payment Transaction no</strong></label><br>
-                                    {{ $ApplicationPayment->transaction_no ?? '' }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
+                    <div class="table-responsive">
+                        @if (count($ApplicationPayments) > 0)
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>
+                                        S.No.
+                                    </th>
+                                    <th>
+                                        Payment Date
+                                    </th>
+                                    <th>
+                                        Payment Transaction no
+                                    </th>
+                                    <th>
+                                        Payment Reference no
+                                    </th>
+                                    <th>Total Courses</th>
+                                    <th>Amount</th>
+                                    <th>Payment Proof</th>
+                                    <th>Payment Slip</th>
+                                    <th>Remarks</th>
+                                </tr>
+                                @foreach ($ApplicationPayments as $ApplicationPayment)
+                                    <tr>
 
-                                    <label><strong>Payment Reference no</strong></label><br>
-
-                                    <label>{{ $ApplicationPayment->reference_no ?? '' }}</label>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label><strong>Total Courses</strong></label><br>
-                                    <label>{{ $ApplicationPayment->course_count ?? '' }}</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label><strong>Amount</strong></label><br>
-                                    <label>{{ $ApplicationPayment->currency ?? '' }}
-                                        {{ $ApplicationPayment->amount }}</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label><strong>Payment Proof</strong></label><br>
-
-                                    <?php
-                                    substr($ApplicationPayment->payment_details_file, -3);
-                                    
-                                    $data = substr($ApplicationPayment->payment_details_file, -3);
-                                    ?>
-
-
-                                    @if ($data == 'pdf')
-                                        <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
-                                            target="_blank" title="Document 3" id="docpdf3" download>
-                                            <i class="fa fa-download mr-2"></i> Payment pdf
-                                        </a>
-                                    @else
-                                        @if (isset($ApplicationPayment->payment_details_file))
-                                            <a target="_blank" class="image-link"
-                                                href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
-                                                <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
-                                                    style="width:100px;height:70px;">
-                                            </a>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        @if ($ApplicationPayment->status == '2')
-                            <div class="col-sm-4 payment_file">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <label><strong>Payment Slip</strong></label><br>
-
-
-
-                                        <div class="mt-2 text-danger">
-                                            @if (!$ApplicationPayment->payment_slip)
-                                                File not available!
-                                            @endif
-                                        </div>
-
-                                        <?php
-                                        substr($ApplicationPayment->payment_slip, -3);
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                                        </td>
+                                        <td>{{ $ApplicationPayment->transaction_no ?? '' }}</td>
+                                        <td>{{ $ApplicationPayment->reference_no ?? '' }}</td>
+                                        <td>{{ $ApplicationPayment->course_count ?? '' }}</td>
+                                        <td>{{ $ApplicationPayment->currency ?? '' }}
+                                            {{ $ApplicationPayment->amount }}</td>
+                                        <td><?php
+                                        substr($ApplicationPayment->payment_details_file, -3);
                                         
-                                        $data = substr($ApplicationPayment->payment_slip, -3);
+                                        $data = substr($ApplicationPayment->payment_details_file, -3);
                                         ?>
 
 
-                                        @if ($data == 'pdf')
-                                            <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
-                                                target="_blank" title="Document 3" id="docpdf3" download>
-                                                <i class="fa fa-download mr-2"></i>Payment pdf
-                                            </a>
-                                        @else
-                                            @if (isset($ApplicationPayment->payment_slip))
-                                                <a target="_blank" class="image-link"
-                                                    href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
-                                                    <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
-                                                        style="width:100px;height:70px;">
+                                            @if ($data == 'pdf')
+                                                <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                    target="_blank" title="Document 3" id="docpdf3" download>
+                                                    <i class="fa fa-download mr-2"></i> Payment pdf
                                                 </a>
+                                            @else
+                                                @if (isset($ApplicationPayment->payment_details_file))
+                                                    <a target="_blank" class="image-link"
+                                                        href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                        <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                            style="width:100px;height:70px;">
+                                                    </a>
+                                                @endif
                                             @endif
-                                        @endif
+                                        </td>
+                                        <td>
+                                            @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 0)
+                                                Pending Payment Approval!
+                                            @endif
+                                            @if ($ApplicationPayment->status == '2')
+                                                @if (!$ApplicationPayment->payment_slip)
+                                                    File not available!
+                                                @endif
+                                                <?php
+                                                substr($ApplicationPayment->payment_slip, -3);
+                                                
+                                                $data = substr($ApplicationPayment->payment_slip, -3);
+                                                ?>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <label><strong>Payment Remark </strong></label><br>
 
-                                        <div class="col-md-12">
-                                            <input type="text" name="paymentremark" disabled
-                                                value="{{ $ApplicationPayment->payment_remark }}" required>
-                                        </div>
+                                                @if ($data == 'pdf')
+                                                    <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                        target="_blank" title="Document 3" id="docpdf3" download>
+                                                        <i class="fa fa-download mr-2"></i>Payment pdf
+                                                    </a>
+                                                @else
+                                                    @if (isset($ApplicationPayment->payment_slip))
+                                                        <a target="_blank" class="image-link"
+                                                            href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
+                                                            <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                                style="width:100px;height:70px;">
+                                                        </a>
+                                                    @endif
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 0)
+                                                Remark not available!
+                                            @else
+                                                {{ $ApplicationPayment->payment_remark }}
+                                            @endif
+                                        </td>
 
-                                    </div>
-                                </div>
-                            </div>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        @else
+                            <p>Payment has not been completed yet.</p>
                         @endif
-                        @if (Auth::user()->role == '6')
-                            @if ($ApplicationPayment->status == '1')
-                                <div class="col-sm-12 payment_file">
-                                    <form action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                        method="post" enctype="multipart/form-data" id="paymentApproveForm">
-                                        @csrf
-                                        <div class="card" style="border:1px solid #ccc;">
-                                            <div class="card-header">
-                                                <div class="d-flex justify-content-between p-2">
-                                                    <b>Payment Approval</b>
-                                                    <div>
-                                                        @if ($ApplicationPayment->status == 1)
-                                                            <span class="bg-warning p-2 text-dark"
-                                                                style="border-radius: 5px;">Application In
-                                                                Process</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
+                    </div>
+                </div>
+        @endif
+        </div>
+
+        @if (Auth::user()->role == '6')
+            <div class="card">
+                <div class="card-header bg-white text-dark">
+                    <h5 class="mt-2">
+                        Payment Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (count($ApplicationPayments) > 0)
+                        @foreach ($ApplicationPayments as $ApplicationPayment)
+                           <div style="border: 1px solid #ccc; padding:10px; border-radius:5px;">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Payment Date</strong></label><br>
+                                            <label>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date ?? '')->format('d-m-Y') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Payment Transaction no</strong></label><br>
+                                            {{ $ApplicationPayment->transaction_no ?? '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+
+                                            <label><strong>Payment Reference no</strong></label><br>
+
+                                            <label>{{ $ApplicationPayment->reference_no ?? '' }}</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Total Courses</strong></label><br>
+                                            <label>{{ $ApplicationPayment->course_count ?? '' }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Amount</strong></label><br>
+                                            <label>{{ $ApplicationPayment->currency ?? '' }}
+                                                {{ $ApplicationPayment->amount ?? '' }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Payment Proof</strong></label><br>
+
+                                            <?php
+                                            substr($ApplicationPayment->payment_details_file ?? '', -3);
+                                            
+                                            $data = substr($ApplicationPayment->payment_details_file ?? '', -3);
+                                            ?>
+
+
+                                            @if ($data == 'pdf')
+                                                <a href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                    target="_blank" title="Document 3" id="docpdf3" download>
+                                                    <i class="fa fa-download mr-2"></i> Payment pdf
+                                                </a>
+                                            @else
+                                                @if (isset($ApplicationPayment->payment_details_file))
+                                                    <a target="_blank" class="image-link"
+                                                        href="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}">
+                                                        <img src="{{ asset('uploads/' . $ApplicationPayment->payment_details_file) }}"
+                                                            style="width:100px;height:70px;">
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @if ($ApplicationPayment->status == '2')
+                                <div class="col-sm-4 payment_file">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Payment Slip</strong></label><br>
+
+
+
+                                            <div class="mt-2 text-danger">
+                                                @if (!$ApplicationPayment->payment_slip)
+                                                    File not available!
+                                                @endif
                                             </div>
-                                            <div class="card-body">
-                                                <div class="row pt-3">
-                                                    <div class="col-sm-6">
-                                                        <div class="form-group" style="margin-top: 10px;">
-                                                            <label for="payment_slip"><strong>Upload
-                                                                    Payment Slip</strong></label>
-                                                            <input type="file" name="payment_slip"
-                                                                class="form-control" id="payment_slip"
-                                                                value="{{ $ApplicationPayment->payment_slip }}">
-                                                            <?php
-                                                            $fileExtension = substr($ApplicationPayment->payment_slip, -3);
-                                                            ?>
-                                                            @if ($fileExtension == 'pdf')
-                                                                <a href="{{ asset('document/' . $ApplicationPayment->payment_slip) }}"
-                                                                    target="_blank" title="Payment PDF"
-                                                                    id="docpdf3" download>
-                                                                    <i class="fa fa-download mr-2"></i>Payment
-                                                                    pdf
-                                                                </a>
-                                                            @else
-                                                                @if (isset($ApplicationPayment->payment_slip))
-                                                                    <a target="_blank" class="image-link"
-                                                                        href="{{ asset('document/' . $ApplicationPayment->payment_slip) }}">
-                                                                        <img src="{{ asset('document/' . $ApplicationPayment->payment_slip) }}"
-                                                                            style="width:100px;height:70px;"
-                                                                            alt="Payment Slip">
-                                                                    </a>
-                                                                @endif
+
+                                            <?php
+                                            substr($ApplicationPayment->payment_slip, -3);
+                                            
+                                            $data = substr($ApplicationPayment->payment_slip, -3);
+                                            ?>
+
+
+                                            @if ($data == 'pdf')
+                                                <a href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                    target="_blank" title="Document 3" id="docpdf3" download>
+                                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                                </a>
+                                            @else
+                                                @if (isset($ApplicationPayment->payment_slip))
+                                                    <a target="_blank" class="image-link"
+                                                        href="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}">
+                                                        <img src="{{ asset('documnet/' . $ApplicationPayment->payment_slip) }}"
+                                                            style="width:100px;height:70px;">
+                                                    </a>
+                                                @endif
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <label><strong>Payment Remark </strong></label><br>
+
+                                            <div class="col-md-12">
+                                                <input type="text" name="paymentremark" disabled
+                                                    value="{{ $ApplicationPayment->payment_remark }}" required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            </div>
+                            @if ($ApplicationPayment->status == '1')
+                                    <div>
+                                        <form
+                                            action="{{ url('image-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                            method="post" enctype="multipart/form-data" id="paymentApproveForm">
+                                            @csrf
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="d-flex justify-content-between p-2">
+                                                        <b>Payment Approval</b>
+                                                        <div>
+                                                            @if ($ApplicationPayment->status == 1)
+                                                                <span class="bg-warning p-2 text-dark"
+                                                                    style="border-radius: 5px;">Application In
+                                                                    Process</span>
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <div class="form-line">
-                                                                <label><strong>Payment Remark <span
-                                                                            class="text-danger">*</span></strong></label><br>
-                                                                <input type="text" name="paymentremark" required
-                                                                    value="{{ $ApplicationPayment->payment_remark }}">
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row pt-3">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group" style="margin-top: 10px;">
+                                                                <label for="payment_slip"><strong>Upload
+                                                                        Payment Slip</strong></label>
+                                                                <input type="file" name="payment_slip"
+                                                                    class="form-control" id="payment_slip"
+                                                                    value="{{ $ApplicationPayment->payment_slip }}">
+                                                                <?php
+                                                                $fileExtension = substr($ApplicationPayment->payment_slip, -3);
+                                                                ?>
+                                                                @if ($fileExtension == 'pdf')
+                                                                    <a href="{{ asset('document/' . $ApplicationPayment->payment_slip) }}"
+                                                                        target="_blank" title="Payment PDF"
+                                                                        id="docpdf3" download>
+                                                                        <i class="fa fa-download mr-2"></i>Payment
+                                                                        pdf
+                                                                    </a>
+                                                                @else
+                                                                    @if (isset($ApplicationPayment->payment_slip))
+                                                                        <a target="_blank" class="image-link"
+                                                                            href="{{ asset('document/' . $ApplicationPayment->payment_slip) }}">
+                                                                            <img src="{{ asset('document/' . $ApplicationPayment->payment_slip) }}"
+                                                                                style="width:100px;height:70px;"
+                                                                                alt="Payment Slip">
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <div class="form-line">
+                                                                    <label><strong>Payment Remark <span
+                                                                                class="text-danger">*</span></strong></label><br>
+                                                                    <input type="text" name="paymentremark"
+                                                                        required
+                                                                        value="{{ $ApplicationPayment->payment_remark }}">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-footer d-flex justify-content-end">
-                                                <input type="hidden" name="status" value="2">
-                                                <button class="btn btn-primary mt-0" type="submit"
-                                                    id="paymentApproveButton">Click to Approve
-                                                    Payment</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            @endif
-                        @endif
-
-                        @if (Auth::user()->role == '6')
-                            <div class="col-sm-4">
-                                <div class="form-group ">
-                                    <div class="form-line">
-                                        @if ($ApplicationPayment->status == 0)
-                                            <label><strong>Verify Payment </strong></label><br>
-                                            <label><br>
-                                                <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
-                                                    class="btn btn-primary btn-sm payment-pending btn-payment-approval"
-                                                    onclick="return confirm_option('Approve Payment & Add Remark')">Approve
-                                                    Payment & Add Remark</a>
-                                        @endif
-
-
-
-
-                                        @if ($ApplicationPayment->status == '2')
-                                            @if ($ApplicationPayment->status == 1)
-                                                <div class="badge col-green">Application Proccess</div>
-                                            @elseif($ApplicationPayment->status == 2)
-                                                <label><strong>Payment Status </strong></label>
-                                                <br>
-                                                <div class="pt-2">
-                                                    <span class="bg-success text-white p-2"
-                                                        style="cursor: default;">Payment
-                                                        Approved</span>
+                                                <div class="card-footer d-flex justify-content-end">
+                                                    <input type="hidden" name="status" value="2">
+                                                    <button class="btn btn-primary mt-0" type="submit"
+                                                        id="paymentApproveButton">Click to Approve
+                                                        Payment</button>
                                                 </div>
-                                            @else
-                                            @endif
-                                        @endif
-
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
+                                @endif
+                           </div>
+                        @endforeach
+                    @else
+                        <p>Payment has not been completed yet.</p>
+                    @endif
                 </div>
-            </div>
-        @endforeach --}}
+                @if ($ApplicationPayment->status == 0)
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ url('preveious-app-status/' . dEncrypt($ApplicationPayment->id)) }}"
+                                class="btn btn-primary btn-sm payment-pending btn-payment-approval mb-0"
+                                onclick="return confirm_option('Approve Payment & Add Remark')">Approve
+                                Payment & Add Remark</a>
+                        </div>
+                    </div>
+                @endif
+              
+        @endif
+        </div>
     </section>
 
 

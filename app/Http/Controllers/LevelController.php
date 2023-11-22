@@ -88,12 +88,12 @@ class LevelController extends Controller
         $Application = Application::whereid(dDecrypt($id))->get();
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
-        $ApplicationPayment = ApplicationPayment::whereapplication_id($applicationData->id)->get();
+        $ApplicationPayment = ApplicationPayment::where('application_id',$applicationData->id)->get();
         // dd($ApplicationPayment);
         $spocData = DB::table('applications')->where('id', $applicationData->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
         $data = DB::table('users')->where('users.id', $applicationData->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $applicationData]);
+        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayments' => $ApplicationPayment, 'applicationData' => $applicationData]);
     }
 
     public function level_view($id)
@@ -1483,9 +1483,12 @@ class LevelController extends Controller
         $course->question_id = $request->question_pid;
         $course->application_id = $request->application_id;
         $course->user_id = Auth::user()->id;
-        if ($oldFile->on_site_assessor_Id != null) {
-            $course->on_site_assessor_Id = $oldFile->on_site_assessor_Id;
+        if ($oldFile) {
+            if ($oldFile->on_site_assessor_Id != null) {
+                $course->on_site_assessor_Id = $oldFile->on_site_assessor_Id;
+            }
         }
+       
         $course->notApraove_count = $notApprove + 1 ?? 1;
 
 
