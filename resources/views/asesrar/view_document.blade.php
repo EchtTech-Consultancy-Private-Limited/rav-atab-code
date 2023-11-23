@@ -428,7 +428,7 @@
                                         @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
                                             @if ($applicationCompletedCount == true)
                                                 <div class="d-flex justify-content-end">
-                                                    <form id="submitForm"
+                                                    <!-- <form id="submitForm"
                                                         action="{{ route('submit-final-report-by-desktop') }}"
                                                         method="post">
                                                         @csrf
@@ -437,7 +437,8 @@
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;"
                                                             onclick="confirmSubmit()">Submit</button>
-                                                    </form>
+                                                    </form> -->
+                                                    <a href="{{ route('submit-report-by-desktop') }}" target="_blanck"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
                                                 </div>
                                             @endif
                                         @else

@@ -1287,15 +1287,10 @@ class LevelController extends Controller
     {
         $application_id = $id;
         $course_id = $course_id;
-
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
-
         $chapters = Chapter::all();
-
         $applicationData = Application::find($id);
-
-
         return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData'));
     }
 
@@ -2769,6 +2764,11 @@ class LevelController extends Controller
         } else {
             return "fail";
         }
+    }
+
+    public function submitReportByDesktopAssessor(Request $request)
+    {
+        return view('asesrar.summery_report_form');
     }
 
     public function submitFinalReportByDesktopAssessor(Request $request)
