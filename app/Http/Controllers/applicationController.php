@@ -138,6 +138,7 @@ class applicationController extends Controller
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
                     $data->notification_status = 0;
                     $data->read_by = 0;
+                    $data->assessment_way = $request->on_site_type;
                     $data->save();
                     return  back()->with('success', 'Application has been successfully assigned to assessor');
                 } else {
@@ -151,6 +152,7 @@ class applicationController extends Controller
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
                     $data->notification_status = 0;
                     $data->read_by = 0;
+                    $data->assessment_way = $request->on_site_type;
                     $data->save();
                     return  back()->with('success', 'Application has been successfully assigned to assessor');
                 }
@@ -168,6 +170,7 @@ class applicationController extends Controller
                 $data->due_date = $due_date = Carbon::now()->addDay(15);
                 $data->notification_status = 0;
                 $data->read_by = 0;
+                $data->assessment_way = $request->on_site_type;
                 $data->save();
             }
         } else {
