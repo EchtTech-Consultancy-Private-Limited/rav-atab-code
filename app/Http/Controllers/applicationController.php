@@ -797,4 +797,8 @@ class applicationController extends Controller
         $applicationData = Application::find($application_id);
         return view('on-site-assessor.view-document',compact('document','question','applicationData','courseID','questionID'));
     }
+
+    public function on_site_report_format(){
+        return view('on-site-assessor.on-site-report-form');
+    }
 }

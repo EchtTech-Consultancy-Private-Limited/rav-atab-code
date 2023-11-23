@@ -292,6 +292,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('on-site/view/document/{document}/{documentID}/{questionID}/{applicationID}/{courseID}',[applicationController::class,"viewDocumentData"]);
 
+
+    Route::get('on-site/report',[applicationController::class,"on_site_report_format"]);
+
 });
 
 

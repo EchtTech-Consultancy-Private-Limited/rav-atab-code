@@ -409,8 +409,9 @@
                                         @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
                                             @if (totalDocumentsCount($application_id) >= 2)
                                                 <div class="d-flex justify-content-end">
-                                                    <a href="{{ url('submit-final-report/' . $application_id) }}"
-                                                        class="btn btn-success" style="margin-right: 10px;">Submit</a>
+                                                    <a class="btn btn-primary mr-2" href="{{ url('on-site/report') }}">
+                                                        Submit
+                                                    </a>
                                                 </div>
                                             @endif
                                         @endif
