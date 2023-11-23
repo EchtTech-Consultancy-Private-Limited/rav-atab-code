@@ -348,10 +348,15 @@
                                                                                         $documents = getOnSiteAssessorDocument($question->id, $applicationData->id, $course_id);
                                                                                     @endphp
                                                                                     @if ($documents !== null)
+                                                                                       <div class="d-flex justify-content-center">
                                                                                         @foreach ($documents as $document)
-                                                                                            <a href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm">{{ getButtonText($document->id) }}</a>
-                                                                                        @endforeach
+                                                                                        <div style="margin:4px;">
+                                                                                            <a href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
+                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} Document</a>
+                                                                                              
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                       </div>
                                                                                     @endif
                                                                                     <div
                                                                                         class="d-flex justify-content-center">
@@ -363,86 +368,94 @@
                                                                                             </div>
                                                                                             &nbsp;
                                                                                         @endif
-
-                                                                                        <div>
-                                                                                            <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
-                                                                                                class="btn btn-info btn-sm">Upload
-                                                                                                Photograph</a>
-                                                                                        </div>
+                                                                                        @php
+                                                                                            $photographs = getOnSiteAssessorPhotograph($question->id, $applicationData->id, $course_id);
+                                                                                        @endphp
+                                                                                        @if ($photographs !== null)
+                                                                                            @foreach ($photographs as $document)
+                                                                                                <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                    class="btn btn-info btn-sm">{{ getButtonText($document->id) }} Photograph</a>
+                                                                                            @endforeach
+                                                                                        @endif
+                                                                                        @if (count($photographs) == 0)
+                                                                                            <div>
+                                                                                                <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                    class="btn btn-info btn-sm">Upload
+                                                                                                    Photograph</a>
+                                                                                            </div>
                                                                                     </div>
-
-                                                                                </div>
-                                                                            </div>
                                                                         @endif
-
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <a target="_blank"
-                                                                            href="{{ url('remarks/' . $applicationData->id . '/' . $course_id . '/' . $question->id) }}"
-                                                                            class="btn btn-info btn-sm p-2 mb-0"><i
-                                                                                class="fa fa-comments"></i> Remarks</a>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-
-
                                             </div>
-                                            @if (auth()->user()->assessment == 2)
-                                                @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
-                                                    @if (totalDocumentsCount($application_id) >= 2)
-                                                        <div class="d-flex justify-content-end">
-                                                            <a href="{{ url('submit-final-report/' . $application_id) }}"
-                                                                class="btn btn-success"
-                                                                style="margin-right: 10px;">Submit</a>
-                                                        </div>
-                                                    @endif
-                                                @endif
-                                            @endif
-
-                                            @if (auth()->user()->assessment == 1)
-                                                @php
-                                                    $applicationCompletedCount = applicationDocuments($application_id);
-
-                                                @endphp
-
-
-                                                {{-- Desktop Assessor --}}
-                                                @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
-                                                    @if ($applicationCompletedCount == true)
-                                                        <div class="d-flex justify-content-end">
-                                                            <form id="submitForm"
-                                                                action="{{ route('submit-final-report-by-desktop') }}"
-                                                                method="post">
-                                                                @csrf
-                                                                <input type="hidden" name="applicationID"
-                                                                    value="{{ $application_id }}">
-                                                                <button type="button" class="btn btn-success"
-                                                                    style="margin-right: 10px;"
-                                                                    onclick="confirmSubmit()">Submit</button>
-                                                            </form>
-                                                        </div>
-                                                    @endif
-                                                @else
-                                                    <div class="text-center">
-                                                        <h5>Report Submitted By Desktop Assessor</h5>
-                                                    </div>
-                                                @endif
-                                            @endif
-
-
                                         </div>
+                                        @endif
+
+
+                                        </td>
+                                        <td>
+                                            <a target="_blank"
+                                                href="{{ url('remarks/' . $applicationData->id . '/' . $course_id . '/' . $question->id) }}"
+                                                class="btn btn-info btn-sm p-2 mb-0"><i class="fa fa-comments"></i>
+                                                Remarks</a>
+                                        </td>
+                                        </tr>
+                                        @endforeach
+                                        @endforeach
+                                        </tbody>
+                                        </table>
+
+
                                     </div>
+                                    @if (auth()->user()->assessment == 2)
+                                        @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
+                                            @if (totalDocumentsCount($application_id) >= 2)
+                                                <div class="d-flex justify-content-end">
+                                                    <a href="{{ url('submit-final-report/' . $application_id) }}"
+                                                        class="btn btn-success" style="margin-right: 10px;">Submit</a>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endif
+
+                                    @if (auth()->user()->assessment == 1)
+                                        @php
+                                            $applicationCompletedCount = applicationDocuments($application_id);
+
+                                        @endphp
+
+
+                                        {{-- Desktop Assessor --}}
+                                        @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
+                                            @if ($applicationCompletedCount == true)
+                                                <div class="d-flex justify-content-end">
+                                                    <form id="submitForm"
+                                                        action="{{ route('submit-final-report-by-desktop') }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="applicationID"
+                                                            value="{{ $application_id }}">
+                                                        <button type="button" class="btn btn-success"
+                                                            style="margin-right: 10px;"
+                                                            onclick="confirmSubmit()">Submit</button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <div class="text-center">
+                                                <h5>Report Submitted By Desktop Assessor</h5>
+                                            </div>
+                                        @endif
+                                    @endif
+
 
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        </div>
         </div>
         </div>
     </section>

@@ -365,6 +365,8 @@
                                         </div>
                                     </div>
 
+@if (count($ApplicationDocument) > 0)
+    
 
 
                                     <div class="col-sm-4">
@@ -410,7 +412,7 @@
 
 
 
-
+                                    @endif
 
 
 

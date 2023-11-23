@@ -94,7 +94,7 @@
                     </div>
                     <div class="card-body">
                         @php
-                            $pdfUrl = url('documnet' . '/' . $document->doc_file);
+                            $pdfUrl = url('level' . '/' . $document->doc_file);
                             $fileExtension = pathinfo($pdfUrl, PATHINFO_EXTENSION);
                         @endphp
 
@@ -129,8 +129,8 @@
                                 <label for="status">Select Status</label>
                                 <select class="selectINputBox form-control" id="status" name="status">
                                     <option value="">Select</option>
-                                    <option value="11">NC1</option>
-                                    <option value="14">Approve</option>
+                                    <option value="1">NC1</option>
+                                    <option value="4">Approve</option>
                                 </select>
                             </div>
                             <div class="form-group">

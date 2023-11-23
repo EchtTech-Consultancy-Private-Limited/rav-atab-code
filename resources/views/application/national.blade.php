@@ -223,9 +223,8 @@
                                                                     class="p-2 buttonBadge text-white bg-primary">Payment
                                                                     Approved</a>
                                                             @endif
-                                                            @else
-                                                            <a 
-                                                                class="p-2 buttonBadge text-white bg-danger">Payment
+                                                        @else
+                                                            <a class="p-2 buttonBadge text-white bg-danger">Payment
                                                                 Pending</a>
                                                         @endif
                                                     @endif
@@ -287,6 +286,11 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body mod-css">
+                                                                @if (count($item->payments) > 1)
+                                                                    @if ($item->desktop_status == 1 && $item->payments[1]->status != 2)
+                                                                        <p class="text-danger">Payment approval pending by accountant!</p>
+                                                                    @endif
+                                                                @endif
                                                                 <form action="{{ url('/Assigan-application') }}"
                                                                     method="post">
                                                                     @csrf
@@ -307,10 +311,13 @@
                                                                             <option value="1">Desktop Assessment
                                                                             </option>
                                                                         @endif
-                                                                        @if ($item->desktop_status == 1 && count($item->payments) > 1)
-                                                                            <option value="2">On-Site Assessment
-                                                                            </option>
+                                                                        @if (count($item->payments) > 1)
+                                                                            @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
+                                                                                <option value="2">On-Site Assessment
+                                                                                </option>
+                                                                            @endif
                                                                         @endif
+
 
                                                                     </select>
                                                                     <div class="destop-id" data-id="{{ $item->id }}">

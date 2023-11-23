@@ -24,6 +24,8 @@ class Add_Document extends Model
         'doc_file',
         'user_id',
         'on_site_assessor_Id',
+        'photograph_comment',
+        'photograph',
     ];
 
 

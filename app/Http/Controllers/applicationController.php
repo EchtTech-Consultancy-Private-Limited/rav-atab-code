@@ -672,14 +672,14 @@ class applicationController extends Controller
             $file = $request->file('document');
             $name = $file->getClientOriginalName();
             $filename = time() . $name;
-            $file->move('documnet/', $filename);
+            $file->move('level/', $filename);
         }
 
-        if ($request->status == 11 || $request->status == 12) {
+        if ($request->status == 1 || $request->status == 2) {
             $commentTxt = "Document Not approved!";
-        } elseif ($request->status == 13) {
+        } elseif ($request->status == 3) {
             $commentTxt = "Not Recommended";
-        } elseif ($request->status == 14) {
+        } elseif ($request->status == 4) {
             $commentTxt = "Document has been approved";
         }
 
@@ -695,7 +695,17 @@ class applicationController extends Controller
             'on_site_assessor_Id' => auth()->user()->id,
         ]);
 
-        $comment = DocComment::create([
+        DocComment::create([
+            'doc_id' => $request->documentID,
+            'comments' => $commentTxt,
+            'status' => $request->status,
+            'doc_code' => $request->question_code,
+            'user_id' => auth()->user()->id,
+            'course_id' => $request->courseID,
+            'by_onsite_assessor' => 1
+        ]);
+
+       DocComment::create([
             'doc_id' => $document->id,
             'comments' => $commentTxt,
             'status' => $request->status,
@@ -718,8 +728,48 @@ class applicationController extends Controller
     public function uploadPhotographByOnSiteAssessor($applicationID, $courseID, $questionID, $documentID)
     {
         $applicationData = Application::find($applicationID);
-        return view('on-site-assessor.upload-photograph', compact('applicationData', 'courseID', 'questionID', 'documentID'));
+        $question = Question::find($questionID);
+        return view('on-site-assessor.upload-photograph', compact('applicationData', 'courseID', 'questionID', 'documentID','question'));
     }
+
+    public function uploadPhotographByOnSiteAssessorPost(Request $request)
+    {
+
+        $request->validate([
+            'remark' => 'required',
+            'document' => 'required'
+        ]);
+
+        if ($request->hasfile('document')) {
+            $file = $request->file('document');
+            $name = $file->getClientOriginalName();
+            $filename = time() . $name;
+            $file->move('level/', $filename);
+        }
+
+   
+
+        // dd($request->all()); 
+
+        $document = Add_Document::create([
+            'question_id' => $request->questionID,
+            'application_id' => $request->applicationID,
+            'course_id' => $request->courseID,
+            'doc_id' => $request->question_code,
+            'doc_file' => $filename,
+            'user_id' => $request->user_id,
+            'on_site_assessor_Id' => auth()->user()->id,
+            'photograph' => 1,
+            'photograph_comment' => $request->remark,
+        ]);
+
+        if ($document) {
+            return redirect()->back()->with('success', 'Document status has been updated');
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong. Please try again!');
+        }
+    }
+
 
     public function paymentAcknowledge(Request $request)
     {
@@ -736,5 +786,12 @@ class applicationController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Payment has been successfully acknowledged.');
+    }
+
+    public function viewDocumentData($document,$document_id,$questionID,$application_id,$courseID){
+        $document = Add_Document::find($document_id);
+        $question = Question::find($questionID);
+        $applicationData = Application::find($application_id);
+        return view('on-site-assessor.view-document',compact('document','question','applicationData','courseID','questionID'));
     }
 }
