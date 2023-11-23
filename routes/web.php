@@ -279,6 +279,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('submit-final-report-by-desktop',[LevelController::class,"submitFinalReportByDesktopAssessor"])->name('submit-final-report-by-desktop');
 
+    Route::get('submit-report-by-desktop',[LevelController::class,"submitReportByDesktopAssessor"])->name('submit-report-by-desktop');
+
     Route::get('pending-payments/{id}',[LevelController::class,"pendingPayments"])->name('pending-payments');
 
     Route::get('on-site/upload-document/{applicationID}/{courseID}/{questionID}/{documentID}', [applicationController::class, "uploadDocumentByOnSiteAssessor"])->name('on-site.upload-document');
