@@ -85,7 +85,7 @@
                     $comment = getLastComment($document->id);
                 @endphp
 
-             
+
                 <div class="card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">
@@ -94,7 +94,7 @@
                     </div>
                     <div class="card-body">
                         @php
-                            $pdfUrl = url('documnet' . '/' . $document->doc_file);
+                            $pdfUrl = url('level' . '/' . $document->doc_file);
                             $fileExtension = pathinfo($pdfUrl, PATHINFO_EXTENSION);
                         @endphp
 

@@ -649,7 +649,7 @@ function getAssessorDocument($questionID, $applicationId, $course_id)
 {
 
 
-    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id',null)->get();
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id', null)->get();
 
     if (count($documents) > 0) {
         return $documents;
@@ -662,7 +662,20 @@ function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
 {
 
 
-    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id','!=',null)->get();
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id', '!=', null)->where('photograph', null)->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
+function getOnSiteAssessorPhotograph($questionID, $applicationId, $course_id)
+{
+
+
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('photograph', 1)->get();
 
     if (count($documents) > 0) {
         return $documents;
@@ -874,11 +887,45 @@ function checkOnSiteDoc($applicationID, $questionID, $courseID, $assesorID)
         ->where('course_id', $courseID)
         ->where('on_site_assessor_Id', $assesorID)->orderBy('id', 'desc')->first();
 
-        
+
     return $document;
 }
 
-function getLastComment($docID){
-    $comment = DocComment::where('doc_id',$docID)->orderBy('id','desc')->first();
+function checkOnSitePhotograph($applicationID, $questionID, $courseID, $assesorID)
+{
+    $document = Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)
+        ->where('on_site_assessor_Id', $assesorID)->where('photograph', 1)->orderBy('id', 'desc')->first();
+
+
+    return $document;
+}
+
+function getLastComment($docID)
+{
+
+    $comment = DocComment::where('doc_id', $docID)->orderBy('id', 'desc')->first();
+
     return $comment;
+}
+
+function updatedBy($docId)
+{
+    $document = Add_Document::find($docId);
+    $comment = DocComment::where('doc_id', $docId)->first();
+
+    if ($comment) {
+        if ($document->on_site_assessor_Id != null && $document->notApraove_count != 0) {
+            return "Updated by On-Site Assessor";
+        } elseif ($document->on_site_assessor_Id != null && $document->notApraove_count == 0) {
+            return "Uploaded by On-Site Assessor";
+        } else {
+            return "Updated by Desktop Assessor";
+        }
+    } elseif ($document->photograph) {
+        return "Photograph uploaded by On-Site Assessor";
+    } else {
+        return "Training Provider";
+    }
 }
