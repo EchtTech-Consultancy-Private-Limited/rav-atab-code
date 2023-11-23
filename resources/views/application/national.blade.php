@@ -288,7 +288,8 @@
                                                             <div class="modal-body mod-css">
                                                                 @if (count($item->payments) > 1)
                                                                     @if ($item->desktop_status == 1 && $item->payments[1]->status != 2)
-                                                                        <p class="text-danger">Payment approval pending by accountant!</p>
+                                                                        <p class="text-danger">Payment approval pending by
+                                                                            accountant!</p>
                                                                     @endif
                                                                 @endif
                                                                 <form action="{{ url('/Assigan-application') }}"
@@ -320,7 +321,10 @@
 
 
                                                                     </select>
+
+                                                                   
                                                                     <div class="destop-id" data-id="{{ $item->id }}">
+                                                                      
                                                                         @foreach ($assesors as $k => $assesorsData)
                                                                             @if ($assesorsData->assessment == 1)
                                                                                 <br>
@@ -355,6 +359,30 @@
                                                                         @endforeach
                                                                     </div>
                                                                     <div class="onsite-id">
+                                                                        <div class="mt-3 mb-2">
+                                                                            @if (count($item->payments) > 1)
+                                                                                @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
+                                                                                <label>
+                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type" checked value="On-Site">
+                                                                                    <span>
+                                                                                        On-site
+                                                                                    </span>
+                                                                                </label>
+                                                                                <label>
+                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type"  value="Hybrid">
+                                                                                    <span>
+                                                                                       Hybrid
+                                                                                    </span>
+                                                                                </label>
+                                                                                <label>
+                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type"  value="Virtual">
+                                                                                    <span>
+                                                                                       Virtual
+                                                                                    </span>
+                                                                                </label>
+                                                                                @endif
+                                                                            @endif
+                                                                        </div>
                                                                         @foreach ($assesors as $k => $assesorsData)
                                                                             @if ($assesorsData->assessment == 2)
                                                                                 <br>
