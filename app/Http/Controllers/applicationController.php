@@ -637,8 +637,7 @@ class applicationController extends Controller
     public function applicationDocumentsSummary($application_id){
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-        
-        return view('admin.application.document-summary',compact('chapters','applicationDetails'));
+        return view('admin.application.document-summery-new',compact('chapters','applicationDetails'));
     }
 
     public function applicationDocumentsSummaryTP($application_id){
