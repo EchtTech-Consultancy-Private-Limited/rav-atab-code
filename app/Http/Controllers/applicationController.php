@@ -643,8 +643,7 @@ class applicationController extends Controller
     {
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-
-        return view('admin.application.document-summary', compact('chapters', 'applicationDetails'));
+        return view('admin.application.document-summery-new',compact('chapters','applicationDetails'));
     }
 
     public function applicationDocumentsSummaryTP($application_id)
@@ -796,5 +795,9 @@ class applicationController extends Controller
         $question = Question::find($questionID);
         $applicationData = Application::find($application_id);
         return view('on-site-assessor.view-document',compact('document','question','applicationData','courseID','questionID'));
+    }
+
+    public function on_site_report_format(){
+        return view('on-site-assessor.on-site-report-form');
     }
 }

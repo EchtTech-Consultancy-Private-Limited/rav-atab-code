@@ -409,8 +409,9 @@
                                         @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
                                             @if (totalDocumentsCount($application_id) >= 2)
                                                 <div class="d-flex justify-content-end">
-                                                    <a href="{{ url('submit-final-report/' . $application_id) }}"
-                                                        class="btn btn-success" style="margin-right: 10px;">Submit</a>
+                                                    <a class="btn btn-primary mr-2" href="{{ url('on-site/report') }}">
+                                                        Submit
+                                                    </a>
                                                 </div>
                                             @endif
                                         @endif
@@ -427,7 +428,7 @@
                                         @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
                                             @if ($applicationCompletedCount == true)
                                                 <div class="d-flex justify-content-end">
-                                                    <form id="submitForm"
+                                                    <!-- <form id="submitForm"
                                                         action="{{ route('submit-final-report-by-desktop') }}"
                                                         method="post">
                                                         @csrf
@@ -436,7 +437,8 @@
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;"
                                                             onclick="confirmSubmit()">Submit</button>
-                                                    </form>
+                                                    </form> -->
+                                                    <a href="{{ route('submit-report-by-desktop') }}" target="_blanck"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
                                                 </div>
                                             @endif
                                         @else
