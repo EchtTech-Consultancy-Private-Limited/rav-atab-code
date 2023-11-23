@@ -49,45 +49,47 @@ class applicationController extends Controller
         return view('showfile', ['data' => $data]);
     }
 
-    public function remarksData($applicationId,$courseId,$questionId){
-     
+    public function remarksData($applicationId, $courseId, $questionId)
+    {
+
 
         $applicationData = Application::find($applicationId);
 
-        $documents = Add_Document::where('question_id',$questionId)->where('application_id',$applicationId)->where('course_id',$courseId)->get();
+        $documents = Add_Document::where('question_id', $questionId)->where('application_id', $applicationId)->where('course_id', $courseId)->get();
 
-        $remarks = DocumentRemark::where('application_id',$applicationId)->where('assessor_id',auth()->user()->id)->get();
-        
-        return view('remarks-index', compact('applicationData','documents','remarks'));
+        $remarks = DocumentRemark::where('application_id', $applicationId)->where('assessor_id', auth()->user()->id)->get();
+
+        return view('remarks-index', compact('applicationData', 'documents', 'remarks'));
     }
 
-    public function documentDetails($name,$applicationId,$document_id)
+    public function documentDetails($name, $applicationId, $document_id)
     {
         $data = $name;
 
-        $remarks = DocumentRemark::where('document_id',$document_id)->where('application_id',$applicationId)->get();
+        $remarks = DocumentRemark::where('document_id', $document_id)->where('application_id', $applicationId)->get();
 
         $tpId = Application::find($applicationId);
         $tpId = $tpId->user_id;
 
         $documentData = Add_Document::find($document_id);
 
-        return view('showfile', ['data' => $data,'remarks'=>$remarks,'application_id'=>$applicationId,'document_id'=>$document_id,'tpId'=>$tpId,'documentData'=>$documentData]);
+        return view('showfile', ['data' => $data, 'remarks' => $remarks, 'application_id' => $applicationId, 'document_id' => $document_id, 'tpId' => $tpId, 'documentData' => $documentData]);
     }
 
-    public function saveRemark(Request $request){
+    public function saveRemark(Request $request)
+    {
         $request->validate([
             'remark' => 'required|max:100',
         ]);
 
-       if (auth()->user()->role == 2) {
-        $assessorId = DB::table('asessor_applications')->where('application_id',$request->application_id)->where('assessment_type',1)->first(['assessor_id']);
-       $assessorId = $assessorId->assessor_id;
-       } else {
-        $assessorId = auth()->user()->id;
-       }
-       
-        
+        if (auth()->user()->role == 2) {
+            $assessorId = DB::table('asessor_applications')->where('application_id', $request->application_id)->where('assessment_type', 1)->first(['assessor_id']);
+            $assessorId = $assessorId->assessor_id;
+        } else {
+            $assessorId = auth()->user()->id;
+        }
+
+
 
         $saved = DocumentRemark::create([
             'application_id' => $request->application_id,
@@ -99,11 +101,10 @@ class applicationController extends Controller
         ]);
 
         if ($saved) {
-            return redirect()->back()->with('success','Remark Added Successfully');
+            return redirect()->back()->with('success', 'Remark Added Successfully');
         } else {
-            return redirect()->back()->with('error','Something went wrong! Please try again.');
+            return redirect()->back()->with('error', 'Something went wrong! Please try again.');
         }
-        
     }
 
     public function show_course_pdf($name)
@@ -137,6 +138,7 @@ class applicationController extends Controller
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
                     $data->notification_status = 0;
                     $data->read_by = 0;
+                    $data->assessment_way = $request->on_site_type;
                     $data->save();
                     return  back()->with('success', 'Application has been successfully assigned to assessor');
                 } else {
@@ -150,6 +152,7 @@ class applicationController extends Controller
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
                     $data->notification_status = 0;
                     $data->read_by = 0;
+                    $data->assessment_way = $request->on_site_type;
                     $data->save();
                     return  back()->with('success', 'Application has been successfully assigned to assessor');
                 }
@@ -167,6 +170,7 @@ class applicationController extends Controller
                 $data->due_date = $due_date = Carbon::now()->addDay(15);
                 $data->notification_status = 0;
                 $data->read_by = 0;
+                $data->assessment_way = $request->on_site_type;
                 $data->save();
             }
         } else {
@@ -468,19 +472,19 @@ class applicationController extends Controller
         //     ->where('applications.country', '=', 101)
         //     ->get();
 
-            $collectionIds = AssessorApplication::where('assessor_id',Auth::user()->id)->get(['application_id']);
-            $collection = Application::whereIn('id',$collectionIds)->latest()->get();
-            $filteredApplications = [];
-        
-            foreach ($collection as $application) {
-                $paymentAvailable = ApplicationPayment::where('application_id', $application->id)->first();
-        
-                if (isset($paymentAvailable)) {
-                    $filteredApplications[] = $application;
-                }
-            }
+        $collectionIds = AssessorApplication::where('assessor_id', Auth::user()->id)->get(['application_id']);
+        $collection = Application::whereIn('id', $collectionIds)->latest()->get();
+        $filteredApplications = [];
 
-            $collection = $filteredApplications;
+        foreach ($collection as $application) {
+            $paymentAvailable = ApplicationPayment::where('application_id', $application->id)->first();
+
+            if (isset($paymentAvailable)) {
+                $filteredApplications[] = $application;
+            }
+        }
+
+        $collection = $filteredApplications;
 
         if (count($collection)) {
             return view('application.accesser.national_accesser', ['collection' => $collection]);
@@ -628,34 +632,39 @@ class applicationController extends Controller
     }
 
 
-    public function applicationDetailData($id){
+    public function applicationDetailData($id)
+    {
         $applicationDetails = Application::find($id);
         $chapters = Chapter::all();
-       return view('application.application-show',compact('applicationDetails','chapters'));
+        return view('application.application-show', compact('applicationDetails', 'chapters'));
     }
 
-    public function applicationDocumentsSummary($application_id){
+    public function applicationDocumentsSummary($application_id)
+    {
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-        
-        return view('admin.application.document-summary',compact('chapters','applicationDetails'));
+
+        return view('admin.application.document-summary', compact('chapters', 'applicationDetails'));
     }
 
-    public function applicationDocumentsSummaryTP($application_id){
+    public function applicationDocumentsSummaryTP($application_id)
+    {
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-        
-        return view('tp.application-summary',compact('chapters','applicationDetails'));
+
+        return view('tp.application-summary', compact('chapters', 'applicationDetails'));
     }
 
-    public function uploadDocumentByOnSiteAssessor($applicationID,$courseID,$questionID,$documentID){
+    public function uploadDocumentByOnSiteAssessor($applicationID, $courseID, $questionID, $documentID)
+    {
         $applicationData = Application::find($applicationID);
         $question = Question::find($questionID);
-        return view('on-site-assessor.upload-document',compact('applicationData','courseID','questionID','documentID','question'));
+        return view('on-site-assessor.upload-document', compact('applicationData', 'courseID', 'questionID', 'documentID', 'question'));
     }
 
-    public function uploadDocumentByOnSiteAssessorPost(Request $request){
-     
+    public function uploadDocumentByOnSiteAssessorPost(Request $request)
+    {
+
         $request->validate([
             'status' => 'required',
             'remark' => 'required',
@@ -666,7 +675,7 @@ class applicationController extends Controller
             $file = $request->file('document');
             $name = $file->getClientOriginalName();
             $filename = time() . $name;
-            $file->move('documnet/', $filename);
+            $file->move('level/', $filename);
         }
 
         if ($request->status == 1 || $request->status == 2) {
@@ -677,8 +686,10 @@ class applicationController extends Controller
             $commentTxt = "Document has been approved";
         }
 
+        // dd($request->all());
+
         $document = Add_Document::create([
-            'question_id' => $request->questionID ,
+            'question_id' => $request->questionID,
             'application_id' => $request->applicationID,
             'course_id' => $request->courseID,
             'doc_id' => $request->question_code,
@@ -687,7 +698,17 @@ class applicationController extends Controller
             'on_site_assessor_Id' => auth()->user()->id,
         ]);
 
-        $comment = DocComment::create([
+        DocComment::create([
+            'doc_id' => $request->documentID,
+            'comments' => $commentTxt,
+            'status' => $request->status,
+            'doc_code' => $request->question_code,
+            'user_id' => auth()->user()->id,
+            'course_id' => $request->courseID,
+            'by_onsite_assessor' => 1
+        ]);
+
+       DocComment::create([
             'doc_id' => $document->id,
             'comments' => $commentTxt,
             'status' => $request->status,
@@ -696,41 +717,84 @@ class applicationController extends Controller
             'course_id' => $request->courseID,
             'by_onsite_assessor' => 1
         ]);
-        
 
 
 
-        if ($document){
-            return redirect()->back()->with('success','Document status has been updated');
+
+        if ($document) {
+            return redirect()->back()->with('success', 'Document status has been updated');
         } else {
-            return redirect()->back()->with('error','Something went wrong. Please try again!');
+            return redirect()->back()->with('error', 'Something went wrong. Please try again!');
         }
-        
-
-      
-
     }
 
-    public function uploadPhotographByOnSiteAssessor($applicationID,$courseID,$questionID,$documentID){
+    public function uploadPhotographByOnSiteAssessor($applicationID, $courseID, $questionID, $documentID)
+    {
         $applicationData = Application::find($applicationID);
-        return view('on-site-assessor.upload-photograph',compact('applicationData','courseID','questionID','documentID'));
+        $question = Question::find($questionID);
+        return view('on-site-assessor.upload-photograph', compact('applicationData', 'courseID', 'questionID', 'documentID','question'));
     }
+
+    public function uploadPhotographByOnSiteAssessorPost(Request $request)
+    {
+
+        $request->validate([
+            'remark' => 'required',
+            'document' => 'required'
+        ]);
+
+        if ($request->hasfile('document')) {
+            $file = $request->file('document');
+            $name = $file->getClientOriginalName();
+            $filename = time() . $name;
+            $file->move('level/', $filename);
+        }
+
+   
+
+        // dd($request->all()); 
+
+        $document = Add_Document::create([
+            'question_id' => $request->questionID,
+            'application_id' => $request->applicationID,
+            'course_id' => $request->courseID,
+            'doc_id' => $request->question_code,
+            'doc_file' => $filename,
+            'user_id' => $request->user_id,
+            'on_site_assessor_Id' => auth()->user()->id,
+            'photograph' => 1,
+            'photograph_comment' => $request->remark,
+        ]);
+
+        if ($document) {
+            return redirect()->back()->with('success', 'Document status has been updated');
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong. Please try again!');
+        }
+    }
+
 
     public function paymentAcknowledge(Request $request)
     {
         $application = Application::find($request->applicationID);
-    
+
         if (!$application) {
             // Handle the case where the application is not found
             return redirect()->back()->with('error', 'Application not found.');
         }
-    
+
         $application->update([
             'is_payment_acknowledge' => 1,
             'acknowledged_by' => auth()->user()->id
         ]);
-    
+
         return redirect()->back()->with('success', 'Payment has been successfully acknowledged.');
     }
-    
+
+    public function viewDocumentData($document,$document_id,$questionID,$application_id,$courseID){
+        $document = Add_Document::find($document_id);
+        $question = Question::find($questionID);
+        $applicationData = Application::find($application_id);
+        return view('on-site-assessor.view-document',compact('document','question','applicationData','courseID','questionID'));
+    }
 }

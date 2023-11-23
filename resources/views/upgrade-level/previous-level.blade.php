@@ -123,7 +123,7 @@
                                    <td class="center">{{ ++$key }}</td>
                                    <td class="center">RAVAP-{{ 4000+$application->id }}</td>
                                    <td class="center"  >
-                                      <a style="color:green;border:2px solid green;padding:5px;border-radius:50px;"> @if($application->level_id==1) First Level
+                                      <a style="color:green;border:2px solid green;padding:3px 5px;border-radius:50px;"> @if($application->level_id==1) First Level
                                        @elseif($application->level_id==2)
                                        Second Level
                                        @elseif($application->level_id==3)

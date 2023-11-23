@@ -7,7 +7,7 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="sidebar-user-panel active">
+            <li class="sidebar-user-panel">
                 <div class="user-panel">
                     <div class=" image">
                         <img src="{{ asset('assets/images/usrbig.jpg') }}" class="user-img-style" alt="User Image" />
@@ -16,11 +16,9 @@
                 <div class="profile-usertitle">
                     <div class="sidebar-userpic-name">{{ Auth::user()->firstname }}</div>
                     <div class="profile-usertitle-job">(Account)</div>
-
-
                 </div>
             </li>
-
+    
             <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="{{ url('/dashboard') }}">
                     <i data-feather="monitor"></i>

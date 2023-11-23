@@ -88,7 +88,7 @@ class LevelController extends Controller
         $Application = Application::whereid(dDecrypt($id))->get();
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
-        $ApplicationPayment = ApplicationPayment::where('application_id',$applicationData->id)->get();
+        $ApplicationPayment = ApplicationPayment::where('application_id', $applicationData->id)->get();
         // dd($ApplicationPayment);
         $spocData = DB::table('applications')->where('id', $applicationData->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
@@ -1488,7 +1488,7 @@ class LevelController extends Controller
                 $course->on_site_assessor_Id = $oldFile->on_site_assessor_Id;
             }
         }
-       
+
         $course->notApraove_count = $notApprove + 1 ?? 1;
 
 

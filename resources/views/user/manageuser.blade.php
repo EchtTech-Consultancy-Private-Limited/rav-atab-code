@@ -460,10 +460,10 @@
                                                     password<span class="text-danger">*</span></label>
 
                                                 <i class="fa fa-eye " aria-hidden="true" id="togglecpassword"></i>
-                                            </div>
+                                           
                                             <input type="password" placeholder="Confirm Password" name="cpassword"
                                                 value="{{ old('cpassword') }}" for="cpassword" id="cpassword" required>
-
+                                                </div>
                                             <label for="cpassword" id="cpassword-error" class="error">
                                                 @error('cpassword')
                                                     {{ $message }}
@@ -506,7 +506,7 @@
                                     </div>
                                 </div>
 
-                            </div>
+                           
 
 
                             @if (request()->path() == 'adduser/assessor-user')
@@ -532,7 +532,7 @@
                                 </div>
                             </div>
                             @endif
-
+                            </div>
                             {{-- <input type="text" placeholder="role" name="role" value="1">
                             @elseif(request()->path() == 'adduser/training-provider')
                             <input type="text" placeholder="role" name="role" value="2">

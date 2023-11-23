@@ -64,37 +64,85 @@
 
                 </div>
             </div>
+            @php
+            $document = checkOnSitePhotograph($applicationData->id, $questionID, $courseID, auth()->user()->id);
+        @endphp
+
+        @if ($document != null)
+           @if ($document->photograph)
+               <div class="card">
+                <div class="card-header bg-white text-dark">
+                    <h5 class="mt-2">
+                        Photograph Comment
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <h5>
+                        {{ $document->photograph_comment }}
+                    </h5>
+                </div>
+               </div>
+           @endif
+
 
             <div class="card">
                 <div class="card-header bg-white text-dark">
                     <h5 class="mt-2">
-                        Upload Photograph
+                        ON SITE ASSESSOR
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label for="status">Select Status</label>
-                        <select class="selectINputBox form-control" id="status">
-                            <option value="">Select</option>
-                            <option value="1">NC1</option>
-                            <option value="4">Approve</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="remark">Remark</label>
-                        <textarea name="remark" id="remark" class="form-control" style="border: 1px solid #ccc; padding:10px;"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="document">Upload Photograph</label><br/>
-                        <input type="file" name="document" id="document">
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary mb-0">Submit</button>
-                    </div>
+                    @php
+                        $pdfUrl = url('level' . '/' . $document->doc_file);
+                        $fileExtension = pathinfo($pdfUrl, PATHINFO_EXTENSION);
+                    @endphp
+
+                    @if ($fileExtension === 'pdf')
+                        <object data="{{ $pdfUrl }}" type="application/pdf" width="100%" height="500px">
+                            <p>Unable to display PDF. <a href="{{ $pdfUrl }}" target="_blank">Download
+                                    Document</a> </p>
+                        </object>
+                    @else
+                        <a class="btn btn-info btn-sm" href="{{ $pdfUrl }}" target="_blank">Download
+                            Document</a>
+                    @endif
                 </div>
             </div>
+        @else
+
+            <form action="{{ url('on-site/upload/photograph') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="documentID" value="{{ $documentID }}">
+                <input type="hidden" name="courseID" value="{{ $courseID }}">
+                <input type="hidden" name="questionID" value="{{ $questionID }}">
+                <input type="hidden" name="applicationID" value="{{ $applicationData->id }}">
+                <input type="hidden" name="user_id" value="{{ $applicationData->user_id }}">
+                <input type="hidden" name="question_code" value="{{ $question->code }}">
+                <div class="card">
+                    <div class="card-header bg-white text-dark">
+                        <h5 class="mt-2">
+                            Upload Photograph
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                       
+                        <div class="form-group">
+                            <label for="remark">Remark</label>
+                            <textarea name="remark" id="remark" class="form-control" style="border: 1px solid #ccc; padding:10px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="document">Upload Photograph</label><br/>
+                            <input type="file" name="document" id="document">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary mb-0">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            @endif
         </div>
     </section>
     @include('layout.footer')

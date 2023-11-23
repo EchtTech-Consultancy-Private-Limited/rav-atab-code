@@ -50,7 +50,7 @@
     background-image: url("{{asset('assets/images/fa-india.png')}}")!important;
     background-repeat: no-repeat;
     background-size: 100px 100px;
-    heigth:100px !important;
+    height:100px !important;
     width:100px !important;
     display: inline-block;
     font-size: 90px;
@@ -60,11 +60,12 @@
 .info-box-5 .card-icon-large .fa {
     height: 100px;
 }
-.mergin-left{}
+
 .span-width{width:70px;}
 
 .nav-Tp .navbar {
-    background-color: #01d8da !important;
+    background-color: #47acd3 !important;
+    /* background-color: #01d8da !important; */
 }
 
 .nav-Ass .navbar {

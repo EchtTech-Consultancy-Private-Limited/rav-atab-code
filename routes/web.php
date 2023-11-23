@@ -285,8 +285,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('on-site/upload-document', [applicationController::class, "uploadDocumentByOnSiteAssessorPost"])->name('on-site.upload-document.post');
 
     Route::get('on-site/upload-photograph/{applicationID}/{courseID}/{questionID}/{documentID}', [applicationController::class, "uploadPhotographByOnSiteAssessor"])->name('on-site.upload-photograph');
+
+    Route::post('on-site/upload/photograph',[applicationController::class, "uploadPhotographByOnSiteAssessorPost"]);
     
     Route::post('payment/acknowledge',[applicationController::class,"paymentAcknowledge"])->name('payment.acknowledge');
+
+    Route::get('on-site/view/document/{document}/{documentID}/{questionID}/{applicationID}/{courseID}',[applicationController::class,"viewDocumentData"]);
 
 });
 

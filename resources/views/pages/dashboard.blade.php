@@ -24,15 +24,18 @@
 
         @endif
 
-">
+">  
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30">
-                <img class="loading-img-spin" style="width: 170px !important;height: auto !important;;" src="{{asset('assets/images/loading-screen-logo.png')}}" alt="admin">
+            <div class="m-t-30 loader1">
+                <!-- <img class="loading-img-spin" style="width: 170px !important;height: auto !important;;" src="{{asset('assets/images/loading-screen-logo.png')}}" alt="admin"> -->
+              
             </div>
-            {{-- <p>Please wait...</p> --}}
+           <!-- <p>Please wait...</p> -->
         </div>
+  </div>
+
     </div>
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
