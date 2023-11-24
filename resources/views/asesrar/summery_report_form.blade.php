@@ -94,7 +94,7 @@
     table {
         /* caption-side: bottom; */
         border-collapse: collapse;
-        border: 1px solid #ddd !important;
+        /* border: 1px solid #ddd !important; */
         background: #fff;
         padding: 33px !important;
     }
@@ -103,6 +103,12 @@
         text-align: left;
         padding: 10px 10px;
     }
+
+    table th, table td, table tr {
+    text-align: center;
+    border: 1px solid #aaa !important;
+    color: #000;
+}
 </style>
 
 </head>
@@ -150,7 +156,7 @@
 
                 </div>
             </div>
-            @if (Session::has('sussess'))
+            @if (Session::has('success'))
             <div class="alert alert-success" role="alert">
                 {{ session::get('success') }}
             </div>
@@ -159,69 +165,112 @@
                 {{ session::get('fail') }}
             </div>
             @endif
+            @foreach ($applicationDetails->courses as $item)
             <div>
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
-                   <div class="p-3  bg-white">
-                <table>
-                <tbody>
-                <tr>
-                    <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
-                </tr>
-                <tr>
-                    <td>Application No (provided by ATAB): <span> <input type="text"></span> </td>
-                    <td>Date of application: <span> <input type="text"></span> </td>
-                </tr>
-                <tr>
-                    <td>Name and Location of the Training Provider: <span> <input type="text"></span> </td>
-                    <td>Name of the course to be assessed:
+                        <form id="submitForm" action="{{ route('submit-final-report-by-desktop') }}"method="post">
+                            @csrf
+                        <div class="p-3  bg-white">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
+                                    </tr>
+                                    <tr>
+                                        <input type="hidden" name="course_id" value="{{ $_GET['course'] }}">
+                                        <input type="hidden" name="application_id" value="{{ $applicationDetails->id }}" readonly>`
+                                        <td>Application No (provided by ATAB): <span> <input type="text" name="application_uid" value="{{ $applicationDetails->application_uid }}" readonly></span> </td>
+                                        <td>Date of application: <span> <input type="text" name="date_of_application" value="{{ date('d-m-Y', strtotime($applicationDetails->created_at)) }}" readonly></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name and Location of the Training Provider: <span> <input type="text" name="location_training_provider" value="{{ $applicationDetails->user->firstname.' '. $applicationDetails->user->lastname.' ('. $applicationDetails->user->address.')' }}" readonly></span> </td>
+                                        <td>Name of the course to be assessed:
 
-                        <span> <input type="text"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Way of assessment (Desktop): <span> <input type="text"></span> </td>
-                    <td>No of Mandays: <span> <input type="text"></span> </td>
-                </tr>
+                                            <span> <input type="text" name="course_assessed" value="{{ Str::ucfirst($item->course_name) }}" readonly></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Way of assessment (Desktop): <span> <input type="text" name="way_of_desktop" value="Desktop" readonly></span> </td>
+                                        <td>No of Mandays: <span> <input type="text" name="mandays"></span> </td>
+                                    </tr>
 
-                <tr>
-                    <td> Signature</td>
-                    <td> N/A</td>
-                </tr>
-                <tr>
-                    <td> Assessor</td>
-                    <td></td>
-                </tr>
-            </tbody>
-            </table>
-                <table>
-                <thead>
-                    <tr>
-                        <th>Sl. No </th>
-                        <th>Objective Element</th>
-                        <th> NC raised</th>
-                        <th> CAPA by Training Provider</th>
-                        <th> Document submitted against the NC</th>
-                        <th> Remarks (Accepted/ Not accepted)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td> <input type="text" placeholder=""></td>
-                        <td> <input type="text" placeholder=""></td>
-                        <td> <input type="text" placeholder=""></td>
-                        <td> <input type="text" placeholder=""></td>
-                        <td> <input type="text" placeholder=""></td>
-                    </tr>
-                </tbody>
-                </table>
+                                    <tr>
+                                        <td> Signature</td>
+                                        <td><span> <input type="hidden" name="signature"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> Assessor</td>
+                                        <td><span> <input type="text" name="assessor" value="{{ Auth::user()->firstname.' '.Auth::user()->lastname }}" readonly> </span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                          <div class="table-responsive">
+                          <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sl. No </th>
+                                        <th>Objective Element</th>
+                                        <th> NC raised</th>
+                                        <th> CAPA by Training Provider</th>
+                                        <th> Document submitted against the NC</th>
+                                        <th> Remarks (Accepted/ Not accepted)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($chapters as $chapter)
+                                    <tr>
+                                        <td colspan="6" style="font-weight: bold; text-align:center;">
+                                            {{ $chapter->title ?? '' }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($chapter->questions as $question)
+                                    <tr>
+                                        <td>   
+                                            <input type="hidden" name="question_id[]" value="{{ $question->id }}" readonly>
+                                            {{ $question->code }}
+                                        </td>
+                                        <td>                                            
+                                            {{ $question->title }}
+                                        </td>
+                                        <td> <input type="text" name="nc_raised[]"></td>
+                                        <td> <input type="text" name="capa_training_provider[]"></td>
+                                        <td> <input type="text" name="document_submitted_against_nc[]"></td>
+                                        <td> <input type="text" name="remark[]"></td>
+                                    </tr>
+                                    @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-success float-right" onclick="confirmSubmit()">Submit</button>
+                        </form>
+                        @endforeach                    
+                    </div>
+                </div>
             </div>
         </div>
         </div>
         </div>
-    </div>
-    </div>
-    </div>
-    </div>
-</section>
+        </div>
+    </section>
+    <script>
+        function confirmSubmit() {
+            Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to submit the report?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user confirms, manually submit the form
+                    document.getElementById('submitForm').submit();
+                }
+            });
+        }
+    </script>
     @include('layout.footer')

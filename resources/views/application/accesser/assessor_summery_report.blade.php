@@ -1,21 +1,20 @@
 @include('layout.header')
 
 
-<title>RAV Accreditation Previous Applications View</title>
-<link rel="stylesheet" type="text/css"
-    href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
-{{--
-<link rel="stylesheet" type="text/css" href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
- --}}
-<style>
-    .text-size-11 {
-        font-size: 11px !important;
-    }
-</style>
+<title>RAV Accreditation || Assessor Applications View</title>
+
 </head>
 
 <body class="light">
-
+    <!-- Page Loader -->
+    {{-- <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="m-t-30">
+                <img class="loading-img-spin" src="{{ asset('assets/images/favicon.png') }}" alt="admin">
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div> --}}
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
@@ -25,19 +24,8 @@
 
     <div>
 
-        @if (Auth::user()->role == '1')
-            @include('layout.sidebar')
-        @elseif(Auth::user()->role == '2')
-            @include('layout.siderTp')
-        @elseif(Auth::user()->role == '3')
-            @include('layout.sideAss')
-        @elseif(Auth::user()->role == '4')
-            @include('layout.sideprof')
-        @elseif(Auth::user()->role == '5')
-            @include('layout.secretariat')
-        @elseif(Auth::user()->role == '6')
-            @include('layout.sidbarAccount')
-        @endif
+
+        @include('layout.sideAss')
 
         @include('layout.rightbar')
 
@@ -138,10 +126,7 @@
     </div>
     </section>
 
-
-
-
-@include('layout.footer')
+    @include('layout.footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 function printDiv(divId) {

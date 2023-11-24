@@ -48,9 +48,12 @@
                             </li>
                             <li class="breadcrumb-item active"> Assessor View Applications </li>
                         </ul>
-
                         <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
                             style="float:right;">Back </a>
+                        @if($spocData->desktop_status != '')
+                        <a href="{{ url('view-summery-report',$spocData->id) }}" type="button" class="btn btn-primary float-right me-2"
+                            >View Summery Report </a>
+                        @endif
                     </div>
                 </div>
             </div>

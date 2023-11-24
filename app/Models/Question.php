@@ -22,4 +22,9 @@ class Question extends Model
     public function document(){
         return $this->hasOne(Add_Document::class,'question_id','id');
     }
+
+
+    public function summeryQuestionreport(){
+        return $this->hasOne(SummeryReportChapter::class,"question_id","id");
+    }
 }

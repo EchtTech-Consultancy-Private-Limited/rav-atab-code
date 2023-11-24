@@ -14,6 +14,8 @@ use App\Models\ApplicationDocument;
 use App\Models\DocumentType;
 use App\Models\ApplicationReport;
 use App\Models\asessor_application;
+use App\Models\SummeryReport;
+use App\Models\SummeryReportChapter;
 use App\Mail\SendMail;
 use App\Mail\paymentSuccessMail;
 use App\Mail\secretariatapplicationmail;
@@ -641,7 +643,7 @@ class applicationController extends Controller
 
     public function applicationDocumentsSummary($application_id)
     {
-        $applicationDetails = Application::find($application_id);
+        $applicationDetails = SummeryReport::with('SummeryReportChapter')->find($application_id);
         $chapters = Chapter::all();
         return view('admin.application.document-summery-new',compact('chapters','applicationDetails'));
     }
