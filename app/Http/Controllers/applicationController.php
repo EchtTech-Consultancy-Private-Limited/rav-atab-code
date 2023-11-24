@@ -28,7 +28,10 @@ use App\Models\DocComment;
 use App\Models\DocumentRemark;
 use App\Models\User;
 use App\Models\Event;
+use App\Models\ImprovementForm;
 use App\Models\Question;
+use App\Models\SummaryReport;
+use App\Models\SummaryReportChapter;
 use Mail;
 use DB;
 use Auth;
@@ -643,7 +646,7 @@ class applicationController extends Controller
     {
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-        return view('admin.application.document-summery-new',compact('chapters','applicationDetails'));
+        return view('admin.application.document-summery-new', compact('chapters', 'applicationDetails'));
     }
 
     public function applicationDocumentsSummaryTP($application_id)
@@ -707,7 +710,7 @@ class applicationController extends Controller
             'by_onsite_assessor' => 1
         ]);
 
-       DocComment::create([
+        DocComment::create([
             'doc_id' => $document->id,
             'comments' => $commentTxt,
             'status' => $request->status,
@@ -731,7 +734,7 @@ class applicationController extends Controller
     {
         $applicationData = Application::find($applicationID);
         $question = Question::find($questionID);
-        return view('on-site-assessor.upload-photograph', compact('applicationData', 'courseID', 'questionID', 'documentID','question'));
+        return view('on-site-assessor.upload-photograph', compact('applicationData', 'courseID', 'questionID', 'documentID', 'question'));
     }
 
     public function uploadPhotographByOnSiteAssessorPost(Request $request)
@@ -749,7 +752,7 @@ class applicationController extends Controller
             $file->move('level/', $filename);
         }
 
-   
+
 
         // dd($request->all()); 
 
@@ -790,14 +793,111 @@ class applicationController extends Controller
         return redirect()->back()->with('success', 'Payment has been successfully acknowledged.');
     }
 
-    public function viewDocumentData($document,$document_id,$questionID,$application_id,$courseID){
+    public function viewDocumentData($document, $document_id, $questionID, $application_id, $courseID)
+    {
         $document = Add_Document::find($document_id);
         $question = Question::find($questionID);
         $applicationData = Application::find($application_id);
-        return view('on-site-assessor.view-document',compact('document','question','applicationData','courseID','questionID'));
+        return view('on-site-assessor.view-document', compact('document', 'question', 'applicationData', 'courseID', 'questionID'));
     }
 
-    public function on_site_report_format(){
-        return view('on-site-assessor.on-site-report-form');
+    public function on_site_report_format(Request $request)
+    {
+        // dd($request->all());
+        $applicationData = Application::find($request->input('application'));
+        $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id',$request->input('course'))->first();
+        if ($applicationAlreadySubmitted) {
+            return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->id . '&course=' . $request->course));
+        }
+        $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
+        $onSiteAssessor = "";
+
+        foreach ($assessors as $assessor) {
+            $user = User::find($assessor->assessor_id);
+            if ($user->assessment == 2) {
+                $onSiteAssessor = $user;
+            }
+        }
+
+        $assessorDetail = AssessorApplication::where('assessor_id', $user->id)->first();
+
+        $courseDetail = ApplicationCourse::find($request->course);
+
+        $chapters = Chapter::all();
+
+        return view('on-site-assessor.on-site-report-form', compact('applicationData', 'onSiteAssessor', 'courseDetail', 'assessorDetail', 'chapters'));
+    }
+
+    public function saveFormDataOnSite(Request $request)
+    {
+        $data = $request->all();
+
+        $summaryReport = SummaryReport::create($data);
+
+        $questionData = [];
+        foreach ($data['question_ids'] as $key => $questionId) {
+            $questionData[] = [
+                'question_id' => $questionId,
+                'nc_raised' => $data['nc_raised'][$key],
+                'capa_training_provider' => $data['capa_training_provider'][$key],
+                'document_submitted_against_nc' => $data['document_submitted_against_nc'][$key],
+                'remark' => $data['remark'][$key],
+                'summary_report_application_id' => $summaryReport->id,
+            ];
+        }
+
+        $insrted = SummaryReportChapter::insert($questionData);
+
+        if ($insrted) {
+            return redirect(url('opportunity-form/report?application=' . $request->application_id . '&course=' . $request->course_id))->with('success', "Data saved successfully");
+        }
+    }
+
+    public function opportunityForm(Request $request)
+    {
+        $existingEntry = ImprovementForm::where('application_id', $request->input('application'))
+        ->where('course_id', $request->input('course'))
+        ->first();
+
+    if ($existingEntry) {
+        // Entry already exists, redirect with flash message
+        return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
+    }
+        $applicationData = Application::find($request->input('application'));
+        $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
+        $onSiteAssessor = "";
+
+        foreach ($assessors as $assessor) {
+            $user = User::find($assessor->assessor_id);
+            if ($user->assessment == 2) {
+                $onSiteAssessor = $user;
+            }
+        }
+
+        $assessorDetail = AssessorApplication::where('assessor_id', $user->id)->first();
+
+        $courseDetail = ApplicationCourse::find($request->course);
+
+        $chapters = Chapter::all();
+        return view('on-site-assessor.opportunityForm', compact('applicationData', 'onSiteAssessor', 'courseDetail', 'assessorDetail', 'chapters'));
+    }
+
+    public function saveImprovmentForm(Request $request)
+    {
+
+        $existingEntry = ImprovementForm::where('application_id', $request->application_id)
+            ->where('course_id', $request->course_id)
+            ->first();
+
+        if ($existingEntry) {
+            // Entry already exists, redirect with flash message
+            return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
+        }
+        $data = $request->all(); // Assuming you are receiving this data in a request
+
+        // Insert into ImprovementForm table
+        $improvementForm = ImprovementForm::create($data);
+
+        return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
     }
 }

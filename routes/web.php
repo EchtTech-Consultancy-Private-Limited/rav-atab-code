@@ -297,6 +297,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('on-site/report',[applicationController::class,"on_site_report_format"]);
 
+    Route::post('save-on-site-report',[applicationController::class,"saveFormDataOnSite"]);
+    Route::get('opportunity-form/report',[applicationController::class,"opportunityForm"]);
+
+    Route::post('save-on-site-report-improvment-form',[applicationController::class,"saveImprovmentForm"]);
+
+    Route::get('on-site/report-summary',[applicationController::class,"summaryReport"]);
+
 });
 
 
