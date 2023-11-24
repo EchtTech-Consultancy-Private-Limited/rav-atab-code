@@ -646,7 +646,7 @@ class applicationController extends Controller
 
     public function applicationDocumentsSummary($application_id)
     {
-        $applicationDetails = SummeryReport::with('SummeryReportChapter')->find($application_id);
+        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id',$application_id)->first();
         $chapters = Chapter::all();
         return view('admin.application.document-summery-new', compact('chapters', 'applicationDetails'));
     }

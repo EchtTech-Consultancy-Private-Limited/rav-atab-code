@@ -426,7 +426,6 @@
 
                                         {{-- Desktop Assessor --}}
                                         @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
-                                            @if ($applicationCompletedCount == true)
                                                 <div class="d-flex justify-content-end">
                                                     <!-- <form id="submitForm"
                                                         action="{{ route('submit-final-report-by-desktop') }}"
@@ -440,7 +439,6 @@
                                                     </form> -->
                                                     <a href="{{ url('submit-report-by-desktop?course='.$course_id,$application_id) }}" target="_blanck"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
                                                 </div>
-                                            @endif
                                         @else
                                             <div class="text-center">
                                                 <h5>Report Submitted By Desktop Assessor</h5>
