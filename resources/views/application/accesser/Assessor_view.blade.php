@@ -48,6 +48,9 @@
                             </li>
                             <li class="breadcrumb-item active"> Assessor View Applications </li>
                         </ul>
+                        @if (auth()->user()->assessment == 2)
+                            <a href="{{ url('get-application-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
+                        @endif
                         <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
                             style="float:right;">Back </a>
                         @if($spocData->desktop_status != '')

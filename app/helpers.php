@@ -929,3 +929,16 @@ function updatedBy($docId)
         return "Training Provider";
     }
 }
+
+
+function getRejectedDocOnly($questionID,$applicationID,$courseID){
+    $documents = Add_Document::where('application_id',$applicationID)->where('course_id',$courseID)->where('question_id',$questionID)->get();
+    foreach ($documents as $document) {
+       $comments = DocComment::where('doc_id',$document->id)->get();
+       foreach ($comments as $comment) {
+            if ($comment->status != 4) {
+                return $comment;
+            }
+       }
+    }
+}

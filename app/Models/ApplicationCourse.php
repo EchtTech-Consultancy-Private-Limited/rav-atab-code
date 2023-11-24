@@ -18,5 +18,7 @@ class ApplicationCourse extends Model
         return $this->hasMany(ApplicationDocument::class,'course_number','id');
     }
 
+   
+
 
 }
