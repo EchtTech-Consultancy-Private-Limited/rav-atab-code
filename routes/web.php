@@ -307,6 +307,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('get-application-summaries',[applicationController::class,"getSummariesList"]);
 
+    Route::post('save-selected-dates',[applicationController::class,"saveSelectedDates"]);
+
 });
 
 

@@ -33,6 +33,9 @@
         font-size: 12px;
         border-radius: 5px;
     }
+    .test{
+        background:red !important;
+    }
 </style>
 </head>
 
@@ -322,9 +325,9 @@
 
                                                                     </select>
 
-                                                                   
+
                                                                     <div class="destop-id" data-id="{{ $item->id }}">
-                                                                      
+
                                                                         @foreach ($assesors as $k => $assesorsData)
                                                                             @if ($assesorsData->assessment == 1)
                                                                                 <br>
@@ -347,9 +350,11 @@
                                                                                     value="{{ $assesorsData->email }}">
                                                                                 <div>
                                                                                     <?php
-                                                         foreach(get_accessor_date($assesorsData->id) as $date){
+                                                         foreach(get_accessor_date_new($assesorsData->id,$item->id,$assesorsData->assessment) as $date){
+                                                          
                                                          ?>
-                                                                                    {!! $date !!}
+                                                                                   
+                                                                                        {!! $date !!}
                                                                                     <?php }   ?>
                                                                                 </div>
                                                                                 <input type="hidden"
@@ -362,24 +367,36 @@
                                                                         <div class="mt-3 mb-2">
                                                                             @if (count($item->payments) > 1)
                                                                                 @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
-                                                                                <label>
-                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type" checked value="On-Site">
-                                                                                    <span>
-                                                                                        On-site
-                                                                                    </span>
-                                                                                </label>
-                                                                                <label>
-                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type"  value="Hybrid">
-                                                                                    <span>
-                                                                                       Hybrid
-                                                                                    </span>
-                                                                                </label>
-                                                                                <label>
-                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type"  value="Virtual">
-                                                                                    <span>
-                                                                                       Virtual
-                                                                                    </span>
-                                                                                </label>
+                                                                                    <label>
+                                                                                        <input type="radio"
+                                                                                            id="on_site_type"
+                                                                                            class="d-none "
+                                                                                            name="on_site_type" checked
+                                                                                            value="On-Site">
+                                                                                        <span>
+                                                                                            On-site
+                                                                                        </span>
+                                                                                    </label>
+                                                                                    <label>
+                                                                                        <input type="radio"
+                                                                                            id="on_site_type"
+                                                                                            class="d-none "
+                                                                                            name="on_site_type"
+                                                                                            value="Hybrid">
+                                                                                        <span>
+                                                                                            Hybrid
+                                                                                        </span>
+                                                                                    </label>
+                                                                                    <label>
+                                                                                        <input type="radio"
+                                                                                            id="on_site_type"
+                                                                                            class="d-none "
+                                                                                            name="on_site_type"
+                                                                                            value="Virtual">
+                                                                                        <span>
+                                                                                            Virtual
+                                                                                        </span>
+                                                                                    </label>
                                                                                 @endif
                                                                             @endif
                                                                         </div>
@@ -597,6 +614,38 @@
         function cancelAssign() {
             location.reload(true);
         }
+
+        $('.dateID').click('on',function(){
+            var dataVal = $(this).attr('data-id').split(',');
+            $(this).addClass('test');
+            var data = {
+                'applicationID': dataVal[0],
+                'assessorID': dataVal[1],
+                'assessmentType': dataVal[2],
+                'selectedDate':dataVal[3]
+            };
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({                
+                type: 'POST',
+                url: "{{ url('save-selected-dates') }}",
+                data: data,
+                success: function(response) {
+                    
+                },
+                error: function(error) {
+
+                    console.error('Error:', error);
+                }
+            });
+            console.log(date);
+                alert(date);
+        })
     </script>
 
 

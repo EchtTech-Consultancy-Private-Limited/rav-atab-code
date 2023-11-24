@@ -916,4 +916,16 @@ class applicationController extends Controller
         $applicationDetails = Application::find($request->input('application'));
         return view('on-site-assessor.summary-list',compact('courses','applicationDetails'));
     }
+
+    public function saveSelectedDates(Request $request){
+         DB::table('assessor_assigne_date')->insert([
+            'assessor_Id' => $request->assessorID,
+            'assesment_type' => $request->applicationID,
+            'application_id' => $request->applicationID,
+            'selected_date' => $request->selectedDate,
+            'status' => 1
+        ]);
+
+       return response()->json(['message'=>'success']);
+    }
 }
