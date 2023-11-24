@@ -304,6 +304,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('on-site/report-summary',[applicationController::class,"summaryReport"]);
 
+    Route::get('get-application-summaries',[applicationController::class,"getSummariesList"]);
+
 });
 
 

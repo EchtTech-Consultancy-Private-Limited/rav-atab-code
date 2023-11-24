@@ -900,4 +900,18 @@ class applicationController extends Controller
 
         return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
     }
+
+    public function summaryReport(Request $request){
+        $applicationDetails = Application::find($request->input('application'));
+        $chapters = Chapter::all();
+        $improvementForm = ImprovementForm::where('application_id',$request->input('application'))->first();
+       
+        return view('on-site-assessor.final-summary',compact('applicationDetails','chapters','improvementForm'));
+    }
+
+    public function getSummariesList(Request $request){
+        $courses = ApplicationCourse::where('application_id',$request->input('application'))->get();
+        $applicationDetails = Application::find($request->input('application'));
+        return view('on-site-assessor.summary-list',compact('courses','applicationDetails'));
+    }
 }
