@@ -225,6 +225,14 @@
                                         </td>
                                     </tr>
                                     @foreach ($chapter->questions as $question)
+                                    @php
+                                        $documentsData = getAdminDocument($question->id, $applicationDetails->id) ?? 0;
+                                    @endphp
+                                    @foreach ($documentsData as $doc)
+                                    @php
+                                        $documentsData = getAssessorComments($doc->id, $applicationDetails->id) ?? 0;
+                                    @endphp
+                                    @if(getButtonText($doc->id) != "Accepted")
                                     <tr>
                                         <td>   
                                             <input type="hidden" name="question_id[]" value="{{ $question->id }}" readonly>
@@ -238,6 +246,8 @@
                                         <td> <input type="text" name="document_submitted_against_nc[]"></td>
                                         <td> <input type="text" name="remark[]"></td>
                                     </tr>
+                                    @endif
+                                    @endforeach
                                     @endforeach
                                     @endforeach
                                 </tbody>

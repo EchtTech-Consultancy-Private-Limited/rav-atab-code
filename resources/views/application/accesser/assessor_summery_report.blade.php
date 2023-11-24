@@ -74,8 +74,8 @@
                         <td>Name of the course to be assessed : {{ $applicationDetails->course_assessed }} </td>
                       </tr>
                       <tr>
-                        <td>Way of assessment (Desktop) : {{ $applicationDetails->course_assessed }}</td>
-                        <td>No of Mandays : N/A</td>
+                        <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
+                        <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
                       </tr>
                       <tr>
                         <td>Signature</td>
@@ -85,10 +85,7 @@
                         <td>Assessor Name</td>
                         <td>{{ $applicationDetails->assessor }}</td>
                       </tr>
-                      <tr>
-                        <td>Assessor</td>
-                        <td>N/A</td>
-                      </tr>
+                      
 
                     </table>
 
