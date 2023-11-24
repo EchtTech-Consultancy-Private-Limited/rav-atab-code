@@ -14,6 +14,8 @@ use App\Models\ApplicationDocument;
 use App\Models\DocumentType;
 use App\Models\ApplicationReport;
 use App\Models\asessor_application;
+use App\Models\SummeryReport;
+use App\Models\SummeryReportChapter;
 use App\Mail\SendMail;
 use App\Mail\paymentSuccessMail;
 use App\Mail\secretariatapplicationmail;
@@ -644,7 +646,7 @@ class applicationController extends Controller
 
     public function applicationDocumentsSummary($application_id)
     {
-        $applicationDetails = Application::find($application_id);
+        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id',$application_id)->first();
         $chapters = Chapter::all();
         return view('admin.application.document-summery-new', compact('chapters', 'applicationDetails'));
     }
@@ -913,5 +915,17 @@ class applicationController extends Controller
         $courses = ApplicationCourse::where('application_id',$request->input('application'))->get();
         $applicationDetails = Application::find($request->input('application'));
         return view('on-site-assessor.summary-list',compact('courses','applicationDetails'));
+    }
+
+    public function saveSelectedDates(Request $request){
+         DB::table('assessor_assigne_date')->insert([
+            'assessor_Id' => $request->assessorID,
+            'assesment_type' => $request->applicationID,
+            'application_id' => $request->applicationID,
+            'selected_date' => $request->selectedDate,
+            'status' => 1
+        ]);
+
+       return response()->json(['message'=>'success']);
     }
 }

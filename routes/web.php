@@ -234,6 +234,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/Assessor-view/{id}', [LevelController::class, 'Assessor_view']);
     Route::get('/secretariat-view/{id}', [LevelController::class, 'secretariat_view']);
     Route::get('view-application-documents', [applicationController::class, 'assessor_view_docs']);
+    Route::get('view-summery-report/{id}', [LevelController::class, 'view_summery_report']);
     Route::get('/accr-view-document/{id}/{course_id}', [LevelController::class, 'accr_upload_document']);
 
     //upgrade level route
@@ -279,7 +280,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('submit-final-report-by-desktop',[LevelController::class,"submitFinalReportByDesktopAssessor"])->name('submit-final-report-by-desktop');
 
-    Route::get('submit-report-by-desktop',[LevelController::class,"submitReportByDesktopAssessor"])->name('submit-report-by-desktop');
+    Route::get('submit-report-by-desktop/{id}',[LevelController::class,"submitReportByDesktopAssessor"])->name('submit-report-by-desktop');
 
     Route::get('pending-payments/{id}',[LevelController::class,"pendingPayments"])->name('pending-payments');
 
@@ -305,6 +306,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('on-site/report-summary',[applicationController::class,"summaryReport"]);
 
     Route::get('get-application-summaries',[applicationController::class,"getSummariesList"]);
+
+    Route::post('save-selected-dates',[applicationController::class,"saveSelectedDates"]);
 
 });
 
