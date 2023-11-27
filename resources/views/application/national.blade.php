@@ -33,9 +33,9 @@
         font-size: 12px;
         border-radius: 5px;
     }
-    .add-color{
+    /* .add-color{
         background:red !important;
-    }
+    } */
 </style>
 </head>
 
@@ -619,19 +619,19 @@
         }
 
         $('.dateID').click('on',function(){
+            var $this = $(this); 
             var dataVal = $(this).attr('data-id').split(',');
             var colorid = $(this).attr('date-color');
         
-            if(colorid ==undefined || colorid =='' || colorid =='false'){
+            // if(colorid ==undefined || colorid =='' || colorid =='false'){
               
-                $(this).attr('date-color','true');
-                $(this).addClass('add-color');
-                $(this).removeClass('btn-success').addClass('btn-danger');
-            }else{
-                alert('true B');
-                $('.dateID').data('color','');
-                $(this).removeClass('add-color');
-            }
+              
+            //     $(this).removeClass('btn-success').addClass('btn-danger');
+            // }else{
+               
+        
+            //     $(this).removeClass('btn-danger').addClass('btn-success');
+            // }
             
             
             var data = {
@@ -652,9 +652,16 @@
                 url: "{{ url('save-selected-dates') }}",
                 data: data,
                 success: function(response) {
-                    if(response.status == 201){
-                        $(this).removeClass('date-color');
+                    if (response.message == 'deleted') {
+                        $this.removeClass('btn-danger').addClass('btn-success');
+                    } else {
+                        $this.removeClass('btn-success').addClass('btn-danger');
                     }
+                    // if(response.status == 200){
+                    //     $this.removeClass('btn-danger').addClass('btn-success');
+                    // }else{
+                    //      $this.removeClass('btn-success').addClass('btn-success');
+                    // }
                 },
                 error: function(error) {
                     console.error('Error:', error);
