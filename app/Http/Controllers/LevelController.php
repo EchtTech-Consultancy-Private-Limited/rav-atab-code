@@ -2798,16 +2798,19 @@ class LevelController extends Controller
                 'assessor' => $request->assessor,
             ]
         )->id;
-        foreach ($request->question_id as $key => $formChapter) {
-            $chapter = new SummeryReportChapter();
-            $chapter->summary_report_application_id = $summeryReportId;
-            $chapter->question_id = $request->question_id[$key];
-            $chapter->nc_raised = $request->nc_raised[$key];
-            $chapter->capa_training_provider = $request->capa_training_provider[$key];
-            $chapter->document_submitted_against_nc = $request->document_submitted_against_nc[$key];
-            $chapter->remark = $request->remark[$key];
-            $chapter->save();
+        if ($request->question_id != null) {
+            foreach ($request->question_id as $key => $formChapter) {
+                $chapter = new SummeryReportChapter();
+                $chapter->summary_report_application_id = $summeryReportId;
+                $chapter->question_id = $request->question_id[$key];
+                $chapter->nc_raised = $request->nc_raised[$key];
+                $chapter->capa_training_provider = $request->capa_training_provider[$key];
+                $chapter->document_submitted_against_nc = $request->document_submitted_against_nc[$key];
+                $chapter->remark = $request->remark[$key];
+                $chapter->save();
+            }
         }
+      
         $application = Application::find($request->application_id);
         $updated = $application->update([
             'desktop_status' => 1
