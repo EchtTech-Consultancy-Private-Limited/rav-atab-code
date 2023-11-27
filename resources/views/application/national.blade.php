@@ -272,6 +272,7 @@
                                                     </td>
                                                 @endif
                                                 {{-- popup form --}}
+                                                @if (Auth::user()->role != 6)
                                                 <div class="modal fade" id="View_popup_{{ $item->id }}" tabindex="-1"
                                                     role="dialog" aria-labelledby="exampleModalCenterTitle"
                                                     aria-hidden="true">
@@ -498,6 +499,8 @@
                                                         </form>
                                                     </div>
                                                 </div>
+                                                @endif
+                                               
                                             </tr>
                                         @endforeach
                                     @endisset
@@ -620,9 +623,10 @@
             var colorid = $(this).attr('date-color');
         
             if(colorid ==undefined || colorid =='' || colorid =='false'){
-                alert('false A');
+              
                 $(this).attr('date-color','true');
                 $(this).addClass('add-color');
+                $(this).removeClass('btn-success').addClass('btn-danger');
             }else{
                 alert('true B');
                 $('.dateID').data('color','');
