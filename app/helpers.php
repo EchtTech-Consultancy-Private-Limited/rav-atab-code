@@ -365,10 +365,10 @@ function get_accessor_date_new($id,$applicationID,$assessmentType)
     for ($j = $begin; $j <= $end; $j->modify('+1 day')) {
        
         if (in_array($j->format("Y-m-d"), $allSelectedDates) ) {
-            $eventsDate[] = "<span class='btn btn-danger dateID' data-color='' data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."' style='color:red'>".$j->format("Y-m-d")."</span>";
+            $eventsDate[] = "<span class='btn btn-danger dateID'  data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."'>".$j->format("Y-m-d")."</span>";
 
         } else {
-           $eventsDate[] = "<span class='btn btn-success dateID' data-color='' data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."' style='color:green'>".$j->format("Y-m-d")."</span>";
+           $eventsDate[] = "<span class='btn btn-success dateID' data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."' >".$j->format("Y-m-d")."</span>";
         }
     }
     return $eventsDate;
