@@ -343,7 +343,7 @@
                                                                 {{ $totalAmount }}({{ implode(', ', $paymentNumbers) }})
                                                             </td>
                                                             <td class="center">
-                                                                {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
+                                                                {{ \Carbon\Carbon::parse($item->payment->payment_date)->format('d-m-Y') }}
                                                             </td>
                                                             <td class="center">
                                                                 <a href="{{ url('application/summary/' . $item->application_id) }}"

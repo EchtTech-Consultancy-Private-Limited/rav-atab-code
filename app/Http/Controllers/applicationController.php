@@ -177,6 +177,7 @@ class applicationController extends Controller
                 $data->read_by = 0;
                 $data->assessment_way = $request->on_site_type;
                 $data->save();
+                return  back()->with('success', 'Application has been successfully assigned to assessor');
             }
         } else {
 

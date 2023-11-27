@@ -420,7 +420,7 @@
                                                                                     value="{{ $assesorsData->email }}">
                                                                                 <div>
                                                                                     <?php
-                                                         foreach(get_accessor_date($assesorsData->id) as $date){
+                                                         foreach(get_accessor_date_new($assesorsData->id,$item->id,$assesorsData->assessment) as $date){
                                                          ?>
                                                                                     {!! $date !!}
                                                                                     <?php }   ?>
