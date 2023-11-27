@@ -33,7 +33,7 @@
         font-size: 12px;
         border-radius: 5px;
     }
-    .test{
+    .add-color{
         background:red !important;
     }
 </style>
@@ -272,6 +272,7 @@
                                                     </td>
                                                 @endif
                                                 {{-- popup form --}}
+                                                @if (Auth::user()->role != 6)
                                                 <div class="modal fade" id="View_popup_{{ $item->id }}" tabindex="-1"
                                                     role="dialog" aria-labelledby="exampleModalCenterTitle"
                                                     aria-hidden="true">
@@ -498,6 +499,8 @@
                                                         </form>
                                                     </div>
                                                 </div>
+                                                @endif
+                                               
                                             </tr>
                                         @endforeach
                                     @endisset
@@ -617,7 +620,20 @@
 
         $('.dateID').click('on',function(){
             var dataVal = $(this).attr('data-id').split(',');
-            $(this).addClass('test');
+            var colorid = $(this).attr('date-color');
+        
+            if(colorid ==undefined || colorid =='' || colorid =='false'){
+              
+                $(this).attr('date-color','true');
+                $(this).addClass('add-color');
+                $(this).removeClass('btn-success').addClass('btn-danger');
+            }else{
+                alert('true B');
+                $('.dateID').data('color','');
+                $(this).removeClass('add-color');
+            }
+            
+            
             var data = {
                 'applicationID': dataVal[0],
                 'assessorID': dataVal[1],
@@ -636,15 +652,14 @@
                 url: "{{ url('save-selected-dates') }}",
                 data: data,
                 success: function(response) {
-                    
+                    if(response.status == 201){
+                        $(this).removeClass('date-color');
+                    }
                 },
                 error: function(error) {
-
                     console.error('Error:', error);
                 }
             });
-            console.log(date);
-                alert(date);
         })
     </script>
 

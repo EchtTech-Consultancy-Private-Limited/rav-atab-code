@@ -918,14 +918,30 @@ class applicationController extends Controller
     }
 
     public function saveSelectedDates(Request $request){
-         DB::table('assessor_assigne_date')->insert([
-            'assessor_Id' => $request->assessorID,
-            'assesment_type' => $request->applicationID,
-            'application_id' => $request->applicationID,
-            'selected_date' => $request->selectedDate,
-            'status' => 1
-        ]);
 
-       return response()->json(['message'=>'success']);
+        $exitValCheck = DB::table('assessor_assigne_date')->where('assessor_Id',$request->assessorID)
+                                    ->where('application_id',$request->applicationID)
+                                    ->where('selected_date',$request->selectedDate)
+                                    ->first();
+        if($exitValCheck !=null){
+            DB::table('assessor_assigne_date')
+                            ->where('assessor_Id',$request->assessorID)
+                            ->where('application_id',$request->applicationID)
+                            ->where('selected_date',$request->selectedDate)
+                            ->delete();
+        $notification = ['status'=>'201','message'=>'success'];
+        }else{
+            //dd($exitValCheck);
+            DB::table('assessor_assigne_date')->insert([
+                'assessor_Id' => $request->assessorID,
+                'assesment_type' => $request->applicationID,
+                'application_id' => $request->applicationID,
+                'selected_date' => $request->selectedDate,
+                'status' => 1
+            ]);
+        $notification = ['status'=>'200','message'=>'success'];
+        }
+
+       return response()->json($notification);
     }
 }
