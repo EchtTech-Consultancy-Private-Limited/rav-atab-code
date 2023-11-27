@@ -26,4 +26,8 @@ class SummeryReport extends Model
     public function SummeryReportChapter(){
         return $this->hasMany(SummeryReportChapter::class,'summary_report_application_id');
     }
+
+    public function application(){
+        return $this->belongsTo(Application::class,"application_id","id");
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\ApplicationCourse;
 use App\Models\ApplicationNotification;
 use App\Models\DocComment;
 use App\Models\Question;
+use App\Models\SummaryReport;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -986,4 +987,10 @@ function getRejectedDocOnly($questionID,$applicationID,$courseID){
             }
        }
     }
+}
+
+function checkReportAvailableOrNot($applicationID){
+    $reportAvailable = SummaryReport::where('application_id',$applicationID)->first();
+
+    return $reportAvailable;
 }
