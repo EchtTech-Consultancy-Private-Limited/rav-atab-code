@@ -696,6 +696,20 @@ function getAdminDocument($questionID, $applicationId)
     }
 }
 
+// only for summery report
+function getSummerDocument($questionID, $applicationId)
+{
+    // dd($questionID);
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->first();
+    // dd($documents);
+    // if (count($documents) > 0) {
+        return $documents;
+    // } else {
+    //     return $documents = [];
+    // }
+}
+// end summery report
+
 function getAssessorComments($docID)
 {
     $comments = DocComment::where('doc_id', $docID)->get();
