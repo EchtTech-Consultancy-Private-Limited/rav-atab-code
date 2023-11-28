@@ -700,7 +700,7 @@ function getAssessorDocument($questionID, $applicationId, $course_id)
     if (count($documents) > 0) {
         return $documents;
     } else {
-        return $documents = [];
+        return $documents = []; 
     }
 }
 
@@ -715,6 +715,11 @@ function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
     } else {
         return $documents = [];
     }
+}
+
+function getMandays($applicationID,$assesorID){
+    $dates =  DB::table('assessor_assigne_date')->where('assessor_Id',$assesorID)->where('application_id',$applicationID)->get();
+    return count($dates);
 }
 
 function getOnSiteAssessorPhotograph($questionID, $applicationId, $course_id)
@@ -741,6 +746,20 @@ function getAdminDocument($questionID, $applicationId)
         return $documents = [];
     }
 }
+
+// only for summery report
+function getSummerDocument($questionID, $applicationId)
+{
+    // dd($questionID);
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->first();
+    // dd($documents);
+    // if (count($documents) > 0) {
+        return $documents;
+    // } else {
+    //     return $documents = [];
+    // }
+}
+// end summery report
 
 function getAssessorComments($docID)
 {
@@ -1002,3 +1021,58 @@ function checkDocumentsStatus($applicationID,$courseID){
     return $comments;
 
 }
+
+function getDocumentComment($questionID,$applicationID,$courseID){
+    $document =  Add_Document::where('question_id',$questionID)->where('application_id',$applicationID)->where('course_id',$courseID)->first();
+   if ($document) {
+    $comment = DB::table('doc_comments')->where('doc_id',$document->id)->first();
+    return $comment;
+   }
+}
+
+function getAllDocumentsForSummary($questionID,$applicationID,$courseID){
+    return Add_Document::where('question_id',$questionID)->where('application_id',$applicationID)->where('course_id',$courseID)->get();
+}
+
+function getDocComment($docID){
+    return DocComment::where('doc_id',$docID)->first();
+}
+
+function printStatus($docID){
+    $comment = DocComment::where('doc_id',$docID)->first();
+
+   if ( $comment ) {
+    if ($comment->status == 1) {
+        return "NC1";
+    } elseif ($comment->status == 2) {
+        return "NC2";
+    } 
+    elseif ($comment->status == 3) {
+        return "Not Recommended";
+    } 
+    elseif ($comment->status == 4) {
+        return "No NC";
+    } 
+   } else {
+    return "Document not uploaded!";
+   }
+   
+    
+}
+
+function printRemark($docID){
+    $comment = DocComment::where('doc_id',$docID)->first();
+
+   if ( $comment ) {
+  if ($comment->status == 4) {
+        return "Accepted";
+    } else{
+        return "Not";
+    }
+   } else {
+    return "Document not uploaded!";
+   }
+   
+    
+}
+

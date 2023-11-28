@@ -662,7 +662,6 @@ class applicationController extends Controller
     {
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-
         return view('tp.application-summary', compact('chapters', 'applicationDetails'));
     }
 
@@ -812,12 +811,12 @@ class applicationController extends Controller
 
     public function on_site_report_format(Request $request)
     {
-        // dd($request->all());
+       
         $applicationData = Application::find($request->input('application'));
-        $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id', $request->input('course'))->first();
-        if ($applicationAlreadySubmitted) {
-            return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->application_id . '&course=' . $request->course));
-        }
+        // $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id', $request->input('course'))->first();
+        // if ($applicationAlreadySubmitted) {
+        //     return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->application_id . '&course=' . $request->course));
+        // }
         $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
         $onSiteAssessor = "";
 
@@ -957,6 +956,26 @@ class applicationController extends Controller
                 'status' => 1
             ]);
             return response()->json(['status' => '200', 'message' => 'inserted']);
+        }
+    }
+
+    public function submitFinalRemark(Request $request){
+        $application = Application::find($request->application_id);
+        if ($request->hasfile('gps_pic')) {
+            $file = $request->file('gps_pic');
+            $name = $file->getClientOriginalName();
+            $filename = time() . $name;
+            $file->move('level/', $filename);
+        }
+
+
+        if ($application) {
+            $application->update([
+                'final_remark' => $request->remark,
+                'gps_pic' => $filename,
+            ]);
+
+            return redirect()->back()->with('success','Remark and GPS Picture has been updated');
         }
     }
 }
