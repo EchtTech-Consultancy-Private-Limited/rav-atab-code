@@ -352,7 +352,7 @@
                                                                                         @foreach ($documents as $document)
                                                                                         <div style="margin:4px;">
                                                                                             <a href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} Document</a>
+                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} </a>
                                                                                               
                                                                                         </div>
                                                                                     @endforeach
@@ -362,7 +362,7 @@
                                                                                         class="d-flex justify-content-center">
                                                                                         @if (count($documents) == 0)
                                                                                             <div>
-                                                                                                <a href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                <a target="_blank" href="{{ route('on-site.upload-document', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
                                                                                                     class="btn btn-primary btn-sm">Upload
                                                                                                     Document</a>&nbsp;
                                                                                             </div>
@@ -373,13 +373,13 @@
                                                                                         @endphp
                                                                                         @if ($photographs !== null)
                                                                                             @foreach ($photographs as $document)
-                                                                                                <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                <a target="_blank" href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
                                                                                                     class="btn btn-info btn-sm">{{ getButtonText($document->id) }} Photograph</a>
                                                                                             @endforeach
                                                                                         @endif
                                                                                         @if (count($photographs) == 0)
                                                                                             <div>
-                                                                                                <a href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
+                                                                                                <a target="_blank" href="{{ route('on-site.upload-photograph', ['applicationID' => $applicationData->id, 'courseID' => $course_id, 'questionID' => $question->id, 'documentID' => $approvedDocumentID]) }}"
                                                                                                     class="btn btn-info btn-sm">Upload
                                                                                                     Photograph</a>
                                                                                             </div>
@@ -409,7 +409,7 @@
                                         @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
                                             @if (totalDocumentsCount($application_id) >= 2)
                                                 <div class="d-flex justify-content-end">
-                                                    <a class="btn btn-primary mr-2" href="{{ url('on-site/report/?application='.$applicationData->id.'&course='.$course_id) }}">
+                                                    <a target="_blank" class="btn btn-primary mr-2" href="{{ url('on-site/report/?application='.$applicationData->id.'&course='.$course_id) }}">
                                                         Submit
                                                     </a>
                                                 </div>
