@@ -309,6 +309,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('save-selected-dates',[applicationController::class,"saveSelectedDates"]);
 
+
+    Route::post('add-final-remark-onsite',[applicationController::class,"submitFinalRemark"]);
+
 });
 
 

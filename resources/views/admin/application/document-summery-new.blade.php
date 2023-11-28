@@ -130,6 +130,27 @@
                     </table>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-header bg-white text-dark">
+                    <h5 class="mt-2">
+                        Remark & GPS Picture
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        {{ $applicationDetails->application->final_remark }}
+                    </div>
+                    <div class="mt-2">
+                        <span style="font-weight: bold;">GPC Picture</span>
+                        <div>
+                            <a href="{{ asset('level/' . $applicationDetails->application->gps_pic) }}" target="_blank">
+                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->application->gps_pic) }}" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     </section>
