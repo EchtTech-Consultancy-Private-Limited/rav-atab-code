@@ -94,6 +94,16 @@
                         showConfirmButton: false,
                     });
                 </script>
+                @elseif (Session::has('warning'))
+                <script>
+                    Swal.fire({
+                        title: "Warning",
+                        icon: "warning",
+                        text: "{{ session('warning') }}",
+                        timer: 3000, // Time in milliseconds (2 seconds in this example)
+                        showConfirmButton: false,
+                    });
+                </script>
             @elseif(Session::has('fail'))
                 <div class="alert alert-danger" role="alert">
                     {{ session::get('fail') }}
@@ -190,7 +200,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
+                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
                                                 </td>
                                                 <td>
                                                     @php
@@ -199,12 +209,12 @@
                                                     @if (totalDocumentsCount($item->id) > 0)
                                                         <div class="d-flex">
                                                             @if ($availableReport != null)
-                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '#' }}"
                                                                     class="p-2 buttonBadge text-white bg-warning"
                                                                     style="margin-right: 5px;">Application In
                                                                     Processing</a>
                                                             @else
-                                                                <a href="#" title="Summary report not available!"
+                                                                <a href="#" title="{{ auth()->user()->role == 1 ? 'Summary report not available!' :'' }}"
                                                                     class="p-2 buttonBadge text-white bg-warning"
                                                                     style="margin-right: 5px;">Application In
                                                                     Processing</a>
@@ -226,7 +236,7 @@
                                                         @php
                                                             $payment = $item->payment;
                                                             $isAdmin = auth()->user()->role == 1;
-                                                            $url = $isAdmin ? url("admin/application/documents/{$item->id}/summary") : '';
+                                                            $url = $isAdmin ? url("admin/application/documents/{$item->id}/summary") : '#';
                                                             $reportAvailable = $availableReport != null;
                                                         @endphp
 
@@ -244,7 +254,7 @@
 
                                                                 <a href="{{ $url }}"
                                                                     class="p-2 buttonBadge {{ $textClass }} {{ $bgClass }}"
-                                                                    title="{{ $reportAvailable ? '' : 'Summary report not available!' }}">
+                                                                    title="{{ $reportAvailable ? '' : '' }}">
                                                                     {{ $displayText }}
                                                                 </a>
                                                             @endif

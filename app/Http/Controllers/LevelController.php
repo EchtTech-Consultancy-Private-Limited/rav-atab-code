@@ -86,7 +86,6 @@ class LevelController extends Controller
 
     public function admin_view($id)
     {
-
         $Application = Application::whereid(dDecrypt($id))->get();
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();

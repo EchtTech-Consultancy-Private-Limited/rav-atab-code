@@ -648,6 +648,12 @@ class applicationController extends Controller
     public function applicationDocumentsSummary($application_id)
     {
         $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id', $application_id)->first();
+        if ($applicationDetails == null) {
+            return redirect(url('nationl-page'))->with('warning','Summary report not created yet!');
+        }
+       if ($applicationDetails->application->desktop_status == null && $applicationDetails->application->onsite_status == null) {
+            return redirect(url('nationl-page'))->with('warning','Summary report not created yet!');
+       }
         $chapters = Chapter::all();
         return view('admin.application.document-summery-new', compact('chapters', 'applicationDetails'));
     }
