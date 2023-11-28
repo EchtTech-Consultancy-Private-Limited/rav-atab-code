@@ -1076,7 +1076,3 @@ function printRemark($docID){
     
 }
 
-function getMandays($applicationID,$assesorID){
-    $dates =  DB::table('assessor_assigne_date')->where('assessor_Id',$assesorID)->where('application_id',$applicationID)->get();
-    return count($dates);
-}
