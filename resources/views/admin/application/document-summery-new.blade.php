@@ -87,7 +87,7 @@
                       </tr>
                       <tr>
                       <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
-                        <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
+                        <td>No of Mandays : {{ getMandays($applicationDetails->id, auth()->user()->id) }}</td>
                       </tr>
                       <tr>
                         <td>Signature</td>
