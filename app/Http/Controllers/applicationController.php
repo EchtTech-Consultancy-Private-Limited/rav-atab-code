@@ -810,7 +810,7 @@ class applicationController extends Controller
         $applicationData = Application::find($request->input('application'));
         $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id', $request->input('course'))->first();
         if ($applicationAlreadySubmitted) {
-            return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->id . '&course=' . $request->course));
+            return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->application_id . '&course=' . $request->course));
         }
         $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
         $onSiteAssessor = "";
@@ -900,6 +900,12 @@ class applicationController extends Controller
 
         // Insert into ImprovementForm table
         $improvementForm = ImprovementForm::create($data);
+
+        $application = Application::find($request->application_id);
+
+        $application->update([
+            'onsite_status' => 1,
+        ]);
 
         return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
     }

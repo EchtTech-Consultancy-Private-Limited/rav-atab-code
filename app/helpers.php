@@ -994,3 +994,11 @@ function checkReportAvailableOrNot($applicationID){
 
     return $reportAvailable;
 }
+
+
+function checkDocumentsStatus($applicationID,$courseID){
+    $documentsIds = Add_Document::where('application_id',$applicationID)->where('course_id',$courseID)->get(['id']);
+    $comments = DocComment::whereIn('doc_id',$documentsIds)->where('status','!=',4)->get();
+    return $comments;
+
+}
