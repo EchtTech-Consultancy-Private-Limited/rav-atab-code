@@ -700,7 +700,7 @@ function getAssessorDocument($questionID, $applicationId, $course_id)
     if (count($documents) > 0) {
         return $documents;
     } else {
-        return $documents = [];
+        return $documents = []; 
     }
 }
 
@@ -715,6 +715,11 @@ function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
     } else {
         return $documents = [];
     }
+}
+
+function getMandays($applicationID,$assesorID){
+    $dates =  DB::table('assessor_assigne_date')->where('assessor_Id',$assesorID)->where('application_id',$applicationID)->get();
+    return count($dates);
 }
 
 function getOnSiteAssessorPhotograph($questionID, $applicationId, $course_id)
@@ -741,6 +746,20 @@ function getAdminDocument($questionID, $applicationId)
         return $documents = [];
     }
 }
+
+// only for summery report
+function getSummerDocument($questionID, $applicationId)
+{
+    // dd($questionID);
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->first();
+    // dd($documents);
+    // if (count($documents) > 0) {
+        return $documents;
+    // } else {
+    //     return $documents = [];
+    // }
+}
+// end summery report
 
 function getAssessorComments($docID)
 {

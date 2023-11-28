@@ -75,11 +75,11 @@
                       </tr>
                       <tr>
                         <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
-                        <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
+                        <td>No of Mandays : {{ getMandays($applicationDetails->id, auth()->user()->id) }}</td>
                       </tr>
                       <tr>
                         <td>Signature</td>
-                        <td>N/A</td>
+                        <td>......</td>
                       </tr>
                       <tr>
                         <td>Assessor Name</td>
@@ -105,15 +105,25 @@
                                 {{ $chapter->title ?? '' }}
                             </td>
                         </tr>                                      
-                        @foreach ($chapter->questions as $question)                        
+                        @foreach ($chapter->questions as $question)
+                        @php
+                            $documentsData = getSummerDocument($question->id, $applicationDetails->application_id) ?? 0;
+                            $docId = $documentsData ? $documentsData->id : null;
+                        @endphp
                         <tr>
-                            <td> {{ $question->id }}</td>
+                            
+                            <td> {{ $docId }}</td>
                            <td>{{ $question->title }}</td>
                            <td>{{ $question->summeryQuestionreport->nc_raised ?? '' }}</td>
                            <td>{{ $question->summeryQuestionreport->capa_training_provider ?? '' }}</td>
                            <td>{{ $question->summeryQuestionreport->document_submitted_against_nc ?? '' }}</td>
+                           @if(getButtonText($docId) == "Accepted")
+                           <td>{{ $question->summeryQuestionreport->remark ??  getButtonText($docId) ?? '' }}</td>
+                           @else
                            <td>{{ $question->summeryQuestionreport->remark ?? '' }}</td>
-                        </tr>                       
+                           @endif
+
+                        </tr>                   
                         @endforeach
                         @endforeach
                     </table>

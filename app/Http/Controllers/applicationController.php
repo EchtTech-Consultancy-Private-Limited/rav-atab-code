@@ -662,7 +662,6 @@ class applicationController extends Controller
     {
         $applicationDetails = Application::find($application_id);
         $chapters = Chapter::all();
-
         return view('tp.application-summary', compact('chapters', 'applicationDetails'));
     }
 

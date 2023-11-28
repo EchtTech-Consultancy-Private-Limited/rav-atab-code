@@ -207,7 +207,7 @@
                                             <tr>
                                                 <td>Way of assessment (Desktop): <span> <input type="text"
                                                             name="way_of_desktop" value="Desktop" readonly></span> </td>
-                                                <td>No of Mandays: <span> <input type="text" name="mandays"></span>
+                                                <td>No of Mandays: <span> {{ getMandays($applicationDetails->id, auth()->user()->id) }}</span>
                                                 </td>
                                             </tr>
 
