@@ -94,8 +94,8 @@
                             <td colspan="2">Name of the course  to be assessed:  <input type="text" name="course_name" value="{{ $courseDetail->course_name }} "></td>
                         </tr>
                         <tr>
-                            <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual): <input name="way_of_assessment" type="text" value="{{ $assessorDetail->assessment_way ?? 'On-Site' }}"></td>
-                            <td colspan="2"> No of Mandays: <input type="text" name="mandays"></td>
+                            <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual): <input name="way_of_assessment" type="text" value="{{ $assessorDetail->assessment_way ?? '' }}"></td>
+                            <td colspan="2"> No of Mandays: <input type="text" name="mandays" value="{{ getMandays($applicationData->id, auth()->user()->id) }}"></td>
                         </tr>
                         <tr>
                             <td>  S. No. </td>

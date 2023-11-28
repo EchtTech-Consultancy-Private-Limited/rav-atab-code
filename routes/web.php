@@ -312,6 +312,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('add-final-remark-onsite',[applicationController::class,"submitFinalRemark"]);
 
+    Route::get('application/courses/{application}',[applicationController::class,"getapplicationcourses"]);
+
+    Route::get('application/summary-report/{course}/{application}',[applicationController::class,"getSummaryReportDataTP"]);
+
 });
 
 

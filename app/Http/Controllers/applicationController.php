@@ -978,4 +978,22 @@ class applicationController extends Controller
             return redirect()->back()->with('success','Remark and GPS Picture has been updated');
         }
     }
+
+    public function getapplicationcourses($applicationID){
+        $courses = ApplicationCourse::where('application_id',$applicationID)->get();
+        $applicationData = Application::find($applicationID);
+        return view('tp.course-list',compact('courses','applicationData'));
+    }
+
+    public function getSummaryReportDataTP($course,$application){
+        $checkSummaryReport = SummaryReport::where('course_id',$course)->where('application_id',$application)->get();
+        if (count($checkSummaryReport) == 0) {
+            return redirect()->back()->with('warning','Report not created yet!');
+        }
+        $applicationDetails = Application::find($application);
+        $chapters = Chapter::all();
+        $summaryReport = SummaryReport::where('course_id',$course)->where('application_id',$application)->first();
+        $improvementForm = ImprovementForm::where('course_id',$course)->where('application_id',$application)->first();
+        return view('tp.final-summary-report',compact('applicationDetails','chapters','improvementForm','summaryReport'));
+    }
 }
