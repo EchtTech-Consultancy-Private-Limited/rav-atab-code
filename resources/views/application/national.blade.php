@@ -219,17 +219,20 @@
                                                                     style="margin-right: 5px;">Application In
                                                                     Processing</a>
                                                             @endif
+                                                            @if (auth()->user()->role == 1)
                                                             @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
-                                                                <form action="{{ route('payment.acknowledge') }}"
-                                                                    method="post">
-                                                                    @csrf
-                                                                    <input type="hidden" name="applicationID"
-                                                                        value="{{ $item->id }}">
-                                                                    <button
-                                                                        class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
-                                                                        Payment</button>
-                                                                </form>
+                                                            <form action="{{ route('payment.acknowledge') }}"
+                                                                method="post">
+                                                                @csrf
+                                                                <input type="hidden" name="applicationID"
+                                                                    value="{{ $item->id }}">
+                                                                <button
+                                                                    class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
+                                                                    Payment</button>
+                                                            </form>
+                                                        @endif
                                                             @endif
+                                                          
 
                                                         </div>
                                                     @else
