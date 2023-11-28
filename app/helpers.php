@@ -6,6 +6,7 @@ use App\Models\ApplicationCourse;
 use App\Models\ApplicationNotification;
 use App\Models\DocComment;
 use App\Models\Question;
+use App\Models\SummaryReport;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -335,13 +336,58 @@ function get_accessor_date($id)
     for ($j = $begin; $j <= $end; $j->modify('+1 day')) {
 
         if (in_array($j->format("Y-m-d"), $entArr)) {
-            $eventsDate[] = '<span class="btn btn-danger" style="color:red">' . $j->format("Y-m-d") . '</span>';
+            $eventsDate[] = '<span onclick="saveDates({{ $item->id }},{{ $assesorsData->id }},{{ $assesorsData->assessment }},{{ $selectedDate }})" data-id="'. $j->format("Y-m-d").'" class="btn btn-danger" style="color:red">' . $j->format("Y-m-d") . '</span>';
         } else {
-            $eventsDate[] = '<span class="btn btn-success" style="color:green">' . $j->format("Y-m-d") . '</span>';
+            $eventsDate[] = '<span data-id="'. $j->format("Y-m-d").'" class="btn btn-success" style="color:green">' . $j->format("Y-m-d") . '</span>';
         }
     }
     return $eventsDate;
 }
+
+function get_accessor_date_new($id,$applicationID,$assessmentType)
+{
+
+    $begin = Carbon\Carbon::now();
+    $end = Carbon\Carbon::now()->addDays(15)->format('Y-m-d');
+
+    $fifteenthDaysadd = Carbon\Carbon::now()->addDays(15)->format('Y-m-d');
+    $events = DB::table('events_record')->where('asesrar_id', $id)->where('availability', 2)->pluck('start')->toArray();
+    $selectedDate = DB::table('assessor_assigne_date')->where('assessor_Id', $id)->where('application_id', $applicationID)->pluck('selected_date')->toArray();
+    $arr_data = [];
+    $eventsDate = [];
+    $entArr = [];
+
+    for ($i = 0; $i <= (count($events) - 1); $i++) {
+        $entArr[] = $events[$i];
+    }
+    $eventsDate = [];
+    $allSelectedDates = [];
+    $allSelectedDates = array_merge($events,$selectedDate);
+    for ($j = $begin; $j <= $end; $j->modify('+1 day')) {
+       
+        if (in_array($j->format("Y-m-d"), $allSelectedDates) ) {
+            $eventsDate[] = "<span class='btn btn-danger dateID'  data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."'>".$j->format("Y-m-d")."</span>";
+
+        } else {
+           $eventsDate[] = "<span class='btn btn-success dateID' data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."' >".$j->format("Y-m-d")."</span>";
+        }
+    }
+    return $eventsDate;
+}
+
+// function selectedDates($applicationID,$assesorID,$selectedDate,$assessmentType){
+//     $selectedDate = DB::table('assessor_assigne_date')->where('assessor_Id',$assesorID)
+//         ->where('assesment_type',$assessmentType)
+//         ->where('application_id',$applicationID)
+//         ->where('selected_date',$selectedDate)->first();
+
+//         if ($selectedDate) {
+//             return $selectedDate;
+//         }else{
+//             return false;
+//         }
+// }
+
 
 function check_upgrade($id = 0)
 {
@@ -955,4 +1001,18 @@ function getRejectedDocOnly($questionID,$applicationID,$courseID){
             }
        }
     }
+}
+
+function checkReportAvailableOrNot($applicationID){
+    $reportAvailable = SummaryReport::where('application_id',$applicationID)->first();
+
+    return $reportAvailable;
+}
+
+
+function checkDocumentsStatus($applicationID,$courseID){
+    $documentsIds = Add_Document::where('application_id',$applicationID)->where('course_id',$courseID)->get(['id']);
+    $comments = DocComment::whereIn('doc_id',$documentsIds)->where('status','!=',4)->get();
+    return $comments;
+
 }

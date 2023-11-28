@@ -104,11 +104,13 @@
         padding: 10px 10px;
     }
 
-    table th, table td, table tr {
-    text-align: center;
-    border: 1px solid #aaa !important;
-    color: #000;
-}
+    table th,
+    table td,
+    table tr {
+        text-align: center;
+        border: 1px solid #aaa !important;
+        color: #000;
+    }
 </style>
 
 </head>
@@ -127,13 +129,13 @@
     @include('layout.topbar')
     <div>
         @if (Auth::user()->role == '1')
-        @include('layout.sidebar')
+            @include('layout.sidebar')
         @elseif(Auth::user()->role == '2')
-        @include('layout.siderTp')
+            @include('layout.siderTp')
         @elseif(Auth::user()->role == '3')
-        @include('layout.sideAss')
+            @include('layout.sideAss')
         @elseif(Auth::user()->role == '4')
-        @include('layout.sideprof')
+            @include('layout.sideprof')
         @endif
         @include('layout.rightbar')
     </div>
@@ -157,109 +159,130 @@
                 </div>
             </div>
             @if (Session::has('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session::get('success') }}
-            </div>
+                <div class="alert alert-success" role="alert">
+                    {{ session::get('success') }}
+                </div>
             @elseif(Session::has('fail'))
-            <div class="alert alert-danger" role="alert">
-                {{ session::get('fail') }}
-            </div>
+                <div class="alert alert-danger" role="alert">
+                    {{ session::get('fail') }}
+                </div>
             @endif
             @foreach ($applicationDetails->courses as $item)
-            <div>
-                <div class="row clearfix">
-                    <div class="col-lg-12 col-md-12">
-                        <form id="submitForm" action="{{ route('submit-final-report-by-desktop') }}"method="post">
-                            @csrf
-                        <div class="p-3  bg-white">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
-                                    </tr>
-                                    <tr>
-                                        <input type="hidden" name="course_id" value="{{ $_GET['course'] }}">
-                                        <input type="hidden" name="application_id" value="{{ $applicationDetails->id }}" readonly>`
-                                        <td>Application No (provided by ATAB): <span> <input type="text" name="application_uid" value="{{ $applicationDetails->application_uid }}" readonly></span> </td>
-                                        <td>Date of application: <span> <input type="text" name="date_of_application" value="{{ date('d-m-Y', strtotime($applicationDetails->created_at)) }}" readonly></span> </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Name and Location of the Training Provider: <span> <input type="text" name="location_training_provider" value="{{ $applicationDetails->user->firstname.' '. $applicationDetails->user->lastname.' ('. $applicationDetails->user->address.')' }}" readonly></span> </td>
-                                        <td>Name of the course to be assessed:
+                <div>
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12">
+                            <form id="submitForm" action="{{ route('submit-final-report-by-desktop') }}"method="post">
+                                @csrf
+                                <div class="p-3  bg-white">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
+                                            </tr>
+                                            <tr>
+                                                <input type="hidden" name="course_id" value="{{ $_GET['course'] }}">
+                                                <input type="hidden" name="application_id"
+                                                    value="{{ $applicationDetails->id }}" readonly>`
+                                                <td>Application No (provided by ATAB): <span> <input type="text"
+                                                            name="application_uid"
+                                                            value="{{ $applicationDetails->application_uid }}"
+                                                            readonly></span> </td>
+                                                <td>Date of application: <span> <input type="text"
+                                                            name="date_of_application"
+                                                            value="{{ date('d-m-Y', strtotime($applicationDetails->created_at)) }}"
+                                                            readonly></span> </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name and Location of the Training Provider: <span> <input
+                                                            type="text" name="location_training_provider"
+                                                            value="{{ $applicationDetails->user->firstname . ' ' . $applicationDetails->user->lastname . ' (' . $applicationDetails->user->address . ')' }}"
+                                                            readonly></span> </td>
+                                                <td>Name of the course to be assessed:
 
-                                            <span> <input type="text" name="course_assessed" value="{{ Str::ucfirst($item->course_name) }}" readonly></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Way of assessment (Desktop): <span> <input type="text" name="way_of_desktop" value="Desktop" readonly></span> </td>
-                                        <td>No of Mandays: <span> <input type="text" name="mandays"></span> </td>
-                                    </tr>
+                                                    <span> <input type="text" name="course_assessed"
+                                                            value="{{ Str::ucfirst($item->course_name) }}"
+                                                            readonly></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Way of assessment (Desktop): <span> <input type="text"
+                                                            name="way_of_desktop" value="Desktop" readonly></span> </td>
+                                                <td>No of Mandays: <span> <input type="text" name="mandays"></span>
+                                                </td>
+                                            </tr>
 
-                                    <tr>
-                                        <td> Signature</td>
-                                        <td><span> <input type="hidden" name="signature"> </span></td>
-                                    </tr>
-                                    <tr>
-                                        <td> Assessor</td>
-                                        <td><span> <input type="text" name="assessor" value="{{ Auth::user()->firstname.' '.Auth::user()->lastname }}" readonly> </span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                          <div class="table-responsive">
-                          <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Sl. No </th>
-                                        <th>Objective Element</th>
-                                        <th> NC raised</th>
-                                        <th> CAPA by Training Provider</th>
-                                        <th> Document submitted against the NC</th>
-                                        <th> Remarks (Accepted/ Not accepted)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($chapters as $chapter)
-                                    <tr>
-                                        <td colspan="6" style="font-weight: bold; text-align:center;">
-                                            {{ $chapter->title ?? '' }}
-                                        </td>
-                                    </tr>
-                                    @foreach ($chapter->questions as $question)
-                                    @php
-                                        $documentsData = getAdminDocument($question->id, $applicationDetails->id) ?? 0;
-                                    @endphp
-                                    @foreach ($documentsData as $doc)
-                                    @php
-                                        $documentsData = getAssessorComments($doc->id, $applicationDetails->id) ?? 0;
-                                    @endphp
-                                    @if(getButtonText($doc->id) != "Accepted")
-                                    <tr>
-                                        <td>   
-                                            <input type="hidden" name="question_id[]" value="{{ $question->id }}" readonly>
-                                            {{ $question->code }}
-                                        </td>
-                                        <td>                                            
-                                            {{ $question->title }}
-                                        </td>
-                                        <td> <input type="text" name="nc_raised[]"></td>
-                                        <td> <input type="text" name="capa_training_provider[]"></td>
-                                        <td> <input type="text" name="document_submitted_against_nc[]"></td>
-                                        <td> <input type="text" name="remark[]"></td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                                    @endforeach
-                                    @endforeach
-                                </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <button type="button" class="btn btn-success float-right" onclick="confirmSubmit()">Submit</button>
-                        </form>
-                        @endforeach                    
-                    </div>
-                </div>
-            </div>
+                                            <tr>
+                                                <td> Signature</td>
+                                                <td><span> <input type="hidden" name="signature"> </span></td>
+                                            </tr>
+                                            <tr>
+                                                <td> Assessor</td>
+                                                <td><span> <input type="text" name="assessor"
+                                                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}"
+                                                            readonly> </span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sl. No </th>
+                                                    <th>Objective Element</th>
+                                                    <th> NC raised</th>
+                                                    <th> CAPA by Training Provider</th>
+                                                    <th> Document submitted against the NC</th>
+                                                    <th> Remarks (Accepted/ Not accepted)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($chapters as $chapter)
+                                                    <tr>
+                                                        <td colspan="6"
+                                                            style="font-weight: bold; text-align:center;">
+                                                            {{ $chapter->title ?? '' }}
+                                                        </td>
+                                                    </tr>
+                                                    @foreach ($chapter->questions as $question)
+                                                        @php
+                                                            $documentsData = getAdminDocument($question->id, $applicationDetails->id) ?? 0;
+                                                        @endphp
+                                                        @foreach ($documentsData as $doc)
+                                                            @php
+                                                                $documentsData = getAssessorComments($doc->id, $applicationDetails->id) ?? 0;
+                                                            @endphp
+                                                            @if (getButtonText($doc->id) != 'Accepted')
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="hidden" name="question_id[]"
+                                                                            value="{{ $question->id }}" readonly>
+                                                                        {{ $question->code }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $question->title }}
+                                                                    </td>
+                                                                    <td> <input type="text" name="nc_raised[]"></td>
+                                                                    <td> <input type="text"
+                                                                            name="capa_training_provider[]"></td>
+                                                                    <td> <input type="text"
+                                                                            name="document_submitted_against_nc[]"></td>
+                                                                    <td> <input type="text" name="remark[]"></td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-success float-right"
+                                    onclick="confirmSubmit()">Submit</button>
+                            </form>
+            @endforeach
+        </div>
+        </div>
+        </div>
         </div>
         </div>
         </div>

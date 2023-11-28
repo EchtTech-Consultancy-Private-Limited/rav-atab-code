@@ -177,6 +177,7 @@ class applicationController extends Controller
                 $data->read_by = 0;
                 $data->assessment_way = $request->on_site_type;
                 $data->save();
+                return  back()->with('success', 'Application has been successfully assigned to assessor');
             }
         } else {
 
@@ -646,7 +647,13 @@ class applicationController extends Controller
 
     public function applicationDocumentsSummary($application_id)
     {
-        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id',$application_id)->first();
+        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id', $application_id)->first();
+        if ($applicationDetails == null) {
+            return redirect(url('nationl-page'))->with('warning','Summary report not created yet!');
+        }
+       if ($applicationDetails->application->desktop_status == null && $applicationDetails->application->onsite_status == null) {
+            return redirect(url('nationl-page'))->with('warning','Summary report not created yet!');
+       }
         $chapters = Chapter::all();
         return view('admin.application.document-summery-new', compact('chapters', 'applicationDetails'));
     }
@@ -806,9 +813,9 @@ class applicationController extends Controller
     {
         // dd($request->all());
         $applicationData = Application::find($request->input('application'));
-        $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id',$request->input('course'))->first();
+        $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id', $request->input('course'))->first();
         if ($applicationAlreadySubmitted) {
-            return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->id . '&course=' . $request->course));
+            return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->application_id . '&course=' . $request->course));
         }
         $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
         $onSiteAssessor = "";
@@ -857,13 +864,13 @@ class applicationController extends Controller
     public function opportunityForm(Request $request)
     {
         $existingEntry = ImprovementForm::where('application_id', $request->input('application'))
-        ->where('course_id', $request->input('course'))
-        ->first();
+            ->where('course_id', $request->input('course'))
+            ->first();
 
-    if ($existingEntry) {
-        // Entry already exists, redirect with flash message
-        return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
-    }
+        if ($existingEntry) {
+            // Entry already exists, redirect with flash message
+            return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
+        }
         $applicationData = Application::find($request->input('application'));
         $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
         $onSiteAssessor = "";
@@ -899,20 +906,56 @@ class applicationController extends Controller
         // Insert into ImprovementForm table
         $improvementForm = ImprovementForm::create($data);
 
+        $application = Application::find($request->application_id);
+
+        $application->update([
+            'onsite_status' => 1,
+        ]);
+
         return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
     }
 
-    public function summaryReport(Request $request){
+    public function summaryReport(Request $request)
+    {
         $applicationDetails = Application::find($request->input('application'));
         $chapters = Chapter::all();
-        $improvementForm = ImprovementForm::where('application_id',$request->input('application'))->first();
-       
-        return view('on-site-assessor.final-summary',compact('applicationDetails','chapters','improvementForm'));
+        $improvementForm = ImprovementForm::where('application_id', $request->input('application'))->first();
+
+        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm'));
     }
 
-    public function getSummariesList(Request $request){
-        $courses = ApplicationCourse::where('application_id',$request->input('application'))->get();
+    public function getSummariesList(Request $request)
+    {
+        $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
         $applicationDetails = Application::find($request->input('application'));
-        return view('on-site-assessor.summary-list',compact('courses','applicationDetails'));
+        return view('on-site-assessor.summary-list', compact('courses', 'applicationDetails'));
+    }
+
+    public function saveSelectedDates(Request $request)
+    {
+
+        $exitValCheck = DB::table('assessor_assigne_date')->where('assessor_Id', $request->assessorID)
+            ->where('application_id', $request->applicationID)
+            ->where('selected_date', $request->selectedDate)
+            ->first();
+        if ($exitValCheck != null) {
+            DB::table('assessor_assigne_date')
+                ->where('assessor_Id', $request->assessorID)
+                ->where('application_id', $request->applicationID)
+                ->where('selected_date', $request->selectedDate)
+                ->delete();
+
+            return response()->json(['status' => '201', 'message' => 'deleted']);
+        } else {
+            //dd($exitValCheck);
+            DB::table('assessor_assigne_date')->insert([
+                'assessor_Id' => $request->assessorID,
+                'assesment_type' => $request->applicationID,
+                'application_id' => $request->applicationID,
+                'selected_date' => $request->selectedDate,
+                'status' => 1
+            ]);
+            return response()->json(['status' => '200', 'message' => 'inserted']);
+        }
     }
 }

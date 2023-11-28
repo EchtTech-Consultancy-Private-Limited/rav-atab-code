@@ -56,9 +56,11 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     @if (auth()->user()->role == 1)
-                        <a class="btn btn-info"
-                            href="{{ url('admin/application/documents/' . $applicationData->id . '/summary') }}">Document
-                            Summary</a>
+                       @if ($applicationData->desktop_status == 1 )
+                       <a class="btn btn-info"
+                       href="{{ url('admin/application/documents/' . $applicationData->id . '/summary') }}">Document
+                       Summary</a>
+                       @endif
                     @endif
                     <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
                     </a>

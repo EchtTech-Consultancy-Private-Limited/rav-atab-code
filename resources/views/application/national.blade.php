@@ -33,6 +33,10 @@
         font-size: 12px;
         border-radius: 5px;
     }
+
+    /* .add-color{
+        background:red !important;
+    } */
 </style>
 </head>
 
@@ -86,6 +90,16 @@
                         title: "Success",
                         icon: "success",
                         text: "{{ session('success') }}",
+                        timer: 3000, // Time in milliseconds (2 seconds in this example)
+                        showConfirmButton: false,
+                    });
+                </script>
+                @elseif (Session::has('warning'))
+                <script>
+                    Swal.fire({
+                        title: "Warning",
+                        icon: "warning",
+                        text: "{{ session('warning') }}",
                         timer: 3000, // Time in milliseconds (2 seconds in this example)
                         showConfirmButton: false,
                     });
@@ -186,45 +200,69 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}
+                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
                                                 </td>
                                                 <td>
+                                                    @php
+                                                        $availableReport = checkReportAvailableOrNot($item->id);
+                                                    @endphp
                                                     @if (totalDocumentsCount($item->id) > 0)
                                                         <div class="d-flex">
-                                                            <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                class="p-2 buttonBadge text-white bg-warning"
-                                                                style="margin-right: 5px;">Application In
-                                                                Processing</a>
-                                                            @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
-                                                                <form action="{{ route('payment.acknowledge') }}"
-                                                                    method="post">
-                                                                    @csrf
-                                                                    <input type="hidden" name="applicationID"
-                                                                        value="{{ $item->id }}">
-                                                                    <button
-                                                                        class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
-                                                                        Payment</button>
-                                                                </form>
+                                                            @if ($availableReport != null)
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '#' }}"
+                                                                    class="p-2 buttonBadge text-white bg-warning"
+                                                                    style="margin-right: 5px;">Application In
+                                                                    Processing</a>
+                                                            @else
+                                                                <a href="#" title="{{ auth()->user()->role == 1 ? 'Summary report not available!' :'' }}"
+                                                                    class="p-2 buttonBadge text-white bg-warning"
+                                                                    style="margin-right: 5px;">Application In
+                                                                    Processing</a>
                                                             @endif
+                                                            @if (auth()->user()->role == 1)
+                                                            @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
+                                                            <form action="{{ route('payment.acknowledge') }}"
+                                                                method="post">
+                                                                @csrf
+                                                                <input type="hidden" name="applicationID"
+                                                                    value="{{ $item->id }}">
+                                                                <button
+                                                                    class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
+                                                                    Payment</button>
+                                                            </form>
+                                                        @endif
+                                                            @endif
+                                                          
 
                                                         </div>
                                                     @else
-                                                        @if ($item->payment != null)
-                                                            @if ($item->payment->status == '0')
-                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                    class="p-2 buttonBadge text-white bg-danger">Payment
-                                                                    Pending</a>
-                                                            @elseif($item->payment->status == 1)
-                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                    class="p-2 buttonBadge text-light bg-warning">Payment
-                                                                    Proccess</a>
-                                                            @elseif ($item->payment->status == '2')
-                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '' }}"
-                                                                    class="p-2 buttonBadge text-white bg-primary">Payment
-                                                                    Approved</a>
+                                                        @php
+                                                            $payment = $item->payment;
+                                                            $isAdmin = auth()->user()->role == 1;
+                                                            $url = $isAdmin ? url("admin/application/documents/{$item->id}/summary") : '#';
+                                                            $reportAvailable = $availableReport != null;
+                                                        @endphp
+
+                                                        @if ($payment)
+                                                            @php
+                                                                $status = $payment->status;
+                                                            @endphp
+
+                                                            @if ($status == '0' || $status == '1' || $status == '2')
+                                                                @php
+                                                                    $bgClass = $status == '0' ? 'bg-danger' : ($status == '1' ? 'bg-warning' : 'bg-primary');
+                                                                    $textClass = $status == '2' ? 'text-white' : 'text-light';
+                                                                    $displayText = $status == '0' ? 'Payment Pending' : ($status == '1' ? 'Payment Process' : 'Payment Approved');
+                                                                @endphp
+
+                                                                <a href="{{ $url }}"
+                                                                    class="p-2 buttonBadge {{ $textClass }} {{ $bgClass }}"
+                                                                    title="{{ $reportAvailable ? '' : '' }}">
+                                                                    {{ $displayText }}
+                                                                </a>
                                                             @endif
                                                         @else
-                                                            <a class="p-2 buttonBadge text-white bg-danger">Payment
+                                                            <a class="p-2 buttonBadge text-white bg-danger" title="Payment not approved!">Payment
                                                                 Pending</a>
                                                         @endif
                                                     @endif
@@ -269,218 +307,242 @@
                                                     </td>
                                                 @endif
                                                 {{-- popup form --}}
-                                                <div class="modal fade" id="View_popup_{{ $item->id }}" tabindex="-1"
-                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-lg"
-                                                        role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                                    Assign an
-                                                                    Assessor to the application from the below list
-                                                                </h5>
-                                                                <button type="button" class="close"
-                                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body mod-css">
-                                                                @if (count($item->payments) > 1)
-                                                                    @if ($item->desktop_status == 1 && $item->payments[1]->status != 2)
-                                                                        <p class="text-danger">Payment approval pending by
-                                                                            accountant!</p>
+                                                @if (Auth::user()->role != 6)
+                                                    <div class="modal fade" id="View_popup_{{ $item->id }}"
+                                                        tabindex="-1" role="dialog"
+                                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg"
+                                                            role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                                        Assign an
+                                                                        Assessor to the application from the below list
+                                                                    </h5>
+                                                                    <button type="button" class="close"
+                                                                        data-bs-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body mod-css">
+                                                                    @if (count($item->payments) > 1)
+                                                                        @if ($item->desktop_status == 1 && $item->payments[1]->status != 2)
+                                                                            <p class="text-danger">Payment approval pending
+                                                                                by
+                                                                                accountant!</p>
+                                                                        @endif
                                                                     @endif
-                                                                @endif
-                                                                <form action="{{ url('/Assigan-application') }}"
+                                                                    <form action="{{ url('/Assigan-application') }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <input type="hidden" name="application_id"
+                                                                            value="{{ $item->id }}">
+                                                                        <?php
+                                                                        $application_assessor_arr = listofapplicationassessor($item->id);
+                                                                        $assessment_type = checkapplicationassessmenttype($item->id);
+                                                                        ?>
+                                                                        <br>
+                                                                        <label class="mb-3"><b>Assessment
+                                                                                Type</b></label><br>
+                                                                        <select name="assessment_type" required
+                                                                            class="form-control assessment_type">
+                                                                            <option value="0">Select Assessment Type
+                                                                            </option>
+                                                                            @if ($item->desktop_status !== 1 && count($item->payments) == 1)
+                                                                                <option value="1">Desktop Assessment
+                                                                                </option>
+                                                                            @endif
+                                                                            @if (count($item->payments) > 1)
+                                                                                @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
+                                                                                    <option value="2">On-Site
+                                                                                        Assessment
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endif
+
+
+                                                                        </select>
+
+
+                                                                        <div class="destop-id"
+                                                                            data-id="{{ $item->id }}">
+
+                                                                            @foreach ($assesors as $k => $assesorsData)
+                                                                                @if ($assesorsData->assessment == 1)
+                                                                                    <br>
+
+                                                                                    <label>
+
+                                                                                        <input type="radio"
+                                                                                            id="assesorsid"
+                                                                                            class="d-none assesorsid "
+                                                                                            name="assessor_id"
+                                                                                            data-application-id="{{ $item->id }}"
+                                                                                            value="{{ $assesorsData->id }}"
+                                                                                            @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
+                                                                                        <span>
+                                                                                            {{ ucfirst($assesorsData->firstname) }}
+                                                                                            {{ ucfirst($assesorsData->lastname) }}
+                                                                                            ({{ $assesorsData->email }})
+                                                                                        </span>
+                                                                                    </label>
+                                                                                    <input type="hidden"
+                                                                                        name="sec_email[]"
+                                                                                        value="{{ $assesorsData->email }}">
+                                                                                    <div>
+                                                                                        <?php
+                                                         foreach(get_accessor_date_new($assesorsData->id,$item->id,$assesorsData->assessment) as $date){
+                                                          
+                                                         ?>
+
+                                                                                        {!! $date !!}
+                                                                                        <?php }   ?>
+                                                                                    </div>
+                                                                                    <input type="hidden"
+                                                                                        name="application_id"
+                                                                                        value="{{ $item->id ?? '' }}">
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="onsite-id">
+                                                                            <div class="mt-3 mb-2">
+                                                                                @if (count($item->payments) > 1)
+                                                                                    @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
+                                                                                        <label>
+                                                                                            <input type="radio"
+                                                                                                id="on_site_type"
+                                                                                                class="d-none "
+                                                                                                name="on_site_type" checked
+                                                                                                value="On-Site">
+                                                                                            <span>
+                                                                                                On-site
+                                                                                            </span>
+                                                                                        </label>
+                                                                                        <label>
+                                                                                            <input type="radio"
+                                                                                                id="on_site_type"
+                                                                                                class="d-none "
+                                                                                                name="on_site_type"
+                                                                                                value="Hybrid">
+                                                                                            <span>
+                                                                                                Hybrid
+                                                                                            </span>
+                                                                                        </label>
+                                                                                        <label>
+                                                                                            <input type="radio"
+                                                                                                id="on_site_type"
+                                                                                                class="d-none "
+                                                                                                name="on_site_type"
+                                                                                                value="Virtual">
+                                                                                            <span>
+                                                                                                Virtual
+                                                                                            </span>
+                                                                                        </label>
+                                                                                    @endif
+                                                                                @endif
+                                                                            </div>
+                                                                            @foreach ($assesors as $k => $assesorsData)
+                                                                                @if ($assesorsData->assessment == 2)
+                                                                                    <br>
+                                                                                    <label>
+                                                                                        <input type="radio"
+                                                                                            id="assesorsid"
+                                                                                            class="d-none "
+                                                                                            name="assessor_radio"
+                                                                                            value="{{ $assesorsData->id }}"
+                                                                                            @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
+                                                                                        <span>
+                                                                                            {{ $assesorsData->firstname }}
+                                                                                            {{ $assesorsData->lastname }}
+                                                                                            ({{ $assesorsData->email }})
+                                                                                        </span>
+                                                                                    </label>
+                                                                                    <input type="hidden" name="sec_email"
+                                                                                        value="{{ $assesorsData->email }}">
+                                                                                    <div>
+                                                                                        <?php
+                                                         foreach(get_accessor_date_new($assesorsData->id,$item->id,$assesorsData->assessment) as $date){
+                                                         ?>
+                                                                                        {!! $date !!}
+                                                                                        <?php }   ?>
+                                                                                    </div>
+                                                                                    <input type="hidden"
+                                                                                        name="application_id"
+                                                                                        value="{{ $item->id ?? '' }}">
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" onclick="cancelAssign()"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary my-button">Submit</button>
+                                                                </div>
+                                                            </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <!-- secreate user popup-->
+                                                    <div class="modal fade" id="view_secreate_popup_{{ $item->id }}"
+                                                        tabindex="-1" role="dialog"
+                                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg"
+                                                            role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                                        Assign
+                                                                        an Secretariat to the application from the below
+                                                                        list </h5>
+                                                                    <button type="button" class="close"
+                                                                        data-bs-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <form
+                                                                    action="{{ url('/assigan-secretariat-application') }}"
                                                                     method="post">
                                                                     @csrf
-                                                                    <input type="hidden" name="application_id"
-                                                                        value="{{ $item->id }}">
                                                                     <?php
-                                                                    $application_assessor_arr = listofapplicationassessor($item->id);
+                                                                    $application_assessor_arr = listofapplicationsecretariat($item->id);
                                                                     $assessment_type = checkapplicationassessmenttype($item->id);
                                                                     ?>
                                                                     <br>
-                                                                    <label class="mb-3"><b>Assessment
-                                                                            Type</b></label><br>
-                                                                    <select name="assessment_type" required
-                                                                        class="form-control assessment_type">
-                                                                        <option value="0">Select Assessment Type
-                                                                        </option>
-                                                                        @if ($item->desktop_status !== 1 && count($item->payments) == 1)
-                                                                            <option value="1">Desktop Assessment
-                                                                            </option>
-                                                                        @endif
-                                                                        @if (count($item->payments) > 1)
-                                                                            @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
-                                                                                <option value="2">On-Site Assessment
-                                                                                </option>
-                                                                            @endif
-                                                                        @endif
 
+                                                                    <div class="modal-body mod-css">
+                                                                        @foreach ($secretariatdata as $k => $assesorsData)
+                                                                            <br>
+                                                                            <label>
+                                                                                <input type="checkbox" id="assesorsid"
+                                                                                    class="d-none" name="secretariat_id[]"
+                                                                                    value="{{ $assesorsData->id }}"
+                                                                                    @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
+                                                                                <span>
+                                                                                    {{ $assesorsData->firstname }}
+                                                                                </span>
+                                                                            </label>
+                                                                            <input type="hidden" name="sec_email"
+                                                                                value="{{ $assesorsData->email }}">
 
-                                                                    </select>
-
-                                                                   
-                                                                    <div class="destop-id" data-id="{{ $item->id }}">
-                                                                      
-                                                                        @foreach ($assesors as $k => $assesorsData)
-                                                                            @if ($assesorsData->assessment == 1)
-                                                                                <br>
-
-                                                                                <label>
-
-                                                                                    <input type="radio" id="assesorsid"
-                                                                                        class="d-none assesorsid "
-                                                                                        name="assessor_id"
-                                                                                        data-application-id="{{ $item->id }}"
-                                                                                        value="{{ $assesorsData->id }}"
-                                                                                        @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
-                                                                                    <span>
-                                                                                        {{ ucfirst($assesorsData->firstname) }}
-                                                                                        {{ ucfirst($assesorsData->lastname) }}
-                                                                                        ({{ $assesorsData->email }})
-                                                                                    </span>
-                                                                                </label>
-                                                                                <input type="hidden" name="sec_email[]"
-                                                                                    value="{{ $assesorsData->email }}">
-                                                                                <div>
-                                                                                    <?php
-                                                         foreach(get_accessor_date($assesorsData->id) as $date){
-                                                         ?>
-                                                                                    {!! $date !!}
-                                                                                    <?php }   ?>
-                                                                                </div>
-                                                                                <input type="hidden"
-                                                                                    name="application_id"
-                                                                                    value="{{ $item->id ?? '' }}">
-                                                                            @endif
+                                                                            <input type="hidden" name="application_id"
+                                                                                class="application_id"
+                                                                                value="{{ $item->id ?? '' }}">
                                                                         @endforeach
                                                                     </div>
-                                                                    <div class="onsite-id">
-                                                                        <div class="mt-3 mb-2">
-                                                                            @if (count($item->payments) > 1)
-                                                                                @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
-                                                                                <label>
-                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type" checked value="On-Site">
-                                                                                    <span>
-                                                                                        On-site
-                                                                                    </span>
-                                                                                </label>
-                                                                                <label>
-                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type"  value="Hybrid">
-                                                                                    <span>
-                                                                                       Hybrid
-                                                                                    </span>
-                                                                                </label>
-                                                                                <label>
-                                                                                    <input type="radio" id="on_site_type" class="d-none " name="on_site_type"  value="Virtual">
-                                                                                    <span>
-                                                                                       Virtual
-                                                                                    </span>
-                                                                                </label>
-                                                                                @endif
-                                                                            @endif
-                                                                        </div>
-                                                                        @foreach ($assesors as $k => $assesorsData)
-                                                                            @if ($assesorsData->assessment == 2)
-                                                                                <br>
-                                                                                <label>
-                                                                                    <input type="radio" id="assesorsid"
-                                                                                        class="d-none "
-                                                                                        name="assessor_radio"
-                                                                                        value="{{ $assesorsData->id }}"
-                                                                                        @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
-                                                                                    <span>
-                                                                                        {{ $assesorsData->firstname }}
-                                                                                        {{ $assesorsData->lastname }}
-                                                                                        ({{ $assesorsData->email }})
-                                                                                    </span>
-                                                                                </label>
-                                                                                <input type="hidden" name="sec_email"
-                                                                                    value="{{ $assesorsData->email }}">
-                                                                                <div>
-                                                                                    <?php
-                                                         foreach(get_accessor_date($assesorsData->id) as $date){
-                                                         ?>
-                                                                                    {!! $date !!}
-                                                                                    <?php }   ?>
-                                                                                </div>
-                                                                                <input type="hidden"
-                                                                                    name="application_id"
-                                                                                    value="{{ $item->id ?? '' }}">
-                                                                            @endif
-                                                                        @endforeach
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Save</button>
                                                                     </div>
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" onclick="cancelAssign()"
-                                                                    class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary my-button">Submit</button>
-                                                            </div>
+                                                            </form>
                                                         </div>
-                                                        </form>
                                                     </div>
-                                                </div>
-                                                <!-- secreate user popup-->
-                                                <div class="modal fade" id="view_secreate_popup_{{ $item->id }}"
-                                                    tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-lg"
-                                                        role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                                    Assign
-                                                                    an Secretariat to the application from the below
-                                                                    list </h5>
-                                                                <button type="button" class="close"
-                                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <form action="{{ url('/assigan-secretariat-application') }}"
-                                                                method="post">
-                                                                @csrf
-                                                                <?php
-                                                                $application_assessor_arr = listofapplicationsecretariat($item->id);
-                                                                $assessment_type = checkapplicationassessmenttype($item->id);
-                                                                ?>
-                                                                <br>
+                                                @endif
 
-                                                                <div class="modal-body mod-css">
-                                                                    @foreach ($secretariatdata as $k => $assesorsData)
-                                                                        <br>
-                                                                        <label>
-                                                                            <input type="checkbox" id="assesorsid"
-                                                                                class="d-none" name="secretariat_id[]"
-                                                                                value="{{ $assesorsData->id }}"
-                                                                                @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif>
-                                                                            <span>
-                                                                                {{ $assesorsData->firstname }}
-                                                                            </span>
-                                                                        </label>
-                                                                        <input type="hidden" name="sec_email"
-                                                                            value="{{ $assesorsData->email }}">
-
-                                                                        <input type="hidden" name="application_id"
-                                                                            class="application_id"
-                                                                            value="{{ $item->id ?? '' }}">
-                                                                    @endforeach
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">Save</button>
-                                                                </div>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
                                             </tr>
                                         @endforeach
                                     @endisset
@@ -597,6 +659,57 @@
         function cancelAssign() {
             location.reload(true);
         }
+
+        $('.dateID').click('on', function() {
+            var $this = $(this);
+            var dataVal = $(this).attr('data-id').split(',');
+            var colorid = $(this).attr('date-color');
+
+            // if(colorid ==undefined || colorid =='' || colorid =='false'){
+
+
+            //     $(this).removeClass('btn-success').addClass('btn-danger');
+            // }else{
+
+
+            //     $(this).removeClass('btn-danger').addClass('btn-success');
+            // }
+
+
+            var data = {
+                'applicationID': dataVal[0],
+                'assessorID': dataVal[1],
+                'assessmentType': dataVal[2],
+                'selectedDate': dataVal[3]
+            };
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url('save-selected-dates') }}",
+                data: data,
+                success: function(response) {
+                    if (response.message == 'deleted') {
+                        $this.removeClass('btn-danger').addClass('btn-success');
+                    } else {
+                        $this.removeClass('btn-success').addClass('btn-danger');
+                    }
+                    // if(response.status == 200){
+                    //     $this.removeClass('btn-danger').addClass('btn-success');
+                    // }else{
+                    //      $this.removeClass('btn-success').addClass('btn-success');
+                    // }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        })
     </script>
 
 

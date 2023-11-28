@@ -110,7 +110,7 @@
                     </div>
                 </div>
             @else
-                <form action="{{ route('on-site.upload-document.post') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('on-site.upload-document.post') }}" method="post" enctype="multipart/form-data" id="createNcForm">
                     @csrf
                     <div class="card">
                         <div class="card-header bg-white text-dark">
@@ -132,14 +132,19 @@
                                     <option value="1">NC1</option>
                                     <option value="4">Approve</option>
                                 </select>
+                                <span id="statusError" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label for="remark">Remark</label>
                                 <textarea name="remark" id="remark" class="form-control" style="border: 1px solid #ccc; padding:10px;"></textarea>
+                                <span id="remarkError" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label for="document">Upload Document</label><br />
                                 <input type="file" name="document" id="document">
+                                <div>
+                                    <span id="documentError" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -153,4 +158,79 @@
 
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the form element
+            var form = document.getElementById('createNcForm');
+    
+            // Attach event listeners to form fields
+            document.getElementById('status').addEventListener('input', removeErrorMessage);
+            document.getElementById('remark').addEventListener('input', removeErrorMessage);
+    
+            // Attach an event listener to the file input for immediate file type validation
+            var documentInput = document.getElementById('document');
+            documentInput.addEventListener('change', function () {
+                // Reset document error message
+                document.getElementById('documentError').textContent = '';
+    
+                // Check the file type of the document
+                var allowedExtensions = /(\.pdf|\.jpg|\.jpeg|\.png)$/i;
+                var fileName = documentInput.value;
+                if (!allowedExtensions.test(fileName)) {
+                    document.getElementById('documentError').textContent = 'Invalid file type. Please upload a PDF, JPG, JPEG, or PNG file.';
+                }
+            });
+    
+            // Attach an event listener to the form
+            form.addEventListener('submit', function (event) {
+                // Reset error messages
+                document.getElementById('statusError').textContent = '';
+                document.getElementById('remarkError').textContent = '';
+    
+                // Check if the status is selected
+                var status = document.getElementById('status').value;
+                if (!status) {
+                    document.getElementById('statusError').textContent = 'Please select a status.';
+                    event.preventDefault();
+                    return false;
+                }
+    
+                // Check if the remark is filled out
+                var remark = document.getElementById('remark').value;
+                if (!remark) {
+                    document.getElementById('remarkError').textContent = 'Please provide a remark.';
+                    event.preventDefault();
+                    return false;
+                }
+    
+                // Check if a document is selected
+                if (documentInput.files.length === 0) {
+                    document.getElementById('documentError').textContent = 'Please upload a document.';
+                    event.preventDefault();
+                    return false;
+                }
+    
+                // Check the file type of the document
+                var allowedExtensions = /(\.pdf|\.jpg|\.jpeg|\.png)$/i;
+                var fileName = documentInput.files[0].name;
+                if (!allowedExtensions.test(fileName)) {
+                    document.getElementById('documentError').textContent = 'Invalid file type. Please upload a PDF, JPG, JPEG, or PNG file.';
+                    event.preventDefault();
+                    return false;
+                }
+    
+                // If all validations pass, the form will be submitted
+            });
+    
+            // Function to remove error messages on input/change
+            function removeErrorMessage() {
+                document.getElementById(this.id + 'Error').textContent = '';
+            }
+        });
+    </script>
+    
+    
+    
+    
     @include('layout.footer')
