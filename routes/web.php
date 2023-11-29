@@ -316,6 +316,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('application/summary-report/{course}/{application}',[applicationController::class,"getSummaryReportDataTP"]);
 
+    Route::get('admin/application/courses-list/{applicationID}',[applicationController::class,"getAdminApplicationCoursesLIst"]);
+    Route::get('admin/application/summary-report/{course}/{application}',[applicationController::class,"getAdminApplicationSummary"]);
+
 });
 
 

@@ -68,76 +68,317 @@
                 </div>
             </div>
         </div>
-    <div id="printableArea">
-        <div id="applicationSummaryContainer">
-            
-            <div class="card">
-                <div class="card-header bg-white text-dark">
-                    <h5 class="mt-2">FORM -1 DESKTOP ASSESSMENT FORM</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                      <tr>
-                        <td>Application No (provided by ATAB) : {{ $applicationDetails->application_uid }} </td>
-                        <td>Date of application : {{ $applicationDetails->date_of_application }}</td>
-                      </tr>
-                      <tr>
-                        <td>Name and Location of the Training Provider : {{ $applicationDetails->location_training_provider }}</td>
-                        <td>Name of the course to be assessed : {{ $applicationDetails->course_assessed }} </td>
-                      </tr>
-                      <tr>
-                      <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
-                        <td>No of Mandays : {{ getMandays($applicationDetails->id, auth()->user()->id) }}</td>
-                      </tr>
-                      <tr>
-                        <td>Signature</td>
-                        <td>N/A</td>
-                      </tr>
-                      <tr>
-                        <td>Assessor Name</td>
-                        <td>{{ $applicationDetails->assessor }}</td>
-                      </tr>
+   
+        <div id="printableArea">
+            <div id="applicationSummaryContainer" class="table-summery">
+                @php
+                    $summaries = getSummaries($applicationDetails->id, $course);
 
-                    </table>
+                @endphp
 
-                    
-                    <table class="table table-bordered">                    
-                        <tr>
-                            <th>Sl. No</th>
-                            <th>Objective Element</th>
-                            <th>NC raised</th>
-                            <th>CAPA by Training Provider</th>
-                            <th>Document submitted against the NC</th>
-                            <th>Remarks (Accepted/ Not accepted)</th>
-                        </tr>
-                        @foreach ($chapters as $chapter)
-                        <tr>
-                            <td colspan="6" style="font-weight: bold; text-align:center;">
-                                {{ $chapter->title ?? '' }}
-                            </td>
-                        </tr>
-                        @foreach ($chapter->questions as $question)
-                        @php
-                            $documentsData = getSummerDocument($question->id, $applicationDetails->application_id) ?? 0;
-                            $docId = $documentsData ? $documentsData->id : null;
-                        @endphp
-                        <tr>
-                            <td> {{ $question->id }}</td>
-                           <td>{{ $question->title }}</td>
-                           <td>{{ $question->summeryQuestionreport->nc_raised ?? '' }}</td>
-                           <td>{{ $question->summeryQuestionreport->capa_training_provider ?? '' }}</td>
-                           <td>{{ $question->summeryQuestionreport->document_submitted_against_nc ?? '' }}</td>
-                           @if(getButtonText($docId) == "Accepted")
-                           <td>{{ $question->summeryQuestionreport->remark ??  getButtonText($docId) ?? '' }}</td>
-                           @else
-                           <td>{{ $question->summeryQuestionreport->remark ?? '' }}</td>
-                           @endif
-                        </tr>                       
-                        @endforeach
-                        @endforeach
-                    </table>
-                </div>
+                @if ($summaries != null)
+                    <div class="card">
+                        <div class="card-header bg-white text-dark">
+                            <h5 class="mt-2">
+                                FORM -1 DESKTOP ASSESSMENT FORM
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>Application No (provided by ATAB) :
+                                        {{ $summaries->application->application_uid }} </td>
+                                    <td>Date of application :
+                                        {{ \Carbon\Carbon::parse($summaries->application->created_at)->format('d-m-Y') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Name and Location of the Training Provider :
+                                        {{ $summaries->location_training_provider }}</td>
+                                    <td>Name of the course to be assessed : {{ $summaries->course_assessed }} </td>
+                                </tr>
+                                <tr>
+                                    <td>Way of assessment : {{ $summaries->way_of_desktop }}</td>
+                                    <td>No of Mandays : {{ $summaries->mandays ?? '' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Signature</td>
+                                    <td>.............</td>
+                                </tr>
+                                <tr>
+                                    <td>Assessor Name</td>
+                                    <td>{{ $summaries->assessor }}
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Sl. No</th>
+                                    <th>Objective Element</th>
+                                    <th>NC raised</th>
+                                    <th>CAPA by Training Provider</th>
+                                    <th>Document submitted against the NC</th>
+                                    <th>Remarks (Accepted/ Not accepted)</th>
+                                </tr>
+                                @foreach ($chapters as $chapter)
+                                    <tr>
+                                        <td colspan="6" style="font-weight: bold; text-align:center;">
+                                            {{ $chapter->title ?? '' }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($chapter->questions as $question)
+                                        <tr>
+                                            <td> {{ $question->code }}</td>
+                                            <td>{{ $question->title }}</td>
+                                            <td>
+                                                @php
+                                                    $summeryReportQuestion = getQuestionSummary($question->id, $summaries->id);
+                                                @endphp
+                                                @if ($summeryReportQuestion)
+                                                    @if ($summeryReportQuestion != null)
+                                                        {{ $summeryReportQuestion->nc_raised }}
+                                                    @endif
+                                                @else
+                                                    @php
+                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $summaries->course_id);
+                                                    @endphp
+                                                    @if (count($documents) > 0)
+                                                        @foreach ($documents as $doc)
+                                                            @php
+                                                                $comment = getDocComment($doc->id);
+                                                            @endphp
+                                                            @if ($comment)
+                                                                <span>{{ printStatus($doc->id) }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    @else
+                                                        <span>Document not uploaded!</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($summeryReportQuestion)
+                                                    @if ($summeryReportQuestion->capa_training_provider != null)
+                                                        {{ $summeryReportQuestion->capa_training_provider }}
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($summeryReportQuestion)
+                                                @if ($summeryReportQuestion->document_submitted_against_nc != null)
+                                                    {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                                @endif
+                                            @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                @endphp
+                                                @if (count($documents) > 0)
+                                                    @foreach ($documents as $doc)
+                                                      @if ($loop->iteration == 1)
+                                                      @php
+                                                      $comment = getDocComment($doc->id);
+                                                  @endphp
+                                                  @if ($comment)
+                                                      <span>{{ printRemark($doc->id) }}</span>
+                                                  @endif
+                                                      @endif
+                                                    @endforeach
+                                                @else
+                                                    <span>Document not uploaded!</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($summaryReport != null)
+                    <div class="card">
+                        <div class="card-header bg-white text-dark">
+                            <h5 class="mt-2"> FORM-2 ASSESSMENT FORM</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>Application No (provided by ATAB) : {{ $applicationDetails->application_uid }}
+                                    </td>
+                                    <td>Date of application :
+                                        {{ \Carbon\Carbon::parse($applicationDetails->created_at)->format('d-m-Y') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Name and Location of the Training Provider :
+                                        {{ $summaryReport->location_training_provider }}</td>
+                                    <td>Name of the course to be assessed : {{ $summaryReport->course_assessed }} </td>
+                                </tr>
+                                <tr>
+                                    <td>Way of assessment : {{ $summaryReport->way_of_desktop }}</td>
+                                    <td>No of Mandays : {{ $summaryReport->mandays ?? '' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Signature</td>
+                                    <td>.............</td>
+                                </tr>
+                                <tr>
+                                    <td>Assessor Name</td>
+                                    <td>{{ $summaryReport->assessor }}
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Sl. No</th>
+                                    <th>Objective Element</th>
+                                    <th>NC raised</th>
+                                    <th>CAPA by Training Provider</th>
+                                    <th>Document submitted against the NC</th>
+                                    <th>Remarks (Accepted/ Not accepted)</th>
+                                </tr>
+                                @foreach ($chapters as $chapter)
+                                    <tr>
+                                        <td colspan="6" style="font-weight: bold; text-align:center;">
+                                            {{ $chapter->title ?? '' }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($chapter->questions as $question)
+                                        <tr>
+                                            <td> {{ $question->code }}</td>
+                                            <td>{{ $question->title }}</td>
+                                            <td>
+                                                @php
+                                                    $summeryReportQuestion = getQuestionSummary($question->id, $summaryReport->id);
+                                                @endphp
+                                                @if ($summeryReportQuestion)
+                                                    @if ($summeryReportQuestion != null)
+                                                        {{ $summeryReportQuestion->nc_raised }}
+                                                    @endif
+                                                @else
+                                                    @php
+                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                    @endphp
+                                                    @if (count($documents) > 0)
+                                                        @foreach ($documents as $doc)
+                                                            @php
+                                                                $comment = getDocComment($doc->id);
+                                                            @endphp
+                                                            @if ($comment)
+                                                                <span>{{ printStatus($doc->id) }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    @else
+                                                        <span>Document not uploaded!</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($summeryReportQuestion)
+                                                    @if ($summeryReportQuestion->capa_training_provider != null)
+                                                        {{ $summeryReportQuestion->capa_training_provider }}
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($summeryReportQuestion)
+                                                @if ($summeryReportQuestion->document_submitted_against_nc != null)
+                                                    {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                                @endif
+                                            @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                @endphp
+                                                @if (count($documents) > 0)
+                                                    @foreach ($documents as $doc)
+                                                      @if ($loop->iteration == 1)
+                                                      @php
+                                                      $comment = getDocComment($doc->id);
+                                                  @endphp
+                                                  @if ($comment)
+                                                      <span>{{ printRemark($doc->id) }}</span>
+                                                  @endif
+                                                      @endif
+                                                    @endforeach
+                                                @else
+                                                    <span>Document not uploaded!</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </table>
+
+                            <table>
+
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">
+                                            FORM -3 - OPPORTUNITY FOR IMPROVEMENT FORM
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Name and Location of the Training Provider:
+                                            {{ $improvementForm->training_provider_name }}</td>
+                                        <td colspan="2">Name of the course to be assessed:
+                                            {{ $improvementForm->course_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):
+                                            {{ $improvementForm->way_of_assessment }}</td>
+                                        <td colspan="2"> No of Mandays: {{ $improvementForm->mandays }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td> S. No. </td>
+                                        <td> Opportunity for improvement Form</td>
+                                        <td colspan="2"> Standard reference</td>
+                                    </tr>
+                                    <tr>
+                                        <td> </td>
+                                        <td> {{ $improvementForm->opportunity_for_improvement }}</td>
+                                        <td> {{ $improvementForm->standard_reference }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> Signatures</td>
+                                        <td> </td>
+                                        <td> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Name </td>
+                                        <td>{{ $improvementForm->name }} </td>
+                                        <td> </td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td> </td>
+                                        <td> Team Leader: {{ $improvementForm->team_leader }} </td>
+                                        <td> Assessor: {{ $improvementForm->assessor_name }} </td>
+                                        <td> Rep. Assessee Orgn: {{ $improvementForm->rep_assessee_orgn }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"> Date: {{ $improvementForm->date_of_submission }}</td>
+                                        <td colspan="2"> Signature of the Team Leader</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
             </div>
+        </div>
 
             <div class="card">
                 <div class="card-header bg-white text-dark">
@@ -147,13 +388,13 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        {{ $applicationDetails->application->final_remark }}
+                        {{ $applicationDetails->final_remark }}
                     </div>
                     <div class="mt-2">
                         <span style="font-weight: bold;">GPC Picture</span>
                         <div>
-                            <a href="{{ asset('level/' . $applicationDetails->application->gps_pic) }}" target="_blank">
-                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->application->gps_pic) }}" alt="">
+                            <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
+                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
                             </a>
                         </div>
                     </div>

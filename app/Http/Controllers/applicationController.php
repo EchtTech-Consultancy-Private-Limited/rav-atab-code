@@ -1000,4 +1000,24 @@ class applicationController extends Controller
         $improvementForm = ImprovementForm::where('course_id', $course)->where('application_id', $application)->first();
         return view('tp.final-summary-report', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course'));
     }
+
+    public function getAdminApplicationCoursesLIst($applicationID)
+    {
+        $courses = ApplicationCourse::where('application_id', $applicationID)->get();
+        $applicationData = Application::find($applicationID);
+        return view('admin.summary.courses-list',compact('courses','applicationData'));
+    }
+
+    public function getAdminApplicationSummary($courseID,$applicationID){
+        $checkSummaryReport = SummaryReport::where('course_id', $courseID)->where('application_id', $applicationID)->get();
+        if (count($checkSummaryReport) == 0) {
+            return redirect()->back()->with('warning', 'Report not created yet!');
+        }
+        $applicationDetails = Application::find($applicationID);
+        $chapters = Chapter::all();
+        $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $courseID)->where('application_id', $applicationID)->first();
+        $improvementForm = ImprovementForm::where('course_id', $courseID)->where('application_id', $applicationID)->first();
+        $course = $courseID;
+        return view('admin.application.document-summery-new', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course'));
+    }
 }
