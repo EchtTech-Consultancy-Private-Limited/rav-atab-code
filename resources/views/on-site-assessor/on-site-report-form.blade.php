@@ -240,7 +240,10 @@
                                 Date : <input type="date" name="date">
                             </td>
                             <td>
-                                Signature : <input type="file" name="signature_file">
+                                Signature 
+                                <div style="padding-top: 10px;">
+                                   ................
+                                </div>
                             </td>
                         </tr>
                     </tbody>
