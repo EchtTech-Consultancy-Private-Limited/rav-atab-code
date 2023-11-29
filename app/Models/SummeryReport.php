@@ -21,6 +21,7 @@ class SummeryReport extends Model
         'mandays',
         'signature',
         'assessor',
+        'summary_type',
         'summary_type'
     ];
 
