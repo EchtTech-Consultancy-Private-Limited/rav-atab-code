@@ -209,7 +209,7 @@
                                                     @if (totalDocumentsCount($item->id) > 0)
                                                         <div class="d-flex">
                                                             @if ($availableReport != null)
-                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/documents/' . $item->id . '/summary') : '#' }}"
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/courses-list/' . $item->id ) : '#' }}"
                                                                     class="p-2 buttonBadge text-white bg-warning"
                                                                     style="margin-right: 5px;">Application In
                                                                     Processing</a>
@@ -239,7 +239,7 @@
                                                         @php
                                                             $payment = $item->payment;
                                                             $isAdmin = auth()->user()->role == 1;
-                                                            $url = $isAdmin ? url("admin/application/documents/{$item->id}/summary") : '#';
+                                                            $url = $isAdmin ? url("admin/application/courses-list/{$item->id}") : '#';
                                                             $reportAvailable = $availableReport != null;
                                                         @endphp
 

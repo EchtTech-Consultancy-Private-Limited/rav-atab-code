@@ -111,6 +111,89 @@
                                 </tr>
 
                             </table>
+
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Sl. No</th>
+                                    <th>Objective Element</th>
+                                    <th>NC raised</th>
+                                    <th>CAPA by Training Provider</th>
+                                    <th>Document submitted against the NC</th>
+                                    <th>Remarks (Accepted/ Not accepted)</th>
+                                </tr>
+                                @foreach ($chapters as $chapter)
+                                    <tr>
+                                        <td colspan="6" style="font-weight: bold; text-align:center;">
+                                            {{ $chapter->title ?? '' }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($chapter->questions as $question)
+                                        <tr>
+                                            <td> {{ $question->code }}</td>
+                                            <td>{{ $question->title }}</td>
+                                            <td>
+                                                @php
+                                                    $summeryReportQuestion = getQuestionSummary($question->id, $summaries->id);
+                                                @endphp
+                                                @if ($summeryReportQuestion)
+                                                    @if ($summeryReportQuestion != null)
+                                                        {{ $summeryReportQuestion->nc_raised }}
+                                                    @endif
+                                                @else
+                                                    @php
+                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $summaries->course_id);
+                                                    @endphp
+                                                    @if (count($documents) > 0)
+                                                        @foreach ($documents as $doc)
+                                                            @php
+                                                                $comment = getDocComment($doc->id);
+                                                            @endphp
+                                                            @if ($comment)
+                                                                <span>{{ printStatus($doc->id) }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    @else
+                                                        <span>Document not uploaded!</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($summeryReportQuestion)
+                                                    @if ($summeryReportQuestion->capa_training_provider != null)
+                                                        {{ $summeryReportQuestion->capa_training_provider }}
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($summeryReportQuestion)
+                                                @if ($summeryReportQuestion->document_submitted_against_nc != null)
+                                                    {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                                @endif
+                                            @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                @endphp
+                                                @if (count($documents) > 0)
+                                                    @foreach ($documents as $doc)
+                                                      @if ($loop->iteration == 1)
+                                                      @php
+                                                      $comment = getDocComment($doc->id);
+                                                  @endphp
+                                                  @if ($comment)
+                                                      <span>{{ printRemark($doc->id) }}</span>
+                                                  @endif
+                                                      @endif
+                                                    @endforeach
+                                                @else
+                                                    <span>Document not uploaded!</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </table>
                         </div>
                     </div>
                 @endif
@@ -118,7 +201,7 @@
                 @if ($summaryReport != null)
                     <div class="card">
                         <div class="card-header bg-white text-dark">
-                            <h5 class="mt-2"> ASSESSMENT FORM</h5>
+                            <h5 class="mt-2"> FORM -1 ONSITE ASSESSMENT FORM</h5>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
