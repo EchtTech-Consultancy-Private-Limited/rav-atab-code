@@ -2795,6 +2795,7 @@ class LevelController extends Controller
                 'mandays' => $request->mandays,
                 'signature' => $request->signature,
                 'assessor' => $request->assessor,
+                'summary_type' => $request->summary_type,
             ]
         )->id;
         if ($request->question_id != null) {
