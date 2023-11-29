@@ -228,6 +228,7 @@
                                                                         {{-- getting documents for each row --}}
                                                                         @if (count($documentsData) > 0)
                                                                             <div class="d-flex">
+
                                                                                 @foreach ($documentsData as $docItem)
                                                                                     <div>
                                                                                         <a target="_blank"
@@ -235,47 +236,51 @@
                                                                                             href="{{ url('document-detail' . '/' . $docItem->doc_file . '/' . $applicationData->id . '/' . $docItem->id) }}"
                                                                                             class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm m-1">
                                                                                             {{ getButtonText($docItem->id) }}</a>
-                                                                                            <div style="font-size: 10px; margin:2px; margin-top:0px; font-weight:bold;">
-                                                                                                {{ updatedBy($docItem->id) }}
-                                                                                            </div>
+                                                                                        <div
+                                                                                            style="font-size: 10px; margin:2px; margin-top:0px; font-weight:bold;">
+                                                                                            {{ updatedBy($docItem->id) }}
+                                                                                        </div>
                                                                                     </div>
                                                                                 @endforeach
                                                                                 @php
                                                                                     $last_document = $documentsData[count($documentsData) - 1];
-
+                                                                                    
                                                                                 @endphp
                                                                                 @if (getCommentsData($last_document->id))
-                                                                                @if ( $last_document && getCommentsData($last_document->id)->status != 4 )
-                                                                                <div>
-                                                                                    <form name="submitform_doc_form"
-                                                                                        id="submitform_doc_form_{{ $question->id }}"
-                                                                                        class="submitform_doc_form"
-                                                                                        enctype="multipart/form-data">
-                                                                                        <input type="hidden"
-                                                                                            name="previous_url"
-                                                                                            value="{{ Request::url() }}">
-                                                                                        <input type="hidden"
-                                                                                            name="application_id"
-                                                                                            value="{{ $application_id }}">
-                                                                                        <input type="hidden"
-                                                                                            name="course_id"
-                                                                                            value="{{ $course_id }}">
-                                                                                        <input type="hidden"
-                                                                                            name="question_id"
-                                                                                            value="{{ $question->code }}">
-                                                                                        <input type="hidden"
-                                                                                            name="question_pid"
-                                                                                            value="{{ $question->id }}">
-                                                                                        <input type="file"
-                                                                                            class="from-control fileup"
-                                                                                            name="fileup"
-                                                                                            id="fileup_{{ $question->id }}"
-                                                                                            data-question-id="{{ $question->id }}" />
-                                                                                    </form>
-                                                                                </div>
-                                                                            @endif
+
+                                                                                {{-- @dd(getCommentsData($last_document->id)) --}}
+                                                                                    @if (($last_document && getCommentsData($last_document->id)->status != 4) &&  getCommentsData($last_document->id)->status != 3)
+                                                                                        <div>
+                                                                                            <form
+                                                                                                name="submitform_doc_form"
+                                                                                                id="submitform_doc_form_{{ $question->id }}"
+                                                                                                class="submitform_doc_form"
+                                                                                                enctype="multipart/form-data">
+                                                                                                <input type="hidden"
+                                                                                                    name="previous_url"
+                                                                                                    value="{{ Request::url() }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="application_id"
+                                                                                                    value="{{ $application_id }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="course_id"
+                                                                                                    value="{{ $course_id }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="question_id"
+                                                                                                    value="{{ $question->code }}">
+                                                                                                <input type="hidden"
+                                                                                                    name="question_pid"
+                                                                                                    value="{{ $question->id }}">
+                                                                                                <input type="file"
+                                                                                                    class="from-control fileup"
+                                                                                                    name="fileup"
+                                                                                                    id="fileup_{{ $question->id }}"
+                                                                                                    data-question-id="{{ $question->id }}" />
+                                                                                            </form>
+                                                                                        </div>
+                                                                                    @endif
                                                                                 @endif
-                                                                               
+
                                                                             </div>
                                                                         @else
                                                                             <form name="submitform_doc_form"

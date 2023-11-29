@@ -80,7 +80,7 @@
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h5 class="mt-2">
-                                FORM -1 DESKTOP ASSESSMENT FORM
+                                 DESKTOP ASSESSMENT FORM
                             </h5>
                         </div>
                         <div class="card-body">
@@ -202,7 +202,7 @@
                 @if ($summaryReport != null)
                     <div class="card">
                         <div class="card-header bg-white text-dark">
-                            <h5 class="mt-2"> FORM -1 ONSITE ASSESSMENT FORM</h5>
+                            <h5 class="mt-2">  ONSITE ASSESSMENT FORM</h5>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
@@ -324,7 +324,7 @@
                                 <tbody>
                                     <tr>
                                         <td colspan="4">
-                                            FORM -3 - OPPORTUNITY FOR IMPROVEMENT FORM
+                                             OPPORTUNITY FOR IMPROVEMENT FORM
                                         </td>
                                     </tr>
                                     <tr>
@@ -379,27 +379,29 @@
                 @endif
             </div>
         </div>
-
-            <div class="card">
-                <div class="card-header bg-white text-dark">
-                    <h5 class="mt-2">
-                        Remark & GPS Picture
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        {{ $applicationDetails->final_remark }}
-                    </div>
-                    <div class="mt-2">
-                        <span style="font-weight: bold;">GPC Picture</span>
-                        <div>
-                            <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
-                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
-                            </a>
-                        </div>
-                    </div>
-                </div>
+@if ($applicationDetails->final_remark != null)
+<div class="card">
+    <div class="card-header bg-white text-dark">
+        <h5 class="mt-2">
+            Remark & GPS Picture
+        </h5>
+    </div>
+    <div class="card-body">
+        <div>
+            {{ $applicationDetails->final_remark }}
+        </div>
+        <div class="mt-2">
+            <span style="font-weight: bold;">GPC Picture</span>
+            <div>
+                <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
+                    <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
+                </a>
             </div>
+        </div>
+    </div>
+</div>
+@endif
+           
         </div>
     </div>
     </section>

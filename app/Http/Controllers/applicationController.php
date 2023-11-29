@@ -708,15 +708,15 @@ class applicationController extends Controller
             'on_site_assessor_Id' => auth()->user()->id,
         ]);
 
-        DocComment::create([
-            'doc_id' => $request->documentID,
-            'comments' => $commentTxt,
-            'status' => $request->status,
-            'doc_code' => $request->question_code,
-            'user_id' => auth()->user()->id,
-            'course_id' => $request->courseID,
-            'by_onsite_assessor' => 1
-        ]);
+        // DocComment::create([
+        //     'doc_id' => $request->documentID,
+        //     'comments' => $commentTxt,
+        //     'status' => $request->status,
+        //     'doc_code' => $request->question_code,
+        //     'user_id' => auth()->user()->id,
+        //     'course_id' => $request->courseID,
+        //     'by_onsite_assessor' => 1
+        // ]);
 
         DocComment::create([
             'doc_id' => $document->id,
