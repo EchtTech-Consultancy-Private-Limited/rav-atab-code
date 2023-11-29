@@ -2785,7 +2785,6 @@ class LevelController extends Controller
     {
         $summeryReportId = SummeryReport::create(
             [
-                'summary_type' => 'desktop',
                 'application_uid'    => $request->application_uid,
                 'application_id' => $request->application_id,
                 'course_id' => $request->course_id,
@@ -2793,7 +2792,8 @@ class LevelController extends Controller
                 'location_training_provider' => $request->location_training_provider,
                 'course_assessed' => $request->course_assessed,
                 'way_of_desktop' => $request->way_of_desktop,
-                'mandays' => $request->mandays,
+                'mandays' => $request->mandays,                
+                'summary_type' => $request->summary_type,
                 'signature' => $request->signature,
                 'assessor' => $request->assessor,
             ]

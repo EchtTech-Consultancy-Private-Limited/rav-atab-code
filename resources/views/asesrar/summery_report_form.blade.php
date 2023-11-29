@@ -181,6 +181,7 @@
                                             </tr>
                                             <tr>
                                                 <input type="hidden" name="course_id" value="{{ $_GET['course'] }}">
+                                                <input type="hidden" name="summary_type" value="desktop">
                                                 <input type="hidden" name="application_id"
                                                     value="{{ $applicationDetails->id }}" readonly>`
                                                 <td>Application No (provided by ATAB): <span> <input type="text"
@@ -216,7 +217,7 @@
                                                 <td><span> <input type="hidden" name="signature"> </span></td>
                                             </tr>
                                             <tr>
-                                                <td> Assessor</td>
+                                                <td> Assessor Name</td>
                                                 <td><span> <input type="text" name="assessor"
                                                             value="{{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}"
                                                             readonly> </span></td>
@@ -245,13 +246,10 @@
                                                     </tr>
                                                     @foreach ($chapter->questions as $question)
                                                         @php
-                                                            $documentsData = getAdminDocument($question->id, $applicationDetails->id) ?? 0;
+                                                            $comment = getDocumentComment($question->id, $applicationDetails->id,$_GET['course']) ?? 0;
                                                         @endphp
-                                                        @foreach ($documentsData as $doc)
-                                                            @php
-                                                                $documentsData = getAssessorComments($doc->id, $applicationDetails->id) ?? 0;
-                                                            @endphp
-                                                            @if (getButtonText($doc->id) != 'Accepted')
+                                                        @if ($comment)
+                                                            @if ($comment->status != 4)
                                                                 <tr>
                                                                     <td>
                                                                         <input type="hidden" name="question_id[]"
@@ -269,7 +267,7 @@
                                                                     <td> <input type="text" name="remark[]" required></td>
                                                                 </tr>
                                                             @endif
-                                                        @endforeach
+                                                        @endif
                                                     @endforeach
                                                 @endforeach
                                             </tbody>
