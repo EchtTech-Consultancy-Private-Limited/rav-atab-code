@@ -53,4 +53,8 @@ class User extends Authenticatable
     public function cityDetail(){
         return $this->belongsTo(City::class,"state","id");
     }
+
+    public function assessorDetail(){
+        return $this->hasOne(AssessorApplication::class,"assessor_id","id");
+    }
 }
