@@ -80,7 +80,7 @@
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h5 class="mt-2">
-                                FORM -1 DESKTOP ASSESSMENT FORM
+                                 DESKTOP ASSESSMENT FORM
                             </h5>
                         </div>
                         <div class="card-body">
@@ -174,7 +174,7 @@
                                             </td>
                                             <td>
                                                 @php
-                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
@@ -202,7 +202,7 @@
                 @if ($summaryReport != null)
                     <div class="card">
                         <div class="card-header bg-white text-dark">
-                            <h5 class="mt-2"> FORM -1 ONSITE ASSESSMENT FORM</h5>
+                            <h5 class="mt-2">  ONSITE ASSESSMENT FORM</h5>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
@@ -318,88 +318,111 @@
                                     @endforeach
                                 @endforeach
                             </table>
-
-                            <table>
-
-                                <tbody>
-                                    <tr>
-                                        <td colspan="4">
-                                            FORM -3 - OPPORTUNITY FOR IMPROVEMENT FORM
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">Name and Location of the Training Provider:
-                                            {{ $improvementForm->training_provider_name }}</td>
-                                        <td colspan="2">Name of the course to be assessed:
-                                            {{ $improvementForm->course_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):
-                                            {{ $improvementForm->way_of_assessment }}</td>
-                                        <td colspan="2"> No of Mandays: {{ $improvementForm->mandays }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td> S. No. </td>
-                                        <td> Opportunity for improvement Form</td>
-                                        <td colspan="2"> Standard reference</td>
-                                    </tr>
-                                    <tr>
-                                        <td> </td>
-                                        <td> {{ $improvementForm->opportunity_for_improvement }}</td>
-                                        <td> {{ $improvementForm->standard_reference }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td> Signatures</td>
-                                        <td> </td>
-                                        <td> </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>Name </td>
-                                        <td>{{ $improvementForm->name }} </td>
-                                        <td> </td>
-                                        <td> </td>
-                                    </tr>
-                                    <tr>
-                                        <td> </td>
-                                        <td> Team Leader: {{ $improvementForm->team_leader }} </td>
-                                        <td> Assessor: {{ $improvementForm->assessor_name }} </td>
-                                        <td> Rep. Assessee Orgn: {{ $improvementForm->rep_assessee_orgn }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2"> Date: {{ $improvementForm->date_of_submission }}</td>
-                                        <td colspan="2"> Signature of the Team Leader</td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div>
+                                <div>
+                                    <span style="font-weight: bold;">Brief Summary 1</span>
+                                    <div>
+                                        {{ $summaryReport->summary1 ?? '' }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <hr>
+                                </div>
+                                <div>
+                                    <span style="font-weight: bold;">Brief Summary 2</span>
+                                    <div>
+                                        {{ $summaryReport->summary2 ?? '' }}
+                                    </div>
+                                </div>
+                            </div>
+                           
                         </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-white text-dark">
+                            <h5 class="mt-2">
+                                OPPORTUNITY FOR IMPROVEMENT FORM
+                            </h5>
+                        </div>
+                        <table class="table table-bordered">
+
+                            <tbody>
+                              
+                                <tr>
+                                    <td colspan="2">Name and Location of the Training Provider:
+                                        {{ $improvementForm->training_provider_name }}</td>
+                                    <td colspan="2">Name of the course to be assessed:
+                                        {{ $improvementForm->course_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):
+                                        {{ $improvementForm->way_of_assessment }}</td>
+                                    <td colspan="2"> No of Mandays: {{ $improvementForm->mandays }}</td>
+                                </tr>
+                                <tr>
+                                    <td> S. No. </td>
+                                    <td> Opportunity for improvement Form</td>
+                                    <td colspan="2"> Standard reference</td>
+                                </tr>
+                                <tr>
+                                    <td> </td>
+                                    <td> {{ $improvementForm->opportunity_for_improvement }}</td>
+                                    <td> {{ $improvementForm->standard_reference }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td> Signatures</td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Name </td>
+                                    <td>{{ $improvementForm->name }} </td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
+                                <tr>
+                                    <td> </td>
+                                    <td> Team Leader: {{ $improvementForm->team_leader }} </td>
+                                    <td> Assessor: {{ $improvementForm->assessor_name }} </td>
+                                    <td> Rep. Assessee Orgn: {{ $improvementForm->rep_assessee_orgn }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> Date: {{ $improvementForm->date_of_submission }}</td>
+                                    <td colspan="2"> Signature of the Team Leader</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 @endif
             </div>
         </div>
-
-            <div class="card">
-                <div class="card-header bg-white text-dark">
-                    <h5 class="mt-2">
-                        Remark & GPS Picture
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        {{ $applicationDetails->final_remark }}
-                    </div>
-                    <div class="mt-2">
-                        <span style="font-weight: bold;">GPC Picture</span>
-                        <div>
-                            <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
-                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
-                            </a>
-                        </div>
-                    </div>
-                </div>
+@if ($applicationDetails->final_remark != null)
+<div class="card">
+    <div class="card-header bg-white text-dark">
+        <h5 class="mt-2">
+            Remark & GPS Picture
+        </h5>
+    </div>
+    <div class="card-body">
+        <div>
+            {{ $applicationDetails->final_remark }}
+        </div>
+        <div class="mt-2">
+            <span style="font-weight: bold;">GPC Picture</span>
+            <div>
+                <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
+                    <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
+                </a>
             </div>
+        </div>
+    </div>
+</div>
+@endif
+           
         </div>
     </div>
     </section>
