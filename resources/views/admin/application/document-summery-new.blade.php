@@ -87,7 +87,7 @@
                       </tr>
                       <tr>
                       <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
-                        <td>No of Mandays : {{ getMandays($applicationDetails->id, auth()->user()->id) }}</td>
+                        <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
                       </tr>
                       <tr>
                         <td>Signature</td>
@@ -110,59 +110,26 @@
                             <th>Document submitted against the NC</th>
                             <th>Remarks (Accepted/ Not accepted)</th>
                         </tr>
-                        @foreach ($chapters as $chapter)
+                        @foreach ($chapters as $chapter)                        
                         <tr>
                             <td colspan="6" style="font-weight: bold; text-align:center;">
                                 {{ $chapter->title ?? '' }}
                             </td>
-                        </tr>
-                        @foreach ($chapter->questions as $question)
-                        @php
-                            $documentsData = getSummerDocument($question->id, $applicationDetails->application_id) ?? 0;
-                            $docId = $documentsData ? $documentsData->id : null;
-                        @endphp
+                        </tr>                                      
+                        @foreach ($chapter->questions as $question)                        
                         <tr>
                             <td> {{ $question->id }}</td>
                            <td>{{ $question->title }}</td>
-                           @php
-                                $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);                                
-                            @endphp
-                                <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
-                                <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
-                                <td>{{ @$summeryReportQuestion->document_submitted_against_nc ?? '' }}</td>                        
-                           @if(getButtonText($docId) == "Accepted")
-                           <td>{{ @$summeryReportQuestion->remark ??  getButtonText($docId) ?? '' }}</td>
-                           @else
-                           <td>{{ @$summeryReportQuestion->remark ?? '' }}</td>
-                           @endif
+                           <td>{{ $question->summeryQuestionreport->nc_raised ?? '' }}</td>
+                           <td>{{ $question->summeryQuestionreport->capa_training_provider ?? '' }}</td>
+                           <td>{{ $question->summeryQuestionreport->document_submitted_against_nc ?? '' }}</td>
+                           <td>{{ $question->summeryQuestionreport->remark ?? '' }}</td>
                         </tr>                       
                         @endforeach
                         @endforeach
                     </table>
                 </div>
             </div>
-            @if($applicationDetails->application != null)
-            <div class="card">
-                <div class="card-header bg-white text-dark">
-                    <h5 class="mt-2">
-                        Remark & GPS Picture
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        {{ $applicationDetails->application->final_remark }}
-                    </div>
-                    <div class="mt-2">
-                        <span style="font-weight: bold;">GPC Picture</span>
-                        <div>
-                            <a href="{{ asset('level/' . $applicationDetails->application->gps_pic) }}" target="_blank">
-                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->application->gps_pic) }}" alt="">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
         </div>
     </div>
     </section>
