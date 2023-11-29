@@ -1083,3 +1083,7 @@ function getSummaries($applicationID,$courseID){
 function getQuestionSummary($question_id,$summaryReport_id){
     return SummaryReportChapter::where('summary_report_application_id',$summaryReport_id)->where('question_id',$question_id)->first();
 }
+
+function getDocumentCommentData($docID){
+    return DocComment::where('doc_id',$docID)->latest()->first();
+}
