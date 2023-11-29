@@ -110,9 +110,8 @@
                             $documentsData = getSummerDocument($question->id, $applicationDetails->application_id) ?? 0;
                             $docId = $documentsData ? $documentsData->id : null;
                         @endphp
-                        <tr>
-                            
-                            <td> {{ $docId }}</td>
+                        <tr>                            
+                            <td> {{ $question->code }}</td>
                            <td>{{ $question->title }}</td>
                            <td>{{ $question->summeryQuestionreport->nc_raised ?? '' }}</td>
                            <td>{{ $question->summeryQuestionreport->capa_training_provider ?? '' }}</td>
@@ -137,10 +136,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 function printDiv(divId) {
-     var printContents = document.getElementById(divId).innerHTML;
-     var originalContents = document.body.innerHTML;
-     document.body.innerHTML = printContents;
-     window.print();
-     document.body.innerHTML = originalContents;
+    var printContents = document.getElementById(divId).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
 }
 </script>

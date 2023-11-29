@@ -903,7 +903,6 @@ function checkVerifiedDocumentAvailableForAdmin($application_id, $course_id, $qu
     $document = DB::table('add_documents')->where('question_id', $question_id)->where('application_id', $application_id)
         ->where('course_id', $course_id)
         ->first();
-
     if ($document) {
         return $document;
     } else {
