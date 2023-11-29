@@ -406,7 +406,7 @@
 
                                     </div>
                                     @if (auth()->user()->assessment == 2)
-                                        @if ($applicationData->gps_pic == '' || $applicationData->gps_pic == null)
+                                        @if ($applicationData->gps_pic == null && $applicationData->onsite_status != 1)
                                             @if (totalDocumentsCount($application_id) >= 2)
                                                 <div class="d-flex justify-content-end">
                                                     <a target="_blank" class="btn btn-primary mr-2" href="{{ url('on-site/report/?application='.$applicationData->id.'&course='.$course_id) }}">
@@ -414,6 +414,8 @@
                                                     </a>
                                                 </div>
                                             @endif
+                                            @else
+                                            <p>Report submitted</p>
                                         @endif
                                     @endif
 

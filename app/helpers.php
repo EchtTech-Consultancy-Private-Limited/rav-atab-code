@@ -7,6 +7,7 @@ use App\Models\ApplicationNotification;
 use App\Models\DocComment;
 use App\Models\Question;
 use App\Models\SummaryReport;
+use App\Models\SummaryReportChapter;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -1067,7 +1068,7 @@ function printRemark($docID){
   if ($comment->status == 4) {
         return "Accepted";
     } else{
-        return "Not";
+        return "Not Accepted";
     }
    } else {
     return "Document not uploaded!";
@@ -1076,3 +1077,10 @@ function printRemark($docID){
     
 }
 
+function getSummaries($applicationID,$courseID){
+    return SummaryReport::where('summary_type','desktop')->where('course_id',$courseID)->where('application_id',$applicationID)->first();
+}
+
+function getQuestionSummary($question_id,$summaryReport_id){
+    return SummaryReportChapter::where('summary_report_application_id',$summaryReport_id)->where('question_id',$question_id)->first();
+}
