@@ -209,10 +209,16 @@
                                             </td>
                                             <td><input type="text" value="{{ $question->title }}"></td>
                                             <td>
-                                                <input type="text" name="nc_raised[]">
+                                                @php
+                                                    $getNCRecords = getNCRecords($question->id,$courseDetail->id,$applicationData->id);
+                                                @endphp
+                                                <input type="text" name="nc_raised[]" value=" {{ $getNCRecords }}">
                                             </td>
                                             <td>
-                                                <input type="text" name="capa_training_provider[]">
+                                                @php
+                                                    $getNCComments = getNCRecordsComments($question->id,$courseDetail->id,$applicationData->id);
+                                                @endphp
+                                                <input type="text" name="capa_training_provider[]" value="{{  $getNCComments }}">
                                             </td>
                                             <td>
                                                 <input type="text" name="document_submitted_against_nc[]">

@@ -1087,3 +1087,57 @@ function getQuestionSummary($question_id,$summaryReport_id){
 function getDocumentCommentData($docID){
     return DocComment::where('doc_id',$docID)->latest()->first();
 }
+
+function getNCRecords($question, $course, $application) {
+    $documents = Add_Document::where('application_id', $application)
+        ->where('course_id', $course)
+        ->where('question_id', $question)
+        ->get();
+
+    $comments = []; // Initialize an array to store comments
+
+    foreach ($documents as $document) {
+        $commentsData = DocComment::where('doc_id', $document->id)
+            ->where('status', '!=', 4)
+            ->get();
+
+        foreach ($commentsData as $comment) {
+            // Check the status and add the appropriate string to the array
+            if ($comment->status == 1) {
+                $comments[] = 'nc1';
+            } elseif ($comment->status == 2) {
+                $comments[] = 'nc2';
+            } // Add more conditions as needed
+        }
+    }
+
+    // Use implode to join the array elements with commas
+    return implode(', ', $comments);
+}
+
+function getNCRecordsComments($question, $course, $application) {
+    $documents = Add_Document::where('application_id', $application)
+        ->where('course_id', $course)
+        ->where('question_id', $question)
+        ->get();
+
+    $comments = []; // Initialize an array to store comments
+    $counter = 1; // Initialize a counter variable
+
+    foreach ($documents as $document) {
+        $commentsData = DocComment::where('doc_id', $document->id)
+            ->where('status', '!=', 4)
+            ->get();
+
+        foreach ($commentsData as $comment) {
+            // Add the comment with the dynamic counter to the array
+            $comments[] = '' . $counter . ': ' . $comment->comments;
+
+            // Increment the counter
+            $counter++;
+        }
+    }
+
+    // Use implode to join the array elements with commas
+    return implode(', ', $comments);
+}
