@@ -2792,10 +2792,10 @@ class LevelController extends Controller
                 'location_training_provider' => $request->location_training_provider,
                 'course_assessed' => $request->course_assessed,
                 'way_of_desktop' => $request->way_of_desktop,
-                'mandays' => $request->mandays,
+                'mandays' => $request->mandays,                
+                'summary_type' => $request->summary_type,
                 'signature' => $request->signature,
                 'assessor' => $request->assessor,
-                'summary_type' => $request->summary_type,
             ]
         )->id;
         if ($request->question_id != null) {
