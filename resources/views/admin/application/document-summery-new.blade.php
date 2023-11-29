@@ -220,7 +220,7 @@
                                 </tr>
                                 <tr>
                                     <td>Way of assessment : {{ $summaryReport->way_of_desktop }}</td>
-                                    <td>No of Mandays : {{ $summaryReport->mandays ?? '' }}</td>
+                                    <td>No of Mandays : {{ $summaryReport->mandays ?? 0 }}</td>
                                 </tr>
                                 <tr>
                                     <td>Signature</td>
