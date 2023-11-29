@@ -143,7 +143,7 @@
                         <tr>
                             <td colspan="4">Way of assessment (onsite/ hybrid/ virtual): <span> <input
                                         type="text" name="way_of_desktop"
-                                        value="{{ $assessorDetail->assessment_way }}"></span>
+                                        value="{{ auth()->user()->assessorDetail->assessment_way ?? '' }}"></span>
                             </td>
                             <td colspan="2">No of Mandays: <span> <input type="text" name="mandays" value="{{ getMandays($applicationData->id, auth()->user()->id) }}"></span>
                             </td>

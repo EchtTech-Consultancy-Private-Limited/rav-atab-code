@@ -217,7 +217,7 @@
                                                 <td><span> <input type="hidden" name="signature"> </span></td>
                                             </tr>
                                             <tr>
-                                                <td> Assessor</td>
+                                                <td> Assessor Name</td>
                                                 <td><span> <input type="text" name="assessor"
                                                             value="{{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}"
                                                             readonly> </span></td>
