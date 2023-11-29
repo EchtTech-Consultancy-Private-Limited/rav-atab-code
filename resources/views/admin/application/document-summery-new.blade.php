@@ -174,7 +174,7 @@
                                             </td>
                                             <td>
                                                 @php
-                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
