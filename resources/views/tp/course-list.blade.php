@@ -44,6 +44,19 @@
 
     </div>
 
+    @if ($message = Session::get('warning'))
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: "warning",
+            text: "{{ $message }}",
+            showConfirmButton: false,
+            timer: 3000
+        })
+    </script>
+@endif
+
 
     <section class="content">
         <div class="block-header">
@@ -67,7 +80,35 @@
             </div>
         </div>
 
-     
+     <div class="card">
+        <div class="card-header bg-white text-dark">
+            <h5 class="mt-2">
+                Summary Reports
+            </h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td>Sr.No.</td>
+                    <td>Course Name</td>
+                    <th>Eligibility </th>
+                    <th>Mode of course</th>
+                    <th>Action</th>
+                </tr>
+                @foreach ($courses as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->course_name }}</td>
+                        <td>{{ $item->eligibility }}</td>
+                        <td> {{ json_encode($item->mode_of_course) }}</td>
+                        <td>
+                            <a href="{{ url('application/summary-report/'.$item->id,$applicationData->id) }}" class="btn btn-primary">View Report</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+     </div>
        
     </section>
 

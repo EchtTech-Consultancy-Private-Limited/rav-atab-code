@@ -60,18 +60,57 @@
                         <li class="breadcrumb-item active">Application Summary</li>
                     </ul>
 
-                    <a href="{{ url('application-list') }}" type="button" class="btn btn-primary" style="float:right;">Back
-                    </a>
-
+                    <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
+                    </a> 
+                 
                 </div>
             </div>
         </div>
+   
+        <div class="card">
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                    Summary Reports
+                </h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Sr.No.</td>
+                        <th>Course Name</th>
+                        <th>Eligibility</th>
+                        <th>Mode of course</th>
+                        <th>Action</th>
+                    </tr>
+                    @foreach ($courses as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->course_name }}</td>
+                        <td>{{ $item->eligibility }}</td>
+                        <td> {{ json_encode($item->mode_of_course) }}</td>
+                        <td>
+                            <a href="{{ url('admin/application/summary-report/'.$item->id,$applicationData->id) }}" class="btn btn-primary">View Report</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
 
-     
        
     </section>
 
 
 
 
-    @include('layout.footer')
+@include('layout.footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+function printDiv(divId) {
+     var printContents = document.getElementById(divId).innerHTML;
+     var originalContents = document.body.innerHTML;
+     document.body.innerHTML = printContents;
+     window.print();
+     document.body.innerHTML = originalContents;
+}
+</script>

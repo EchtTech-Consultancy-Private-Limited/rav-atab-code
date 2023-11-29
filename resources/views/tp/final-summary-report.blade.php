@@ -60,15 +60,14 @@
                         <li class="breadcrumb-item active">Application Summary</li>
                     </ul>
 
-                    <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
-                    </a> 
-                    <a type="button" class="btn btn-primary float-right me-2" onclick="printDiv('printableArea')">Print
+                    <a href="{{ url('application-list') }}" type="button" class="btn btn-primary"
+                        style="float:right;">Back
                     </a>
 
                 </div>
             </div>
         </div>
-   
+
         <div id="printableArea">
             <div id="applicationSummaryContainer" class="table-summery">
                 @php
@@ -220,7 +219,7 @@
                                 </tr>
                                 <tr>
                                     <td>Way of assessment : {{ $summaryReport->way_of_desktop }}</td>
-                                    <td>No of Mandays : {{ $summaryReport->mandays ?? 0 }}</td>
+                                    <td>No of Mandays : {{ $summaryReport->mandays ?? '' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Signature</td>
@@ -380,41 +379,9 @@
             </div>
         </div>
 
-            <div class="card">
-                <div class="card-header bg-white text-dark">
-                    <h5 class="mt-2">
-                        Remark & GPS Picture
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        {{ $applicationDetails->final_remark }}
-                    </div>
-                    <div class="mt-2">
-                        <span style="font-weight: bold;">GPC Picture</span>
-                        <div>
-                            <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
-                                <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     </section>
 
 
 
 
-@include('layout.footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-function printDiv(divId) {
-     var printContents = document.getElementById(divId).innerHTML;
-     var originalContents = document.body.innerHTML;
-     document.body.innerHTML = printContents;
-     window.print();
-     document.body.innerHTML = originalContents;
-}
-</script>
+    @include('layout.footer')

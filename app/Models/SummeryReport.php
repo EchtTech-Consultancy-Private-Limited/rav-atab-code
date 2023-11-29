@@ -20,7 +20,8 @@ class SummeryReport extends Model
         'way_of_desktop',
         'mandays',
         'signature',
-        'assessor'
+        'assessor',
+        'summary_type'
     ];
 
     public function SummeryReportChapter(){

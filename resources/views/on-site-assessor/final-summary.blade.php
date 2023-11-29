@@ -115,16 +115,17 @@
                         <table class="table table-bordered">
                             <tr>
                                 <td>Application No (provided by ATAB) : {{ $applicationDetails->application_uid }} </td>
-                                <td>Date of application : {{ $applicationDetails->date_of_application }}</td>
+                                <td>Date of application :
+                                    {{ \Carbon\Carbon::parse($applicationDetails->created_at)->format('d-m-Y') }}</td>
                             </tr>
                             <tr>
                                 <td>Name and Location of the Training Provider :
-                                    {{ $applicationDetails->location_training_provider }}</td>
-                                <td>Name of the course to be assessed : {{ $applicationDetails->course_assessed }} </td>
+                                    {{ $summaryReport->location_training_provider }}</td>
+                                <td>Name of the course to be assessed : {{ $summaryReport->course_assessed }} </td>
                             </tr>
                             <tr>
-                                <td>Way of assessment (Desktop) : {{ $applicationDetails->course_assessed }}</td>
-                                <td>No of Mandays : {{ getMandays($applicationDetails->id, auth()->user()->id) }}</td>
+                                <td>Way of assessment : {{ $summaryReport->way_of_desktop }}</td>
+                                <td>No of Mandays : {{ getMandays($summaryReport->mandays, auth()->user()->id) }}</td>
                             </tr>
                             <tr>
                                 <td>Signature</td>
@@ -160,9 +161,12 @@
                                         <td> {{ $question->code }}</td>
                                         <td>{{ $question->title }}</td>
                                         <td>
-                                            @if ($question->summeryQuestionreport)
-                                                @if ($question->summeryQuestionreport->nc_raised != null)
-                                                    nc raised
+                                            @php
+                                                $summeryReportQuestion = getQuestionSummary($question->id, $summaryReport->id);
+                                            @endphp
+                                            @if ($summeryReportQuestion)
+                                                @if ($summeryReportQuestion != null)
+                                                    {{ $summeryReportQuestion->nc_raised }}
                                                 @endif
                                             @else
                                                 @php
@@ -182,22 +186,35 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <td>{{ $question->summeryQuestionreport->capa_training_provider ?? '' }}</td>
-                                        <td>{{ $question->summeryQuestionreport->document_submitted_against_nc ?? '' }}
+                                        <td>
+                                            @if ($summeryReportQuestion)
+                                                @if ($summeryReportQuestion->capa_training_provider != null)
+                                                    {{ $summeryReportQuestion->capa_training_provider }}
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($summeryReportQuestion)
+                                            @if ($summeryReportQuestion->document_submitted_against_nc != null)
+                                                {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                            @endif
+                                        @endif
                                         </td>
                                         <td>
                                             @php
                                                 $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
                                             @endphp
                                             @if (count($documents) > 0)
-                                                @foreach ($documents as $doc)
-                                                    @php
-                                                        $comment = getDocComment($doc->id);
-                                                    @endphp
-                                                    @if ($comment)
-                                                        <span>{{ printRemark($doc->id) }}</span>
-                                                    @endif
-                                                @endforeach
+                                            @foreach ($documents as $doc)
+                                            @if ($loop->iteration == 1)
+                                            @php
+                                            $comment = getDocComment($doc->id);
+                                        @endphp
+                                        @if ($comment)
+                                            <span>{{ printRemark($doc->id) }}</span>
+                                        @endif
+                                            @endif
+                                          @endforeach
                                             @else
                                                 <span>Document not uploaded!</span>
                                             @endif

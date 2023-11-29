@@ -649,11 +649,11 @@ class applicationController extends Controller
     {
         $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id', $application_id)->first();
         if ($applicationDetails == null) {
-            return redirect(url('nationl-page'))->with('warning','Summary report not created yet!');
+            return redirect(url('nationl-page'))->with('warning', 'Summary report not created yet!');
         }
-       if ($applicationDetails->application->desktop_status == null && $applicationDetails->application->onsite_status == null) {
-            return redirect(url('nationl-page'))->with('warning','Summary report not created yet!');
-       }
+        if ($applicationDetails->application->desktop_status == null && $applicationDetails->application->onsite_status == null) {
+            return redirect(url('nationl-page'))->with('warning', 'Summary report not created yet!');
+        }
         $chapters = Chapter::all();
         return view('admin.application.document-summery-new', compact('chapters', 'applicationDetails'));
     }
@@ -811,7 +811,7 @@ class applicationController extends Controller
 
     public function on_site_report_format(Request $request)
     {
-       
+
         $applicationData = Application::find($request->input('application'));
         // $applicationAlreadySubmitted = SummaryReport::where('application_id', $request->input('application'))->where('course_id', $request->input('course'))->first();
         // if ($applicationAlreadySubmitted) {
@@ -839,6 +839,7 @@ class applicationController extends Controller
     public function saveFormDataOnSite(Request $request)
     {
         $data = $request->all();
+        $data['summary_type'] = 'onsite';
 
         $summaryReport = SummaryReport::create($data);
 
@@ -920,8 +921,8 @@ class applicationController extends Controller
         $applicationDetails = Application::find($request->input('application'));
         $chapters = Chapter::all();
         $improvementForm = ImprovementForm::where('application_id', $request->input('application'))->first();
-
-        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm'));
+        $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $request->input('course'))->where('application_id', $request->input('application'))->first();
+        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm','summaryReport'));
     }
 
     public function getSummariesList(Request $request)
@@ -959,7 +960,8 @@ class applicationController extends Controller
         }
     }
 
-    public function submitFinalRemark(Request $request){
+    public function submitFinalRemark(Request $request)
+    {
         $application = Application::find($request->application_id);
         if ($request->hasfile('gps_pic')) {
             $file = $request->file('gps_pic');
@@ -975,7 +977,47 @@ class applicationController extends Controller
                 'gps_pic' => $filename,
             ]);
 
-            return redirect()->back()->with('success','Remark and GPS Picture has been updated');
+            return redirect()->back()->with('success', 'Remark and GPS Picture has been updated');
         }
+    }
+
+    public function getapplicationcourses($applicationID)
+    {
+        $courses = ApplicationCourse::where('application_id', $applicationID)->get();
+        $applicationData = Application::find($applicationID);
+        return view('tp.course-list', compact('courses', 'applicationData'));
+    }
+
+    public function getSummaryReportDataTP($course, $application)
+    {
+        $checkSummaryReport = SummaryReport::where('course_id', $course)->where('application_id', $application)->get();
+        if (count($checkSummaryReport) == 0) {
+            return redirect()->back()->with('warning', 'Report not created yet!');
+        }
+        $applicationDetails = Application::find($application);
+        $chapters = Chapter::all();
+        $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $course)->where('application_id', $application)->first();
+        $improvementForm = ImprovementForm::where('course_id', $course)->where('application_id', $application)->first();
+        return view('tp.final-summary-report', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course'));
+    }
+
+    public function getAdminApplicationCoursesLIst($applicationID)
+    {
+        $courses = ApplicationCourse::where('application_id', $applicationID)->get();
+        $applicationData = Application::find($applicationID);
+        return view('admin.summary.courses-list',compact('courses','applicationData'));
+    }
+
+    public function getAdminApplicationSummary($courseID,$applicationID){
+        $checkSummaryReport = SummaryReport::where('course_id', $courseID)->where('application_id', $applicationID)->get();
+        if (count($checkSummaryReport) == 0) {
+            return redirect()->back()->with('warning', 'Report not created yet!');
+        }
+        $applicationDetails = Application::find($applicationID);
+        $chapters = Chapter::all();
+        $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $courseID)->where('application_id', $applicationID)->first();
+        $improvementForm = ImprovementForm::where('course_id', $courseID)->where('application_id', $applicationID)->first();
+        $course = $courseID;
+        return view('admin.application.document-summery-new', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course'));
     }
 }
