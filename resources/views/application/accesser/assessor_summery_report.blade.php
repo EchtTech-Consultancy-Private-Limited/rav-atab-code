@@ -113,13 +113,16 @@
                         <tr>                            
                             <td> {{ $question->code }}</td>
                            <td>{{ $question->title }}</td>
-                           <td>{{ $question->summeryQuestionreport->nc_raised ?? '' }}</td>
-                           <td>{{ $question->summeryQuestionreport->capa_training_provider ?? '' }}</td>
-                           <td>{{ $question->summeryQuestionreport->document_submitted_against_nc ?? '' }}</td>
+                           @php
+                                $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);                                
+                            @endphp
+                                <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
+                                <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
+                                <td>{{ @$summeryReportQuestion->document_submitted_against_nc ?? '' }}</td>                        
                            @if(getButtonText($docId) == "Accepted")
-                           <td>{{ $question->summeryQuestionreport->remark ??  getButtonText($docId) ?? '' }}</td>
+                           <td>{{ @$summeryReportQuestion->remark ??  getButtonText($docId) ?? '' }}</td>
                            @else
-                           <td>{{ $question->summeryQuestionreport->remark ?? '' }}</td>
+                           <td>{{ @$summeryReportQuestion->remark ?? '' }}</td>
                            @endif
 
                         </tr>                   
