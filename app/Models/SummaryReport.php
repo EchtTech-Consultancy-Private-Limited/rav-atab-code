@@ -28,10 +28,19 @@ class SummaryReport extends Model
         'date',
         'date_of_application',
         'signature',
+        'summary_type',
     ];
 
     public function chapters()
     {
         return $this->hasMany(SummaryReportChapter::class);
+    }
+
+    public function application(){
+        return $this->belongsTo(Application::class,"application_id","id");
+    }
+
+    public function course(){
+        return $this->belongsTo(ApplicationCourse::class,"course_id","id");
     }
 }

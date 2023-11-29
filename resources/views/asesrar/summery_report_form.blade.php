@@ -261,12 +261,12 @@
                                                                     <td>
                                                                         {{ $question->title }}
                                                                     </td>
-                                                                    <td> <input type="text" name="nc_raised[]"></td>
+                                                                    <td> <input type="text" name="nc_raised[]" required></td>
                                                                     <td> <input type="text"
-                                                                            name="capa_training_provider[]"></td>
+                                                                            name="capa_training_provider[]" required></td>
                                                                     <td> <input type="text"
-                                                                            name="document_submitted_against_nc[]"></td>
-                                                                    <td> <input type="text" name="remark[]"></td>
+                                                                            name="document_submitted_against_nc[]" required></td>
+                                                                    <td> <input type="text" name="remark[]" required></td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
