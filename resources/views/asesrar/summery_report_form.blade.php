@@ -208,7 +208,7 @@
                                             <tr>
                                                 <td>Way of assessment (Desktop): <span> <input type="text"
                                                             name="way_of_desktop" value="Desktop" readonly></span> </td>
-                                                <td>No of Mandays: <span> {{ getMandays($applicationDetails->id, auth()->user()->id) }}</span>
+                                                <td>No of Mandays: <span> <input type="text" name="mandays" value="{{ getMandays($applicationDetails->id, auth()->user()->id) }}"></span>
                                                 </td>
                                             </tr>
 
@@ -259,11 +259,22 @@
                                                                     <td>
                                                                         {{ $question->title }}
                                                                     </td>
-                                                                    <td> <input type="text" name="nc_raised[]" required></td>
+                                                                    <td> 
+                                                                        @php
+                                                                            $getNCRecords = getNCRecords($question->id,$_GET['course'],$applicationDetails->id);
+                                                                        @endphp
+                                                                         <input type="text" name="nc_raised[]" value=" {{ $getNCRecords }}">
+                                                                    </td>
+
+                                                                    @php
+                                                                        $getNCComments = getNCRecordsComments($question->id,$_GET['course'],$applicationDetails->id);
+                                                                    @endphp
+                                                
+
+                                                                    <td> <input type="text" name="capa_training_provider[]" value="{{  $getNCComments }}">
+
                                                                     <td> <input type="text"
-                                                                            name="capa_training_provider[]" required></td>
-                                                                    <td> <input type="text"
-                                                                            name="document_submitted_against_nc[]" required></td>
+                                                                            name="document_submitted_against_nc[]" value=" {{ $getNCRecords }}" required></td>
                                                                     <td> <input type="text" name="remark[]" required></td>
                                                                 </tr>
                                                             @endif
