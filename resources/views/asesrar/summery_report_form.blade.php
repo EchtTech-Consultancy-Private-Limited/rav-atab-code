@@ -1,9 +1,15 @@
 @include('layout.header')
 <title>RAV Accreditation</title>
 <style>
-    table th,
-    table td {
+    table th
+   {
         text-align: center;
+        border: 1px solid #eee;
+        color: #000;
+    }
+    
+    table td {
+        text-align: left;
         border: 1px solid #eee;
         color: #000;
     }
@@ -99,11 +105,7 @@
         padding: 33px !important;
     }
 
-    table td {
-        text-align: left;
-        padding: 10px 10px;
-    }
-
+   
     table th,
     table td,
     table tr {
@@ -111,6 +113,13 @@
         border: 1px solid #aaa !important;
         color: #000;
     }
+
+    table td {
+        text-align: left;
+        padding: 10px 10px;
+        font-weight:700;
+    }
+
 </style>
 
 </head>
@@ -177,7 +186,7 @@
                                     <table>
                                         <tbody>
                                             <tr>
-                                                <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
+                                                <th colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</th>
                                             </tr>
                                             <tr>
                                                 <input type="hidden" name="course_id" value="{{ $_GET['course'] }}">

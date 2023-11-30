@@ -19,10 +19,6 @@
         padding: 33px !important;
     }
 
-    table td {
-        text-align: left;
-        padding: 10px 10px;
-    }
 
     table th,
     table td,
@@ -30,6 +26,11 @@
         text-align: center;
         border: 1px solid #aaa !important;
         color: #000;
+    } 
+    table td {
+        text-align: left;
+        padding: 10px 10px;
+        font-weight:700;
     }
 </style>
 </head>
@@ -116,7 +117,7 @@
 
                     <tbody>
                         <tr>
-                            <td colspan="6">FORM -2 - ONSITE ASSESSMENT FORM.</td>
+                            <th colspan="6">FORM -2 - ONSITE ASSESSMENT FORM.</th>
                         </tr>
                         <tr>
                             <td colspan="3">Application No (provided by ATAB): <span>

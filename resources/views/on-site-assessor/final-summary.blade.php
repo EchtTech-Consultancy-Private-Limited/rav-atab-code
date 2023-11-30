@@ -19,10 +19,7 @@
         padding: 33px !important;
     }
 
-    table td {
-        text-align: left !important;
-        padding: 10px 10px;
-    }
+ 
 
     table th,
     table td,
@@ -31,7 +28,11 @@
         border: 1px solid #aaa !important;
         color: #000;
     }
-
+    table td {
+        text-align: left !important;
+        padding: 10px 10px;
+        font-weight:700;
+    }
     .table-summery .table-bordered tbody tr td,
     .table-summery .table-bordered tbody tr th {
         text-emphasis: left !important;
