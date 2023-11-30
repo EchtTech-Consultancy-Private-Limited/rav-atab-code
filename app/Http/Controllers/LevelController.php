@@ -2476,7 +2476,10 @@ class LevelController extends Controller
     }
 
     public function newApplications($id = null)
-    { $id = dDecrypt($id);
+    { 
+        if ($id) {
+            $id = dDecrypt($id);
+        }
         if ($id) {
             $applicationData = DB::table('applications')->where('id', $id)->first();
         } else {
