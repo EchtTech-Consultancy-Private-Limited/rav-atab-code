@@ -864,22 +864,12 @@ class applicationController extends Controller
             return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
         }
         $applicationData = Application::find($request->input('application'));
-        $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
-        $onSiteAssessor = "";
-
-        foreach ($assessors as $assessor) {
-            $user = User::find($assessor->assessor_id);
-            if ($user->assessment == 2) {
-                $onSiteAssessor = $user;
-            }
-        }
-
-        $assessorDetail = AssessorApplication::where('assessor_id', $user->id)->first();
-
+        $assessorDetail = AssessorApplication::where('application_id', $applicationData->id)->where('assessor_id',auth()->user()->id)->first();
+       
         $courseDetail = ApplicationCourse::find($request->course);
 
         $chapters = Chapter::all();
-        return view('on-site-assessor.opportunityForm', compact('applicationData', 'onSiteAssessor', 'courseDetail', 'assessorDetail', 'chapters'));
+        return view('on-site-assessor.opportunityForm', compact('applicationData', 'courseDetail', 'assessorDetail', 'chapters'));
     }
 
     public function saveImprovmentForm(Request $request)
@@ -914,7 +904,9 @@ class applicationController extends Controller
         $improvementForm = ImprovementForm::where('application_id', $request->input('application'))->first();
         $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $request->input('course'))->where('application_id', $request->input('application'))->first();
         $course = $request->input('course');
-        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm','summaryReport','course'));
+        $mandays = DB::table('assessor_assigne_date')->where('assessor_id',auth()->user()->id)->where('application_id', $request->input('application'))->where('assesment_type',2)->get();
+        $mandays = count($mandays);
+        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm','summaryReport','course','mandays'));
     }
 
     public function getSummariesList(Request $request)

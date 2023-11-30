@@ -239,7 +239,7 @@
                                                     @endphp
                                                     @if ($documents)
                                                         @foreach ($documents as $item)
-                                                        <div>
+                                                        <div class="mt-2">
                                                             <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
                                                         </div>
                                                        

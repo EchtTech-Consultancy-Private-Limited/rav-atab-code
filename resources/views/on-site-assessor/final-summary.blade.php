@@ -126,7 +126,7 @@
                             </tr>
                             <tr>
                                 <td>Way of assessment : {{ $summaryReport->way_of_desktop }}</td>
-                                <td>No of Mandays : {{ getMandays($summaryReport->mandays, auth()->user()->id) }}</td>
+                                <td>No of Mandays : {{ $summaryReport->mandays }}</td>
                             </tr>
                             <tr>
                                 <td>Signature</td>
@@ -208,7 +208,7 @@
                                         @endphp
                                         @if ($documents)
                                             @foreach ($documents as $item)
-                                            <div>
+                                            <div class="m-2">
                                                 <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
                                             </div>
                                            
