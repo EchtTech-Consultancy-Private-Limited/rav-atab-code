@@ -61,14 +61,14 @@
                     </ul>
 
                     <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
-                    </a> 
+                    </a>
                     <a type="button" class="btn btn-primary float-right me-2" onclick="printDiv('printableArea')">Print
                     </a>
 
                 </div>
             </div>
         </div>
-   
+
         <div id="printableArea">
             <div id="applicationSummaryContainer" class="table-summery">
                 @php
@@ -173,7 +173,7 @@
                                                    @if ($documents)
                                                    @foreach ($documents as $item)
                                                    <div>
-                                                       <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
+                                                       <a target="_blank" class="btn view btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
                                                    </div>
                                                    @endforeach
                                                    @else
@@ -343,7 +343,7 @@
                                     </div>
                                 </div>
                             </div>
-                           
+
                         </div>
                     </div>
 
@@ -357,7 +357,7 @@
                         <table class="table table-bordered">
 
                             <tbody>
-                              
+
                                 <tr>
                                     <td colspan="2">Name and Location of the Training Provider:
                                         {{ $improvementForm->training_provider_name }}</td>
@@ -408,7 +408,7 @@
                     </div>
                     @endif
 
-                   
+
                 @endif
             </div>
         </div>
@@ -434,7 +434,7 @@
     </div>
 </div>
 @endif
-           
+
         </div>
     </div>
     </section>
