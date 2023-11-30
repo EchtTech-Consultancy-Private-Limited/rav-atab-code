@@ -242,8 +242,10 @@
                                                         <div>
                                                             <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
                                                         </div>
-                                                        <input type="hidden" name="document_submitted_against_nc[]" value="{{ $item->doc_file }}">
+                                                       
                                                         @endforeach
+
+                                                        <input type="hidden" name="document_submitted_against_nc[]" value="none">
                                                         @else
                                                     @endif
                                                     
