@@ -40,6 +40,18 @@
 
     </div>
 
+    @if ($message = Session::get('success'))
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: "Success",
+                text: "{{ $message }}",
+                showConfirmButton: false,
+                timer: 3000
+            })
+        </script>
+    @endif
 
     <section class="content">
         <div class="block-header">
@@ -57,8 +69,8 @@
                     </ul>
                     @if (auth()->user()->role == 1)
                        @if ($applicationData->desktop_status == 1 )
-                       <a class="btn btn-info"
-                       href="{{ url('admin/application/documents/' . $applicationData->id . '/summary') }}">Document
+                       <a class="btn btn-info" target="_blank"
+                       href="{{ url('admin/application/courses-list/' . $applicationData->id ) }}">Document
                        Summary</a>
                        @endif
                     @endif

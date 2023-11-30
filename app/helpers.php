@@ -337,15 +337,15 @@ function get_accessor_date($id)
     for ($j = $begin; $j <= $end; $j->modify('+1 day')) {
 
         if (in_array($j->format("Y-m-d"), $entArr)) {
-            $eventsDate[] = '<span onclick="saveDates({{ $item->id }},{{ $assesorsData->id }},{{ $assesorsData->assessment }},{{ $selectedDate }})" data-id="'. $j->format("Y-m-d").'" class="btn btn-danger" style="color:red">' . $j->format("Y-m-d") . '</span>';
+            $eventsDate[] = '<span onclick="saveDates({{ $item->id }},{{ $assesorsData->id }},{{ $assesorsData->assessment }},{{ $selectedDate }})" data-id="' . $j->format("Y-m-d") . '" class="btn btn-danger" style="color:red">' . $j->format("Y-m-d") . '</span>';
         } else {
-            $eventsDate[] = '<span data-id="'. $j->format("Y-m-d").'" class="btn btn-success" style="color:green">' . $j->format("Y-m-d") . '</span>';
+            $eventsDate[] = '<span data-id="' . $j->format("Y-m-d") . '" class="btn btn-success" style="color:green">' . $j->format("Y-m-d") . '</span>';
         }
     }
     return $eventsDate;
 }
 
-function get_accessor_date_new($id,$applicationID,$assessmentType)
+function get_accessor_date_new($id, $applicationID, $assessmentType)
 {
 
     $begin = Carbon\Carbon::now();
@@ -363,14 +363,13 @@ function get_accessor_date_new($id,$applicationID,$assessmentType)
     }
     $eventsDate = [];
     $allSelectedDates = [];
-    $allSelectedDates = array_merge($events,$selectedDate);
+    $allSelectedDates = array_merge($events, $selectedDate);
     for ($j = $begin; $j <= $end; $j->modify('+1 day')) {
-       
-        if (in_array($j->format("Y-m-d"), $allSelectedDates) ) {
-            $eventsDate[] = "<span class='btn btn-danger dateID'  data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."'>".$j->format("Y-m-d")."</span>";
 
+        if (in_array($j->format("Y-m-d"), $allSelectedDates)) {
+            $eventsDate[] = "<span class='btn btn-danger dateID'  data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "'>" . $j->format("Y-m-d") . "</span>";
         } else {
-           $eventsDate[] = "<span class='btn btn-success dateID' data-id='".$applicationID.','.$id.','.$assessmentType.','.$j->format("Y-m-d")."' >".$j->format("Y-m-d")."</span>";
+            $eventsDate[] = "<span class='btn btn-success dateID' data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "' >" . $j->format("Y-m-d") . "</span>";
         }
     }
     return $eventsDate;
@@ -683,7 +682,20 @@ function getDocument($questionID, $applicationId, $course_id)
 {
     $authId = auth()->user()->id;
 
-    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id', $authId)->where('application_id', $applicationId)->where('course_id', $course_id)->get();
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id', $authId)->where('application_id', $applicationId)->where('course_id', $course_id)->where('photograph', null)->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
+function getPhotograph($questionID, $applicationId, $course_id)
+{
+    $authId = auth()->user()->id;
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('user_id', $authId)->where('application_id', $applicationId)->where('course_id', $course_id)->where('photograph', 1)->get();
 
     if (count($documents) > 0) {
         return $documents;
@@ -701,7 +713,7 @@ function getAssessorDocument($questionID, $applicationId, $course_id)
     if (count($documents) > 0) {
         return $documents;
     } else {
-        return $documents = []; 
+        return $documents = [];
     }
 }
 
@@ -718,8 +730,9 @@ function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
     }
 }
 
-function getMandays($applicationID,$assesorID){
-    $dates =  DB::table('assessor_assigne_date')->where('assessor_Id',$assesorID)->where('application_id',$applicationID)->get();
+function getMandays($applicationID, $assesorID)
+{
+    $dates =  DB::table('assessor_assigne_date')->where('assessor_Id', $assesorID)->where('application_id', $applicationID)->get();
     return count($dates);
 }
 
@@ -755,7 +768,7 @@ function getSummerDocument($questionID, $applicationId)
     $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->first();
     // dd($documents);
     // if (count($documents) > 0) {
-        return $documents;
+    return $documents;
     // } else {
     //     return $documents = [];
     // }
@@ -996,99 +1009,104 @@ function updatedBy($docId)
 }
 
 
-function getRejectedDocOnly($questionID,$applicationID,$courseID){
-    $documents = Add_Document::where('application_id',$applicationID)->where('course_id',$courseID)->where('question_id',$questionID)->get();
+function getRejectedDocOnly($questionID, $applicationID, $courseID)
+{
+    $documents = Add_Document::where('application_id', $applicationID)->where('course_id', $courseID)->where('question_id', $questionID)->get();
     foreach ($documents as $document) {
-       $comments = DocComment::where('doc_id',$document->id)->get();
-       foreach ($comments as $comment) {
+        $comments = DocComment::where('doc_id', $document->id)->get();
+        foreach ($comments as $comment) {
             if ($comment->status != 4) {
                 return $comment;
             }
-       }
+        }
     }
 }
 
-function checkReportAvailableOrNot($applicationID){
-    $reportAvailable = SummaryReport::where('application_id',$applicationID)->first();
+function checkReportAvailableOrNot($applicationID)
+{
+    $reportAvailable = SummaryReport::where('application_id', $applicationID)->first();
 
     return $reportAvailable;
 }
 
 
-function checkDocumentsStatus($applicationID,$courseID){
-    $documentsIds = Add_Document::where('application_id',$applicationID)->where('course_id',$courseID)->get(['id']);
-    $comments = DocComment::whereIn('doc_id',$documentsIds)->where('status','!=',4)->get();
+function checkDocumentsStatus($applicationID, $courseID)
+{
+    $documentsIds = Add_Document::where('application_id', $applicationID)->where('course_id', $courseID)->get(['id']);
+    $comments = DocComment::whereIn('doc_id', $documentsIds)->where('status', '!=', 4)->get();
     return $comments;
-
 }
 
-function getDocumentComment($questionID,$applicationID,$courseID){
-    $document =  Add_Document::where('question_id',$questionID)->where('application_id',$applicationID)->where('course_id',$courseID)->first();
-   if ($document) {
-    $comment = DB::table('doc_comments')->where('doc_id',$document->id)->first();
-    return $comment;
-   }
-}
-
-function getAllDocumentsForSummary($questionID,$applicationID,$courseID){
-    return Add_Document::where('question_id',$questionID)->where('application_id',$applicationID)->where('course_id',$courseID)->get();
-}
-
-function getDocComment($docID){
-    return DocComment::where('doc_id',$docID)->first();
-}
-
-function printStatus($docID){
-    $comment = DocComment::where('doc_id',$docID)->first();
-
-   if ( $comment ) {
-    if ($comment->status == 1) {
-        return "NC1";
-    } elseif ($comment->status == 2) {
-        return "NC2";
-    } 
-    elseif ($comment->status == 3) {
-        return "Not Recommended";
-    } 
-    elseif ($comment->status == 4) {
-        return "No NC";
-    } 
-   } else {
-    return "Document not uploaded!";
-   }
-   
-    
-}
-
-function printRemark($docID){
-    $comment = DocComment::where('doc_id',$docID)->first();
-
-   if ( $comment ) {
-  if ($comment->status == 4) {
-        return "Accepted";
-    } else{
-        return "Not Accepted";
+function getDocumentComment($questionID, $applicationID, $courseID)
+{
+    $document =  Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->first();
+    if ($document) {
+        $comment = DB::table('doc_comments')->where('doc_id', $document->id)->first();
+        return $comment;
     }
-   } else {
-    return "Document not uploaded!";
-   }
-   
-    
 }
 
-function getSummaries($applicationID,$courseID){
-    return SummaryReport::where('summary_type','desktop')->where('course_id',$courseID)->where('application_id',$applicationID)->first();
+function getAllDocumentsForSummary($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->get();
 }
 
-function getQuestionSummary($question_id,$summaryReport_id){
-    return SummaryReportChapter::where('summary_report_application_id',$summaryReport_id)->where('question_id',$question_id)->first();
+function getDocComment($docID)
+{
+    return DocComment::where('doc_id', $docID)->first();
 }
 
-function getDocumentCommentData($docID){
-    return DocComment::where('doc_id',$docID)->latest()->first();
+function printStatus($docID)
+{
+    $comment = DocComment::where('doc_id', $docID)->first();
+
+    if ($comment) {
+        if ($comment->status == 1) {
+            return "NC1";
+        } elseif ($comment->status == 2) {
+            return "NC2";
+        } elseif ($comment->status == 3) {
+            return "Not Recommended";
+        } elseif ($comment->status == 4) {
+            return "No NC";
+        }
+    } else {
+        return "Document not uploaded!";
+    }
 }
 
-function getNCRecords($question, $course, $application) {
+function printRemark($docID)
+{
+    $comment = DocComment::where('doc_id', $docID)->first();
+
+    if ($comment) {
+        if ($comment->status == 4) {
+            return "Accepted";
+        } else {
+            return "Not Accepted";
+        }
+    } else {
+        return "Document not uploaded!";
+    }
+}
+
+function getSummaries($applicationID, $courseID)
+{
+    return SummaryReport::where('summary_type', 'desktop')->where('course_id', $courseID)->where('application_id', $applicationID)->first();
+}
+
+function getQuestionSummary($question_id, $summaryReport_id)
+{
+    return SummaryReportChapter::where('summary_report_application_id', $summaryReport_id)->where('question_id', $question_id)->first();
+}
+
+function getDocumentCommentData($docID)
+{
+    return DocComment::where('doc_id', $docID)->latest()->first();
+}
+
+function getNCRecords($question, $course, $application)
+{
     $documents = Add_Document::where('application_id', $application)
         ->where('course_id', $course)
         ->where('question_id', $question)
@@ -1115,29 +1133,31 @@ function getNCRecords($question, $course, $application) {
     return implode(', ', $comments);
 }
 
-function getNCRecordsComments($question, $course, $application) {
+function getNCRecordsComments($question, $course, $application)
+{
     $documents = Add_Document::where('application_id', $application)
         ->where('course_id', $course)
         ->where('question_id', $question)
         ->get();
 
     $comments = []; // Initialize an array to store comments
-    $counter = 1; // Initialize a counter variable
 
     foreach ($documents as $document) {
         $commentsData = DocComment::where('doc_id', $document->id)
             ->where('status', '!=', 4)
             ->get();
 
-        foreach ($commentsData as $comment) {
-            // Add the comment with the dynamic counter to the array
-            $comments[] = '' . $counter . ': ' . $comment->comments;
-
-            // Increment the counter
-            $counter++;
+        // Check if there are any comments for the current document
+        if ($commentsData->isNotEmpty()) {
+            // Add the comments for the current document to the array
+            $comments[] = $commentsData;
         }
     }
 
-    // Use implode to join the array elements with commas
-    return implode(', ', $comments);
+    // Return the array of comments for all documents
+    return $comments;
+}
+
+function getQuestionDocument($question,$course,$application){
+    return Add_Document::where('question_id',$question)->where('course_id',$course)->where('application_id',$application)->where('parent_doc_id','!=',null)->get();
 }
