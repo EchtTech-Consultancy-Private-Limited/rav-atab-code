@@ -19,10 +19,6 @@
         padding: 33px !important;
     }
 
-    table td {
-        text-align: left;
-        padding: 10px 10px;
-    }
 
     table th,
     table td,
@@ -30,6 +26,11 @@
         text-align: center;
         border: 1px solid #aaa !important;
         color: #000;
+    } 
+    table td {
+        text-align: left;
+        padding: 10px 10px;
+        font-weight:700;
     }
 </style>
 </head>
@@ -114,27 +115,27 @@
                 <div class="card-body">
                     <table>
 
-                        <tbody>
-                            <tr>
-                                <td colspan="6">FORM -2 - ONSITE ASSESSMENT FORM.</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">Application No (provided by ATAB): <span>
-                                        <input type="text" name="application_uid"
-                                            value="{{ $applicationData->application_uid }}"></span>
-                                </td>
-                                <td colspan="3">Date of Application: <span> <input type="text"
-                                            value="{{ \Carbon\Carbon::parse($applicationData->created_at)->format('d-m-Y') }}">
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">Name and Location of the Training Provider: <span>
-                                        <input type="text" name="location_training_provider"
-                                            value="{{ $applicationData->user->firstname . ' ' . $applicationData->user->middlename . ' ' . $applicationData->user->lastname }}({{ $applicationData->user->address }})">
-                                    </span>
-                                </td>
-                                <td colspan="3">Name of the course to be assessed:
+                    <tbody>
+                        <tr>
+                            <th colspan="6">FORM -2 - ONSITE ASSESSMENT FORM.</th>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Application No (provided by ATAB): <span>
+                                    <input type="text" name="application_uid"
+                                        value="{{ $applicationData->application_uid }}"></span>
+                            </td>
+                            <td colspan="3">Date of Application: <span> <input type="text"
+                                        value="{{ \Carbon\Carbon::parse($applicationData->created_at)->format('d-m-Y') }}">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Name and Location of the Training Provider: <span>
+                                    <input type="text" name="location_training_provider"
+                                        value="{{ $applicationData->user->firstname . ' ' . $applicationData->user->middlename . ' ' . $applicationData->user->lastname }}({{ $applicationData->user->address }})">
+                                </span>
+                            </td>
+                            <td colspan="3">Name of the course to be assessed:
 
                                     <span> <input name="course_assessed" type="text"
                                             value="{{ $courseDetail->course_name }}"></span>

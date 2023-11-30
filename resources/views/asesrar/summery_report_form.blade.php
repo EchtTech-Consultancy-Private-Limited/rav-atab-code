@@ -1,9 +1,15 @@
 @include('layout.header')
 <title>RAV Accreditation</title>
 <style>
-    table th,
-    table td {
+    table th
+   {
         text-align: center;
+        border: 1px solid #eee;
+        color: #000;
+    }
+    
+    table td {
+        text-align: left;
         border: 1px solid #eee;
         color: #000;
     }
@@ -99,11 +105,7 @@
         padding: 33px !important;
     }
 
-    table td {
-        text-align: left;
-        padding: 10px 10px;
-    }
-
+   
     table th,
     table td,
     table tr {
@@ -111,6 +113,13 @@
         border: 1px solid #aaa !important;
         color: #000;
     }
+
+    table td {
+        text-align: left;
+        padding: 10px 10px;
+        font-weight:700;
+    }
+
 </style>
 
 </head>
@@ -177,7 +186,7 @@
                                     <table>
                                         <tbody>
                                             <tr>
-                                                <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
+                                                <th colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</th>
                                             </tr>
                                             <tr>
                                                 <input type="hidden" name="course_id" value="{{ $_GET['course'] }}">
@@ -208,7 +217,7 @@
                                             <tr>
                                                 <td>Way of assessment (Desktop): <span> <input type="text"
                                                             name="way_of_desktop" value="Desktop" readonly></span> </td>
-                                                <td>No of Mandays: <span> {{ getMandays($applicationDetails->id, auth()->user()->id) }}</span>
+                                                <td>No of Mandays: <span> <input type="text" name="mandays" value="{{ getMandays($applicationDetails->id, auth()->user()->id) }}"></span>
                                                 </td>
                                             </tr>
 
@@ -259,11 +268,22 @@
                                                                     <td>
                                                                         {{ $question->title }}
                                                                     </td>
-                                                                    <td> <input type="text" name="nc_raised[]" required></td>
+                                                                    <td> 
+                                                                        @php
+                                                                            $getNCRecords = getNCRecords($question->id,$_GET['course'],$applicationDetails->id);
+                                                                        @endphp
+                                                                         <input type="text" name="nc_raised[]" value=" {{ $getNCRecords }}">
+                                                                    </td>
+
+                                                                    @php
+                                                                        $getNCComments = getNCRecordsComments($question->id,$_GET['course'],$applicationDetails->id);
+                                                                    @endphp
+                                                
+
+                                                                    <td> <input type="text" name="capa_training_provider[]" value="{{  $getNCComments }}">
+
                                                                     <td> <input type="text"
-                                                                            name="capa_training_provider[]" required></td>
-                                                                    <td> <input type="text"
-                                                                            name="document_submitted_against_nc[]" required></td>
+                                                                            name="document_submitted_against_nc[]" value=" {{ $getNCRecords }}" required></td>
                                                                     <td> <input type="text" name="remark[]" required></td>
                                                                 </tr>
                                                             @endif
