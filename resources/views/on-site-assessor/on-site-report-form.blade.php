@@ -251,7 +251,7 @@
                                                     
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="remark[]" value="Not Accepted">
+                                                    <input type="text" name="remark[]" value="Not Accepted" readonly>
                                                 </td>
                                             </tr>
                                         @endif

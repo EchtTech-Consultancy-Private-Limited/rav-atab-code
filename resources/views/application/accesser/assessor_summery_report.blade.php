@@ -58,7 +58,6 @@
         </div>
     <div id="printableArea">
         <div id="applicationSummaryContainer">
-            
             <div class="card">
                 <div class="card-header bg-white text-dark">
                     <h5 class="mt-2">FORM -1 DESKTOP ASSESSMENT FORM</h5>
@@ -118,7 +117,19 @@
                             @endphp
                                 <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
                                 <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
-                                <td>{{ @$summeryReportQuestion->document_submitted_against_nc ?? '' }}</td>                        
+                                @php
+                                    $documents = getQuestionDocument($question->id,$applicationDetails->course_id, $applicationDetails->application_id);
+                                @endphp
+                                <td>
+                                    @if ($documents)
+                                    @foreach ($documents as $item)
+                                    <div>
+                                        <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
+                                    </div>
+                                    @endforeach
+                                    @else
+                                    @endif
+                                </td>
                            @if(getButtonText($docId) == "Accepted")
                            <td>{{ @$summeryReportQuestion->remark ??  getButtonText($docId) ?? '' }}</td>
                            @else

@@ -1162,3 +1162,4 @@ function getQuestionDocument($question, $course, $application)
 {
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
 }
+

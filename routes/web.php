@@ -234,7 +234,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/Assessor-view/{id}', [LevelController::class, 'Assessor_view']);
     Route::get('/secretariat-view/{id}', [LevelController::class, 'secretariat_view']);
     Route::get('view-application-documents', [applicationController::class, 'assessor_view_docs']);
-    Route::get('view-summery-report/{id}', [LevelController::class, 'view_summery_report']);
+    Route::get('summery-course-report/{id}', [LevelController::class, 'summery_course_report']);
+    Route::get('view-summery-report/{course}/{application}', [LevelController::class, 'view_summery_report']);
     Route::get('/accr-view-document/{id}/{course_id}', [LevelController::class, 'accr_upload_document']);
 
     //upgrade level route
