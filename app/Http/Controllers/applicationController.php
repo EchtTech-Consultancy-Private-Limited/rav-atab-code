@@ -913,7 +913,8 @@ class applicationController extends Controller
         $chapters = Chapter::all();
         $improvementForm = ImprovementForm::where('application_id', $request->input('application'))->first();
         $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $request->input('course'))->where('application_id', $request->input('application'))->first();
-        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm','summaryReport'));
+        $course = $request->input('course');
+        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm','summaryReport','course'));
     }
 
     public function getSummariesList(Request $request)
