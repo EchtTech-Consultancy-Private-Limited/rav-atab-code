@@ -272,10 +272,17 @@
                                                 
 
                                                                     <td> <input type="text" name="capa_training_provider[]" value="{{  $getNCComments }}">
+                                                                    
+                                                                    @php
+                                                                        $getNCDocs = getNCDocs($question->id,$_GET['course'],$applicationDetails->id);
+                                                                    @endphp
 
-                                                                    <td> <input type="text"
-                                                                            name="document_submitted_against_nc[]" value=" {{ $getNCRecords }}" required></td>
-                                                                    <td> <input type="text" name="remark[]" required></td>
+                                                                    <td>
+                                                                        <?php echo implode(', ', $getNCDocs['doclink']) ?>
+                                                                        <input type="hidden"
+                                                                            name="document_submitted_against_nc[]" value="{{  $getNCDocs['docData'] }}" required>
+                                                                    </td>
+                                                                    <td> <input type="text" name="remark[]" value="{{  $getNCComments }}" required></td>
                                                                 </tr>
                                                             @endif
                                                         @endif

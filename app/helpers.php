@@ -1141,3 +1141,4 @@ function getNCRecordsComments($question, $course, $application) {
     // Use implode to join the array elements with commas
     return implode(', ', $comments);
 }
+
