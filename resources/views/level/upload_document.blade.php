@@ -223,6 +223,7 @@
                                                                             $documentsData = [];
                                                                             if (isset($file[0])) {
                                                                                 $documentsData = getDocument($question->id, $application_id, $course_id) ?? 0;
+                                                                                $photographdata = getPhotograph($question->id, $application_id, $course_id) ?? 0;
                                                                             }
                                                                         @endphp
                                                                         {{-- getting documents for each row --}}
@@ -242,20 +243,24 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 @endforeach
+                                                                               
                                                                                 @php
                                                                                     $last_document = $documentsData[count($documentsData) - 1];
-                                                                                    
+
                                                                                 @endphp
                                                                                 @if (getCommentsData($last_document->id))
-
-                                                                                {{-- @dd(getCommentsData($last_document->id)) --}}
-                                                                                    @if (($last_document && getCommentsData($last_document->id)->status != 4) &&  getCommentsData($last_document->id)->status != 3)
+                                                                                    {{-- @dd(getCommentsData($last_document->id)) --}}
+                                                                                    @if (
+                                                                                        $last_document &&
+                                                                                            getCommentsData($last_document->id)->status != 4 &&
+                                                                                            getCommentsData($last_document->id)->status != 3)
                                                                                         <div>
                                                                                             <form
                                                                                                 name="submitform_doc_form"
                                                                                                 id="submitform_doc_form_{{ $question->id }}"
                                                                                                 class="submitform_doc_form"
                                                                                                 enctype="multipart/form-data">
+                                                                                                <input type="hidden" name="parent_doc_id" value="{{ $last_document->id }}">
                                                                                                 <input type="hidden"
                                                                                                     name="previous_url"
                                                                                                     value="{{ Request::url() }}">
@@ -280,13 +285,26 @@
                                                                                         </div>
                                                                                     @endif
                                                                                 @endif
-
+                                                                                @foreach ($photographdata as $photo)
+                                                                                <div>
+                                                                                 <a target="_blank"
+                                                                                 title="{{ checkDocumentCommentStatusreturnText($photo->id) }}"
+                                                                                 href="{{ url('document-detail' . '/' . $photo->doc_file . '/' . $applicationData->id . '/' . $photo->id) }}"
+                                                                                 class="btn {{ checkDocumentCommentStatus($photo->id) }} btn-sm m-1">
+                                                                                 {{ getButtonText($photo->id) }}</a>
+                                                                             <div
+                                                                                 style="font-size: 10px; margin:2px; margin-top:0px; font-weight:bold;">
+                                                                                 {{ updatedBy($photo->id) }}
+                                                                             </div>
+                                                                                </div>
+                                                                             @endforeach
                                                                             </div>
                                                                         @else
                                                                             <form name="submitform_doc_form"
                                                                                 id="submitform_doc_form_{{ $question->id }}"
                                                                                 class="submitform_doc_form"
                                                                                 enctype="multipart/form-data">
+                                                                                
                                                                                 <input type="hidden"
                                                                                     name="previous_url"
                                                                                     value="{{ Request::url() }}">
@@ -295,7 +313,8 @@
                                                                                     value="{{ $application_id }}">
                                                                                 <input type="hidden" name="course_id"
                                                                                     value="{{ $course_id }}">
-                                                                                <input type="hidden" name="question_id"
+                                                                                <input type="hidden"
+                                                                                    name="question_id"
                                                                                     value="{{ $question->code }}">
                                                                                 <input type="hidden"
                                                                                     name="question_pid"

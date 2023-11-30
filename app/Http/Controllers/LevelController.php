@@ -1484,6 +1484,7 @@ class LevelController extends Controller
                 $course->on_site_assessor_Id = $oldFile->on_site_assessor_Id;
             }
         }
+        $course->parent_doc_id = $request->parent_doc_id ?? null;
 
         $course->notApraove_count = $notApprove + 1 ?? 1;
 
@@ -2144,6 +2145,7 @@ class LevelController extends Controller
             $data->user_id = Auth::user()->id;
             $data->application_id = $aplication->id;
             $data->level_id = $request->level_id;
+           
             $data->save();
         }
         if ($request->hasfile('doc3')) {

@@ -817,23 +817,14 @@ class applicationController extends Controller
         // if ($applicationAlreadySubmitted) {
         //     return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->application_id . '&course=' . $request->course));
         // }
-        $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
-        $onSiteAssessor = "";
-
-        foreach ($assessors as $assessor) {
-            $user = User::find($assessor->assessor_id);
-            if ($user->assessment == 2) {
-                $onSiteAssessor = $user;
-            }
-        }
-
-        $assessorDetail = AssessorApplication::where('assessor_id', $user->id)->first();
+        $assessorDetail = AssessorApplication::where('application_id', $applicationData->id)->where('assessor_id',auth()->user()->id)->first();
+        
 
         $courseDetail = ApplicationCourse::find($request->course);
 
         $chapters = Chapter::all();
 
-        return view('on-site-assessor.on-site-report-form', compact('applicationData', 'onSiteAssessor', 'courseDetail', 'assessorDetail', 'chapters'));
+        return view('on-site-assessor.on-site-report-form', compact('applicationData', 'courseDetail', 'assessorDetail', 'chapters'));
     }
 
     public function saveFormDataOnSite(Request $request)
