@@ -142,7 +142,7 @@
                                                     @endif
                                                 @else
                                                     @php
-                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $summaries->course_id);
+                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
                                                     @endphp
                                                     @if (count($documents) > 0)
                                                         @foreach ($documents as $doc)
@@ -265,7 +265,7 @@
                                                     @endif
                                                 @else
                                                     @php
-                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
                                                     @endphp
                                                     @if (count($documents) > 0)
                                                         @foreach ($documents as $doc)
@@ -297,7 +297,7 @@
                                             </td>
                                             <td>
                                                 @php
-                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
@@ -339,6 +339,7 @@
                         </div>
                     </div>
 
+                    @if ($improvementForm != null)
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h5 class="mt-2">
@@ -397,6 +398,9 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
+
+                   
                 @endif
             </div>
         </div>
