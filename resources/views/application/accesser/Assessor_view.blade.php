@@ -56,7 +56,7 @@
                             style="float:right;">Back </a>
                             @if (auth()->user()->assessment == 1)
                         @if($spocData->desktop_status != '')
-                        <a href="{{ url('view-summery-report',$spocData->id) }}" type="button" class="btn btn-primary float-right me-2"
+                        <a href="{{ url('summery-course-report',$spocData->id) }}" type="button" class="btn btn-primary float-right me-2"
                             >View Summery Report </a>
                         @endif
                         @endif

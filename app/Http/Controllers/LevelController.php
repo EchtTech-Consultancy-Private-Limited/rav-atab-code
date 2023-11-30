@@ -15,6 +15,8 @@ use App\Models\SummeryReport;
 use App\Models\SummeryReportChapter;
 use App\Models\User;
 use App\Models\Faq;
+use App\Models\SummaryReport;
+use App\Models\SummaryReportChapter;
 use App\Models\ApplicationLevel2;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cookie;
@@ -2305,9 +2307,16 @@ class LevelController extends Controller
         return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application, 'alreadyPicked' => $alreadyPicked]);
     }
 
-    public function view_summery_report($application_id)
+    public function summery_course_report($applicationID)
     {
-        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id',$application_id)->first();
+        $courses = ApplicationCourse::where('application_id', $applicationID)->get();
+        $applicationData = Application::find($applicationID);
+        return view('application.accesser.assessor_summery_course_list',compact('courses','applicationData'));
+    }
+
+    public function view_summery_report($courseID,$applicationID)
+    {
+        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id',$applicationID)->first();
         $chapters = Chapter::all();
         return view('application.accesser.assessor_summery_report',compact('chapters','applicationDetails'));
     }
@@ -2785,48 +2794,35 @@ class LevelController extends Controller
 
     public function submitFinalReportByDesktopAssessor(Request $request)
     {
-        $summeryReportId = SummeryReport::create(
-            [
-                'application_uid'    => $request->application_uid,
-                'application_id' => $request->application_id,
-                'course_id' => $request->course_id,
-                'date_of_application' => $request->date_of_application,
-                'location_training_provider' => $request->location_training_provider,
-                'course_assessed' => $request->course_assessed,
-                'way_of_desktop' => $request->way_of_desktop,
-                'mandays' => $request->mandays,                
-                'summary_type' => $request->summary_type,
-                'signature' => $request->signature,
-                'assessor' => $request->assessor,
-            ]
-        )->id;
-        if ($request->question_id != null) {
-            foreach ($request->question_id as $key => $formChapter) {
-                $chapter = new SummeryReportChapter();
-                $chapter->summary_report_application_id = $summeryReportId;
-                $chapter->question_id = $request->question_id[$key];
-                $chapter->nc_raised = $request->nc_raised[$key];
-                $chapter->capa_training_provider = $request->capa_training_provider[$key];
-                $chapter->document_submitted_against_nc = $request->document_submitted_against_nc[$key];
-                $chapter->remark = $request->remark[$key];
-                $chapter->save();
-            }
+        $data = $request->all();
+        $data['summary_type'] = 'desktop';
+
+        $summaryReport = SummaryReport::create($data);
+
+        $questionData = [];
+        foreach ($data['question_ids'] as $key => $questionId) {
+            $questionData[] = [
+                'question_id' => $questionId,
+                'nc_raised' => $data['nc_raised'][$key],
+                'capa_training_provider' => $data['capa_training_provider'][$key],
+                'document_submitted_against_nc' => $data['document_submitted_against_nc'][$key],
+                'remark' => $data['remark'][$key],
+                'summary_report_application_id' => $summaryReport->id,
+            ];
         }
-      
-        $application = Application::find($request->application_id);
+
+        $insrted = SummaryReportChapter::insert($questionData);
+        $application = Application::find($data['application_id']);
         $updated = $application->update([
             'desktop_status' => 1
         ]);
         ApplicationNotification::create([
-            'application_id' => $request->application_id,
+            'application_id' => $data['application_id'],
             'is_read' => 0,
             'notification_type' => 'payment'
         ]);
-
-        if ($updated) {
+        if ($insrted) {
             return redirect('/nationl-accesser')->with('success', "Report submit successfully");
-        } else {
-            return "fail";
         }
     }
 
