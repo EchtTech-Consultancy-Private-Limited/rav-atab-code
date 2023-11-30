@@ -126,7 +126,7 @@
                             </tr>
                             <tr>
                                 <td>Way of assessment : {{ $summaryReport->way_of_desktop }}</td>
-                                <td>No of Mandays : {{ getMandays($summaryReport->mandays, auth()->user()->id) }}</td>
+                                <td>No of Mandays : {{ $summaryReport->mandays }}</td>
                             </tr>
                             <tr>
                                 <td>Signature</td>
@@ -171,7 +171,7 @@
                                                 @endif
                                             @else
                                                 @php
-                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
+                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
@@ -188,17 +188,33 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($summeryReportQuestion)
-                                                @if ($summeryReportQuestion->capa_training_provider != null)
-                                                    {{ $summeryReportQuestion->capa_training_provider }}
-                                                @endif
-                                            @endif
+                                            @php
+                                            $getNCComments = getNCRecordsComments($question->id, $course, $applicationDetails->id);
+
+                                        @endphp
+                                        @if ($getNCComments)
+                                            @foreach ($getNCComments as $collection)
+                                                @foreach ($collection as $item)
+                                                <div class="bg-danger m-2 text-white">{{ $item->comments ?? '' }}</div>
+                                                    <input type="hidden" name="capa_training_provider[]"
+                                                        value="{{ $item->comments ?? '' }}">
+                                                @endforeach
+                                            @endforeach
+                                        @endif
                                         </td>
                                         <td>
-                                            @if ($summeryReportQuestion)
-                                            @if ($summeryReportQuestion->document_submitted_against_nc != null)
-                                                {{ $summeryReportQuestion->document_submitted_against_nc }}
-                                            @endif
+                                            @php
+                                            $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                        @endphp
+                                        @if ($documents)
+                                            @foreach ($documents as $item)
+                                            <div class="m-2">
+                                                <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
+                                            </div>
+                                           
+                                            @endforeach
+
+                                            @else
                                         @endif
                                         </td>
                                         <td>

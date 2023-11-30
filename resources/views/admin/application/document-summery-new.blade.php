@@ -167,8 +167,16 @@
                                             </td>
                                             <td>
                                                 @if ($summeryReportQuestion)
-                                                @if ($summeryReportQuestion->document_submitted_against_nc != null)
-                                                    {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                                @php
+                                                    $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                   @if ($documents)
+                                                   @foreach ($documents as $item)
+                                                   <div>
+                                                       <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
+                                                   </div>
+                                                   @endforeach
+                                                   @else
                                                 @endif
                                             @endif
                                             </td>
