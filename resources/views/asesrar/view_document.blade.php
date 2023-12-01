@@ -93,6 +93,10 @@
     .file-input {
         display: none;
     }
+
+    .width-50{width:50%}
+    .width-10{width:10%}
+
 </style>
 
 </head>
@@ -174,13 +178,18 @@
                         <div>
                             <div>
                                 <div class="row clearfix">
-                                    <div class="col-sm-12 d-flex justify-content-end">
-                                        <a href="{{ url('Assessor-view/' . dEncrypt($application_id)) }}"
-                                            class="btn btn-primary btn-sm">Back</a>
-                                    </div>
+                                   
                                     <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="d-flex justify-content-end">
-                                            @if (check_document_upload($course_id) == Auth::user()->id)
+                                        
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                        <div>
+                                            <span style="font-weight: bold;">Application ID:</span>
+                                            {{ $applicationData->application_uid }}
+                                        </div>
+
+                                         <div>
+                                         @if (check_document_upload($course_id) == Auth::user()->id)
                                                 {{-- <a href="{{ url('document-report-toadmin/' . $course_id) }}"
                                                     class="btn btn-primary">Send Document To Admin</a> --}}
                                             @else
@@ -188,13 +197,13 @@
                                             @endif
 
                                             <a href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
-                                                class="btn btn-primary">History Log</a>
+                                                class="btn btn-dark" style="margin-right:10px;">History Log</a>
+                                                <a href="{{ url('Assessor-view/' . dEncrypt($application_id)) }}"
+                                            class="btn btn-primary btn-sm">Back</a>
+                                         </div>
 
                                         </div>
-                                        <div>
-                                            <span style="font-weight: bold;">Application ID:</span>
-                                            {{ $applicationData->application_uid }}
-                                        </div>
+                                      
                                         <div class="card project_widget">
                                             @if ($message = Session::get('success'))
                                                 <script>
@@ -218,11 +227,11 @@
                                                 <table class="table table-hover js-basic-example contact_list">
                                                     <thead>
                                                         <tr>
-                                                            <th>Sr.No.</th>
-                                                            <th width="400">Objective criteria</th>
-                                                            <th> Documents</th>
-                                                            <th>Remarks</th>
-                                                        </tr>
+                                                            <th class="width-10">Sr.No.</th>
+                                                            <th class="width-50">Objective criteria</th>
+                                                            <th>Desktop Assessor</th>
+                                                            <th rowspan="2" class="width-10">Remarks</th>
+                                                        </tr>                                                     
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($chapters as $chapter)
@@ -241,18 +250,17 @@
                                                                         {{ $question->title ?? '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <div class="bg-white"
-                                                                            style="border-radius: 10px;  color:#000;">
-                                                                            <div
+                                                                        <div style="border-radius: 10px;  color:#000;">
+                                                                            <!-- <div
                                                                                 style="border-bottom: 1px solid #ddd; padding:3px; font-size:11px;">
                                                                                 Desktop Assessor
-                                                                            </div>
+                                                                            </div> -->
                                                                             <div class="d-flex justify-content-center"
                                                                                 style="padding: 8px; text-align:center;">
                                                                                 @if ($question->documents->isEmpty())
                                                                                     <div class="text-center">
                                                                                         <span
-                                                                                            class="badge bg-danger text-white">Documents
+                                                                                            class="docBtn btn-warning btn-sm text-white">Documents
                                                                                             not uploaded</span>
                                                                                     </div>
                                                                                 @else
@@ -265,7 +273,7 @@
                                                                                                 <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
-                                                                                                        target="_blank"
+                                                                                                       
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
@@ -276,7 +284,7 @@
                                                                                                 <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
-                                                                                                        target="_blank"
+                                                                                                        
                                                                                                         href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
@@ -290,7 +298,7 @@
                                                                                                 <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
-                                                                                                        target="_blank"
+                                                                                                        
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
@@ -304,7 +312,7 @@
                                                                                                 <div>
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
-                                                                                                        target="_blank"
+                                                                                                        
                                                                                                         href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}
                                                                                                     </a>
                                                                                                     <div
@@ -424,13 +432,13 @@
                                                         href="{{ url('on-site/report/?application=' . $applicationData->id . '&course=' . $course_id) }}">
                                                         Submit
                                                     </a>
-                                                </div>
-                                            @endif
-                                        @else
+                                                </div>                                           
+                                            @else
+
                                             <p>Report submitted</p>
                                         @endif
                                     @endif
-
+                                    @endif
                                     @if (auth()->user()->assessment == 1)
                                         @php
                                             $applicationCompletedCount = applicationDocuments($application_id);
