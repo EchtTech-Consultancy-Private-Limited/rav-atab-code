@@ -350,11 +350,13 @@
                                                                                     @if ($documents !== null)
                                                                                        <div class="d-flex justify-content-center">
                                                                                         @foreach ($documents as $document)
-                                                                                        <div style="margin:4px;">
-                                                                                            <a target="_blank" href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} </a>
-                                                                                              
-                                                                                        </div>
+                                                                                       @if ($document->is_displayed_onsite != 2)
+                                                                                       <div style="margin:4px;">
+                                                                                        <a target="_blank" href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
+                                                                                            class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} </a>
+                                                                                          
+                                                                                    </div>
+                                                                                       @endif
                                                                                     @endforeach
                                                                                        </div>
                                                                                     @endif
@@ -405,9 +407,10 @@
 
 
                                     </div>
+                                    
                                     @if (auth()->user()->assessment == 2)
                                         @if ($applicationData->gps_pic == null && $applicationData->onsite_status != 1)
-                                            @if (totalDocumentsCount($application_id) >= 2)
+                                            @if (totalDocumentsCount($application_id) >= count($chapter->questions))
                                                 <div class="d-flex justify-content-end">
                                                     <a target="_blank" class="btn btn-primary mr-2" href="{{ url('on-site/report/?application='.$applicationData->id.'&course='.$course_id) }}">
                                                         Submit
@@ -427,7 +430,7 @@
 
 
                                         {{-- Desktop Assessor --}}
-                                        @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
+                                        @if ($summeryReport == null)
                                                 <div class="d-flex justify-content-end">
                                                     <!-- <form id="submitForm"
                                                         action="{{ route('submit-final-report-by-desktop') }}"
@@ -439,7 +442,9 @@
                                                             style="margin-right: 10px;"
                                                             onclick="confirmSubmit()">Submit</button>
                                                     </form> -->
-                                                    <a href="{{ url('submit-report-by-desktop?course='.$course_id,$application_id) }}" target="_blanck"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
+                                                    @if (totalDocumentsCount($application_id) >= count($chapter->questions))
+                                                    <a href="{{ url('/submit-report-by-desktop' . '/' . $application_id . '/' . $course_id) }}"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
+                                                    @endif
                                                 </div>
                                         @else
                                             <div class="text-center">

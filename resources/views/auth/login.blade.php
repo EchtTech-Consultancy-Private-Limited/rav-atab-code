@@ -24,12 +24,37 @@
    color: red !important;
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body id="top">
 <div class="page_loader"></div>
 
+@if ($message = Session::get('success'))
+<script>
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: "Success",
+        text: "{{ $message }}",
+        showConfirmButton: false,
+        timer: 5000
+    })
+</script>
+@endif
 
+@if ($message = Session::get('warning'))
+<script>
+    Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: "Warning",
+        text: "{{ $message }}",
+        showConfirmButton: false,
+        timer: 5000
+    })
+</script>
+@endif
 <!-- Login start -->
 <div class="login-2 login-background">
     <div class="login-background-inner">

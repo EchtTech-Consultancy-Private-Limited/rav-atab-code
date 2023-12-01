@@ -48,7 +48,8 @@
                         <li class="breadcrumb-item active">Application Summary</li>
                     </ul>
 
-                    <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary" style="float:right;">Back
+                    <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
+                        style="float:right;">Back
                     </a>
                     <a type="button" class="btn btn-primary float-right me-2" onclick="printDiv('printableArea')">Print
                     </a>
@@ -56,104 +57,136 @@
                 </div>
             </div>
         </div>
-    <div id="printableArea">
-        <div id="applicationSummaryContainer">
-            <div class="card">
-                <div class="card-header bg-white text-dark">
-                    <h5 class="mt-2">FORM -1 DESKTOP ASSESSMENT FORM</h5>
+        <div id="printableArea">
+            <div id="applicationSummaryContainer">
+                <div class="card">
+                    <div class="card-header bg-white text-dark">
+                        <h5 class="mt-2">FORM -1 DESKTOP ASSESSMENT FORM</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Application No (provided by ATAB) : {{ $applicationDetails->application_uid }} </td>
+                                <td>Date of application : {{ $applicationDetails->date_of_application }}</td>
+                            </tr>
+                            <tr>
+                                <td>Name and Location of the Training Provider :
+                                    {{ $applicationDetails->location_training_provider }}</td>
+                                <td>Name of the course to be assessed : {{ $applicationDetails->course_assessed }} </td>
+                            </tr>
+                            <tr>
+                                <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
+                                <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
+                            </tr>
+                            <tr>
+                                <td>Signature</td>
+                                <td>......</td>
+                            </tr>
+                            <tr>
+                                <td>Assessor Name</td>
+                                <td>{{ $applicationDetails->assessor }}</td>
+                            </tr>
+
+
+                        </table>
+
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Sl. No</th>
+                                <th>Objective Element</th>
+                                <th>NC raised</th>
+                                <th>CAPA by Training Provider</th>
+                                <th>Document submitted against the NC</th>
+                                <th>Remarks (Accepted/ Not accepted)</th>
+                            </tr>
+                            @foreach ($chapters as $chapter)
+                                <tr>
+                                    <td colspan="6" style="font-weight: bold; text-align:center;">
+                                        {{ $chapter->title ?? '' }}
+                                    </td>
+                                </tr>
+                                @foreach ($chapter->questions as $question)
+                                    @php
+                                        $documentsData = getSummerDocument($question->id, $applicationDetails->application_id, $applicationDetails->course_id) ?? 0;
+                                        $docId = $documentsData ? $documentsData->id : null;
+                                    @endphp
+                                    <tr>
+                                        <td> {{ $question->code }}</td>
+                                        <td>{{ $question->title }}</td>
+                                        @php
+                                            $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);
+                                        @endphp
+                                        <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
+                                        <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
+                                        @php
+                                            $documents = getQuestionDocument($question->id, $applicationDetails->course_id, $applicationDetails->application_id);
+                                        @endphp
+                                        <td>
+                                            @if ($documents)
+                                                @foreach ($documents as $item)
+                                                    <div>
+                                                        <a target="_blank" class="btn view btn-primary p-1 m-0"
+                                                            href="{{ asset('level/' . $item->doc_file) }}">View Doc</a>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                            @endif
+                                        </td>
+                                        @if (getButtonText($docId) == 'Accepted')
+                                            <td>{{ @$summeryReportQuestion->remark ?? (getButtonText($docId) ?? '') }}
+                                            </td>
+                                        @else
+                                            <td>{{ @$summeryReportQuestion->remark ?? '' }}</td>
+                                        @endif
+
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </table>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                      <tr>
-                        <td>Application No (provided by ATAB) : {{ $applicationDetails->application_uid }} </td>
-                        <td>Date of application : {{ $applicationDetails->date_of_application }}</td>
-                      </tr>
-                      <tr>
-                        <td>Name and Location of the Training Provider : {{ $applicationDetails->location_training_provider }}</td>
-                        <td>Name of the course to be assessed : {{ $applicationDetails->course_assessed }} </td>
-                      </tr>
-                      <tr>
-                        <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
-                        <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
-                      </tr>
-                      <tr>
-                        <td>Signature</td>
-                        <td>......</td>
-                      </tr>
-                      <tr>
-                        <td>Assessor Name</td>
-                        <td>{{ $applicationDetails->assessor }}</td>
-                      </tr>
 
-
-                    </table>
-
-
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Sl. No</th>
-                            <th>Objective Element</th>
-                            <th>NC raised</th>
-                            <th>CAPA by Training Provider</th>
-                            <th>Document submitted against the NC</th>
-                            <th>Remarks (Accepted/ Not accepted)</th>
-                        </tr>
-                        @foreach ($chapters as $chapter)
-                        <tr>
-                            <td colspan="6" style="font-weight: bold; text-align:center;">
-                                {{ $chapter->title ?? '' }}
-                            </td>
-                        </tr>
-                        @foreach ($chapter->questions as $question)
-                        @php
-                            $documentsData = getSummerDocument($question->id, $applicationDetails->application_id) ?? 0;
-                            $docId = $documentsData ? $documentsData->id : null;
-                        @endphp
-                        <tr>
-                            <td> {{ $question->code }}</td>
-                           <td>{{ $question->title }}</td>
-                           @php
-                                $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);
-                            @endphp
-                                <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
-                                <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
-                                @php
-                                    $documents = getQuestionDocument($question->id,$applicationDetails->course_id, $applicationDetails->application_id);
-                                @endphp
-                                <td>
-                                    @if ($documents)
-                                    @foreach ($documents as $item)
-                                    <div>
-                                        <a target="_blank" class="btn view btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
-                                    </div>
-                                    @endforeach
-                                    @else
-                                    @endif
-                                </td>
-                           @if(getButtonText($docId) == "Accepted")
-                           <td>{{ @$summeryReportQuestion->remark ??  getButtonText($docId) ?? '' }}</td>
-                           @else
-                           <td>{{ @$summeryReportQuestion->remark ?? '' }}</td>
-                           @endif
-
-                        </tr>
-                        @endforeach
-                        @endforeach
-                    </table>
+                <div class="row">
+                    <div class="col-sm-3 text-center">
+                        <div class="card">
+                           <div class="card-body">
+                            <h4>Total NC</h4>
+                            <div>
+                                <span style="font-weight: bold">
+                                    {{ $totalNc ?? 0 }}
+                                </span>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <div class="card">
+                           <div class="card-body">
+                            <h4>Total Accepted</h4>
+                            <div>
+                                <span style="font-weight: bold">
+                                    {{ $totalAccepted ?? 0 }}
+                                </span>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </section>
 
     @include('layout.footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-function printDiv(divId) {
-    var printContents = document.getElementById(divId).innerHTML;
-    var originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-}
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function printDiv(divId) {
+            var printContents = document.getElementById(divId).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>

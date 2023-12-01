@@ -281,7 +281,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('submit-final-report-by-desktop',[LevelController::class,"submitFinalReportByDesktopAssessor"])->name('submit-final-report-by-desktop');
 
-    Route::get('submit-report-by-desktop/{id}',[LevelController::class,"submitReportByDesktopAssessor"])->name('submit-report-by-desktop');
+    Route::get('submit-report-by-desktop/{applicationId}/{courseId}',[LevelController::class,"submitReportByDesktopAssessor"])->name('submit-report-by-desktop');
 
     Route::get('pending-payments/{id}',[LevelController::class,"pendingPayments"])->name('pending-payments');
 

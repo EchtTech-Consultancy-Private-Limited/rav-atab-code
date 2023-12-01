@@ -19,7 +19,7 @@
         padding: 33px !important;
     }
 
- 
+
 
     table th,
     table td,
@@ -28,11 +28,13 @@
         border: 1px solid #aaa !important;
         color: #000;
     }
+
     table td {
         text-align: left !important;
         padding: 10px 10px;
-        font-weight:700;
+        font-weight: 700;
     }
+
     .table-summery .table-bordered tbody tr td,
     .table-summery .table-bordered tbody tr th {
         text-emphasis: left !important;
@@ -189,49 +191,49 @@
                                         </td>
                                         <td>
                                             @php
-                                            $getNCComments = getNCRecordsComments($question->id, $course, $applicationDetails->id);
+                                                $getNCComments = getNCRecordsComments($question->id, $course, $applicationDetails->id);
 
-                                        @endphp
-                                        @if ($getNCComments)
-                                            @foreach ($getNCComments as $collection)
-                                                @foreach ($collection as $item)
-                                                <div class="bg-danger m-2 text-white">{{ $item->comments ?? '' }}</div>
-                                                    <input type="hidden" name="capa_training_provider[]"
-                                                        value="{{ $item->comments ?? '' }}">
+                                            @endphp
+                                            @if ($getNCComments)
+                                                @foreach ($getNCComments as $collection)
+                                                    @foreach ($collection as $item)
+                                                        <div class="bg-danger m-2 text-white">
+                                                            {{ $item->comments ?? '' }}</div>
+                                                        <input type="hidden" name="capa_training_provider[]"
+                                                            value="{{ $item->comments ?? '' }}">
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
-                                        @endif
+                                            @endif
                                         </td>
                                         <td>
                                             @php
-                                            $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
-                                        @endphp
-                                        @if ($documents)
-                                            @foreach ($documents as $item)
-                                            <div class="m-2">
-                                                <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
-                                            </div>
-                                           
-                                            @endforeach
-
+                                                $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                            @endphp
+                                            @if ($documents)
+                                                @foreach ($documents as $item)
+                                                    <div class="m-2">
+                                                        <a target="_blank" class="btn btn-primary p-1 m-0"
+                                                            href="{{ asset('level/' . $item->doc_file) }}">View Doc</a>
+                                                    </div>
+                                                @endforeach
                                             @else
-                                        @endif
+                                            @endif
                                         </td>
                                         <td>
                                             @php
                                                 $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $improvementForm->course_id);
                                             @endphp
                                             @if (count($documents) > 0)
-                                            @foreach ($documents as $doc)
-                                            @if ($loop->iteration == 1)
-                                            @php
-                                            $comment = getDocComment($doc->id);
-                                        @endphp
-                                        @if ($comment)
-                                            <span>{{ printRemark($doc->id) }}</span>
-                                        @endif
-                                            @endif
-                                          @endforeach
+                                                @foreach ($documents as $doc)
+                                                    @if ($loop->iteration == 1)
+                                                        @php
+                                                            $comment = getDocComment($doc->id);
+                                                        @endphp
+                                                        @if ($comment)
+                                                            <span>{{ printRemark($doc->id) }}</span>
+                                                        @endif
+                                                    @endif
+                                                @endforeach
                                             @else
                                                 <span>Document not uploaded!</span>
                                             @endif
@@ -296,6 +298,33 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3 text-center">
+                        <div class="card">
+                           <div class="card-body">
+                            <h4>Total NC</h4>
+                            <div>
+                                <span style="font-weight: bold">
+                                    {{ $totalNc ?? 0 }}
+                                </span>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <div class="card">
+                           <div class="card-body">
+                            <h4>Total Accepted</h4>
+                            <div>
+                                <span style="font-weight: bold">
+                                    {{ $totalAccepted ?? 0 }}
+                                </span>
+                            </div>
+                           </div>
+                        </div>
                     </div>
                 </div>
             </div>

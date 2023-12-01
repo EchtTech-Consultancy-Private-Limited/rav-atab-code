@@ -76,13 +76,15 @@
             <div class="card-body">
                 <table class="table table-bordered">
                     <tr>
-                        <td>Sr.No.</td>
+                        <th>Sr.No.</th>
                         <th>Course Name</th>
                         <th>Eligibility</th>
                         <th>Mode of course</th>
                         <th>Action</th>
                     </tr>
                     @foreach ($courses as $course)
+                    @foreach ($summeryReport as $summerycourse)
+                    @if($course->id == $summerycourse->course_id)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $course->course_name }}</td>
@@ -92,6 +94,8 @@
                             <a href="{{ url('view-summery-report/'.$course->id,$applicationData->id) }}" class="btn btn-primary">View Report</a>
                         </td>
                     </tr>
+                    @endif
+                    @endforeach
                     @endforeach
                 </table>
             </div>
@@ -104,13 +108,3 @@
 
 
 @include('layout.footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-function printDiv(divId) {
-     var printContents = document.getElementById(divId).innerHTML;
-     var originalContents = document.body.innerHTML;
-     document.body.innerHTML = printContents;
-     window.print();
-     document.body.innerHTML = originalContents;
-}
-</script>
