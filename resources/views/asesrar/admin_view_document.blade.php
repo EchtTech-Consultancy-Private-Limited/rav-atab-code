@@ -9,11 +9,13 @@
     table td {
         text-align: left;
         border: 1px solid #eee;
+        vertical-align: middle;
     }
 
     table th {
         padding: 10px !important;
-        padding-top: 20px !important;
+        padding-top: 10px !important;
+        text-align:center;
     }
 
     .highlight {
@@ -81,6 +83,9 @@
         padding: 6px;
         text-align: center;
     }
+
+    .width-50{width:50%}
+    .width-10{width:8%}
 
    
 </style>
@@ -158,10 +163,8 @@
                 <div class="row clearfix">
 
                     <div class="col-lg-12 col-md-12">
-                        <div class="d-flex justify-content-end">
-                            <a href="{{ URL::previous() }}" class="btn btn-primary">Go Back </a>
-                        </div>
-                        <div class="header">
+                       
+                        <div class="header float-right mb-3">
 
 
                             @if (check_acknowledgement($course_id) == $course_id)
@@ -176,13 +179,18 @@
                             @endif
 
 
-                            <a style="float:right;margin:10px;"
+                            <a style="margin-left:10px;"
                                 href="{{ url('document-report-verified-by-assessor/' . $application_id . '/' . $course_id) }}"
                                 class="btn btn-info"> Verified Report</a>
 
-                            <a style="float:right;margin:10px;"
+                            <a style="margin-left:10px;"
                                 href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
-                                class="btn btn-success">Assessor & Admin Conversation</a>
+                                class="btn btn-success">Assessor & Admin Conversation
+                            </a>
+
+                               
+                            <a href="{{ URL::previous() }}" class="btn btn-primary" style="margin-left:10px;">Go Back </a>
+                       
                         </div>
                         <div>
                             <div>
@@ -202,36 +210,39 @@
                                                     <p class=" msg-none ">Documents Update Successfully</p>
                                                 </div>
                                                 <!-- table-striped  -->
-                                                <div class="table-responsive" style="margin-top:-10px;">
+                                                <div class="table-responsive">
 
 
                                                     <table class="table table-responsive table-hover">
                                                         <thead>
-                                                            <tr>
-                                                                <th>Sr.No.</th>
-                                                                <th>Objective criteria</th>
-                                                                <th>Documents</th>
+                                                        <tr>  
+                                                             <th rowspan="2" class="width-10">Sr.No.</th>
+                                                                <th rowspan="2">Objective criteria</th>                                                      
+                                                                <th colspan="2" class="width-50"> Assessor Verified </th>
+                                                            </tr>
+                                                            <tr>                                                               
+                                                                <th>Desktop</th>
+                                                                <th>On-site </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
 
                                                             @foreach ($chapters as $chapter)
                                                                 <tr>
-                                                                    <th colspan="3" class="text-justify">
-                                                                        <h3 class="text-center">
-                                                                            {{ $chapter->title ?? '' }}</h3>
+                                                                    <th colspan="4" class="text-justify">
+                                                                        <h5 class="text-center mb-0"> {{ $chapter->title ?? '' }}</h5>
                                                                     </th>
                                                                 </tr>
                                                                 @foreach ($chapter->questions as $question)
                                                                     <tr>
-                                                                        <td>{{ $question->code ?? '' }}</td>
+                                                                        <td class="text-center">{{ $question->code ?? '' }}</td>
                                                                         <td width="500" class="text-left">
                                                                             {{ $question->title ?? '' }}</td>
                                                                         <td>
-                                                                            <div class="cardContainer">
-                                                                                <div class="cardHeader">
+                                                                            <div class="">
+                                                                                <!-- <div class="cardHeader">
                                                                                     Desktop
-                                                                                </div>
+                                                                                </div> -->
                                                                                 <div class="cardBody d-flex justify-content-center">
                                                                                     @php
                                                                                         $documentsData = getAdminDocument($question->id, $file[0]->application_id) ?? 0;
@@ -242,8 +253,7 @@
                                                                                                 @foreach ($documentsData as $doc)
                                                                                                     @if ($doc->application_id == $application_id)
                                                                                                         <div>
-                                                                                                            <a target="_blank"
-                                                                                                                title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                            <a                                                                                                              title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
                                                                                                                 href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                                 class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                                 style="color: #fff ;margin:10px;"
@@ -266,7 +276,7 @@
                                                                                                 @foreach ($documentsData as $doc)
                                                                                                     @if ($doc->application_id == $application_id)
                                                                                                         <div>
-                                                                                                            <a target="_blank"
+                                                                                                            <a
                                                                                                                 title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
                                                                                                                 href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
                                                                                                                 class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
@@ -289,10 +299,14 @@
                                                                                     @endif
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="cardContainer">
-                                                                                <div class="cardHeader">
+                                                                           
+                                                                        </td>
+
+                                                                        <td>
+                                                                        <div class="">
+                                                                                <!-- <div class="cardHeader">
                                                                                     On-site
-                                                                                </div>
+                                                                                </div> -->
                                                                                 <div class="cardBody">
                                                                                     @php
                                                                                         $verifiedDocumentForAdmin = checkVerifiedDocumentAvailableForAdmin($application_id, $course_id, $question->id);
@@ -302,13 +316,13 @@
                                                                                             $fileExtension = pathinfo($verifiedDocumentForAdmin->verified_document, PATHINFO_EXTENSION);
                                                                                         @endphp
                                                                                         @if ($fileExtension === 'pdf')
-                                                                                            <a target="_blank"
+                                                                                            <a
                                                                                                 href="{{ url('show-course-pdf/' . $verifiedDocumentForAdmin->verified_document) }}"
                                                                                                 class="docBtn bg-primary"
                                                                                                 style="margin-right: 10px !important; ">View
                                                                                                 Document </a>
                                                                                         @else
-                                                                                            <a target="_blank"
+                                                                                            <a
                                                                                                 href="{{ asset('documnet/' . $verifiedDocumentForAdmin->verified_document) }}"
                                                                                                 class="docBtn bg-primary"
                                                                                                 style="margin-right: 10px !important; ">View
@@ -325,12 +339,12 @@
                                                                                         @endphp
 
                                                                                         @if ($fileExtension === 'pdf')
-                                                                                            <a target="_blank"
+                                                                                            <a
                                                                                                 href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
                                                                                                 class="docBtn bg-secondary">View
                                                                                                 Photograph </a>
                                                                                         @else
-                                                                                            <a target="_blank"
+                                                                                            <a
                                                                                                 href="{{ asset('documnet/' . $verifiedPhotograph->photograph) }}"
                                                                                                 class="docBtn bg-secondary">View
                                                                                                 Photograph </a>
@@ -339,6 +353,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </td>
+
                                                                     </tr>
                                                                 @endforeach
                                                             @endforeach

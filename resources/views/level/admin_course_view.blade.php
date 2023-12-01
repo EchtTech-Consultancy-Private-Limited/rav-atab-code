@@ -67,28 +67,31 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    @if (auth()->user()->role == 1)
+                  <div class="float-right">
+                  @if (auth()->user()->role == 1)
                        @if ($applicationData->desktop_status == 1 )
-                       <a class="btn btn-info" target="_blank"
-                       href="{{ url('admin/application/courses-list/' . $applicationData->id ) }}">Document
+                       <a class="btn btn-info mr-2" target="_blank"
+                       href="{{ url('admin/application/courses-list/' . $applicationData->id ) }}" style="margin-right:10px">Document
                        Summary</a>
                        @endif
                     @endif
-                    <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
+                    <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary">Back
                     </a>
 
+                  </div>
                 </div>
             </div>
         </div>
 
-        <div>
-            <span style="font-weight: bold;">Application ID:</span> {{ $applicationData->application_uid }}
-        </div>
+       
         <div class="card">
-            <div class="card-header bg-white text-dark">
+            <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     Basic Information
                 </h5>
+                <div>
+            <span style="font-weight: bold;">Application ID:</span> {{ $applicationData->application_uid }}
+        </div>
             </div>
             <div class="card-body">
                 <div class="row">
