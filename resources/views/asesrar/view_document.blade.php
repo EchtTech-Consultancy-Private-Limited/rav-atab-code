@@ -441,7 +441,7 @@
                                                             style="margin-right: 10px;"
                                                             onclick="confirmSubmit()">Submit</button>
                                                     </form> -->
-                                                    @if (totalDocumentsCount($application_id) >= count(count($questions)))
+                                                    @if (totalDocumentsCount($application_id) >= count($questions))
                                                     <a href="{{ url('/submit-report-by-desktop' . '/' . $application_id . '/' . $course_id) }}"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
                                                     @endif
                                                 </div>
