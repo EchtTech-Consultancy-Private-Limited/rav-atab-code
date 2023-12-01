@@ -168,6 +168,7 @@
                                             <td>
                                                 @if ($summeryReportQuestion)
 
+
                                                 @php
                                                     $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
                                                 @endphp
@@ -178,6 +179,7 @@
                                                    </div>
                                                    @endforeach
                                                    @else
+
 
                                                 @endif
                                             </td>
