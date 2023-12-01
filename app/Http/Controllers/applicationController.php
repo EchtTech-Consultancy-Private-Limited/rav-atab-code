@@ -599,7 +599,10 @@ class applicationController extends Controller
             $fifteenthDaysadd = Carbon::now()->addDays(15)->format('Y-m-d');
             $events = Event::select('start')->where('asesrar_id', 76)->whereDate('start', '<=', $fifteenthDaysadd)->where('availability', 2)->get();
 
-            return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata]);
+            $totalQuestion = Question::all();
+            $totalQuestion = count($totalQuestion);
+
+            return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata,'totalQuestion' => $totalQuestion]);
         }
         return view('application.national');
     }
