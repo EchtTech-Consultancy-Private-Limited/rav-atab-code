@@ -1273,8 +1273,9 @@ class LevelController extends Controller
     }
     public function upload_document($id, $course_id)
     {
-        $application_id = $id;
-        $course_id = $course_id;
+
+        $application_id = $id ? dDecrypt($id) : $id;
+        $course_id = $course_id ? dDecrypt($course_id) : $course_id;
 
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();

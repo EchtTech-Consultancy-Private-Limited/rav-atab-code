@@ -94,7 +94,7 @@
                         showConfirmButton: false,
                     });
                 </script>
-                @elseif (Session::has('warning'))
+            @elseif (Session::has('warning'))
                 <script>
                     Swal.fire({
                         title: "Warning",
@@ -209,30 +209,31 @@
                                                     @if (totalDocumentsCount($item->id) > 0)
                                                         <div class="d-flex">
                                                             @if ($availableReport != null)
-                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/courses-list/' . $item->id ) : '#' }}"
+                                                                <a href="{{ auth()->user()->role == 1 ? url('admin/application/courses-list/' . $item->id) : '#' }}"
                                                                     class="p-2 buttonBadge text-white bg-warning"
                                                                     style="margin-right: 5px;">Application In
                                                                     Processing</a>
                                                             @else
-                                                                <a href="#" title="{{ auth()->user()->role == 1 ? 'Summary report not available!' :'' }}"
+                                                                <a href="#"
+                                                                    title="{{ auth()->user()->role == 1 ? 'Summary report not available!' : '' }}"
                                                                     class="p-2 buttonBadge text-white bg-warning"
                                                                     style="margin-right: 5px;">Application In
                                                                     Processing</a>
                                                             @endif
                                                             @if (auth()->user()->role == 1)
-                                                            @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
-                                                            <form action="{{ route('payment.acknowledge') }}"
-                                                                method="post">
-                                                                @csrf
-                                                                <input type="hidden" name="applicationID"
-                                                                    value="{{ $item->id }}">
-                                                                <button
-                                                                    class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
-                                                                    Payment</button>
-                                                            </form>
-                                                        @endif
+                                                                @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
+                                                                    <form action="{{ route('payment.acknowledge') }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <input type="hidden" name="applicationID"
+                                                                            value="{{ $item->id }}">
+                                                                        <button
+                                                                            class="btn btn-primary btn-sm mb-0 p-2">Acknowledge
+                                                                            Payment</button>
+                                                                    </form>
+                                                                @endif
                                                             @endif
-                                                          
+
 
                                                         </div>
                                                     @else
@@ -243,7 +244,8 @@
                                                             $reportAvailable = $availableReport != null;
                                                         @endphp
 
-                                                        @if ($payment)
+                                                        <div class="d-flex">
+                                                            @if ($payment)
                                                             @php
                                                                 $status = $payment->status;
                                                             @endphp
@@ -260,11 +262,27 @@
                                                                     title="{{ $reportAvailable ? '' : '' }}">
                                                                     {{ $displayText }}
                                                                 </a>
+
+                                                                @if (auth()->user()->role == 1 && $status == '2')
+                                                                    {{-- Display button only when payment is approved --}}
+                                                                    @if ($item->is_payment_acknowledge != 1 || $item->is_payment_acknowledge == null)
+                                                                        <form action="{{ route('payment.acknowledge') }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <input type="hidden" name="applicationID"
+                                                                                value="{{ $item->id }}">
+                                                                            <button
+                                                                                class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;">Acknowledge
+                                                                                Payment</button>
+                                                                        </form>
+                                                                    @endif
+                                                                @endif
                                                             @endif
                                                         @else
-                                                            <a class="p-2 buttonBadge text-white bg-danger" title="Payment not approved!">Payment
-                                                                Pending</a>
+                                                            <a class="p-2 buttonBadge text-white bg-danger"
+                                                                title="Payment not approved!">Payment Pending</a>
                                                         @endif
+                                                        </div>
                                                     @endif
                                                 </td>
 
@@ -283,7 +301,9 @@
                                                         </a>
 
                                                         {{-- @if (totalDocumentsCount($item->id) >= totalQuestionsCount($item->id)) --}}
-                                                        @if (totalDocumentsCount($item->id) >= $totalQuestion && $item->acknowledged_by != null && $item->is_payment_acknowledge == 1)
+                                                        @if (totalDocumentsCount($item->id) >= $totalQuestion &&
+                                                                $item->acknowledged_by != null &&
+                                                                $item->is_payment_acknowledge == 1)
                                                             @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->id }}"

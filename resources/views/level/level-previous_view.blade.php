@@ -331,7 +331,7 @@
                     <div class="card-footer bg-white text-dark">
                         <div>
                             @if ($spocData->status == 1)
-                                <a href="{{ url('/upload-document' . '/' . $ApplicationCourses->application_id . '/' . $ApplicationCourses->id) }}"
+                                <a href="{{ url('/upload-document' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">Upload
                                     Documents</a>
