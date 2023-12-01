@@ -721,13 +721,13 @@
                         </div>
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
-                                    <a href="{{ url('new-applications/' . $applicationData->id) }}"
+                                    <a href="{{ url('new-applications/' . dEncrypt($applicationData->id)) }}"
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
                                     @isset($course)
                                     @if (count($course) > 0)
-                                        <a href="{{ url('course-payment/' . $applicationData->id) }}"
+                                        <a href="{{ url('course-payment/' . dEncrypt($applicationData->id)) }}"
                                             class="btn btn-primary next-step1 mr-2">Next</a>
                                     @endif
                                 @endisset

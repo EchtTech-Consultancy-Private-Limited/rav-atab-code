@@ -49,7 +49,7 @@
                     </ul>
 
                     <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary" style="float:right;">Back
-                    </a> 
+                    </a>
                     <a type="button" class="btn btn-primary float-right me-2" onclick="printDiv('printableArea')">Print
                     </a>
 
@@ -84,12 +84,12 @@
                         <td>Assessor Name</td>
                         <td>{{ $applicationDetails->assessor }}</td>
                       </tr>
-                      
+
 
                     </table>
 
-                    
-                    <table class="table table-bordered">                    
+
+                    <table class="table table-bordered">
                         <tr>
                             <th>Sl. No</th>
                             <th>Objective Element</th>
@@ -98,22 +98,22 @@
                             <th>Document submitted against the NC</th>
                             <th>Remarks (Accepted/ Not accepted)</th>
                         </tr>
-                        @foreach ($chapters as $chapter)                        
+                        @foreach ($chapters as $chapter)
                         <tr>
                             <td colspan="6" style="font-weight: bold; text-align:center;">
                                 {{ $chapter->title ?? '' }}
                             </td>
-                        </tr>                                      
+                        </tr>
                         @foreach ($chapter->questions as $question)
                         @php
                             $documentsData = getSummerDocument($question->id, $applicationDetails->application_id,$applicationDetails->course_id) ?? 0;
                             $docId = $documentsData ? $documentsData->id : null;
                         @endphp
-                        <tr>                            
+                        <tr>
                             <td> {{ $question->code }}</td>
                            <td>{{ $question->title }}</td>
                            @php
-                                $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);                                
+                                $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);
                             @endphp
                                 <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
                                 <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
@@ -124,7 +124,7 @@
                                     @if ($documents)
                                     @foreach ($documents as $item)
                                     <div>
-                                        <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
+                                        <a target="_blank" class="btn view btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
                                     </div>
                                     @endforeach
                                     @else
@@ -136,7 +136,7 @@
                            <td>{{ @$summeryReportQuestion->remark ?? '' }}</td>
                            @endif
 
-                        </tr>                   
+                        </tr>
                         @endforeach
                         @endforeach
                     </table>

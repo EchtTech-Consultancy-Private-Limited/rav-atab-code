@@ -383,7 +383,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class="center">
-                                                                <a href="{{ url('previews-application-first/' . $item->id) }}"
+                                                                <a href="{{ url('previews-application-first/' . dEncrypt($item->id)) }}"
                                                                     class="btn btn-tbl-edit"><i
                                                                         class="material-icons">visibility</i></a>
 

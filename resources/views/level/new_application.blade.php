@@ -288,9 +288,7 @@ active @endif"
                                                                                  placeholder="Person Name"
                                                                                  class="preventnumeric"
                                                                                  id="person_name"
-                                                                                 
-                                                                                  value="{{ old('Person_Name',$applicationData->Person_Name ?? '') }}"
-                                                                             
+                                                                                 value="{{ old('Person_Name', $applicationData->Person_Name ?? '') }}"
                                                                                  required maxlength="30">
                                                                              @error('Person_Name')
                                                                                  <span class="text-danger">
@@ -336,9 +334,7 @@ active @endif"
                                                                                  class="preventalpha"
                                                                                  placeholder="Contact Number"
                                                                                  id="Contact_Number"
-                                                                               
-                                                                              value="{{ old('Contact_Number',$applicationData->Contact_Number ?? '') }}"
-                                                                              >
+                                                                                 value="{{ old('Contact_Number', $applicationData->Contact_Number ?? '') }}">
                                                                          </div>
                                                                          @error('Contact_Number')
                                                                              <span class="text-danger">
@@ -356,7 +352,7 @@ active @endif"
                                                                              <input id="emailId" type="text"
                                                                                  name="Email_ID"
                                                                                  placeholder="Email-ID"
-                                                                                value="{{ old('Email_ID',$applicationData->Email_ID ?? '') }}">
+                                                                                 value="{{ old('Email_ID', $applicationData->Email_ID ?? '') }}">
                                                                          </div>
                                                                          @error('Email_ID')
                                                                              <span id="backendError" class="text-danger">
@@ -375,14 +371,12 @@ active @endif"
                                                                              </label>
                                                                              <input type="text" name="designation"
                                                                                  placeholder="Designation"
-                                                                                 
-                                                                                value="{{ old('designation',$applicationData->designation ?? '') }}"
-                                                                               >
+                                                                                 value="{{ old('designation', $applicationData->designation ?? '') }}">
                                                                          </div>
                                                                          @error('designation')
-                                                                         <span class="text-danger">
-                                                                             {{ $message }}</span>
-                                                                     @enderror
+                                                                             <span class="text-danger">
+                                                                                 {{ $message }}</span>
+                                                                         @enderror
                                                                          <span class="text-danger"
                                                                              id="designation_error"></span>
                                                                      </div>

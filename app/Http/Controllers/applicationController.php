@@ -599,7 +599,10 @@ class applicationController extends Controller
             $fifteenthDaysadd = Carbon::now()->addDays(15)->format('Y-m-d');
             $events = Event::select('start')->where('asesrar_id', 76)->whereDate('start', '<=', $fifteenthDaysadd)->where('availability', 2)->get();
 
-            return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata]);
+            $totalQuestion = Question::all();
+            $totalQuestion = count($totalQuestion);
+
+            return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata,'totalQuestion' => $totalQuestion]);
         }
         return view('application.national');
     }
@@ -675,6 +678,7 @@ class applicationController extends Controller
     public function uploadDocumentByOnSiteAssessorPost(Request $request)
     {
 
+
         $request->validate([
             'status' => 'required',
             'remark' => 'required',
@@ -688,15 +692,15 @@ class applicationController extends Controller
             $file->move('level/', $filename);
         }
 
-        if ($request->status == 1 || $request->status == 2) {
-            $commentTxt = "Document Not approved!";
-        } elseif ($request->status == 3) {
-            $commentTxt = "Not Recommended";
-        } elseif ($request->status == 4) {
+        if ($request->status == 4) {
             $commentTxt = "Document has been approved";
+        } else {
+            $commentTxt = $request->remark;
         }
 
-        // dd($request->all());
+        if ($request->parent_doc_id) {
+            Add_Document::where('id', $request->documentID)->update(['is_displayed_onsite' => 2]);
+        }
 
         $document = Add_Document::create([
             'question_id' => $request->questionID,
@@ -720,7 +724,7 @@ class applicationController extends Controller
 
         DocComment::create([
             'doc_id' => $document->id,
-            'comments' => $commentTxt,
+            'comments' => $commentTxt ?? '',
             'status' => $request->status,
             'doc_code' => $request->question_code,
             'user_id' => auth()->user()->id,
@@ -732,7 +736,7 @@ class applicationController extends Controller
 
 
         if ($document) {
-            return redirect()->back()->with('success', 'Document status has been updated');
+            return redirect(url('on-site/upload-document/' . $request->applicationID . '/' . $request->courseID . '/' . $request->questionID . '/' . $document->id))->with('success', 'Document status has been updated');
         } else {
             return redirect()->back()->with('error', 'Something went wrong. Please try again!');
         }
@@ -817,8 +821,8 @@ class applicationController extends Controller
         // if ($applicationAlreadySubmitted) {
         //     return redirect(url('opportunity-form/report?application=' . $applicationAlreadySubmitted->application_id . '&course=' . $request->course));
         // }
-        $assessorDetail = AssessorApplication::where('application_id', $applicationData->id)->where('assessor_id',auth()->user()->id)->first();
-        
+        $assessorDetail = AssessorApplication::where('application_id', $applicationData->id)->where('assessor_id', auth()->user()->id)->first();
+
 
         $courseDetail = ApplicationCourse::find($request->course);
 
@@ -864,22 +868,12 @@ class applicationController extends Controller
             return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
         }
         $applicationData = Application::find($request->input('application'));
-        $assessors = AssessorApplication::where('application_id', $applicationData->id)->get();
-        $onSiteAssessor = "";
-
-        foreach ($assessors as $assessor) {
-            $user = User::find($assessor->assessor_id);
-            if ($user->assessment == 2) {
-                $onSiteAssessor = $user;
-            }
-        }
-
-        $assessorDetail = AssessorApplication::where('assessor_id', $user->id)->first();
+        $assessorDetail = AssessorApplication::where('application_id', $applicationData->id)->where('assessor_id', auth()->user()->id)->first();
 
         $courseDetail = ApplicationCourse::find($request->course);
 
         $chapters = Chapter::all();
-        return view('on-site-assessor.opportunityForm', compact('applicationData', 'onSiteAssessor', 'courseDetail', 'assessorDetail', 'chapters'));
+        return view('on-site-assessor.opportunityForm', compact('applicationData', 'courseDetail', 'assessorDetail', 'chapters'));
     }
 
     public function saveImprovmentForm(Request $request)
@@ -913,7 +907,10 @@ class applicationController extends Controller
         $chapters = Chapter::all();
         $improvementForm = ImprovementForm::where('application_id', $request->input('application'))->first();
         $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $request->input('course'))->where('application_id', $request->input('application'))->first();
-        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm','summaryReport'));
+        $course = $request->input('course');
+        $mandays = DB::table('assessor_assigne_date')->where('assessor_id', auth()->user()->id)->where('application_id', $request->input('application'))->where('assesment_type', 2)->get();
+        $mandays = count($mandays);
+        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course', 'mandays'));
     }
 
     public function getSummariesList(Request $request)
@@ -996,10 +993,11 @@ class applicationController extends Controller
     {
         $courses = ApplicationCourse::where('application_id', $applicationID)->get();
         $applicationData = Application::find($applicationID);
-        return view('admin.summary.courses-list',compact('courses','applicationData'));
+        return view('admin.summary.courses-list', compact('courses', 'applicationData'));
     }
 
-    public function getAdminApplicationSummary($courseID,$applicationID){
+    public function getAdminApplicationSummary($courseID, $applicationID)
+    {
         $checkSummaryReport = SummaryReport::where('course_id', $courseID)->where('application_id', $applicationID)->get();
         if (count($checkSummaryReport) == 0) {
             return redirect()->back()->with('warning', 'Report not created yet!');

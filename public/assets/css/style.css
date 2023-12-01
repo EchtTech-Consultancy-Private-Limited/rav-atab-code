@@ -4658,7 +4658,7 @@ table .checkbox [type="checkbox"]+label {
 
 .light .nav>li>a {
     color: #0d091d;
-   
+
 }
 
 .nav-tab  .nav .custom-nav-item  .custom-nav-link{
@@ -19242,6 +19242,12 @@ nav.navbar {
     font-size: 14px;
 }
 
+#applicationSummaryContainer .table-bordered tbody tr td,  #applicationSummaryContainer .table-bordered tbody tr th{
+    padding: 12px 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
 .table-bordered thead tr th {
     padding: 12px 10px 12px 10px;
     border-bottom: 1px solid #eee;
@@ -20296,7 +20302,7 @@ span.badge {
     border: 0;
     outline: 0;
     line-height: 23px;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
 }
 
 .btn:not(.btn-link):not(.btn-circle):hover {
@@ -20306,7 +20312,7 @@ span.badge {
 .btn:not(.btn-link):not(.btn-circle) i {
     font-size: 18px;
     position: relative;
-    line-height: 10px;
+    line-height: 1.2;
 }
 
 .btn:not(.btn-link):not(.btn-circle) span {
@@ -24439,7 +24445,7 @@ i.fa.fa-eye {
 }
 
 input[type=text]:not(.browser-default):disabled{
-    color: rgba(0,0,0); 
+    color: rgba(0,0,0);
     border-bottom: none;
 }
 
@@ -24466,7 +24472,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     width: auto;
     height: auto;
     display: inline-block;
-   
+
 }
 
 
@@ -24486,7 +24492,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 #Payment_Statuss{
     text-align: center !important;
 }
-/* 
+/*
 .mfp-wrap.mfp-gallery.mfp-close-btn-in.mfp-auto-cursor.mfp-with-zoom.mfp-ready {
     position: relative;
     max-width: 100%;
@@ -24494,7 +24500,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     justify-content: center;
     z-index: 99999;
     margin: 75px;
-    
+
   }
 
 
@@ -24524,7 +24530,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
   }
 
 
-  
+
    /* pre lodel */
 #pageloader {
     display: none;
@@ -24659,4 +24665,17 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     100% {
         transform: translate(0, 0);
     }
+}
+
+.btn.view{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    margin: 2px !important;
+}
+
+.btn {
+    line-height: 2.1 !important;
+    border-radius: 7px !important;
 }

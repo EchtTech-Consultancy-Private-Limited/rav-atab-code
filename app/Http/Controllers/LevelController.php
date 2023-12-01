@@ -996,7 +996,7 @@ class LevelController extends Controller
 
         //return $request->level_id;
         if ($request->level_id == '1') {
-            return  redirect('create-course/' . $data->application_id)->with('success', 'Course  successfully  Added');
+            return  redirect('create-course/' . dEncrypt($data->application_id))->with('success', 'Course  successfully  Added');
             // return  redirect('level-first/'.dEncrypt($data->application_id))->with('success','Course  successfully  Added!!!!');
 
         } elseif ($request->level_id == '2') {
@@ -1011,7 +1011,7 @@ class LevelController extends Controller
 
             return  redirect('level-list')->with('success', 'Course successfully Added');
         } else {
-            return  redirect('create-course/' . $data->application_id)->with('success', 'Course successfully Added');
+            return  redirect('create-course/' . dEncrypt($data->application_id))->with('success', 'Course successfully Added');
         }
     }
 
@@ -1154,6 +1154,7 @@ class LevelController extends Controller
 
     public function previews_application1($application_id, $notificationId = 0)
     {
+        $application_id = dDecrypt($application_id);
         if ($notificationId > 0) {
             $notification = ApplicationNotification::find($notificationId);
             $notification->update(['is_read' => 1]);
@@ -1272,8 +1273,9 @@ class LevelController extends Controller
     }
     public function upload_document($id, $course_id)
     {
-        $application_id = $id;
-        $course_id = $course_id;
+
+        $application_id = $id ? dDecrypt($id) : $id;
+        $course_id = $course_id ? dDecrypt($course_id) : $course_id;
 
         $data = ApplicationPayment::whereapplication_id($id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
@@ -1490,6 +1492,10 @@ class LevelController extends Controller
         $course->parent_doc_id = $request->parent_doc_id ?? null;
 
         $course->notApraove_count = $notApprove + 1 ?? 1;
+
+        if ($request->is_displayed_onsite > 0) {
+            $course->is_displayed_onsite = 1;
+        }
 
 
         if ($request->hasfile('fileup')) {
@@ -2404,6 +2410,7 @@ class LevelController extends Controller
 
     public function coursePayment(Request $request, $id = null)
     {
+        $id = dDecrypt($id);
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $id)->first();
         if ($checkPaymentAlready) {
             return redirect(url('application-list'))->with('payment_fail', 'Payment has already been submitted for this application.');
@@ -2466,6 +2473,7 @@ class LevelController extends Controller
 
     public function create_course($id = null)
     {
+        $id = dDecrypt($id);
         if ($id) {
             $applicationData = DB::table('applications')->where('id', $id)->first();
         }
@@ -2475,7 +2483,10 @@ class LevelController extends Controller
     }
 
     public function newApplications($id = null)
-    {
+    { 
+        if ($id) {
+            $id = dDecrypt($id);
+        }
         if ($id) {
             $applicationData = DB::table('applications')->where('id', $id)->first();
         } else {
@@ -2503,7 +2514,7 @@ class LevelController extends Controller
     {
 
         if ($request->previous_data && $request->application_id) {
-            return redirect(url('create-course/' . $request->application_id));
+            return redirect(url('create-course/' . dEncrypt($request->application_id)));
         }
 
         $this->validate(
@@ -2535,7 +2546,7 @@ class LevelController extends Controller
         $application->designation = $request->designation;
         $application->ip = getHostByName(getHostName());
         $application->save();
-        return redirect(url('create-course/' . $application->id))->with('success', 'Application Create Successfully');
+        return redirect(url('create-course/' . dEncrypt($application->id)))->with('success', 'Application Create Successfully');
     }
 
 
