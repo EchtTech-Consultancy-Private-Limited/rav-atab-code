@@ -62,7 +62,7 @@
 
                     <a href="{{ url('nationl-page') }}" type="button" class="btn btn-primary" style="float:right;">Back
                     </a>
-                    <a type="button" class="btn btn-primary float-right me-2" onclick="printDiv('printableArea')">Print
+                    <a type="button" class="btn btn-danger float-right me-2" onclick="printDiv('printableArea')"><i class="fas fa-print mr-2"></i> Print
                     </a>
 
                 </div>
@@ -167,19 +167,20 @@
                                             </td>
                                             <td>
                                                 @if ($summeryReportQuestion)
-                                                    @php
-                                                        $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
-                                                    @endphp
-                                                    @if ($documents)
-                                                        @foreach ($documents as $item)
-                                                            <div>
-                                                                <a target="_blank" class="btn view btn-primary p-1 m-0"
-                                                                    href="{{ asset('level/' . $item->doc_file) }}">View
-                                                                    Doc</a>
-                                                            </div>
-                                                        @endforeach
-                                                    @else
-                                                    @endif
+
+
+                                                @php
+                                                    $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                   @if ($documents)
+                                                   @foreach ($documents as $item)
+                                                   <div class="mt-3">
+                                                       <a target="_blank" class="btn view btn-primary p-1 mb-3" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
+                                                   </div>
+                                                   @endforeach
+                                                   @else
+
+
                                                 @endif
                                             </td>
                                             <td>

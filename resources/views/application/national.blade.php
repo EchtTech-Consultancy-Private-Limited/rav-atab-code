@@ -18,9 +18,9 @@
     }
 
     .modal-body.mod-css span {
-        font-size: 18px !important;
-        margin-bottom: 15px !important;
-        height: 30px;
+        font-size: 16px !important;
+    margin-bottom: 15px !important;
+    height: 40px;
         line-height: 26px;
         color: #000;
     }
@@ -37,6 +37,14 @@
     /* .add-color{
         background:red !important;
     } */
+
+    .onsite-id span.btn.btn-success.dateID, .onsite-id span.btn.btn-danger.dateID {
+    padding: 4px 10px;
+    height: 32px;
+    line-height: 26px !important;
+    font-size: 13px !important;
+}
+
 </style>
 </head>
 
@@ -474,7 +482,7 @@
                                                                                         <span>
                                                                                             {{ $assesorsData->firstname }}
                                                                                             {{ $assesorsData->lastname }}
-                                                                                            ({{ $assesorsData->email }})
+                                                                                            <b>({{ $assesorsData->email }})</b>
                                                                                         </span>
                                                                                     </label>
                                                                                     <input type="hidden" name="sec_email"
