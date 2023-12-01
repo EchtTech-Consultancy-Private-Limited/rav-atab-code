@@ -721,7 +721,9 @@ function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
 {
 
 
-    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)->where('application_id', $applicationId)->where('on_site_assessor_Id', '!=', null)->where('photograph', null)->get();
+    $documents = DB::table('add_documents')->where('course_id', $course_id)->where('question_id', $questionID)
+        ->where('application_id', $applicationId)->where('on_site_assessor_Id', '!=', null)
+        ->where('photograph', null)->get();
 
     if (count($documents) > 0) {
         return $documents;
@@ -983,7 +985,7 @@ function checkOnSitePhotograph($applicationID, $questionID, $courseID, $assesorI
 function getLastComment($docID)
 {
 
-    $comment = DocComment::where('doc_id', $docID)->orderBy('id', 'desc')->first();
+    $comment = DocComment::where('doc_id', $docID)->first();
 
     return $comment;
 }
@@ -1163,3 +1165,7 @@ function getQuestionDocument($question, $course, $application)
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
 }
 
+
+function getLastDocCommentData($docID){
+    return DocComment::where('doc_id',$docID)->first();
+}

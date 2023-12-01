@@ -350,11 +350,13 @@
                                                                                     @if ($documents !== null)
                                                                                        <div class="d-flex justify-content-center">
                                                                                         @foreach ($documents as $document)
-                                                                                        <div style="margin:4px;">
-                                                                                            <a target="_blank" href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
-                                                                                                class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} </a>
-                                                                                              
-                                                                                        </div>
+                                                                                       @if ($document->is_displayed_onsite != 2)
+                                                                                       <div style="margin:4px;">
+                                                                                        <a target="_blank" href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
+                                                                                            class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }} </a>
+                                                                                          
+                                                                                    </div>
+                                                                                       @endif
                                                                                     @endforeach
                                                                                        </div>
                                                                                     @endif
