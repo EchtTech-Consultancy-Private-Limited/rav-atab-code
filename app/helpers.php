@@ -762,10 +762,10 @@ function getAdminDocument($questionID, $applicationId)
 }
 
 // only for summery report
-function getSummerDocument($questionID, $applicationId)
+function getSummerDocument($questionID, $applicationId,$courseId)
 {
     // dd($questionID);
-    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->first();
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('course_id', $courseId)->where('application_id', $applicationId)->first();
     // dd($documents);
     // if (count($documents) > 0) {
     return $documents;

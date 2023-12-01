@@ -1294,7 +1294,8 @@ class LevelController extends Controller
         $file = ApplicationDocument::whereapplication_id($data[0]->application_id)->get();
         $chapters = Chapter::all();
         $applicationData = Application::find($id);
-        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData'));
+        $summeryReport = SummaryReport::where(['application_id' => $id,'course_id'=> $course_id])->first();
+        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData','summeryReport'));
     }
 
     public function document_report_verified_by_assessor($id, $course_id)
@@ -2311,12 +2312,13 @@ class LevelController extends Controller
     {
         $courses = ApplicationCourse::where('application_id', $applicationID)->get();
         $applicationData = Application::find($applicationID);
-        return view('application.accesser.assessor_summery_course_list',compact('courses','applicationData'));
+        $summeryReport = SummaryReport::where('application_id', $applicationID)->get();
+        return view('application.accesser.assessor_summery_course_list',compact('courses','applicationData','summeryReport'));
     }
 
     public function view_summery_report($courseID,$applicationID)
     {
-        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where('application_id',$applicationID)->first();
+        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where(['application_id'=> $applicationID,'course_id' => $courseID])->first();
         $chapters = Chapter::all();
         return view('application.accesser.assessor_summery_report',compact('chapters','applicationDetails'));
     }
@@ -2785,9 +2787,11 @@ class LevelController extends Controller
         }
     }
 
-    public function submitReportByDesktopAssessor($application_id)
+    public function submitReportByDesktopAssessor($application_id,$course_id)
     {
-        $applicationDetails = Application::find($application_id);
+        $applicationDetails = Application::with(['courses' => function ($query) use ($course_id) {
+            $query->where('id', $course_id);
+        }])->where('id', $application_id)->first();
         $chapters = Chapter::all();
         return view('asesrar.summery_report_form',compact('chapters','applicationDetails'));
     }
@@ -2799,19 +2803,20 @@ class LevelController extends Controller
 
         $summaryReport = SummaryReport::create($data);
 
-        $questionData = [];
-        foreach ($data['question_ids'] as $key => $questionId) {
-            $questionData[] = [
-                'question_id' => $questionId,
-                'nc_raised' => $data['nc_raised'][$key],
-                'capa_training_provider' => $data['capa_training_provider'][$key],
-                'document_submitted_against_nc' => $data['document_submitted_against_nc'][$key],
-                'remark' => $data['remark'][$key],
-                'summary_report_application_id' => $summaryReport->id,
-            ];
+        if(isset($data['question_ids'])){
+            $questionData = [];
+            foreach ($data['question_ids'] as $key => $questionId) {
+                $questionData[] = [
+                    'question_id' => $questionId,
+                    'nc_raised' => $data['nc_raised'][$key],
+                    'capa_training_provider' => $data['capa_training_provider'][$key],
+                    'document_submitted_against_nc' => $data['document_submitted_against_nc'][$key],
+                    'remark' => $data['remark'][$key],
+                    'summary_report_application_id' => $summaryReport->id,
+                ];
+            }
+            $insrted = SummaryReportChapter::insert($questionData);           
         }
-
-        $insrted = SummaryReportChapter::insert($questionData);
         $application = Application::find($data['application_id']);
         $updated = $application->update([
             'desktop_status' => 1
@@ -2821,9 +2826,7 @@ class LevelController extends Controller
             'is_read' => 0,
             'notification_type' => 'payment'
         ]);
-        if ($insrted) {
-            return redirect('/nationl-accesser')->with('success', "Report submit successfully");
-        }
+        return redirect('/nationl-accesser')->with('success', "Report submit successfully");
     }
 
     public function pendingPayments($application_id)

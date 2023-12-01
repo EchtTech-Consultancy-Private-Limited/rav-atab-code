@@ -106,7 +106,7 @@
                         </tr>                                      
                         @foreach ($chapter->questions as $question)
                         @php
-                            $documentsData = getSummerDocument($question->id, $applicationDetails->application_id) ?? 0;
+                            $documentsData = getSummerDocument($question->id, $applicationDetails->application_id,$applicationDetails->course_id) ?? 0;
                             $docId = $documentsData ? $documentsData->id : null;
                         @endphp
                         <tr>                            

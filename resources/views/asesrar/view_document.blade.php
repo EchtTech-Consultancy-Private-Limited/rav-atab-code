@@ -427,7 +427,7 @@
 
 
                                         {{-- Desktop Assessor --}}
-                                        @if ($applicationData->desktop_status == '' || $applicationData->desktop_status == null)
+                                        @if ($summeryReport == null)
                                                 <div class="d-flex justify-content-end">
                                                     <!-- <form id="submitForm"
                                                         action="{{ route('submit-final-report-by-desktop') }}"
@@ -439,7 +439,8 @@
                                                             style="margin-right: 10px;"
                                                             onclick="confirmSubmit()">Submit</button>
                                                     </form> -->
-                                                    <a href="{{ url('submit-report-by-desktop?course='.$course_id,$application_id) }}" target="_blanck"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
+                                                    <a href="{{ url('/submit-report-by-desktop' . '/' . $application_id . '/' . $course_id) }}"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
+                                                    
                                                 </div>
                                         @else
                                             <div class="text-center">
