@@ -602,7 +602,7 @@ class applicationController extends Controller
             $totalQuestion = Question::all();
             $totalQuestion = count($totalQuestion);
 
-            return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata,'totalQuestion' => $totalQuestion]);
+            return view('application.national', ['collection' => $Application, 'assesors' => $assessordata, 'secretariatdata' => $secretariatdata, 'totalQuestion' => $totalQuestion]);
         }
         return view('application.national');
     }
@@ -910,7 +910,13 @@ class applicationController extends Controller
         $course = $request->input('course');
         $mandays = DB::table('assessor_assigne_date')->where('assessor_id', auth()->user()->id)->where('application_id', $request->input('application'))->where('assesment_type', 2)->get();
         $mandays = count($mandays);
-        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course', 'mandays'));
+
+
+        $documentIds = Add_Document::where('course_id', $request->input('course'))->where('application_id', $request->input('application'))->get(['id']);
+        $totalNc = DocComment::whereIn('doc_id', $documentIds)->where('status', '!=', 4)->where('status', '!=', 3)->get()->count();
+        $totalAccepted = DocComment::whereIn('doc_id', $documentIds)->where('status', 4)->get()->count();
+
+        return view('on-site-assessor.final-summary', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course', 'mandays', 'totalNc', 'totalAccepted'));
     }
 
     public function getSummariesList(Request $request)
@@ -986,7 +992,12 @@ class applicationController extends Controller
         $chapters = Chapter::all();
         $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $course)->where('application_id', $application)->first();
         $improvementForm = ImprovementForm::where('course_id', $course)->where('application_id', $application)->first();
-        return view('tp.final-summary-report', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course'));
+
+        $documentIds = Add_Document::where('course_id', $course)->where('application_id', $application)->get(['id']);
+        $totalNc = DocComment::whereIn('doc_id', $documentIds)->where('status', '!=', 4)->where('status', '!=', 3)->get()->count();
+        $totalAccepted = DocComment::whereIn('doc_id', $documentIds)->where('status', 4)->get()->count();
+
+        return view('tp.final-summary-report', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course', 'totalNc', 'totalAccepted'));
     }
 
     public function getAdminApplicationCoursesLIst($applicationID)
@@ -1007,6 +1018,12 @@ class applicationController extends Controller
         $summaryReport = SummaryReport::where('summary_type', 'onsite')->where('course_id', $courseID)->where('application_id', $applicationID)->first();
         $improvementForm = ImprovementForm::where('course_id', $courseID)->where('application_id', $applicationID)->first();
         $course = $courseID;
-        return view('admin.application.document-summery-new', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course'));
+
+        $documentIds = Add_Document::where('course_id', $courseID)->where('application_id', $applicationID)->get(['id']);
+        $totalNc = DocComment::whereIn('doc_id', $documentIds)->where('status', '!=', 4)->where('status', '!=', 3)->get()->count();
+        $totalAccepted = DocComment::whereIn('doc_id', $documentIds)->where('status', 4)->get()->count();
+
+
+        return view('admin.application.document-summery-new', compact('applicationDetails', 'chapters', 'improvementForm', 'summaryReport', 'course', 'totalNc', 'totalAccepted'));
     }
 }

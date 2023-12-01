@@ -2326,7 +2326,11 @@ class LevelController extends Controller
     {
         $applicationDetails = SummeryReport::with('SummeryReportChapter')->where(['application_id'=> $applicationID,'course_id' => $courseID])->first();
         $chapters = Chapter::all();
-        return view('application.accesser.assessor_summery_report',compact('chapters','applicationDetails'));
+
+        $documentIds = Add_Document::where('course_id', $courseID)->where('application_id', $applicationID)->get(['id']);
+        $totalNc = DocComment::whereIn('doc_id',$documentIds)->where('status','!=',4)->where('status','!=',3)->get()->count();
+        $totalAccepted = DocComment::whereIn('doc_id',$documentIds)->where('status',4)->get()->count();
+        return view('application.accesser.assessor_summery_report',compact('chapters','applicationDetails','totalNc','totalAccepted'));
     }
 
     public function secretariat_view($id)

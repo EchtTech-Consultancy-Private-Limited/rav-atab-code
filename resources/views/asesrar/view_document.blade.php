@@ -409,7 +409,7 @@
                                     </div>
                                     @if (auth()->user()->assessment == 2)
                                         @if ($applicationData->gps_pic == null && $applicationData->onsite_status != 1)
-                                            @if (totalDocumentsCount($application_id) >= 2)
+                                            @if (totalDocumentsCount($application_id) >= count(count($questions)))
                                                 <div class="d-flex justify-content-end">
                                                     <a target="_blank" class="btn btn-primary mr-2" href="{{ url('on-site/report/?application='.$applicationData->id.'&course='.$course_id) }}">
                                                         Submit
@@ -441,8 +441,9 @@
                                                             style="margin-right: 10px;"
                                                             onclick="confirmSubmit()">Submit</button>
                                                     </form> -->
+                                                    @if (totalDocumentsCount($application_id) >= count(count($questions)))
                                                     <a href="{{ url('/submit-report-by-desktop' . '/' . $application_id . '/' . $course_id) }}"><button type="button" class="btn btn-success" style="margin-right: 10px;">Submit Report</button></a>
-                                                    
+                                                    @endif
                                                 </div>
                                         @else
                                             <div class="text-center">
