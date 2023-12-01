@@ -1491,6 +1491,10 @@ class LevelController extends Controller
 
         $course->notApraove_count = $notApprove + 1 ?? 1;
 
+        if ($request->is_displayed_onsite > 0) {
+            $course->is_displayed_onsite = 1;
+        }
+
 
         if ($request->hasfile('fileup')) {
             $file = $request->file('fileup');

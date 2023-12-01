@@ -85,7 +85,20 @@
                     $comment = getLastComment($document->id);
                 @endphp
 
-
+@if ($comment)
+<div class="card">
+    <div class="card-header bg-white text-dark">
+        <h5 class="mt-2">
+            Comments
+        </h5>
+    </div>
+    <div class="card-body text-center">
+        <h5>
+            {{ $comment->comments }}
+        </h5>
+    </div>
+</div>
+@endif
                 <div class="card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">

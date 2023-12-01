@@ -261,6 +261,7 @@
                                                                                                 class="submitform_doc_form"
                                                                                                 enctype="multipart/form-data">
                                                                                                 <input type="hidden" name="parent_doc_id" value="{{ $last_document->id }}">
+                                                                                                <input type="hidden" name="is_displayed_onsite" value="{{ $last_document->on_site_assessor_Id ? 1 : 0 }}">
                                                                                                 <input type="hidden"
                                                                                                     name="previous_url"
                                                                                                     value="{{ Request::url() }}">
