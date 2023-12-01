@@ -80,7 +80,7 @@
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h5 class="mt-2">
-                                 DESKTOP ASSESSMENT FORM
+                                DESKTOP ASSESSMENT FORM
                             </h5>
                         </div>
                         <div class="card-body">
@@ -167,18 +167,20 @@
                                             </td>
                                             <td>
                                                 @if ($summeryReportQuestion)
-                                                @php
-                                                    $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
-                                                @endphp
-                                                   @if ($documents)
-                                                   @foreach ($documents as $item)
-                                                   <div>
-                                                       <a target="_blank" class="btn view btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
-                                                   </div>
-                                                   @endforeach
-                                                   @else
+                                                    @php
+                                                        $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                                    @endphp
+                                                    @if ($documents)
+                                                        @foreach ($documents as $item)
+                                                            <div>
+                                                                <a target="_blank" class="btn view btn-primary p-1 m-0"
+                                                                    href="{{ asset('level/' . $item->doc_file) }}">View
+                                                                    Doc</a>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                    @endif
                                                 @endif
-                                            @endif
                                             </td>
                                             <td>
                                                 @php
@@ -186,14 +188,14 @@
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
-                                                      @if ($loop->iteration == 1)
-                                                      @php
-                                                      $comment = getDocComment($doc->id);
-                                                  @endphp
-                                                  @if ($comment)
-                                                      <span>{{ printRemark($doc->id) }}</span>
-                                                  @endif
-                                                      @endif
+                                                        @if ($loop->iteration == 1)
+                                                            @php
+                                                                $comment = getDocComment($doc->id);
+                                                            @endphp
+                                                            @if ($comment)
+                                                                <span>{{ printRemark($doc->id) }}</span>
+                                                            @endif
+                                                        @endif
                                                     @endforeach
                                                 @else
                                                     <span>Document not uploaded!</span>
@@ -210,7 +212,7 @@
                 @if ($summaryReport != null)
                     <div class="card">
                         <div class="card-header bg-white text-dark">
-                            <h5 class="mt-2">  ONSITE ASSESSMENT FORM</h5>
+                            <h5 class="mt-2"> ONSITE ASSESSMENT FORM</h5>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
@@ -298,10 +300,10 @@
                                             </td>
                                             <td>
                                                 @if ($summeryReportQuestion)
-                                                @if ($summeryReportQuestion->document_submitted_against_nc != null)
-                                                    {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                                    @if ($summeryReportQuestion->document_submitted_against_nc != null)
+                                                        {{ $summeryReportQuestion->document_submitted_against_nc }}
+                                                    @endif
                                                 @endif
-                                            @endif
                                             </td>
                                             <td>
                                                 @php
@@ -309,14 +311,14 @@
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
-                                                      @if ($loop->iteration == 1)
-                                                      @php
-                                                      $comment = getDocComment($doc->id);
-                                                  @endphp
-                                                  @if ($comment)
-                                                      <span>{{ printRemark($doc->id) }}</span>
-                                                  @endif
-                                                      @endif
+                                                        @if ($loop->iteration == 1)
+                                                            @php
+                                                                $comment = getDocComment($doc->id);
+                                                            @endphp
+                                                            @if ($comment)
+                                                                <span>{{ printRemark($doc->id) }}</span>
+                                                            @endif
+                                                        @endif
                                                     @endforeach
                                                 @else
                                                     <span>Document not uploaded!</span>
@@ -348,108 +350,139 @@
                     </div>
 
                     @if ($improvementForm != null)
-                    <div class="card">
-                        <div class="card-header bg-white text-dark">
-                            <h5 class="mt-2">
-                                OPPORTUNITY FOR IMPROVEMENT FORM
-                            </h5>
+                        <div class="card">
+                            <div class="card-header bg-white text-dark">
+                                <h5 class="mt-2">
+                                    OPPORTUNITY FOR IMPROVEMENT FORM
+                                </h5>
+                            </div>
+                            <table class="table table-bordered">
+
+                                <tbody>
+
+                                    <tr>
+                                        <td colspan="2">Name and Location of the Training Provider:
+                                            {{ $improvementForm->training_provider_name }}</td>
+                                        <td colspan="2">Name of the course to be assessed:
+                                            {{ $improvementForm->course_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):
+                                            {{ $improvementForm->way_of_assessment }}</td>
+                                        <td colspan="2"> No of Mandays: {{ $improvementForm->mandays }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td> S. No. </td>
+                                        <td> Opportunity for improvement Form</td>
+                                        <td colspan="2"> Standard reference</td>
+                                    </tr>
+                                    <tr>
+                                        <td> </td>
+                                        <td> {{ $improvementForm->opportunity_for_improvement }}</td>
+                                        <td> {{ $improvementForm->standard_reference }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> Signatures</td>
+                                        <td> </td>
+                                        <td> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Name </td>
+                                        <td>{{ $improvementForm->name }} </td>
+                                        <td> </td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td> </td>
+                                        <td> Team Leader: {{ $improvementForm->team_leader }} </td>
+                                        <td> Assessor: {{ $improvementForm->assessor_name }} </td>
+                                        <td> Rep. Assessee Orgn: {{ $improvementForm->rep_assessee_orgn }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"> Date: {{ $improvementForm->date_of_submission }}</td>
+                                        <td colspan="2"> Signature of the Team Leader</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table class="table table-bordered">
-
-                            <tbody>
-
-                                <tr>
-                                    <td colspan="2">Name and Location of the Training Provider:
-                                        {{ $improvementForm->training_provider_name }}</td>
-                                    <td colspan="2">Name of the course to be assessed:
-                                        {{ $improvementForm->course_name }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):
-                                        {{ $improvementForm->way_of_assessment }}</td>
-                                    <td colspan="2"> No of Mandays: {{ $improvementForm->mandays }}</td>
-                                </tr>
-                                <tr>
-                                    <td> S. No. </td>
-                                    <td> Opportunity for improvement Form</td>
-                                    <td colspan="2"> Standard reference</td>
-                                </tr>
-                                <tr>
-                                    <td> </td>
-                                    <td> {{ $improvementForm->opportunity_for_improvement }}</td>
-                                    <td> {{ $improvementForm->standard_reference }}</td>
-                                </tr>
-
-                                <tr>
-                                    <td> Signatures</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Name </td>
-                                    <td>{{ $improvementForm->name }} </td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td> </td>
-                                    <td> Team Leader: {{ $improvementForm->team_leader }} </td>
-                                    <td> Assessor: {{ $improvementForm->assessor_name }} </td>
-                                    <td> Rep. Assessee Orgn: {{ $improvementForm->rep_assessee_orgn }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"> Date: {{ $improvementForm->date_of_submission }}</td>
-                                    <td colspan="2"> Signature of the Team Leader</td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                     @endif
 
 
                 @endif
             </div>
         </div>
-@if ($applicationDetails->final_remark != null)
-<div class="card">
-    <div class="card-header bg-white text-dark">
-        <h5 class="mt-2">
-            Remark & GPS Picture
-        </h5>
-    </div>
-    <div class="card-body">
-        <div>
-            {{ $applicationDetails->final_remark }}
-        </div>
-        <div class="mt-2">
-            <span style="font-weight: bold;">GPC Picture</span>
-            <div>
-                <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
-                    <img style="width:300px;" src="{{ asset('level/'.$applicationDetails->gps_pic) }}" alt="">
-                </a>
+
+        <div class="row">
+            <div class="col-sm-3 text-center">
+                <div class="card">
+                   <div class="card-body">
+                    <h4>Total NC</h4>
+                    <div>
+                        <span style="font-weight: bold">
+                            {{ $totalNc ?? 0 }}
+                        </span>
+                    </div>
+                   </div>
+                </div>
+            </div>
+            <div class="col-sm-3 text-center">
+                <div class="card">
+                   <div class="card-body">
+                    <h4>Total Accepted</h4>
+                    <div>
+                        <span style="font-weight: bold">
+                            {{ $totalAccepted ?? 0 }}
+                        </span>
+                    </div>
+                   </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-@endif
+        
+        {{-- @if ($applicationDetails->final_remark != null)
+            <div class="card">
+                <div class="card-header bg-white text-dark">
+                    <h5 class="mt-2">
+                        Remark & GPS Picture
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        {{ $applicationDetails->final_remark }}
+                    </div>
+                    <div class="mt-2">
+                        <span style="font-weight: bold;">GPC Picture</span>
+                        <div>
+                            <a href="{{ asset('level/' . $applicationDetails->gps_pic) }}" target="_blank">
+                                <img style="width:300px;" src="{{ asset('level/' . $applicationDetails->gps_pic) }}"
+                                    alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif --}}
 
         </div>
-    </div>
+        </div>
     </section>
 
 
 
 
-@include('layout.footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-function printDiv(divId) {
-     var printContents = document.getElementById(divId).innerHTML;
-     var originalContents = document.body.innerHTML;
-     document.body.innerHTML = printContents;
-     window.print();
-     document.body.innerHTML = originalContents;
-}
-</script>
+    @include('layout.footer')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function printDiv(divId) {
+            var printContents = document.getElementById(divId).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
