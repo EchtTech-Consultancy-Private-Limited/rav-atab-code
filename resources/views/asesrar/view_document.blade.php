@@ -230,7 +230,7 @@
                                                         <tr>
                                                             <th class="width-10">Sr.No.</th>
                                                             <th class="width-50">Objective criteria</th>
-                                                            <th>Desktop Assessor</th>
+                                                            <th>{{ auth()->user()->assessment == 1 ? 'Desktop' : 'On-site' }} Assessor</th>
                                                             <th rowspan="2" class="width-10">Remarks</th>
                                                         </tr>                                                     
                                                     </thead>
@@ -346,7 +346,7 @@
                                                                                 }
 
                                                                             @endphp
-                                                                            <div class="bg-white text-dark mt-1"
+                                                                            <div class="text-dark mt-1"
                                                                                 style="border-radius: 10px;">
                                                                                 <div
                                                                                     style="padding: 3px; font-size: 11px; border-bottom: 1px solid #ddd;">
