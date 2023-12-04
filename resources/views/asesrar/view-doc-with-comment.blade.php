@@ -71,6 +71,8 @@
                                 <div>
                                     <form method="post" action="{{ url('add-accr-comment-view-doc') }}" id="ncForm">
                                         @csrf
+                                        <input type="hidden" name="assessor_id" value="{{ auth()->user()->id }}">
+                                        <input type="hidden" name="assesor_type" value="{{ auth()->user()->assessment == 1 ? 'desktop' : 'onsite' }}">
                                         <div class="row clearfix">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <div class="card project_widget">

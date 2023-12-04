@@ -766,7 +766,7 @@ class applicationController extends Controller
 
 
 
-        // dd($request->all()); 
+        // dd($request->all());
 
         $document = Add_Document::create([
             'question_id' => $request->questionID,

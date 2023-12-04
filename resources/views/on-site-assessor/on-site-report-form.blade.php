@@ -26,7 +26,7 @@
         text-align: center;
         border: 1px solid #aaa !important;
         color: #000;
-    } 
+    }
     table td {
         text-align: left;
         padding: 10px 10px;
@@ -220,18 +220,36 @@
                                                                 </td>
                                                                 <td>
                                                                     @php
-                                                                        $getNCComments = getNCRecordsComments($question->id, $courseDetail->id, $applicationData->id);
+                                                                        $documents = getQuestionDocument($question->id, $courseDetail->id, $applicationData->id);
                                                                     @endphp
-                                                                    @if ($getNCComments)
-                                                                        @foreach ($getNCComments as $item)
-                                                                            <div>
-                                                                                <div class="bg-danger p-1 m-2">
-                                                                                    {{ $item->comments ?? '' }}
-                                                                                </div>
+                                                                    @if ($documents)
+                                                                        @foreach ($documents as $item)
+                                                                            @php
+                                                                                $comment = getDocRemarks($item->id);
+                                                                            @endphp
+                                                                            @if($comment)
+                                                                                @foreach($comment as $commentItem)
+                                                                                    @if($commentItem)
+                                                                                        @if($commentItem->remark)
+                                                                                            {{ $commentItem->remark }}
+                                                                                            <input type="hidden"
+                                                                                                   name="capa_training_provider[]"
+                                                                                                   value="{{ $commentItem->remark }}">
+                                                                                        @endif
+                                                                                    @else
+                                                                                        No remark
+                                                                                        <input type="hidden"
+                                                                                               name="capa_training_provider[]"
+                                                                                               value="No remark">
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @else
+                                                                                No remark
                                                                                 <input type="hidden"
-                                                                                    name="capa_training_provider[]"
-                                                                                    value="{{ $item->comments ?? '' }}">
-                                                                            </div>
+                                                                                       name="capa_training_provider[]"
+                                                                                       value="No remark">
+                                                                            @endif
+
                                                                         @endforeach
                                                                     @endif
                                                                 </td>
@@ -242,13 +260,28 @@
                                                                     @if ($documents)
                                                                         @foreach ($documents as $item)
                                                                             <div>
-                                                                                <a class="btn btn-primary m-1" href="">View Doc</a>
+                                                                                <a href="{{ asset('level/'.$item->doc_file)  }}" class="btn btn-primary m-1" href="">View Doc</a>
                                                                             </div>
                                                                             <input type="hidden" name="document_submitted_against_nc[]" value="{{ $item->doc_file }}">
                                                                         @endforeach
                                                                     @endif
                                                                 </td>
-                                                                <td> <input type="text" name="remark[]" value="Not Accepted" required></td>
+                                                                <td>
+                                                                    @php
+
+                                                                        $documents = getONeDocument($question->id,$applicationData->id,$courseDetail->id);
+                                                                    @endphp
+                                                                    @if($documents)
+                                                                        @php
+                                                                            $comment = getLastComment($documents->id);
+                                                                        @endphp
+                                                                        @if($comment)
+                                                                            {{ ucfirst($comment->comments) }}
+                                                                            <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                                        @endif
+                                                                    @endif
+
+                                                                </td>
                                                             </tr>
                                                         @endif
                                                     @endforeach
