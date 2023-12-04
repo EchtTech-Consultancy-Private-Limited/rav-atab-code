@@ -96,7 +96,8 @@
 
     .width-50{width:50%}
     .width-10{width:10%}
-
+    .card .header h2{font-size:14px;}
+    .card .header{padding:8px}
 </style>
 
 </head>
