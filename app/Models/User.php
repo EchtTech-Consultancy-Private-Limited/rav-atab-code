@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_loggedin'
+        'is_loggedin',
+        'last_activity'
     ];
 
     /**

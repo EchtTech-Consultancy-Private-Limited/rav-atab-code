@@ -198,65 +198,60 @@
                                     </td>
                                 </tr>
                                 @foreach ($item->questions as $question)
-                                    @php
-                                        $comment = getDocumentComment($question->id, $applicationData->id, $courseDetail->id);
-                                    @endphp
-                                    @if ($comment)
-                                        @if ($comment->status != 4)
-                                            <tr>
-                                                <td>
-                                                    <input type="text" value="{{ $question->code }}">
-                                                    <input type="hidden" name="question_ids[]"
-                                                        value="{{ $question->id }}">
-                                                </td>
-                                                <td><input type="text" value="{{ $question->title }}"></td>
-                                                <td>
-                                                    @php
-                                                        $getNCRecords = getNCRecords($question->id, $courseDetail->id, $applicationData->id);
-                                                    @endphp
-                                                    <input type="text" name="nc_raised[]"
-                                                        value=" {{ $getNCRecords }}">
-                                                </td>
-                                                <td>
-                                                    @php
-                                                        $getNCComments = getNCRecordsComments($question->id, $courseDetail->id, $applicationData->id);
-
-                                                    @endphp
-                                                    @if ($getNCComments)
-                                                        @foreach ($getNCComments as $collection)
-                                                            @foreach ($collection as $item)
-                                                            <div class="bg-danger m-2 text-white">{{ $item->comments ?? '' }}</div>
-                                                                <input type="hidden" name="capa_training_provider[]"
-                                                                    value="{{ $item->comments ?? '' }}">
-                                                            @endforeach
-                                                        @endforeach
-                                                    @endif
-
-                                                </td>
-                                                <td>
-                                                    @php
-                                                        $documents = getQuestionDocument($question->id, $courseDetail->id, $applicationData->id);
-                                                    @endphp
-                                                    @if ($documents)
-                                                        @foreach ($documents as $item)
-                                                        <div class="mt-2">
-                                                            <a target="_blank" class="btn btn-primary p-1 m-0" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
-                                                        </div>
-                                                       
-                                                        @endforeach
-
-                                                        <input type="hidden" name="document_submitted_against_nc[]" value="none">
-                                                        @else
-                                                    @endif
-                                                    
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="remark[]" value="Not Accepted" readonly>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endif
-                                @endforeach
+                                                        @php
+                                                            $comment = getDocumentComment($question->id, $applicationData->id, $courseDetail->id);
+                                                        @endphp
+                                                        @if ($comment)
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="hidden" name="question_ids[]"
+                                                                        value="{{ $question->id }}" readonly>
+                                                                    {{ $question->code }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $question->title }}
+                                                                </td>
+                                                                <td>
+                                                                    @php
+                                                                        $getNCRecords = getNCRecords($question->id, $courseDetail->id, $applicationData->id);
+                                                                    @endphp
+                                                                    <input type="text" name="nc_raised[]"
+                                                                        value=" {{ $getNCRecords }}" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    @php
+                                                                        $getNCComments = getNCRecordsComments($question->id, $courseDetail->id, $applicationData->id);
+                                                                    @endphp
+                                                                    @if ($getNCComments)
+                                                                        @foreach ($getNCComments as $item)
+                                                                            <div>
+                                                                                <div class="bg-danger p-1 m-2">
+                                                                                    {{ $item->comments ?? '' }}
+                                                                                </div>
+                                                                                <input type="hidden"
+                                                                                    name="capa_training_provider[]"
+                                                                                    value="{{ $item->comments ?? '' }}">
+                                                                            </div>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @php
+                                                                        $documents = getQuestionDocument($question->id, $courseDetail->id, $applicationData->id);
+                                                                    @endphp
+                                                                    @if ($documents)
+                                                                        @foreach ($documents as $item)
+                                                                            <div>
+                                                                                <a class="btn btn-primary m-1" href="">View Doc</a>
+                                                                            </div>
+                                                                            <input type="hidden" name="document_submitted_against_nc[]" value="{{ $item->doc_file }}">
+                                                                        @endforeach
+                                                                    @endif
+                                                                </td>
+                                                                <td> <input type="text" name="remark[]" value="Not Accepted" required></td>
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
                             @endforeach
                             <tr>
                                 <td colspan="5">

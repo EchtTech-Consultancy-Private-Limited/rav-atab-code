@@ -39,6 +39,16 @@
     .table-summery .table-bordered tbody tr th {
         text-emphasis: left !important;
     }
+
+    .next-step, .next-step1, .next-step2, .prev-step, .prev-step1, .preview-step, .btn:not(.btn-link):not(.btn-circle) {
+    padding: 6px 18px;
+    white-space: nowrap;
+}
+
+ .width-50{
+    width:50%;
+ }
+
 </style>
 </head>
 
@@ -147,10 +157,10 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th>Sl. No</th>
-                                <th>Objective Element</th>
+                                <th class="width-50">Objective Element</th>
                                 <th>NC raised</th>
                                 <th>CAPA by Training Provider</th>
-                                <th>Document submitted against the NC</th>
+                                <th>Document submitted <br> against the NC</th>
                                 <th>Remarks (Accepted/ Not accepted)</th>
                             </tr>
                             @foreach ($chapters as $chapter)
@@ -197,7 +207,7 @@
                                             @if ($getNCComments)
                                                 @foreach ($getNCComments as $collection)
                                                     @foreach ($collection as $item)
-                                                        <div class="bg-danger m-2 text-white">
+                                                        <div class="btn btn-danger btn-sm mb-3">
                                                             {{ $item->comments ?? '' }}</div>
                                                         <input type="hidden" name="capa_training_provider[]"
                                                             value="{{ $item->comments ?? '' }}">

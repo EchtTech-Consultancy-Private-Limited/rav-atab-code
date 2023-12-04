@@ -2324,13 +2324,15 @@ class LevelController extends Controller
 
     public function view_summery_report($courseID,$applicationID)
     {
-        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where(['application_id'=> $applicationID,'course_id' => $courseID])->first();
+        $applicationDetails = Application::find($applicationID);
         $chapters = Chapter::all();
+        $summaryReport = SummeryReport::with('SummeryReportChapter')->where(['application_id'=> $applicationID,'course_id' => $courseID])->first();
 
         $documentIds = Add_Document::where('course_id', $courseID)->where('application_id', $applicationID)->get(['id']);
         $totalNc = DocComment::whereIn('doc_id',$documentIds)->where('status','!=',4)->where('status','!=',3)->get()->count();
         $totalAccepted = DocComment::whereIn('doc_id',$documentIds)->where('status',4)->get()->count();
-        return view('application.accesser.assessor_summery_report',compact('chapters','applicationDetails','totalNc','totalAccepted'));
+        $course = $courseID;
+        return view('application.accesser.assessor_summery_report',compact('course','chapters','applicationDetails','totalNc','totalAccepted','summaryReport'));
     }
 
     public function secretariat_view($id)
@@ -2804,11 +2806,10 @@ class LevelController extends Controller
 
     public function submitReportByDesktopAssessor($application_id,$course_id)
     {
-        $applicationDetails = Application::with(['courses' => function ($query) use ($course_id) {
-            $query->where('id', $course_id);
-        }])->where('id', $application_id)->first();
+        $applicationDetails = Application::find($application_id);
+        
         $chapters = Chapter::all();
-        return view('asesrar.summery_report_form',compact('chapters','applicationDetails'));
+        return view('asesrar.summery_report_form',compact('chapters','applicationDetails','course_id'));
     }
 
     public function submitFinalReportByDesktopAssessor(Request $request)
