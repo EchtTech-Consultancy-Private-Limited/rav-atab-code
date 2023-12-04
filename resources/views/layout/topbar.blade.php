@@ -90,13 +90,13 @@
                                      @if (getApplicationPaymentNotificationStatus())
                                          @foreach ($applications as $application)
                                              <li>
-                                                 @if ($application->notification_type == 'document')
-                                                     <a href="{{ url('previews-application-first/' . $application->application->id.'/'.$application->id) }}"
+                                                 {{-- @if ($application->notification_type == 'document') --}}
+                                                 {{-- <a href="{{ url('previews-application-first/' . $application->application->id.'/'.$application->id) }}"
                                                          style="color: #000;">
                                                          Application ID {{ $application->application->application_uid }}
 
-                                                     </a>
-                                                 @else
+                                                     </a> --}}
+                                                 @if ($application->notification_type != 'document')
                                                      <a href="{{ url('pending-payments/' . $application->application->id) }}"
                                                          style="color: #000;">
                                                          Application ID {{ $application->application->application_uid }}

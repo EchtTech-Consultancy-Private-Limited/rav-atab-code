@@ -66,17 +66,17 @@
                     <div class="card-body">
                         <table class="table table-bordered">
                             <tr>
-                                <td>Application No (provided by ATAB) : {{ $applicationDetails->application_uid }} </td>
-                                <td>Date of application : {{ $applicationDetails->date_of_application }}</td>
+                                <td>Application No (provided by ATAB) : {{ $summaryReport->application_uid }} </td>
+                                <td>Date of application : {{ $summaryReport->date_of_application }}</td>
                             </tr>
                             <tr>
                                 <td>Name and Location of the Training Provider :
-                                    {{ $applicationDetails->location_training_provider }}</td>
-                                <td>Name of the course to be assessed : {{ $applicationDetails->course_assessed }} </td>
+                                    {{ $summaryReport->location_training_provider }}</td>
+                                <td>Name of the course to be assessed : {{ $summaryReport->course_assessed }} </td>
                             </tr>
                             <tr>
-                                <td>Way of assessment (Desktop) : {{ $applicationDetails->way_of_desktop }}</td>
-                                <td>No of Mandays : {{ $applicationDetails->mandays }}</td>
+                                <td>Way of assessment (Desktop) : {{ $summaryReport->way_of_desktop }}</td>
+                                <td>No of Mandays : {{ $summaryReport->mandays }}</td>
                             </tr>
                             <tr>
                                 <td>Signature</td>
@@ -84,7 +84,7 @@
                             </tr>
                             <tr>
                                 <td>Assessor Name</td>
-                                <td>{{ $applicationDetails->assessor }}</td>
+                                <td>{{ $summaryReport->assessor }}</td>
                             </tr>
 
 
@@ -107,39 +107,81 @@
                                     </td>
                                 </tr>
                                 @foreach ($chapter->questions as $question)
-                                    @php
-                                        $documentsData = getSummerDocument($question->id, $applicationDetails->application_id, $applicationDetails->course_id) ?? 0;
-                                        $docId = $documentsData ? $documentsData->id : null;
-                                    @endphp
                                     <tr>
                                         <td> {{ $question->code }}</td>
                                         <td>{{ $question->title }}</td>
-                                        @php
-                                            $summeryReportQuestion = getQuestionSummary($question->id, $applicationDetails->id);
-                                        @endphp
-                                        <td>{{ @$summeryReportQuestion->nc_raised ?? '' }}</td>
-                                        <td>{{ @$summeryReportQuestion->capa_training_provider ?? '' }}</td>
-                                        @php
-                                            $documents = getQuestionDocument($question->id, $applicationDetails->course_id, $applicationDetails->application_id);
-                                        @endphp
                                         <td>
+                                            @php
+                                                $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
+                                            @endphp
+                                            @if (count($documents) > 0)
+                                                @foreach ($documents as $doc)
+                                                    @php
+                                                        $comment = getDocComment($doc->id);
+                                                    @endphp
+                                                    @if ($comment)
+                                                        @if ($comment->status == 1)
+                                                            NC1
+                                                        @elseif($comment->status == 2)
+                                                            NC2
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <span>Document not uploaded!</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php
+                                                $getNCComments = getNCRecordsComments($question->id, $course, $applicationDetails->id);
+                                            @endphp
+                                            @if ($getNCComments)
+                                                @foreach ($getNCComments as $item)
+                                                    <div>
+                                                        <div class="bg-danger p-1 m-2">
+                                                            {{ $item->comments ?? '' }}
+                                                        </div>
+                                                        <input type="hidden" name="capa_training_provider[]"
+                                                            value="{{ $item->comments ?? '' }}">
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php
+                                                $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                            @endphp
                                             @if ($documents)
                                                 @foreach ($documents as $item)
                                                     <div>
-                                                        <a target="_blank" class="btn view btn-primary p-1 m-0"
-                                                            href="{{ asset('level/' . $item->doc_file) }}">View Doc</a>
+                                                        <a class="btn btn-primary" href="">View Doc</a>
                                                     </div>
+                                                    <input type="hidden" name="document_submitted_against_nc[]"
+                                                        value="{{ $item->doc_file }}">
                                                 @endforeach
-                                            @else
                                             @endif
                                         </td>
-                                        @if (getButtonText($docId) == 'Accepted')
-                                            <td>{{ @$summeryReportQuestion->remark ?? (getButtonText($docId) ?? '') }}
-                                            </td>
-                                        @else
-                                            <td>{{ @$summeryReportQuestion->remark ?? '' }}</td>
-                                        @endif
-
+                                        <td>
+                                            @php
+                                                $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
+                                            @endphp
+                                            @if (count($documents) > 0)
+                                                @foreach ($documents as $doc)
+                                                    @php
+                                                        $comment = getDocComment($doc->id);
+                                                    @endphp
+                                                    @if ($comment)
+                                                        @if ($comment->status == 4)
+                                                            Accepted
+                                                        @else
+                                                            Not Accepted
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <span>Document not uploaded!</span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endforeach
@@ -150,26 +192,26 @@
                 <div class="row">
                     <div class="col-sm-3 text-center">
                         <div class="card">
-                           <div class="card-body">
-                            <h4>Total NC</h4>
-                            <div>
-                                <span style="font-weight: bold">
-                                    {{ $totalNc ?? 0 }}
-                                </span>
+                            <div class="card-body">
+                                <h4>Total NC</h4>
+                                <div>
+                                    <span style="font-weight: bold">
+                                        {{ $totalNc ?? 0 }}
+                                    </span>
+                                </div>
                             </div>
-                           </div>
                         </div>
                     </div>
                     <div class="col-sm-3 text-center">
                         <div class="card">
-                           <div class="card-body">
-                            <h4>Total Accepted</h4>
-                            <div>
-                                <span style="font-weight: bold">
-                                    {{ $totalAccepted ?? 0 }}
-                                </span>
+                            <div class="card-body">
+                                <h4>Total Accepted</h4>
+                                <div>
+                                    <span style="font-weight: bold">
+                                        {{ $totalAccepted ?? 0 }}
+                                    </span>
+                                </div>
                             </div>
-                           </div>
                         </div>
                     </div>
                 </div>

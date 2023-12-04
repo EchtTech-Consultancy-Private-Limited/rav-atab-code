@@ -952,7 +952,7 @@ function getVerifiedApplications()
 function getApplicationPaymentNotificationStatus()
 {
     $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
-    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->orderBy('id','desc')->get();
     if (count($applications) > 0) {
         return true;
     } else {
@@ -1043,7 +1043,7 @@ function getDocumentComment($questionID, $applicationID, $courseID)
 {
     $document =  Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->first();
     if ($document) {
-        $comment = DB::table('doc_comments')->where('doc_id', $document->id)->first();
+        $comment = DB::table('doc_comments')->where('doc_id', $document->id)->where('status','!=',4)->first();
         return $comment;
     }
 }
@@ -1060,15 +1060,13 @@ function getDocComment($docID)
 
 function printStatus($docID)
 {
-    $comment = DocComment::where('doc_id', $docID)->first();
+    $comment = DocComment::where('doc_id', $docID)->where('status','!=',3)->first();
 
     if ($comment) {
         if ($comment->status == 1) {
             return "NC1";
         } elseif ($comment->status == 2) {
             return "NC2";
-        } elseif ($comment->status == 3) {
-            return "Not Recommended";
         } elseif ($comment->status == 4) {
             return "No NC";
         }
@@ -1124,9 +1122,9 @@ function getNCRecords($question, $course, $application)
         foreach ($commentsData as $comment) {
             // Check the status and add the appropriate string to the array
             if ($comment->status == 1) {
-                $comments[] = 'nc1';
+                $comments[] = 'NC1';
             } elseif ($comment->status == 2) {
-                $comments[] = 'nc2';
+                $comments[] = 'NC2';
             } // Add more conditions as needed
         }
     }
@@ -1140,29 +1138,25 @@ function getNCRecordsComments($question, $course, $application)
     $documents = Add_Document::where('application_id', $application)
         ->where('course_id', $course)
         ->where('question_id', $question)
+        ->pluck('id'); // Use pluck to retrieve only the 'id' column
+
+    // Use a single query to fetch comments for all documents
+    $comments = DocComment::whereIn('doc_id', $documents)
+        ->where('status', '!=', 4)
+        ->where('status', '!=', 3)
         ->get();
 
-    $comments = []; // Initialize an array to store comments
-
-    foreach ($documents as $document) {
-        $commentsData = DocComment::where('doc_id', $document->id)
-            ->where('status', '!=', 4)
-            ->get();
-
-        // Check if there are any comments for the current document
-        if ($commentsData->isNotEmpty()) {
-            // Add the comments for the current document to the array
-            $comments[] = $commentsData;
-        }
-    }
-
-    // Return the array of comments for all documents
     return $comments;
 }
+
 
 function getQuestionDocument($question, $course, $application)
 {
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
+}
+
+function getAcceptedDocument($question, $course, $application){
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->first();
 }
 
 
