@@ -24365,6 +24365,7 @@ div#ui-datepicker-div{
 }
 
 
+
 @media(max-width:767px) {
     .sidebar .menu{
         background: #def0f5 !important;
@@ -24678,4 +24679,17 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 .btn {
     line-height: 2.1 !important;
     border-radius: 7px !important;
+}
+
+
+
+@media(max-width:1400px) {
+    .sidebar .logo-brand img {
+        text-align: center;
+        width: 115px !important;
+        margin-top: 2px;
+    }
+    .logo-brand{height: 62px;}
+    .user-panel{padding: 10px 10px 10px 0;}
+    .user-panel .image {width: 22%;}
 }
