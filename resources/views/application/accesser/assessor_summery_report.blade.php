@@ -154,7 +154,7 @@
                                             @if ($documents)
                                                 @foreach ($documents as $item)
                                                     <div>
-                                                        <a class="btn btn-primary" href="">View Doc</a>
+                                                        <a class="btn btn-primary m-1" href="">View Doc</a>
                                                     </div>
                                                     <input type="hidden" name="document_submitted_against_nc[]"
                                                         value="{{ $item->doc_file }}">
