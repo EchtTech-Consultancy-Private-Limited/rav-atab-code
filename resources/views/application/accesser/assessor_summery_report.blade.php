@@ -36,7 +36,7 @@
     <section class="content">
         <div class="block-header">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
                     <ul class="breadcrumb breadcrumb-style ">
                         <li class="breadcrumb-item">
                             <h4 class="page-title">Application</h4>
@@ -51,7 +51,7 @@
                     <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
                         style="float:right;">Back
                     </a>
-                    <a type="button" class="btn btn-primary float-right me-2" onclick="printDiv('printableArea')">Print
+                    <a type="button" class="btn btn-dark float-right me-2" onclick="printDiv('printableArea')"><i class="fas fa-print"></i> Print
                     </a>
 
                 </div>
