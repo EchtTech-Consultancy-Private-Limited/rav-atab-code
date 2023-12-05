@@ -149,7 +149,28 @@
                                                     @endif
                                                 @endforeach
                                             @else
-                                                <span>Document not uploaded!</span>
+                                                @php
+                                                    $documents = getAllDocumentsNoAction($question->id, $applicationDetails->id, $course);
+
+                                                @endphp
+                                                @if (count($documents) > 0)
+                                                    @foreach ($documents as $doc)
+                                                        @php
+                                                            $comment = getDocComment($doc->id);
+                                                        @endphp
+                                                        @if ($comment)
+                                                            @if ($comment->status == 1)
+                                                                NC1
+                                                            @elseif($comment->status == 2)
+                                                                NC2
+                                                            @endif
+                                                        @else
+                                                            <span class="text-success">Document Uploaded. No NC</span>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-danger">Document Not Uploaded</span>
+                                                @endif
                                             @endif
                                         </td>
                                         <td>
@@ -171,20 +192,24 @@
                                                            name="capa_training_provider[]"
                                                            value="No remark">
                                                 @endif
+                                            @else
+                                                No Remark
                                             @endif
                                         </td>
                                         <td>
                                             @php
                                                 $documents = getQuestionDocumentDesktop($question->id, $course, $applicationDetails->id);
                                             @endphp
-                                            @if ($documents)
+                                            @if (count($documents) > 0)
                                                 @foreach ($documents as $item)
                                                     <div>
-                                                        <a class="btn btn-primary m-1" href="">View Doc</a>
+                                                        <a target="_blank" href="{{ asset('level/'.$item->doc_file) }}" class="btn btn-primary m-1" href="">View Doc</a>
                                                     </div>
                                                     <input type="hidden" name="document_submitted_against_nc[]"
                                                            value="{{ $item->doc_file }}">
                                                 @endforeach
+                                            @else
+                                                Document not available!
                                             @endif
                                         </td>
                                         <td>
@@ -199,7 +224,11 @@
                                                 @if($comment)
                                                     {{ ucfirst($comment->comments) }}
                                                     <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                @else
+                                                    <span>No Remark</span>
                                                 @endif
+                                            @else
+                                                <span>No Remark</span>
                                             @endif
 
                                         </td>
@@ -287,7 +316,28 @@
                                                     @endif
                                                 @endforeach
                                             @else
-                                                <span>Document not uploaded!</span>
+                                                @php
+                                                    $documents = getAllDocumentsNoAction($question->id, $applicationDetails->id, $course);
+
+                                                @endphp
+                                                @if (count($documents) > 0)
+                                                    @foreach ($documents as $doc)
+                                                        @php
+                                                            $comment = getDocComment($doc->id);
+                                                        @endphp
+                                                        @if ($comment)
+                                                            @if ($comment->status == 1)
+                                                                NC1
+                                                            @elseif($comment->status == 2)
+                                                                NC2
+                                                            @endif
+                                                        @else
+                                                            <span class="text-success">Document Uploaded. No NC</span>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-danger">Document Not Uploaded</span>
+                                                @endif
                                             @endif
                                         </td>
                                         <td>
@@ -309,6 +359,8 @@
                                                            name="capa_training_provider[]"
                                                            value="No remark">
                                                 @endif
+                                            @else
+                                                No Remark
                                             @endif
                                         </td>
 
@@ -316,14 +368,16 @@
                                             @php
                                                 $documents = getQuestionDocumentOnsite($question->id, $course, $applicationDetails->id);
                                             @endphp
-                                            @if ($documents)
+                                            @if (count($documents) > 0)
                                                 @foreach ($documents as $item)
                                                     <div>
-                                                        <a class="btn btn-primary m-1" href="">View Doc</a>
+                                                        <a target="_blank" href="{{ asset('level/'.$item->doc_file) }}" class="btn btn-primary m-1" href="">View Doc</a>
                                                     </div>
                                                     <input type="hidden" name="document_submitted_against_nc[]"
                                                            value="{{ $item->doc_file }}">
                                                 @endforeach
+                                            @else
+                                                Document not available!
                                             @endif
                                         </td>
                                         <td>
@@ -338,7 +392,11 @@
                                                 @if($comment)
                                                     {{ ucfirst($comment->comments) }}
                                                     <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                @else
+                                                    <span>No Remark</span>
                                                 @endif
+                                            @else
+                                                <span>No Remark</span>
                                             @endif
 
                                         </td>

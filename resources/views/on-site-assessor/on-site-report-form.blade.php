@@ -212,7 +212,7 @@
                                     </td>
                                     <td>
                                         @php
-                                            $getNCRecords = getNCRecords($question->id, $courseDetail->id, $applicationData->id);
+                                            $getNCRecords = getNCRecordsONsite($question->id, $courseDetail->id, $applicationData->id);
                                         @endphp
                                         <input type="text" name="nc_raised[]"
                                                value=" {{ $getNCRecords }}" readonly>
@@ -240,7 +240,7 @@
                                     </td>
                                     <td>
                                         @php
-                                            $documents = getQuestionDocument($question->id, $courseDetail->id, $applicationData->id);
+                                            $documents = getQuestionDocumentOnsite($question->id, $courseDetail->id, $applicationData->id);
                                         @endphp
                                         @if ($documents)
                                             @foreach ($documents as $item)
@@ -265,7 +265,11 @@
                                             @if($comment)
                                                 {{ ucfirst($comment->comments) }}
                                                 <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                            @else
+                                                <input type="hidden" name="remark[]" value="No Remark">
                                             @endif
+                                        @else
+                                            <input type="hidden" name="remark[]" value="No Remark">
                                         @endif
 
                                     </td>
