@@ -867,9 +867,12 @@ function totalQuestionsCount($applicationId)
 
 function totalDocumentsCount($applicationId)
 {
-    $totalDocuments = DB::table('add_documents')->where('application_id', $applicationId)->get()->count();
-
-    return $totalDocuments;
+    return DB::table('add_documents')
+        ->select('question_id')
+        ->where('application_id', $applicationId)
+        ->distinct()
+        ->get()
+        ->count();
 }
 
 function getUserDetail($userId)
