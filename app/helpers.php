@@ -1048,7 +1048,26 @@ function getDocumentComment($questionID, $applicationID, $courseID)
 
 function getAllDocumentsForSummary($questionID, $applicationID, $courseID)
 {
+
     return Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->get();
+}
+
+
+
+function getAllDocumentsForSummaryForDesktop($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)->where('assesment_type','desktop')
+        ->get();
+}
+
+function getAllDocumentsForSummaryForOnsite($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)->where('assesment_type','onsite')
+        ->get();
 }
 
 
@@ -1061,9 +1080,8 @@ function getONeDocument($questionID, $applicationID, $courseID)
     return Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
         ->where('course_id', $courseID)
-        ->skip(1)
-        ->take(1)
         ->orderBy('id', 'desc')
+        ->where('photograph',null)
         ->first();
 }
 function getDocComment($docID)
@@ -1073,7 +1091,7 @@ function getDocComment($docID)
 
 function getDocRemarks($docID)
 {
-    return DocumentRemark::where('document_id', $docID)->first();
+    return DocumentRemark::where('document_id', $docID)->orderBy('id','desc')->first();
 }
 
 
@@ -1157,6 +1175,7 @@ function getNCRecordsComments($question, $course, $application)
     $documents = Add_Document::where('application_id', $application)
         ->where('course_id', $course)
         ->where('question_id', $question)
+        ->where('assesment_type','desktop')
         ->pluck('id'); // Use pluck to retrieve only the 'id' column
 
     // Use a single query to fetch comments for all documents
@@ -1172,6 +1191,32 @@ function getNCRecordsComments($question, $course, $application)
 function getQuestionDocument($question, $course, $application)
 {
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
+}
+
+function getQuestionDocumentDesktop($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->where('assesment_type','desktop')->get();
+}
+
+function getQuestionDocumentOnsite($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->where('on_site_assessor_Id','!=',null)->get();
+}
+
+
+function getSingleDocument($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->first();
+}
+
+function getSingleDocumentForDesktop($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('assesment_type', 'desktop')->orderBy('id','desc')->first();
+}
+
+function getSingleDocumentForONSite($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('assesment_type', 'onsite')->orderBy('id','desc')->first();
 }
 
 function getAcceptedDocument($question, $course, $application)

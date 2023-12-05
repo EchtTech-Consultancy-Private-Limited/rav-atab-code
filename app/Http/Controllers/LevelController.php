@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Application;
@@ -1567,14 +1569,14 @@ class LevelController extends Controller
 
     public function acc_doc_comments(Request $request)
     {
+
         $login_id = Auth::user()->role;
         if ($login_id == 3) {
             $request->doc_code;
 
-            $document = Add_Document::where('doc_id', $request->doc_code)->first();
+            $document = Add_Document::where('id', $request->doc_id)->first();
             $document->assessor_id = Auth::user()->id;
-            $document->assessor_id = $request->assessor_id ?? 0;
-            $document->assesment_type = $request->assesor_type ?? 0;
+            $document->assesment_type = Auth::user()->assessment == 1 ? 'desktop' : 'onsite';
             $document->save();
 
 

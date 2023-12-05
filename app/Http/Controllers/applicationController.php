@@ -677,8 +677,6 @@ class applicationController extends Controller
 
     public function uploadDocumentByOnSiteAssessorPost(Request $request)
     {
-
-
         $request->validate([
             'status' => 'required',
             'remark' => 'required',
@@ -692,17 +690,17 @@ class applicationController extends Controller
             $file->move('level/', $filename);
         }
 
-        if ($request->status == 4) {
-            $commentTxt = "Document has been approved";
-        } else {
+
             $commentTxt = $request->remark;
-        }
+
 
         if ($request->parent_doc_id) {
             Add_Document::where('id', $request->documentID)->update(['is_displayed_onsite' => 2]);
         }
 
         $document = Add_Document::create([
+            'assessor_id' => auth()->user()->id,
+            'assesment_type' => auth()->user()->assessment == 1 ? 'desktop' : 'onsite',
             'question_id' => $request->questionID,
             'application_id' => $request->applicationID,
             'course_id' => $request->courseID,
@@ -859,14 +857,14 @@ class applicationController extends Controller
 
     public function opportunityForm(Request $request)
     {
-        $existingEntry = ImprovementForm::where('application_id', $request->input('application'))
-            ->where('course_id', $request->input('course'))
-            ->first();
-
-        if ($existingEntry) {
-            // Entry already exists, redirect with flash message
-            return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
-        }
+//        $existingEntry = ImprovementForm::where('application_id', $request->input('application'))
+//            ->where('course_id', $request->input('course'))
+//            ->first();
+//
+//        if ($existingEntry) {
+//            // Entry already exists, redirect with flash message
+//            return redirect(url('nationl-accesser'))->with('success', 'Report already exists for the given application and course.');
+//        }
         $applicationData = Application::find($request->input('application'));
         $assessorDetail = AssessorApplication::where('application_id', $applicationData->id)->where('assessor_id', auth()->user()->id)->first();
 

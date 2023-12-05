@@ -26,6 +26,9 @@ class Add_Document extends Model
         'on_site_assessor_Id',
         'photograph_comment',
         'photograph',
+        'assessor_id',
+        'assesment_type',
+
     ];
 
 

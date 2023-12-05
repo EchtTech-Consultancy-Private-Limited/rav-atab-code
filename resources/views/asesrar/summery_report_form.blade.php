@@ -276,37 +276,23 @@
                                                         </td>
                                                         <td>
                                                             @php
-                                                                $documents = getQuestionDocument($question->id, $course_id, $applicationDetails->id);
+                                                                $documents = getSingleDocument($question->id, $course_id, $applicationDetails->id);
                                                             @endphp
                                                             @if ($documents)
-                                                                @foreach ($documents as $item)
-                                                                    @php
-                                                                        $comment = getDocRemarks($item->id);
-                                                                    @endphp
-                                                                    @if($comment)
-                                                                        @foreach($comment as $commentItem)
-                                                                            @if($commentItem)
-                                                                                @if($commentItem->remark)
-                                                                                    {{ $commentItem->remark }}
-                                                                                    <input type="hidden"
-                                                                                           name="capa_training_provider[]"
-                                                                                           value="{{ $commentItem->remark }}">
-                                                                                @endif
-                                                                            @else
-                                                                                No remark
-                                                                                <input type="hidden"
-                                                                                       name="capa_training_provider[]"
-                                                                                       value="No remark">
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        No remark
-                                                                        <input type="hidden"
-                                                                               name="capa_training_provider[]"
-                                                                               value="No remark">
-                                                                    @endif
-
-                                                                @endforeach
+                                                                @php
+                                                                    $comment = getDocRemarks($documents->id);
+                                                                @endphp
+                                                                @if ($comment)
+                                                                    {{ $comment->remark }}
+                                                                    <input type="hidden"
+                                                                           name="capa_training_provider[]"
+                                                                           value="{{ $comment->remark }}">
+                                                                @else
+                                                                    No Remark
+                                                                    <input type="hidden"
+                                                                           name="capa_training_provider[]"
+                                                                           value="No remark">
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td>
@@ -316,7 +302,10 @@
                                                             @if ($documents)
                                                                 @foreach ($documents as $item)
                                                                     <div>
-                                                                        <a class="btn btn-primary" href="">View Doc</a>
+                                                                        <a target="_blank"
+                                                                           href="{{ asset('level/'.$item->doc_file) }}"
+                                                                           class="btn btn-primary m-1" href="">View
+                                                                            Doc</a>
                                                                     </div>
                                                                     <input type="hidden"
                                                                            name="document_submitted_against_nc[]"
@@ -336,7 +325,8 @@
                                                                 @endphp
                                                                 @if($comment)
                                                                     {{ ucfirst($comment->comments) }}
-                                                                    <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                                    <input type="hidden" name="remark[]"
+                                                                           value="{{ $comment->comments }}">
                                                                 @endif
                                                             @endif
 

@@ -178,37 +178,23 @@
                                     </td>
                                     <td>
                                         @php
-                                            $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                            $documents = getSingleDocument($question->id, $course, $applicationDetails->id);
                                         @endphp
                                         @if ($documents)
-                                            @foreach ($documents as $item)
-                                                @php
-                                                    $comment = getDocRemarks($item->id);
-                                                @endphp
-                                                @if($comment)
-                                                    @foreach($comment as $commentItem)
-                                                        @if($commentItem)
-                                                            @if($commentItem->remark)
-                                                                {{ $commentItem->remark }}
-                                                                <input type="hidden"
-                                                                       name="capa_training_provider[]"
-                                                                       value="{{ $commentItem->remark }}">
-                                                            @endif
-                                                        @else
-                                                            No remark
-                                                            <input type="hidden"
-                                                                   name="capa_training_provider[]"
-                                                                   value="No remark">
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    No remark
-                                                    <input type="hidden"
-                                                           name="capa_training_provider[]"
-                                                           value="No remark">
-                                                @endif
-
-                                            @endforeach
+                                            @php
+                                                $comment = getDocRemarks($documents->id);
+                                            @endphp
+                                            @if ($comment)
+                                                {{ $comment->remark }}
+                                                <input type="hidden"
+                                                       name="capa_training_provider[]"
+                                                       value="{{ $comment->remark }}">
+                                            @else
+                                                No Remark
+                                                <input type="hidden"
+                                                       name="capa_training_provider[]"
+                                                       value="No remark">
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
