@@ -151,7 +151,7 @@
                                                     @endforeach
                                                 @else
                                                     @php
-                                                    $documents = getAllDocumentsNoAction($question->id, $applicationDetails->id, $course);
+                                                    $documents = getAllDocumentsNoActionDesktop($question->id, $applicationDetails->id, $course);
 
                                                     @endphp
                                                     @if (count($documents) > 0)
@@ -170,7 +170,7 @@
                                                             @endif
                                                         @endforeach
                                                     @else
-                                                        Document Not Uploaded
+                                                       <span class="text-danger"> Document Not Uploaded</span>
                                                     @endif
                                                 @endif
                                             </td>
@@ -317,7 +317,7 @@
                                                     @endforeach
                                                 @else
                                                     @php
-                                                        $documents = getAllDocumentsNoAction($question->id, $applicationDetails->id, $course);
+                                                        $documents = getAllDocumentsForSummaryForOnsite($question->id, $applicationDetails->id, $course);
 
                                                     @endphp
                                                     @if (count($documents) > 0)

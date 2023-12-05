@@ -1480,11 +1480,29 @@ class LevelController extends Controller
         if ($oldFile) {
             $notApprove = $oldFile->notApraove_count ?? 0;
         }
+
+//        check assigned assessor
+        $assessor = null;
+        $assignedAssessor = AssessorApplication::where('application_id',$request->application_id)->get();
+
+        if (count($assignedAssessor) > 1){
+            $assessor = AssessorApplication::where('application_id',$request->application_id)->orderBy('id','desc')->first();
+        }elseif(count($assignedAssessor) == 1){
+            $assessor = AssessorApplication::where('application_id',$request->application_id)->first();
+        }
+
+
+
         $course = new Add_Document;
         $course->course_id = $request->course_id;
         $course->doc_id = $request->question_id;
         $course->question_id = $request->question_pid;
         $course->application_id = $request->application_id;
+        if ($assessor){
+            $course->assesment_type = $assessor->assessment_type == 1 ? 'desktop' : 'onsite';
+        }else{
+            $course->assesment_type = 'desktop';
+        }
         $course->user_id = Auth::user()->id;
         if ($oldFile) {
             if ($oldFile->on_site_assessor_Id != null) {

@@ -301,6 +301,7 @@
                                         <td>
                                             @php
                                                 $documents = getAllDocumentsForSummaryForOnsite($question->id, $applicationDetails->id, $course);
+
                                             @endphp
                                             @if (count($documents) > 0)
                                                 @foreach ($documents as $doc)
@@ -316,28 +317,9 @@
                                                     @endif
                                                 @endforeach
                                             @else
-                                                @php
-                                                    $documents = getAllDocumentsNoAction($question->id, $applicationDetails->id, $course);
 
-                                                @endphp
-                                                @if (count($documents) > 0)
-                                                    @foreach ($documents as $doc)
-                                                        @php
-                                                            $comment = getDocComment($doc->id);
-                                                        @endphp
-                                                        @if ($comment)
-                                                            @if ($comment->status == 1)
-                                                                NC1
-                                                            @elseif($comment->status == 2)
-                                                                NC2
-                                                            @endif
-                                                        @else
-                                                            <span class="text-success">Document Uploaded. No NC</span>
-                                                        @endif
-                                                    @endforeach
-                                                @else
                                                     <span class="text-danger">Document Not Uploaded</span>
-                                                @endif
+
                                             @endif
                                         </td>
                                         <td>
@@ -393,7 +375,7 @@
                                                     {{ ucfirst($comment->comments) }}
                                                     <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
                                                 @else
-                                                    <span>No Remark</span>
+                                                    <span class="text-warning">The document has been uploaded by the training provider, but no action has been taken yet</span>
                                                 @endif
                                             @else
                                                 <span>No Remark</span>

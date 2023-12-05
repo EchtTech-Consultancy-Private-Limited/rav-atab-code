@@ -1073,6 +1073,14 @@ function getDocumentComment($questionID, $applicationID, $courseID)
     }
 }
 
+function getDocumentCommentOnSite($questionID, $applicationID, $courseID)
+{
+    $document = Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->where('assesment_type','onsite')->first();
+    if ($document) {
+        return DB::table('doc_comments')->where('doc_id', $document->id)->where('status', '!=', 4)->first();
+    }
+}
+
 function getAllDocumentsForSummary($questionID, $applicationID, $courseID)
 {
 
@@ -1094,6 +1102,14 @@ function getAllDocumentsNoAction($questionID, $applicationID, $courseID)
     return Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
 
+        ->get();
+}
+
+function getAllDocumentsNoActionDesktop($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)->where('assesment_type','desktop')
         ->get();
 }
 
@@ -1221,7 +1237,7 @@ function getNCRecordsONsite($question, $course, $application)
         ->where('assesment_type','onsite')
         ->get();
 
-    $comments = []; // Initialize an array to store comments
+    $comments = [];
 
     foreach ($documents as $document) {
         $commentsData = DocComment::where('doc_id', $document->id)
@@ -1235,6 +1251,7 @@ function getNCRecordsONsite($question, $course, $application)
             } elseif ($comment->status == 2) {
                 $comments[] = 'NC2';
             } // Add more conditions as needed
+
         }
     }
 
@@ -1273,7 +1290,7 @@ function getQuestionDocumentDesktop($question, $course, $application)
 
 function getQuestionDocumentOnsite($question, $course, $application)
 {
-    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->where('on_site_assessor_Id','!=',null)->get();
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->where('assesment_type','onsite')->get();
 }
 
 
