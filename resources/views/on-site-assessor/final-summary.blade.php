@@ -172,13 +172,13 @@
                                     <td>{{ $question->title }}</td>
                                     <td>
                                         @php
-                                            $getNCRecords = getNCRecords($question->id, $course, $applicationDetails->id);
+                                            $getNCRecords = getNCRecordsONsite($question->id, $course, $applicationDetails->id);
                                         @endphp
                                         {{ $getNCRecords }}
                                     </td>
                                     <td>
                                         @php
-                                            $documents = getSingleDocument($question->id, $course, $applicationDetails->id);
+                                            $documents = getSingleDocumentForONSite($question->id, $course, $applicationDetails->id);
                                         @endphp
                                         @if ($documents)
                                             @php
@@ -199,7 +199,7 @@
                                     </td>
                                     <td>
                                         @php
-                                            $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                            $documents = getQuestionDocumentOnsite($question->id, $course, $applicationDetails->id);
                                         @endphp
                                         @if ($documents)
                                             @foreach ($documents as $item)

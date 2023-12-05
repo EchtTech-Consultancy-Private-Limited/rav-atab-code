@@ -764,6 +764,30 @@ function getAdminDocument($questionID, $applicationId)
     }
 }
 
+function getOnlyDesktopAssessorDoc($questionID, $applicationId)
+{
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->where('assesment_type','desktop')->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
+function getOnlyOnsiteAssessorDoc($questionID, $applicationId)
+{
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->where('assesment_type','onsite')->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
 // only for summery report
 function getSummerDocument($questionID, $applicationId, $courseId)
 {
@@ -1065,11 +1089,26 @@ function getAllDocumentsForSummaryForDesktop($questionID, $applicationID, $cours
         ->get();
 }
 
+function getAllDocumentsNoAction($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+
+        ->get();
+}
+
 function getAllDocumentsForSummaryForOnsite($questionID, $applicationID, $courseID)
 {
     return Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
         ->where('course_id', $courseID)->where('assesment_type','onsite')
+        ->get();
+}
+
+function getNOActionDocuments($questionID, $applicationID, $courseID){
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)
         ->get();
 }
 
@@ -1173,6 +1212,36 @@ function getNCRecords($question, $course, $application)
     return implode(', ', $comments);
 }
 
+
+function getNCRecordsONsite($question, $course, $application)
+{
+    $documents = Add_Document::where('application_id', $application)
+        ->where('course_id', $course)
+        ->where('question_id', $question)
+        ->where('assesment_type','onsite')
+        ->get();
+
+    $comments = []; // Initialize an array to store comments
+
+    foreach ($documents as $document) {
+        $commentsData = DocComment::where('doc_id', $document->id)
+            ->where('status', '!=', 4)
+            ->get();
+
+        foreach ($commentsData as $comment) {
+            // Check the status and add the appropriate string to the array
+            if ($comment->status == 1) {
+                $comments[] = 'NC1';
+            } elseif ($comment->status == 2) {
+                $comments[] = 'NC2';
+            } // Add more conditions as needed
+        }
+    }
+
+    // Use implode to join the array elements with commas
+    return implode(', ', $comments);
+}
+
 function getNCRecordsComments($question, $course, $application)
 {
     $documents = Add_Document::where('application_id', $application)
@@ -1195,6 +1264,7 @@ function getQuestionDocument($question, $course, $application)
 {
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
 }
+
 
 function getQuestionDocumentDesktop($question, $course, $application)
 {
