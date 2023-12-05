@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AdminController;
@@ -147,7 +148,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('paymentstatus/{id?}', [LevelController::class, 'paymentstatus']);
 
 
-    // upgrade application 
+    // upgrade application
     // Route::post('upgrade-application',[LevelController::class,"upgradeApplicationLevel"]);
 
     //previews-application upgrade
@@ -291,7 +292,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('on-site/upload-photograph/{applicationID}/{courseID}/{questionID}/{documentID}', [applicationController::class, "uploadPhotographByOnSiteAssessor"])->name('on-site.upload-photograph');
 
     Route::post('on-site/upload/photograph',[applicationController::class, "uploadPhotographByOnSiteAssessorPost"]);
-    
+
     Route::post('payment/acknowledge',[applicationController::class,"paymentAcknowledge"])->name('payment.acknowledge');
 
     Route::get('on-site/view/document/{document}/{documentID}/{questionID}/{applicationID}/{courseID}',[applicationController::class,"viewDocumentData"]);

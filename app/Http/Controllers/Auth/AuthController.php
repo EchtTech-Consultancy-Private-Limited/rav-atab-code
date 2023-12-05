@@ -52,15 +52,16 @@ class AuthController extends Controller
             ]
         );
 
-        // dd($request->all());
 
         $data = user::where('email', $request->email)->first();
 
-        if ($data->is_loggedin == 1) {
-            return redirect()->back()->with('warning', 'User is already logged in. Multiple logins are not allowed.');
-        } else {
-            $data->update(['is_loggedin' => 1]);
-        }
+       if ($data){
+           if ($data->is_loggedin == 1) {
+               return redirect()->back()->with('warning', 'User is already logged in. Multiple logins are not allowed.');
+           } else {
+               $data->update(['is_loggedin' => 1]);
+           }
+       }
 
         //dd($data);
         if ($data != null) {

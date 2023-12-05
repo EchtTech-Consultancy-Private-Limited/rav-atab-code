@@ -107,82 +107,80 @@
                                     </td>
                                 </tr>
                                 @foreach ($chapter->questions as $question)
-                                    <tr>
-                                        <td> {{ $question->code }}</td>
-                                        <td>{{ $question->title }}</td>
-                                        <td>
-                                            @php
-                                                $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
-                                            @endphp
-                                            @if (count($documents) > 0)
-                                                @foreach ($documents as $doc)
+                                    @php
+                                        $comment = getDocumentComment($question->id, $applicationDetails->id, $course);
+
+                                    @endphp
+                                    @if ($comment)
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" name="question_ids[]"
+                                                       value="{{ $question->id }}" readonly>
+                                                {{ $question->code }}
+                                            </td>
+                                            <td>
+                                                {{ $question->title }}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $getNCRecords = getNCRecords($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                <input type="text" name="nc_raised[]"
+                                                       value=" {{ $getNCRecords }}" readonly>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getSingleDocument($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                @if ($documents)
                                                     @php
-                                                        $comment = getDocComment($doc->id);
+                                                        $comment = getDocRemarks($documents->id);
                                                     @endphp
                                                     @if ($comment)
-                                                        @if ($comment->status == 1)
-                                                            NC1
-                                                        @elseif($comment->status == 2)
-                                                            NC2
-                                                        @endif
+                                                        {{ $comment->remark }}
+                                                        <input type="hidden"
+                                                               name="capa_training_provider[]"
+                                                               value="{{ $comment->remark }}">
+                                                    @else
+                                                        No Remark
+                                                        <input type="hidden"
+                                                               name="capa_training_provider[]"
+                                                               value="No remark">
                                                     @endif
-                                                @endforeach
-                                            @else
-                                                <span>Document not uploaded!</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @php
-                                                $getNCComments = getNCRecordsComments($question->id, $course, $applicationDetails->id);
-                                            @endphp
-                                            @if ($getNCComments)
-                                                @foreach ($getNCComments as $item)
-                                                    <div>
-                                                        <div class="bg-danger p-1 m-2">
-                                                            {{ $item->comments ?? '' }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                @if ($documents)
+                                                    @foreach ($documents as $item)
+                                                        <div>
+                                                            <a target="_blank" href="{{ asset('level/'.$item->doc_file) }}" class="btn btn-primary m-1" href="">View Doc</a>
                                                         </div>
-                                                        <input type="hidden" name="capa_training_provider[]"
-                                                            value="{{ $item->comments ?? '' }}">
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @php
-                                                $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
-                                            @endphp
-                                            @if ($documents)
-                                                @foreach ($documents as $item)
-                                                    <div>
-                                                        <a class="btn btn-primary m-1" href="">View Doc</a>
-                                                    </div>
-                                                    <input type="hidden" name="document_submitted_against_nc[]"
-                                                        value="{{ $item->doc_file }}">
-                                                @endforeach
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @php
-                                                $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
-                                            @endphp
-                                            @if (count($documents) > 0)
-                                                @foreach ($documents as $doc)
-                                                    @php
-                                                        $comment = getDocComment($doc->id);
-                                                    @endphp
-                                                    @if ($comment)
-                                                        @if ($comment->status == 4)
-                                                            Accepted
-                                                        @else
-                                                            Not Accepted
-                                                        @endif
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <span>Document not uploaded!</span>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                                        <input type="hidden"
+                                                               name="document_submitted_against_nc[]"
+                                                               value="{{ $item->doc_file }}">
+                                                    @endforeach
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getAllDocumentsForSummary($question->id,$applicationDetails->id,$course);
+                                                    $lastDocument = $documents[count($documents) - 1];
+                                                $comment = getLastComment($lastDocument->id);
+
+                                                @endphp
+
+                                                @if($comment)
+                                                    {{ $comment->comments }}
+                                                    <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                @endif
+
+
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             @endforeach
                         </table>

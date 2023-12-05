@@ -130,71 +130,22 @@
                                     </tr>
                                     @foreach ($chapter->questions as $question)
                                         <tr>
-                                            <td> {{ $question->code }}</td>
+                                            <td>{{ $question->code }}</td>
                                             <td>{{ $question->title }}</td>
                                             <td>
                                                 @php
-                                                    $summeryReportQuestion = getQuestionSummary($question->id, $summaries->id);
-                                                @endphp
-                                                @if ($summeryReportQuestion)
-                                                    @if ($summeryReportQuestion != null)
-                                                        {{ $summeryReportQuestion->nc_raised }}
-                                                    @endif
-                                                @else
-                                                    @php
-                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
-                                                    @endphp
-                                                    @if (count($documents) > 0)
-                                                        @foreach ($documents as $doc)
-                                                            @php
-                                                                $comment = getDocComment($doc->id);
-                                                            @endphp
-                                                            @if ($comment)
-                                                                <span>{{ printStatus($doc->id) }}</span>
-                                                            @endif
-                                                        @endforeach
-                                                    @else
-                                                        <span>Document not uploaded!</span>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($summeryReportQuestion)
-                                                    @if ($summeryReportQuestion->capa_training_provider != null)
-                                                        {{ $summeryReportQuestion->capa_training_provider }}
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($summeryReportQuestion)
-
-
-                                                @php
-                                                    $documents = getQuestionDocument($question->id, $course, $applicationDetails->id);
-                                                @endphp
-                                                   @if ($documents)
-                                                   @foreach ($documents as $item)
-                                                   <div class="mt-3">
-                                                       <a target="_blank" class="btn view btn-primary p-1 mb-3" href="{{ asset('level/'.$item->doc_file) }}">View Doc</a>
-                                                   </div>
-                                                   @endforeach
-                                                   @else
-
-
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @php
-                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
+                                                    $documents = getAllDocumentsForSummaryForDesktop($question->id, $applicationDetails->id, $course);
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
-                                                        @if ($loop->iteration == 1)
-                                                            @php
-                                                                $comment = getDocComment($doc->id);
-                                                            @endphp
-                                                            @if ($comment)
-                                                                <span>{{ printRemark($doc->id) }}</span>
+                                                        @php
+                                                            $comment = getDocComment($doc->id);
+                                                        @endphp
+                                                        @if ($comment)
+                                                            @if ($comment->status == 1)
+                                                                NC1
+                                                            @elseif($comment->status == 2)
+                                                                NC2
                                                             @endif
                                                         @endif
                                                     @endforeach
@@ -202,10 +153,62 @@
                                                     <span>Document not uploaded!</span>
                                                 @endif
                                             </td>
+                                            <td>
+                                                @php
+                                                    $documents = getSingleDocumentForDesktop($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                @if ($documents)
+                                                    @php
+                                                        $comment = getDocRemarks($documents->id);
+                                                    @endphp
+                                                    @if ($comment)
+                                                        {{ $comment->remark }}
+                                                        <input type="hidden"
+                                                               name="capa_training_provider[]"
+                                                               value="{{ $comment->remark }}">
+                                                    @else
+                                                        No Remark
+                                                        <input type="hidden"
+                                                               name="capa_training_provider[]"
+                                                               value="No remark">
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getQuestionDocumentDesktop($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                @if ($documents)
+                                                    @foreach ($documents as $item)
+                                                        <div>
+                                                            <a class="btn btn-primary m-1" href="">View Doc</a>
+                                                        </div>
+                                                        <input type="hidden" name="document_submitted_against_nc[]"
+                                                               value="{{ $item->doc_file }}">
+                                                    @endforeach
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @php
+
+                                                    $documents = getONeDocument($question->id,$applicationDetails->id,$course);
+                                                @endphp
+                                                @if($documents)
+                                                    @php
+                                                        $comment = getLastComment($documents->id);
+                                                    @endphp
+                                                    @if($comment)
+                                                        {{ ucfirst($comment->comments) }}
+                                                        <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                    @endif
+                                                @endif
+
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @endforeach
                             </table>
+
                         </div>
                     </div>
                 @endif
@@ -268,62 +271,76 @@
                                             <td>{{ $question->title }}</td>
                                             <td>
                                                 @php
-                                                    $summeryReportQuestion = getQuestionSummary($question->id, $summaryReport->id);
-                                                @endphp
-                                                @if ($summeryReportQuestion)
-                                                    @if ($summeryReportQuestion != null)
-                                                        {{ $summeryReportQuestion->nc_raised }}
-                                                    @endif
-                                                @else
-                                                    @php
-                                                        $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
-                                                    @endphp
-                                                    @if (count($documents) > 0)
-                                                        @foreach ($documents as $doc)
-                                                            @php
-                                                                $comment = getDocComment($doc->id);
-                                                            @endphp
-                                                            @if ($comment)
-                                                                <span>{{ printStatus($doc->id) }}</span>
-                                                            @endif
-                                                        @endforeach
-                                                    @else
-                                                        <span>Document not uploaded!</span>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($summeryReportQuestion)
-                                                    @if ($summeryReportQuestion->capa_training_provider != null)
-                                                        {{ $summeryReportQuestion->capa_training_provider }}
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($summeryReportQuestion)
-                                                    @if ($summeryReportQuestion->document_submitted_against_nc != null)
-                                                        {{ $summeryReportQuestion->document_submitted_against_nc }}
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @php
-                                                    $documents = getAllDocumentsForSummary($question->id, $applicationDetails->id, $course);
+                                                    $documents = getAllDocumentsForSummaryForOnsite($question->id, $applicationDetails->id, $course);
                                                 @endphp
                                                 @if (count($documents) > 0)
                                                     @foreach ($documents as $doc)
-                                                        @if ($loop->iteration == 1)
-                                                            @php
-                                                                $comment = getDocComment($doc->id);
-                                                            @endphp
-                                                            @if ($comment)
-                                                                <span>{{ printRemark($doc->id) }}</span>
+                                                        @php
+                                                            $comment = getDocComment($doc->id);
+                                                        @endphp
+                                                        @if ($comment)
+                                                            @if ($comment->status == 1)
+                                                                NC1
+                                                            @elseif($comment->status == 2)
+                                                                NC2
                                                             @endif
                                                         @endif
                                                     @endforeach
                                                 @else
                                                     <span>Document not uploaded!</span>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $documents = getSingleDocumentForONSite($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                @if ($documents)
+                                                    @php
+                                                        $comment = getDocRemarks($documents->id);
+                                                    @endphp
+                                                    @if ($comment)
+                                                        {{ $comment->remark }}
+                                                        <input type="hidden"
+                                                               name="capa_training_provider[]"
+                                                               value="{{ $comment->remark }}">
+                                                    @else
+                                                        No Remark
+                                                        <input type="hidden"
+                                                               name="capa_training_provider[]"
+                                                               value="No remark">
+                                                    @endif
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                @php
+                                                    $documents = getQuestionDocumentOnsite($question->id, $course, $applicationDetails->id);
+                                                @endphp
+                                                @if ($documents)
+                                                    @foreach ($documents as $item)
+                                                        <div>
+                                                            <a class="btn btn-primary m-1" href="">View Doc</a>
+                                                        </div>
+                                                        <input type="hidden" name="document_submitted_against_nc[]"
+                                                               value="{{ $item->doc_file }}">
+                                                    @endforeach
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @php
+
+                                                    $documents = getONeDocument($question->id,$applicationDetails->id,$course);
+                                                @endphp
+                                                @if($documents)
+                                                    @php
+                                                        $comment = getLastComment($documents->id);
+                                                    @endphp
+                                                    @if($comment)
+                                                        {{ ucfirst($comment->comments) }}
+                                                        <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                                    @endif
+                                                @endif
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -442,7 +459,7 @@
                 </div>
             </div>
         </div>
-        
+
         {{-- @if ($applicationDetails->final_remark != null)
             <div class="card">
                 <div class="card-header bg-white text-dark">

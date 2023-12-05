@@ -309,7 +309,7 @@
                                                         </a>
 
                                                         {{-- @if (totalDocumentsCount($item->id) >= totalQuestionsCount($item->id)) --}}
-                                                        @if (totalDocumentsCount($item->id) >= 0 &&
+                                                        @if (totalDocumentsCount($item->id) >= $totalQuestion &&
                                                                 $item->acknowledged_by != null &&
                                                                 $item->is_payment_acknowledge == 1)
                                                             @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
@@ -420,7 +420,7 @@
                                                                                     <div>
                                                                                         <?php
                                                          foreach(get_accessor_date_new($assesorsData->id,$item->id,$assesorsData->assessment) as $date){
-                                                          
+
                                                          ?>
 
                                                                                         {!! $date !!}

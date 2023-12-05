@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Application;
@@ -1567,12 +1569,14 @@ class LevelController extends Controller
 
     public function acc_doc_comments(Request $request)
     {
+
         $login_id = Auth::user()->role;
         if ($login_id == 3) {
             $request->doc_code;
 
-            $document = Add_Document::where('doc_id', $request->doc_code)->first();
+            $document = Add_Document::where('id', $request->doc_id)->first();
             $document->assessor_id = Auth::user()->id;
+            $document->assesment_type = Auth::user()->assessment == 1 ? 'desktop' : 'onsite';
             $document->save();
 
 
@@ -1583,6 +1587,7 @@ class LevelController extends Controller
             $comment->comments = $request->doc_comment;
             $comment->course_id = $request->course_id;
             $comment->user_id = Auth::user()->id;
+
             $comment->save();
 
             if ($request->status != 4) {
@@ -2154,7 +2159,7 @@ class LevelController extends Controller
             $data->user_id = Auth::user()->id;
             $data->application_id = $aplication->id;
             $data->level_id = $request->level_id;
-           
+
             $data->save();
         }
         if ($request->hasfile('doc3')) {
@@ -2489,7 +2494,7 @@ class LevelController extends Controller
     }
 
     public function newApplications($id = null)
-    { 
+    {
         if ($id) {
             $id = dDecrypt($id);
         }
@@ -2807,7 +2812,7 @@ class LevelController extends Controller
     public function submitReportByDesktopAssessor($application_id,$course_id)
     {
         $applicationDetails = Application::find($application_id);
-        
+
         $chapters = Chapter::all();
         return view('asesrar.summery_report_form',compact('chapters','applicationDetails','course_id'));
     }
@@ -2831,7 +2836,7 @@ class LevelController extends Controller
                     'summary_report_application_id' => $summaryReport->id,
                 ];
             }
-            $insrted = SummaryReportChapter::insert($questionData);           
+            $insrted = SummaryReportChapter::insert($questionData);
         }
         $application = Application::find($data['application_id']);
         $updated = $application->update([
