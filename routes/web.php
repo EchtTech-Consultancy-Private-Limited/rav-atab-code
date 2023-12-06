@@ -65,12 +65,11 @@ Route::group(['middleware' => ['guest']], function () {
     //Route::get('my-captcha',[AuthController::class,'myCaptcha'])->name('myCaptcha');
     //Route::post('my-captcha',[AuthController::class,'myCaptchaPost'])->name('myCaptcha.post');
     Route::get('refresh_captcha', [AuthController::class, 'refreshCaptcha'])->name('refresh_captcha');
-
+    Route::get("/logout", [AuthController::class, 'logout']);
     //mail
     Route::post('sendOtp',  [AuthController::class, 'sendOtp'])->middleware('guest');
     Route::post('sendEmailOtp', [AuthController::class, 'sendEmailOtp'])->middleware('guest');
     Route::post('verifyOtp',  [AuthController::class, 'verifyOtp'])->middleware('guest');
-
     //forget password
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
@@ -79,9 +78,8 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 //dashboard Route
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
-    Route::get("/logout", [AuthController::class, 'logout']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');;
     Route::get('/admin-user', [adminController::class, 'user_index']);
     Route::get('/training-provider', [adminController::class, 'tp_index']);
