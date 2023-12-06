@@ -297,7 +297,7 @@
                                                         </td>
                                                         <td>
                                                             @php
-                                                                $documents = getQuestionDocument($question->id, $course_id, $applicationDetails->id);
+                                                                $documents = getQuestionDocumentNCDeskktop($question->id, $course_id, $applicationDetails->id);
                                                             @endphp
                                                             @if ($documents)
                                                                 @foreach ($documents as $item)

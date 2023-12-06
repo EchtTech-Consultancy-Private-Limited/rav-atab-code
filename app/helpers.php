@@ -1277,6 +1277,12 @@ function getNCRecordsComments($question, $course, $application)
 }
 
 
+function getQuestionDocumentNCDeskktop($question, $course, $application)
+{
+    //$data = Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
+   
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->get();
+}
 function getQuestionDocument($question, $course, $application)
 {
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();

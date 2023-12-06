@@ -2830,8 +2830,11 @@ class LevelController extends Controller
     public function submitReportByDesktopAssessor($application_id,$course_id)
     {
         $applicationDetails = Application::find($application_id);
-
+        
         $chapters = Chapter::all();
+        
+        //dd($applicationDetails);
+
         return view('asesrar.summery_report_form',compact('chapters','applicationDetails','course_id'));
     }
 
