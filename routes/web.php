@@ -53,7 +53,7 @@ Route::get('list_show', [AuthController::class, 'list_show']);
 Route::get('state-list', [AuthController::class, 'state']);
 Route::get('city-list', [AuthController::class, 'city']);
 
-
+Route::get("/logout", [AuthController::class, 'logout']);
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/', [AuthController::class, 'landing'])->name('/');
     Route::get('/login/{slug?}', [AuthController::class, 'login'])->name('login');
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['guest']], function () {
     //Route::get('my-captcha',[AuthController::class,'myCaptcha'])->name('myCaptcha');
     //Route::post('my-captcha',[AuthController::class,'myCaptchaPost'])->name('myCaptcha.post');
     Route::get('refresh_captcha', [AuthController::class, 'refreshCaptcha'])->name('refresh_captcha');
-    Route::get("/logout", [AuthController::class, 'logout']);
+    
     //mail
     Route::post('sendOtp',  [AuthController::class, 'sendOtp'])->middleware('guest');
     Route::post('sendEmailOtp', [AuthController::class, 'sendEmailOtp'])->middleware('guest');
