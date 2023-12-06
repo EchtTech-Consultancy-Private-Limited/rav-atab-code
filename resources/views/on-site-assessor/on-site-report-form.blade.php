@@ -198,7 +198,7 @@
                         </tr>
                         @foreach ($item->questions as $question)
                             @php
-                                $comment = getDocumentComment($question->id, $applicationData->id, $courseDetail->id);
+                                $comment = getDocumentCommentOnSite($question->id, $applicationData->id, $courseDetail->id);
                             @endphp
                             @if ($comment)
                                 <tr>
@@ -236,13 +236,18 @@
                                                        name="capa_training_provider[]"
                                                        value="No remark">
                                             @endif
+                                        @else
+                                            No Remark
+                                            <input type="hidden"
+                                                   name="capa_training_provider[]"
+                                                   value="No remark">
                                         @endif
                                     </td>
                                     <td>
                                         @php
                                             $documents = getQuestionDocumentOnsite($question->id, $courseDetail->id, $applicationData->id);
                                         @endphp
-                                        @if ($documents)
+                                        @if (count($documents) > 0)
                                             @foreach ($documents as $item)
                                                 <div>
                                                     <a href="{{ asset('level/'.$item->doc_file)  }}"
@@ -251,7 +256,12 @@
                                                 <input type="hidden" name="document_submitted_against_nc[]"
                                                        value="{{ $item->doc_file }}">
                                             @endforeach
+                                        @else
+                                            <input type="hidden" name="document_submitted_against_nc[]"
+                                                   value="">
+                                            <span class="text-danger">The document has not been uploaded by the training provider.</span>
                                         @endif
+
                                     </td>
                                     <td>
                                         @php
@@ -266,10 +276,12 @@
                                                 {{ ucfirst($comment->comments) }}
                                                 <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
                                             @else
-                                                <input type="hidden" name="remark[]" value="No Remark">
+                                                <span class="text-warning">The document has been uploaded by the training provider, but no action has been taken yet</span>
+                                                <input type="hidden" name="remark[]" value="">
                                             @endif
                                         @else
-                                            <input type="hidden" name="remark[]" value="No Remark">
+                                            No Remark
+                                            <input type="hidden" name="remark[]" value="">
                                         @endif
 
                                     </td>

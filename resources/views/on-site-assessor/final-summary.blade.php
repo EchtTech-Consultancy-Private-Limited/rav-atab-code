@@ -172,10 +172,44 @@
                                     <td>{{ $question->title }}</td>
                                     <td>
                                         @php
-                                            $getNCRecords = getNCRecordsONsite($question->id, $course, $applicationDetails->id);
+                                            $documents = getAllDocumentsForSummaryForOnsite($question->id, $applicationDetails->id, $course);
                                         @endphp
-                                        {{ $getNCRecords }}
+
+                                        @if (count($documents) > 0)
+                                            @foreach ($documents as $doc)
+                                                @php
+                                                    $comment = getDocComment($doc->id);
+                                                @endphp
+                                                @if ($comment)
+                                                    @if ($comment->status == 1 || $comment->status == 2)
+                                                        NC{{ $comment->status }}
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            @php
+                                                $documents = getAllDocumentsNoAction($question->id, $applicationDetails->id, $course);
+                                            @endphp
+
+                                            @if (count($documents) > 0)
+                                                @foreach ($documents as $doc)
+                                                    @php
+                                                        $comment = getDocComment($doc->id);
+                                                    @endphp
+                                                    @if ($comment)
+                                                        @if ($comment->status == 1 || $comment->status == 2)
+                                                            NC{{ $comment->status }}
+                                                        @endif
+                                                    @else
+                                                        <span class="text-success">Document Uploaded. No NC</span>
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <span class="text-danger">Document Not Uploaded</span>
+                                            @endif
+                                        @endif
                                     </td>
+
                                     <td>
                                         @php
                                             $documents = getSingleDocumentForONSite($question->id, $course, $applicationDetails->id);
@@ -195,13 +229,18 @@
                                                        name="capa_training_provider[]"
                                                        value="No remark">
                                             @endif
+                                        @else
+                                            No Remark
+                                            <input type="hidden"
+                                                   name="capa_training_provider[]"
+                                                   value="No remark">
                                         @endif
                                     </td>
                                     <td>
                                         @php
                                             $documents = getQuestionDocumentOnsite($question->id, $course, $applicationDetails->id);
                                         @endphp
-                                        @if ($documents)
+                                        @if (count($documents) > 0)
                                             @foreach ($documents as $item)
                                                 <div>
                                                     <a target="_blank" href="{{ asset('level/'.$item->doc_file)  }}"
@@ -210,6 +249,10 @@
                                                 <input type="hidden" name="document_submitted_against_nc[]"
                                                        value="{{ $item->doc_file }}">
                                             @endforeach
+                                        @else
+                                            <input type="hidden" name="document_submitted_against_nc[]"
+                                                   value="">
+                                            <span class="text-danger">The document has not been uploaded by the training provider.</span>
                                         @endif
                                     </td>
                                     <td>
@@ -224,7 +267,13 @@
                                             @if($comment)
                                                 {{ ucfirst($comment->comments) }}
                                                 <input type="hidden" name="remark[]" value="{{ $comment->comments }}">
+                                            @else
+                                                <span class="text-warning">The document has been uploaded by the training provider, but no action has been taken yet</span>
                                             @endif
+                                        @else
+                                            No Remark
+                                            <input type="hidden" name="remark[]" value="">
+
                                         @endif
 
                                     </td>
