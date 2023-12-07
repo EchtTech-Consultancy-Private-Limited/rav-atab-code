@@ -250,6 +250,9 @@
                                                                     <td class="text-justify">
                                                                         {{ $question->title ?? '' }}
                                                                     </td>
+                                                                    <td class="text-justify">
+                                                                        {{ $question->id ?? '' }}
+                                                                    </td>
                                                                     <td>
                                                                         <div style="border-radius: 10px;  color:#000;">
                                                                             <!-- <div
@@ -275,7 +278,10 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
 
-                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
+                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id)
+                                                                                                        . '/' .
+                                                                                                            $question->id
+                                                                                                        }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
@@ -286,7 +292,9 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
 
-                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
+                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id). '/' .
+                                                                                                            $question->id
+                                                                                                        }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
