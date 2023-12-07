@@ -110,7 +110,7 @@
                                                                 value="{{ $doc_code }}">
                                                             <input type="hidden" name="course_id"
                                                                 value="{{ $course_id }}">
-                                                                <input type="hidden" name="application_id" value="{{ $application_id }}">
+                                                                <input type="hidden" name="application_id" value="{{ $app_id }}">
                                                                 <input type="hidden" name="question_id" value="{{ Request()->segment(6) }}">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">

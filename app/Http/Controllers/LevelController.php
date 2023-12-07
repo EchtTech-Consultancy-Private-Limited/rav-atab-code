@@ -1562,6 +1562,7 @@ class LevelController extends Controller
         // Fetch the latest document record.
         $doc_latest_record = Add_Document::latest('id')->find($doc_id);
 
+       $application_id = DB::table('application_courses')->where(['id'=>$course_id])->first()->application_id;
 
         return view('asesrar.view-doc-with-comment', [
             'doc_latest_record' => $doc_latest_record,
@@ -1570,7 +1571,8 @@ class LevelController extends Controller
             'doc_latest_record_comment' => $doc_latest_record_comment,
             'doc_code' => $doc_code,
             'comment' => $comment,
-            'application_id' => $course_id
+            'application_id' => $course_id,
+            'app_id'=>$application_id
         ], compact('course_id'));
     }
 
