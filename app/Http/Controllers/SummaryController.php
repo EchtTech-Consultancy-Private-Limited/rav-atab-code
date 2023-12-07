@@ -17,9 +17,12 @@ class SummaryController extends Controller
     }
 
     public function desktopSubmitSummary(){
-        $summertReport = DB::table('assessor_summary_reports')->where(['application_id'=>190])->get();
-        // print_r($summertReport);
-        // die('sdfsg');
+        $summertReport = DB::table('assessor_summary_reports')
+        ->join('applications', 'applications.id', '=', 'assessor_summary_reports.application_id')
+        ->where(['application_id'=>123,'assessor_id'=>127])->get();
+        echo '<pre>';
+        print_r($summertReport);
+        die('sdfsg');
         return view('assessor-summary.desktop-submit-summary');
     }
 

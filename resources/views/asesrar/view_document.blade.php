@@ -431,20 +431,20 @@
                                         </table>
 
 
-                                    </div>
-                                    <a
-                                        href="{{ url('onsite/submit') }}">
-                                        <button type="button" class="btn btn-success"
-                                            style="margin-right: 10px;">Submit Report</button>
-                                    </a>
+                                    </div>                                    
 
                                     @if (auth()->user()->assessment == 2)
                                         @if ($applicationData->gps_pic == null && $applicationData->onsite_status != 1)
                                             @if (totalDocumentsCount($application_id) >= 0)
                                                 <div class="d-flex justify-content-end">
-                                                    <a target="_blank" class="btn btn-primary mr-2"
+                                                    {{-- <a target="_blank" class="btn btn-primary mr-2"
                                                         href="{{ url('on-site/report/?application=' . $applicationData->id . '&course=' . $course_id) }}">
                                                         Submit
+                                                    </a> --}}
+                                                    <a
+                                                        href="{{ url('onsite/submit') }}">
+                                                        <button type="button" class="btn btn-success"
+                                                            style="margin-right: 10px;">Submit Report</button>
                                                     </a>
                                                 </div>
                                             @else
