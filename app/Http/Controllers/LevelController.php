@@ -1589,17 +1589,36 @@ class LevelController extends Controller
 
     public function acc_doc_comments(Request $request)
     {
+        $check_nc = DB::table('assessor_summary_reports')->where(['application_id'=>$request->application_id,'nc_raise_code'=>$request->status,'object_element_id'=>$request->question_id,'assessor_id'=> $request->assessor_id,'assessor_type'=>$request->assesor_type])->first();
 
-
-
+        // if(!empty($check_nc)){
+        //     return redirect("$request->previous_url")->with('error', 'NC already created on this document.');
+        // }
         /*Written By Suraj*/
+        if($request->status==1){
+            $nc_raise = "NC1";
+        }
+        else if($request->status==2){
+            $nc_raise = "NC2";
+        }
+        else if($request->status==3){
+            $nc_raise = "Not Approved";
+        }
+        else if($request->status==4){
+            $nc_raise="Approved";
+        }else{
+            $nc_raise="Request for final approval";
+        }
+
         $data=[];
         $data['application_id'] = $request->application_id;
+        $data['application_course_id'] = $request->application_course_id;
         $data['object_element_id'] = $request->question_id;
         $data['date_of_assessement'] = $request->date_of_assessement??'';
         $data['assessor_id'] = $request->assessor_id;
         $data['assessor_type'] = $request->assesor_type;
-        $data['nc_raise'] = $request->nc_raise??'';
+        $data['nc_raise'] = $nc_raise??'';
+        $data['nc_raise_code'] = $request->status??'';
         $data['doc_path'] = $request->doc_path;
         $data['capa_mark'] = $request->capa_mark??'';
         $data['doc_against_nc'] = $request->doc_against_nc??'';
@@ -1607,8 +1626,6 @@ class LevelController extends Controller
         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
 
         /*end here*/
-        dd($create_summary_report);
-
         $login_id = Auth::user()->role;
         if ($login_id == 3) {
             $request->doc_code;

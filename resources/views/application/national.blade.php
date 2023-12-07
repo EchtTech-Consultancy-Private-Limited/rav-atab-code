@@ -308,8 +308,11 @@
                                                             <i class="material-icons">visibility</i>
                                                         </a>
 
+                                                        @php
+                                                        $total_documents = 4;
+                                                        @endphp
                                                         {{-- @if (totalDocumentsCount($item->id) >= totalQuestionsCount($item->id)) --}}
-                                                        @if (totalDocumentsCount($item->id) >= $totalQuestion &&
+                                                        @if (totalDocumentsCount($item->id) >= $total_documents &&
                                                                 $item->acknowledged_by != null &&
                                                                 $item->is_payment_acknowledge == 1)
                                                             @if (in_array(checktppaymentstatustype($item->id), [2, 3]))

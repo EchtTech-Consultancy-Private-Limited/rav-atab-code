@@ -138,6 +138,8 @@
                             <input type="hidden" name="applicationID" value="{{ $applicationData->id }}">
                             <input type="hidden" name="user_id" value="{{ $applicationData->user_id }}">
                             <input type="hidden" name="question_code" value="{{ $question->code }}">
+                            <input type="hidden" name="assessor_id" value="{{ $assessor_id }}">
+                            <input type="hidden" name="assessor_type" value="onsite">
                             <div class="form-group">
                                 <label for="status">Select Status</label>
                                 <select class="selectINputBox form-control" id="status" name="status">

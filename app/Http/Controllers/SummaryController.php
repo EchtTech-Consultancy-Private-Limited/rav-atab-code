@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
-
+use Auth;
 class SummaryController extends Controller
 {
     public function desktopIndex(){
@@ -16,14 +16,26 @@ class SummaryController extends Controller
         return view('assessor-summary.on-site-view-summary');
     }
 
-    public function desktopSubmitSummary(){
-        $summertReport = DB::table('assessor_summary_reports')
-        ->join('applications', 'applications.id', '=', 'assessor_summary_reports.application_id')
-        ->where(['application_id'=>123,'assessor_id'=>127])->get();
-        echo '<pre>';
-        print_r($summertReport);
-        die('sdfsg');
-        return view('assessor-summary.desktop-submit-summary');
+    public function desktopSubmitSummary(Request $request){
+        $assessor_id = Auth::user()->id;
+        $summertReport = DB::table('assessor_summary_reports as asr')
+        ->select('asr.application_id')
+        ->leftJoin('applications', 'applications.id', '=', 'assessor_summary_reports.application_id')
+        ->leftJoin('application_courses', 'application_courses.id', '=', 'assessor_summary_reports.application_course_id')
+        ->where(['asr.application_id'=>$request->application_id,'asr.assessor_id'=>$assessor_id,'asr.application_course_id'=>$request->application_course_id])->first();
+
+        /*count the no of mandays*/
+        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summertReport->assessor_id,'application_id'=>$summertReport->application_id])->count();
+
+        $no_of_questions = DB::table('questions')->where('id',$summertReport->object_element_id)->get();
+        // echo '<pre>';
+        // print_r($summertReport);
+        // echo 'No of mandays.';
+        // print_r($no_of_mandays);
+        // print_r($no_of_questions);
+        // die();
+      
+        return view('assessor-summary.desktop-submit-summary', compact('summertReport', 'no_of_mandays', 'no_of_questions'));
     }
 
     public function onSiteSubmitSummary(Request $request){
@@ -46,7 +58,7 @@ class SummaryController extends Controller
         $data['doc_path'] = $request->doc_path;
         $data['capa_mark'] = $request->capa_mark??'';
         $data['doc_against_nc'] = $request->doc_against_nc??'';
-        $data['remark'] = $request->remarks;
+        $data['doc_verify_remark'] = $request->remarks;
         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
 
         dd($create_summary_report);

@@ -185,11 +185,11 @@
                                             <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
-                                            <td>Application No (provided by ATAB): <span> <input type="text"></span> </td>
-                                            <td>Date of application: <span> <input type="text"></span> </td>
+                                            <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
+                                            <td>Date of application: <span> <input type="text" ></span> </td>
                                         </tr>
                                         <tr>
-                                            <td>Name and Location of the Training Provider: <span> <input type="text"></span> </td>
+                                            <td>Name and Location of the Training Provider: <span> <input type="text" disabled></span> </td>
                                             <td>Name of the course to be assessed:
                                 
                                                 <span> <input type="text"></span> </td>
