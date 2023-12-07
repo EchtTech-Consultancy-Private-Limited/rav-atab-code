@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class SummaryController extends Controller
 {
-    public function desktopIndex(Request $request){
+    public function desktopIndex(){
         return view('assessor-summary.desktop-view-summary');
     }
 

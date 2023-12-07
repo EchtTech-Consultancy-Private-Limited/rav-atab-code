@@ -424,6 +424,11 @@
 
 
                                     </div>
+                                    <a
+                                        href="{{ url('onsite/submit') }}">
+                                        <button type="button" class="btn btn-success"
+                                            style="margin-right: 10px;">Submit Report</button>
+                                    </a>
 
                                     @if (auth()->user()->assessment == 2)
                                         @if ($applicationData->gps_pic == null && $applicationData->onsite_status != 1)
@@ -460,8 +465,13 @@
             </form> -->
 
                                                 @if (totalDocumentsCount($application_id) >= 0)
+                                                    {{-- <a
+                                                        href="{{ url('/desktop/submit' . '/' . $application_id . '/' . $course_id) }}">
+                                                        <button type="button" class="btn btn-success"
+                                                            style="margin-right: 10px;">Submit Report</button>
+                                                    </a> --}}
                                                     <a
-                                                        href="{{ url('/submit-report-by-desktop' . '/' . $application_id . '/' . $course_id) }}">
+                                                        href="{{ url('desktop/submit') }}">
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;">Submit Report</button>
                                                     </a>
