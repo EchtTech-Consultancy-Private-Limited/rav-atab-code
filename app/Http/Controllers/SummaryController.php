@@ -16,7 +16,10 @@ class SummaryController extends Controller
         return view('assessor-summary.on-site-view-summary');
     }
 
-    public function desktopSubmitSummary(Request $request){
+    public function desktopSubmitSummary(){
+        $summertReport = DB::table('assessor_summary_reports')->where(['application_id'=>190])->get();
+        // print_r($summertReport);
+        // die('sdfsg');
         return view('assessor-summary.desktop-submit-summary');
     }
 
