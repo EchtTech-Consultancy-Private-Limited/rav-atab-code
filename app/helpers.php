@@ -1134,7 +1134,6 @@ function getNOActionDocuments($questionID, $applicationID, $courseID){
 function getONeDocument($questionID, $applicationID, $courseID)
 {
 
-
     return Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
         ->where('course_id', $courseID)

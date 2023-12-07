@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\applicationController;
+use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\aknownledgeController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\FullCalenderController;
@@ -318,6 +319,13 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::get('admin/application/courses-list/{applicationID}',[applicationController::class,"getAdminApplicationCoursesLIst"]);
     Route::get('admin/application/summary-report/{course}/{application}',[applicationController::class,"getAdminApplicationSummary"]);
+
+// Summary Routes
+
+    Route::get('desktop/view',[SummaryController::class,"desktopIndex"]);
+    Route::get('onsite/view',[SummaryController::class,"onSiteIndex"]);
+    Route::post('desktop/submit',[SummaryController::class,"desktopSubmitSummary"]);
+    Route::post('onsite/submit',[SummaryController::class,"onSiteSubmitSummary"]);
 
 });
 
