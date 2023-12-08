@@ -96,7 +96,7 @@
                         <td>{{ $item->course_duration }}</td>
                         <td>{{ $item->eligibility }}</td>
                         <th>
-                            <a href="{{ url('on-site/report-summary?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                            <a href="{{ url('desktop/view?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
                         </th>
                     </tr>
                 @endforeach

@@ -119,7 +119,6 @@
 </style>
 
 </head>
-
 <body class="light">
 <!-- Progressbar Modal Poup -->
 <div class="loading-img d-none" id="loader">
@@ -175,8 +174,10 @@
             <div>
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
-                        <form id="submitForm" action="#" method="post">
+                        <form id="submitForm" action="{{url('desktop/final-summary')}}" method="post">
                             @csrf
+                            <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
+                            <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
                             <div class="p-3  bg-white">
                                 <table>
 
@@ -280,8 +281,11 @@
                                         </tbody>
                                     
                                     </table>
-                                    <button type="button" class="btn btn-success float-right mt-3"
-                                    onclick="confirmSubmit()">Submit
+                                    
+                                    @if(!$is_final_submit)
+                                    <button type="submit" class="btn btn-success float-right mt-3"
+                                   >Submit
+                                   @endif
                             </button>
                                 </div>
                                
