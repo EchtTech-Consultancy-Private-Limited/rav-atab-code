@@ -186,26 +186,26 @@
                                         </tr>
                                         <tr>
                                             <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
-                                            <td>Date of application: <span> <input type="text" ></span> </td>
+                                            <td>Date of application: <span> <input type="text" disabled value="{{$summertReport->app_created_at}}" ></span> </td>
                                         </tr>
                                         <tr>
-                                            <td>Name and Location of the Training Provider: <span> <input type="text" disabled></span> </td>
+                                            <td>Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summertReport->Person_Name}}"></span> </td>
                                             <td>Name of the course to be assessed:
                                 
-                                                <span> <input type="text"></span> </td>
+                                                <span> <input type="text" disabled value="{{$summertReport->course_name}}"></span> </td>
                                         </tr>
                                         <tr>
-                                            <td>Way of assessment (Desktop): <span> <input type="text"></span> </td>
-                                            <td>No of Mandays:  <span> <input type="text"></span> </td>
+                                            <td>Way of assessment (Desktop): <span> <input type="text" disabled value="{{$summertReport->assessor_type}}"></span> </td>
+                                            <td>No of Mandays:  <span> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
                                         </tr>
                                 
                                         <tr>
                                             <td> Signature</td>
-                                            <td> After print</td>
+                                            <td>........</td>
                                         </tr>
                                         <tr>
                                             <td> Assessor</td>
-                                            <td> Assessor Name</td>
+                                            <td>{{$summertReport->firstname??''}}  {{$summertReport->lastname??''}}</td>
                                         </tr>
                                     </tbody>
                                 
@@ -223,21 +223,70 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($final_data as $key=>$rows)
                                             <tr>
-                                                <td> <input type="text" placeholder=""></td>
-                                                <td> <input type="text" placeholder=""></td>
-                                                <td> <input type="text" placeholder=""></td>
-                                                <td> <input type="text" placeholder=""></td>
-                                                <td> <input type="text" placeholder=""></td>
+                                                <td>{{$rows->code}}</td>
+                                                <td>{{$rows->title}}</td>
+                                                <td>
+                                                    @foreach($rows->nc as $row)
+                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                      {{$row->nc_raise}}
+                                                      @endif
+                                                    @endforeach
+                                                </td>
+                                                <td>
+
+                                                @foreach($rows->nc as $row)
+                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                      {{$row->capa_mark}}
+                                                      @endif
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                @foreach($rows->nc as $key=>$row)
+                                                    @if($row->nc_raise_code==4)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
+                                                    @elseif($row->nc_raise_code==3)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
+                                                    @else
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-primary m-1" href="">NC{{$key+1}} Doc</a>      
+                                                    @endif
+                                                    @endforeach
+                                            
+                                            </td>
+                                            <td>
+                                                @php
+                                                $count = count($rows->nc);
+                                                @endphp
+                                             
+                                                @if($count==1)
+                                                    {{$rows->nc[0]->doc_verify_remark}}
+                                                @elseif($count==2)
+                                                {{$rows->nc[1]->doc_verify_remark}}
+                                                @elseif($count==3)
+                                                {{$rows->nc[2]->doc_verify_remark}}
+                                                @elseif($count==4)
+                                                {{$rows->nc[3]->doc_verify_remark}}
+                                                @elseif($count==5)
+                                                {{$rows->nc[4]->doc_verify_remark}}
+                                                @elseif($count==6)
+                                                {{$rows->nc[5]->doc_verify_remark}}
+                                                @else
+                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                @endif
+                                            </td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     
                                     </table>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-success float-right"
+                                    <button type="button" class="btn btn-success float-right mt-3"
                                     onclick="confirmSubmit()">Submit
                             </button>
+                                </div>
+                               
+                            </div>
+                           
                         </form>
                     </div>
                 </div>

@@ -1577,23 +1577,24 @@ class LevelController extends Controller
     }
 
 
-    public function admin_view_doc($doc_code, $id, $doc_id, $course_id)
+    public function admin_view_doc($doc_code, $id, $doc_id, $course_id,$question_id)
     {
+        $assesor_id = Auth::user()->id;
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
         $docByAdmin = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->where('user_id', auth()->user()->id)->first();
-
-        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id', 'docByAdmin'));
+        $app_id = DB::table('application_courses')->where(['id'=>$course_id])->first()->application_id;
+        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id', 'docByAdmin','question_id','app_id','assesor_id'));
     }
 
     public function acc_doc_comments(Request $request)
     {
         $check_nc = DB::table('assessor_summary_reports')->where(['application_id'=>$request->application_id,'nc_raise_code'=>$request->status,'object_element_id'=>$request->question_id,'assessor_id'=> $request->assessor_id,'assessor_type'=>$request->assesor_type])->first();
 
-        // if(!empty($check_nc)){
-        //     return redirect("$request->previous_url")->with('error', 'NC already created on this document.');
-        // }
+        if(!empty($check_nc)){
+            return redirect("$request->previous_url")->with('error', 'NC already created on this document.');
+        }
         /*Written By Suraj*/
         if($request->status==1){
             $nc_raise = "NC1";
@@ -1614,6 +1615,8 @@ class LevelController extends Controller
         $data['application_id'] = $request->application_id;
         $data['application_course_id'] = $request->application_course_id;
         $data['object_element_id'] = $request->question_id;
+        $data['doc_sr_code'] = $request->doc_code;
+        $data['doc_unique_id'] = $request->doc_unique_id;
         $data['date_of_assessement'] = $request->date_of_assessement??'';
         $data['assessor_id'] = $request->assessor_id;
         $data['assessor_type'] = $request->assesor_type;

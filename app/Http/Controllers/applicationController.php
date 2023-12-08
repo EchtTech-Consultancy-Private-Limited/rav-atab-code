@@ -94,7 +94,7 @@ class applicationController extends Controller
             $assessorId = auth()->user()->id;
         }
 
-
+        DB::table('assessor_summary_reports')->where(['doc_unique_id'=>$request->document_id])->update(['capa_mark'=>$request->remark]);
 
         $saved = DocumentRemark::create([
             'application_id' => $request->application_id,

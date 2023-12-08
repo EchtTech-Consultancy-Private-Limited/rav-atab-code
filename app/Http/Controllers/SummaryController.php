@@ -18,16 +18,50 @@ class SummaryController extends Controller
 
     public function desktopSubmitSummary(Request $request){
         $assessor_id = Auth::user()->id;
+
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id')
-        ->leftJoin('applications', 'applications.id', '=', 'assessor_summary_reports.application_id')
-        ->leftJoin('application_courses', 'application_courses.id', '=', 'assessor_summary_reports.application_course_id')
-        ->where(['asr.application_id'=>$request->application_id,'asr.assessor_id'=>$assessor_id,'asr.application_course_id'=>$request->application_course_id])->first();
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
+        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
+        ->where([
+            'asr.application_id' => $request->application_id,
+            'asr.assessor_id' => $assessor_id,
+            'asr.application_course_id' => $request->application_course_id,
+            'app_course.application_id' => $request->application_id,
+            'app_course.id' => $request->application_course_id
+        ])
+        ->first();
 
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summertReport->assessor_id,'application_id'=>$summertReport->application_id])->count();
+  
+    $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
+    ->select('asr.application_id','asr.assessor_id','asr.object_element_id')
+    ->where(['application_id' => $request->application_id, 'assessor_id' => $assessor_id])
+    ->whereIn('nc_raise_code', ['1', '2'])
+    ->groupBy('asr.application_id','asr.assessor_id','asr.object_element_id')
+    ->get()->pluck('object_element_id');
+        
+  
+    $questions = DB::table('questions')->whereIn('id',$assesor_distinct_report)->get();
 
-        $no_of_questions = DB::table('questions')->where('id',$summertReport->object_element_id)->get();
+    foreach($questions as $question){
+        $obj = new \stdClass;
+        $obj->title= $question->title;
+        $obj->code= $question->code;
+
+            $value = DB::table('assessor_summary_reports')->where([
+                'application_id' => $request->application_id,
+                'assessor_id' => $assessor_id,
+                'object_element_id' => $question->id,
+                'doc_sr_code' => $question->code,
+            ])->get();
+                $obj->nc = $value;
+                $final_data[] = $obj;
+            
+    }
+            // dd($final_data);
         // echo '<pre>';
         // print_r($summertReport);
         // echo 'No of mandays.';
@@ -35,7 +69,7 @@ class SummaryController extends Controller
         // print_r($no_of_questions);
         // die();
       
-        return view('assessor-summary.desktop-submit-summary', compact('summertReport', 'no_of_mandays', 'no_of_questions'));
+        return view('assessor-summary.desktop-submit-summary', compact('summertReport', 'no_of_mandays','final_data'));
     }
 
     public function onSiteSubmitSummary(Request $request){

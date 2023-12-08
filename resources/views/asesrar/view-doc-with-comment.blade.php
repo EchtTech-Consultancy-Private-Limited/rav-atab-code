@@ -111,6 +111,7 @@
                                                             <input type="hidden" name="course_id"
                                                                 value="{{ $course_id }}">
                                                                 <input type="hidden" name="application_id" value="{{ $app_id }}">
+                                                                <input type="hidden" name="doc_unique_id" value="{{ Request()->segment(4) }}">
                                                                 <input type="hidden" name="question_id" value="{{ Request()->segment(6) }}">
                                                                 <input type="hidden" name="application_course_id" value="{{ Request()->segment(5) }}">
                                                             <div class="row">
