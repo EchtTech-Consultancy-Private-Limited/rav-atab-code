@@ -94,7 +94,7 @@ class applicationController extends Controller
             $assessorId = auth()->user()->id;
         }
 
-
+        DB::table('assessor_summary_reports')->where(['doc_unique_id'=>$request->document_id])->update(['capa_mark'=>$request->remark]);
 
         $saved = DocumentRemark::create([
             'application_id' => $request->application_id,
@@ -670,9 +670,11 @@ class applicationController extends Controller
 
     public function uploadDocumentByOnSiteAssessor($applicationID, $courseID, $questionID, $documentID)
     {
+    
         $applicationData = Application::find($applicationID);
         $question = Question::find($questionID);
-        return view('on-site-assessor.upload-document', compact('applicationData', 'courseID', 'questionID', 'documentID', 'question'));
+        $assessor_id = Auth::user()->id;
+        return view('on-site-assessor.upload-document', compact('applicationData', 'courseID', 'questionID', 'documentID', 'question','assessor_id'));
     }
 
     public function uploadDocumentByOnSiteAssessorPost(Request $request)
@@ -682,6 +684,7 @@ class applicationController extends Controller
             'remark' => 'required',
             'document' => 'required'
         ]);
+      
 
         if ($request->hasfile('document')) {
             $file = $request->file('document');
@@ -697,6 +700,27 @@ class applicationController extends Controller
         if ($request->parent_doc_id) {
             Add_Document::where('id', $request->documentID)->update(['is_displayed_onsite' => 2]);
         }
+
+/*Written By Suraj*/
+        if($request->status==1){
+            $nc_raise = "NC1";
+        }else if($request->status==4){
+            $nc_raise="Approved";
+        }
+        $data=[];
+        $data['application_id'] = $request->applicationID;
+        $data['object_element_id'] = $request->questionID;
+        $data['date_of_assessement'] = $request->date_of_assessement??'N/A';
+        $data['assessor_id'] = $request->assessor_id;
+        $data['assessor_type'] = $request->assessor_type;
+        $data['nc_raise'] = $nc_raise??'N/A';
+        $data['nc_raise_code'] = $request->status??'N/A';
+        $data['doc_path'] = $filename;
+        $data['capa_mark'] = $request->capa_mark??'N/A';
+        $data['doc_against_nc'] = $request->doc_against_nc??'N/A';
+        $data['doc_verify_remark'] = $request->remark??'N/A';
+        $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
+        /*end here*/
 
         $document = Add_Document::create([
             'assessor_id' => auth()->user()->id,

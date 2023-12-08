@@ -250,6 +250,7 @@
                                                                     <td class="text-justify">
                                                                         {{ $question->title ?? '' }}
                                                                     </td>
+                                                                    
                                                                     <td>
                                                                         <div style="border-radius: 10px;  color:#000;">
                                                                             <!-- <div
@@ -275,10 +276,13 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
 
-                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
+                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id)
+                                                                                                        . '/' .
+                                                                                                            $question->id
+                                                                                                        }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
-                                                                                                        {{ checkFinalRequest($documentData[0]->id) }}
+                                                                                                        {{ checkFinalRequest($documentData[0]->id) }} 
                                                                                                     </div>
                                                                                                 </div>
                                                                                             @else
@@ -286,7 +290,9 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($documentData[0]->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($documentData[0]->id) }}"
 
-                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id) }}">{{ getButtonText($documentData[0]->id) }}</a>
+                                                                                                        href="{{ url('view-doc' . '/' . $documentData[0]->doc_id . '/' . $documentData[0]->doc_file . '/' . $documentData[0]->id . '/' . $course_id). '/' .
+                                                                                                            $question->id
+                                                                                                        }}">{{ getButtonText($documentData[0]->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($documentData[0]->id) }}
@@ -300,7 +306,10 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
 
-                                                                                                        href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}</a>
+                                                                                                        href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) 
+                                                                                                            . '/' .
+                                                                                                            $question->id
+                                                                                                        }}">{{ getButtonText($docItem->id) }}</a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
                                                                                                         {{ checkFinalRequest($docItem->id) }}
@@ -314,7 +323,10 @@
                                                                                                     <a class="docBtn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm"
                                                                                                         title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
 
-                                                                                                        href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) }}">{{ getButtonText($docItem->id) }}
+                                                                                                        href="{{ url('view-doc' . '/' . $docItem->doc_id . '/' . $docItem->doc_file . '/' . $docItem->id . '/' . $course_id) 
+                                                                                                         . '/' .
+                                                                                                            $question->id
+                                                                                                        }}">{{ getButtonText($docItem->id) }}
                                                                                                     </a>
                                                                                                     <div
                                                                                                         style="font-size: 10px; margin-top:5px; margin-bottom:5px;">
@@ -364,7 +376,10 @@
                                                                                                     <div
                                                                                                         style="margin:4px;">
                                                                                                         <a target="_blank"
-                                                                                                            href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id) }}"
+                                                                                                            href="{{ url('on-site/view/document/' . $document->doc_file . '/' . $document->id . '/' . $question->id . '/' . $applicationData->id . '/' . $course_id
+                                                                                                            . '/' .
+                                                                                                            $question->id
+                                                                                                            ) }}"
                                                                                                             class="btn {{ checkDocumentCommentStatus($document->id) }} btn-sm mb-0">{{ getButtonText($document->id) }}
                                                                                                         </a>
 
@@ -423,15 +438,20 @@
                                         </table>
 
 
-                                    </div>
+                                    </div>                                    
 
                                     @if (auth()->user()->assessment == 2)
                                         @if ($applicationData->gps_pic == null && $applicationData->onsite_status != 1)
                                             @if (totalDocumentsCount($application_id) >= 0)
                                                 <div class="d-flex justify-content-end">
-                                                    <a target="_blank" class="btn btn-primary mr-2"
+                                                    {{-- <a target="_blank" class="btn btn-primary mr-2"
                                                         href="{{ url('on-site/report/?application=' . $applicationData->id . '&course=' . $course_id) }}">
                                                         Submit
+                                                    </a> --}}
+                                                    <a
+                                                        href="{{ url('onsite/submit') }}">
+                                                        <button type="button" class="btn btn-success"
+                                                            style="margin-right: 10px;">Submit Report</button>
                                                     </a>
                                                 </div>
                                             @else
@@ -460,8 +480,13 @@
             </form> -->
 
                                                 @if (totalDocumentsCount($application_id) >= 0)
+                                                    {{-- <a
+                                                        href="{{ url('/desktop/submit' . '/' . $application_id . '/' . $course_id) }}">
+                                                        <button type="button" class="btn btn-success"
+                                                            style="margin-right: 10px;">Submit Report</button>
+                                                    </a> --}}
                                                     <a
-                                                        href="{{ url('/submit-report-by-desktop' . '/' . $application_id . '/' . $course_id) }}">
+                                                        href="{{ url('/desktop/submit' . '/' . $application_id . '/' . $course_id) }}">
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;">Submit Report</button>
                                                     </a>

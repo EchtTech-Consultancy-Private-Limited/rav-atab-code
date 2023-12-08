@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\applicationController;
+use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\aknownledgeController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\FullCalenderController;
@@ -250,8 +251,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::get('create-course/{id?}', [LevelController::class, 'create_course']);
 
-    Route::get('view-doc/{doc_code}/{id?}/{doc_id}/{course_id}', [LevelController::class, 'view_doc']);
-    Route::get('admin-view-doc/{doc_code}/{id?}/{doc_id}/{course_id}', [LevelController::class, 'admin_view_doc']);
+    Route::get('view-doc/{doc_code}/{id?}/{doc_id}/{course_id}/{question_id}', [LevelController::class, 'view_doc']);
+    Route::get('admin-view-doc/{doc_code}/{id?}/{doc_id}/{course_id}/{question_id}', [LevelController::class, 'admin_view_doc']);
 
     Route::get('show-comment/{doc_id}', [LevelController::class, 'show_comment']);
     Route::get('document-report-toadmin/{course_id}', [LevelController::class, 'doc_to_admin']);
@@ -319,27 +320,15 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('admin/application/courses-list/{applicationID}',[applicationController::class,"getAdminApplicationCoursesLIst"]);
     Route::get('admin/application/summary-report/{course}/{application}',[applicationController::class,"getAdminApplicationSummary"]);
 
+// Summary Routes
+
+    Route::get('desktop/view',[SummaryController::class,"desktopIndex"]);
+    Route::get('onsite/view',[SummaryController::class,"onSiteIndex"]);
+    Route::get('desktop/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
+    Route::get('onsite/submit',[SummaryController::class,"onSiteSubmitSummary"]);
+    
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //notification status change
 Route::get('notification', [LevelController::class, 'notification']);

@@ -72,6 +72,7 @@
                                     <form method="post" action="{{ url('add-accr-comment-view-doc') }}" id="ncForm">
                                         @csrf
                                         <input type="hidden" name="assessor_id" value="{{ auth()->user()->id }}">
+                                        <input type="hidden" name="doc_path" value="{{ Request()->segment(3) }}">
                                         <input type="hidden" name="assesor_type" value="{{ auth()->user()->assessment == 1 ? 'desktop' : 'onsite' }}">
                                         <div class="row clearfix">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
@@ -109,7 +110,10 @@
                                                                 value="{{ $doc_code }}">
                                                             <input type="hidden" name="course_id"
                                                                 value="{{ $course_id }}">
-                                                                <input type="hidden" name="application_id" value="{{ $application_id }}">
+                                                                <input type="hidden" name="application_id" value="{{ $app_id }}">
+                                                                <input type="hidden" name="doc_unique_id" value="{{ Request()->segment(4) }}">
+                                                                <input type="hidden" name="question_id" value="{{ Request()->segment(6) }}">
+                                                                <input type="hidden" name="application_course_id" value="{{ Request()->segment(5) }}">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">
                                                                     <label>Select Type</label>

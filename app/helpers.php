@@ -520,7 +520,7 @@ function checkDocumentCommentStatusreturnText($id)
 }
 
 
-function getComments($id = null, $applicationID)
+function getComments($id, $applicationID)
 {
     $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
@@ -586,7 +586,7 @@ function getComments($id = null, $applicationID)
     return $html;
 }
 
-function getCommentsForAdmin($id = null, $applicationID)
+function getCommentsForAdmin($id, $applicationID)
 {
     $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
@@ -1133,7 +1133,6 @@ function getNOActionDocuments($questionID, $applicationID, $courseID){
 
 function getONeDocument($questionID, $applicationID, $courseID)
 {
-
 
     return Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
