@@ -325,6 +325,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('desktop/view',[SummaryController::class,"desktopIndex"]);
     Route::get('onsite/view',[SummaryController::class,"onSiteIndex"]);
     Route::get('desktop/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
+    Route::post('desktop/final-summary',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
     Route::get('onsite/submit',[SummaryController::class,"onSiteSubmitSummary"]);
     
 
