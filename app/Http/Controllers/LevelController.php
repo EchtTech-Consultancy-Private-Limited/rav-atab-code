@@ -1038,6 +1038,14 @@ class LevelController extends Controller
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
 
+
+        /*Implemented by suraj*/
+          $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
+          if(!empty($get_final_summary)){
+            DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
+          }
+        /*end here*/
+
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $request->Application_id)->first();
         if (!$request->coursePayment) {
             if ($checkPaymentAlready) {

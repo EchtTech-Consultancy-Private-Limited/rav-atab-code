@@ -371,6 +371,7 @@
                                                                         <?php
                                                                         $application_assessor_arr = listofapplicationassessor($item->id);
                                                                         $assessment_type = checkapplicationassessmenttype($item->id);
+                                                                        $is_onsite_payment_status = checkOnsiteAssessorPayment($item->id);
                                                                         ?>
                                                                         <br>
                                                                         <label class="mb-3"><b>Assessment
@@ -383,14 +384,20 @@
                                                                                 <option value="1">Desktop Assessment
                                                                                 </option>
                                                                             @endif
-                                                                            @if (count($item->payments) > 1)
+                                                                          {{--  @if (count($item->payments) > 1)
                                                                                 @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
                                                                                     <option value="2">On-Site
                                                                                         Assessment
                                                                                     </option>
                                                                                 @endif
                                                                             @endif
+                                                                            --}}
 
+                                                                            @if ($is_onsite_payment_status)
+                                                                                    <option value="2">On-Site
+                                                                                        Assessment
+                                                                                    </option>
+                                                                            @endif
 
                                                                         </select>
 
