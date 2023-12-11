@@ -977,7 +977,45 @@ function getVerifiedApplications()
     $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
     return $applications;
 }
+/*created by suraj*/
+function checkOnsiteAssessorPayment($application_id){
 
+    $is_exists = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'assessor_type'=>'desktop','payment_status'=>1])->first();
+    if(!empty($is_exists)){
+        return true;
+    }else{
+        return false;
+    }
+
+}
+
+function getApplicationListForSecondPayment()
+{
+    $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
+    $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('payment_status',0)->get();
+    if($final_assessor_summary){
+        return $final_assessor_summary;
+    }else{
+       return [];
+    }
+    
+}
+
+function getNotificationForSecondPayment()
+{
+    $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
+   $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('payment_status',0)->get();
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->orderBy('id', 'desc')->get();
+    
+    if (!empty($final_assessor_summary)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/*end here*/
 function getApplicationPaymentNotificationStatus()
 {
     $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);

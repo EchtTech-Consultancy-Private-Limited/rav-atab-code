@@ -74,20 +74,20 @@
                          <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
                              role="button">
                              <i class="far fa-bell"></i>
-                             @if (getApplicationPaymentNotificationStatus())
+                             @if (getNotificationForSecondPayment())
                                  <span class="notify" style="    background-color: #ff5722 !important;"></span>
                                  <span class="heartbeat" style="    background-color: #ff5722 !important;"></span>
                              @endif
                          </a>
 
                          @php
-                             $applications = getVerifiedApplications();
+                             $applications = getApplicationListForSecondPayment();
                          @endphp
                          <ul class="dropdown-menu pullDown placeholder_input">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
-                                     @if (getApplicationPaymentNotificationStatus())
+                                     @if (getNotificationForSecondPayment())
                                          @foreach ($applications as $application)
                                              <li>
                                                  {{-- @if ($application->notification_type == 'document') --}}
@@ -96,13 +96,17 @@
                                                          Application ID {{ $application->application->application_uid }}
 
                                                      </a> --}}
-                                                 @if ($application->notification_type != 'document')
-                                                     <a href="{{ url('pending-payments/' . $application->application->id) }}"
-                                                         style="color: #000;">
-                                                         Application ID {{ $application->application->application_uid }}
+                                                {{-- @if ($application->notification_type != 'document')
+                                                    <a href="{{ url('pending-payments/' . $application->application->id) }}"
+                                                        style="color: #000;">
+                                                        Application ID {{ $application->application->application_uid }}
 
-                                                     </a>
-                                                 @endif
+                                                    </a>
+                                                @endif --}}
+                                                <a href="{{ url('pending-payments/' . $application->application_id) }}"
+                                                         style="color: #000;">
+                                                         Application ID {{ $application->application_id }}
+                                                </a>
                                              </li>
                                          @endforeach
                                      @else
