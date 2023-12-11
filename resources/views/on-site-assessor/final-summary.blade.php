@@ -132,7 +132,7 @@
                                     {{ \Carbon\Carbon::parse($applicationDetails->created_at)->format('d-m-Y') }}</td>
                             </tr>
                             <tr>
-                                <td>Name and Location of the Training Provider :
+                                <td>Name and Location of the Training Provider :  
                                     {{ $summaryReport->location_training_provider }}</td>
                                 <td>Name of the course to be assessed : {{ $summaryReport->course_assessed }} </td>
                             </tr>

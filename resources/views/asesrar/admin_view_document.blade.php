@@ -86,7 +86,9 @@
 
     .width-50{width:50%}
     .width-10{width:8%}
-
+    .font-12 {
+    font-size: 12px !important;
+}
    
 </style>
 
@@ -143,6 +145,11 @@
                         </ul>
                     </div>
 
+                    <div class="col-lg-3">
+                   <div class="float-right text-right mr-3">
+                   <a href="{{ URL::previous() }}" class="btn btn-primary" style="margin-right:20px;"> <i class="fa fa-chevron-left font-12"></i> Go Back </a>
+                   </div>
+                    </div>
 
                 </div>
             </div>
@@ -189,7 +196,7 @@
                             </a>
 
                                
-                            <a href="{{ URL::previous() }}" class="btn btn-primary" style="margin-left:10px;">Go Back </a>
+                           
                        
                         </div>
                         <div>
