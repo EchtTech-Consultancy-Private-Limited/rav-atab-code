@@ -444,8 +444,9 @@
                                                                         </div>
                                                                         <div class="onsite-id">
                                                                             <div class="mt-3 mb-2">
-                                                                                @if (count($item->payments) > 1)
-                                                                                    @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
+                                                                            {{-- @if (count($item->payments) > 1) --}}
+                                                                                {{--  @if ($item->desktop_status == 1 && $item->payments[1]->status == 2) --}}
+                                                                                @if ($is_onsite_payment_status)
                                                                                         <label>
                                                                                             <input type="radio"
                                                                                                 id="on_site_type"
@@ -476,7 +477,7 @@
                                                                                                 Virtual
                                                                                             </span>
                                                                                         </label>
-                                                                                    @endif
+                                                                                   {{--  @endif --}}
                                                                                 @endif
                                                                             </div>
                                                                             @foreach ($assesors as $k => $assesorsData)

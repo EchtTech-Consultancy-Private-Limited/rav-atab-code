@@ -704,15 +704,29 @@ class applicationController extends Controller
 /*Written By Suraj*/
         if($request->status==1){
             $nc_raise = "NC1";
-        }else if($request->status==4){
+        }
+        else if($request->status==2){
+            $nc_raise = "NC2";
+        }
+        else if($request->status==3){
+            $nc_raise = "Not Approved";
+        }
+        else if($request->status==4){
             $nc_raise="Approved";
+        }else{
+            $nc_raise="Request for final approval";
         }
         $data=[];
         $data['application_id'] = $request->applicationID;
         $data['object_element_id'] = $request->questionID;
+      
+        $data['application_course_id'] = $request->courseID;
+        $data['doc_sr_code'] = $request->question_code;
+        $data['doc_unique_id'] = $request->documentID;
+        
         $data['date_of_assessement'] = $request->date_of_assessement??'N/A';
-        $data['assessor_id'] = $request->assessor_id;
-        $data['assessor_type'] = $request->assessor_type;
+        $data['assessor_id'] = Auth::user()->id;
+        $data['assessor_type'] = $request->assessor_type??'onsite';
         $data['nc_raise'] = $nc_raise??'N/A';
         $data['nc_raise_code'] = $request->status??'N/A';
         $data['doc_path'] = $filename;
@@ -879,6 +893,7 @@ class applicationController extends Controller
         }
     }
 
+    
     public function opportunityForm(Request $request)
     {
 //        $existingEntry = ImprovementForm::where('application_id', $request->input('application'))
@@ -945,7 +960,7 @@ class applicationController extends Controller
     {
         $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
         $applicationDetails = Application::find($request->input('application'));
-        
+
         return view('on-site-assessor.summary-list', compact('courses', 'applicationDetails'));
     }
 

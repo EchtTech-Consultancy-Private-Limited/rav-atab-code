@@ -449,7 +449,7 @@
                                                         Submit
                                                     </a> --}}
                                                     <a
-                                                        href="{{ url('onsite/submit') }}">
+                                                        href="{{ url('onsite/submit' . '/' . $application_id . '/' . $course_id) }}">
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;">Submit Report</button>
                                                     </a>

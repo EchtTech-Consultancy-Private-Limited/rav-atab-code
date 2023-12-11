@@ -175,57 +175,59 @@
             <div>
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
-                        <form id="submitForm" action="#" method="post">
+                        <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
                             @csrf
+                             <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
+                            <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
                             <div class="p-3  bg-white">
                                 <table>
 
                                     <tbody>
                                         <tr>
-                                            <td colspan="6">FORM -2 - ONSITE ASSESSMENT FORM.</td>
+                                            <td colspan="6">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">Application No (provided by ATAB): <span> <input type="text"></span>
+                                            <td colspan="3">Application No (provided by ATAB): <span> {{$summertReport->application_uid}}</span>
                                             </td>
-                                            <td colspan="3">Date of Application: <span> <input type="text"></span>
+                                            <td colspan="3">Date of Application: <span> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">Name and Location of the Training Provider: <span> <input type="text"></span>
+                                            <td colspan="3">Name and Location of the Training Provider: <span> {{$summertReport->Person_Name}}</span>
                                             </td>
                                             <td colspan="3">Name of the course  to be assessed:
                                 
-                                                 <span> <input type="text"></span>
+                                                 <span> {{$summertReport->course_name}}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4">Way of assessment (onsite/ hybrid/ virtual): <span> <input type="text"></span>
+                                            <td colspan="4">Way of assessment (onsite/ hybrid/ virtual):</br> <span> {{$assessement_way}}</span>
                                             </td>
-                                            <td colspan="2">No of Mandays: <span> <input type="text"></span>
+                                            <td colspan="2">No of Mandays: <span> {{$no_of_mandays}}</span>
                                             </td>
                                         </tr>
                                 
                                         <tr>
                                             <td> Signature:</td>
-                                            <td> </td>
+                                            <td>.................</td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td> Name</td>
-                                            <td>  </td>
+                                            <td>Assessor Name</td>
+                                            <td> {{$assessor_name}} </td>
                                             <td> </td>
                                             <td> </td>
                                         </tr>
                                         <tr>
-                                            <td> Team: <input type="text"></td>
-                                            <td colspan="2"> Team Leader: <input type="text"></td>
-                                            <td> Assessor: <input type="text"></td>
-                                            <td colspan="2"> Rep. Assessee Orgn: <input type="text"></td>
+                                            <td> Team Leader: </td>
+                                            <td> {{$assessor_name}}</td>
+                                            <td colspan="2"> Rep. Assessee Orgn:</td>
+                                            <td colspan="2"><input type="text" name="assessee_org" id="assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required></td>
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the Opening Meeting: <input
-                                                    type="text"></td>
+                                                    type="text" id="brief_open_meeting" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required></td>
                                         </tr>
                                 
                                         <tr>
@@ -233,32 +235,79 @@
                                             <td>Objective Element </td>
                                             <td> NC raised</td>
                                             <td> CAPA by Training Provider</td>
+                                            <td> Document submitted against the NC</td>
                                             <td> Remarks (Accepted/ Not accepted)</td>
-                                            <td> Remarks (Accepted/ Not accepted)</td>
                                         </tr>
-                                        <tr>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                        </tr>
-                                        <tr>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                            <td> <input type="text"> </td>
-                                        </tr>
-                                      
-                                        <tr>
-                                            <td>
-                                                Date : <input type="date">
+                                        <tbody>
+                                            @foreach ($final_data as $key=>$rows)
+                                            <tr>
+                                                <td>{{$rows->code}}</td>
+                                                <td>{{$rows->title}}</td>
+                                                <td>
+                                                    @foreach($rows->nc as $row)
+                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                      {{$row->nc_raise}}
+                                                      @endif
+                                                    @endforeach
+                                                </td>
+                                                <td>
+
+                                                @foreach($rows->nc as $row)
+                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                      {{$row->capa_mark}}
+                                                      @endif
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                @foreach($rows->nc as $key=>$row)
+                                                    @if($row->nc_raise_code==4)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
+                                                    @elseif($row->nc_raise_code==3)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
+                                                    @else
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-primary m-1" href="">NC{{$key+1}} Doc</a>      
+                                                    @endif
+                                                    @endforeach
+                                            
                                             </td>
                                             <td>
-                                                Signature : <input type="file">
+                                                @php
+                                                $count = count($rows->nc);
+                                                @endphp
+                                             
+                                                @if($count==1)
+                                                    {{$rows->nc[0]->doc_verify_remark}}
+                                                @elseif($count==2)
+                                                {{$rows->nc[1]->doc_verify_remark}}
+                                                @elseif($count==3)
+                                                {{$rows->nc[2]->doc_verify_remark}}
+                                                @elseif($count==4)
+                                                {{$rows->nc[3]->doc_verify_remark}}
+                                                @elseif($count==5)
+                                                {{$rows->nc[4]->doc_verify_remark}}
+                                                @elseif($count==6)
+                                                {{$rows->nc[5]->doc_verify_remark}}
+                                                @else
+                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                @endif
+                                            </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tr>
+                                            <td colspan="6">Brief Summary: <input
+                                                    type="text" id="brief_summary" name="brief_summary" placeholder="Please Enter Brief Summary" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6">Brief about the closing meeting: <input
+                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Date : <input type="date" id="summary_date" name="summary_date">
+                                            </td>
+                                            <td>
+                                                Signature : ..........
                                             </td>
                                         </tr>
                                     </tbody>
@@ -270,16 +319,16 @@
                                         <tbody>
                                             <tr>
                                                 <td colspan="4">
-                                                    FORM -3 - OPPORTUNITY FOR IMPROVEMENT FORM
+                                                    OPPORTUNITY FOR IMPROVEMENT FORM
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2">Name and Location of the Training Provider: <input type="text"></td>
-                                                <td colspan="2">Name of the course  to be assessed:  <input type="text"></td>
+                                                <td colspan="2">Name and Location of the Training Provider: {{$summertReport->Person_Name}}</td>
+                                                <td colspan="2">Name of the course  to be assessed: {{$summertReport->course_name}}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual): <input type="text"></td>
-                                                <td colspan="2"> No of Mandays: <input type="text"></td>
+                                                <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):</br> {{$assessement_way}}</td>
+                                                <td colspan="2"> No of Mandays: {{$no_of_mandays}}</td>
                                             </tr>
                                             <tr>
                                                 <td>  S. No. </td>
@@ -287,41 +336,42 @@
                                                 <td colspan="2"> Standard reference</td>
                                             </tr>
                                             <tr>
-                                                <td> </td>
-                                                <td> </td>
-                                                <td> </td>
+                                                <td> <input type="text" name="sr_no" id="sr_no" placeholder="Enter Serial No." maxLength="10" required></td>
+                                                <td><input type="text" name="improvement_form" id="improvement_form" placeholder="Enter Opportunity for improvement Form" maxLength="1000"> </td>
+                                                <td><input type="text" name="standard_reference" id="standard_reference" maxLength="1000" placeholder="Enter Standard Reference" required> </td>
                                             </tr>
                                     
                                             <tr>
                                                 <td> Signatures</td>
-                                                <td> </td>
+                                                <td>.......... </td>
                                                 <td> </td>
                                             </tr>
                                     
                                             <tr>
-                                                <td>Name </td>
+                                                <td>Assessor Name </td>
+                                                
+                                                <td>{{$assessor_name}} </td>
                                                 <td> </td>
-                                                <td> </td>
-                                                <td> </td>
+                                                
                                             </tr>
                                             <tr>
-                                                <td> </td>
-                                                <td> Team Leader</td>
-                                                <td> Assessor</td>
+                                                <td>Team Leader </td>
+                                                <td>{{$assessor_name}}</td>
+                                                
                                                 <td> Rep. Assessee Orgn.</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"> Date:</td>
+                                                <td colspan="2"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
                                                 <td colspan="2"> Signature of the Team Leader</td>
                                     
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </br>
+                                    <button type="submit" class="btn btn-success float-right">Submit</button>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-success float-right"
-                                    onclick="confirmSubmit()">Submit
-                            </button>
+                            
                         </form>
                     </div>
                 </div>
