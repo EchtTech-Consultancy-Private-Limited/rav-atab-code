@@ -51,10 +51,7 @@ class AuthController extends Controller
 
             ]
         );
-
-
         $data = user::where('email', $request->email)->first();
-
     //    if ($data){
     //        if ($data->is_loggedin == 1) {
     //            return redirect()->back()->with('warning', 'User is already logged in. Multiple logins are not allowed.');
@@ -62,8 +59,7 @@ class AuthController extends Controller
                 
     //        }
     //    }
-
-        //dd($data);
+        //dd($data->is_loggedin);
         if ($data != null) {
             if ($data->is_loggedin == 1) {
                 return redirect()->back()->with('warning', 'User is already logged in. Multiple logins are not allowed.');
@@ -85,7 +81,6 @@ class AuthController extends Controller
                     }
                 } else {
                     // dd($request->all());
-
                     return back()->with('fail', 'Your account is not active Yet. please Contact Your website Adminstrator.');
                 }
             } else {
