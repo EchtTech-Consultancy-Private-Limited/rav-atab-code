@@ -96,7 +96,11 @@
                         <td>{{ $item->course_duration }}</td>
                         <td>{{ $item->eligibility }}</td>
                         <th>
+                            @if(Auth::user()->assessment==2)
+                            <a href="{{ url('onsite/view?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                            @else
                             <a href="{{ url('desktop/view?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                            @endif
                         </th>
                     </tr>
                 @endforeach

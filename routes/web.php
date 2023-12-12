@@ -294,12 +294,13 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::post('payment/acknowledge',[applicationController::class,"paymentAcknowledge"])->name('payment.acknowledge');
 
-    Route::get('on-site/view/document/{document}/{documentID}/{questionID}/{applicationID}/{courseID}',[applicationController::class,"viewDocumentData"]);
+    Route::get('on-site/view/document/{document}/{documentID}/{questionID}/{applicationID}/{courseID}/{objectElementID}',[applicationController::class,"viewDocumentData"]);
 
 
     Route::get('on-site/report',[applicationController::class,"on_site_report_format"]);
 
     Route::post('save-on-site-report',[applicationController::class,"saveFormDataOnSite"]);
+    
     Route::get('opportunity-form/report',[applicationController::class,"opportunityForm"]);
 
     Route::post('save-on-site-report-improvment-form',[applicationController::class,"saveImprovmentForm"]);
@@ -326,7 +327,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('onsite/view',[SummaryController::class,"onSiteIndex"]);
     Route::get('desktop/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
     Route::post('desktop/final-summary',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
-    Route::get('onsite/submit',[SummaryController::class,"onSiteSubmitSummary"]);
+    Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
+    Route::get('onsite/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
     
 
 });
