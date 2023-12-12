@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use App\Models\User;
 
 class Authenticate extends Middleware
 {
@@ -15,6 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
+            User::where('is_loggedin', 1)->update(['is_loggedin' => 0]);
             return route('/');
         }
     }

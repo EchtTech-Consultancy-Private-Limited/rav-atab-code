@@ -94,7 +94,6 @@ class AuthController extends Controller
         } } else {
             return back()->with('fail', 'Record not exist!!');
         }
-        
     }
 
     public function register()
