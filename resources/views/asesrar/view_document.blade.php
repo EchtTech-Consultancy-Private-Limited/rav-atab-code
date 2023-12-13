@@ -448,11 +448,13 @@
                                                         href="{{ url('on-site/report/?application=' . $applicationData->id . '&course=' . $course_id) }}">
                                                         Submit
                                                     </a> --}}
+                                                    @if(!$is_final_submit)
                                                     <a
                                                         href="{{ url('onsite/submit' . '/' . $application_id . '/' . $course_id) }}">
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;">Submit Report</button>
                                                     </a>
+                                                    @endif
                                                 </div>
                                             @else
 
@@ -485,11 +487,14 @@
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;">Submit Report</button>
                                                     </a> --}}
+
+                                                    @if(!$is_final_submit)
                                                     <a
                                                         href="{{ url('/desktop/submit' . '/' . $application_id . '/' . $course_id) }}">
                                                         <button type="button" class="btn btn-success"
                                                             style="margin-right: 10px;">Submit Report</button>
                                                     </a>
+                                                    @endif
                                                 @endif
                                             </div>
                                         @else

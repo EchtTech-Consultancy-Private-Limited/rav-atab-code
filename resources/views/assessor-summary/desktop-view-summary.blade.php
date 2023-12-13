@@ -183,11 +183,11 @@
 
                                     <tbody>
                                         <tr>
-                                            <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
+                                            <td colspan="2">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
                                             <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
-                                            <td>Date of application: <span> <input type="text" disabled value="{{$summertReport->app_created_at}}" ></span> </td>
+                                            <td>Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td>Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summertReport->Person_Name}}"></span> </td>
@@ -196,7 +196,7 @@
                                                 <span> <input type="text" disabled value="{{$summertReport->course_name}}"></span> </td>
                                         </tr>
                                         <tr>
-                                            <td>Way of assessment (Desktop): <span> <input type="text" disabled value="{{$summertReport->assessor_type}}"></span> </td>
+                                            <td>Way of assessment (Desktop): <span> <input type="text" disabled value="{{$assessement_way}}"></span> </td>
                                             <td>No of Mandays:  <span> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
                                         </tr>
                                 

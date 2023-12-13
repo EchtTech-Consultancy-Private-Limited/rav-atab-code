@@ -358,7 +358,7 @@
                                                 <td>Team Leader </td>
                                                 <td>{{$assessor_name}}</td>
                                                 
-                                                <td> Rep. Assessee Orgn.</td>
+                                                <td> Rep. Assessee Orgn. <input type="text" name="improve_assessee_org" id="improve_assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>

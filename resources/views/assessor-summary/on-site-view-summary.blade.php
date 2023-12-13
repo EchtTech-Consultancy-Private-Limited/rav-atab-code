@@ -114,7 +114,7 @@
     table td {
         text-align: left;
         padding: 10px 10px;
-        font-weight: 700;
+       
     }
 </style>
 
@@ -182,74 +182,74 @@
                             <div class="p-3  bg-white">
                                 <div class="row">
                                     <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse">
-                                        <button class="btn btn-success">Show</button>
-                                        <button class="btn btn-primary">Print</button>
+                                        <!-- <button class="btn btn-success">Show</button> -->
+                                        <button class="btn btn-primary" onclick="printDiv('on-site-print')">Print</button>
                                     </div>
                                 </div>
-                                <table>
+                                <section id="on-site-print">
+                                <table >
 
                                     <tbody>
                                         <tr>
-                                            <td colspan="6">ONSITE ASSESSMENT FORM.</td>
+                                            <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">Application No (provided by ATAB): <span> {{$summertReport->application_uid}}</span>
+                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$summertReport->application_uid}}</span>
                                             </td>
-                                            <td colspan="3">Date of Application: <span> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
+                                            <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">Name and Location of the Training Provider: <span> {{$summertReport->Person_Name}}</span>
+                                            <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->Person_Name}}</span>
                                             </td>
-                                            <td colspan="3">Name of the course  to be assessed:
+                                            <td colspan="3" class="fw-bold">Name of the course  to be assessed:
+                                            </br>
+                                                 <span class="fw-normal"> {{$summertReport->course_name}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal"> {{$assessement_way??''}}</span>
+                                            </td>
+                                            <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
+                                            </td>
+                                        </tr>
                                 
-                                                 <span> {{$summertReport->course_name}}</span>
-                                            </td>
-                                        </tr>
                                         <tr>
-                                            <td colspan="4">Way of assessment (onsite/ hybrid/ virtual):</br> <span> {{$assessement_way??''}}</span>
-                                            </td>
-                                            <td colspan="2">No of Mandays: <span> {{$no_of_mandays}}</span>
-                                            </td>
-                                        </tr>
-                                
-                                        <tr>
-                                            <td> Signature:</td>
+                                            <td class="fw-bold"> Signature:</td>
                                             <td>.................</td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Assessor Name</td>
+                                            <td class="fw-bold">Assessor Name</td>
                                             <td> {{$assessor_name??''}} </td>
                                             <td> </td>
                                             <td> </td>
                                         </tr>
                                         <tr>
-                                            <td> Team Leader: </td>
+                                            <td class="fw-bold"> Team Leader: </td>
                                             <td> {{$assessor_name??''}}</td>
-                                            <td colspan="2"> Rep. Assessee Orgn:</td>
-                                            <td colspan="2"><input type="text" name="assessee_org" id="assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required></td>
+                                            <td colspan="2" class="fw-bold"> Rep. Assessee Orgn:</td>
+                                            <td colspan="2">{{$summertReport->assessee_org}}</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6">Brief about the Opening Meeting: <input
-                                                    type="text" id="brief_open_meeting" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required></td>
+                                            <td colspan="6" class="fw-bold">Brief about the Opening Meeting: <span class="fw-normal">{{$summertReport->brief_open_meeting}}</span></td>
                                         </tr>
                                 
                                         <tr>
-                                            <td> Sl. No</td>
-                                            <td>Objective Element </td>
-                                            <td> NC raised</td>
-                                            <td> CAPA by Training Provider</td>
-                                            <td> Document submitted against the NC</td>
-                                            <td> Remarks (Accepted/ Not accepted)</td>
+                                            <td class="fw-bold"> Sl. No</td>
+                                            <td class="fw-bold">Objective Element </td>
+                                            <td class="fw-bold"> NC raised</td>
+                                            <td class="fw-bold"> CAPA by Training Provider</td>
+                                            <td class="fw-bold"> Document submitted against the NC</td>
+                                            <td class="fw-bold"> Remarks (Accepted/ Not accepted)</td>
                                         </tr>
                                         <tbody>
                                             @foreach ($final_data as $key=>$rows)
                                             <tr>
-                                                <td>{{$rows->code}}</td>
+                                                <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
-                                                <td>
+                                                <td class="fw-bold">
                                                     @foreach($rows->nc as $row)
                                                     @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
                                                       {{$row->nc_raise}}
@@ -303,18 +303,16 @@
                                             @endforeach
                                         </tbody>
                                         <tr>
-                                            <td colspan="6">Brief Summary: <input
-                                                    type="text" id="brief_summary" name="brief_summary" placeholder="Please Enter Brief Summary" required></td>
+                                            <td colspan="6" class="fw-bold">Brief Summary: <span class="fw-normal">{{$summertReport->brief_summary}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6">Brief about the closing meeting: <input
-                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" required></td>
+                                            <td colspan="6" class="fw-bold">Brief about the closing meeting: <span class="fw-bold">{{$summertReport->brief_closing_meeting}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                Date : <input type="date" id="summary_date" name="summary_date">
+                                            <td class="fw-bold">
+                                                Date : <span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->summary_date))}}</span>
                                             </td>
-                                            <td>
+                                            <td class="fw-bold">
                                                 Signature : ..........
                                             </td>
                                         </tr>
@@ -326,57 +324,58 @@
 
                                         <tbody>
                                             <tr>
-                                                <td colspan="4">
+                                                <td colspan="4" class="fw-bold">
                                                     OPPORTUNITY FOR IMPROVEMENT FORM
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2">Name and Location of the Training Provider: {{$summertReport->Person_Name}}</td>
-                                                <td colspan="2">Name of the course  to be assessed: {{$summertReport->course_name}}</td>
+                                                <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$summertReport->Person_Name}}</span></td>
+                                                <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$summertReport->course_name}}</span></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual):</br> {{$assessement_way??''}}</td>
-                                                <td colspan="2"> No of Mandays: {{$no_of_mandays}}</td>
+                                                <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">{{$assessement_way??'N/A'}}</span></td>
+                                                <td colspan="2" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$no_of_mandays}}</span></td>
                                             </tr>
                                             <tr>
-                                                <td>  S. No. </td>
-                                                <td> Opportunity for improvement Form</td>
-                                                <td colspan="2"> Standard reference</td>
+                                                <td class="fw-bold">S.No.</td>
+                                                <td class="fw-bold"> Opportunity for improvement Form</td>
+                                                <td class="fw-bold" colspan="2"> Standard reference</td>
                                             </tr>
                                             <tr>
-                                                <td> <input type="text" name="sr_no" id="sr_no" placeholder="Enter Serial No." maxLength="10" required></td>
-                                                <td><input type="text" name="improvement_form" id="improvement_form" placeholder="Enter Opportunity for improvement Form" maxLength="1000"> </td>
-                                                <td><input type="text" name="standard_reference" id="standard_reference" maxLength="1000" placeholder="Enter Standard Reference" required> </td>
+                                                <td>{{$summertReport->sr_no}}</td>
+                                                <td>{{$summertReport->improvement_form}}</td>
+                                                <td>{{$summertReport->standard_reference}}</td>
                                             </tr>
                                     
                                             <tr>
-                                                <td> Signatures</td>
-                                                <td>.......... </td>
+                                                <td class="fw-bold"> Signatures</td>
+                                                <td class="fw-bold">.......... </td>
                                                 <td> </td>
                                             </tr>
                                     
                                             <tr>
-                                                <td>Assessor Name </td>
+                                                <td class="fw-bold">Assessor Name </td>
                                                 
                                                 <td>{{$assessor_name??''}} </td>
                                                 <td> </td>
                                                 
                                             </tr>
                                             <tr>
-                                                <td>Team Leader </td>
+                                                <td class="fw-bold">Team Leader </td>
                                                 <td>{{$assessor_name??''}}</td>
                                                 
-                                                <td> Rep. Assessee Orgn.</td>
+                                                <td class="fw-bold"> Rep. Assessee Orgn.</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
-                                                <td colspan="2"> Signature of the Team Leader</td>
+                                                <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
+                                                <td colspan="2" class="fw-bold"> Signature of the Team Leader</td>
                                     
                                             </tr>
                                         </tbody>
                                     </table>
                                     </br>
                                 </div>
+                            </section>
                             </div>
                             
                         </form>
@@ -388,4 +387,13 @@
     </div>
     </div>
 </section>
+<script>
+    function printDiv(divId) {
+            var printContents = document.getElementById(divId).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+</script>
 @include('layout.footer')

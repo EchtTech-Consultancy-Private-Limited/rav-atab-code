@@ -183,7 +183,7 @@
 
                                     <tbody>
                                         <tr>
-                                            <td colspan="2">FORM -1 DESKTOP ASSESSMENT FORM</td>
+                                            <td colspan="2">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
                                             <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
