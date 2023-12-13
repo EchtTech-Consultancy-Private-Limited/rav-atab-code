@@ -329,6 +329,10 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::post('desktop/final-summary',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
     Route::get('onsite/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
+
+    Route::get('tp-get-application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
+    Route::get('tp-view-finnal_summaries',[SummaryController::class,"tpViewFinalSummary"]);
+
     
 
 });

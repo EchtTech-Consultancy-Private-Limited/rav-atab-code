@@ -67,6 +67,9 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
+                    @if($is_final_submit)
+                        <a href="{{ url('tp-get-application-course-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
+                        @endif
                   <div class="float-right">
                   @if (auth()->user()->role == 1)
                        @if ($applicationData->desktop_status == 1 )

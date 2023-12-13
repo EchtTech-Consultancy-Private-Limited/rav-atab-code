@@ -94,11 +94,20 @@ class LevelController extends Controller
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
         $ApplicationPayment = ApplicationPayment::where('application_id', $applicationData->id)->get();
-        // dd($ApplicationPayment);
+       
         $spocData = DB::table('applications')->where('id', $applicationData->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
         $data = DB::table('users')->where('users.id', $applicationData->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayments' => $ApplicationPayment, 'applicationData' => $applicationData]);
+
+        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$applicationData->id,'application_course_id'=>$ApplicationCourse[0]->id])->first();
+
+        if(!empty($is_exists)){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+
+        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayments' => $ApplicationPayment, 'applicationData' => $applicationData,'is_final_submit'=>$is_final_submit]);
     }
 
     public function level_view($id)
@@ -1186,9 +1195,11 @@ class LevelController extends Controller
 
         $ApplicationCourse = ApplicationCourse::where('user_id', $id)->where('application_id', $application_id)->wherelevel_id($item[0]->id)->get();
 
+        $application_course_id = $ApplicationCourse[0]->id;
+
         $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id($item[0]->id)->get();
 
-
+        
 
         $check_payment = ApplicationPayment::where('id', $application_id)->first();
         if (isset($check_payment->level_id)) {
@@ -1198,11 +1209,21 @@ class LevelController extends Controller
             }
         }
 
+        // dd($application_course_id);
+        // dd($application_id);
+
+        $count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id])->whereIn('assessor_type',['desktop','onsite'])->count();
+        if($count>1){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+ 
 
         //return $ApplicationPayment;
 
 
-        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
+        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment,'is_final_submit'=>$is_final_submit]);
     }
 
     public function previews_application2($ids)
