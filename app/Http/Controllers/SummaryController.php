@@ -572,4 +572,99 @@ class SummaryController extends Controller
 
         return view('tp-admin-summary.tp-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way'));
     }
+    public function adminViewFinalSummary(Request $request){
+        $application_id = $request->input('application');
+        $application_course_id = $request->input('course');
+
+
+        $summeryReport = DB::table('assessor_summary_reports as asr')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
+        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
+        ->where([
+            'asr.application_id' => $application_id,
+            'asr.application_course_id' => $application_course_id,
+            'app_course.application_id' => $application_id,
+            'app_course.id' => $application_course_id,
+            'asr.assessor_type' => 'desktop',
+        ])
+        ->first();
+
+        /*count the no of mandays*/
+        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summeryReport->assessor_id,'application_id'=>$application_id])->count();
+  
+  
+    $questions = DB::table('questions')->get();
+    foreach($questions as $question){
+        $obj = new \stdClass;
+        $obj->title= $question->title;
+        $obj->code= $question->code;
+            $value = DB::table('assessor_summary_reports')->where([
+                'application_id' => $application_id,
+                'assessor_id' => $summeryReport->assessor_id,
+                'object_element_id' => $question->id,
+                'doc_sr_code' => $question->code,
+            ])->get();
+                $obj->nc = $value;
+                $final_data[] = $obj;
+            
+    }
+    $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$summeryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;
+
+
+
+       /*On Site Final Summary Report*/
+        $onsiteSummaryReport = DB::table('assessor_summary_reports as asr')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date')
+        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
+        ->leftJoin('assessor_improvement_form as ass_impr_form', 'ass_impr_form.assessor_id', '=', 'asr.assessor_id')
+        ->leftJoin('assessor_final_summary_reports as final_summary_repo', 'final_summary_repo.assessor_id', '=', 'asr.assessor_id')
+        ->where([
+            'asr.application_id' => $application_id,
+            // 'asr.assessor_id' => $assessor_id,
+            'asr.application_course_id' => $application_course_id,
+            'app_course.application_id' => $application_id,
+            'app_course.id' => $application_course_id,
+            'asr.assessor_type' => 'onsite',
+            // 'ass_impr_form.assessor_id'=>$assessor_id,
+            'ass_impr_form.application_id'=>$application_id,
+            'ass_impr_form.application_course_id'=>$application_course_id,
+            // 'final_summary_repo.assessor_id'=>$assessor_id,
+            'final_summary_repo.application_id'=>$application_id,
+            'final_summary_repo.application_course_id'=>$application_course_id,
+        ])
+        ->first();
+        /*count the no of mandays*/
+        $onsite_no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->count();
+  
+
+    $questions = DB::table('questions')->get();
+    foreach($questions as $question){
+        $obj = new \stdClass;
+        $obj->title= $question->title;
+        $obj->code= $question->code;
+
+            $value = DB::table('assessor_summary_reports')->where([
+                'application_id' => $application_id,
+                'assessor_id' => $onsiteSummaryReport->assessor_id,
+                'object_element_id' => $question->id,
+                'doc_sr_code' => $question->code,
+            ])->get();
+                $obj->nc = $value;
+                $onsite_final_data[] = $obj;
+            
+    }
+
+
+        $onsite_assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;
+
+       
+      
+      /*End here*/    
+
+        return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way'));
+    }
 }

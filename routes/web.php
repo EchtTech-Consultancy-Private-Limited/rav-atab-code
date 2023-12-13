@@ -332,6 +332,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::get('tp-get-application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
     Route::get('tp-view-finnal_summaries',[SummaryController::class,"tpViewFinalSummary"]);
+    Route::get('admin-view-finnal_summaries',[SummaryController::class,"adminViewFinalSummary"]);
 
     
 
