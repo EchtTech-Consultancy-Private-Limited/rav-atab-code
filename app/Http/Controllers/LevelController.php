@@ -1307,7 +1307,17 @@ class LevelController extends Controller
         $chapters = Chapter::all();
         $applicationData = Application::find($id);
         $summeryReport = SummaryReport::where(['application_id' => $id,'course_id'=> $course_id])->first();
-        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData','summeryReport'));
+
+        /*Created by Suraj*/
+        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$data[0]->application_id,'application_course_id'=>$course_id])->first();
+
+        if(!empty($is_exists)){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+        /*end here*/
+        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData','summeryReport','is_final_submit'));
     }
 
     public function document_report_verified_by_assessor($id, $course_id)
@@ -2382,6 +2392,7 @@ class LevelController extends Controller
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
         /*Written by suraj*/
+        // dd($assesorId);
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$appId,'assessor_id'=>$assesorId])->first();
 
         if(!empty($is_exists)){
