@@ -865,7 +865,7 @@ function getButtonText($id)
         } elseif ($commentData->status == 1) {
             return "NC1";
         } elseif ($commentData->status == 6) {
-            return "NC3";
+            return "Not Accepted";
         } else {
             return "Not Approved";
         }

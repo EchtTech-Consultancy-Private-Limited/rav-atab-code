@@ -266,7 +266,8 @@
                                                                                     @if (
                                                                                         $last_document &&
                                                                                             getCommentsData($last_document->id)->status != 4 &&
-                                                                                            getCommentsData($last_document->id)->status != 3)
+                                                                                            getCommentsData($last_document->id)->status != 3 &&
+                                                                                            getCommentsData($last_document->id)->status != 6)
                                                                                         <div>
                                                                                             <form
                                                                                                 name="submitform_doc_form"
