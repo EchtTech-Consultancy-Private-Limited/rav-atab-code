@@ -57,7 +57,7 @@
                             <li class="breadcrumb-item active">Previous Application Details </li>
                         </ul>
                         @if($is_final_submit)
-                        <a href="{{ url('tp-get-application-course-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
+                        <a href="{{ url('application-course-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
                         @endif
                         <a href="{{ url('application-list') }}" type="button" class="btn btn-primary"
                             style="float:right;">Back </a>

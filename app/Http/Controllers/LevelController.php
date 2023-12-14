@@ -1321,6 +1321,7 @@ class LevelController extends Controller
 
     public function accr_upload_document($id, $course_id)
     {
+        $assessor_id = Auth::user()->id;
         $application_id = $id;
         $course_id = $course_id;
         $data = ApplicationPayment::whereapplication_id($id)->get();
@@ -1330,8 +1331,7 @@ class LevelController extends Controller
         $summeryReport = SummaryReport::where(['application_id' => $id,'course_id'=> $course_id])->first();
 
         /*Created by Suraj*/
-        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$data[0]->application_id,'application_course_id'=>$course_id])->first();
-
+        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$data[0]->application_id,'application_course_id'=>$course_id,'assessor_id'=>$assessor_id ])->first();
         if(!empty($is_exists)){
          $is_final_submit = true;
         }else{

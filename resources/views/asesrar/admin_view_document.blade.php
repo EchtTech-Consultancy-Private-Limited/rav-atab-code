@@ -1,6 +1,7 @@
 @include('layout.header')
 
 
+
 <title>RAV Accreditation</title>
 
 <style>
@@ -14,7 +15,7 @@
     table th {
         padding: 10px !important;
         padding-top: 10px !important;
-        text-align: center;
+        text-align:center;
     }
 
     .highlight {
@@ -42,7 +43,8 @@
         right: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);;
+        background: rgba(0, 0, 0, 0.5);
+        ;
         overflow: hidden;
         text-align: center;
     }
@@ -77,388 +79,381 @@
         border-bottom: 1px solid #ccc;
         text-align: center;
     }
-
-    .cardBody {
+    .cardBody{
         padding: 6px;
         text-align: center;
     }
 
-    .width-50 {
-        width: 50%
-    }
-
-    .width-10 {
-        width: 8%
-    }
-
-
+    .width-50{width:50%}
+    .width-10{width:8%}
+    .font-12 {
+    font-size: 12px !important;
+}
+   
 </style>
 
 </head>
 
 <body class="light">
 
-<div class="loading-img d-none" id="loader">
-    <div class="box">
-        <img src="{{ asset('assets/img/VAyR.gif') }}">
-        <h5 class="uploading-text"> Uploading... </h5>
-    </div>
-</div>
-<!-- Overlay For Sidebars -->
-<div class="overlay"></div>
-<!-- #END# Overlay For Sidebars -->
-
-@include('layout.topbar')
-
-<div>
-
-    @if (Auth::user()->role == '1')
-        @include('layout.sidebar')
-    @elseif(Auth::user()->role == '2')
-        @include('layout.siderTp')
-    @elseif(Auth::user()->role == '3')
-        @include('layout.sideAss')
-    @elseif(Auth::user()->role == '4')
-        @include('layout.sideprof')
-    @endif
-
-
-    @include('layout.rightbar')
-
-
-</div>
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="block-header">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
-                    <ul class="breadcrumb breadcrumb-style ">
-                        <li class="breadcrumb-item">
-                            <h4 class="page-title">View Documents</h4>
-                        </li>
-                        <li class="breadcrumb-item bcrumb-1">
-                            <a href="{{ url('/dashboard') }}">
-                                <i class="fas fa-home"></i> Level </a>
-                        </li>
-                        <li class="breadcrumb-item active">View Documents</li>
-
-
-                    </ul>
-                </div>
-
-
-            </div>
+    <div class="loading-img d-none" id="loader">
+        <div class="box">
+            <img src="{{ asset('assets/img/VAyR.gif') }}">
+            <h5 class="uploading-text"> Uploading... </h5>
         </div>
+    </div>
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
 
+    @include('layout.topbar')
 
-        @if (Session::has('sussess'))
-            <div class="alert alert-success" role="alert">
-                {{ session::get('success') }}
-            </div>
-        @elseif(Session::has('fail'))
-            <div class="alert alert-danger" role="alert">
-                {{ session::get('fail') }}
-            </div>
+    <div>
+
+        @if (Auth::user()->role == '1')
+            @include('layout.sidebar')
+        @elseif(Auth::user()->role == '2')
+            @include('layout.siderTp')
+        @elseif(Auth::user()->role == '3')
+            @include('layout.sideAss')
+        @elseif(Auth::user()->role == '4')
+            @include('layout.sideprof')
         @endif
 
-        <div class="row ">
 
-            <div class="row clearfix">
-
-                <div class="col-lg-12 col-md-12">
-
-                    <div class="header float-right mb-3">
+        @include('layout.rightbar')
 
 
-                        @if (check_acknowledgement($course_id) == $course_id)
-                            <a class="btn btn-danger">Final Approval Done</a>
-                        @else
-                            @if (count_document_record($course_id) == 44)
-                                <a href="{{ url('document-report-by-admin/' . $course_id) }}"
-                                   class="btn btn-primary">Final Approval</a>
-                            @else
-                                <a class="btn btn-danger">All Document Not Uploaded</a>
-                            @endif
-                        @endif
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                        <ul class="breadcrumb breadcrumb-style ">
+                            <li class="breadcrumb-item">
+                                <h4 class="page-title">View Documents</h4>
+                            </li>
+                            <li class="breadcrumb-item bcrumb-1">
+                                <a href="{{ url('/dashboard') }}">
+                                    <i class="fas fa-home"></i> Level </a>
+                            </li>
+                            <li class="breadcrumb-item active">View Documents</li>
 
 
-                        <a style="margin-left:10px;"
-                           href="{{ url('document-report-verified-by-assessor/' . $application_id . '/' . $course_id) }}"
-                           class="btn btn-info"> Verified Report</a>
-
-                        <a style="margin-left:10px;"
-                           href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
-                           class="btn btn-success">Assessor & Admin Conversation
-                        </a>
-
-
-                        <a href="{{ URL::previous() }}" class="btn btn-primary" style="margin-left:10px;">Go Back </a>
-
+                        </ul>
                     </div>
-                    <div>
+
+                    <div class="col-lg-3">
+                   <div class="float-right text-right mr-3">
+                   <a href="{{ URL::previous() }}" class="btn btn-primary" style="margin-right:20px;"> <i class="fa fa-chevron-left font-12"></i> Go Back </a>
+                   </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            @if (Session::has('sussess'))
+                <div class="alert alert-success" role="alert">
+                    {{ session::get('success') }}
+                </div>
+            @elseif(Session::has('fail'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session::get('fail') }}
+                </div>
+            @endif
+
+            <div class="row ">
+
+                <div class="row clearfix">
+
+                    <div class="col-lg-12 col-md-12">
+                       
+                        <div class="header float-right mb-3">
+
+
+                            @if (check_acknowledgement($course_id) == $course_id)
+                                <a class="btn btn-danger">Final Approval Done</a>
+                            @else
+                                @if (count_document_record($course_id) == 44)
+                                    <a href="{{ url('document-report-by-admin/' . $course_id) }}"
+                                        class="btn btn-primary">Final Approval</a>
+                                @else
+                                    <a class="btn btn-danger">All Document Not Uploaded</a>
+                                @endif
+                            @endif
+
+
+                            <a style="margin-left:10px;"
+                                href="{{ url('document-report-verified-by-assessor/' . $application_id . '/' . $course_id) }}"
+                                class="btn btn-info"> Verified Report</a>
+
+                            <a style="margin-left:10px;"
+                                href="{{ url('document-comment-admin-assessor/' . $course_id) }}"
+                                class="btn btn-success">Assessor & Admin Conversation
+                            </a>
+
+                               
+                           
+                       
+                        </div>
                         <div>
-                            <div class="row clearfix">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <div class="card project_widget">
+                            <div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="card project_widget">
 
-                                        @if (isset($check_admin))
+                                            @if (isset($check_admin))
 
-                                            @if ($message = Session::get('success'))
-                                                <div class="alert alert-success">
-                                                    <p>{{ $message }}</p>
+
+                                                @if ($message = Session::get('success'))
+                                                    <div class="alert alert-success">
+                                                        <p>{{ $message }}</p>
+                                                    </div>
+                                                @endif
+                                                <div id="success-msg" class="alert alert-success d-none" role="alert">
+                                                    <p class=" msg-none ">Documents Update Successfully</p>
                                                 </div>
-                                            @endif
-                                            <div id="success-msg" class="alert alert-success d-none" role="alert">
-                                                <p class=" msg-none ">Documents Update Successfully</p>
-                                            </div>
-                                            <!-- table-striped  -->
-                                            <div class="table-responsive">
+                                                <!-- table-striped  -->
+                                                <div class="table-responsive">
 
 
-                                                <table class="table table-responsive table-hover">
-                                                    <thead>
-                                                    <tr>
-                                                        <th rowspan="2" class="width-10">Sr.No.</th>
-                                                        <th rowspan="2">Objective criteria</th>
-                                                        <th colspan="2" class="width-50"> Assessor Verified</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Desktop</th>
-                                                        <th>On-site</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
+                                                    <table class="table table-responsive table-hover">
+                                                        <thead>
+                                                        <tr>  
+                                                             <th rowspan="2" class="width-10">Sr.No.</th>
+                                                                <th rowspan="2">Objective criteria</th>                                                      
+                                                                <th colspan="2" class="width-50"> Assessor Verified </th>
+                                                            </tr>
+                                                            <tr>                                                               
+                                                                <th>Desktop</th>
+                                                                <th>On-site </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                                                    @foreach ($chapters as $chapter)
-                                                        <tr>
-                                                            <th colspan="4" class="text-justify">
-                                                                <h5 class="text-center mb-0"> {{ $chapter->title ?? '' }}</h5>
-                                                            </th>
-                                                        </tr>
-                                                        @foreach ($chapter->questions as $question)
-                                                            <tr>
-                                                                <td class="text-center">{{ $question->code ?? '' }}</td>
-                                                                <td width="500" class="text-left">
-                                                                    {{ $question->title ?? '' }}</td>
-                                                                <td>
-                                                                    <div class="">
-                                                                        <!-- <div class="cardHeader">
-                                                                            Desktop
-                                                                        </div> -->
-                                                                        <div
-                                                                            class="cardBody d-flex justify-content-center">
-                                                                            @php
-                                                                                $documentsData = getOnlyDesktopAssessorDoc($question->id, $file[0]->application_id) ?? 0;
-                                                                            @endphp
-                                                                            @if (count($documentsData) > 0)
-                                                                                <div class="d-flex">
-                                                                                    @if (count($documentsData) <= 1)
-                                                                                        @foreach ($documentsData as $doc)
-                                                                                            @if ($doc->application_id == $application_id)
-                                                                                                <div>
-                                                                                                    <a title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                       href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id . '/' . $question->id) }}"
-                                                                                                       class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                       style="color: #fff ;margin:10px;"
-                                                                                                       id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
-                                                                                                    <div
-                                                                                                        style="font-size: 11px; padding-top:3px; padding-bottom:3px;">
-                                                                                                        {{ checkFinalRequest($doc->id) }}
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            @else
-                                                                                                <span
-                                                                                                    class="bg-danger p-2 text-white"
-                                                                                                    style="border-radius: 5px;  font-size:12px;">
+                                                            @foreach ($chapters as $chapter)
+                                                                <tr>
+                                                                    <th colspan="4" class="text-justify">
+                                                                        <h5 class="text-center mb-0"> {{ $chapter->title ?? '' }}</h5>
+                                                                    </th>
+                                                                </tr>
+                                                                @foreach ($chapter->questions as $question)
+                                                                    <tr>
+                                                                        <td class="text-center">{{ $question->code ?? '' }}</td>
+                                                                        <td width="500" class="text-left">
+                                                                            {{ $question->title ?? '' }}</td>
+                                                                        <td>
+                                                                            <div class="">
+                                                                                <!-- <div class="cardHeader">
+                                                                                    Desktop
+                                                                                </div> -->
+                                                                                <div class="cardBody d-flex justify-content-center">
+                                                                                    @php
+                                                                                        $documentsData = getAdminDocument($question->id, $file[0]->application_id) ?? 0;
+                                                                                    @endphp
+                                                                                    @if (count($documentsData) > 0)
+                                                                                        <div class="d-flex">
+                                                                                            @if (count($documentsData) <= 1)
+                                                                                                @foreach ($documentsData as $doc)
+                                                                                                    @if ($doc->application_id == $application_id)
+                                                                                                        <div>
+                                                                                                            <a                                                                                                              title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                                href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id.'/'.$question->id) }}"
+                                                                                                                class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
+                                                                                                                style="color: #fff ;margin:10px;"
+                                                                                                                id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                            <div style="font-size: 11px; padding-top:3px; padding-bottom:3px;">
+                                                                                                                {{ checkFinalRequest($doc->id) }}
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    @else
+                                                                                                        <span
+                                                                                                            class="bg-danger p-2 text-white"
+                                                                                                            style="border-radius: 5px;  font-size:12px;">
                                                                                                             Documents
                                                                                                             not
                                                                                                             uploaded
                                                                                                         </span>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            @else
+                                                                                                @foreach ($documentsData as $doc)
+                                                                                                    @if ($doc->application_id == $application_id)
+                                                                                                        <div>
+                                                                                                            <a
+                                                                                                                title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
+                                                                                                                href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id.'/'.$question->id) }}"
+                                                                                                                class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
+                                                                                                                style="color: #fff ;margin:10px;"
+                                                                                                                id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
+                                                                                                                <div style="font-size: 11px; padding-top:3px; padding-bottom:3px;">
+                                                                                                                {{ checkFinalRequest($doc->id) }}
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    @endif
+                                                                                                @endforeach
                                                                                             @endif
-                                                                                        @endforeach
+                                                                                        </div>
                                                                                     @else
-                                                                                        @foreach ($documentsData as $doc)
-                                                                                            @if ($doc->application_id == $application_id)
-                                                                                                <div>
-                                                                                                    <a
-                                                                                                        title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                        href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id . '/' . $question->id) }}"
-                                                                                                        class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                        style="color: #fff ;margin:10px;"
-                                                                                                        id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
-                                                                                                    <div
-                                                                                                        style="font-size: 11px; padding-top:3px; padding-bottom:3px;">
-                                                                                                        {{ checkFinalRequest($doc->id) }}
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        @endforeach
+                                                                                        <span
+                                                                                            class="bg-danger p-2 text-white"
+                                                                                            style="border-radius: 5px; font-size:12px;">
+                                                                                            Documents not uploaded
+                                                                                        </span>
                                                                                     @endif
                                                                                 </div>
-                                                                            @else
-                                                                                <span
-                                                                                    class="bg-danger p-2 text-white"
-                                                                                    style="border-radius: 5px; font-size:12px;">
-                                                                                            Documents not uploaded
-                                                                                        </span>
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-
-                                                                </td>
-
-                                                                <td>
-                                                                    <div
-                                                                        class="cardBody d-flex justify-content-center">
-                                                                        @php
-                                                                            $documentsData = getOnlyOnsiteAssessorDoc($question->id, $file[0]->application_id) ?? 0;
-                                                                        @endphp
-                                                                        @if (count($documentsData) > 0)
-                                                                            <div class="d-flex">
-                                                                                @if (count($documentsData) <= 1)
-                                                                                    @foreach ($documentsData as $doc)
-                                                                                        @if ($doc->application_id == $application_id)
-                                                                                            <div>
-                                                                                                <a title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                   href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id . '/' . $question->id) }}"
-                                                                                                   class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                   style="color: #fff ;margin:10px;"
-                                                                                                   id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
-                                                                                                <div
-                                                                                                    style="font-size: 11px; padding-top:3px; padding-bottom:3px;">
-                                                                                                    {{ checkFinalRequest($doc->id) }}
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        @else
-                                                                                            <span
-                                                                                                class="bg-danger p-2 text-white"
-                                                                                                style="border-radius: 5px;  font-size:12px;">
-                                                                                                            Documents
-                                                                                                            not
-                                                                                                            uploaded
-                                                                                                        </span>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                @else
-                                                                                    @foreach ($documentsData as $doc)
-                                                                                        @if ($doc->application_id == $application_id)
-                                                                                            <div>
-                                                                                                <a
-                                                                                                    title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                    href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id . '/' . $question->id) }}"
-                                                                                                    class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
-                                                                                                    style="color: #fff ;margin:10px;"
-                                                                                                    id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
-                                                                                                <div
-                                                                                                    style="font-size: 11px; padding-top:3px; padding-bottom:3px;">
-                                                                                                    {{ checkFinalRequest($doc->id) }}
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                @endif
                                                                             </div>
-                                                                        @else
-                                                                            <span
-                                                                                class="bg-danger p-2 text-white"
-                                                                                style="border-radius: 5px; font-size:12px;">
-                                                                                            Documents not uploaded
-                                                                                        </span>
-                                                                        @endif
-                                                                    </div>
-                                                                </td>
+                                                                           
+                                                                        </td>
 
-                                                            </tr>
-                                                        @endforeach
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                                                                        <td>
+                                                                        <div class="">
+                                                                                <!-- <div class="cardHeader">
+                                                                                    On-site
+                                                                                </div> -->
+                                                                                <div class="cardBody">
+                                                                                    @php
+                                                                                        $verifiedDocumentForAdmin = checkVerifiedDocumentAvailableForAdmin($application_id, $course_id, $question->id);
+                                                                                    @endphp
+                                                                                    @if (isset($verifiedDocumentForAdmin->verified_document) && !empty($verifiedDocumentForAdmin->verified_document))
+                                                                                        @php
+                                                                                            $fileExtension = pathinfo($verifiedDocumentForAdmin->verified_document, PATHINFO_EXTENSION);
+                                                                                        @endphp
+                                                                                        @if ($fileExtension === 'pdf')
+                                                                                            <a
+                                                                                                href="{{ url('show-course-pdf/' . $verifiedDocumentForAdmin->verified_document) }}"
+                                                                                                class="docBtn bg-primary"
+                                                                                                style="margin-right: 10px !important; ">View
+                                                                                                Document </a>
+                                                                                        @else
+                                                                                            <a
+                                                                                                href="{{ asset('documnet/' . $verifiedDocumentForAdmin->verified_document) }}"
+                                                                                                class="docBtn bg-primary"
+                                                                                                style="margin-right: 10px !important; ">View
+                                                                                                Document </a>
+                                                                                        @endif
+                                                                                    @endif
+
+                                                                                    @php
+                                                                                        $verifiedPhotograph = checkVerifiedDocumentAvailableForAdmin($application_id, $course_id, $question->id);
+                                                                                    @endphp
+                                                                                    @if (isset($verifiedPhotograph->photograph) && !empty($verifiedPhotograph->photograph))
+                                                                                        @php
+                                                                                            $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
+                                                                                        @endphp
+
+                                                                                        @if ($fileExtension === 'pdf')
+                                                                                            <a
+                                                                                                href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
+                                                                                                class="docBtn bg-secondary">View
+                                                                                                Photograph </a>
+                                                                                        @else
+                                                                                            <a
+                                                                                                href="{{ asset('documnet/' . $verifiedPhotograph->photograph) }}"
+                                                                                                class="docBtn bg-secondary">View
+                                                                                                Photograph </a>
+                                                                                        @endif
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
 
 
-                                            </div>
-                                        @else
-                                            <h3 class="text-center">You dont have any document</h3>
-                                        @endif
 
+                                                </div>
+                                            @else
+                                                <h3 class="text-center">You dont have any document</h3>
+                                            @endif
+
+                                        </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-</section>
+        </div>
+    </section>
 
 
-<script>
-    $('.fileup').on('change', function (e) {
-        e.preventDefault();
 
-        let sbformId = $(this).closest("form").attr('id');
-        let formData = new FormData(document.getElementById(sbformId));
-        console.log(formData);
-        formData.append('fileup', $('input[type=file]').val().split('\\').pop());
+    <script>
+        $('.fileup').on('change', function(e) {
+            e.preventDefault();
 
-        //formData.append('fileup', $('input[type=file]').val().split('\\').pop());
-        $("#success-msg").removeClass('d-none');
-        $("#loader").removeClass('d-none');
-        var data = "{{ url(Request::url()) }}";
-        //alert(data);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+            let sbformId = $(this).closest("form").attr('id');
+            let formData = new FormData(document.getElementById(sbformId));
+            console.log(formData);
+            formData.append('fileup', $('input[type=file]').val().split('\\').pop());
+
+            //formData.append('fileup', $('input[type=file]').val().split('\\').pop());
+            $("#success-msg").removeClass('d-none');
+            $("#loader").removeClass('d-none');
+            var data = "{{ url(Request::url()) }}";
+            //alert(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+
+                url: " {{ url('add-courses') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+
+
+
+                success: function(response) {
+                    $("#loader").addClass('d-none');
+                    //$("#success-msg").addClass('d-none');
+                    alert("Document Added Successfully");
+                    window.location.href = "{{ url(Request::url()) }}";
+                    //$("#mydiv").load(location.href + " #mydiv");
+
+
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#view_doc').hide();
+            $('#show_comments').hide();
         });
 
-        $.ajax({
+        $('#show_view_doc_options').on('change', function() {
 
-            url: " {{ url('add-courses') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            enctype: 'multipart/form-data',
-
-
-            success: function (response) {
-                $("#loader").addClass('d-none');
-                //$("#success-msg").addClass('d-none');
-                alert("Document Added Successfully");
-                window.location.href = "{{ url(Request::url()) }}";
-                //$("#mydiv").load(location.href + " #mydiv");
-
-
+            var listvalue = $(this).val();
+           
+            if (listvalue == 1) {
+                $("#view_doc").show();
+                $("#show_comments").show();
+            } else if (listvalue == 2) {
+                $("#view_doc").hide();
+                $("#show_comments").hide();
+            } else if (listvalue == '') {
+                $("#view_doc").hide();
+                $("#show_comments").hide();
             }
+
+
         });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#view_doc').hide();
-        $('#show_comments').hide();
-    });
-
-    $('#show_view_doc_options').on('change', function () {
-
-        var listvalue = $(this).val();
-
-        if (listvalue == 1) {
-            $("#view_doc").show();
-            $("#show_comments").show();
-        } else if (listvalue == 2) {
-            $("#view_doc").hide();
-            $("#show_comments").hide();
-        } else if (listvalue == '') {
-            $("#view_doc").hide();
-            $("#show_comments").hide();
-        }
-
-
-    });
-</script>
-@include('layout.footer')
+    </script>
+    @include('layout.footer')

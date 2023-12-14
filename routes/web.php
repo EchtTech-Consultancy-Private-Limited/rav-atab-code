@@ -330,9 +330,9 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
     Route::get('onsite/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
 
-    Route::get('tp-get-application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
-    Route::get('tp-view-finnal_summaries',[SummaryController::class,"tpViewFinalSummary"]);
-    Route::get('admin-view-finnal_summaries',[SummaryController::class,"adminViewFinalSummary"]);
+    Route::get('application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
+    Route::get('view-final_summaries',[SummaryController::class,"tpViewFinalSummary"]);
+    Route::get('admin-view-final_summaries',[SummaryController::class,"adminViewFinalSummary"]);
 
     
 
