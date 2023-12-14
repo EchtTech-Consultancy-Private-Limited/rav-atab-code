@@ -508,7 +508,7 @@
                                             <tr>
                                                 <td class="fw-bold">Team Leader </td>
                                                 <td >{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} </td>
-                                                <td class="fw-bold"> Rep. Assessee Orgn.</td>
+                                                <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$onsiteSummaryReport->onsite_assessee_org}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</td>
