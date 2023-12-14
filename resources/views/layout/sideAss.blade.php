@@ -33,7 +33,7 @@
 
             <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="{{ url('dashboard') }}">
-                    <i data-feather="monitor"></i>
+                <i class="fa fa-television" aria-hidden="true"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
@@ -41,14 +41,14 @@
 
             <li class="{{ Request::is('profile-get')?'active':''}}">
                     <a href="{{ url('profile-get') }}" >
-                        <i data-feather="user"></i>
+                    <i class="fa fa-user"></i>
                         <span>Manage Profile</span>
                     </a>
             </li>
 
             <li  class="{{ (Request::is('nationl-accesser') ||  Request::is('internationl-accesser') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
-                    <i data-feather="file"></i>
+                <i class="fa fa-cog"></i>
                     <span>Manage Application</span>
                 </a>
                 <ul class="ml-menu">
@@ -92,7 +92,7 @@
 
             <li>
                 <a href="#" onClick="return false;">
-                    <i data-feather="bell"></i>
+                    <i class="fa fa-bell"></i>
                     <span>Circulars & Notifications</span>
                 </a>
             </li>
@@ -106,14 +106,12 @@
 
                 </a>
             </li>
-
-            <li>
+  
                 <a href="#" onClick="return false;">
-                    <i data-feather="clipboard"></i>
+                    <i class="fa fa-clipboard"></i>
                     <span>Grievance</span>
                 </a>
             </li>
-
 
             <li class="{{ Request::is('send-feedback')?'active':''}}">
                 <a href="{{ url('/send-feedback') }}">
@@ -131,7 +129,7 @@
 
             <li>
                 <a href="{{ url('/view-faqs') }}" class="{{ Request::is('view-faqs') ? 'active' : '' }}">
-                    <i data-feather="message-circle"></i>
+                <i class="fa fa-comment" aria-hidden="true"></i>
                     <span>FAQs</span>
                 </a>
             </li>
