@@ -206,7 +206,7 @@
                                         </tr>
                                         <tr>
                                             <td> Assessor</td>
-                                            <td>{{$summeryReport->firstname??''}}  {{$summeryReport->lastname??''}}</td>
+                                            <td>{{$summeryReport->firstname??''}}  {{$summeryReport->middlename??''}} {{$summeryReport->lastname??''}}</td>
                                         </tr>
                                     </tbody>
                                 

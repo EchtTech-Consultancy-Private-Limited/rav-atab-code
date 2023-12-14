@@ -422,7 +422,7 @@
                                             
                                             </td>
                                             <td>
-                                                {{-- 
+                                                
                                                 @php
                                                 $count = count($rows->nc);
                                                 @endphp
@@ -440,9 +440,9 @@
                                                 @elseif($count==6)
                                                 {{$rows->nc[5]->doc_verify_remark}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                {{-- {{$rows->nc[6]->doc_verify_remark}} --}}
                                                 @endif
-                                                --}}
+                                               
                                             </td>
                                             </tr>
                                             @endforeach
@@ -508,7 +508,7 @@
                                             <tr>
                                                 <td class="fw-bold">Team Leader </td>
                                                 <td >{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} </td>
-                                                <td class="fw-bold"> Rep. Assessee Orgn.</td>
+                                                <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$onsiteSummaryReport->onsite_assessee_org}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</td>

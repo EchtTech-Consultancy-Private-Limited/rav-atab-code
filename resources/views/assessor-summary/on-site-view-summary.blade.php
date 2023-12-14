@@ -364,7 +364,7 @@
                                                 <td class="fw-bold">Team Leader </td>
                                                 <td>{{$assessor_name??''}}</td>
                                                 
-                                                <td class="fw-bold"> Rep. Assessee Orgn.</td>
+                                                <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$summertReport->onsite_assessee_org}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
