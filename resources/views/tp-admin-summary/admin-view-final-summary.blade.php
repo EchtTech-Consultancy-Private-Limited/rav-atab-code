@@ -267,29 +267,34 @@
     
                                         <tbody>
                                             <tr>
-                                                <td colspan="2">DESKTOP ASSESSMENT FORM</td>
+                                                <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                             </tr>
                                             <tr>
-                                                <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summeryReport->application_uid}}"></span> </td>
-                                                <td>Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
+                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->application_uid}}"></span> </td>
+                                                <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
-                                                <td>Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summeryReport->Person_Name}}"></span> </td>
-                                                <td>Name of the course to be assessed:
+                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->Person_Name}}"></span> </td>
+                                                <td class="fw-bold">Name of the course to be assessed:
                                     
-                                                    <span> <input type="text" disabled value="{{$summeryReport->course_name}}"></span> </td>
+                                                    <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->course_name}}"></span> </td>
                                             </tr>
                                             <tr>
-                                                <td>Way of assessment (Desktop): <span> <input type="text" disabled value="{{$assessement_way}}"></span> </td>
-                                                <td>No of Mandays:  <span> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
+                                                <td class="fw-bold">Way of assessment (Desktop): </br><span class="fw-normal">
+                                                    @if($assessement_way[0]->assessment_type==1)
+                                                    {{$assessement_way[0]->assessment_way??'N/A'}}
+                                                    @endif
+                                                </span> 
+                                                    </td>
+                                                <td class="fw-bold">No of Mandays:  <span class="fw-normal"> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
                                             </tr>
                                     
                                             <tr>
-                                                <td> Signature</td>
+                                                <td class="fw-bold"> Signature</td>
                                                 <td>........</td>
                                             </tr>
                                             <tr>
-                                                <td> Assessor</td>
+                                                <td class="fw-bold"> Assessor</td>
                                                 <td>{{$summeryReport->firstname??''}}  {{$summeryReport->middlename??''}} {{$summeryReport->lastname??''}}</td>
                                             </tr>
                                         </tbody>
@@ -310,11 +315,11 @@
                                             <tbody>
                                                 @foreach ($final_data as $key=>$rows)
                                                 <tr>
-                                                    <td>{{$rows->code}}</td>
+                                                    <td class="fw-bold">{{$rows->code}}</td>
                                                     <td>{{$rows->title}}</td>
                                                     <td>
                                                         @foreach($rows->nc as $row)
-                                                        @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                        @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3 && $row->nc_raise_code!=6)
                                                           {{$row->nc_raise}}
                                                           @endif
                                                         @endforeach
@@ -420,7 +425,12 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal"> {{$assessement_way??''}}</span>
+                                                <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">
+
+                                                @if($assessement_way[1]->assessment_type==2)
+                                                    {{$assessement_way[1]->assessment_way??'N/A'}}
+                                                    @endif
+                                                </span>
                                                 </td>
                                                 <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
                                                 </td>
@@ -549,7 +559,12 @@
                                                     <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$onsiteSummaryReport->course_name}}</span></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">{{$assessement_way??'N/A'}}</span></td>
+                                                    <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">
+
+                                                    @if($assessement_way[1]->assessment_type==2)
+                                                    {{$assessement_way[1]->assessment_way??'N/A'}}
+                                                    @endif
+                                                    </span></td>
                                                     <td colspan="2" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$no_of_mandays}}</span></td>
                                                 </tr>
                                                 <tr>

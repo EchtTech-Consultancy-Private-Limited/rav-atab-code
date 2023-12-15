@@ -99,9 +99,9 @@ class LevelController extends Controller
         $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
         $data = DB::table('users')->where('users.id', $applicationData->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
-        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$applicationData->id,'application_course_id'=>$ApplicationCourse[0]->id])->first();
+        $final_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$applicationData->id,'application_course_id'=>$ApplicationCourse[0]->id])->whereIn('assessor_type',['desktop','onsite'])->count();
 
-        if(!empty($is_exists)){
+        if($final_count>1){
          $is_final_submit = true;
         }else{
          $is_final_submit = false;
