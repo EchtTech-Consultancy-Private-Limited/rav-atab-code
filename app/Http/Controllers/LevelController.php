@@ -94,7 +94,7 @@ class LevelController extends Controller
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
         $ApplicationPayment = ApplicationPayment::where('application_id', $applicationData->id)->get();
-       
+
         $spocData = DB::table('applications')->where('id', $applicationData->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
         $data = DB::table('users')->where('users.id', $applicationData->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
@@ -1199,7 +1199,7 @@ class LevelController extends Controller
 
         $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id($item[0]->id)->get();
 
-        
+
 
         $check_payment = ApplicationPayment::where('id', $application_id)->first();
         if (isset($check_payment->level_id)) {
@@ -1218,7 +1218,7 @@ class LevelController extends Controller
         }else{
          $is_final_submit = false;
         }
- 
+
 
         //return $ApplicationPayment;
 
@@ -1747,6 +1747,32 @@ class LevelController extends Controller
             //Mail sending script ends here
 
         } elseif ($login_id == 1) {
+            $newDocument = null;
+            if ($request->status == 4){
+                $document = Add_Document::find($request->doc_id);
+
+                $newDocument = new Add_Document;
+                $newDocument->application_id = $document->application_id;
+                $newDocument->course_id = $document->course_id;
+                $newDocument->section_id = $document->section_id;
+                $newDocument->doc_id = $document->doc_id;
+                $newDocument->status = $document->status;
+                $newDocument->doc_file = $document->doc_file;
+                $newDocument->question_id = $document->question_id;
+                $newDocument->user_id = $document->user_id;
+                $newDocument->assessor_id = $document->assessor_id;
+                $newDocument->notApraove_count = $document->notApraove_count;
+                $newDocument->assesment_type = $document->assesment_type;
+                $newDocument->verified_document = $document->verified_document;
+                $newDocument->on_site_assessor_Id = $document->on_site_assessor_Id;
+                $newDocument->photograph = $document->photograph;
+                $newDocument->photograph_comment = $document->photograph_comment;
+                $newDocument->parent_doc_id = $document->parent_doc_id;
+                $newDocument->is_displayed_onsite = $document->is_displayed_onsite;
+                $newDocument->save();
+
+            }
+
             //return $request->course_id;
             $txt = "";
             if ($request->status == 4) {
@@ -1755,7 +1781,7 @@ class LevelController extends Controller
                 $txt = $request->doc_comment;
             }
             $comment = new DocComment;
-            $comment->doc_id = $request->doc_id;
+            $comment->doc_id = $newDocument ? $newDocument->id : $request->doc_id;
             $comment->doc_code = $request->doc_code;
             $comment->status = $request->status;
             $comment->comments = $txt;
@@ -2421,7 +2447,7 @@ class LevelController extends Controller
         }else{
          $is_final_submit = false;
         }
-    
+
         /*end here*/
 
         return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application, 'alreadyPicked' => $alreadyPicked,'is_final_submit'=>$is_final_submit]);
@@ -2920,9 +2946,9 @@ class LevelController extends Controller
     public function submitReportByDesktopAssessor($application_id,$course_id)
     {
         $applicationDetails = Application::find($application_id);
-        
+
         $chapters = Chapter::all();
-        
+
         //dd($applicationDetails);
 
         return view('asesrar.summery_report_form',compact('chapters','applicationDetails','course_id'));
