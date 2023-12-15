@@ -78,6 +78,19 @@
         font-size: 13px !important;
         font-weight: bold;
     }
+    .width-50{
+        width:50%;
+    }
+    .card .header{padding:8px;}
+    .card .header h2{font-size:14px;}
+    .docBtn {
+        padding: 6px 10px !important;
+    color: #fff;
+    border-radius: 4px !important;
+    margin-right: 5px !important;
+    height: 30px;
+    line-height: 18px !important;
+}
 </style>
 
 </head>
@@ -195,7 +208,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="center">Sr.No.</th>
-                                                            <th class="center">Objective criteria</th>
+                                                            <th class="center width-50">Objective criteria</th>
                                                             <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                                             <th class="center">Cross reference to supporting evidence
                                                                 provided</th>
@@ -235,7 +248,7 @@
                                                                                         <a target="_blank"
                                                                                             title="{{ checkDocumentCommentStatusreturnText($docItem->id) }}"
                                                                                             href="{{ url('document-detail' . '/' . $docItem->doc_file . '/' . $applicationData->id . '/' . $docItem->id) }}"
-                                                                                            class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm m-1">
+                                                                                            class="btn {{ checkDocumentCommentStatus($docItem->id) }} btn-sm docBtn m-1">
                                                                                             {{ getButtonText($docItem->id) }}</a>
                                                                                         <div
                                                                                             style="font-size: 10px; margin:2px; margin-top:0px; font-weight:bold;">
@@ -253,7 +266,8 @@
                                                                                     @if (
                                                                                         $last_document &&
                                                                                             getCommentsData($last_document->id)->status != 4 &&
-                                                                                            getCommentsData($last_document->id)->status != 3)
+                                                                                            getCommentsData($last_document->id)->status != 3 &&
+                                                                                            getCommentsData($last_document->id)->status != 6)
                                                                                         <div>
                                                                                             <form
                                                                                                 name="submitform_doc_form"
@@ -291,7 +305,7 @@
                                                                                  <a target="_blank"
                                                                                  title="{{ checkDocumentCommentStatusreturnText($photo->id) }}"
                                                                                  href="{{ url('document-detail' . '/' . $photo->doc_file . '/' . $applicationData->id . '/' . $photo->id) }}"
-                                                                                 class="btn {{ checkDocumentCommentStatus($photo->id) }} btn-sm m-1">
+                                                                                 class="btn {{ checkDocumentCommentStatus($photo->id) }} docBtn btn-sm m-1">
                                                                                  {{ getButtonText($photo->id) }}</a>
                                                                              <div
                                                                                  style="font-size: 10px; margin:2px; margin-top:0px; font-weight:bold;">
@@ -431,8 +445,7 @@
                     success: function(response) {
                         $("#loader").addClass('d-none');
                         if (response.message == 'success') {
-                            Swal.fire({
-                                position: 'center',
+                            Swal.fire({    
                                 icon: 'success',
                                 title: 'Upload Successful',
                                 text: 'Your documents have been successfully uploaded.',

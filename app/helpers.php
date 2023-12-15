@@ -558,7 +558,7 @@ function getComments($id, $applicationID)
             } elseif ($comment->status == 5) {
                 $statusCode = "Request final approval";
             } elseif ($comment->status == 6) {
-                $statusCode = "NC3";
+                $statusCode = "Not Accepted";
             } else {
                 $statusCode = "Close";
             }
@@ -624,7 +624,7 @@ function getCommentsForAdmin($id, $applicationID)
             } elseif ($comment->status == 5) {
                 $statusCode = "Request final approval";
             } elseif ($comment->status == 6) {
-                $statusCode = "NC3";
+                $statusCode = "Not Accepted";
             } else {
                 $statusCode = "Close";
             }
@@ -865,7 +865,7 @@ function getButtonText($id)
         } elseif ($commentData->status == 1) {
             return "NC1";
         } elseif ($commentData->status == 6) {
-            return "NC3";
+            return "Not Accepted";
         } else {
             return "Not Approved";
         }

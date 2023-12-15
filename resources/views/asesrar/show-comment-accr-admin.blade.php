@@ -63,7 +63,7 @@
             <div class="container-fluid">
               <div class="block-header">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
 
                        <ul class="breadcrumb breadcrumb-style ">
                           <li class="breadcrumb-item">
@@ -83,6 +83,12 @@
                          </div>
                       @endif
                     </div>
+
+                    <div class="col-md-3">
+                    <div class="text-right float-right">
+                                <a href="{{ url()->previous() }}" type="button" class="btn btn-primary" style="float:right;">Back</a>
+                             </div>
+                    </div>
                 </div>
               </div>
             <div class="row">
@@ -91,9 +97,7 @@
 
                     <div class="card">
 
-                             <div>
-                                <a href="{{ url()->previous() }}" type="button" class="btn btn-primary" style="float:right;">Back</a>
-                             </div>
+                           
 
                        <div class="body">
 

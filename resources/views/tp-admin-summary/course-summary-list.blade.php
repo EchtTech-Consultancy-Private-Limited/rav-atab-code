@@ -97,9 +97,9 @@
                         <td>{{ $item->eligibility }}</td>
                         <th>
                             @if(Auth::user()->role == 1)
-                            <a href="{{ url('admin-view-finnal_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                            <a href="{{ url('admin-view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
                             @else
-                            <a href="{{ url('tp-view-finnal_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                            <a href="{{ url('view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
                             @endif
                         </th>
                     </tr>

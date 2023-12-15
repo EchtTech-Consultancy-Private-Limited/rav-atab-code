@@ -26,7 +26,6 @@
     <style>
         .form {
             width: 40%;
-
         }
 
         @media (min-width: 1200px){

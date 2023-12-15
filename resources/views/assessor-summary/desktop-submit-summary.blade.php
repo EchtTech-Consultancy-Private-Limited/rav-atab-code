@@ -245,12 +245,16 @@
                                                 </td>
                                                 <td>
                                                 @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code==4)
+                                                    @if($row->nc_raise_code==1)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
+                                                    @elseif($row->nc_raise_code==2)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
+                                                    @elseif($row->nc_raise_code==4)
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
                                                     @elseif($row->nc_raise_code==3)
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
                                                     @else
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-primary m-1" href="">NC{{$key+1}} Doc</a>      
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
                                                     @endif
                                                     @endforeach
                                             

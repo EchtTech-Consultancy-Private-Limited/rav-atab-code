@@ -265,13 +265,17 @@
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code==4)
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->nc_raise_code==1)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
+                                                    @elseif($row->nc_raise_code==2)
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
+                                                    @elseif($row->nc_raise_code==4)
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
                                                     @elseif($row->nc_raise_code==3)
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
                                                     @else
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-primary m-1" href="">NC{{$key+1}} Doc</a>      
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
                                                     @endif
                                                     @endforeach
                                             
@@ -364,7 +368,7 @@
                                                 <td class="fw-bold">Team Leader </td>
                                                 <td>{{$assessor_name??''}}</td>
                                                 
-                                                <td class="fw-bold"> Rep. Assessee Orgn.</td>
+                                                <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$summertReport->onsite_assessee_org}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
