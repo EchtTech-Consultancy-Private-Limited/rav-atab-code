@@ -659,12 +659,11 @@ function getUserDetails($userId)
     return $user->firstname . ' ' . $user->lastname;
 }
 
-function checkCommentsExist($id = null, $applicationId = null)
+function checkCommentsExist($id = null, $applicationId = null,$course_id=null)
 {
     $authId = auth()->user()->id;
 
-    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id', $authId)->where('application_id', $applicationId)->get();
-
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id', $authId)->where('application_id', $applicationId)->where('course_id',$course_id)->get();
 
     if ($documents) {
         $docIds = $documents->pluck('id');
