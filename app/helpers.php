@@ -1031,8 +1031,8 @@ function checkOnSiteDoc($applicationID, $questionID, $courseID, $assesorID)
     $document = Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
         ->where('course_id', $courseID)
+        ->where('photograph',null)
         ->where('on_site_assessor_Id', $assesorID)->orderBy('id', 'desc')->first();
-
 
     return $document;
 }
