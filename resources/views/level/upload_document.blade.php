@@ -345,10 +345,10 @@
                                                                     </td>
                                                                     <td>
 
-                                                                        @if (checkCommentsExist($question->id, $application_id) == true)
+                                                                        @if (checkCommentsExist($question->id, $application_id,$course_id) == true)
                                                                             <button
                                                                                 class="expand-button btn btn-primary btn-sm mt-3"
-                                                                                onclick="toggleDocumentDetails(this)">Comments</button>
+                                                                                onclick="toggleDocumentDetails(this)">Show Comments</button>
                                                                         @else
                                                                             <span class="text-danger"
                                                                                 style="font-size: 12px; padding:5px; border-radius:5px;">Comment
@@ -389,13 +389,11 @@
             if (documentDetails && (documentDetails.classList.contains('document-details'))) {
                 if (documentDetails.style.display === 'none' || documentDetails.style.display === '') {
                     documentDetails.style.display = 'table-row';
-                    button.textContent = 'Collapse';
-
-
+                    button.textContent = 'Hide Comments';
 
                 } else {
                     documentDetails.style.display = 'none';
-                    button.textContent = 'Expand';
+                    button.textContent = 'Show Comments';
                 }
             }
         }

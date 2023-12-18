@@ -31,10 +31,6 @@
         @endif
 
 
-
-
-
-
         @include('layout.rightbar')
 
 

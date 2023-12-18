@@ -958,9 +958,20 @@ class applicationController extends Controller
 
     public function getSummariesList(Request $request)
     {
-        $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
-        $applicationDetails = Application::find($request->input('application'));
+        $courses=DB::table('application_courses as app_crs')
+        ->select('app_crs.*','final_summary_repo.application_id')
+        ->leftJoin('assessor_final_summary_reports as final_summary_repo', 'final_summary_repo.application_course_id', '=', 'app_crs.id')
+        ->where('app_crs.application_id',$request->input('application'))
+        ->get();
 
+        $collection = collect($courses);
+        $courses = $collection->unique(function ($item) {
+            return $item->course_name;
+        })->values()->all();
+
+     
+        // $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
+        $applicationDetails = Application::find($request->input('application'));
         return view('on-site-assessor.summary-list', compact('courses', 'applicationDetails'));
     }
 

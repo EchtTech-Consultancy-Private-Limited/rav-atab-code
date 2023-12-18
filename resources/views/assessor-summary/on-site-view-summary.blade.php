@@ -181,10 +181,11 @@
                             <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
                             <div class="p-3  bg-white">
                                 <div class="row">
-                                    <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse">
-                                        <!-- <button class="btn btn-success">Show</button> -->
-                                        <button class="btn btn-primary" onclick="printDiv('on-site-print')">Print</button>
-                                    </div>
+                                <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
+                                    <button class="btn btn-warning" onclick="printDiv('on-site-print')">
+                                    <i class="fa fa-print"></i>
+                                    </button>
+                                </div>
                                 </div>
                                 <section id="on-site-print">
                                 <table >
@@ -208,7 +209,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal"> {{$assessement_way??''}}</span>
+                                            <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal"> {{$assessement_way??'N/A'}}</span>
                                             </td>
                                             <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
                                             </td>
@@ -251,7 +252,7 @@
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
                                                     @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3 && $row->nc_raise_code!=6)
                                                       {{$row->nc_raise}}
                                                       @endif
                                                     @endforeach
