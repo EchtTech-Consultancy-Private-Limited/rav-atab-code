@@ -39,7 +39,7 @@
         <div class="card mt-4">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
-                    Basic Information
+                    Basic Information 
                 </h5>
             </div>
             <div class="card-body">

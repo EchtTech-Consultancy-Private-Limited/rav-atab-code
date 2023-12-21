@@ -968,8 +968,7 @@ class applicationController extends Controller
         $courses = $collection->unique(function ($item) {
             return $item->course_name;
         })->values()->all();
-
-     
+        
         // $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
         $applicationDetails = Application::find($request->input('application'));
         return view('on-site-assessor.summary-list', compact('courses', 'applicationDetails'));

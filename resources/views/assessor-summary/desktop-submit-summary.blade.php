@@ -277,7 +277,7 @@
                                                 @elseif($count==6)
                                                 {{$rows->nc[5]->doc_verify_remark}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                {{$rows->nc[6]->doc_verify_remark??''}}
                                                 @endif
                                             </td>
                                             </tr>

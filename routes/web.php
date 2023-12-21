@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\applicationController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\ApplicationCoursesController;
 use App\Http\Controllers\aknownledgeController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\FullCalenderController;
@@ -334,9 +335,34 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('view-final_summaries',[SummaryController::class,"tpViewFinalSummary"]);
     Route::get('admin-view-final_summaries',[SummaryController::class,"adminViewFinalSummary"]);
 
+
+    // Created by Brijesh sir and Suraj
+/*----------------- New Application Routes------------------------*/
+
+    Route::get('create-new-applications/{id?}',[ApplicationCoursesController::class,"createNewApplication"]);
+    Route::post('store-new-applications',[ApplicationCoursesController::class,"storeNewApplication"]);
+    Route::get('get-application-courses',[ApplicationCoursesController::class,"getApplicationCourses"]);
+    Route::get('get-application-fees',[ApplicationCoursesController::class,"getApplicationFees"]);
+    Route::get('get-application-documents',[ApplicationCoursesController::class,"getApplicationDocuments"]);
+    Route::get('get-application-list', [ApplicationCoursesController::class, 'getApplicationList']);
+
+    // =========Courses Route=========//
+    Route::get('create-new-course/{id?}', [ApplicationCoursesController::class, 'createNewCourse']);
+    Route::post('/store-new-application-course', [ApplicationCoursesController::class, 'storeNewApplicationCourse']);
+    Route::get('/get-course-list', [ApplicationCoursesController::class, 'getCourseList']);
+    Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
+    Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment'])->name('course.payment');
+    Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
+/*----------------- End Here------------------------*/
     
 
 });
+
+
+
+
+
+
 
 //notification status change
 Route::get('notification', [LevelController::class, 'notification']);

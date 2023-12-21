@@ -39,8 +39,10 @@ class SummaryController extends Controller
             $value = DB::table('assessor_summary_reports')->where([
                 'application_id' => $request->application,
                 'assessor_id' => $assessor_id,
+                'application_course_id'=>$request->course,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
+                // 'nc_raise_code'=>['1', '2'],
             ])->get();
                 $obj->nc = $value;
                 $final_data[] = $obj;
@@ -85,11 +87,8 @@ class SummaryController extends Controller
         ->first();
        
         /*count the no of mandays*/
-        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$request->application])->count();
-            
-   
-        
-  
+    $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$request->application])->count();
+
     $questions = DB::table('questions')->get();
 
     foreach($questions as $question){
@@ -136,8 +135,9 @@ class SummaryController extends Controller
             'app_course.application_id' => $request->application_id,
             'app_course.id' => $request->application_course_id,
             'asr.assessor_type'=>'desktop'
-        ])
-        ->first();
+            ])
+            ->first();
+            // dd($request->application_course_id);
 
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summertReport->assessor_id,'application_id'=>$summertReport->application_id])->count();
@@ -164,6 +164,8 @@ class SummaryController extends Controller
                 'assessor_id' => $assessor_id,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
+                'nc_raise_code'=>['1', '2'],
+                'application_course_id' =>$request->application_course_id
             ])->get();
                 $obj->nc = $value;
                 $final_data[] = $obj;

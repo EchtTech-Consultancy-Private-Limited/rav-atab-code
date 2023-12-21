@@ -71,3 +71,55 @@
 .nav-Ass .navbar {
     background-color: #ffb463 !important;
 }
+
+
+/*created by Suraj*/
+
+
+
+@media (min-width: 900px) {
+    .modal-dialog {
+        max-width: 674px;
+    }
+}
+
+  /* Add styles for the active class */
+  .nav-active {
+    background-color: #e91e63 !important;
+    /* Change this to your desired active background color */
+    color: #ffffff !important;
+    /* Change this to your desired active text color */
+}
+
+/* Add hover effect for all nav links except the active link */
+.custom-nav-item:not(.nav-active) .custom-nav-link:hover {
+    background-color: #e91e63;
+    /* Change this to your desired hover background color */
+    color: #ffffff !important;
+    /* Change this to your desired hover text color */
+    border-radius: 20px;
+}
+
+/* Add border-radius to all nav links */
+.custom-nav-link {
+    border-radius: 20px !important;
+    /* Apply border-radius to all nav links */
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+/* Remove hover effect on active link */
+.nav-active .custom-nav-link:hover {
+    background-color: inherit;
+    color: inherit !important;
+    border-radius: 20px;
+}
+
+/* Additional style for hover on active link */
+.nav-active .custom-nav-link:hover {
+    background-color: #e91e63 !important;
+    /* Change this to your desired hover background color for active link */
+    color: #ffffff !important;
+    /* Change this to your desired hover text color for active link */
+}
+/*end here*/

@@ -363,7 +363,7 @@
                                              <br>
                                          </div>
                                          <div class="col-md-12 ml-auto" style="text-align: right">
-                                             <a href="{{ url('/new-applications') }}" class="btn btn-info">New
+                                             <a href="{{ url('/create-new-applications') }}" class="btn btn-info">New
                                                  Application</a>
                                          </div>
                                      </div>
