@@ -19,6 +19,12 @@ use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
 
+use App\Http\Controllers\Roles\AdminApplicationController;
+use App\Http\Controllers\Roles\TPApplicationController;
+use App\Http\Controllers\Roles\AccountApplicationController;
+use App\Http\Controllers\Roles\DesktopApplicationController;
+use App\Http\Controllers\Roles\OnsiteApplicationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -353,6 +359,16 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
     Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment'])->name('course.payment');
     Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
+
+
+    Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList']);
+    Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);
+    Route::get('/account/application-list', [AccountApplicationController::class, 'getApplicationList']);
+    Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
+    Route::get('/onsite/application-list', [OnsiteApplicationController::class, 'getApplicationList']);
+
+
+
 /*----------------- End Here------------------------*/
     
 
