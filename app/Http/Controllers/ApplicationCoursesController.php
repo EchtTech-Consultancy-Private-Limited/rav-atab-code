@@ -437,8 +437,6 @@ class ApplicationCoursesController extends Controller
         return view('create-application.get-application-list', ['collection' => $filteredApplications]);
     }
 
-
-
     function get_india_id()
     {
         $india = Country::where('name', 'India')->get('id')->first();
