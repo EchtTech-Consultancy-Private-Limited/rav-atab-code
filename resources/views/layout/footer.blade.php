@@ -17,6 +17,7 @@
 
  <script>
      $(document).ready(function() {
+ 
          $("#regForm").validate({
              rules: {
                  postal: {
@@ -334,6 +335,7 @@
  <script src="{{ asset('assets/js/pages/index.js') }}"></script>
  <script src="{{ asset('assets/js/pages/todo/todo.js') }}"></script>
 
+ <!-- <script src="{{ asset('assets/js/toastify.min.js') }}"></script> -->
 
  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
  <script src="{{ asset('assets/js/atab-fullcalendar.min.js') }}"></script>
@@ -343,6 +345,7 @@
 
  <script src="{{ asset('assets/js/atab-moment.min.js') }}"></script>
  <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script>
+
  <!-- <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> -->
 
 
