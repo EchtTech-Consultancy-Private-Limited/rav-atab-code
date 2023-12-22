@@ -1,7 +1,5 @@
 @include('layout.header')
 
-
-
 <title>RAV Accreditation</title>
 
 <style>
