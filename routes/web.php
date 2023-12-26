@@ -351,7 +351,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('get-application-courses',[ApplicationCoursesController::class,"getApplicationCourses"]);
     Route::get('get-application-fees',[ApplicationCoursesController::class,"getApplicationFees"]);
     Route::get('get-application-documents',[ApplicationCoursesController::class,"getApplicationDocuments"]);
-    Route::get('get-application-list', [ApplicationCoursesController::class, 'getApplicationList']);
+    Route::get('get-application-list', [TPApplicationController::class, 'getApplicationList']);
 
     // =========Courses Route=========//
     Route::get('create-new-course/{id?}', [ApplicationCoursesController::class, 'createNewCourse']);
@@ -368,8 +368,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
     Route::get('/onsite/application-list', [OnsiteApplicationController::class, 'getApplicationList']);
 
-    Route::get('/admin/application-view', [AdminApplicationController::class, 'getApplicationView']);
-    Route::get('/tp/application-view', [TPApplicationController::class, 'getApplicationView']);
+    Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
+    Route::get('/tp/application-view/{id}', [TPApplicationController::class, 'getApplicationView']);
     Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
     Route::get('/desktop/application-view', [DesktopApplicationController::class, 'getApplicationView']);
     Route::get('/onsite/application-view', [OnsiteApplicationController::class, 'getApplicationView']);
