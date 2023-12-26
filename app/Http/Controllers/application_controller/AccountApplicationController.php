@@ -16,7 +16,9 @@ class AccountApplicationController extends Controller
     public function getApplicationList(){
 
         $application = DB::table('tbl_application as a')
+        ->whereIn('payment_status',[1,2,3])
         ->get();
+
         foreach($application as $app){
             $obj = new \stdClass;
             $obj->application_list= $app;
@@ -51,7 +53,7 @@ class AccountApplicationController extends Controller
 
     /** Whole Application View for Account */
     public function getApplicationView($id){
-        
+
 
 
         $application = DB::table('tbl_application')

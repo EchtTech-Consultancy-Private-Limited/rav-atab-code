@@ -367,7 +367,7 @@
                                 @if ($ApplicationPayment->status == 0)
                                 N/A
                                 @endif
-                                @if ($ApplicationPayment->status == 1)
+                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
                                 @if (!$ApplicationPayment->payment_proof_by_account)
                                 File not available!
                                 @endif
@@ -440,7 +440,7 @@
                                 </div>
                             </div>
                         </form>
-                        </div>
+                        </div>  
                     </div>
                 </div>
                 @endif
@@ -466,9 +466,6 @@
                                 <div class="col-md-3 mt-4"> 
                                     <button class="btn btn-primary" type="button" onclick="handlePaymentApproved()" id="submit_btn_2">Payment Approved
                                     </button>
-                                    <div class="spinner-border d-none"  id="loading" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
                                 </div>
                             </div>
                         </form>
