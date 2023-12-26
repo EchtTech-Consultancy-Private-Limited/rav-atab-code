@@ -19,11 +19,12 @@ use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
 
-use App\Http\Controllers\Roles\AdminApplicationController;
-use App\Http\Controllers\Roles\TPApplicationController;
-use App\Http\Controllers\Roles\AccountApplicationController;
-use App\Http\Controllers\Roles\DesktopApplicationController;
-use App\Http\Controllers\Roles\OnsiteApplicationController;
+use App\Http\Controllers\application_controller\AdminApplicationController;
+use App\Http\Controllers\application_controller\TPApplicationController;
+use App\Http\Controllers\application_controller\AccountApplicationController;
+use App\Http\Controllers\application_controller\DesktopApplicationController;
+use App\Http\Controllers\application_controller\OnsiteApplicationController;
+use App\Http\Controllers\application_controller\DocApplicationController;
 
 
 /*
@@ -367,7 +368,20 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
     Route::get('/onsite/application-list', [OnsiteApplicationController::class, 'getApplicationList']);
 
+    Route::get('/admin/application-view', [AdminApplicationController::class, 'getApplicationView']);
+    Route::get('/tp/application-view', [TPApplicationController::class, 'getApplicationView']);
+    Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
+    Route::get('/desktop/application-view', [DesktopApplicationController::class, 'getApplicationView']);
+    Route::get('/onsite/application-view', [OnsiteApplicationController::class, 'getApplicationView']);
 
+    // Doc Routes
+    Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
+    
+    
+    // Payment Routes
+    Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
+    Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
+    
 
 /*----------------- End Here------------------------*/
     

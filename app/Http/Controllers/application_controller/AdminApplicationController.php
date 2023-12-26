@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\application_controller;
-use App\Http\Controller;
-
+use App\Http\Controllers\Controller;
+use DB;
 class AdminApplicationController extends Controller
 {
     public function __construct()
@@ -12,14 +12,39 @@ class AdminApplicationController extends Controller
     
     public function getApplicationList(){
 
-        $application = DB::table('tbl_application')->get();
-        if(!empty($application)){
-            $data = $application;
-        }else{
-            $data = '';
+        $application = DB::table('tbl_application as a')
+        ->where('payemnt_status',1)
+        ->get();
+
+        foreach($application as $app){
+            $obj = new \stdClass;
+            $obj->application_list= $app;
+    
+                $course = DB::table('tbl_application_courses')->where([
+                    'application_id' => $app->id,
+                ])->count();
+                if($course){
+                    $obj->course_count = $course;
+                }
+                
+                $payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->latest('created_at')->first();
+                $payment_amount = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->sum('amount');
+                $payment_count = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->count();
+                if($payment){
+                    $obj->payment = $payment;
+                    $obj->payment->payment_count = $payment_count;
+                    $obj->payment->payment_amount = $payment_amount ;
+                }
+                $final_data[] = $obj;
+                
         }
-        //dd($data);
-        return view('admin-view',['list'=>$data]);
+        return view('admin-view.application-list',['list'=>$final_data]);
     }
 }
 

@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\application_controller;
-use App\Http\Controller;
-
+use App\Http\Controllers\Controller;
+use DB;
 class DesktopApplicationController extends Controller
 {
     public function __construct()
@@ -12,13 +12,38 @@ class DesktopApplicationController extends Controller
     
     public function getApplicationList(){
 
-        $application = DB::table('tbl_application')->get();
-        if(!empty($application)){
-            $data = $application;
-        }else{
-            $data = '';
+        $user_id = Auth::user()->id;
+        $application = DB::table('tbl_application as a')
+        ->where('assessor_id', $user_id)
+        ->get();
+        foreach($application as $app){
+            $obj = new \stdClass;
+            $obj->application_list= $app;
+    
+                $course = DB::table('tbl_application_courses')->where([
+                    'application_id' => $app->id,
+                ])->count();
+                if($course){
+                    $obj->course_count = $course;
+                }
+                
+                $payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->latest('created_at')->first();
+                $payment_amount = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->sum('amount');
+                $payment_count = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->count();
+                if($payment){
+                    $obj->payment = $payment;
+                    $obj->payment->payment_count = $payment_count;
+                    $obj->payment->payment_amount = $payment_amount ;
+                }
+                $final_data[] = $obj;
+                
         }
-        //dd($data);
         return view('desktop-view',['list'=>$data]);
     }
 }

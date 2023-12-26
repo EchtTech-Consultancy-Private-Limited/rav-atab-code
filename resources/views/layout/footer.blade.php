@@ -14,6 +14,7 @@
      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
  </script>
  <script src="{{ asset('assets/js/atab-jquery.validate.min.js') }}"></script>
+ <script src="{{ asset('customjs/payment-approve.js') }}"></script>
 
  <script>
      $(document).ready(function() {
@@ -313,6 +314,8 @@
 
  <script>
      // disable alphate
+    
+
      $('#postal').keypress(function(e) {
          var regex = new RegExp("^[0-9_]");
          var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -335,7 +338,7 @@
  <script src="{{ asset('assets/js/pages/index.js') }}"></script>
  <script src="{{ asset('assets/js/pages/todo/todo.js') }}"></script>
 
- <!-- <script src="{{ asset('assets/js/toastify.min.js') }}"></script> -->
+ <script src="{{ asset('assets/js/toastify.min.js') }}"></script>
 
  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
  <script src="{{ asset('assets/js/atab-fullcalendar.min.js') }}"></script>
@@ -344,7 +347,8 @@
  <script src="{{ asset('assets/js/table.min.js') }}"></script>
 
  <script src="{{ asset('assets/js/atab-moment.min.js') }}"></script>
- <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script>
+ <!-- <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script> -->
+ <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
  <!-- <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> -->
 
@@ -373,6 +377,11 @@
  <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script> --}}
  <script>
      $(document).ready(function() {
+        toastr.success(
+                            "New Page Content added successfully!", 
+                            "New Page Content!", 
+                            {timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
+                         );  
          $('#dataTableMain').DataTable({
              dom: 'Bfrtip',
              lengthMenu: [

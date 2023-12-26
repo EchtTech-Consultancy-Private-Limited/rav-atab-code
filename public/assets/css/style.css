@@ -24693,3 +24693,89 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     .user-panel{padding: 10px 10px 10px 0;}
     .user-panel .image {width: 22%;}
 }
+
+.badge-main {
+    border-radius: 20px !important;
+}
+.badge{
+    margin:0 !important;
+}
+.badge-main.primary {
+    color: #fff !important;
+    background-color: #007bff !important;
+}
+
+.badge-main.info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+.badge-main.warning {
+    color: #fff;
+    background-color:#ffc107;
+}
+
+.badge-main.success {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.badge-main.danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+.payment-count{
+    font-size: 10px;
+    position: relative;
+    color: #5757ed;
+    top: 3px;
+}
+
+.process_status {
+    background-color: #d9e42657;
+}
+
+.pending_status {
+    background-color: #ff000042;
+}
+
+.approved_status {
+    background-color: #00800040;
+}
+
+.mod-css {
+    padding: 15px !important;
+}
+
+.modal-body.mod-css span {
+    font-size: 16px !important;
+margin-bottom: 15px !important;
+height: 40px;
+    line-height: 26px;
+    color: #000;
+}
+
+.font-a {
+    line-height: 20px !important;
+}
+
+.buttonBadge {
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+/* .add-color{
+    background:red !important;
+} */
+
+.onsite-id span.btn.btn-success.dateID, .onsite-id span.btn.btn-danger.dateID {
+padding: 4px 10px;
+height: 32px;
+line-height: 26px !important;
+font-size: 13px !important;
+}
+
+
+.err{
+color:red;
+}

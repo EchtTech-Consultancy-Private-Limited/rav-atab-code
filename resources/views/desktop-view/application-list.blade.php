@@ -1,124 +1,31 @@
 @include('layout.header')
-
-
 <title>RAV Accreditation</title>
-
 </head>
-
 <body class="light">
-    <!-- Page Loader -->
-    {{-- <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="m-t-30">
-                <img class="loading-img-spin" src="{{asset('assets/images/favicon.png')}}" alt="admin">
-            </div>
-            <p>Please wait...</p>
-        </div>
-    </div> --}}
-    <!-- #END# Page Loader -->
-    <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
-    <!-- #END# Overlay For Sidebars -->
-
     @include('layout.topbar')
-
     <div>
-
-        @if (Auth::user()->role == '1')
+        @if (Auth::user()->role == 1)
             @include('layout.sidebar')
-        @elseif(Auth::user()->role == '2')
+        @elseif(Auth::user()->role == 2)
             @include('layout.siderTp')
-        @elseif(Auth::user()->role == '3')
+        @elseif(Auth::user()->role == 3)
             @include('layout.sideAss')
-        @elseif(Auth::user()->role == '4')
+        @elseif(Auth::user()->role == 4)
             @include('layout.sideprof')
+        @elseif(Auth::user()->role == 5)
+            @include('layout.secretariat')
+        @elseif(Auth::user()->role == 6)
+            @include('layout.sidbarAccount')
         @endif
-
-
-
         @include('layout.rightbar')
-
-
     </div>
-
-    <style>
-        .blinking-btn {
-            background-color: #004A7F;
-            -webkit-border-radius: 10px;
-            border-radius: 10px;
-            border: none;
-            color: #FFFFFF;
-            cursor: pointer;
-            display: inline-block;
-            font-family: Arial;
-            font-size: 15px;
-            padding: 3px 7px;
-            text-align: center;
-            text-decoration: none;
-            -webkit-animation: glowing 1500ms infinite;
-            -moz-animation: glowing 1500ms infinite;
-        }
-
-        @-webkit-keyframes glowing {
-            0% {
-                background-color: #B20000;
-                -webkit-box-shadow: 0 0 3px #B20000;
-            }
-
-            50% {
-                background-color: #FF0000;
-                -webkit-box-shadow: 0 0 40px #FF0000;
-            }
-
-            100% {
-                background-color: #B20000;
-                -webkit-box-shadow: 0 0 3px #B20000;
-            }
-        }
-
-        @-moz-keyframes glowing {
-            0% {
-                background-color: #B20000;
-                -moz-box-shadow: 0 0 3px #B20000;
-            }
-
-            50% {
-                background-color: #FF0000;
-                -moz-box-shadow: 0 0 40px #FF0000;
-            }
-
-            100% {
-                background-color: #B20000;
-                -moz-box-shadow: 0 0 3px #B20000;
-            }
-        }
-
-    
-    </style>
-
-    @if (Session::has('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @elseif(Session::has('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: '{{ session('error') }}',
-            });
-        </script>
-    @endif
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <ul class="breadcrumb breadcrumb-style ">
+                        <ul class="breadcrumb breadcrumb-style">
                             <li class="breadcrumb-item">
                                 <h4 class="page-title">National Applications</h4>
                             </li>
@@ -137,69 +44,85 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-header bg-white text-dark">
-                            <h4 class="header-title mt-2"> National Applications</h2>
-
-                        </div>
                         <div class="body">
                             <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
-                                <table class="table display nowrap" style="width:100%; overflow:hidden;"
-                                    id="dataTableMain">
-                                    <thead>
-                                        <tr>
-                                            <th class="center">Sr.No</th>
-                                            <th class="center">Level</th>
-                                            <th class="center">Application No.</th>
-                                            <th class="center">Total Course</th>
-                                            <th class="center">Date of Application </th>
-                                            <th class="center">Assessment Date </th>
-                                            <th class="center">State </th>
-
-                                            <!-- <th class="center">Due Date </th> -->
-
-                                            <th class="center">Action</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @isset($collection)
-                                            @foreach ($collection as $k => $item)
-                                                <?php
-                                                $assessor_id = listofapplicationassessor($item->id);
-                                                ?>
-
-                                                <tr class="odd gradeX">
-                                                    <td class="center">{{ $k + 1 }}</td>
-                                                    <td class="center">{{ $item->level_id }}</td>
-                                                    <td class="center">
-                                                        {{ $item->application_uid ?? 'something went wrong!' }}</td>
-                                                    <td class="center">{{ count($item->courses) }}</td>
-                                                    <td class="center">
-                                                        {{ application_submission_date($item->id, $assessor_id) }}
-                                                    </td>
-                                                    <td class="center">
-                                                        {{ assessor_assign_date($item->id, $assessor_id) }}</td>
-                                                    <td class="center">{{ showstate($item->state) }}</td>
-
-                                                    <td class="center">
-                                                        <a href="{{ url('/Assessor-view/' . dEncrypt($item->id)) }}"
+                                <!-- The Modal -->
+                                <div class="modal" id="myModal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Modal Heading</h4>
+                                                <button type="button" class="close"
+                                                    data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                Modal body..
+                                            </div>
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-responsive" style="width:100%;" id="dataTableMain">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No</th>
+                                        <th>Level </th>
+                                        <th>Application No. </th>
+                                        <th>Courses</th>
+                                        <th>Total Fee</th>
+                                        <th> Payment Date </th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($list)
+                                        @foreach ($list as $k => $item)
+                                            <tr
+                                                class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
+                                                <td>{{ $k + 1 }}</td>
+                                                <td>Level-{{ $item->application_list->level_id ?? '' }}</td>
+                                                <td>RAVAP-{{ $item->application_list->id }}</td>
+                                                <td>Course ({{ $item->course_count ?? '' }})</td>
+                                                <td>
+                                                ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                </td>
+                                                <td>
+                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
+                                                </td>
+                                                <td>
+                                                    @if($item->application_list->status===0)
+                                                    <span class="badge badge-main warning">Payment Pending</span>
+                                                    @elseif($item->application_list->status===1)
+                                                    <span class="badge badge-primary">Received</span>
+                                                    @else
+                                                    <span class="badge badge-success">Accepted</span>
+                                                    @endif
+                                                </td>
+                                                    <td>
+                                                        <a href="{{ url('/admin-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-
                                                     </td>
-                                                </tr>
-                                            @endforeach
-                                        @endisset
-                                    </tbody>
-                                </table>
-                            </div>
-
+                                            </tr>
+                                        @endforeach
+                                    @endisset
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         </div>
+        </div>
     </section>
-
+   
     @include('layout.footer')

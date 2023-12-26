@@ -41,8 +41,8 @@
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('nationl-page') ? 'active' : '' }}">
-                        <a href="{{ url('nationl-page') }}">National Application</a>
+                    <li class="{{ Request::is('account/application-list') ? 'active' : '' }}">
+                        <a href="{{ url('account/application-list') }}">National Application</a>
                     </li>
 
                     <li class="{{ Request::is('internationl-page') ? 'active' : '' }}">

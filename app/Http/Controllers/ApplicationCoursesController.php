@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Traits\PdfImageSizeTrait;
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationCourse;
 use App\Models\Application;
@@ -44,7 +44,8 @@ use App\Mail\tpApplicationmail;
 
 class ApplicationCoursesController extends Controller
 {
-    
+    use PdfImageSizeTrait;
+
     public function createNewApplication(Request $request,$id=null){
         if ($id) {
             $id = dDecrypt($id);
@@ -189,6 +190,16 @@ class ApplicationCoursesController extends Controller
             $file->course_brief = $course_brief[$i];
             $file->tp_id = Auth::user()->id;
 
+            $doc_size_1 = $this->getFileSize($request->file('doc1')[$i]->getSize());
+            $doc_extension_1 = $request->file('doc1')[$i]->getClientOriginalExtension();
+
+            $doc_size_2 = $this->getFileSize($request->file('doc2')[$i]->getSize());
+            $doc_extension_2 = $request->file('doc2')[$i]->getClientOriginalExtension();
+
+            $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
+            $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
+
+
             $name = $doc1[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc1[$i]->move('documnet/', $filename);
@@ -206,7 +217,18 @@ class ApplicationCoursesController extends Controller
             $name = $doc3[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc3[$i]->move('documnet/', $filename);
-            $file->course_details_pdf =  $filename;
+            $file->course_details_xsl =  $filename;
+
+            $file->pdf_1_file_size = $doc_size_1 ;
+            $file->pdf_1_file_extension =$doc_extension_1;
+
+            $file->pdf_2_file_size = $doc_size_2 ;
+            $file->pdf_2_file_extension =$doc_extension_2;
+
+            $file->xls_file_size = $doc_size_3 ;
+            $file->xls_file_extension =$doc_extension_3;
+
+
             $file->save();
         }
         $session_for_redirection = $request->form_step_type;
