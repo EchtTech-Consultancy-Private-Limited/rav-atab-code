@@ -377,11 +377,7 @@
  <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script> --}}
  <script>
      $(document).ready(function() {
-        toastr.success(
-                            "New Page Content added successfully!", 
-                            "New Page Content!", 
-                            {timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
-                         );  
+     
          $('#dataTableMain').DataTable({
              dom: 'Bfrtip',
              lengthMenu: [

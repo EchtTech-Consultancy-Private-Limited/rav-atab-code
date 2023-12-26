@@ -299,10 +299,13 @@
                 </div>
             </div>
         </div>
-        </div>
+        </div>  
         @endforeach
 
-        <div class="card">
+        <div class="card p-relative">
+            <div class="box-overlay">
+                <span class="spinner-border"></span>
+            </div>
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
                     Payment Information
@@ -406,7 +409,10 @@
 
             @if (isset($ApplicationPayment))
                 @if( $application_payment_status->status===0)
-                <div class="card" id="payment_rcv_card">
+                <div class="card p-relative" id="payment_rcv_card">
+                <div class="box-overlay">
+                     <span class="spinner-border"></span>
+                </div>
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">
                             Payment Process
@@ -431,9 +437,6 @@
                                 <div class="col-md-3 mt-4"> 
                                     <button class="btn btn-primary" type="button" onclick="handlePaymentReceived()" id="submit_btn">Payment Received
                                     </button>
-                                    <div class="spinner-border d-none"  id="loading" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
                                 </div>
                             </div>
                         </form>

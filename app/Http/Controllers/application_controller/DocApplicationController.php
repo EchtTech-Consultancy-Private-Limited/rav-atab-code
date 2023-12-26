@@ -21,8 +21,13 @@ class DocApplicationController extends Controller
     {
 
         try{
-            DB::beginTransaction();
 
+            $is_exists = DB::table('tbl_application_payment')->where('application_id',$request->application_id)->where('status',0)->first();
+            if(!$is_exists){
+                return response()->json(['success' =>false,'message'=>'Payment already done.'], 409);
+            }
+            
+            DB::beginTransaction();
             if ($request->hasfile('payment_proof')) {
                 $payment_proof = $request->file('payment_proof');
             }

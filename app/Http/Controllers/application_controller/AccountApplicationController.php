@@ -51,6 +51,9 @@ class AccountApplicationController extends Controller
 
     /** Whole Application View for Account */
     public function getApplicationView($id){
+        
+
+
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();

@@ -29,7 +29,7 @@
                 contentType: false,
                 processData: false,
                 beforeSend: function(){
-                    $("#loading").show();
+                    $('.box-overlay').show();
                 },
                 complete: function(){
                     $("#loading").hide();
@@ -37,13 +37,19 @@
                 success: function(resdata){
                     if(resdata.success){
                         toastr.success(
-                            "New Page Content added successfully!", 
-                            "New Page Content!", 
+                            resdata.message, 
                             {timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
                          );  
-                        window.location.reload();
+                         $('.box-overlay').hide();
+                         setTimeout(function(){
+                             window.location.reload();
+                         },1000)
                     }else{
-
+                        toastr.error(
+                            resdata.message, 
+                            {timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
+                         ); 
+    
                     }
                 },
                 error:(xhr,st)=>{
@@ -89,16 +95,26 @@ function handlePaymentApproved(){
             contentType: false,
             processData: false,
             beforeSend: function(){
-                $("#loading").show();
+                $('.box-overlay').show();
             },
             complete: function(){
                 $("#loading").hide();
               },
             success: function(resdata){
                 if(resdata.success){
-                    window.location.reload();
+                    toastr.success(
+                        resdata.message, 
+                        {timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
+                     ); 
+                    $(".box-overlay").hide();
+                    setTimeout(function(){
+                        window.location.reload();
+                    },1000)
                 }else{
-
+                    toastr.error(
+                        resdata.message, 
+                        {timeOut: 0, extendedTimeOut: 0, closeButton: true, closeDuration: 0}
+                     ); 
                 }
             },
             error:(xhr,st)=>{
