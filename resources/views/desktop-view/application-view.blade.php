@@ -284,11 +284,11 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <label for="Declaration">Course Details (Excel format)
-                                    </label>
+                                    </label></br>
                                     <span class="badge badge-success">
                                         <a href="{{url('doc').'/'.$ApplicationCourses->course_details_xsl}}"
                                             target="_blank" download title="Download Document">
-                                            <i class="fa fa-download mr-2"></i>&nbsp; Download
+                                            <i class="fa fa-download mr-2"></i> &nbsp;Download
                                             Document
                                         </a></span>
                                     </span>

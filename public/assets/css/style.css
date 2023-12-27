@@ -24786,7 +24786,7 @@ color:red;
     top:2% !important;
 }
 
-.box-overlay {
+.box-overlay,.box-overlay-2 {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -24801,6 +24801,15 @@ color:red;
 }
 
 .box-overlay .spinner-border {
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    margin: auto;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+}
+.box-overlay-2 .spinner-border {
     position: absolute;
     top: 43%;
     left: 50%;

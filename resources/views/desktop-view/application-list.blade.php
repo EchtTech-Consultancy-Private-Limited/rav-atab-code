@@ -79,6 +79,7 @@
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
                                         <th>Status</th>
+                                        <th>Upgrade</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -125,11 +126,14 @@
                                                     @elseif($item->application_list->payment_status===1)
                                                     <span class="badge badge-main primary">Received</span>
                                                     @else
-                                                    <span class="badge badge-main success">Accepted</span>
+                                                    <span class="badge badge-main warning">Application in process</span>
                                                     @endif
                                                 </td>
+                                                <td>
+                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
+                                                </td>
                                                     <td>
-                                                        <a href="{{ url('/account/application-view', dEncrypt($item->application_list->id)) }}"
+                                                        <a href="{{ url('/desktop/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                     </td>

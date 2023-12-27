@@ -92,18 +92,22 @@
                                                 <td>RAVAP-{{ $item->application_list->id }}</td>
                                                 <td>Course ({{ $item->course_count ?? '' }})</td>
                                                 <td>
+                                                @isset($item->payment)
                                                 ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                @endisset
                                                 </td>
                                                 <td>
+                                                @isset($item->payment)
                                                     {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
+                                                    @endisset
                                                 </td>
                                                 <td>
-                                                    @if($item->application_list->status===0)
+                                                @if($item->application_list->payment_status===0)
                                                     <span class="badge badge-main warning">Payment Pending</span>
-                                                    @elseif($item->application_list->status===1)
-                                                    <span class="badge badge-primary">Received</span>
+                                                    @elseif($item->application_list->payment_status===1)
+                                                    <span class="badge badge-main primary">Received</span>
                                                     @else
-                                                    <span class="badge badge-success">Accepted</span>
+                                                    <span class="badge badge-main success">Accepted</span>
                                                     @endif
                                                 </td>
                                                     <td>

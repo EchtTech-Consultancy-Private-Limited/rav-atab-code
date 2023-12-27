@@ -371,18 +371,18 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
     Route::get('/tp/application-view/{id}', [TPApplicationController::class, 'getApplicationView']);
     Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
-    Route::get('/desktop/application-view', [DesktopApplicationController::class, 'getApplicationView']);
+    Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
     Route::get('/onsite/application-view', [OnsiteApplicationController::class, 'getApplicationView']);
 
     // Doc Routes
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
-    
-    
+    Route::get('/tp-upload-document/{id}/{course_id}', [TPApplicationController::class, 'upload_document']);
+    Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
+    Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
     Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
-
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
 
     

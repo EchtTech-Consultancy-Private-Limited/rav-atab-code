@@ -24,7 +24,7 @@ var handlePaymentReceived = () => {
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $(".box-overlay").show();
+                $(".box-overlay-2").show();
             },
             complete: function () {
                 $("#loading").hide();
@@ -37,7 +37,7 @@ var handlePaymentReceived = () => {
                         closeButton: true,
                         closeDuration: 0,
                     });
-                    $(".box-overlay").hide();
+                    $(".box-overlay-2").hide();
                     setTimeout(function () {
                         window.location.reload();
                     }, 1000);
@@ -48,10 +48,12 @@ var handlePaymentReceived = () => {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $(".box-overlay-2").hide();
+                    
                 }
             },
             error: (xhr, st) => {
-                console.log(st, "st");
+                console.log(xhr, "st");
             },
         });
     } else {
@@ -109,6 +111,7 @@ function handlePaymentApproved() {
                     closeButton: true,
                     closeDuration: 0,
                 });
+                $(".box-overlay").hide();
             }
         },
         error: (xhr, st) => {

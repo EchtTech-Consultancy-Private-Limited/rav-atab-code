@@ -284,7 +284,7 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <label for="Declaration">Course Details (Excel format)
-                                    </label>
+                                    </label></br>
                                     <span class="badge badge-success">
                                         <a href="{{url('doc').'/'.$ApplicationCourses->course_details_xsl}}"
                                             target="_blank" download title="Download Document">
@@ -294,6 +294,15 @@
                                     </span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-end">
+                        @if ($spocData->payment_status == 2)
+                                <a href="{{ url('/tp-upload-document' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="float:right; color: #fff ; line-height: 25px;">Upload
+                                    Documents</a>
+                        @endif
+                           
                         </div>
                     </div>
                 </div>
@@ -364,10 +373,10 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($ApplicationPayment->status == 0)
+                            @if ($ApplicationPayment->status == 0)
                                 N/A
                                 @endif
-                                @if ($ApplicationPayment->status == 1)
+                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
                                 @if (!$ApplicationPayment->payment_proof_by_account)
                                 File not available!
                                 @endif

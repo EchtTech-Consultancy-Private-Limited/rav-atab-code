@@ -21,13 +21,16 @@ class DocApplicationController extends Controller
     {
 
         try{
-
-            $is_exists = DB::table('tbl_application_payment')->where('application_id',$request->application_id)->where('status',0)->first();
-            if(!$is_exists){
-                return response()->json(['success' =>false,'message'=>'Payment already done.'], 409);
+             DB::beginTransaction();
+             $application_id = dDecrypt($request->application_id);
+             
+            $is_exists = DB::table('tbl_application_payment')->where('application_id',$application_id)->where('status',1)->first();
+            
+            if($is_exists){
+                return response()->json(['success' =>false,'message'=>'Payment already done.'], 200);
             }
             
-            DB::beginTransaction();
+            
             if ($request->hasfile('payment_proof')) {
                 $payment_proof = $request->file('payment_proof');
             }
@@ -45,7 +48,7 @@ class DocApplicationController extends Controller
         }
         catch(Exception $e){
             DB::rollBack();
-            return response()->json(['success' =>false,'message'=>'Failed to make payment'], 500);
+            return response()->json(['success' =>false,'message'=>'Failed to make payment'], 200);
         }
        
     }
