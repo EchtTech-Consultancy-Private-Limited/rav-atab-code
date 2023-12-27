@@ -610,7 +610,6 @@ class applicationController extends Controller
     public function assigin_check_delete(Request $request)
     {
 
-
         $existData = DB::table('asessor_applications')
             ->where('application_id', $request->id)
             ->where('assessor_id', $request->assessor_id)
@@ -630,8 +629,6 @@ class applicationController extends Controller
                     'read_by' => 0,
                 ]);
         }
-
-
 
         if ($existData) {
             return response()->json('success');

@@ -362,7 +362,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
 
 
-    Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList']);
+    Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);
     Route::get('/account/application-list', [AccountApplicationController::class, 'getApplicationList']);
     Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
@@ -381,6 +381,10 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
+    Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
+
+    Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
+
     
 
 /*----------------- End Here------------------------*/

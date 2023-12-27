@@ -202,6 +202,8 @@ $('.assessment_type').on('change', function() {
       $('.modal-footer').hide();
   }
 });
+
+
 $(document).ready(function() {
   $('.destop-id').hide();
   $('.onsite-id').hide();

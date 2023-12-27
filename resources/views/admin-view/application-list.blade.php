@@ -20,6 +20,16 @@
         @endif
         @include('layout.rightbar')
     </div>
+    @if (Session::has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session::get('error') }}
+                </div>
+    @endif
+    @if (Session::has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session::get('success') }}
+                </div>
+    @endif
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -113,12 +123,113 @@
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
 
-                                                        <button
-                                                            class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true"></i></button>
+                                                    @isset($item->payment)
+                                                        @if($item->payment->aknowledgement_id===null)
+                                                        <button id="acknowledgement_{{$item->application_list->id}}"
+                                                            class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
+                                                        @endif
+                                                    @endisset   
+                                                    
 
-                                                           
-                                                    </td>
+                                                    @isset($item->payment)
+                                                        @if($item->payment->aknowledgement_id!==null)
+                                                    <a class="btn btn-tbl-delete bg-primary font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
+                                                    </a>
+
+
+                                                    <a class="btn btn-tbl-delete bg-danger font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#view_secreate_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                                    <i class="fa fa-scribd" aria-hidden="true"
+                                                                        title=""></i>
+                                                    </a>
+                                                    @endif
+                                                    @endisset  
+                                                </td>
                                             </tr>
+                                           
+  <!-- Modal box assessor assign-->
+<div class="modal fade" id="View_popup_{{ $item->application_list->id }}"
+   tabindex="-1" role="dialog"
+   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered modal-lg"
+      role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">
+               Assign an
+               Assessor to the application from the below list
+            </h5>
+            <button type="button" class="close"
+               data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body mod-css">
+            <form action="{{ url('/admin-assign-assessor') }}"
+               method="post">
+               @csrf
+               <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
+                <input type="hidden" name="assessor_type" value="desktop">
+                <?php
+                    $application_assessor_arr = listofapplicationassessor($item->application_list->id);
+
+                ?>
+               <br>
+               <label class="mb-3"><b>Assessment
+               Type</b></label><br>
+               <p>Desktop Assessment</p>
+              
+               <div class="destop-id">
+               @foreach ($assessor_list as $k => $assesorsData)
+               <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
+                  <br>
+                  <label>
+                    
+                  <input type="radio"
+                  id="assesorsid"
+                  class="d-none assesorsid"
+                  name="assessor_id"
+                  value="{{$assesorsData->id}}"
+                  @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
+                 
+                  />
+                  <span>
+                  {{ ucfirst($assesorsData->firstname) }}
+                    {{ ucfirst($assesorsData->lastname) }}
+                    ({{ $assesorsData->email }})
+                  </span>
+                  </label>
+              
+                  <div id="assessor_assign_dates_{{$assesorsData->id}}">
+                  <?php
+                    foreach(get_accessor_date_new($assesorsData->id,$item->application_list->id,$assesorsData->assessment) as $date){
+                    ?>
+                    {!! $date !!}
+                <?php }   ?>
+                  </div>
+              @endforeach  
+               </div>
+         </div>
+         <div class="modal-footer">
+         <button type="button" onclick="cancelAssign()"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">Close</button>
+         <button type="submit"
+            class="btn btn-primary my-button">Submit</button>
+         </div>
+      </div>
+      </form>
+   </div>
+</div>
+
+
+
                                         @endforeach
                                     @endisset
                                 </tbody>
@@ -130,6 +241,9 @@
         </div>
         </div>
         </div>
+
+
+   
     </section>
    
     @include('layout.footer')
