@@ -52,7 +52,7 @@
                     </ul>
 
                     <div class="float-right">
-                        <a href="{{ url('account/application-list') }}" type="button" class="btn btn-primary">Back
+                        <a href="{{ url('tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>

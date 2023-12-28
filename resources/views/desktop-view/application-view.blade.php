@@ -295,6 +295,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12 d-flex justify-content-end">
+                       
+                                <a href="{{ url('/desktop/document-list' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
+                       
+                           
+                        </div>
                     </div>
                 </div>
             </div>

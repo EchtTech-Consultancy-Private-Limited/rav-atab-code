@@ -121,13 +121,13 @@
                <div class="col-sm-6">
                   <ul class="breadcrumb breadcrumb-style ">
                      <li class="breadcrumb-item">
-                        <h4 class="page-title">Upload Documents</h4>
+                        <h4 class="page-title">Documents List</h4>
                      </li>
                      <li class="breadcrumb-item bcrumb-1">
                         <a href="{{ url('/dashboard') }}">
                         <i class="fas fa-home"></i> Level </a>
                      </li>
-                     <li class="breadcrumb-item active">Upload Documents</li>
+                     <li class="breadcrumb-item active">Document List</li>
                   </ul>
                </div>
                <div class="col-sm-6">
@@ -175,7 +175,7 @@
                                              <th class="center">Sr.No.</th>
                                              <th class="center width-50">Objective criteria</th>
                                              <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
-                                             <th class="center"> Cross reference to supporting evidence provided
+                                             <th class="center">Desktop Assessor
                                              </th>
                                              <th>Action</th>
                                           </tr>
@@ -246,7 +246,7 @@
                                     @endforeach
 
                                     @else
-                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                   N/A
                                     @endif
 
                                 </form>

@@ -169,6 +169,65 @@ function handleAcknowledgementPayment(id) {
     }
 }
 
+
+function desktopDocumentVerfiy() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+        let urlObject = new URL(window.location.href);
+        let urlPath = urlObject.pathname.split('/');
+
+        let application_id=urlPath[5];
+        let doc_sr_code=urlPath[3];
+        let doc_unique_id=urlPath[6];
+        let application_courses_id=urlPath[7];
+        let doc_comment = $("#comment_text").val();
+        let nc_type = $('#status').find(":selected").val();
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('application_courses_id',application_courses_id);
+        formData.append('doc_sr_code',doc_sr_code);
+        formData.append('doc_unique_id',doc_unique_id);
+        formData.append('nc_type',nc_type);
+        formData.append('comments',doc_comment);
+
+        $.ajax({
+            url: "/desktop/document-verfiy",
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 1,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 1,
+                    });
+                    
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 0,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
 const assessor_dates = [];
 $(".dateID").click("on", function () {
     var $this = $(this);

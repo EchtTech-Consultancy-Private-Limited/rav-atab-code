@@ -14168,11 +14168,13 @@ fieldset[disabled] .form-control {
 }
 
 .menu_dark .sidebar .menu .list a {
-    color: #e6e6e6
+    color: #3f4254;
 }
 
 .menu_dark .sidebar .menu .list a span {
-    color: #e6e6e6
+    /* color: #3f4254; */
+    font-weight: 300;
+    font-size: 14px;
 }
 
 .menu_dark .sidebar .menu .list a:hover {
@@ -14221,9 +14223,9 @@ fieldset[disabled] .form-control {
     color: #e6e6e6
 }
 
-.menu_dark .sidebar-userpic-name {
+/* .menu_dark .sidebar-userpic-name {
     color: #e6e6e6
-}
+} */
 
 .user-panel {
     float: left;
