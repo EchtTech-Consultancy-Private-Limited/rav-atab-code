@@ -379,14 +379,20 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/tp-upload-document/{id}/{course_id}', [TPApplicationController::class, 'upload_document']);
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
-    Route::get('/tp-document-detail/{document_name}/{application_id}/{document_id}', [TPApplicationController::class, 'tpDocumentDetails']);
-
+    
+    Route::get('/tp-document-detail/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetails']);
 
     Route::get('/desktop/document-list/{id}/{course_id}', [DesktopApplicationController::class, 'applicationDocumentList']);
 
-    Route::get('/desktop/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
+    Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
+
+    Route::get('/admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
+
+    Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
 
     Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
+
+    Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
    
    
 

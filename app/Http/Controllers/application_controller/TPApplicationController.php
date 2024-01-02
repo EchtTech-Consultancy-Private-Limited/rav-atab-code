@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Chapter; 
 use Carbon\Carbon;
 use App\Models\TblNCComments; 
+use URL;
 class TPApplicationController extends Controller
 {
     public function __construct()
@@ -76,16 +77,22 @@ class TPApplicationController extends Controller
     }
     public function upload_document($id, $course_id)
     {
+     
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id',$application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+
+       
+       
+
+
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','status')->get();
 
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -128,7 +135,7 @@ class TPApplicationController extends Controller
         $course_doc->doc_sr_code = $request->doc_sr_code;
         $course_doc->doc_unique_id = $request->doc_unique_id;
         $course_doc->tp_id = $tp_id;
-        $course_doc->assessor_type = 'desktop';
+        $course_doc->assessor_type ='desktop';
         if ($request->hasfile('fileup')) {
             $file = $request->file('fileup');
             $name = $file->getClientOriginalName();
@@ -137,6 +144,8 @@ class TPApplicationController extends Controller
             $course_doc->doc_file_name = $filename;
         }
         $course_doc->save();
+        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
+       
         if($course_doc){
         DB::commit();
         return response()->json(['success' => true,'message' =>'Document uploaded successfully'],200);
@@ -149,13 +158,49 @@ class TPApplicationController extends Controller
         return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
     }
   }
-  public function tpDocumentDetails($name, $applicationId, $document_id)
+//   public function tpDocumentDetails($name, $applicationId, $document_id)
+//   {
+//       $data = $name;
+//       $remarks = DocumentRemark::where('document_id', $document_id)->where('application_id', $applicationId)->get();
+//       $tpId = Application::find($applicationId);
+//       $tpId = $tpId->user_id;
+//       $documentData = Add_Document::find($document_id);
+
+
+//       return view('tp-upload-documents.tp-show-document-details', ['data' => $data, 'remarks' => $remarks, 'application_id' => $applicationId, 'document_id' => $document_id, 'tpId' => $tpId, 'documentData' => $documentData]);
+//   }
+
+  public function tpDocumentDetails($doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_courses_id)
   {
-      $data = $name;
-      $remarks = DocumentRemark::where('document_id', $document_id)->where('application_id', $applicationId)->get();
-      $tpId = Application::find($applicationId);
-      $tpId = $tpId->user_id;
-      $documentData = Add_Document::find($document_id);
-      return view('tp-upload-documents.tp-show-document-details', ['data' => $data, 'remarks' => $remarks, 'application_id' => $applicationId, 'document_id' => $document_id, 'tpId' => $tpId, 'documentData' => $documentData]);
+      try{
+      $doc_latest_record = TblApplicationCourseDoc::latest('id')
+      ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+      ->first();
+
+      $get_remarks = TblNCComments::where([
+        'application_id' => $application_id,
+        'doc_unique_id' => $doc_unique_code,
+        'doc_sr_code' => $doc_sr_code,
+        'application_courses_id' => $application_courses_id
+    ])
+    ->select("tbl_nc_comments.comments","tbl_nc_comments.created_at","tbl_nc_comments.assessor_id",'users.firstname','users.middlename','users.lastname','users.id as assessor_id')
+    ->leftJoin('users', 'users.id', '=', 'tbl_nc_comments.assessor_id')
+    ->get();
+
+    
+      $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+      return view('tp-upload-documents.tp-show-document-details', [
+          'doc_latest_record' => $doc_latest_record,
+          'doc_id' => $doc_sr_code,
+          'doc_code' => $doc_unique_code,
+          'application_id' => $application_id,
+          'doc_path' => $doc_path,
+          'remarks' => $get_remarks
+      ]);
+  }catch(Exception $e){
+      return back()->with('fail','Something went wrong');
   }
+  }
+
+  
 }

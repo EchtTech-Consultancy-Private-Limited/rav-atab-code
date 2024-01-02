@@ -62,8 +62,8 @@
                     })
                 </script>
             @endif
-            
-            @if($is_nc_exists)
+
+            @if($form_view===1)
                 <div class="row ">
                     <div class="row clearfix">
                         <div class="col-lg-12 col-md-12">
@@ -131,7 +131,7 @@
 
                                                     <div class="card-footer">
                                                         <button id="submitBtn" type="button" value="Submit"
-                                                            class="btn btn-primary" onclick="desktopDocumentVerfiy()">Submit</button>
+                                                            class="btn btn-primary" onclick="adminDocumentVerfiy()">Submit</button>
                                                     </div>
 
                                 </div>
@@ -265,7 +265,10 @@
                 comment_text.value = "Document has been approved";
                 commentSection.style.display = "none"; // Hide the textarea
 
-            } else {
+            } else if(this.value==="Request_For_Final_Approval"){
+                commentSection.style.display = "block"; // Show the textarea for other options
+                comment_text.value = "Request for Final Approval";
+            } else{
                 commentSection.style.display = "block"; // Show the textarea for other options
                 comment_text.value = "Document Not approved!";
             }

@@ -81,6 +81,7 @@ class DesktopApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
+                // dd($final_data);
         return view('desktop-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status]);
     }
     public function applicationDocumentList($id, $course_id)
@@ -93,7 +94,9 @@ class DesktopApplicationController extends Controller
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','status')->get();
+        ])
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','status')
+        ->get();
 
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -125,32 +128,87 @@ class DesktopApplicationController extends Controller
         $applicationData = TblApplication::find($application_id);
         return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
     }
-    public function desktopVerfiyDocument($doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
         try{
+          
+
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->latest('id')
+            ->get();
+
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
+        
+            $is_nc_exists=false;
+            if($nc_type==="view"){
+                $is_nc_exists=true;
+            }
+
+        if(isset($tbl_nc_comments->nc_type)){
+            if($tbl_nc_comments->nc_type==="NC1"){
+                $dropdown_arr = array(
+                            "NC2"=>"NC2",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="NC2"){
+                $dropdown_arr = array(
+                            "not_recommended"=>"Not Recommended",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="not_recommended"){
+                $dropdown_arr = array(
+                            "Reject"=>"Reject",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="Request_For_Final_Approval"){
+                $dropdown_arr = array(
+                    "Reject"=>"Reject",
+                    "Accept"=>"Accept",
+                );
+             }
+        }else{
+            $dropdown_arr = array(
+                "NC1"=>"NC1",
+                "Accept"=>"Accept",
+            );
+        }
+
+
+
         $doc_latest_record = TblApplicationCourseDoc::latest('id')
         ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
         ->first();
         $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+         
         return view('desktop-view.document-verify', [
             'doc_latest_record' => $doc_latest_record,
             'doc_id' => $doc_sr_code,
             'doc_code' => $doc_unique_code,
             'application_id' => $application_id,
             'doc_path' => $doc_path,
+            'dropdown_arr'=>$dropdown_arr,
+            'is_nc_exists'=>$is_nc_exists,
+            'nc_comments'=>$nc_comments,
         ]);
     }catch(Exception $e){
         return back()->with('fail','Something went wrong');
     }
     }
 
+    // submit nc's
     public function desktopDocumentVerify(Request $request)
     {
         try{
+          
+        $redirect_to=URL::to("/desktop/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
+       
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
-        $assessor_type = Auth::user()->assessment===1?'desktop':'onsite';
+        $assessor_type = Auth::user()->assessment==1?"desktop":"onsite";
 
+        /*end here*/
         $data = [];
         $data['application_id'] = $request->application_id;
         $data['doc_sr_code'] = $request->doc_sr_code;
@@ -160,26 +218,36 @@ class DesktopApplicationController extends Controller
         $data['comments'] = $request->comments;
         $data['nc_type'] = $request->nc_type;
         $data['assessor_id'] = $assessor_id;
+        $data['doc_file_name'] = $request->doc_file_name;
 
         $nc_comment_status="";
-        if($request->nc_type==="accept"){
+        if($request->nc_type==="Accept"){
             $nc_comment_status=1;
-        }else if($request->nc_type==="nc1"){
+            $nc_flag=0;
+        }else if($request->nc_type=="NC1"){
             $nc_comment_status=2;
-        }else if($request->nc_type==="nc2"){
-            $nc_comment_status=3; 
-        }else{
-            $nc_comment_status=4; //not recommended
+            $nc_flag=1;
+        }else if($request->nc_type=="NC2"){
+            $nc_comment_status=3;
+            $nc_flag=1; 
         }
-
+        else if($request->nc_type=="Reject"){
+            $nc_comment_status=6;
+            $nc_flag=0; 
+        }
+        else{
+            $nc_comment_status=4; //not recommended
+            $nc_flag=0;
+        }
 
         $create_nc_comments = TblNCComments::insert($data);
         
-        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->update(['status'=>$nc_comment_status]);
+        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
+       
 
         if($create_nc_comments){
             DB::commit();
-            return response()->json(['success' => true,'message' =>'Nc comments created successfully'],200);
+            return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);
         }else{
             return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
         }

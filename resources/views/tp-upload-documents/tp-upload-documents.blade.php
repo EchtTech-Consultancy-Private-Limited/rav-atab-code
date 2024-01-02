@@ -76,6 +76,7 @@
    height: 30px;
    line-height: 18px !important;
    }
+
 </style>
 </head>
 <body class="light">
@@ -217,34 +218,76 @@
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] === $question['question']->id;
                                     }) as $doc)
-                                        
+                                   
                                     @if($doc->status===0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
-                                    @else
-                                    <?php
-                                    // print_r($chapter->nc_comments);
-                                    ?>
-                                    @isset($question['nc_comments'])
-                                    @foreach($question['nc_comments'] as $nc_comment)
-                                    <!-- show nc for multiple times -->
-                                      <a target="_blank"
+                                    @elseif($doc->status===1)
+                                    <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        class="btn btn-success btn-sm docBtn m-1">
+                                        Accepted</a>
+                                    @elseif($doc->status===2)
+                                    <a target="_blank"
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn m-1">
-                                          {{$nc_comment->nc_type}} 
-                                       </a>
-                                  
-                                    @endforeach
-                                    @endisset
+                                        NC1</a>
+                                        @if($doc->nc_flag===1)
+                                        <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                             </div>
+                                       @endif
+                                       
+
+                                    @elseif($doc->status===3)
+                                          <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                             NC2</a>
+                                             @if($doc->nc_flag===1)
+                                        <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                             </div>
+                                             @endif
+                                            
+                                             @elseif($doc->status===6)
+                                             <a target="_blank"
+                                                title="{{$doc->doc_file_name}}"
+                                                href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                                class="btn btn-danger btn-sm docBtn m-1">
+                                                Rejected</a>
+                                        @elseif($doc->status===4)
+                                          <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                             Not Recommended</a>
+                                             
+                                             @if($doc->nc_flag===1)
+                                        <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                             </div>
+                                             @endif
+                                                                                
+
+                                    @else
+                                       <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                             </div>
                                     @endif 
-                                    <!-- doc status!==0 endif  -->
-
                                     @endforeach
 
+                                 <!--this else for first time upload doc  -->
                                     @else
                                     <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
                                     @endif
@@ -261,14 +304,11 @@
                                                 {{-- getting documents for each row end point --}}
                                              </td>
                                              <td>
-                                             @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
-                                    @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
-                                        return $item['doc_unique_id'] === $question['question']->id;
-                                    }) as $doc)
+                                 @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                    @endforeach
+                                  
                                     @else
                                   
                                                 <span class="text-danger"
@@ -294,7 +334,7 @@
 
                                                    @isset($question['nc_comments'])
                                                       @foreach($question['nc_comments'] as $k=>$nc_comment)
-                                                      <tr class="text-danger" style="border-left:3px solid red">
+                                                      <tr class="text-{{$nc_comment->nc_type==='Accept'?'success':'danger'}}" style="border-left:3px solid red">
                                                          <td width="60">{{$k+1}}</td>
                                                          <td width="130">{{$nc_comment->doc_sr_code}}</td>
                                                          <td width="120">{{date('d-m-Y',strtotime($nc_comment->created_at))}}</td>

@@ -52,48 +52,6 @@
                 </div>
             @endif
 
-
-
-            @if (auth()->user()->role == 2 || auth()->user()->role == 3)
-
-               @if ($documentData->comment)
-               @if ($documentData->comment->status != 4)
-               <form action="{{ url('submit-remark') }}" method="post" id="remarkForm">
-                   @csrf
-                   <input type="hidden" name="document_id" value="{{ $document_id ?? 0 }}">
-                   <input type="hidden" name="application_id" value="{{ $application_id ?? 0 }}">
-                   <input type="hidden" name="tpId" value="{{ $tpId ?? 0 }}">
-                   <div class="card">
-                       <div class="card-header bg-white text-dark">
-                           <h5 class="mt-2">
-                               Write Remark
-                           </h5>
-                       </div>
-                       <div class="card-body">
-                           <div class="form-group">
-                               <label for="remark">Remark</label>
-                               <textarea name="remark" class="form-control" id="remark" placeholder="Write remark..." maxlength="100"></textarea>
-                               <span id="charCount" class="text-muted"><br />0 characters</span>
-                               <br /><!-- Added character count element -->
-                               <span id="charLimitWarning" class="text-danger"></span>
-                               <br /><!-- Added warning message element -->
-                           </div>
-                       </div>
-                       <div class="card-footer bg-white">
-                           <div class="d-flex justify-content-end">
-                               <button type="submit" class="btn btn-primary mb-0">
-                                   Submit
-                               </button>
-                           </div>
-                       </div>
-                   </div>
-               </form>
-           @endif
-               @endif
-
-
-
-                @if (!$remarks->isEmpty())
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h5 class="mt-2">
@@ -106,25 +64,32 @@
                                     <th>Sr.No</th>
                                     <th>Remark</th>
                                     <th>Added By</th>
+                                    <th>Created At</th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($remarks as $remark)
+                                    @isset($remarks)
+                                        @foreach($remarks as $k=>$remark)
+                                    
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $remark->remark }}</td>
-                                            <td>{{ $remark->user->firstname ?? '' }}
-                                                {{ $remark->user->middlename ?? '' }}
-                                                {{ $remark->user->lastname ?? '' }}{{ $remark->created_by === auth()->user()->id ? '(You)' : '' }}
+                                            <td>{{$k+1}}</td>
+                                            <td>{{$remark->comments}}</td>
+                                            <td>
+                                            {{ $remark->firstname ?? '' }}
+                                                {{ $remark->middlename ?? '' }}
+                                                {{ $remark->lastname ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{ date('m-d-Y',strtotime($remark->created_at))}}
                                             </td>
                                         </tr>
                                     @endforeach
+                                 @endisset
+                            
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                @endif
 
-            @endif
 
             <div class="row ">
 
@@ -140,10 +105,10 @@
 
                                             <div class="body p-0">
 
-                                                <object data="{{ url('level' . '/' . $data) }}" type="application/pdf"
+                                                <object data="{{ url($doc_path) }}" type="application/pdf"
                                                     width="100%" height="1150px">
                                                     <p>Unable to display PDF file. <a
-                                                            href="{{ url('level' . '/' . $data) }}">Download</a> instead.
+                                                            href="{{ url($doc_path) }}">Download</a> instead.
                                                     </p>
                                                 </object>
 
