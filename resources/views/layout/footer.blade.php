@@ -14,7 +14,8 @@
      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
  </script>
  <script src="{{ asset('assets/js/atab-jquery.validate.min.js') }}"></script>
- <script src="{{ asset('customjs/payment-approve.js') }}"></script>
+ <script src="{{ asset('customjs/custom.js') }}"></script>
+ <script src="{{ asset('customjs/notification.js') }}"></script>
 
  <script>
      $(document).ready(function() {

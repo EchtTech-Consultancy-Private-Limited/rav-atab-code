@@ -95,8 +95,10 @@ class DesktopApplicationController extends Controller
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','status')
         ->get();
+        
+
 
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -222,28 +224,54 @@ class DesktopApplicationController extends Controller
         $data['doc_file_name'] = $request->doc_file_name;
 
         $nc_comment_status="";
+        $nc_raise="";
         if($request->nc_type==="Accept"){
             $nc_comment_status=1;
             $nc_flag=0;
+            $nc_raise="Accept";
         }else if($request->nc_type=="NC1"){
             $nc_comment_status=2;
             $nc_flag=1;
+            $nc_raise = "NC1";
         }else if($request->nc_type=="NC2"){
             $nc_comment_status=3;
             $nc_flag=1; 
+            $nc_raise = "NC2";
         }
         else if($request->nc_type=="Reject"){
             $nc_comment_status=6;
             $nc_flag=0; 
+            $nc_raise = "Reject";
         }
         else{
             $nc_comment_status=4; //not recommended
             $nc_flag=0;
+            $nc_raise="Request for final approval";
         }
 
         $create_nc_comments = TblNCComments::insert($data);
         
         TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
+
+        /*Create record for summary report*/
+        $data=[];
+        $data['application_id'] = $request->application_id;
+        $data['object_element_id'] = $request->doc_unique_id;
+        $data['application_course_id'] = $request->application_courses_id;
+        $data['doc_sr_code'] = $request->doc_sr_code;
+        $data['doc_unique_id'] = $request->doc_unique_id;
+        
+        $data['date_of_assessement'] = $request->date_of_assessement??'N/A';
+        $data['assessor_id'] = Auth::user()->id;
+        $data['assessor_type'] = $assessor_type;
+        $data['nc_raise'] = $nc_raise??'N/A';
+        $data['nc_raise_code'] = $nc_raise??'N/A';
+        $data['doc_path'] = $request->doc_file_name;
+        $data['capa_mark'] = $request->capa_mark??'N/A';
+        $data['doc_against_nc'] = $request->doc_against_nc??'N/A';
+        $data['doc_verify_remark'] = $request->remark??'N/A';
+        $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
+        /*end here*/
        
 
         if($create_nc_comments){

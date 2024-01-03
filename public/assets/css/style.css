@@ -24845,3 +24845,16 @@ color:red;
     top: 0;
     opacity: 0;
 }
+
+
+.docBtn.docBtn_nc{
+    display: inline-grid !important;
+    padding: 0px 5px !important;
+}
+
+.docBtn.docBtn_nc span{font-size: 9px;}
+
+button.expand-button {
+    padding: 5px 15px !important;
+    white-space: nowrap;
+}

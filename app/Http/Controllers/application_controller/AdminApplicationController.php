@@ -278,7 +278,7 @@ class AdminApplicationController extends Controller
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status')
         ->get();
 
         $chapters = Chapter::all();

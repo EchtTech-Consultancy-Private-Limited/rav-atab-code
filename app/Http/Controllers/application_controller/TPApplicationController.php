@@ -92,7 +92,7 @@ class TPApplicationController extends Controller
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','status')->get();
 
         $chapters = Chapter::all();
         foreach($chapters as $chapter){

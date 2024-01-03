@@ -186,7 +186,7 @@
                                             <td colspan="2">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
-                                            <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
+                                            <td>Application No (provided by ATAB): <span>{{$summertReport->id}}</span> </td>
                                             <td>Date of application: <span> <input type="text" disabled value="{{$summertReport->app_created_at}}" ></span> </td>
                                         </tr>
                                         <tr>

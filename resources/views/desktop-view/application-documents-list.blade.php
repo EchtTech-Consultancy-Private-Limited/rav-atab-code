@@ -250,7 +250,8 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
-                                             Not Recommended</a>
+                                              Not Recommended</a>
+                                             
                                              @elseif($doc->status===6)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
@@ -326,14 +327,13 @@
                                                 </table>
                                              </td>
                                           </tr>
-                                          
-                                        
                                           @endforeach
                                         @endforeach
-
-
                                        </tbody>
                                     </table>
+                                    <div class="col-md-12 p-2 d-flex justify-content-end">
+                                       <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
+                                    </div>
                                  </div>
                               </div>
                            </div>
