@@ -278,7 +278,7 @@ class AdminApplicationController extends Controller
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','status')
         ->get();
 
         $chapters = Chapter::all();
@@ -323,14 +323,14 @@ class AdminApplicationController extends Controller
             ->latest('id')
             ->get();
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
-
+            
             $form_view=0;
-            if($nc_type==="nr"){
+            if($nc_type==="nr" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept")){
                 $form_view=1;
             }else if($nc_type=="reject"){
                 $form_view=0;
             }
-
+            // dd($form_view);
         if(isset($tbl_nc_comments->nc_type)){
                 if($tbl_nc_comments->nc_type==="not_recommended"){
                     $dropdown_arr = array(
@@ -344,7 +344,8 @@ class AdminApplicationController extends Controller
         $doc_latest_record = TblApplicationCourseDoc::latest('id')
         ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
         ->first();
-        $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+        // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+        $doc_path = URL::to("/level").'/'.$doc_name;
          
         return view('admin-view.document-verify', [
             'doc_latest_record' => $doc_latest_record,
@@ -366,7 +367,7 @@ class AdminApplicationController extends Controller
         try{
           
         $redirect_to=URL::to("/admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
-       
+
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
         $assessor_type = 'admin';
@@ -383,24 +384,23 @@ class AdminApplicationController extends Controller
         $data['doc_file_name'] = $request->doc_file_name;
 
         $nc_comment_status="";
+        $admin_nc_flag=0;
         if($request->nc_type==="Accept"){
             $nc_comment_status=1;
+            $admin_nc_flag=1;
             $nc_flag=0;
         }else if($request->nc_type=="Reject"){
             $nc_comment_status=1;
+            $admin_nc_flag=2;
             $nc_flag=0;
         }else{
             $nc_comment_status=4; //request for final approval
             $nc_flag=1;
         }
 
-        
-
-
-
         $create_nc_comments = TblNCComments::insert($data);
         
-        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag]);
+        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
        
 
         if($create_nc_comments){

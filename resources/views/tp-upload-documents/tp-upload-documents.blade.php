@@ -265,11 +265,27 @@
                                                 class="btn btn-danger btn-sm docBtn m-1">
                                                 Rejected</a>
                                         @elseif($doc->status===4)
+                                       
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Not Recommended</a>
+                                             @if($doc->admin_nc_flag===1)
+                                             <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-success btn-sm docBtn m-1">
+                                             Accept</a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag===2)
+                                             <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                             Reject</a>
+                                             @endif
                                              
                                              @if($doc->nc_flag===1)
                                         <div class="upload-btn-wrapper">

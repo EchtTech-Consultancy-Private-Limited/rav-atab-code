@@ -214,7 +214,7 @@
                                     <input type="hidden" name="doc_unique_id" value="{{$question['question']->id}}">
                                   
                                    
-  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
+                        @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] === $question['question']->id;
                                     }) as $doc)
@@ -232,7 +232,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn m-1">
-                                             Accepted</a>
+                                             Accept</a>
                                     @elseif($doc->status===2)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
@@ -252,11 +252,29 @@
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Reject</a>
                                         @elseif($doc->status===4)
+                                       
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Not Recommended</a>
+                                             @if($doc->admin_nc_flag===1)
+                                             <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-success btn-sm docBtn m-1">
+                                             Accept</a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag===2)
+                                             <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                             Reject</a>
+                                             @endif
+
+
                                     @else
                                        <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>

@@ -92,7 +92,7 @@ class TPApplicationController extends Controller
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','status')->get();
 
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -120,7 +120,6 @@ class TPApplicationController extends Controller
 
                 $final_data[] = $obj;
         }
-        // dd($final_data);
         $applicationData = TblApplication::find($application_id);
         return view('tp-upload-documents.tp-upload-documents', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
     }
@@ -158,17 +157,6 @@ class TPApplicationController extends Controller
         return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
     }
   }
-//   public function tpDocumentDetails($name, $applicationId, $document_id)
-//   {
-//       $data = $name;
-//       $remarks = DocumentRemark::where('document_id', $document_id)->where('application_id', $applicationId)->get();
-//       $tpId = Application::find($applicationId);
-//       $tpId = $tpId->user_id;
-//       $documentData = Add_Document::find($document_id);
-
-
-//       return view('tp-upload-documents.tp-show-document-details', ['data' => $data, 'remarks' => $remarks, 'application_id' => $applicationId, 'document_id' => $document_id, 'tpId' => $tpId, 'documentData' => $documentData]);
-//   }
 
   public function tpDocumentDetails($doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_courses_id)
   {
@@ -188,7 +176,8 @@ class TPApplicationController extends Controller
     ->get();
 
     
-      $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+    //   $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+      $doc_path = URL::to("/level").'/'.$doc_name;
       return view('tp-upload-documents.tp-show-document-details', [
           'doc_latest_record' => $doc_latest_record,
           'doc_id' => $doc_sr_code,

@@ -118,6 +118,7 @@ class DesktopApplicationController extends Controller
                         ])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->where('assessor_type','desktop')
                         ->get(),
                     ];
                 }
@@ -131,8 +132,7 @@ class DesktopApplicationController extends Controller
     public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
         try{
-          
-
+   
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
@@ -180,15 +180,16 @@ class DesktopApplicationController extends Controller
         $doc_latest_record = TblApplicationCourseDoc::latest('id')
         ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
         ->first();
-        $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+        // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+        $doc_path = URL::to("/level").'/'.$doc_name;
          
         return view('desktop-view.document-verify', [
-            'doc_latest_record' => $doc_latest_record,
+            // 'doc_latest_record' => $doc_latest_record,
             'doc_id' => $doc_sr_code,
             'doc_code' => $doc_unique_code,
             'application_id' => $application_id,
             'doc_path' => $doc_path,
-            'dropdown_arr'=>$dropdown_arr,
+            'dropdown_arr'=>$dropdown_arr??[],
             'is_nc_exists'=>$is_nc_exists,
             'nc_comments'=>$nc_comments,
         ]);
