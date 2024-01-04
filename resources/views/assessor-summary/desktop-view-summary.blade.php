@@ -193,14 +193,14 @@
                                             <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
-                                            <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span> </td>
+                                            <td class="fw-bold">Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_id}}"></span> </td>
+                                            <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->created_at))}}</span> </td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summertReport->Person_Name}}"></span> </td>
+                                            <td class="fw-bold">Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summertReport->person_name}}"></span> </td>
                                             <td class="fw-bold">Name of the course to be assessed:
                                 
-                                                <span> <input type="text" disabled value="{{$summertReport->course_name}}"></span> </td>
+                                                <span> <input type="text" disabled value="{{$summertReport->course_name??'N/A'}}"></span> </td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">Way of assessment (Desktop): <span> <input type="text" disabled value="{{$assessement_way??'N/A'}}"></span> </td>
@@ -238,7 +238,7 @@
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
                                                     @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3 && $row->nc_raise_code!=6)
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended")
                                                       {{$row->nc_raise}}
                                                       @endif
                                                     @endforeach
@@ -246,23 +246,17 @@
                                                 <td>
 
                                                 @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="not_recommended")
                                                       {{$row->capa_mark}}
                                                       @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
                                                     @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code==1)
+                                                    @if($row->nc_raise_code=="NC1")
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
-                                                    @elseif($row->nc_raise_code==2)
+                                                    @elseif($row->nc_raise_code=="NC2")
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
-                                                    @elseif($row->nc_raise_code==4)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
-                                                    @elseif($row->nc_raise_code==3)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
-                                                    @else
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
                                                     @endif
                                                     @endforeach
                                             
@@ -293,6 +287,11 @@
                                         </tbody>
                                     
                                     </table>
+                                    @if(!$is_final_submit)
+                                    <div class="col-md-12 p-2 d-flex justify-content-end">
+                                    <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>
+                                    @endif
+                                </div>
                                 </section>
                             </button>
                                 </div>

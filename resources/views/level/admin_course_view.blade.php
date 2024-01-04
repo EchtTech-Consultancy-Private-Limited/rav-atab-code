@@ -223,7 +223,7 @@
         <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
-                    Single Point of Contact Details (SPoC)
+                    Single Point of Contact Details (SPoC) 
                 </h5>
             </div>
             <div class="card-body">

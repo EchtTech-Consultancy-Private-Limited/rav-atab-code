@@ -131,7 +131,7 @@
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h4 class="header-title mt-2">
-                                National Applications
+                                National Applications 
                                 </h2>
                         </div>
                         <div class="body">
@@ -316,6 +316,7 @@
                                                                 $item->acknowledged_by != null &&
                                                                 $item->is_payment_acknowledge == 1)
                                                             @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
+
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->id }}"
                                                                     data-bs-target="#View_popup_{{ $item->id }}"
@@ -339,6 +340,7 @@
                                                 @endif
                                                 {{-- popup form --}}
                                                 @if (Auth::user()->role != 6)
+
                                                     <div class="modal fade" id="View_popup_{{ $item->id }}"
                                                         tabindex="-1" role="dialog"
                                                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -442,6 +444,15 @@
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
+
+
+
+
+
+
+
+
+                                                                        
                                                                         <div class="onsite-id">
                                                                             <div class="mt-3 mb-2">
                                                                             {{-- @if (count($item->payments) > 1) --}}
@@ -523,6 +534,7 @@
                                                             </form>
                                                         </div>
                                                     </div>
+
                                                     <!-- secreate user popup-->
                                                     <div class="modal fade" id="view_secreate_popup_{{ $item->id }}"
                                                         tabindex="-1" role="dialog"

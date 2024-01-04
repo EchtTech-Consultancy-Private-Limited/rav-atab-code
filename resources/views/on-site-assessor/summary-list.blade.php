@@ -90,6 +90,7 @@
                     <th>Action</th>
                 </tr>
                 @foreach ($courses as $item)
+                @if($item->application_id!==null)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->course_name }}</td>
@@ -115,6 +116,7 @@
                             @endif
                         </th>
                     </tr>
+                    @endif
                 @endforeach
             </table>
         </div>

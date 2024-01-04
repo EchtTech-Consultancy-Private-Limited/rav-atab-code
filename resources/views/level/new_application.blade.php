@@ -263,7 +263,7 @@ active @endif"
                                              <!-- Form  -->
                                              <div class="row">
                                                  <div class="header">
-                                                     <h2>Single Point of Contact Details (SPoC)</h2>
+                                                     <h2>Single Point of Contact Details (SPoC) bnm</h2>
 
                                                  </div>
                                                  <div class="col-md-12">

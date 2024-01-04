@@ -610,7 +610,6 @@ class applicationController extends Controller
     public function assigin_check_delete(Request $request)
     {
 
-
         $existData = DB::table('asessor_applications')
             ->where('application_id', $request->id)
             ->where('assessor_id', $request->assessor_id)
@@ -630,8 +629,6 @@ class applicationController extends Controller
                     'read_by' => 0,
                 ]);
         }
-
-
 
         if ($existData) {
             return response()->json('success');
@@ -968,8 +965,7 @@ class applicationController extends Controller
         $courses = $collection->unique(function ($item) {
             return $item->course_name;
         })->values()->all();
-
-     
+        
         // $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
         $applicationDetails = Application::find($request->input('application'));
         return view('on-site-assessor.summary-list', compact('courses', 'applicationDetails'));

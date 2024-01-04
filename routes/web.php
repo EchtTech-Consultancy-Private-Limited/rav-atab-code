@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\applicationController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\ApplicationCoursesController;
 use App\Http\Controllers\aknownledgeController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\FullCalenderController;
@@ -17,6 +18,13 @@ use App\Http\Controllers\FaqController; #SKP
 use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
+
+use App\Http\Controllers\application_controller\AdminApplicationController;
+use App\Http\Controllers\application_controller\TPApplicationController;
+use App\Http\Controllers\application_controller\AccountApplicationController;
+use App\Http\Controllers\application_controller\DesktopApplicationController;
+use App\Http\Controllers\application_controller\OnsiteApplicationController;
+use App\Http\Controllers\application_controller\DocApplicationController;
 
 
 /*
@@ -323,20 +331,95 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
 // Summary Routes
 
-    Route::get('desktop/view',[SummaryController::class,"desktopIndex"]);
-    Route::get('onsite/view',[SummaryController::class,"onSiteIndex"]);
-    Route::get('desktop/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
-    Route::post('desktop/final-summary',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
+    Route::get('desktop/summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopIndex"]);
+    Route::get('onsite/summary',[SummaryController::class,"onSiteIndex"]);
+    Route::get('desktop/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
+    Route::get('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
     Route::get('onsite/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
+
+    Route::get('desktop-application-course-summaries',[DesktopApplicationController::class,"getCourseSummariesList"]);
+    Route::get('desktop-view-final_summaries',[DesktopApplicationController::class,"desktopViewFinalSummary"]);
 
     Route::get('application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
     Route::get('view-final_summaries',[SummaryController::class,"tpViewFinalSummary"]);
     Route::get('admin-view-final_summaries',[SummaryController::class,"adminViewFinalSummary"]);
 
+
+
+
+    // Created by Brijesh sir and Suraj
+/*----------------- New Application Routes------------------------*/
+
+    Route::get('create-new-applications/{id?}',[ApplicationCoursesController::class,"createNewApplication"]);
+    Route::post('store-new-applications',[ApplicationCoursesController::class,"storeNewApplication"]);
+    Route::get('get-application-courses',[ApplicationCoursesController::class,"getApplicationCourses"]);
+    Route::get('get-application-fees',[ApplicationCoursesController::class,"getApplicationFees"]);
+    Route::get('get-application-documents',[ApplicationCoursesController::class,"getApplicationDocuments"]);
+    Route::get('get-application-list', [TPApplicationController::class, 'getApplicationList']);
+
+    // =========Courses Route=========//
+    Route::get('create-new-course/{id?}', [ApplicationCoursesController::class, 'createNewCourse']);
+    Route::post('/store-new-application-course', [ApplicationCoursesController::class, 'storeNewApplicationCourse']);
+    Route::get('/get-course-list', [ApplicationCoursesController::class, 'getCourseList']);
+    Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
+    Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment'])->name('course.payment');
+    Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
+
+
+    Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
+    Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);
+    Route::get('/account/application-list', [AccountApplicationController::class, 'getApplicationList']);
+    Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
+    Route::get('/onsite/application-list', [OnsiteApplicationController::class, 'getApplicationList']);
+
+    Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
+    Route::get('/tp/application-view/{id}', [TPApplicationController::class, 'getApplicationView']);
+    Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
+    Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
+    Route::get('/onsite/application-view', [OnsiteApplicationController::class, 'getApplicationView']);
+
+    // Doc Routes
+    Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
+    Route::get('/tp-upload-document/{id}/{course_id}', [TPApplicationController::class, 'upload_document']);
+    Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
+    Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
+    
+    Route::get('/tp-document-detail/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetails']);
+
+    Route::get('/desktop/document-list/{id}/{course_id}', [DesktopApplicationController::class, 'applicationDocumentList']);
+
+    Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
+
+    Route::get('/admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
+
+    Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
+
+    Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
+
+    Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
+   
+   
+
+
+    // Payment Routes
+    Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
+    Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
+    Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
+    Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
+
+    
+
+/*----------------- End Here------------------------*/
     
 
 });
+
+
+
+
+
+
 
 //notification status change
 Route::get('notification', [LevelController::class, 'notification']);

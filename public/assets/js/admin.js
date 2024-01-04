@@ -636,26 +636,26 @@ if (localStorage.getItem("layout")) {
 }
 
 //set theme on startup
-if (localStorage.getItem("theme")) {
-  if (localStorage.getItem("theme") == "light") {
-    $(".theme-color .btn-check[value|='1']").prop("checked", true);
-  } else {
-    $(".theme-color .btn-check[value|='2']").prop("checked", true);
-  }
-  $("body").removeClass("dark light");
-  jQuery("body").addClass(localStorage.getItem("theme"));
-  localStorage.setItem("theme", localStorage.getItem("theme"));
-} else {
-  $("body").removeClass("dark light");
-  if (themeType == "light") {
-    jQuery("body").addClass("light");
-    $(".theme-color .btn-check[value|='1']").prop("checked", true);
-  } else {
-    jQuery("body").addClass("dark");
-    $(".theme-color .btn-check[value|='2']").prop("checked", true);
-  }
-  localStorage.setItem("theme", themeType);
-}
+// if (localStorage.getItem("theme")) {
+//   if (localStorage.getItem("theme") == "light") {
+//     $(".theme-color .btn-check[value|='1']").prop("checked", true);
+//   } else {
+//     $(".theme-color .btn-check[value|='2']").prop("checked", true);
+//   }
+//   $("body").removeClass("dark light");
+//   jQuery("body").addClass(localStorage.getItem("theme"));
+//   localStorage.setItem("theme", localStorage.getItem("theme"));
+// } else {
+//   $("body").removeClass("dark light");
+//   if (themeType == "light") {
+//     jQuery("body").addClass("light");
+//     $(".theme-color .btn-check[value|='1']").prop("checked", true);
+//   } else {
+//     jQuery("body").addClass("dark");
+//     $(".theme-color .btn-check[value|='2']").prop("checked", true);
+//   }
+//   localStorage.setItem("theme", themeType);
+// }
 
 if (localStorage.getItem("choose_skin")) {
   jQuery("body").addClass(localStorage.getItem("choose_skin"));

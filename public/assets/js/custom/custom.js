@@ -177,3 +177,109 @@ $(document).ready(function(){
          });*/
 });
 
+
+
+$('.assessment_type').on('change', function() {
+  var data = $(this).val();
+  ///  alert(data);
+  if (data == 1) {
+      //alert('1');
+      $('.destop-id').show();
+      $('.onsite-id').hide();
+      $('.my-button').prop('disabled', false)
+      $('.modal-footer').show();
+  } else if (data == 2) {
+      // alert('2');
+      $('.destop-id').hide();
+      $('.onsite-id').show();
+      $('.modal-footer').show();
+      $('.my-button').prop('disabled', false)
+  } else {
+      //alert('hii')
+      $('.destop-id').hide();
+      $('.onsite-id').hide();
+      $('.my-button').attr('disabled', false)
+      $('.modal-footer').hide();
+  }
+});
+
+
+$(document).ready(function() {
+  $('.destop-id').hide();
+  $('.onsite-id').hide();
+  $('.my-button').prop('disabled', true)
+  $('.modal-footer').hide();
+});
+$('.assesorsid').on('click', function() {
+  var application_id = $(this).data('application-id');
+  var assessor_id = $(this).val();
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+  $.ajax({
+      url: "{{ url('/assigin-check-delete') }}",
+      type: "get",
+      data: {
+          id: application_id,
+          assessor_id
+      },
+      success: function(data) {
+          //alert(data)
+          if (data === 'success') {
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Success',
+                  text: 'Application has been unassigned from the assessor successfully.',
+              }).then(() => {
+                  location.reload(true);
+              });
+          }
+      }
+  });
+});
+function cancelAssign() {
+  location.reload(true);
+}
+$('.dateID').click('on', function() {
+  var $this = $(this);
+  var dataVal = $(this).attr('data-id').split(',');
+  var colorid = $(this).attr('date-color');
+  // if(colorid ==undefined || colorid =='' || colorid =='false'){
+  //     $(this).removeClass('btn-success').addClass('btn-danger');
+  // }else{
+  //     $(this).removeClass('btn-danger').addClass('btn-success');
+  // }
+  var data = {
+      'applicationID': dataVal[0],
+      'assessorID': dataVal[1],
+      'assessmentType': dataVal[2],
+      'selectedDate': dataVal[3]
+  };
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+  $.ajax({
+      type: 'POST',
+      url: "{{ url('save-selected-dates') }}",
+      data: data,
+      success: function(response) {
+          if (response.message == 'deleted') {
+              $this.removeClass('btn-danger').addClass('btn-success');
+          } else {
+              $this.removeClass('btn-success').addClass('btn-danger');
+          }
+          // if(response.status == 200){
+          //     $this.removeClass('btn-danger').addClass('btn-success');
+          // }else{
+          //      $this.removeClass('btn-success').addClass('btn-success');
+          // }
+      },
+      error: function(error) {
+          console.error('Error:', error);
+      }
+  });
+})

@@ -114,7 +114,6 @@
     table td {
         text-align: left;
         padding: 10px 10px;
-        font-weight: 700;
     }
 </style>
 
@@ -179,38 +178,47 @@
                             <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
                             <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
                             <div class="p-3  bg-white">
+                            <div class="row">
+                                <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
+                                    <button class="btn btn-warning" onclick="printDiv('desktop-print')">
+                                    <i class="fa fa-print"></i>
+                                    </button>
+                                </div>
+                                </div>
+                                <section id="desktop-print">
                                 <table>
 
                                     <tbody>
                                         <tr>
-                                            <td colspan="2">DESKTOP ASSESSMENT FORM</td>
+                                            <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
-                                            <td>Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_uid}}"></span> </td>
-                                            <td>Date of application: <span> <input type="text" disabled value="{{$summertReport->app_created_at}}" ></span> </td>
+                                            <td class="fw-bold">Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_id}}"></span> </td>
+                                            <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span> </td>
                                         </tr>
                                         <tr>
-                                            <td>Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summertReport->Person_Name}}"></span> </td>
-                                            <td>Name of the course to be assessed:
+                                            <td class="fw-bold">Name and Location of the Training Provider: <span> <input type="text" disabled value="{{$summertReport->person_name}}"></span> </td>
+                                            <td class="fw-bold">Name of the course to be assessed:
                                 
-                                                <span> <input type="text" disabled value="{{$summertReport->course_name}}"></span> </td>
+                                                <span> <input type="text" disabled value="{{$summertReport->course_name??'N/A'}}"></span> </td>
                                         </tr>
                                         <tr>
-                                            <td>Way of assessment (Desktop): <span> <input type="text" disabled value="{{$summertReport->assessor_type}}"></span> </td>
-                                            <td>No of Mandays:  <span> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
+                                            <td class="fw-bold">Way of assessment (Desktop): <span> <input type="text" disabled value="{{$assessement_way??'N/A'}}"></span> </td>
+                                            <td class="fw-bold">No of Mandays:  <span> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
                                         </tr>
                                 
                                         <tr>
-                                            <td> Signature</td>
+                                            <td class="fw-bold"> Signature</td>
                                             <td>........</td>
                                         </tr>
                                         <tr>
-                                            <td> Assessor</td>
-                                            <td>{{$summertReport->firstname??''}}  {{$summertReport->lastname??''}}</td>
+                                            <td class="fw-bold"> Assessor</td>
+                                            <td>{{$summertReport->firstname??''}} {{$summertReport->middlename??''}} {{$summertReport->lastname??''}}</td>
                                         </tr>
                                     </tbody>
                                 
                                 </table>
+
                                 <div class="table-responsive">
                                     <table>
                                         <thead>
@@ -226,11 +234,11 @@
                                         <tbody>
                                             @foreach ($final_data as $key=>$rows)
                                             <tr>
-                                                <td>{{$rows->code}}</td>
+                                                <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
-                                                <td>
-                                                    @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                <td class="fw-bold">
+                                                @foreach($rows->nc as $row)
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
                                                       {{$row->nc_raise}}
                                                       @endif
                                                     @endforeach
@@ -238,25 +246,20 @@
                                                 <td>
 
                                                 @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
                                                       {{$row->capa_mark}}
                                                       @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code==1)
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->nc_raise_code=="NC1")
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
-                                                    @elseif($row->nc_raise_code==2)
+                                                    @elseif($row->nc_raise_code=="NC2")
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
-                                                    @elseif($row->nc_raise_code==4)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
-                                                    @elseif($row->nc_raise_code==3)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
-                                                    @else
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
                                                     @endif
                                                     @endforeach
+                                                   
                                             
                                             </td>
                                             <td>
@@ -265,19 +268,19 @@
                                                 @endphp
                                              
                                                 @if($count==1)
-                                                    {{$rows->nc[0]->doc_verify_remark}}
+                                                    {{$rows->nc[0]->doc_verify_remark??''}}
                                                 @elseif($count==2)
-                                                {{$rows->nc[1]->doc_verify_remark}}
+                                                {{$rows->nc[1]->doc_verify_remark??''}}
                                                 @elseif($count==3)
-                                                {{$rows->nc[2]->doc_verify_remark}}
+                                                {{$rows->nc[2]->doc_verify_remark??''}}
                                                 @elseif($count==4)
-                                                {{$rows->nc[3]->doc_verify_remark}}
+                                                {{$rows->nc[3]->doc_verify_remark??''}}
                                                 @elseif($count==5)
-                                                {{$rows->nc[4]->doc_verify_remark}}
+                                                {{$rows->nc[4]->doc_verify_remark??''}}
                                                 @elseif($count==6)
-                                                {{$rows->nc[5]->doc_verify_remark}}
+                                                {{$rows->nc[5]->doc_verify_remark??''}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                {{$rows->nc[6]->doc_verify_remark??''}}
                                                 @endif
                                             </td>
                                             </tr>
@@ -285,11 +288,12 @@
                                         </tbody>
                                     
                                     </table>
-                                    
                                     @if(!$is_final_submit)
-                                    <button type="submit" class="btn btn-success float-right mt-3"
-                                   >Submit
-                                   @endif
+                                    <div class="col-md-12 p-2 d-flex justify-content-end">
+                                    <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>
+                                    @endif
+                                </div>
+                                </section>
                             </button>
                                 </div>
                                
@@ -303,5 +307,15 @@
     </div>
     </div>
     </div>
+
 </section>
+<script>
+    function printDiv(divId) {
+            var printContents = document.getElementById(divId).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+</script>
 @include('layout.footer')
