@@ -62,6 +62,7 @@ class AdminApplicationController extends Controller
                 $final_data[] = $obj;
         }
         // dd($final_data);
+        
         return view('admin-view.application-list',['list'=>$final_data, 'assessor_list' => $desktop_assessor_list,'secretariatdata' => $secretariatdata,'assessor_pluck'=>$desktop_assessor_pluck]);
     }
     /** Whole Application View for Account */
