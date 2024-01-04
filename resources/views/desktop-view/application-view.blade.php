@@ -50,9 +50,12 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-
-                    <div class="float-right">
-                        <a href="{{ url('account/application-list') }}" type="button" class="btn btn-primary">Back
+                    <div class="">
+                    @if($is_final_submit)
+                        <a href="{{ url('desktop-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        </a>
+                    @endif
+                        <a href="{{ url('desktop/application-list') }}" class="float-right"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back
                         </a>
                     </div>
                 </div>

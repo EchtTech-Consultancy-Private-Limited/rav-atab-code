@@ -65,7 +65,7 @@ class SummaryController extends Controller
     public function desktopSubmitSummary(Request $request,$application_id,$application_course_id){
         $assessor_id = Auth::user()->id;
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
@@ -183,6 +183,7 @@ class SummaryController extends Controller
         return redirect('desktop/document-list'.'/'.$application_id.'/'.$application_course_id); 
 
     }
+       
     public function onSiteFinalSubmitSummaryReport(Request $request){
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $request->application_id,'application_course_id' => $request->application_course_id,'assessor_type'=>'onsite'])->first();
         if(!empty($check_report)){
@@ -264,6 +265,7 @@ class SummaryController extends Controller
        }
         return view('assessor-summary.on-site-submit-summary', compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way'));
     }
+
     public function desktopVerifiedDocuments(Request $request){
         /*---Written by suraj---*/
         // $request->validate([
@@ -402,6 +404,8 @@ class SummaryController extends Controller
         $applicationDetails = Application::find($request->input('application'));
         return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails'));
     }
+
+
     public function tpViewFinalSummary(Request $request){
         $application_id = $request->input('application');
         $application_course_id = $request->input('course');

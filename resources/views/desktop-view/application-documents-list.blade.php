@@ -214,7 +214,7 @@
                                     <input type="hidden" name="doc_unique_id" value="{{$question['question']->id}}">
                                   
                                    
-  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
+                                 @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] === $question['question']->id;
                                     }) as $doc)
@@ -331,9 +331,11 @@
                                         @endforeach
                                        </tbody>
                                     </table>
+                                    @if(!$is_final_submit && $is_doc_uploaded)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>
+                                    @endif
                                  </div>
                               </div>
                            </div>

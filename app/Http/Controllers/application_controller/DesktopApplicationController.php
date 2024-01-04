@@ -7,6 +7,7 @@ use Auth;
 use App\Models\TblApplication; 
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
+use App\Models\TblApplicationCourses; 
 use App\Models\DocumentRemark;
 use App\Models\DocComment;
 use App\Models\Application;
@@ -24,13 +25,15 @@ class DesktopApplicationController extends Controller
     }
     /** Application List For Account */
     public function getApplicationList(){
-        $assessor_id = Auth::user()->id;
-        $assessor_application = DB::table('tbl_assessor_assign')
-        ->where('assessor_id',$assessor_id)
-        ->pluck('application_id')->toArray();
+            $assessor_id = Auth::user()->id;
+            $assessor_application = DB::table('tbl_assessor_assign')
+            ->where('assessor_id',$assessor_id)
+            ->pluck('application_id')->toArray();
+
             $application = DB::table('tbl_application')
             ->whereIn('payment_status',[1,2,3])
             ->whereIn('id',$assessor_application)
+            ->orderBy('id','desc')
             ->get();
             foreach($application as $app){
                 $obj = new \stdClass;
@@ -81,8 +84,13 @@ class DesktopApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
-                // dd($final_data);
-        return view('desktop-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status]);
+                $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->first();
+                if(!empty($is_exists)){
+                    $is_final_submit = true;
+                }else{
+                    $is_final_submit = false;
+                }
+        return view('desktop-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
     public function applicationDocumentList($id, $course_id)
     {
@@ -97,8 +105,18 @@ class DesktopApplicationController extends Controller
         ])
         ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','status')
         ->get();
-        
 
+        $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
+        ->select("asr.application_id","asr.application_courses_id")
+        ->where('asr.assessor_type','desktop')
+        ->where(['application_id' => $application_id, 'application_courses_id' => $course_id])
+        ->groupBy('asr.application_id','asr.application_courses_id')
+        ->count();
+        /*end here*/
+        $is_doc_uploaded=false;
+        if($doc_uploaded_count>=4){
+            $is_doc_uploaded=true;
+        }
 
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -127,10 +145,16 @@ class DesktopApplicationController extends Controller
 
                 $final_data[] = $obj;
         }
-        // dd($final_data);
+        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id])->first();
+       if(!empty($is_exists)){
+        $is_final_submit = true;
+       }else{
+        $is_final_submit = false;
+       }
         $applicationData = TblApplication::find($application_id);
-        return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
+        return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded'));
     }
+
     public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
         try{
@@ -284,5 +308,80 @@ class DesktopApplicationController extends Controller
         DB::rollBack();
         return response()->json(['success' => false,'message' =>'Something went wrong'],200);
     }
+    }
+
+
+    public function getCourseSummariesList(Request $request){
+
+        $get_all_final_course_id = DB::table('assessor_final_summary_reports')->where('application_id',$request->input('application'))->get()->pluck('application_course_id')->toArray();
+
+        $courses = TblApplicationCourses::where('application_id', $request->input('application'))
+        ->whereIn("id",$get_all_final_course_id)
+        ->get();
+
+        $applicationDetails = TblApplication::find($request->input('application'));
+        return view('desktop-view.course-summary-list', compact('courses', 'applicationDetails'));
+    }
+
+
+    public function desktopViewFinalSummary(Request $request){
+        $assessor_id = Auth::user()->id;
+        $application_id = $request->input('application');
+        $application_course_id = $request->input('course');
+        $summeryReport = DB::table('assessor_summary_reports as asr')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname')
+        ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
+        ->where([
+            'asr.application_id' => $application_id,
+            'asr.application_course_id' => $application_course_id,
+            'app_course.application_id' => $application_id,
+            'app_course.id' => $application_course_id,
+            'asr.assessor_type' => 'desktop',
+        ])
+        ->first();
+        /*count the no of mandays*/
+        $no_of_mandays = DB::table('tbl_assessor_assign')->where(['assessor_id'=>$assessor_id,'application_id'=>$application_id])->count();
+   
+        $questions = DB::table('questions')->get();
+            
+
+        foreach($questions as $question){
+            $obj = new \stdClass;
+            $obj->title= $question->title;
+            $obj->code= $question->code;
+                    $value = TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $application_course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->where('assessor_type','desktop')
+                        ->get();
+                      
+                        $obj->nc = $value;
+                        $final_data[] = $obj;
+        }
+
+    // foreach($questions as $question){
+    //     $obj = new \stdClass;
+    //     $obj->title= $question->title;
+    //     $obj->code= $question->code;
+    //         $value = DB::table('assessor_summary_reports')->where([
+    //             'application_id' => $application_id,
+    //             'assessor_id' => $assessor_id,
+    //             'object_element_id' => $question->id,
+    //             'doc_sr_code' => $question->code,
+    //         ])->get();
+    //             $obj->nc = $value;
+    //             $final_data[] = $obj;
+    // }
+    // dd($final_data);
+    $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
+      
+        return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way'));
     }
 }
