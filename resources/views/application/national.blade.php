@@ -199,7 +199,7 @@
                                                             $totalAmount += $payment->amount;
                                                             $paymentNumbers[] = $loop->iteration;
                                                         @endphp
-                                                        @if ($loop->iteration === 1)
+                                                        @if ($loop->iteration == 1)
                                                             {{ $payment->currency }}
                                                         @endif
                                                     @endforeach
@@ -690,7 +690,7 @@
                 success: function(data) {
                     //alert(data)
 
-                    if (data === 'success') {
+                    if (data == 'success') {
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',

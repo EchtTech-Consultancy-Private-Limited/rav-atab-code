@@ -322,7 +322,7 @@
                                                                                         @php
                                                                                             $fileExtension = pathinfo($verifiedDocumentForAdmin->verified_document, PATHINFO_EXTENSION);
                                                                                         @endphp
-                                                                                        @if ($fileExtension === 'pdf')
+                                                                                        @if ($fileExtension == 'pdf')
                                                                                             <a
                                                                                                 href="{{ url('show-course-pdf/' . $verifiedDocumentForAdmin->verified_document) }}"
                                                                                                 class="docBtn bg-primary"
@@ -345,7 +345,7 @@
                                                                                             $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
                                                                                         @endphp
 
-                                                                                        @if ($fileExtension === 'pdf')
+                                                                                        @if ($fileExtension == 'pdf')
                                                                                             <a
                                                                                                 href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
                                                                                                 class="docBtn bg-secondary">View

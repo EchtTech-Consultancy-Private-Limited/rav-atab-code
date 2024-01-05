@@ -43,6 +43,7 @@ class TPApplicationController extends Controller
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])->count();
+                
                 if($payment){
                     $obj->payment = $payment;
                     $obj->payment->payment_count = $payment_count;

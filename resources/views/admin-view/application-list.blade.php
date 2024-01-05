@@ -110,9 +110,9 @@
                                                     {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->payment_status===0)
+                                                @if($item->application_list->payment_status==0)
                                                     <span class="badge badge-main warning">Payment Pending</span>
-                                                    @elseif($item->application_list->payment_status===1)
+                                                    @elseif($item->application_list->payment_status==1)
                                                     <span class="badge badge-main primary">Received</span>
                                                     @else
                                                     <span class="badge badge-main success">Accepted</span>
@@ -124,7 +124,7 @@
                                                                 class="material-icons">visibility</i></a>
 
                                                     @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id===null)
+                                                        @if($item->payment->aknowledgement_id==null)
                                                         <button id="acknowledgement_{{$item->application_list->id}}"
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif

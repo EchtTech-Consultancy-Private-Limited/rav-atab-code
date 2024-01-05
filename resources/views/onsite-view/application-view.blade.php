@@ -406,9 +406,8 @@
                     @endif
                 </div>
             </div>
-
             @if (isset($ApplicationPayment))
-                @if( $application_payment_status->status===0)
+                @if($application_payment_status->status==0)
                 <div class="card p-relative" id="payment_rcv_card">
                 <div class="box-overlay">
                      <span class="spinner-border"></span>
@@ -446,7 +445,7 @@
                 @endif
 
 
-                @if( $application_payment_status->status===1)
+                @if( $application_payment_status->status==1)
                 <div class="card" id="payment_apr_card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">

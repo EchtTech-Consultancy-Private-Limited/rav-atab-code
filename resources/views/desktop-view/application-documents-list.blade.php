@@ -216,43 +216,43 @@
                                    
                                  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
-                                        return $item['doc_unique_id'] === $question['question']->id;
+                                        return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
                                     
                                    
                                     
-                                    @if($doc->status===0)
+                                    @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('desktop-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
-                                        @elseif($doc->status===1)
+                                        @elseif($doc->status==1)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn m-1">
                                              Accepted</a>
-                                    @elseif($doc->status===2)
+                                    @elseif($doc->status==2)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('desktop-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn m-1">
                                         NC1</a>
-                                        @elseif($doc->status===3)
+                                        @elseif($doc->status==3)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              NC2</a>
-                                        @elseif($doc->status===4)
+                                        @elseif($doc->status==4)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                               Not Recommended</a>
                                              
-                                             @elseif($doc->status===6)
+                                             @elseif($doc->status==6)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -313,7 +313,7 @@
 
                                                    @isset($question['nc_comments'])
                                                       @foreach($question['nc_comments'] as $k=>$nc_comment)
-                                                      <tr class="text-{{$nc_comment->nc_type==='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+                                                      <tr class="text-{{$nc_comment->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
                                                          <td width="60">{{$k+1}}</td>
                                                          <td width="130">{{$nc_comment->doc_sr_code}}</td>
                                                          <td width="120">{{date('d-m-Y',strtotime($nc_comment->created_at))}}</td>
@@ -353,7 +353,7 @@
           const documentRow = button.closest('.document-row');
           const documentDetails = documentRow.nextElementSibling;
           if (documentDetails && (documentDetails.classList.contains('document-details'))) {
-              if (documentDetails.style.display === 'none' || documentDetails.style.display === '') {
+              if (documentDetails.style.display == 'none' || documentDetails.style.display == '') {
                   documentDetails.style.display = 'table-row';
                   button.textContent = 'Hide Comments';
               } else {
@@ -373,7 +373,7 @@
               var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
               var uploadedFileName = fileInput.val();
               var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
-              if (allowedExtensions.indexOf(fileExtension) === -1) {
+              if (allowedExtensions.indexOf(fileExtension) == -1) {
                   Swal.fire({
                       position: 'center',
                       icon: 'error',
