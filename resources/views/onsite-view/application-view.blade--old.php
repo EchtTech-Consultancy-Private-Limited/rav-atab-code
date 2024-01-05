@@ -50,12 +50,9 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    <div class="">
-                    @if($is_final_submit)
-                        <a href="{{ url('desktop-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
-                        </a>
-                    @endif
-                        <a href="{{ url('desktop/application-list') }}" class="float-right"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+
+                    <div class="float-right">
+                        <a href="{{ url('account/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>
@@ -287,24 +284,16 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <label for="Declaration">Course Details (Excel format)
-                                    </label></br>
+                                    </label>
                                     <span class="badge badge-success">
                                         <a href="{{url('doc').'/'.$ApplicationCourses->course_details_xsl}}"
                                             target="_blank" download title="Download Document">
-                                            <i class="fa fa-download mr-2"></i> &nbsp;Download
+                                            <i class="fa fa-download mr-2"></i>&nbsp; Download
                                             Document
                                         </a></span>
                                     </span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-12 d-flex justify-content-end">
-                       
-                                <a href="{{ url('/onsite/document-list' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
-                                    class="btn text-white bg-primary mb-0"
-                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
-                       
-                           
                         </div>
                     </div>
                 </div>
@@ -417,9 +406,8 @@
                     @endif
                 </div>
             </div>
-
             @if (isset($ApplicationPayment))
-                @if( $application_payment_status->status==0)
+                @if($application_payment_status->status==0)
                 <div class="card p-relative" id="payment_rcv_card">
                 <div class="box-overlay">
                      <span class="spinner-border"></span>

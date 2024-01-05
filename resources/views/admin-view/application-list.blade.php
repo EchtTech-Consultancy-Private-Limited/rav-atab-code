@@ -183,10 +183,10 @@
                <br>
                <label class="mb-3"><b>Assessment
                Type</b></label><br>
-               <p>Desktop Assessment</p>
+               <p>{{$item->assessor_type=="desktop"?'Desktop Assessment':'Onsite Assessment'}}</p>
               
                <div class="destop-id">
-               @foreach ($assessor_list as $k => $assesorsData)
+               @foreach ($item->assessor_list as $k => $assesorsData)
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
                   <br>
                   <label>

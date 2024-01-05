@@ -27,12 +27,13 @@ class AdminApplicationController extends Controller
         ->whereIn('a.payment_status',[1,2,3])
         ->orderBy('id','desc')
         ->get();
+
+        // $payment_count = DB::table("tbl_application_payment")->where('')
         
         $desktop_assessor_list = DB::table('users')->where(['assessment'=>1,'role'=>3])->orderBy('id', 'DESC')->get();
-        $desktop_assessor_pluck = DB::table('users')->where(['assessment'=>1,'role'=>3])->where(['assessment'=>2,'role'=>3])->orderBy('id', 'DESC')->pluck(
-            'id'
-        )->toArray();
+        
         $onsite_assessor_list = DB::table('users')->where(['assessment'=>2,'role'=>3])->orderBy('id', 'DESC')->get();
+       
         $secretariatdata = DB::table('users')->where('role', '5')->orderBy('id', 'DESC')->get();
         foreach($application as $app){
             $obj = new \stdClass;
@@ -45,7 +46,7 @@ class AdminApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                ])->latest('created_at')->first();
+                ])->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])->sum('amount');
@@ -55,15 +56,17 @@ class AdminApplicationController extends Controller
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
                 if($payment){
+                  $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
+                   $obj->assessor_type = $payment_count>1?"onsite":"desktop";
                     $obj->payment = $payment;
                     $obj->payment->payment_count = $payment_count;
-                    $obj->payment->payment_amount = $payment_amount ;
+                    $obj->payment->payment_amount = $payment_amount;
                 }
                 $final_data[] = $obj;
         }
         // dd($final_data);
         
-        return view('admin-view.application-list',['list'=>$final_data, 'assessor_list' => $desktop_assessor_list,'secretariatdata' => $secretariatdata,'assessor_pluck'=>$desktop_assessor_pluck]);
+        return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
     public function getApplicationView($id){
@@ -110,11 +113,12 @@ class AdminApplicationController extends Controller
     public function assignAssessor(Request $request){
         try{
             DB::beginTransaction();
+            $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
             $data = [];
             $data['application_id']=$request->application_id;
             $data['assessor_id']=$request->assessor_id;
             $data['course_id']=$request->course_id??null;
-            $data['assessor_type']=Auth::user()->assessment==1?'desktop':'onsite';
+            $data['assessor_type']=$get_assessor_type==1?'desktop':'onsite';
             $data['due_date']=Carbon::now()->addDay(365);
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_id'=>$request->assessor_id,'assessor_type'=>$request->assessor_type])->first();
             if($is_assign_assessor_date!=null){

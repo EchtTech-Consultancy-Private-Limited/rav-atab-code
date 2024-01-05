@@ -177,4 +177,18 @@ class TPApplicationController extends Controller
       return back()->with('fail','Something went wrong');
   }
   }
+
+    function secondPaymentView(Request $request)
+    {
+
+        
+        return view('tp-upload-documents.tp-show-document-details', [
+            'doc_latest_record' => $doc_latest_record,
+            'doc_id' => $doc_sr_code,
+            'doc_code' => $doc_unique_code,
+            'application_id' => $application_id,
+            'doc_path' => $doc_path,
+            'remarks' => $get_remarks
+        ]);
+    }
 }

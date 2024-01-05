@@ -377,7 +377,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/tp/application-view/{id}', [TPApplicationController::class, 'getApplicationView']);
     Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
     Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
-    Route::get('/onsite/application-view', [OnsiteApplicationController::class, 'getApplicationView']);
+    Route::get('/onsite/application-view/{id}', [OnsiteApplicationController::class, 'getApplicationView']);
 
     // Doc Routes
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
@@ -389,6 +389,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::get('/desktop/document-list/{id}/{course_id}', [DesktopApplicationController::class, 'applicationDocumentList']);
 
+    Route::get('/onsite/document-list/{id}/{course_id}', [OnsiteApplicationController::class, 'applicationDocumentList']);
+
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
 
     Route::get('/admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
@@ -398,15 +400,15 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
 
     Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
-   
-   
-
 
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
     Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
+
+    Route::get('/tp-second-payment', [TpApplicationController::class, 'secondPaymentView']);
+    Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
 
     
 

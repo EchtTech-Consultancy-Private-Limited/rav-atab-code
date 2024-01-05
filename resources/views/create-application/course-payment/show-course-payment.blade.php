@@ -456,8 +456,8 @@
                                         </div>
                                         <ul class="list-inline pull-right">
                                        
-                                            <li><a href="{{ url('create-new-course/' .  dEncrypt($applicationData->id)) }}"
-                                                    class="btn btn-danger prev-step1">Previous</a></li>
+                                            <!-- <li><a href="{{ url('create-new-course/' .  dEncrypt($applicationData->id)) }}"
+                                                    class="btn btn-danger prev-step1">Previous</a></li> -->
                                             <li><button id="submitBtn" type="submit"
                                                     class="btn btn-primary btn-info-full">Submit</button>
                                             </li>

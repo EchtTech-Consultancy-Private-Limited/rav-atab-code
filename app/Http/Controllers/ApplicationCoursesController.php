@@ -256,7 +256,7 @@ class ApplicationCoursesController extends Controller
 
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('payment_fail', 'Payment has already been submitted for this application.');
-            }
+        }
 
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
@@ -349,10 +349,13 @@ class ApplicationCoursesController extends Controller
 
             'payment.required' => 'Please select a payment mode.'
         ]);
+       try{
+        DB::beginTransaction();
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
         /*Implemented by suraj*/
           $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
+          
           if(!empty($get_final_summary)){
             DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
           }
@@ -388,6 +391,7 @@ class ApplicationCoursesController extends Controller
         }
         $item->save();
         
+        DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
        
         $userEmail = 'superadmin@yopmail.com';
         $paymentMail = [
@@ -416,6 +420,7 @@ class ApplicationCoursesController extends Controller
             $session_for_redirection = $request->form_step_type;
             Session::put('session_for_redirections', $session_for_redirection);
             $session_for_redirections = Session::get('session_for_redirections');
+            DB::commit();
             return  redirect('get-application-list')->with('success', 'Payment Done successfully');
 
         } elseif ($request->level_id == '2') {
@@ -426,7 +431,7 @@ class ApplicationCoursesController extends Controller
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
                 $ApplicationCourse->update(['payment_status' =>1]);
             }
-
+            DB::commit();
             return  redirect('/level-second')->with('success', 'Payment Done successfully');;
         } elseif ($request->level_id == '3') {
             foreach ($request->course_id as $item) {
@@ -436,11 +441,16 @@ class ApplicationCoursesController extends Controller
                 $ApplicationCourse->update();
             }
             $ApplicationCourse->save();
-
-            return  redirect('/level-third')->with('success', ' Payment Done successfully');;
+            DB::commit();
+            return  redirect('/level-third')->with('success', ' Payment Done successfully');
         } else {
-            return  redirect('/level-fourth')->with('success', 'Payment Done successfully');;
+            return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
         }
+       }
+       catch(Exception $e){
+        DB::rollback();
+        return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+       }
     }
 
 

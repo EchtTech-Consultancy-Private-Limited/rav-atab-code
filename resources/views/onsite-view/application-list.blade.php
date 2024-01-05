@@ -129,7 +129,7 @@
                                                     @endif
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/account/application-view', dEncrypt($item->application_list->id)) }}"
+                                                        <a href="{{ url('/onsite/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                     </td>
