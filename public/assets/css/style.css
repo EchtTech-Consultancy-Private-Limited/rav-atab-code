@@ -24858,3 +24858,6 @@ button.expand-button {
     padding: 5px 15px !important;
     white-space: nowrap;
 }
+.upload-btn-fn-size{
+font-size:12px !important;
+}

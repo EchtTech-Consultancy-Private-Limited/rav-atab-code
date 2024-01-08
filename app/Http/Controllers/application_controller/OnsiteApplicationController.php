@@ -8,6 +8,7 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
 use App\Models\TblApplicationCourses; 
+use Illuminate\Http\Request;
 use App\Models\DocumentRemark;
 use App\Models\DocComment;
 use App\Models\Application;
@@ -145,7 +146,8 @@ class OnsiteApplicationController extends Controller
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
                             'doc_unique_id' => $question->id,
-                            'doc_sr_code' => $question->code
+                            'doc_sr_code' => $question->code,
+                            'assessor_type'=>'onsite'
                         ])  
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
@@ -168,18 +170,18 @@ class OnsiteApplicationController extends Controller
       
         $applicationData = TblApplication::find($application_id);
 
-        $desktopData = $this->DesktopapplicationDocumentList($application_id, $course_id);
+        $desktopData = $this->onsiteApplicationDocumentList($application_id, $course_id);
 
         // dd($desktopData);
 
         return view('onsite-view.application-documents-list', compact('final_data','desktopData', 'course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded'));
     }
 
-    public function DesktopapplicationDocumentList($id, $course_id)
+    public function onsiteApplicationDocumentList($id, $course_id)
     {
         $tp_id = Auth::user()->id;
-        $application_id = $id ;
-        $course_id = $course_id ;
+        $application_id = $id;
+        $course_id = $course_id;
         $data = TblApplicationPayment::where('application_id',$application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
         $course_doc_uploaded = TblApplicationCourseDoc::where([
@@ -213,32 +215,38 @@ class OnsiteApplicationController extends Controller
                 foreach ($questions as $k => $question) {
                     $obj->questions[] = [
                         'question' => $question,
-                        'nc_comments' => TblNCComments::where([
-                            'application_id' => $application_id,
-                            'application_courses_id' => $course_id,
-                            'doc_unique_id' => $question->id,
-                            'doc_sr_code' => $question->code
-                        ])
-                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
-                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-                        ->where('assessor_type','desktop')
-                        ->get(),
+                        
                         'onsite_nc_comments' => TblNCComments::where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
-                            'assessor_type' => 'onsite'
+                            'assessor_type' => 'onsite',
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code,
                         ])
+                        ->where('nc_type',"!=",null)
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
+                        'onsite_photograph' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'assessor_type' => 'onsite',
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->latest('id')
+                        ->select('tbl_nc_comments.onsite_photograph')
+                        ->first(),
                     ];
                 }
 
                 $final_data[] = $obj;
 
         }
-        
+
+        // dd($final_data);
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id])->first();
+
        if(!empty($is_exists)){
         $is_final_submit = true;
        }else{
@@ -248,6 +256,230 @@ class OnsiteApplicationController extends Controller
         return $final_data;
         // return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded'));
     }
+
+
+    public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    {
+        try{
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->latest('id')
+            ->get();
+
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
+        
+            $is_nc_exists=false;
+            if($nc_type==="view"){
+                $is_nc_exists=true;
+            }
+
+           
+        if(isset($tbl_nc_comments->nc_type)){
+           
+            if($tbl_nc_comments->nc_type==="NC1"){
+                $dropdown_arr = array(
+                            "NC2"=>"NC2",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="NC2"){
+                $dropdown_arr = array(
+                            "not_recommended"=>"Not Recommended",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="not_recommended"){
+                $dropdown_arr = array(
+                            "Reject"=>"Reject",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="Request_For_Final_Approval"){
+                $dropdown_arr = array(
+                    "Reject"=>"Reject",
+                    "Accept"=>"Accept",
+                );
+             }
+        }else{
+            $dropdown_arr = array(
+                "NC1"=>"NC1",
+                "Accept"=>"Accept",
+            );
+        }
+
+        $doc_latest_record = TblApplicationCourseDoc::latest('id')
+        ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])
+        ->first();
+        // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+        $doc_path = URL::to("/level").'/'.$doc_name;
+         
+        return view('onsite-view.document-verify', [
+            // 'doc_latest_record' => $doc_latest_record,
+            'doc_id' => $doc_sr_code,
+            'doc_code' => $doc_unique_code,
+            'application_id' => $application_id,
+            'doc_path' => $doc_path,
+            'dropdown_arr'=>$dropdown_arr??[],
+            'is_nc_exists'=>$is_nc_exists,
+            'nc_comments'=>$nc_comments,
+        ]);
+    }catch(Exception $e){
+        return back()->with('fail','Something went wrong');
+    }
+    }
+
+     // submit nc's
+     public function onsiteDocumentVerify(Request $request)
+     {
+         try{
+           
+         $redirect_to=URL::to("/onsite/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
+        
+         DB::beginTransaction();
+         $assessor_id = Auth::user()->id;
+         $assessor_type = Auth::user()->assessment==1?"desktop":"onsite";
+
+         $data = [];
+
+         if ($request->hasfile('fileup')) {
+            $file = $request->file('fileup');
+            $name = $file->getClientOriginalName();
+            $filename = time() . $name;
+            $file->move('level/', $filename);
+            $data['doc_file_name'] = $filename;
+        }
+
+         /*end here*/
+         $data['application_id'] = $request->application_id;
+         $data['doc_sr_code'] = $request->doc_sr_code;
+         $data['doc_unique_id'] = $request->doc_unique_id;
+         $data['application_courses_id'] = $request->application_courses_id;
+         $data['assessor_type'] = $assessor_type;
+         $data['assessor_id'] = $assessor_id;
+         $data['comments'] = $request->comments;
+         $data['nc_type'] = $request->nc_type;
+        //  $data['status'] = 1;
+
+
+       
+         $nc_comment_status="";
+         $nc_raise="";
+         if($request->nc_type==="Accept"){
+             $nc_comment_status=1;
+             $nc_flag=0;
+             $nc_raise="Accept";
+         }else if($request->nc_type=="NC1"){
+             $nc_comment_status=2;
+             $nc_flag=1;
+             $nc_raise = "NC1";
+         }else if($request->nc_type=="NC2"){
+             $nc_comment_status=3;
+             $nc_flag=1; 
+             $nc_raise = "NC2";
+         }
+         else if($request->nc_type=="Reject"){
+             $nc_comment_status=6;
+             $nc_flag=0; 
+             $nc_raise = "Reject";
+         }
+         else{
+             $nc_comment_status=4; //not recommended
+             $nc_flag=0;
+             $nc_raise="Request for final approval";
+         }
+
+         $get_last_nc = TblNCComments::where(['application_id'=>$request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->select('id')->latest('id')->first();
+
+         if($get_last_nc){
+            TblNCComments::where(['application_id'=>$request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->update($data);
+         }else{
+             $create_nc_comments = TblNCComments::insert($data);
+         }
+        
+        $last_course_doc=  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->latest('id')->first();
+        
+        TblApplicationCourseDoc::where('id',$last_course_doc->id)->update(['onsite_status'=>$nc_comment_status,'onsite_nc_status'=>$nc_flag]);
+
+         /*Create record for summary report*/
+         $data=[];
+         $data['application_id'] = $request->application_id;
+         $data['object_element_id'] = $request->doc_unique_id;
+         $data['application_course_id'] = $request->application_courses_id;
+         $data['doc_sr_code'] = $request->doc_sr_code;
+         $data['doc_unique_id'] = $request->doc_unique_id;
+         
+         $data['date_of_assessement'] = $request->date_of_assessement??'N/A';
+         $data['assessor_id'] = Auth::user()->id;
+         $data['assessor_type'] = $assessor_type;
+         $data['nc_raise'] = $nc_raise??'N/A';
+         $data['nc_raise_code'] = $nc_raise??'N/A';
+         $data['doc_path'] = $request->doc_file_name;
+         $data['capa_mark'] = $request->capa_mark??'N/A';
+         $data['doc_against_nc'] = $request->doc_against_nc??'N/A';
+         $data['doc_verify_remark'] = $request->remark??'N/A';
+         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
+         /*end here*/
+        
+ 
+         if($create_nc_comments){
+             DB::commit();
+             return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);
+         }else{
+             return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
+         }
+     }catch(Exception $e){
+         DB::rollBack();
+         return response()->json(['success' => false,'message' =>'Something went wrong'],200);
+     }
+     }
    
+
+     public function onsiteUploadPhotograph(Request $request){
+
+        try{
+            DB::beginTransaction();
+            $assessor_id  = Auth::user()->id;
+            $application_id = $request->application_id;
+            $application_courses_id = $request->application_courses_id;
+            $doc_sr_code = $request->doc_sr_code;
+            $doc_unique_id = $request->doc_unique_id;
+            $doc_file_name = "";
+            if ($request->hasfile('fileup_photograph')) {
+                $file = $request->file('fileup_photograph');
+                $name = $file->getClientOriginalName();
+                $filename = time() . $name;
+                $file->move('level/', $filename);
+                $doc_file_name = $filename;
+            }
+            $get_last_nc = TblNCComments::where(['application_id'=>$application_id,'application_courses_id'=>$application_courses_id,'doc_sr_code'=>$doc_sr_code,'doc_unique_id'=>$doc_unique_id,'assessor_type'=>'onsite'])->select('id')->latest('id')->first();
+
+            $is_submitted = false;
+            if($get_last_nc){
+                TblNCComments::where('id',$get_last_nc->id)->update(['onsite_photograph'=>$doc_file_name]);
+                $is_submitted=true;
+            }else{
+                $photograph_data=[];
+                $photograph_data['application_id'] = $application_id;
+                $photograph_data['doc_sr_code'] = $doc_sr_code;
+                $photograph_data['doc_unique_id'] = $doc_unique_id;
+                $photograph_data['application_courses_id'] = $application_courses_id;
+                $photograph_data['assessor_type'] = 'onsite';
+                $photograph_data['assessor_id'] = $assessor_id;
+                $photograph_data['onsite_photograph'] = $doc_file_name;
+                TblNCComments::insert($photograph_data);
+                $is_submitted=true;
+            }
+
+            if($is_submitted){
+                DB::commit();
+                return response()->json(['success' => true,'message' =>'Photograph uploaded successfully'],200);
+            }else{
+                DB::rollBack();
+                return response()->json(['success' => false,'message' =>'Failed to upload photograph'],200);
+            }
+        }catch(Exception $e){
+            DB::rollBack();
+            return response()->json(['success' => false,'message' =>'Something went wrong'],200);
+        }
+
+     }
 }
 

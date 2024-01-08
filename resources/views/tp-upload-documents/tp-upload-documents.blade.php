@@ -178,6 +178,7 @@
                                              <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                              <th class="center"> Cross reference to supporting evidence provided
                                              </th>
+                                             
                                              <th>Action</th>
                                           </tr>
                                        </thead>
@@ -303,6 +304,20 @@
                                     @endif 
                                     @endforeach
 
+
+                                    <!-- Onsite nc's list -->
+                                    @if(count($question['onsite_nc_comments'])>0)
+                                                @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
+                                                <a target="_blank"
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('tp-document-detail' . '/' . $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+                                        class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn docBtn_nc m-1">
+                                        {{$onsite_nc_comment->nc_type}} <span>{{ucfirst($onsite_nc_comment->assessor_type)}} Assessor</span></a>
+                                       @endforeach
+                                    @endif
+
+                                    <!-- Onsite nc's list end here -->
+
                                  <!--this else for first time upload doc  -->
                                     @else
                                     <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
@@ -319,14 +334,18 @@
                                               
                                                 {{-- getting documents for each row end point --}}
                                              </td>
+
+
+                                        
+
+
+
                                              <td>
                                  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                  
                                     @else
-                                  
                                                 <span class="text-danger"
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment
                                                 pending!</span>

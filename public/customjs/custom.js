@@ -295,6 +295,166 @@ function adminDocumentVerfiy() {
         });
     }
 }
+
+function onsiteDocumentVerfiy() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+        let urlObject = new URL(window.location.href);
+        let urlPath = urlObject.pathname.split('/');
+        
+        let doc_sr_code=urlPath[3];
+        let doc_file_name = urlPath[4];
+        let application_id=urlPath[5];
+        let doc_unique_id=urlPath[6];
+        let application_courses_id=urlPath[7];
+        let doc_comment = $("#comment_text").val();
+        let nc_type = $('#status').find(":selected").val();
+        
+        var d = $(`#fileup_${doc_unique_id}`)[0].files[0]
+        var fileInput = $(`#fileup_${doc_unique_id}`);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('application_courses_id',application_courses_id);
+        formData.append('doc_sr_code',doc_sr_code);
+        formData.append('doc_unique_id',doc_unique_id);
+        formData.append('nc_type',nc_type);
+        formData.append('comments',doc_comment);
+        formData.append('doc_file_name',doc_file_name);
+        formData.append('fileup',d);
+
+        var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+        var uploadedFileName = fileInput.val();
+        var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+            toastr.error("Invalid file type", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 1,
+            });
+            // Clear the file input
+            fileInput.val('');
+            return;
+        }
+
+        $.ajax({
+            url: "/onsite/document-verfiy",
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 1,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 1,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=resdata.redirect_to
+                    },1000);
+                    
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 0,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
+function onsitePhotographUpload(question_id) {
+
+    let is_acknowledged = confirm("Are you sure you want to upload photograph");
+    if (is_acknowledged) {
+        var d = $(`#fileup_photograph_${question_id}`)[0].files[0]
+        var fileInput = $(`#fileup_photograph_${question_id}`);
+
+
+        let doc_sr_code=$(`#doc_sr_code_${question_id}`).val();
+        let application_id=$(`#application_id`).val();
+        let doc_unique_id=$(`#doc_unique_id_${question_id}`).val();
+        let application_courses_id=$(`#application_courses_id`).val();
+        let doc_file_name=d.name;
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('application_courses_id',application_courses_id);
+        formData.append('doc_sr_code',doc_sr_code);
+        formData.append('doc_unique_id',doc_unique_id);
+        formData.append('doc_file_name',doc_file_name);
+        formData.append('fileup_photograph',d);
+        
+        var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+        var uploadedFileName = fileInput.val();
+        var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+            toastr.error("Invalid file type", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 1,
+            });
+            // Clear the file input
+            fileInput.val('');
+            return;
+        }
+      
+        $.ajax({
+            url: "/onsite/upload-photograph",
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 1,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 1,
+                    });
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 0,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
 const assessor_dates = [];
 $(".dateID").click("on", function () {
     var $this = $(this);
@@ -361,6 +521,62 @@ $(".assesorsid").on("click", function () {
         },
     });
 });
+
+
+/*Upload file from onsite assessor for nc's*/
+$('#upload_onstie_nc_file').change(function() {
+    var fileInput = $(this);
+    var questionId = fileInput.data('question-id');
+    var form = $('#submitform_doc_form_' + questionId)[0];
+    var formData = new FormData(form);
+    var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+    var uploadedFileName = fileInput.val();
+    var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+    if (allowedExtensions.indexOf(fileExtension) == -1) {
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Invalid File Type',
+            text: 'Please upload a PDF or DOC file.',
+            showConfirmButton: true
+        });
+        // Clear the file input
+        fileInput.val('');
+        return;
+    }
+    $("#loader").removeClass('d-none');
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+   
+    $.ajax({
+        url: "/tp-add-document", // Your server-side upload endpoint
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $("#loader").addClass('d-none');
+            if (response.success) {
+              toastr.success(response.message, {
+                  timeOut: 0,
+                  extendedTimeOut: 0,
+                  closeButton: true,
+                  closeDuration: 0,
+              });
+                location.reload();
+            }
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
+            console.error(error);
+        }
+    });
+});
+
+/*nc's end here*/
 
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");

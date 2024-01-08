@@ -221,9 +221,7 @@
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
-                                    
-                                   
-                                    
+
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
@@ -287,30 +285,62 @@
                                              </td>
 
                                              <!-- Onsite Document NC's -->
-                                            
                                              <td>
-                                          @if(count($question['onsite_nc_comments'])>0)
+                                          @if(count($question['onsite_nc_comments'])>0  &&  $question['onsite_nc_comments'][0]->nc_type!=null)
+                                          @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
 
+                                          <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('desktop-'.strtolower($onsite_nc_comment->nc_type).'/verify-doc' . '/' . $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn m-1">
+                                             {{$onsite_nc_comment->nc_type}}</a>
+                                          @endforeach
+                                             
                                           @else
                                           <div style="padding: 8px;">
                                              <div class="d-flex justify-content-center"></div>
                                              <div class="d-flex justify-content-center">
                                                 <div>
-                                                   <a target="_blank" href="#" class="btn btn-primary btn-sm">Upload
+                                                   <a target="_blank" href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}" class="btn btn-primary btn-sm">Upload
                                                    Document</a>&nbsp;
                                                 </div>
                                                 &nbsp;
-                                                <div>
-                                                   <a target="_blank" href="#" class="btn btn-info btn-sm">Upload
-                                                   Photograph</a>
-                                                </div>
-                                             </div
                                           @endif
-                                             </td>
 
+
+                                          <!-- Photograph -->
+                          
+                                     @if($question['onsite_photograph']?->onsite_photograph!=null)
+                                           <div>
+                                                  <div class="upload-btn-wrapper">
+                                                     <button class="upld-btn upload-btn-fn-size"><i class="fas fa-cloud-upload-alt"></i> View Photograph</button>
+                                            </div>
+                                               </div>
+                                            </div>
+                                      
+                                            @else
+
+                                            <div>
+                                                  <input type="hidden" id="doc_sr_code_{{$question['question']->id}}" value="{{$question['question']->code}}">
+                                                  
+                                                  <input type="hidden" id="application_id" value="{{$application_id}}">
+                                                  <input type="hidden" id="doc_unique_id_{{$question['question']->id}}" value="{{$question['question']->id}}">
+                                                  <input type="hidden" id="application_courses_id" value="{{$course_id}}">
+                                                  
+                                                  <div class="upload-btn-wrapper">
+                                                     <button class="upld-btn upload-btn-fn-size"><i class="fas fa-cloud-upload-alt"></i> Upload Photograph</button>
+
+                                                  <input type="file" class="from-control fileup_photograph" name="fileup_photograph" id="fileup_photograph_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" onchange="onsitePhotographUpload({{$question['question']->id}})"/>
+                                            </div>
+                                               </div>
+                                            </div>
+                                  @endif
+
+                                          </td>
                                              <!-- end here onsite doc nc -->
+
                                              <td>
-                                             @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
+                                            @if(count($question['onsite_nc_comments'])>0)
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
@@ -323,7 +353,7 @@
                                      @endif
                                           </tr>
                                           <tr class="document-details" style="display: none">
-                                             <td colspan="4">
+                                             <td colspan="5">
                                                 <table>
                                                    <thead>
                                                       <tr>
@@ -337,8 +367,10 @@
                                                    </thead>
                                                    <tbody>
 
-                                                   @isset($question['nc_comments'])
-                                                      @foreach($question['nc_comments'] as $k=>$nc_comment)
+                                                 
+                                                   @isset($question['onsite_nc_comments'])
+                                                      @foreach($question['onsite_nc_comments'] as $k=>$nc_comment)
+                                                     
                                                       <tr class="text-{{$nc_comment->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
                                                          <td width="60">{{$k+1}}</td>
                                                          <td width="130">{{$nc_comment->doc_sr_code}}</td>

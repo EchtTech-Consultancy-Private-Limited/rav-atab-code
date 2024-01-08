@@ -99,6 +99,13 @@
                                                                     <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
                                                                     <small id="char-count-info">0/100 characters</small>
                                                                 </div>
+
+                                            <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" />
+                                             </div>
+
+                                             
                                                                     <!-- <div class="col-sm-12">
                                                                         <div>
                                                                             <div class="bg-warning p-2">
@@ -131,7 +138,7 @@
 
                                                     <div class="card-footer">
                                                         <button id="submitBtn" type="button" value="Submit"
-                                                            class="btn btn-primary" onclick="desktopDocumentVerfiy()">Submit</button>
+                                                            class="btn btn-primary" onclick="onsiteDocumentVerfiy()">Submit</button>
                                                     </div>
 
                                 </div>
@@ -236,11 +243,8 @@
                     {{ session::get('fail') }}
                 </div>
             @endif
-
-
-
         </div>
-
+<!-- 
         <div class="container">
             <div class="card project-widget">
                 <div class="card-body">
@@ -250,7 +254,7 @@
                         </object>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
 
