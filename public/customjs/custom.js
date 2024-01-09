@@ -298,6 +298,8 @@ function adminDocumentVerfiy() {
 
 function onsiteDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
+   
+   
     if (is_acknowledged) {
         let urlObject = new URL(window.location.href);
         let urlPath = urlObject.pathname.split('/');
@@ -378,7 +380,8 @@ function onsiteDocumentVerfiy() {
 }
 
 function onsitePhotographUpload(question_id) {
-
+    $('.full_screen_loading').show();
+    
     let is_acknowledged = confirm("Are you sure you want to upload photograph");
     if (is_acknowledged) {
         var d = $(`#fileup_photograph_${question_id}`)[0].files[0]
@@ -417,6 +420,7 @@ function onsitePhotographUpload(question_id) {
             });
             // Clear the file input
             fileInput.val('');
+            $('.full_screen_loading').hide();
             return;
         }
       
@@ -435,6 +439,7 @@ function onsitePhotographUpload(question_id) {
                         closeButton: true,
                         closeDuration: 1,
                     });
+                    $('.full_screen_loading').hide();
                     setTimeout(()=>{
                         window.location.reload();
                     },1000);
@@ -446,10 +451,18 @@ function onsitePhotographUpload(question_id) {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
                 }
             },
             error: (xhr, st) => {
+                $('.full_screen_loading').hide();
                 console.log(xhr, "st");
+                toastr.error("Something went wrong!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 0,
+                });
             },
         });
     }
@@ -578,7 +591,24 @@ $('#upload_onstie_nc_file').change(function() {
 
 /*nc's end here*/
 
+function handlePdfOrImageForPhotograph(path){
+    const BASE_URL = window.location.origin+'/level/';
+    console.log(BASE_URL,' BASE URL')
+    const fileExtension = path.split('.').pop().toLowerCase();
+    $("#view_photograph_onsite").html("");
+    if(fileExtension==="pdf"){
+        const html = '<object data="' + BASE_URL+path + '" type="application/pdf" width="100%" height="700px"></object>';
+        $("#view_photograph_onsite").html(html);
+    }else{
+        const html = '<img src="'+BASE_URL+path+'" alt="Photograph" title="Photograph" class="img img-responsive"/>';
+        $("#view_photograph_onsite").html(html);
+    }
+}
+
+
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");
     $(`#${err_id}_err`).html("");
 });
+
+document.getElementById("summary_date").value = new Date().toLocaleDateString(); 

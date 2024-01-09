@@ -282,6 +282,19 @@
                                     @endif 
                                     @endforeach
 
+                                     <!-- Onsite nc's list -->
+                                     @if(count($question['onsite_nc_comments'])>0)
+                                                @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
+                                                <a target="_blank"
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('tp-document-detail' . '/' . $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+                                        class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn docBtn_nc m-1">
+                                        {{$onsite_nc_comment->nc_type}} <span>{{ucfirst($onsite_nc_comment->assessor_type)}} Assessor</span></a>
+                                       @endforeach
+                                    @endif
+
+                                    <!-- Onsite nc's list end here -->
+
                                  <!--this else for first time upload doc  -->
                                     @else
                                        N/A
@@ -334,7 +347,15 @@
                                                          <td width="130">{{$nc_comment->doc_sr_code}}</td>
                                                          <td width="120">{{date('d-m-Y',strtotime($nc_comment->created_at))}}</td>
                                                          <td>{{$nc_comment->comments}}</td>
-                                                         <td>{{$nc_comment->nc_type}}</td>
+                                                         <td>
+                                                         @php
+                                                            $string = $nc_comment->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
+                                                         </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
                                                       </tr>
                                                      @endforeach

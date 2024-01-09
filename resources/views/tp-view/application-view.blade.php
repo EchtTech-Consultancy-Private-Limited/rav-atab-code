@@ -387,7 +387,7 @@
                                 @if ($data == 'pdf')
                                 <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
                                     title="Document 3" id="docpdf3" download>
-                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                    <i class="fa fa-download mr-2"></i>Payment pdf 
                                 </a>
                                 @else
                                 @if (isset($ApplicationPayment->payment_proof_by_account))

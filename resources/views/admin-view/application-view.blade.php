@@ -372,10 +372,11 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($ApplicationPayment->status == 0)
+                                
+                            @if ($ApplicationPayment->status == 0)
                                 N/A
                                 @endif
-                                @if ($ApplicationPayment->status == 1)
+                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
                                 @if (!$ApplicationPayment->payment_proof_by_account)
                                 File not available!
                                 @endif
@@ -386,7 +387,7 @@
                                 @if ($data == 'pdf')
                                 <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
                                     title="Document 3" id="docpdf3" download>
-                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                    <i class="fa fa-download mr-2"></i>Payment pdf 
                                 </a>
                                 @else
                                 @if (isset($ApplicationPayment->payment_proof_by_account))

@@ -98,6 +98,8 @@
          <h5 class="uploading-text"> Uploading... </h5>
       </div>
    </div>
+   <div class="full_screen_loading">Loading&#8230;</div>
+
    <!-- Overlay For Sidebars -->
    <div class="overlay"></div>
    <!-- #END# Overlay For Sidebars -->
@@ -290,7 +292,7 @@
                                           @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
 
                                           <a target="_blank"
-                                             title="{{$doc->doc_file_name}}"
+                                             title="{{$onsite_nc_comment->doc_file_name}}"
                                              href="{{ url('desktop-'.strtolower($onsite_nc_comment->nc_type).'/verify-doc' . '/' . $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn m-1">
                                              {{$onsite_nc_comment->nc_type}}</a>
@@ -313,7 +315,7 @@
                                      @if($question['onsite_photograph']?->onsite_photograph!=null)
                                            <div>
                                                   <div class="upload-btn-wrapper">
-                                                     <button class="upld-btn upload-btn-fn-size"><i class="fas fa-cloud-upload-alt"></i> View Photograph</button>
+                                                     <button class="upld-btn upload-btn-fn-size" data-bs-toggle="modal" data-bs-target="#view_photograph_modal" data-bs-whatever="@mdo" onclick="handlePdfOrImageForPhotograph('{{$question['onsite_photograph']->onsite_photograph}}')"><i class="fas fa-cloud-upload-alt"></i> View Photograph</button>
                                             </div>
                                                </div>
                                             </div>
@@ -376,7 +378,15 @@
                                                          <td width="130">{{$nc_comment->doc_sr_code}}</td>
                                                          <td width="120">{{date('d-m-Y',strtotime($nc_comment->created_at))}}</td>
                                                          <td>{{$nc_comment->comments}}</td>
-                                                         <td>{{$nc_comment->nc_type}}</td>
+                                                         <td>
+                                                         @php
+                                                            $string = $nc_comment->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
+                                                         </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
                                                       </tr>
                                                      @endforeach
@@ -391,7 +401,7 @@
                                     </table>
                                     @if(!$is_final_submit && $is_doc_uploaded)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
-                                       <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
+                                       <a href="{{url('onsite/summary/submit').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>
                                     @endif
                                  </div>
@@ -405,6 +415,27 @@
          </div>
       </div>
       </div>
+
+<!-- Modal -->
+<div class="modal fade" id="view_photograph_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">View Photograph</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         
+         <div id="view_photograph_onsite">
+            <object data="http://127.0.0.1:8000/level/170418181317035556641703203498Get_Started_With_Smallpdf.pdf" type="application/pdf" width="100%" height="700px"></object>                   
+         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal -->
+
+
    </section>
    <script>
       function toggleDocumentDetails(button) {

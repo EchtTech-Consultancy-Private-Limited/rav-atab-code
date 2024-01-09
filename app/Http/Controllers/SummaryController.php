@@ -117,40 +117,42 @@ class SummaryController extends Controller
 
 
 
-    public function onSiteIndex(Request $request){
+    public function onSiteIndex(Request $request,$application_id,$application_course_id){
         $assessor_id = Auth::user()->id;
         $assessor_name = Auth::user()->firstname.' '.Auth::user()->middlename.' '.Auth::user()->lastname;
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','ass_impr_form.assessee_org as onsite_assessee_org')
-        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
-        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','ass_impr_form.assessee_org as onsite_assessee_org')
+        ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
         ->leftJoin('assessor_improvement_form as ass_impr_form', 'ass_impr_form.assessor_id', '=', 'asr.assessor_id')
         ->leftJoin('assessor_final_summary_reports as final_summary_repo', 'final_summary_repo.assessor_id', '=', 'asr.assessor_id')
         ->where([
-            'asr.application_id' => $request->application,
+            'asr.application_id' => dDecrypt($application_id),
             'asr.assessor_id' => $assessor_id,
-            'asr.application_course_id' => $request->course,
-            'app_course.application_id' => $request->application,
-            'app_course.id' => $request->course,
+            'asr.application_course_id' => dDecrypt($application_course_id),
+            'app_course.application_id' => dDecrypt($application_id),
+            'app_course.id' => dDecrypt($application_course_id),
             'asr.assessor_type' => 'onsite',
             'ass_impr_form.assessor_id'=>$assessor_id,
-            'ass_impr_form.application_id'=>$request->application,
-            'ass_impr_form.application_course_id'=>$request->course,
+            'ass_impr_form.application_id'=>dDecrypt($application_id),
+            'ass_impr_form.application_course_id'=>dDecrypt($application_course_id),
             'final_summary_repo.assessor_id'=>$assessor_id,
-            'final_summary_repo.application_id'=>$request->application,
-            'final_summary_repo.application_course_id'=>$request->course,
+            'final_summary_repo.application_id'=>dDecrypt($application_id),
+            'final_summary_repo.application_course_id'=>dDecrypt($application_course_id),
         ])
         ->first();
+        // dd($summertReport);
         /*count the no of mandays*/
-    $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$request->application])->count();
+    $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>dDecrypt($application_id)])->count();
+
     $questions = DB::table('questions')->get();
     foreach($questions as $question){
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
             $value = DB::table('assessor_summary_reports')->where([
-                'application_id' => $request->application,
+                'application_id' => dDecrypt($application_id),
                 'assessor_id' => $assessor_id,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
@@ -159,7 +161,7 @@ class SummaryController extends Controller
                 $final_data[] = $obj;
     }
        $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way;
-       $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->application,'application_course_id'=>$request->course])->first();
+       $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id)])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
        }else{
@@ -185,63 +187,77 @@ class SummaryController extends Controller
     }
        
     public function onSiteFinalSubmitSummaryReport(Request $request){
-        $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $request->application_id,'application_course_id' => $request->application_course_id,'assessor_type'=>'onsite'])->first();
-        if(!empty($check_report)){
-            return back()->with('fail', 'This application record already submitted');
+        try{
+            // dd($request->all());
+            DB::beginTransaction();
+            $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($request->application_id),'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
+            if(!empty($check_report)){
+                return back()->with('fail', 'This application record already submitted');
+            }
+            $assessor_id = Auth::user()->id;
+            $data = [];
+            $data['application_id']=dDecrypt($request->application_id);
+            $data['assessor_id']=$assessor_id;
+            $data['application_course_id']=dDecrypt($request->application_course_id);
+            $data['assessor_type']='onsite';
+            $data['brief_open_meeting']=$request->brief_open_meeting??'N/A';
+            $data['brief_summary']=$request->brief_summary??'N/A';
+            $data['brief_closing_meeting']=$request->brief_closing_meeting??'N/A';
+            $data['assessee_org']=$request->assessee_org??'N/A';
+            $data['summary_date']=$request->summary_date??'N/A';
+            $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
+            $dataImprovement= [];
+            $dataImprovement['assessor_id']=$assessor_id;
+            $dataImprovement['application_id']=dDecrypt($request->application_id);
+            $dataImprovement['application_course_id']=dDecrypt($request->application_course_id);
+            $dataImprovement['sr_no']=$request->sr_no??'N/A';
+            $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
+            $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
+            $dataImprovement['signatures']=$request->signatures??'N/A';
+            $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
+            $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
+            $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
+        
+            DB::commit();
+            return redirect('onsite/application-view'.'/'.$request->application_id); 
         }
-        $assessor_id = Auth::user()->id;
-        $data = [];
-        $data['application_id']=$request->application_id;
-        $data['assessor_id']=$assessor_id;
-        $data['application_course_id']=$request->application_course_id;
-        $data['assessor_type']='onsite';
-        $data['brief_open_meeting']=$request->brief_open_meeting??'N/A';
-        $data['brief_summary']=$request->brief_summary??'N/A';
-        $data['brief_closing_meeting']=$request->brief_closing_meeting??'N/A';
-        $data['assessee_org']=$request->assessee_org??'N/A';
-        $data['summary_date']=$request->summary_date??'N/A';
-        $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
-        $dataImprovement= [];
-        $dataImprovement['assessor_id']=$assessor_id;
-        $dataImprovement['application_id']=$request->application_id;
-        $dataImprovement['application_course_id']=$request->application_course_id;
-        $dataImprovement['sr_no']=$request->sr_no??'N/A';
-        $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
-        $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
-        $dataImprovement['signatures']=$request->signatures??'N/A';
-        $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
-        $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
-        $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
-        // return redirect(url('opportunity-form/report?application=' . $request->application_id . '&course=' . $request->application_course_id))->with('success', "Data saved successfully");
-        return redirect(url('accr-view-document/' . $request->application_id . '/' . $request->application_course_id))->with('success', "Data saved successfully");
+        catch(Exception $e){
+            DB::rollback();
+            return redirect('onsite/application-view'.'/'.$request->application_id); 
+
+        }
+
+        // return redirect(url('accr-view-document/' . $request->application_id . '/' . $request->application_course_id))->with('success', "Data saved successfully");
     }
+
+    // view summary report
     public function onSiteSubmitSummary(Request $request,$application_id,$application_course_id){
         $assessor_id = Auth::user()->id;
         $assessor_name = Auth::user()->firstname.' '.Auth::user()->middlename.' '.Auth::user()->lastname;
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
-        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
-        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
+        ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
         ->where([
-            'asr.application_id' => $application_id,
+            'asr.application_id' => dDecrypt($application_id),
             'asr.assessor_id' => $assessor_id,
-            'asr.application_course_id' =>$application_course_id,
-            'app_course.application_id' => $application_id,
-            'app_course.id' =>$application_course_id,
+            'asr.application_course_id' =>dDecrypt($application_course_id),
+            'app_course.application_id' => dDecrypt($application_id),
+            'app_course.id' =>dDecrypt($application_course_id),
             'asr.assessor_type'=>'onsite',
         ])
         ->first();
         /*count the no of mandays*/
-        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=> $assessor_id,'application_id'=> $application_id])->count();
+        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=> $assessor_id,'application_id'=> dDecrypt($application_id)])->count();
     $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
     ->select('asr.application_id','asr.assessor_id','asr.object_element_id')
     ->where('asr.assessor_type','onsite')
-    ->where(['application_id' => $application_id, 'assessor_id' => $assessor_id])
-    ->whereIn('nc_raise_code', ['1', '2'])
+    ->where(['application_id' => dDecrypt($application_id), 'assessor_id' => $assessor_id])
+    ->whereIn('nc_raise_code', ['NC1', 'NC2'])
     ->groupBy('asr.application_id','asr.assessor_id','asr.object_element_id')
     ->get()->pluck('object_element_id');
-    $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$application_id])->first()->assessment_way;
+    $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>dDecrypt($application_id)])->first()->assessment_way;
     $questions = DB::table('questions')->whereIn('id',$assesor_distinct_report)->get();
     $final_data=[];
     foreach($questions as $question){
@@ -249,7 +265,7 @@ class SummaryController extends Controller
         $obj->title= $question->title;
         $obj->code= $question->code;
             $value = DB::table('assessor_summary_reports')->where([
-                'application_id' => $application_id,
+                'application_id' => dDecrypt($application_id),
                 'assessor_id' => $assessor_id,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
@@ -257,7 +273,8 @@ class SummaryController extends Controller
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
-       $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$request->application_course_id])->first();
+        // dd($final_data);
+       $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>$request->application_course_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
        }else{

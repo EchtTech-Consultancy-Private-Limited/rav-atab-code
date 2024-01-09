@@ -195,13 +195,13 @@
                                             <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$summertReport->application_uid}}</span>
+                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$summertReport->id}}</span>
                                             </td>
                                             <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->Person_Name}}</span>
+                                            <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->person_name}}</span>
                                             </td>
                                             <td colspan="3" class="fw-bold">Name of the course  to be assessed:
                                             </br>
@@ -251,8 +251,8 @@
                                                 <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
-                                                    @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3 && $row->nc_raise_code!=6)
+                                                @foreach($rows->nc as $row)
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
                                                       {{$row->nc_raise}}
                                                       @endif
                                                     @endforeach
@@ -260,49 +260,43 @@
                                                 <td>
 
                                                 @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
                                                       {{$row->capa_mark}}
                                                       @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code==1)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
-                                                    @elseif($row->nc_raise_code==2)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
-                                                    @elseif($row->nc_raise_code==4)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
-                                                    @elseif($row->nc_raise_code==3)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
-                                                    @else
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
+                                                @foreach($rows->nc as $key=>$row)
+                                                    @if($row->nc_raise_code=="NC1")
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
+                                                    @elseif($row->nc_raise_code=="NC2")
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
                                                     @endif
                                                     @endforeach
                                             
                                             </td>
                                             <td>
-                                                {{-- 
+                                                
                                                 @php
                                                 $count = count($rows->nc);
                                                 @endphp
                                              
                                                 @if($count==1)
-                                                    {{$rows->nc[0]->doc_verify_remark}}
+                                                    {{$rows->nc[0]->doc_verify_remark??''}}
                                                 @elseif($count==2)
-                                                {{$rows->nc[1]->doc_verify_remark}}
+                                                {{$rows->nc[1]->doc_verify_remark??''}}
                                                 @elseif($count==3)
-                                                {{$rows->nc[2]->doc_verify_remark}}
+                                                {{$rows->nc[2]->doc_verify_remark??''}}
                                                 @elseif($count==4)
-                                                {{$rows->nc[3]->doc_verify_remark}}
+                                                {{$rows->nc[3]->doc_verify_remark??''}}
                                                 @elseif($count==5)
-                                                {{$rows->nc[4]->doc_verify_remark}}
+                                                {{$rows->nc[4]->doc_verify_remark??''}}
                                                 @elseif($count==6)
-                                                {{$rows->nc[5]->doc_verify_remark}}
+                                                {{$rows->nc[5]->doc_verify_remark??''}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                {{$rows->nc[6]->doc_verify_remark??''}}
                                                 @endif
-                                                --}}
+                                           
                                             </td>
                                             </tr>
                                             @endforeach
@@ -334,7 +328,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$summertReport->Person_Name}}</span></td>
+                                                <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$summertReport->person_name}}</span></td>
                                                 <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$summertReport->course_name}}</span></td>
                                             </tr>
                                             <tr>

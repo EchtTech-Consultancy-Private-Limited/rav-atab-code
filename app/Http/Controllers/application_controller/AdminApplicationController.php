@@ -246,11 +246,20 @@ class AdminApplicationController extends Controller
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
+                        'onsite_nc_comments' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code,
+                            'assessor_type'=>'onsite'
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get(),
                     ];
                 }
                 $final_data[] = $obj;
         }
-        // dd($final_data);
         $applicationData = TblApplication::find($application_id);
         return view('admin-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
     }

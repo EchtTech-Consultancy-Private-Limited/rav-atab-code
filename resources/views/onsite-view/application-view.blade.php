@@ -42,7 +42,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <ul class="breadcrumb breadcrumb-style ">
                         <li class="breadcrumb-item">
-                            <h4 class="page-title">Application</h4>
+                            <h4 class="page-title">Application c</h4>
                         </li>
                         <li class="breadcrumb-item bcrumb-1">
                             <a href="{{ url('/dashboard') }}">
@@ -52,10 +52,10 @@
                     </ul>
                     <div class="">
                     @if($is_final_submit)
-                        <a href="{{ url('desktop-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        <a href="{{ url('onsite-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
-                        <a href="{{ url('desktop/application-list') }}" class="float-right"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+                        <a href="{{ url('onsite/application-list') }}" class="float-right"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back
                         </a>
                     </div>
                 </div>

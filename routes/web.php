@@ -332,14 +332,20 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 // Summary Routes
 
     Route::get('desktop/summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopIndex"]);
-    Route::get('onsite/summary',[SummaryController::class,"onSiteIndex"]);
+    Route::get('onsite/summary/{application_id}/{application_course_id}',[SummaryController::class,"onSiteIndex"]);
     Route::get('desktop/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
     Route::get('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
+
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
-    Route::get('onsite/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
+    Route::get('onsite/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
 
     Route::get('desktop-application-course-summaries',[DesktopApplicationController::class,"getCourseSummariesList"]);
+
+    Route::get('onsite-application-course-summaries',[OnsiteApplicationController::class,"getCourseSummariesList"]);
+
+
     Route::get('desktop-view-final_summaries',[DesktopApplicationController::class,"desktopViewFinalSummary"]);
+    // Route::get('onsite-view-final_summaries',[OnsiteApplicationController::class,"onsiteViewFinalSummary"]);
 
     Route::get('application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
     Route::get('view-final_summaries',[SummaryController::class,"tpViewFinalSummary"]);
@@ -398,6 +404,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
 
     Route::get('/onsite-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [OnsiteApplicationController::class, 'onsiteVerfiyDocument']);
+// hii
+
 
     Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
     Route::post('/onsite/document-verfiy', [OnsiteApplicationController::class, 'onsiteDocumentVerify']);

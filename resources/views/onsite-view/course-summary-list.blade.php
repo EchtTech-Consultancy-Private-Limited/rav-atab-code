@@ -99,7 +99,8 @@
                         </td>
                         <td>{{ $item->eligibility }}</td>
                         <th>
-                            <a href="{{ url('desktop-view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="float-left btn btn-primary btn-sm">View Summary 
+                            <!-- <a href="{{ url('onsite-view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="float-left btn btn-primary btn-sm">View Summary</a>  -->
+                            <a href="{{ url('onsite/summary/'.dEncrypt($applicationDetails->id).'/'.dEncrypt($item->id)) }}" class="float-left btn btn-primary btn-sm">View Summary 
                         </a>
                         </th>
                     </tr>

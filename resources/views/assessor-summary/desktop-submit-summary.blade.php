@@ -223,7 +223,7 @@
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Sl. No </th>
+                                                <th>S.No. </th>
                                                 <th>Objective Element</th>
                                                 <th> NC raised</th>
                                                 <th> CAPA by Training Provider</th>
@@ -254,9 +254,9 @@
                                                 <td>
                                                     @foreach($rows->nc as $key=>$row)
                                                     @if($row->nc_raise_code=="NC1")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
                                                     @elseif($row->nc_raise_code=="NC2")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
                                                     @endif
                                                     @endforeach
                                                    
