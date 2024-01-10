@@ -4,6 +4,9 @@ use App\Http\Controllers\Controller;
 use App\Models\ApplicationCourse;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use App\Models\TblApplication; 
+use App\Models\TblApplicationCourses; 
+use App\Models\TblNCComments; 
 use DB;
 use Auth;
 class SummaryController extends Controller
@@ -425,11 +428,16 @@ class SummaryController extends Controller
         }
         return redirect("$request->previous_url")->with('success', 'Comment Added on this Documents Successfully');
     }
+
+
     public function getCourseSummariesList(Request $request){
-        $courses = ApplicationCourse::where('application_id', $request->input('application'))->get();
-        $applicationDetails = Application::find($request->input('application'));
+        $courses = TblApplicationCourses::where('application_id', $request->input('application'))->get();
+
+        $applicationDetails = TblApplication::find($request->input('application'));
         return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails'));
     }
+
+
     public function tpViewFinalSummary(Request $request){
         $application_id = $request->input('application');
         $application_course_id = $request->input('course');
@@ -511,9 +519,9 @@ class SummaryController extends Controller
         $application_id = $request->input('application');
         $application_course_id = $request->input('course');
         $summeryReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
-        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
-        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
+        ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
         ->where([
             'asr.application_id' => $application_id,
@@ -524,6 +532,7 @@ class SummaryController extends Controller
         ])
         ->first();
             // dd($summeryReport);
+
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summeryReport->assessor_id,'application_id'=>$application_id])->count();
     $questions = DB::table('questions')->get();
@@ -531,21 +540,28 @@ class SummaryController extends Controller
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
-            $value = DB::table('assessor_summary_reports')->where([
+           
+            $value = TblNCComments::where([
                 'application_id' => $application_id,
                 'assessor_id' => $summeryReport->assessor_id,
-                'object_element_id' => $question->id,
-                'doc_sr_code' => $question->code,
-            ])->get();
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->where('assessor_type','desktop')
+            ->get();
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
+    // dd($final_data);    
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
        /*On Site Final Summary Report*/
         $onsiteSummaryReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.Person_Name','app.application_uid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.assessee_org as onsite_assessee_org')
-        ->leftJoin('applications as app', 'app.id', '=', 'asr.application_id')
-        ->leftJoin('application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.assessee_org as onsite_assessee_org')
+        ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
+        ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
         ->leftJoin('assessor_improvement_form as ass_impr_form', 'ass_impr_form.assessor_id', '=', 'asr.assessor_id')
         ->leftJoin('assessor_final_summary_reports as final_summary_repo', 'final_summary_repo.assessor_id', '=', 'asr.assessor_id')
@@ -564,6 +580,8 @@ class SummaryController extends Controller
             'final_summary_repo.application_course_id'=>$application_course_id,
         ])
         ->first();
+            // dd($onsiteSummaryReport);
+
         /*count the no of mandays*/
         $onsite_no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->count();
     $questions = DB::table('questions')->get();
@@ -571,15 +589,21 @@ class SummaryController extends Controller
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
-            $value = DB::table('assessor_summary_reports')->where([
+            $value = TblNCComments::where([
                 'application_id' => $application_id,
                 'assessor_id' => $onsiteSummaryReport->assessor_id,
-                'object_element_id' => $question->id,
-                'doc_sr_code' => $question->code,
-            ])->get();
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->where('assessor_type','onsite')
+            ->get();
                 $obj->nc = $value;
                 $onsite_final_data[] = $obj;
     }
+  
         $onsite_assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;
       /*End here*/    
         return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way'));

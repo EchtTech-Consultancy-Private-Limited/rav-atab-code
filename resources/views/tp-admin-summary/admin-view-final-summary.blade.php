@@ -270,20 +270,18 @@
                                                 <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->application_uid}}"></span> </td>
+                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->id}}"></span> </td>
                                                 <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->Person_Name}}"></span> </td>
+                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->person_name}}"></span> </td>
                                                 <td class="fw-bold">Name of the course to be assessed:
                                     
                                                     <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->course_name}}"></span> </td>
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">Way of assessment (Desktop): </br><span class="fw-normal">
-                                                    @if($assessement_way[0]->assessment_type==1)
-                                                    {{$assessement_way[0]->assessment_way??'N/A'}}
-                                                    @endif
+                                                    N/A
                                                 </span> 
                                                     </td>
                                                 <td class="fw-bold">No of Mandays:  <span class="fw-normal"> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
@@ -318,33 +316,34 @@
                                                     <td class="fw-bold">{{$rows->code}}</td>
                                                     <td>{{$rows->title}}</td>
                                                     <td>
-                                                        @foreach($rows->nc as $row)
-                                                        @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3 && $row->nc_raise_code!=6)
-                                                          {{$row->nc_raise}}
-                                                          @endif
-                                                        @endforeach
+                                                    @foreach($rows->nc as $row)
+                                                      {{$row->nc_type}},
+                                                    @endforeach
                                                     </td>
                                                     <td>
     
                                                     @foreach($rows->nc as $row)
-                                                        @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
-                                                          {{$row->capa_mark}}
-                                                          @endif
-                                                        @endforeach
+                                                      {{$row->capa_mark}}
+                                                    @endforeach
                                                     </td>
                                                     <td>
-                                                        @foreach($rows->nc as $key=>$row)
-                                                        @if($row->nc_raise_code==1)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
-                                                        @elseif($row->nc_raise_code==2)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
-                                                        @elseif($row->nc_raise_code==4)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
-                                                        @elseif($row->nc_raise_code==3)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
-                                                        @else
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
-                                                        @endif
+                                                    @foreach($rows->nc as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                            @if($row->nc_type=="not_recommended")
+                                                            {{ucfirst($row->nc_type)}}
+                                                            @else
+                                                            {{$row->nc_type}}
+                                                            @endif
+                                                        
+                                                    </a>  
                                                         @endforeach
                                                 
                                                 </td>
@@ -411,13 +410,13 @@
                                                 <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$onsiteSummaryReport->application_uid}}</span>
+                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$onsiteSummaryReport->id}}</span>
                                                 </td>
                                                 <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$onsiteSummaryReport->Person_Name}}</span>
+                                                <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$onsiteSummaryReport->person_name}}</span>
                                                 </td>
                                                 <td colspan="3" class="fw-bold">Name of the course  to be assessed:
                                                 </br>
@@ -426,10 +425,10 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">
-
-                                                @if($assessement_way[1]->assessment_type==2)
-                                                    {{$assessement_way[1]->assessment_way??'N/A'}}
-                                                    @endif
+                                                {{
+                                                            $onsite_assessement_way
+                                                        }}
+                                                
                                                 </span>
                                                 </td>
                                                 <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
@@ -467,38 +466,39 @@
                                                 <td class="fw-bold"> Remarks (Accepted/ Not accepted)</td>
                                             </tr>
                                             <tbody>
-                                                @foreach ($final_data as $key=>$rows)
+                                                @foreach ($onsite_final_data as $key=>$rows)
                                                 <tr>
                                                     <td class="fw-bold">{{$rows->code}}</td>
                                                     <td>{{$rows->title}}</td>
                                                     <td class="fw-bold">
-                                                        @foreach($rows->nc as $row)
-                                                        @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
-                                                          {{$row->nc_raise}}
-                                                          @endif
-                                                        @endforeach
+                                                    @foreach($rows->nc as $row)
+                                                      {{$row->nc_type}},
+                                                    @endforeach
                                                     </td>
                                                     <td>
     
                                                     @foreach($rows->nc as $row)
-                                                        @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
-                                                          {{$row->capa_mark}}
-                                                          @endif
-                                                        @endforeach
+                                                      {{$row->capa_mark}}
+                                                    @endforeach
                                                     </td>
                                                     <td>
-                                                        @foreach($rows->nc as $key=>$row)
-                                                        @if($row->nc_raise_code==1)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
-                                                        @elseif($row->nc_raise_code==2)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
-                                                        @elseif($row->nc_raise_code==4)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
-                                                        @elseif($row->nc_raise_code==3)
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
-                                                        @else
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
-                                                        @endif
+                                                    @foreach($rows->nc as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                            @if($row->nc_type=="not_recommended")
+                                                            {{ucfirst($row->nc_type)}}
+                                                            @else
+                                                            {{$row->nc_type}}
+                                                            @endif
+                                                        
+                                                    </a>  
                                                         @endforeach
                                                 
                                                 </td>
@@ -555,15 +555,15 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$onsiteSummaryReport->Person_Name}}</span></td>
+                                                    <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$onsiteSummaryReport->person_name}}</span></td>
                                                     <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$onsiteSummaryReport->course_name}}</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">
-
-                                                    @if($assessement_way[1]->assessment_type==2)
-                                                    {{$assessement_way[1]->assessment_way??'N/A'}}
-                                                    @endif
+                                                        {{
+                                                            $onsite_assessement_way
+                                                        }}
+                                                   
                                                     </span></td>
                                                     <td colspan="2" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$no_of_mandays}}</span></td>
                                                 </tr>

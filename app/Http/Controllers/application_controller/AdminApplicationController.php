@@ -74,7 +74,9 @@ class AdminApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
+
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
@@ -91,7 +93,16 @@ class AdminApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
-        return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status]);
+
+                $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->first();
+                if(!empty($is_exists)){
+                 $is_final_submit = true;
+                }else{
+                 $is_final_submit = false;
+                }
+
+
+        return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
     public function adminPaymentAcknowledge(Request $request)
     {
@@ -355,4 +366,5 @@ class AdminApplicationController extends Controller
         return response()->json(['success' => false,'message' =>'Something went wrong'],200);
     }
     }
+    
 }

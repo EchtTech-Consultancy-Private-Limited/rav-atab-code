@@ -372,19 +372,7 @@ class DesktopApplicationController extends Controller
                         $final_data[] = $obj;
         }
 
-    // foreach($questions as $question){
-    //     $obj = new \stdClass;
-    //     $obj->title= $question->title;
-    //     $obj->code= $question->code;
-    //         $value = DB::table('assessor_summary_reports')->where([
-    //             'application_id' => $application_id,
-    //             'assessor_id' => $assessor_id,
-    //             'object_element_id' => $question->id,
-    //             'doc_sr_code' => $question->code,
-    //         ])->get();
-    //             $obj->nc = $value;
-    //             $final_data[] = $obj;
-    // }
+ 
     // dd($final_data);
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
