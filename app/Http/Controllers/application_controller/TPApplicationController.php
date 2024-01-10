@@ -25,6 +25,7 @@ class TPApplicationController extends Controller
         $application = DB::table('tbl_application as a')
         ->orderBy('id','desc')
         ->get();
+        $final_data=array();
         foreach($application as $app){
             $obj = new \stdClass;
             $obj->application_list= $app;

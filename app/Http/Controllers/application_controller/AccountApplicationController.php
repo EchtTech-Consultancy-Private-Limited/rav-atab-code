@@ -19,7 +19,7 @@ class AccountApplicationController extends Controller
         ->whereIn('payment_status',[0,1,2])
         ->orderBy('id','desc')
         ->get();
-
+        $final_data=array();
         foreach($application as $app){
             $obj = new \stdClass;
             $obj->application_list= $app;

@@ -220,6 +220,7 @@
                                 </table>
 
                                 <div class="table-responsive">
+                                    @if(count($final_data)>0)
                                     <table>
                                         <thead>
                                             <tr>
@@ -287,6 +288,8 @@
                                         </tbody>
                                     
                                     </table>
+                                    @endif
+
                                     @if(!$is_final_submit)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                     <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>

@@ -417,8 +417,7 @@
                     @endif
                 </div>
             </div>
-
-            @if (isset($ApplicationPayment))
+            <!-- @if (isset($ApplicationPayment))
                 @if( $application_payment_status->status==0)
                 <div class="card p-relative" id="payment_rcv_card">
                 <div class="box-overlay">
@@ -484,7 +483,7 @@
                     </div>
                 </div>
                 @endif
-        @endif
+        @endif -->
 
 
         </div>

@@ -27,7 +27,7 @@ class AdminApplicationController extends Controller
         ->whereIn('a.payment_status',[1,2,3])
         ->orderBy('id','desc')
         ->get();
-
+        $final_data=array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
         
         $desktop_assessor_list = DB::table('users')->where(['assessment'=>1,'role'=>3])->orderBy('id', 'DESC')->get();

@@ -29,7 +29,7 @@ class DesktopApplicationController extends Controller
             $assessor_application = DB::table('tbl_assessor_assign')
             ->where('assessor_id',$assessor_id)
             ->pluck('application_id')->toArray();
-
+            $final_data=array();
             $application = DB::table('tbl_application')
             ->whereIn('payment_status',[1,2,3])
             ->whereIn('id',$assessor_application)
@@ -167,6 +167,7 @@ class DesktopApplicationController extends Controller
 
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])->latest('id')->first();
         
+            // dd($tbl_nc_comments);
             $is_nc_exists=false;
             if($nc_type==="view"){
                 $is_nc_exists=true;
@@ -191,6 +192,11 @@ class DesktopApplicationController extends Controller
              }else if($tbl_nc_comments->nc_type==="Request_For_Final_Approval"){
                 $dropdown_arr = array(
                     "Reject"=>"Reject",
+                    "Accept"=>"Accept",
+                );
+             }else{
+                $dropdown_arr = array(
+                    "NC1"=>"NC1",
                     "Accept"=>"Accept",
                 );
              }
@@ -313,7 +319,7 @@ class DesktopApplicationController extends Controller
 
     public function getCourseSummariesList(Request $request){
 
-        $get_all_final_course_id = DB::table('assessor_final_summary_reports')->where('application_id',$request->input('application'))->get()->pluck('application_course_id')->toArray();
+        $get_all_final_course_id = DB::table('assessor_final_summary_reports')->where('application_id',$request->input('application'))->where('assessor_type','desktop')->get()->pluck('application_course_id')->toArray();
 
         $courses = TblApplicationCourses::where('application_id', $request->input('application'))
         ->whereIn("id",$get_all_final_course_id)

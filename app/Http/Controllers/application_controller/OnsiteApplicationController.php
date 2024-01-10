@@ -33,7 +33,7 @@ class OnsiteApplicationController extends Controller
             $assessor_application = DB::table('tbl_assessor_assign')
             ->where('assessor_id',$assessor_id)
             ->pluck('application_id')->toArray();
-
+            $final_data=array();
             $application = DB::table('tbl_application')
             ->whereIn('payment_status',[1,2,3])
             ->whereIn('id',$assessor_application)
@@ -77,6 +77,8 @@ class OnsiteApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
+        $assessor_id = Auth::user()->id;
+
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
@@ -85,6 +87,12 @@ class OnsiteApplicationController extends Controller
                     'application_id' => $application->id,
                 ])->get();
                 if($course){
+                    $c = [];
+                    foreach($course as $crse){
+                        $course_doc_count = DB::table('tbl_application_course_doc')->where(['application_id'=>$application->id,'application_courses_id'=>$crse->id])->count();
+                        $crse->is_doc_uploaded = $course_doc_count;
+                        
+                    }
                     $obj->course = $course;
                 }
                 $payment = DB::table('tbl_application_payment')->where([
@@ -100,6 +108,7 @@ class OnsiteApplicationController extends Controller
                 }else{
                     $is_final_submit = false;
                 }
+                
                 return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
 
@@ -256,8 +265,9 @@ class OnsiteApplicationController extends Controller
     }
 
 
-    public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
+        
         try{
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
@@ -265,13 +275,13 @@ class OnsiteApplicationController extends Controller
             ->latest('id')
             ->get();
 
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'application_courses_id'=>$application_course_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
         
             $is_nc_exists=false;
             if($nc_type==="view"){
                 $is_nc_exists=true;
             }
-
+            // dd($doc_sr_code, $doc_unique_code);
            
         if(isset($tbl_nc_comments->nc_type)){
            
@@ -488,7 +498,12 @@ class OnsiteApplicationController extends Controller
 
      public function getCourseSummariesList(Request $request){
 
-        $get_all_final_course_id = DB::table('assessor_final_summary_reports')->where('application_id',$request->input('application'))->get()->pluck('application_course_id')->toArray();
+        $get_all_final_course_id = DB::table('assessor_final_summary_reports')
+        ->where('application_id',$request->input('application'))
+        ->where('assessor_type','onsite')
+        ->get()
+        ->pluck('application_course_id')
+        ->toArray();
 
         $courses = TblApplicationCourses::where('application_id', $request->input('application'))
         ->whereIn("id",$get_all_final_course_id)

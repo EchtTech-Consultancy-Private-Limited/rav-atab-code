@@ -10,6 +10,7 @@ class SummaryController extends Controller
 {
     public function desktopIndex(Request $request,$application_id,$application_course_id){
         $assessor_id = Auth::user()->id;
+        $final_data = array();
         $summertReport = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.application_course_id','asr.application_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app_course.course_name','app.created_at','usr.firstname','usr.middlename','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
@@ -156,6 +157,7 @@ class SummaryController extends Controller
                 'assessor_id' => $assessor_id,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
+                'application_course_id' => dDecrypt($application_course_id)
             ])->get();
                 $obj->nc = $value;
                 $final_data[] = $obj;
@@ -250,15 +252,21 @@ class SummaryController extends Controller
         ->first();
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=> $assessor_id,'application_id'=> dDecrypt($application_id)])->count();
+
     $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
     ->select('asr.application_id','asr.assessor_id','asr.object_element_id')
     ->where('asr.assessor_type','onsite')
-    ->where(['application_id' => dDecrypt($application_id), 'assessor_id' => $assessor_id])
-    ->whereIn('nc_raise_code', ['NC1', 'NC2'])
+    ->where(['asr.application_id' => dDecrypt($application_id), 'asr.assessor_id' => $assessor_id,
+    'asr.application_course_id'=>dDecrypt($application_course_id)])
+    ->whereIn('asr.nc_raise_code', ['NC1', 'NC2'])
     ->groupBy('asr.application_id','asr.assessor_id','asr.object_element_id')
     ->get()->pluck('object_element_id');
+
+    //  dd($assesor_distinct_report);
+
     $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>dDecrypt($application_id)])->first()->assessment_way;
     $questions = DB::table('questions')->whereIn('id',$assesor_distinct_report)->get();
+
     $final_data=[];
     foreach($questions as $question){
         $obj = new \stdClass;
@@ -266,6 +274,7 @@ class SummaryController extends Controller
         $obj->code= $question->code;
             $value = DB::table('assessor_summary_reports')->where([
                 'application_id' => dDecrypt($application_id),
+                'application_course_id' => dDecrypt($application_course_id),
                 'assessor_id' => $assessor_id,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
@@ -273,7 +282,7 @@ class SummaryController extends Controller
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
-        // dd($final_data);
+    // dd($final_data);
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>$request->application_course_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;

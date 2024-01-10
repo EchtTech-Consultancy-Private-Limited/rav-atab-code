@@ -218,7 +218,7 @@
                                     </tbody>
                                 
                                 </table>
-
+                                
                                 <div class="table-responsive">
                                     <table>
                                         <thead>
@@ -293,6 +293,7 @@
                                     <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>
                                     @endif
                                 </div>
+                               
                                 </section>
                             </button>
                                 </div>

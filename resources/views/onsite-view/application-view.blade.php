@@ -299,11 +299,11 @@
                             </div>
                         </div>
                         <div class="col-md-12 d-flex justify-content-end">
-                       
+                                @if($ApplicationCourses->is_doc_uploaded>=4)
                                 <a href="{{ url('/onsite/document-list' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
-                       
+                                @endif
                            
                         </div>
                     </div>
@@ -418,7 +418,7 @@
                 </div>
             </div>
 
-            @if (isset($ApplicationPayment))
+            <!-- @if (isset($ApplicationPayment))
                 @if( $application_payment_status->status==0)
                 <div class="card p-relative" id="payment_rcv_card">
                 <div class="box-overlay">
@@ -484,7 +484,7 @@
                     </div>
                 </div>
                 @endif
-        @endif
+        @endif -->
 
 
         </div>
