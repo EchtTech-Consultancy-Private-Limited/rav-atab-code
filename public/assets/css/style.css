@@ -24990,3 +24990,11 @@ font-size:12px !important;
   }
 
 /* loading full screen end here */
+
+.modal-body.mod-css .radio-ass span {
+    font-size: 16px !important;
+    margin-bottom: 0px;
+    height: 30px;
+    margin-right: 20px;
+    padding-left: 27px;
+}

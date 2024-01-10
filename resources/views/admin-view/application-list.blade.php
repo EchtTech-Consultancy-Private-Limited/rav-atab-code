@@ -175,7 +175,7 @@
                method="post">
                @csrf
                <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
-                <input type="hidden" name="assessor_type" value="desktop">
+                <input type="hidden" name="assessor_type" value="{{$item->assessor_type=='desktop'?'desktop':'onsite'}}">
                 <?php
                     $application_assessor_arr = listofapplicationassessor($item->application_list->id);
 
@@ -183,8 +183,40 @@
                <br>
                <label class="mb-3"><b>Assessment
                Type</b></label><br>
+
                <p>{{$item->assessor_type=="desktop"?'Desktop Assessment':'Onsite Assessment'}}</p>
-              
+               <!--   -->
+
+               <div class="form-check form-check-inline radio-ass">
+               <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked>
+                    <span>
+                        Onsite                     
+                    </span>
+                    </label>  
+
+                    <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="hybrid">
+                    <span>
+                        Hybrid                     
+                    </span>
+                    </label>  
+
+                    <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="virtual">
+                    <span>
+                        Virtual                     
+                    </span>
+                    </label>  
+
+              </div>
+            
+             
+                    
+                   
+
+
+
                <div class="destop-id">
                @foreach ($item->assessor_list as $k => $assesorsData)
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">

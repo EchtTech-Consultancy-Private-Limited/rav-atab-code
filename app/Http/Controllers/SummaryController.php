@@ -430,8 +430,6 @@ class SummaryController extends Controller
         $applicationDetails = Application::find($request->input('application'));
         return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails'));
     }
-
-
     public function tpViewFinalSummary(Request $request){
         $application_id = $request->input('application');
         $application_course_id = $request->input('course');

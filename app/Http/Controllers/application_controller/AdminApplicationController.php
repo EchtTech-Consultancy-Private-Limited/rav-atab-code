@@ -12,6 +12,7 @@ use App\Models\DocComment;
 use App\Models\Application;
 use App\Models\Add_Document;
 use App\Models\AssessorApplication; 
+use App\Models\asessor_application; 
 use App\Models\User; 
 use App\Models\Chapter; 
 use App\Models\TblNCComments; 
@@ -131,16 +132,17 @@ class AdminApplicationController extends Controller
             }else{
                 $assessment_type = 2;
             }
-            if ($request->assessment_type == 2) {
-                $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_radio)->count()  > 0;
-                if ($data == false) {
+            if ($assessment_type == 2) {
+                
+                $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->count()  > 0;
+                if ($data == false) {   
                     $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->count() > 0;
                     if ($value == false) {
                         $data = new asessor_application();
-                        $data->assessor_id = $request->assessor_radio;
+                        $data->assessor_id = $request->assessor_id;
                         $data->application_id = $request->application_id;
                         $data->status = 1;
-                        $data->assessment_type = $request->assessment_type;
+                        $data->assessment_type = $assessment_type;
                         $data->due_date = $due_date = Carbon::now()->addDay(15);
                         $data->notification_status = 0;
                         $data->read_by = 0;
@@ -150,10 +152,10 @@ class AdminApplicationController extends Controller
                     } else {
                         $item = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->first();
                         $data = asessor_application::find($item->id);
-                        $data->assessor_id = $request->assessor_radio;
+                        $data->assessor_id = $request->assessor_id;
                         $data->application_id = $request->application_id;
                         $data->status = 1;
-                        $data->assessment_type = $request->assessment_type;
+                        $data->assessment_type = $assessment_type;
                         $data->due_date = $due_date = Carbon::now()->addDay(15);
                         $data->notification_status = 0;
                         $data->read_by = 0;
@@ -162,13 +164,13 @@ class AdminApplicationController extends Controller
                         return  back()->with('success', 'Application has been successfully assigned to assessor');
                     }
                 } else {
-                    $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_radio)->first();
-                    //dd($value);
+                    $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->first();
+                    // dd($value);
                     $data = asessor_application::find($value->id);
-                    $data->assessor_id = $request->assessor_radio;
+                    $data->assessor_id = $request->assessor_id;
                     $data->application_id = $request->application_id;
                     $data->status = 1;
-                    $data->assessment_type = $request->assessment_type;
+                    $data->assessment_type = $assessment_type;
                     $data->due_date = $due_date = Carbon::now()->addDay(15);
                     $data->notification_status = 0;
                     $data->read_by = 0;
@@ -182,7 +184,7 @@ class AdminApplicationController extends Controller
                 $assessor = $request->assessor_id;
                 $newApplicationAssign = new AssessorApplication;
                 $newApplicationAssign->application_id = $request->application_id;
-                $newApplicationAssign->assessment_type = $request->assessment_type;
+                $newApplicationAssign->assessment_type = $assessment_type;
                 $newApplicationAssign->assessor_id = $assessor;
                 $newApplicationAssign->status = 1;
                 $newApplicationAssign->notification_status = 0;
@@ -209,6 +211,7 @@ class AdminApplicationController extends Controller
                 return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
             }
         }
+
         catch(Exception $e){
             DB::rolback();
             return redirect()->back()->with('fail', $e->getMessage());
