@@ -76,7 +76,14 @@ class TPApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
-        return view('tp-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status]);
+                $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
+                if($tp_final_summary_count>1){
+                 $is_final_submit = true;
+                }else{
+                 $is_final_submit = false;
+                }
+
+        return view('tp-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
     public function upload_document($id, $course_id)
     {

@@ -94,8 +94,8 @@ class AdminApplicationController extends Controller
                 }
                 $final_data = $obj;
 
-                $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->first();
-                if(!empty($is_exists)){
+                $admin_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
+                if($admin_final_summary_count>1){
                  $is_final_submit = true;
                 }else{
                  $is_final_submit = false;
