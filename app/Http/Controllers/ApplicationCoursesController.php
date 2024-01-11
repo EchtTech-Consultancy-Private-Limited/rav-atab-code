@@ -469,6 +469,113 @@ class ApplicationCoursesController extends Controller
         return view('create-application.get-application-list', ['collection' => $filteredApplications]);
     }
 
+
+    
+    public function course_edit(Request $request)
+    {
+       
+        $item = LevelInformation::whereid('1')->get();
+        $ApplicationCourse = TblApplicationCourses::whereid($request->id)->wheretp_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
+        $course_mode = ['1' => 'Online', '2' => 'Offline', '3' => 'Hybrid'];
+        return response()->json(['ApplicationCourse' => $ApplicationCourse]);
+    }
+
+
+    public function course_update(Request $request, $id)
+    {
+        
+        
+        
+
+        $Document = TblApplicationCourses::whereid($id)->get();
+        if ($request->hasfile('doc1')) {
+            $file_size1 = $request->file('doc1')->getSize();
+            $doc1 = $request->file('doc1');
+            $data = TblApplicationCourses::find($Document[0]->id);
+            $old_file_name = $data->declaration_pdf;
+            $name = $doc1->getClientOriginalName();
+            $filename = time() . $name;
+            $doc1->move('documnet/', $filename);
+            $data->declaration_pdf =  $filename;
+            $data->save();
+            
+            if (file_exists(public_path() . '/documnet/'.$old_file_name)) {
+                unlink(public_path() . '/documnet/'.$old_file_name);
+            } 
+            
+        }
+
+        if ($request->hasfile('doc2')) {
+            $file_size2 = $request->file('doc2')->getSize();
+            $doc2 = $request->file('doc2');
+            $data = TblApplicationCourses::find($Document[0]->id);
+            $old_file_name = $data->course_curriculum_pdf;
+            $name = $doc2->getClientOriginalName();
+            $filename = time() . $name;
+            $doc2->move('documnet/', $filename);
+            $data->	course_curriculum_pdf =  $filename;
+            $data->save();
+            if (file_exists(public_path() . '/documnet/'.$old_file_name)) {
+                unlink(public_path() . '/documnet/'.$old_file_name);
+            } 
+        }
+        if ($request->hasfile('doc3')) {
+            $file_size3 = $request->file('doc3')->getSize();
+            $doc3 = $request->file('doc3');
+            $data = TblApplicationCourses::find($Document[0]->id);
+            $old_file_name = $data->course_details_xsl;
+            $name = $doc3->getClientOriginalName();
+            $filename = time() . $name;
+            $doc3->move('documnet/', $filename);
+            $data->course_details_xsl =  $filename;
+            $data->save();
+            if (file_exists(public_path() . '/documnet/'.$old_file_name)) {
+                unlink(public_path() . '/documnet/'.$old_file_name);
+            } 
+        }
+
+
+        $file = TblApplicationCourses::find($id);
+        $file->course_name = $request->Course_Names;
+        $file->mode_of_course = collect($request->mode_of_course)->implode(',');
+        $file->course_brief = $request->course_brief;
+        $file->course_duration_y = $request->years;
+        $file->course_duration_m = $request->months;
+        $file->course_duration_d = $request->days;
+        $file->course_duration_h = $request->hours;
+        
+        if($request->hasfile('doc1')){
+           
+            $doc_size_1 = $this->getFileSize($file_size1);
+            $doc_extension_1 = $request->file('doc1')->getClientOriginalExtension();
+
+            $file->pdf_1_file_size = $doc_size_1;
+            $file->pdf_1_file_extension =$doc_extension_1;
+        }
+
+        if($request->hasfile('doc2')){
+            $doc_size_2 = $this->getFileSize($file_size2);
+            $doc_extension_2 = $request->file('doc2')->getClientOriginalExtension();
+
+            $file->pdf_2_file_size = $doc_size_2;
+            $file->pdf_2_file_extension =$doc_extension_2;
+           
+        }
+        if($request->hasfile('doc3')){
+            $doc_size_3 = $this->getFileSize($file_size3);
+            $doc_extension_3 = $request->file('doc3')->getClientOriginalExtension();
+            
+            $file->xls_file_size = $doc_size_3 ;
+            $file->xls_file_extension =$doc_extension_3;
+            
+        }
+        
+        $file->save();
+        return back()->with('sussess', 'Course Update successfull');
+
+    }
+
+
     function get_india_id()
     {
         $india = Country::where('name', 'India')->get('id')->first();

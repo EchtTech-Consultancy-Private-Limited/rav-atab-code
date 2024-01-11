@@ -370,7 +370,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
     Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment'])->name('course.payment');
     Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
-
+    Route::get('/course-edit', [ApplicationCoursesController::class, 'course_edit']);
+    Route::post('/course-update/{id?}', [ApplicationCoursesController::class, 'course_update']);
 
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);

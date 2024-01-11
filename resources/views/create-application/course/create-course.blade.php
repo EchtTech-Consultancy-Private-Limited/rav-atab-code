@@ -518,10 +518,10 @@
                                                     <td class="center">{{ $courses->course_name }}
                                                     </td>
                                                     <td class="center course-duration-table">
-                                                        years:{{ $courses->years }} <br>
-                                                        Months: {{ $courses->months }} <br>
-                                                        days: {{ $courses->days }} <br>
-                                                        Hours: {{ $courses->hours }}
+                                                        years:{{ $courses->course_duration_y }} <br>
+                                                        Months: {{ $courses->course_duration_m }} <br>
+                                                        days: {{ $courses->course_duration_d }} <br>
+                                                        Hours: {{ $courses->course_duration_h }}
                                                     </td>
                                                     <td class="center">{{ $courses->eligibility }}
                                                     </td>
@@ -551,14 +551,14 @@
                                                             id="view">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                        @if ($courses->payment == 'false')
+                                                        
                                                             <a href="#" data-bs-toggle="modal"
                                                                 data-id="{{ $courses->id }}"
                                                                 data-bs-target="#edit_popup" id="edit_course"
                                                                 class="btn btn-tbl-delete bg-primary">
                                                                 <i class="material-icons">edit</i>
                                                             </a>
-                                                        @endif
+                                                       
                                                         <a onclick="confirmDelete('{{ url('/delete-course-by-id' . '/' . dEncrypt($courses->id)) }}')"
                                                             class="btn btn-tbl-delete bg-danger">
                                                             <i class="material-icons">delete</i>
@@ -858,7 +858,7 @@
                                 </div>
                                 <div class="modal-body edit-popup">
                                     <div class="body col-md-12">
-                                        <form action="" id="form_update" method="post">
+                                        <form action="" id="form_update" method="post" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row mt-4">
                                                 <div class="col-sm-6">
@@ -961,7 +961,7 @@
                                                             <a target="_blank" href="" id="docpdf1ss"
                                                                 title=" Document 1"><i
                                                                     class="fa fa-eye mr-2 d-inline-block w-auto"></i>
-                                                                Doc 1 </a>
+                                                                    Declaration Pdf</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -976,7 +976,7 @@
                                                             <a target="_blank" href="" id="docpdf2ss"
                                                                 title=" Document 1"><i
                                                                     class="fa fa-eye mr-2 d-inline-block w-auto"></i>
-                                                                Doc 2</a>
+                                                                    Course Curriculum Pdf</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -991,7 +991,7 @@
                                                             <a href="" id="docpdf3ss"
                                                                 title="Download Document 1" download><i
                                                                     class="fa fa-download mr-2 d-inline-block w-"></i>
-                                                                Doc 3 </a>
+                                                                    Course Details XSL</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1075,10 +1075,7 @@
                             var online_checkbox = $('#online_checkbox').val();
                             var hybrid_checkbox = $('#hybrid_checkbox').val();
 
-                            //alert("edit course second 2420");
                             var UserName = $(this).data('id');
-                            console.log(UserName);
-
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1093,15 +1090,13 @@
                                 },
                                 success: function(data) {
 
-
-
-                                    var values = data.ApplicationCourse[0].mode_of_course;
+                                    var values = data.ApplicationCourse[0].mode_of_course?.split(',');
                                     $.each(values, function(i, e) {
                                         $("#mode_of_course_edit option[value='" + e + "']").prop("selected",
                                             true);
                                     });
 
-                                    $('#form_update').attr('action', '{{ url('/course-edit') }}' + '/' + data
+                                    $('#form_update').attr('action', '{{ url('/course-update') }}' + '/' + data
                                         .ApplicationCourse[0].id)
                                     $("#Course_Names").val(data.ApplicationCourse[0].course_name);
                                     $("#Eligibilitys").val(data.ApplicationCourse[0].eligibility);
@@ -1118,38 +1113,26 @@
                                         }
                                     });
 
-
-
-
-                                    if (data.ApplicationCourse[0].payment == "false") {
+                                    
                                         $("#Payment_Statuss").val("Pending");
-                                    }
+                             
 
-                                    $("#years").val(data.ApplicationCourse[0].years);
-                                    $("#months").val(data.ApplicationCourse[0].months);
-                                    $("#days").val(data.ApplicationCourse[0].days);
-                                    $("#hours").val(data.ApplicationCourse[0].hours);
+                                    $("#years").val(data.ApplicationCourse[0].course_duration_y);
+                                    $("#months").val(data.ApplicationCourse[0].course_duration_m);
+                                    $("#days").val(data.ApplicationCourse[0].course_duration_d);
+                                    $("#hours").val(data.ApplicationCourse[0].	course_duration_h);
                                     $("#course_brief").val(data.ApplicationCourse[0].course_brief);
 
-                                    //$("#doc1_edit").val(data.Document[0].document_file);
-
-
-
-                                    //alert("yes");
                                     $("a#docpdf1ss").attr("href", "{{ url('show-course-pdf') }}" + '/' + data
-                                        .Document[0]
-                                        .document_file);
+                                        .ApplicationCourse[0]
+                                        .declaration_pdf);
                                     $("a#docpdf2ss").attr("href", "{{ url('show-course-pdf') }}" + '/' + data
-                                        .Document[1]
-                                        .document_file);
-                                    /*$("a#docpdf1ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[0]
-                                        .document_file);
-                                    $("a#docpdf2ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[1]
-                                        .document_file);*/
-                                    $("a#docpdf3ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.Document[2]
-                                        .document_file);
+                                        .ApplicationCourse[0]
+                                        .course_curriculum_pdf);
+                                    
+                                    $("a#docpdf3ss").attr("href", "{{ asset('/documnet') }}" + '/' + data.ApplicationCourse[0]
+                                        .course_details_xsl);
 
-                                    //dd
                                 }
 
                             });
@@ -1284,33 +1267,12 @@
 
                     <script>
                         function confirmDelete(deleteUrl) {
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: "You won't be able to revert this!",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#d33',
-                                cancelButtonColor: '#3085d6',
-                                confirmButtonText: 'Yes, delete it!',
-                                cancelButtonText: 'Cancel'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // If the user confirms, proceed with the delete operation by navigating to the delete URL
-                                    window.location.href = deleteUrl;
-                                }
-                            });
+                            const is_confirmed = confirm("Are you sure you want to delete?");
+                            if(is_confirmed) {
+                                window.location.href = deleteUrl;
+                            }
                         }
 
-                        // select2 multiple
-                        // $(document).ready(function() {
-                        //     var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-                        //         removeItemButton: true,
-                        //         maxItemCount: 3,
-                        //         searchResultLimit: 5,
-                        //         renderChoiceLimit: 5
-                        //     });
-
-                        // });
                     </script>
 
                     <script>

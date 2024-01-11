@@ -143,7 +143,7 @@ class AdminApplicationController extends Controller
             }else{
                 $assessment_type = 2;
             }
-            if ($assessment_type == 2) {
+            if ($request->assessment_type == 2) {
                 
                 $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->count()  > 0;
                 if ($data == false) {   
@@ -200,6 +200,7 @@ class AdminApplicationController extends Controller
                 $newApplicationAssign->status = 1;
                 $newApplicationAssign->notification_status = 0;
                 $newApplicationAssign->read_by = 0;
+                $newApplicationAssign->assessment_way = $request->on_site_type;
                 $newApplicationAssign->save();
                 $superadminEmail = 'superadmin@yopmail.com';
                 $adminEmail = 'admin@yopmail.com';

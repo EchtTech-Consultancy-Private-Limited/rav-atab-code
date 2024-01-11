@@ -225,38 +225,38 @@
                                     }) as $doc)
 
                                     @if($doc->status==0)
-                                       <a target="_blank"
+                                       <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('desktop-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                         @elseif($doc->status==1)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn m-1">
                                              Accepted</a>
                                     @elseif($doc->status==2)
-                                    <a target="_blank"
+                                    <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('desktop-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn m-1">
                                         NC1</a>
                                         @elseif($doc->status==3)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              NC2</a>
                                         @elseif($doc->status==4)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                               Not Recommended</a>
                                              
                                              @elseif($doc->status==6)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
@@ -291,7 +291,7 @@
                                           @if(count($question['onsite_nc_comments'])>0  &&  $question['onsite_nc_comments'][0]->nc_type!=null)
                                           @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
 
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$onsite_nc_comment->doc_file_name}}"
                                              href="{{ url('desktop-'.strtolower($onsite_nc_comment->nc_type).'/verify-doc' . '/' . $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn m-1">
@@ -303,7 +303,7 @@
                                              <div class="d-flex justify-content-center"></div>
                                              <div class="d-flex justify-content-center">
                                                 <div>
-                                                   <a target="_blank" href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}" class="btn btn-primary btn-sm">Upload
+                                                   <a  href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}" class="btn btn-primary btn-sm">Upload
                                                    Document</a>&nbsp;
                                                 </div>
                                                 &nbsp;

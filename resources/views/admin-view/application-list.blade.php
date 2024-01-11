@@ -186,7 +186,7 @@
 
                <p>{{$item->assessor_type=="desktop"?'Desktop Assessment':'Onsite Assessment'}}</p>
                <!--   -->
-
+                @if($item->assessor_type=="onsite")
                <div class="form-check form-check-inline radio-ass">
                <label>
                    <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked>
@@ -210,6 +210,7 @@
                     </label>  
 
               </div>
+              @endif
             
              
                     
