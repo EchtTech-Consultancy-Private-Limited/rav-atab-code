@@ -353,19 +353,19 @@
                                                     @endphp
                                                  
                                                     @if($count==1)
-                                                        {{$rows->nc[0]->doc_verify_remark??''}}
+                                                        {{$rows->nc[0]->comments??''}}
                                                     @elseif($count==2)
-                                                    {{$rows->nc[1]->doc_verify_remark??''}}
+                                                    {{$rows->nc[1]->comments??''}}
                                                     @elseif($count==3)
-                                                    {{$rows->nc[2]->doc_verify_remark??''}}
+                                                    {{$rows->nc[2]->comments??''}}
                                                     @elseif($count==4)
-                                                    {{$rows->nc[3]->doc_verify_remark??''}}
+                                                    {{$rows->nc[3]->comments??''}}
                                                     @elseif($count==5)
-                                                    {{$rows->nc[4]->doc_verify_remark??''}}
+                                                    {{$rows->nc[4]->comments??''}}
                                                     @elseif($count==6)
-                                                    {{$rows->nc[5]->doc_verify_remark??''}}
+                                                    {{$rows->nc[5]->comments??''}}
                                                     @else
-                                                    {{$rows->nc[6]->doc_verify_remark??''}}
+                                                    {{$rows->nc[6]->comments??''}}
                                                     @endif
                                                 </td>
                                                 </tr>
@@ -431,7 +431,7 @@
                                                 
                                                 </span>
                                                 </td>
-                                                <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
+                                                <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$onsite_no_of_mandays}}</span>
                                                 </td>
                                             </tr>
                                     
@@ -503,27 +503,25 @@
                                                 
                                                 </td>
                                                 <td>
-                                                    {{-- 
                                                     @php
                                                     $count = count($rows->nc);
                                                     @endphp
                                                  
                                                     @if($count==1)
-                                                        {{$rows->nc[0]->doc_verify_remark}}
+                                                        {{$rows->nc[0]->comments??''}}
                                                     @elseif($count==2)
-                                                    {{$rows->nc[1]->doc_verify_remark}}
+                                                    {{$rows->nc[1]->comments??''}}
                                                     @elseif($count==3)
-                                                    {{$rows->nc[2]->doc_verify_remark}}
+                                                    {{$rows->nc[2]->comments??''}}
                                                     @elseif($count==4)
-                                                    {{$rows->nc[3]->doc_verify_remark}}
+                                                    {{$rows->nc[3]->comments??''}}
                                                     @elseif($count==5)
-                                                    {{$rows->nc[4]->doc_verify_remark}}
+                                                    {{$rows->nc[4]->comments??''}}
                                                     @elseif($count==6)
-                                                    {{$rows->nc[5]->doc_verify_remark}}
+                                                    {{$rows->nc[5]->comments??''}}
                                                     @else
-                                                    {{$rows->nc[6]->doc_verify_remark}}
+                                                    {{$rows->nc[6]->comments??''}}
                                                     @endif
-                                                    --}}
                                                 </td>
                                                 </tr>
                                                 @endforeach

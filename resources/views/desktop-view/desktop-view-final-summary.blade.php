@@ -316,8 +316,10 @@
                                                     </td>
                                                     <td>
     
-                                                    @foreach($rows->nc as $row)
-                                                      {{$row->capa_mark}}
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},
+                                                    @endif
                                                     @endforeach
                                                     </td>
                                                     <td>

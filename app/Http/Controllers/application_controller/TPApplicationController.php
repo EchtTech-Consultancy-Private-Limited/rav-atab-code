@@ -166,12 +166,42 @@ class TPApplicationController extends Controller
         return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
     }
   }
-  public function tpDocumentDetails($doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_courses_id)
+  public function tpDocumentDetails($nc_status_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_courses_id)
   {
       try{
+        $nc_type = "NC1";
+        if($nc_status_type==2){
+            $nc_type="NC1";
+        }
+        else if($nc_status_type==3){
+            $nc_type="NC2";
+        }
+        else if($nc_status_type==4){
+            $nc_type="not_recommended";
+        }
+        else{
+            $nc_type="Accept";
+        }
+
+        // is remark form show to top
+        $is_already_remark_exists = TblNCComments::where(['application_id' => $application_id,'application_courses_id' => $application_courses_id,'doc_sr_code' => $doc_sr_code,'doc_unique_id' => $doc_unique_code,'assessor_type' => $assessor_type,'nc_type'=>$nc_type])->first();
+        
+        $is_form_view = false;
+        if($is_already_remark_exists->nc_type!=="Accept" && $is_already_remark_exists->nc_type!=="Request_For_Final_Approval"){
+            // dd($is_already_remark_exists);
+            if($is_already_remark_exists->tp_remark!==null){
+                $is_form_view=false;
+            }else{
+                $is_form_view=true;
+            }
+        }
+
+        // end here for form
+
       $doc_latest_record = TblApplicationCourseDoc::latest('id')
       ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
       ->first();
+
       $get_remarks = TblNCComments::where([
         'application_id' => $application_id,
         'doc_unique_id' => $doc_unique_code,
@@ -189,12 +219,36 @@ class TPApplicationController extends Controller
           'doc_code' => $doc_unique_code,
           'application_id' => $application_id,
           'doc_path' => $doc_path,
-          'remarks' => $get_remarks
+          'remarks' => $get_remarks,
+          'nc_type'=>$nc_type,
+          'is_form_view'=>$is_form_view,
       ]);
   }catch(Exception $e){
       return back()->with('fail','Something went wrong');
   }
   }
+
+
+  public function tpSubmitRemark(Request $request)
+  {
+      try{
+        DB::beginTransaction();
+        $submit_remark = TblNCComments::where(['application_id' => $request->application_id,'application_courses_id' => $request->application_course_id,'doc_sr_code' => $request->doc_sr_code,'doc_unique_id' => $request->doc_unique_id,'assessor_type' => $request->assessor_type,'nc_type'=>$request->nc_type])->update(['tp_remark'=>$request->tp_remark]);
+        if($submit_remark){
+            DB::commit();
+            return back()->with('success','Remark created successfully');
+        }else{
+            DB::rollback();
+            return back()->with('fail','Failed to create remark');
+        }
+  }
+  catch(Exception $e){
+        DB::rollback();
+      return back()->with('fail','Something went wrong');
+  }
+  }
+
+
 
     function secondPaymentView(Request $request)
     {

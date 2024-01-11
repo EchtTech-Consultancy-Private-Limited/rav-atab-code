@@ -270,21 +270,21 @@
                                                 <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->id}}"></span> </td>
-                                                <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
+                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> {{$summeryReport->id}}</span> </td>
+                                                <td class="fw-bold">Date of application: <span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->person_name}}"></span> </td>
+                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> {{$summeryReport->person_name}}</span> </td>
                                                 <td class="fw-bold">Name of the course to be assessed:
                                     
-                                                    <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->course_name}}"></span> </td>
+                                                    <span class="fw-normal"> {{$summeryReport->course_name}}</span> </td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Way of assessment (Desktop): </br><span class="fw-normal">
+                                                <td class="fw-bold">Way of assessment (Desktop): <span class="fw-normal">
                                                     N/A
                                                 </span> 
                                                     </td>
-                                                <td class="fw-bold">No of Mandays:  <span class="fw-normal"> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
+                                                <td class="fw-bold">No of Mandays:  <span class="fw-normal">{{$no_of_mandays}}</span> </td>
                                             </tr>
                                     
                                             <tr>
@@ -322,8 +322,10 @@
                                                     </td>
                                                     <td>
     
-                                                    @foreach($rows->nc as $row)
-                                                      {{$row->capa_mark}}
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},</br>
+                                                    @endif
                                                     @endforeach
                                                     </td>
                                                     <td>
@@ -353,19 +355,19 @@
                                                     @endphp
                                                  
                                                     @if($count==1)
-                                                        {{$rows->nc[0]->doc_verify_remark??''}}
+                                                        {{$rows->nc[0]->comments??''}}
                                                     @elseif($count==2)
-                                                    {{$rows->nc[1]->doc_verify_remark??''}}
+                                                    {{$rows->nc[1]->comments??''}}
                                                     @elseif($count==3)
-                                                    {{$rows->nc[2]->doc_verify_remark??''}}
+                                                    {{$rows->nc[2]->comments??''}}
                                                     @elseif($count==4)
-                                                    {{$rows->nc[3]->doc_verify_remark??''}}
+                                                    {{$rows->nc[3]->comments??''}}
                                                     @elseif($count==5)
-                                                    {{$rows->nc[4]->doc_verify_remark??''}}
+                                                    {{$rows->nc[4]->comments??''}}
                                                     @elseif($count==6)
-                                                    {{$rows->nc[5]->doc_verify_remark??''}}
+                                                    {{$rows->nc[5]->comments??''}}
                                                     @else
-                                                    {{$rows->nc[6]->doc_verify_remark??''}}
+                                                    {{$rows->nc[6]->comments??''}}
                                                     @endif
                                                 </td>
                                                 </tr>
@@ -410,28 +412,28 @@
                                                 <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$onsiteSummaryReport->id}}</span>
+                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> {{$onsiteSummaryReport->id}}</span>
                                                 </td>
-                                                <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</span>
+                                                <td colspan="3" class="fw-bold">Date of Application: <span class="fw-normal"> {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$onsiteSummaryReport->person_name}}</span>
+                                                <td colspan="3" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> {{$onsiteSummaryReport->person_name}}</span>
                                                 </td>
                                                 <td colspan="3" class="fw-bold">Name of the course  to be assessed:
-                                                </br>
+                                                
                                                      <span class="fw-normal"> {{$onsiteSummaryReport->course_name}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">
+                                                <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual): <span class="fw-normal">
                                                 {{
                                                             $onsite_assessement_way
                                                         }}
                                                 
                                                 </span>
                                                 </td>
-                                                <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
+                                                <td colspan="2" class="fw-bold">No of Mandays: <span class="fw-normal"> {{$onsite_no_of_mandays}}</span>
                                                 </td>
                                             </tr>
                                     
@@ -477,8 +479,10 @@
                                                     </td>
                                                     <td>
     
-                                                    @foreach($rows->nc as $row)
-                                                      {{$row->capa_mark}}
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},
+                                                    @endif
                                                     @endforeach
                                                     </td>
                                                     <td>
@@ -503,27 +507,27 @@
                                                 
                                                 </td>
                                                 <td>
-                                                    {{-- 
+                                                   
                                                     @php
                                                     $count = count($rows->nc);
                                                     @endphp
                                                  
-                                                    @if($count==1)
-                                                        {{$rows->nc[0]->doc_verify_remark}}
+                                                     @if($count==1)
+                                                        {{$rows->nc[0]->comments??''}}
                                                     @elseif($count==2)
-                                                    {{$rows->nc[1]->doc_verify_remark}}
+                                                    {{$rows->nc[1]->comments??''}}
                                                     @elseif($count==3)
-                                                    {{$rows->nc[2]->doc_verify_remark}}
+                                                    {{$rows->nc[2]->comments??''}}
                                                     @elseif($count==4)
-                                                    {{$rows->nc[3]->doc_verify_remark}}
+                                                    {{$rows->nc[3]->comments??''}}
                                                     @elseif($count==5)
-                                                    {{$rows->nc[4]->doc_verify_remark}}
+                                                    {{$rows->nc[4]->comments??''}}
                                                     @elseif($count==6)
-                                                    {{$rows->nc[5]->doc_verify_remark}}
+                                                    {{$rows->nc[5]->comments??''}}
                                                     @else
-                                                    {{$rows->nc[6]->doc_verify_remark}}
+                                                    {{$rows->nc[6]->comments??''}}
                                                     @endif
-                                                    --}}
+                                                  
                                                 </td>
                                                 </tr>
                                                 @endforeach
@@ -559,7 +563,7 @@
                                                     <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$onsiteSummaryReport->course_name}}</span></td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">
+                                                    <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual): <span class="fw-normal">
                                                         {{
                                                             $onsite_assessement_way
                                                         }}
@@ -603,7 +607,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        </br>
+                                        
                                     </div>
                                 </section>
                                 </div>

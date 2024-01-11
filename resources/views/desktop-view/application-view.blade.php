@@ -217,7 +217,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
-                                <label><strong>Course Name</strong></label><br>
+                                <label><strong>Course Name : </strong></label>
                                 <label>{{ $ApplicationCourses->course_name }}</label>
                             </div>
                         </div>
@@ -225,7 +225,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
-                                <label><strong>Course Duration</strong></label><br>
+                                <label><strong>Course Duration : </strong></label>
                                 {{ $ApplicationCourses->course_duration_y ?? '' }} Years(s)
                                 {{ $ApplicationCourses->course_duration_m ?? '' }} Month(s)
                                 {{ $ApplicationCourses->course_duration_d ?? '' }} Day(s)
@@ -236,7 +236,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
-                                <label><strong>Eligibility</strong></label><br>
+                                <label><strong>Eligibility : </strong></label>
                                 <label>{{ $ApplicationCourses->eligibility ?? '' }}</label>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
-                                <label><strong>Mode of Course</strong></label>
+                                <label><strong>Mode of Course : </strong></label>
                                 <label> {{$ApplicationCourses->mode_of_course}}</label>
                             </div>
                         </div>
@@ -252,7 +252,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
-                                <label><strong>Course Brief</strong></label><br>
+                                <label><strong>Course Brief : </strong></label><br>
                                 <label>{{ $ApplicationCourses->course_brief ?? '' }}</label>
                             </div>
                         </div>
@@ -261,7 +261,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <label for="Declaration">Declaration</label></br>
+                                    <label for="Declaration"><strong>Declaration</strong></label></br>
                                     <span class="badge badge-success">
                                         <a href="{{url('doc').'/'.$ApplicationCourses->declaration_pdf}}"
                                             target="_blank" title="Download Document">
@@ -273,7 +273,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <label for="Declaration">Course Curriculum / Material / Syllabus</label></br>
+                                    <label for="Declaration"><strong>Course Curriculum / Material / Syllabus</strong></label></br>
                                     <span class="badge badge-success">
                                         <a href="{{url('doc').'/'.$ApplicationCourses->course_curriculum_pdf}}"
                                             target="_blank" title="Download Document">
@@ -286,7 +286,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <label for="Declaration">Course Details (Excel format)
+                                    <label for="Declaration"><strong>Course Details (Excel format)</strong>
                                     </label></br>
                                     <span class="badge badge-success">
                                         <a href="{{url('doc').'/'.$ApplicationCourses->course_details_xsl}}"

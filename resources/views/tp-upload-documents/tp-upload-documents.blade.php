@@ -220,23 +220,22 @@
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
-                                   
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $nc_type . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                     @elseif($doc->status==1)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                         Accepted <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                     @elseif($doc->status==2)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                         NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @if($doc->nc_flag==1)
@@ -250,7 +249,7 @@
                                     @elseif($doc->status==3)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                              @if($doc->nc_flag==1)
@@ -263,14 +262,14 @@
                                              @elseif($doc->status==6)
                                              <a target="_blank"
                                                 title="{{$doc->doc_file_name}}"
-                                                href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                                href="{{ url('tp-document-detail'. '/' . $doc->status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                                 class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                                 Rejected <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @elseif($doc->status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/' . $doc->status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                              @if($doc->admin_nc_flag==1)

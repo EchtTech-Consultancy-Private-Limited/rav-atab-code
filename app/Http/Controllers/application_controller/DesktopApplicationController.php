@@ -348,11 +348,10 @@ class DesktopApplicationController extends Controller
         ])
         ->first();
         /*count the no of mandays*/
-        $no_of_mandays = DB::table('tbl_assessor_assign')->where(['assessor_id'=>$assessor_id,'application_id'=>$application_id])->count();
-   
+        
+        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$application_id])->count();
+        
         $questions = DB::table('questions')->get();
-            
-
         foreach($questions as $question){
             $obj = new \stdClass;
             $obj->title= $question->title;
@@ -372,8 +371,6 @@ class DesktopApplicationController extends Controller
                         $final_data[] = $obj;
         }
 
- 
-    // dd($final_data);
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
         return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way'));

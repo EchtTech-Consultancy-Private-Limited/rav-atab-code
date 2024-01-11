@@ -42,7 +42,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <ul class="breadcrumb breadcrumb-style ">
                         <li class="breadcrumb-item">
-                            <h4 class="page-title">Application c</h4>
+                            <h4 class="page-title">Application</h4>
                         </li>
                         <li class="breadcrumb-item bcrumb-1">
                             <a href="{{ url('/dashboard') }}">

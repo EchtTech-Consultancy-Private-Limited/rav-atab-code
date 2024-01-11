@@ -288,7 +288,9 @@ class AdminApplicationController extends Controller
             ->get();
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
             $form_view=0;
-            if($nc_type==="nr" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept")){
+            // dd($tbl_nc_comments->nc_type);
+            
+            if($nc_type==="nr" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
                 $form_view=1;
             }else if($nc_type=="reject"){
                 $form_view=0;

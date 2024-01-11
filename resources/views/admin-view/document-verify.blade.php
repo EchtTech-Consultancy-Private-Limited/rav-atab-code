@@ -62,6 +62,13 @@
                     })
                 </script>
             @endif
+            
+            @if($nc_comments[0]->comments=="Request for Final Approval")
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Ooh!</strong> Request sent already for final approval
+            </div>
+            @endif
+            
 
             @if($form_view==1)
                 <div class="row ">
