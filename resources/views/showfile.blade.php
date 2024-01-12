@@ -114,7 +114,7 @@
                                             <td>{{ $remark->remark }}</td>
                                             <td>{{ $remark->user->firstname ?? '' }}
                                                 {{ $remark->user->middlename ?? '' }}
-                                                {{ $remark->user->lastname ?? '' }}{{ $remark->created_by === auth()->user()->id ? '(You)' : '' }}
+                                                {{ $remark->user->lastname ?? '' }}{{ $remark->created_by == auth()->user()->id ? '(You)' : '' }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -189,7 +189,7 @@
 
                 // Validate the Remark field
                 let remark = $('#remark').val();
-                if (remark.length === 0) {
+                if (remark.length == 0) {
                     event.preventDefault();
                     $('#remark').after('<span class="text-danger">Remark is required</span>');
                 }

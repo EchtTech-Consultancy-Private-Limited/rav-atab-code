@@ -193,7 +193,7 @@
              var myVar = $("#Country").val();
 
              $.ajax({
-                 url: "{{ url('/state-list') }}",
+                 url:`${BASE_URL}/state-list`,
                  type: "get",
                  data: {
                      "myData": myVar
@@ -241,7 +241,7 @@
 
 
              $.ajax({
-                 url: "{{ url('/city-list') }}",
+                 url:`${BASE_URL}/city-list`,
                  type: "get",
                  data: {
                      "myData": myVars

@@ -220,6 +220,7 @@
                                 </table>
 
                                 <div class="table-responsive">
+                                    @if(count($final_data)>0)
                                     <table>
                                         <thead>
                                             <tr>
@@ -238,7 +239,7 @@
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
                                                     @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended")
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
                                                       {{$row->nc_raise}}
                                                       @endif
                                                     @endforeach
@@ -246,7 +247,7 @@
                                                 <td>
 
                                                 @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="not_recommended")
+                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
                                                       {{$row->capa_mark}}
                                                       @endif
                                                     @endforeach
@@ -254,9 +255,9 @@
                                                 <td>
                                                     @foreach($rows->nc as $key=>$row)
                                                     @if($row->nc_raise_code=="NC1")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
                                                     @elseif($row->nc_raise_code=="NC2")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
                                                     @endif
                                                     @endforeach
                                             
@@ -287,6 +288,8 @@
                                         </tbody>
                                     
                                     </table>
+                                    @endif
+
                                     @if(!$is_final_submit)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                     <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>

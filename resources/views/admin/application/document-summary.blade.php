@@ -202,7 +202,7 @@
                                                                         Document
                                                                     </a>
                                                                 </label>
-                                                            @elseif ($extension === 'pdf')
+                                                            @elseif ($extension == 'pdf')
                                                                 <label>
                                                                     <a href="{{ url('show-course-pdf/' . $document->document_file) }}"
                                                                         target="_blank" title="View Document}">
@@ -319,7 +319,7 @@
                                                                 @php
                                                                     $fileExtension = pathinfo($verifiedDocumentForAdmin->verified_document, PATHINFO_EXTENSION);
                                                                 @endphp
-                                                                @if ($fileExtension === 'pdf')
+                                                                @if ($fileExtension == 'pdf')
                                                                     <a target="_blank"
                                                                         href="{{ url('show-course-pdf/' . $verifiedDocumentForAdmin->verified_document) }}"
                                                                         class="docBtn text-size-11 bg-primary"
@@ -342,7 +342,7 @@
                                                                     $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
                                                                 @endphp
 
-                                                                @if ($fileExtension === 'pdf')
+                                                                @if ($fileExtension =='pdf')
                                                                     <a target="_blank"
                                                                         href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
                                                                         class="docBtn text-size-11 bg-secondary">View

@@ -264,7 +264,7 @@
                                                 <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->id}}"></span> </td>
+                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal">RAVAP-{{$summeryReport->id}}</span> </td>
                                                 <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
@@ -316,8 +316,10 @@
                                                     </td>
                                                     <td>
     
-                                                    @foreach($rows->nc as $row)
-                                                      {{$row->capa_mark}}
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},
+                                                    @endif
                                                     @endforeach
                                                     </td>
                                                     <td>

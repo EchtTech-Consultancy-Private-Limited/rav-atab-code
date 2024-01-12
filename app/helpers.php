@@ -6,6 +6,7 @@ use App\Models\ApplicationCourse;
 use App\Models\ApplicationNotification;
 use App\Models\DocComment;
 use App\Models\DocumentRemark;
+use App\Models\TblApplication;
 use App\Models\Question;
 use App\Models\SummaryReport;
 use App\Models\SummaryReportChapter;
@@ -1000,6 +1001,19 @@ function getApplicationListForSecondPayment()
     }
     
 }
+
+/*Created by Suraj*/
+function getSecondPaymentNotification()
+    {
+        $applicationsIds = TblApplication::where('tp_id', auth()->user()->id)->get(['id']);
+        $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('second_payment_status',0)->get();
+        if($final_assessor_summary){
+            return $final_assessor_summary;
+        }else{
+        return [];
+        }
+    }
+/*end here*/
 
 function getNotificationForSecondPayment()
 {

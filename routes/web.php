@@ -332,16 +332,21 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 // Summary Routes
 
     Route::get('desktop/summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopIndex"]);
-    Route::get('onsite/summary',[SummaryController::class,"onSiteIndex"]);
+    Route::get('onsite/summary/{application_id}/{application_course_id}',[SummaryController::class,"onSiteIndex"]);
     Route::get('desktop/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
     Route::get('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
+
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
-    Route::get('onsite/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
+    Route::get('onsite/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
 
     Route::get('desktop-application-course-summaries',[DesktopApplicationController::class,"getCourseSummariesList"]);
     Route::get('desktop-view-final_summaries',[DesktopApplicationController::class,"desktopViewFinalSummary"]);
 
+    Route::get('onsite-application-course-summaries',[OnsiteApplicationController::class,"getCourseSummariesList"]);
+    // Route::get('onsite-view-final_summaries',[OnsiteApplicationController::class,"onsiteViewFinalSummary"]);
+
     Route::get('application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
+    
     Route::get('view-final_summaries',[SummaryController::class,"tpViewFinalSummary"]);
     Route::get('admin-view-final_summaries',[SummaryController::class,"adminViewFinalSummary"]);
 
@@ -365,7 +370,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
     Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment'])->name('course.payment');
     Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
-
+    Route::get('/course-edit', [ApplicationCoursesController::class, 'course_edit']);
+    Route::post('/course-update/{id?}', [ApplicationCoursesController::class, 'course_update']);
 
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);
@@ -377,7 +383,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/tp/application-view/{id}', [TPApplicationController::class, 'getApplicationView']);
     Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
     Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
-    Route::get('/onsite/application-view', [OnsiteApplicationController::class, 'getApplicationView']);
+    Route::get('/onsite/application-view/{id}', [OnsiteApplicationController::class, 'getApplicationView']);
 
     // Doc Routes
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
@@ -385,9 +391,14 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
     
-    Route::get('/tp-document-detail/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetails']);
+    Route::get('/tp-document-detail/{nc_type}/{assessor_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetails']);
+
+    Route::post('/tp-submit-remark', [TPApplicationController::class, 'tpSubmitRemark']);
+
 
     Route::get('/desktop/document-list/{id}/{course_id}', [DesktopApplicationController::class, 'applicationDocumentList']);
+
+    Route::get('/onsite/document-list/{id}/{course_id}', [OnsiteApplicationController::class, 'applicationDocumentList']);
 
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
 
@@ -395,18 +406,24 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
 
+    Route::get('/onsite-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [OnsiteApplicationController::class, 'onsiteVerfiyDocument']);
+
+
+
     Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
+    Route::post('/onsite/document-verfiy', [OnsiteApplicationController::class, 'onsiteDocumentVerify']);
+    Route::post('/onsite/upload-photograph', [OnsiteApplicationController::class, 'onsiteUploadPhotograph']);
 
     Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
-   
-   
-
 
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
     Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
+
+    Route::get('/tp-second-payment', [TpApplicationController::class, 'secondPaymentView']);
+    Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
 
     
 

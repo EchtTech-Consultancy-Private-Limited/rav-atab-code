@@ -99,6 +99,7 @@
          <h5 class="uploading-text"> Uploading... </h5>
       </div>
    </div>
+   <div class="full_screen_loading">Loading&#8230;</div>
    <!-- Overlay For Sidebars -->
    <div class="overlay"></div>
    <!-- #END# Overlay For Sidebars -->
@@ -178,6 +179,7 @@
                                              <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
                                              <th class="center"> Cross reference to supporting evidence provided
                                              </th>
+                                             
                                              <th>Action</th>
                                           </tr>
                                        </thead>
@@ -216,28 +218,27 @@
                                      
                                     @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
-                                        return $item['doc_unique_id'] === $question['question']->id;
+                                        return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
-                                   
-                                    @if($doc->status===0)
+                                    @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $nc_type . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
-                                    @elseif($doc->status===1)
+                                    @elseif($doc->status==1)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                         Accepted <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
-                                    @elseif($doc->status===2)
+                                    @elseif($doc->status==2)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                         NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
-                                        @if($doc->nc_flag===1)
+                                        @if($doc->nc_flag==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
@@ -245,33 +246,33 @@
                                        @endif
                                        
 
-                                    @elseif($doc->status===3)
+                                    @elseif($doc->status==3)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
-                                             @if($doc->nc_flag===1)
+                                             @if($doc->nc_flag==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
                                              </div>
                                              @endif
                                             
-                                             @elseif($doc->status===6)
+                                             @elseif($doc->status==6)
                                              <a target="_blank"
                                                 title="{{$doc->doc_file_name}}"
-                                                href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                                href="{{ url('tp-document-detail'. '/' . $doc->status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                                 class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                                 Rejected <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
-                                        @elseif($doc->status===4)
+                                        @elseif($doc->status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/' . $doc->status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
-                                             @if($doc->admin_nc_flag===1)
+                                             @if($doc->admin_nc_flag==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -279,7 +280,7 @@
                                              Accept <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->admin_nc_flag===2)
+                                             @if($doc->admin_nc_flag==2)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -287,7 +288,7 @@
                                              Reject <span>By Admin</span></a>
                                              @endif
                                              
-                                             @if($doc->nc_flag===1)
+                                             @if($doc->nc_flag==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
@@ -302,6 +303,35 @@
                                              </div>
                                     @endif 
                                     @endforeach
+
+
+                                    <!-- Onsite nc's list -->
+                                   
+                                    @if(count($question['onsite_nc_comments'])>0)
+                                                @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
+                                                <?php
+                                                $nc_status = 1;
+                                                   if($onsite_nc_comment->nc_type=="NC1")
+                                                   $nc_status = 2;
+                                                   else if($onsite_nc_comment->nc_type=="NC2")
+                                                   $nc_status = 3;
+                                                   else if($onsite_nc_comment->nc_type=="not_recommended")
+                                                   $nc_status = 4;
+                                                   else
+                                                   $nc_status = 1;
+                                                   ?>
+
+                                                
+                                                <a target="_blank"
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('tp-document-detail'. '/' . $nc_status . '/onsite' .'/'. $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+
+                                        class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn docBtn_nc m-1">
+                                        {{$onsite_nc_comment->nc_type}} <span>{{ucfirst($onsite_nc_comment->assessor_type)}} Assessor</span></a>
+                                       @endforeach
+                                    @endif
+
+                                    <!-- Onsite nc's list end here -->
 
                                  <!--this else for first time upload doc  -->
                                     @else
@@ -319,14 +349,18 @@
                                               
                                                 {{-- getting documents for each row end point --}}
                                              </td>
+
+
+                                        
+
+
+
                                              <td>
                                  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                  
                                     @else
-                                  
                                                 <span class="text-danger"
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment
                                                 pending!</span>
@@ -350,12 +384,20 @@
 
                                                    @isset($question['nc_comments'])
                                                       @foreach($question['nc_comments'] as $k=>$nc_comment)
-                                                      <tr class="text-{{$nc_comment->nc_type==='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+                                                      <tr class="text-{{$nc_comment->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
                                                          <td width="60">{{$k+1}}</td>
                                                          <td width="130">{{$nc_comment->doc_sr_code}}</td>
                                                          <td width="120">{{date('d-m-Y',strtotime($nc_comment->created_at))}}</td>
                                                          <td>{{$nc_comment->comments}}</td>
-                                                         <td>{{$nc_comment->nc_type}}</td>
+                                                         <td>
+                                                         @php
+                                                            $string = $nc_comment->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
+                                                         </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
                                                       </tr>
                                                      @endforeach
@@ -389,7 +431,7 @@
           const documentRow = button.closest('.document-row');
           const documentDetails = documentRow.nextElementSibling;
           if (documentDetails && (documentDetails.classList.contains('document-details'))) {
-              if (documentDetails.style.display === 'none' || documentDetails.style.display === '') {
+              if (documentDetails.style.display == 'none' || documentDetails.style.display == '') {
                   documentDetails.style.display = 'table-row';
                   button.textContent = 'Hide Comments';
               } else {
@@ -402,6 +444,7 @@
    <script>
       $(document).ready(function() {
           $('.fileup').change(function() {
+            $('.full_screen_loading').show();
               var fileInput = $(this);
               var questionId = fileInput.data('question-id');
               var form = $('#submitform_doc_form_' + questionId)[0];
@@ -409,33 +452,33 @@
               var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
               var uploadedFileName = fileInput.val();
               var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
-              if (allowedExtensions.indexOf(fileExtension) === -1) {
-                  Swal.fire({
-                      position: 'center',
-                      icon: 'error',
-                      title: 'Invalid File Type',
-                      text: 'Please upload a PDF or DOC file.',
-                      showConfirmButton: true
-                  });
-                  // Clear the file input
+              if (allowedExtensions.indexOf(fileExtension) == -1) {
+                  toastr.error("Please upload a PDF or DOC file.", "Invalid file type",{
+                            timeOut: 0,
+                            extendedTimeOut: 0,
+                            closeButton: true,
+                            closeDuration: 0,
+                        });
+                  $('.full_screen_loading').hide();
                   fileInput.val('');
                   return;
               }
-              $("#loader").removeClass('d-none');
+            //   $("#loader").removeClass('d-none');
               $.ajaxSetup({
                   headers: {
                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                   }
               });
-             
+
               $.ajax({
-                  url: "/tp-add-document", // Your server-side upload endpoint
+                  url: `${BASE_URL}/tp-add-document`, // Your server-side upload endpoint
                   type: 'POST',
                   data: formData,
                   processData: false,
                   contentType: false,
                   success: function(response) {
-                      $("#loader").addClass('d-none');
+                     //  $("#loader").addClass('d-none');
+                     $('.full_screen_loading').hide();
                       if (response.success) {
                         toastr.success(response.message, {
                             timeOut: 0,
@@ -447,8 +490,14 @@
                       }
                   },
                   error: function(xhr, status, error) {
-                      // Handle errors
                       console.error(error);
+                      $('.full_screen_loading').hide();
+                      toastr.error("Something went wrong!", {
+                            timeOut: 0,
+                            extendedTimeOut: 0,
+                            closeButton: true,
+                            closeDuration: 0,
+                        });
                   }
               });
           });

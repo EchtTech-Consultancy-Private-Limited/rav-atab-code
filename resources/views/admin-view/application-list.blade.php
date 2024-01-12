@@ -110,9 +110,9 @@
                                                     {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->payment_status===0)
+                                                @if($item->application_list->payment_status==0)
                                                     <span class="badge badge-main warning">Payment Pending</span>
-                                                    @elseif($item->application_list->payment_status===1)
+                                                    @elseif($item->application_list->payment_status==1)
                                                     <span class="badge badge-main primary">Received</span>
                                                     @else
                                                     <span class="badge badge-main success">Accepted</span>
@@ -124,7 +124,7 @@
                                                                 class="material-icons">visibility</i></a>
 
                                                     @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id===null)
+                                                        @if($item->payment->aknowledgement_id==null)
                                                         <button id="acknowledgement_{{$item->application_list->id}}"
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
@@ -175,7 +175,7 @@
                method="post">
                @csrf
                <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
-                <input type="hidden" name="assessor_type" value="desktop">
+                <input type="hidden" name="assessor_type" value="{{$item->assessor_type=='desktop'?'desktop':'onsite'}}">
                 <?php
                     $application_assessor_arr = listofapplicationassessor($item->application_list->id);
 
@@ -183,10 +183,43 @@
                <br>
                <label class="mb-3"><b>Assessment
                Type</b></label><br>
-               <p>Desktop Assessment</p>
-              
+
+               <p>{{$item->assessor_type=="desktop"?'Desktop Assessment':'Onsite Assessment'}}</p>
+               <!--   -->
+                @if($item->assessor_type=="onsite")
+               <div class="form-check form-check-inline radio-ass">
+               <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked>
+                    <span>
+                        Onsite                     
+                    </span>
+                    </label>  
+
+                    <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="hybrid">
+                    <span>
+                        Hybrid                     
+                    </span>
+                    </label>  
+
+                    <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="virtual">
+                    <span>
+                        Virtual                     
+                    </span>
+                    </label>  
+
+              </div>
+              @endif
+            
+             
+                    
+                   
+
+
+
                <div class="destop-id">
-               @foreach ($assessor_list as $k => $assesorsData)
+               @foreach ($item->assessor_list as $k => $assesorsData)
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
                   <br>
                   <label>

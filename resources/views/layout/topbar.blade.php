@@ -70,42 +70,30 @@
                  </li>
 
                  @if (Auth::user()->role == 2)
+                         @php
+                             $applications = getSecondPaymentNotification();
+                         @endphp
                      <li class="dropdown">
                          <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
                              role="button">
                              <i class="far fa-bell"></i>
                              @if (getNotificationForSecondPayment())
-                                 <span class="notify" style="    background-color: #ff5722 !important;"></span>
-                                 <span class="heartbeat" style="    background-color: #ff5722 !important;"></span>
+                                @if(count($applications)>0)
+                                 <span class="notify" style="background-color: #ff5722 !important;"></span>
+                                 <span class="heartbeat" style="background-color: #ff5722 !important;"></span>
+                                 @endif
                              @endif
                          </a>
-
-                         @php
-                             $applications = getApplicationListForSecondPayment();
-                         @endphp
                          <ul class="dropdown-menu pullDown placeholder_input">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
-                                     @if (getNotificationForSecondPayment())
+                                     @if (count($applications)>0)
                                          @foreach ($applications as $application)
                                              <li>
-                                                 {{-- @if ($application->notification_type == 'document') --}}
-                                                 {{-- <a href="{{ url('previews-application-first/' . $application->application->id.'/'.$application->id) }}"
+                                                <a href="{{ url('show-course-payment/' . dEncrypt($application->application_id)) }}"
                                                          style="color: #000;">
-                                                         Application ID {{ $application->application->application_uid }}
-
-                                                     </a> --}}
-                                                {{-- @if ($application->notification_type != 'document')
-                                                    <a href="{{ url('pending-payments/' . $application->application->id) }}"
-                                                        style="color: #000;">
-                                                        Application ID {{ $application->application->application_uid }}
-
-                                                    </a>
-                                                @endif --}}
-                                                <a href="{{ url('pending-payments/' . $application->application_id) }}"
-                                                         style="color: #000;">
-                                                         Application ID {{ $application->application_id }}
+                                                         Application ID : RAVAP-{{ $application->application_id }}
                                                 </a>
                                              </li>
                                          @endforeach

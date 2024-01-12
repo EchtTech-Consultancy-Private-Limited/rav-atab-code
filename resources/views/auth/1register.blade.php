@@ -424,7 +424,7 @@
             let togglePassword = document.querySelector('#togglepassword');
 
             togglePassword.addEventListener('click', (e)=>{
-                const type = password.getAttribute('type') === 'password' ? 'text' :'password';
+                const type = password.getAttribute('type') == 'password' ? 'text' :'password';
                 password.setAttribute('type', type);
                 this.classlist.toggle('fa fa-eye');
             });
@@ -434,7 +434,7 @@
             let togglecpassword = document.querySelector('#togglecpassword');
 
             togglecpassword.addEventListener('click', (e)=>{
-                const type = cpassword.getAttribute('type') === 'cpassword' ? 'text' :'cpassword';
+                const type = cpassword.getAttribute('type') == 'cpassword' ? 'text' :'cpassword';
 
                 cpassword.setAttribute('type', type);
 

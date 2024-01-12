@@ -50,7 +50,10 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-
+                    @if($is_final_submit)
+                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        </a>
+                    @endif
                     <div class="float-right">
                         <a href="{{ url('tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
@@ -387,7 +390,7 @@
                                 @if ($data == 'pdf')
                                 <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
                                     title="Document 3" id="docpdf3" download>
-                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                    <i class="fa fa-download mr-2"></i>Payment pdf 
                                 </a>
                                 @else
                                 @if (isset($ApplicationPayment->payment_proof_by_account))

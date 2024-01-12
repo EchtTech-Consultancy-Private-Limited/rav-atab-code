@@ -29,7 +29,7 @@ class DesktopApplicationController extends Controller
             $assessor_application = DB::table('tbl_assessor_assign')
             ->where('assessor_id',$assessor_id)
             ->pluck('application_id')->toArray();
-
+            $final_data=array();
             $application = DB::table('tbl_application')
             ->whereIn('payment_status',[1,2,3])
             ->whereIn('id',$assessor_application)
@@ -62,7 +62,7 @@ class DesktopApplicationController extends Controller
             }
         return view('desktop-view.application-list',['list'=>$final_data]);
     }
-    /** Whole Application View for Account */
+    /** Whole Application View for desktop */
     public function getApplicationView($id){
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
@@ -159,14 +159,15 @@ class DesktopApplicationController extends Controller
     {
         try{
    
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->latest('id')
             ->get();
 
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])->latest('id')->first();
         
+            // dd($tbl_nc_comments);
             $is_nc_exists=false;
             if($nc_type==="view"){
                 $is_nc_exists=true;
@@ -191,6 +192,11 @@ class DesktopApplicationController extends Controller
              }else if($tbl_nc_comments->nc_type==="Request_For_Final_Approval"){
                 $dropdown_arr = array(
                     "Reject"=>"Reject",
+                    "Accept"=>"Accept",
+                );
+             }else{
+                $dropdown_arr = array(
+                    "NC1"=>"NC1",
                     "Accept"=>"Accept",
                 );
              }
@@ -313,7 +319,7 @@ class DesktopApplicationController extends Controller
 
     public function getCourseSummariesList(Request $request){
 
-        $get_all_final_course_id = DB::table('assessor_final_summary_reports')->where('application_id',$request->input('application'))->get()->pluck('application_course_id')->toArray();
+        $get_all_final_course_id = DB::table('assessor_final_summary_reports')->where('application_id',$request->input('application'))->where('assessor_type','desktop')->get()->pluck('application_course_id')->toArray();
 
         $courses = TblApplicationCourses::where('application_id', $request->input('application'))
         ->whereIn("id",$get_all_final_course_id)
@@ -342,11 +348,10 @@ class DesktopApplicationController extends Controller
         ])
         ->first();
         /*count the no of mandays*/
-        $no_of_mandays = DB::table('tbl_assessor_assign')->where(['assessor_id'=>$assessor_id,'application_id'=>$application_id])->count();
-   
+        
+        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$application_id])->count();
+        
         $questions = DB::table('questions')->get();
-            
-
         foreach($questions as $question){
             $obj = new \stdClass;
             $obj->title= $question->title;
@@ -366,20 +371,6 @@ class DesktopApplicationController extends Controller
                         $final_data[] = $obj;
         }
 
-    // foreach($questions as $question){
-    //     $obj = new \stdClass;
-    //     $obj->title= $question->title;
-    //     $obj->code= $question->code;
-    //         $value = DB::table('assessor_summary_reports')->where([
-    //             'application_id' => $application_id,
-    //             'assessor_id' => $assessor_id,
-    //             'object_element_id' => $question->id,
-    //             'doc_sr_code' => $question->code,
-    //         ])->get();
-    //             $obj->nc = $value;
-    //             $final_data[] = $obj;
-    // }
-    // dd($final_data);
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
         return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way'));

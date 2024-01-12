@@ -171,9 +171,9 @@ $(document).ready(function () {
 
         var myVars=$("#state").val();
 
-
+       
             $.ajax({
-            url: "{{url('/city-list')}}",
+            url:  `${BASE_URL}/city-list`,
             type: "get",
             data:{"myData":myVars},
             success: function(resdata){
@@ -209,7 +209,7 @@ $(document).ready(function () {
         var myVar=$("#Country").val();
 
             $.ajax({
-            url: "{{url('/state-list')}}",
+            url:`${BASE_URL}/state-list`,
             type: "get",
             data:{"myData":myVar},
             success: function(resdata){

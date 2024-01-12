@@ -195,13 +195,13 @@
                                             <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$summertReport->application_uid}}</span>
+                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$summertReport->id}}</span>
                                             </td>
                                             <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->Person_Name}}</span>
+                                            <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->person_name}}</span>
                                             </td>
                                             <td colspan="3" class="fw-bold">Name of the course  to be assessed:
                                             </br>
@@ -251,58 +251,63 @@
                                                 <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
-                                                    @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3 && $row->nc_raise_code!=6)
-                                                      {{$row->nc_raise}}
-                                                      @endif
+                                                @foreach($rows->nc as $row)
+                                                      {{$row->nc_type}},
                                                     @endforeach
                                                 </td>
                                                 <td>
 
-                                                @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=4 && $row->nc_raise_code!=3)
-                                                      {{$row->capa_mark}}
-                                                      @endif
+                                                @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},
+                                                    @else
+                                                    N/A
+                                                    @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code==1)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
-                                                    @elseif($row->nc_raise_code==2)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
-                                                    @elseif($row->nc_raise_code==4)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-success m-1" href="">Accepted Doc</a>       
-                                                    @elseif($row->nc_raise_code==3)
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Recommended</a>  
-                                                    @else
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">Not Accepted</a>      
-                                                    @endif
-                                                    @endforeach
+                                                @foreach($rows->nc as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                            @if($row->nc_type=="not_recommended")
+                                                            {{ucfirst($row->nc_type)}}
+                                                            @else
+                                                            {{$row->nc_type}}
+                                                            @endif
+                                                        
+                                                    </a>  
+                                                        @endforeach
                                             
                                             </td>
                                             <td>
-                                                {{-- 
+                                                
                                                 @php
                                                 $count = count($rows->nc);
                                                 @endphp
                                              
                                                 @if($count==1)
-                                                    {{$rows->nc[0]->doc_verify_remark}}
+                                                    {{$rows->nc[0]->comments??''}}
                                                 @elseif($count==2)
-                                                {{$rows->nc[1]->doc_verify_remark}}
+                                                {{$rows->nc[1]->comments??''}}
                                                 @elseif($count==3)
-                                                {{$rows->nc[2]->doc_verify_remark}}
+                                                {{$rows->nc[2]->comments??''}}
                                                 @elseif($count==4)
-                                                {{$rows->nc[3]->doc_verify_remark}}
+                                                {{$rows->nc[3]->comments??''}}
                                                 @elseif($count==5)
-                                                {{$rows->nc[4]->doc_verify_remark}}
+                                                {{$rows->nc[4]->comments??''}}
                                                 @elseif($count==6)
-                                                {{$rows->nc[5]->doc_verify_remark}}
+                                                {{$rows->nc[5]->comments??''}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark}}
+                                                {{$rows->nc[6]->comments??''}}
                                                 @endif
-                                                --}}
+                                           
                                             </td>
                                             </tr>
                                             @endforeach
@@ -334,7 +339,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$summertReport->Person_Name}}</span></td>
+                                                <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$summertReport->person_name}}</span></td>
                                                 <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$summertReport->course_name}}</span></td>
                                             </tr>
                                             <tr>

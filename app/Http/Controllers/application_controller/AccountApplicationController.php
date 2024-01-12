@@ -17,8 +17,9 @@ class AccountApplicationController extends Controller
 
         $application = DB::table('tbl_application as a')
         ->whereIn('payment_status',[0,1,2])
+        ->orderBy('id','desc')
         ->get();
-
+        $final_data=array();
         foreach($application as $app){
             $obj = new \stdClass;
             $obj->application_list= $app;
@@ -54,12 +55,10 @@ class AccountApplicationController extends Controller
     /** Whole Application View for Account */
     public function getApplicationView($id){
 
-
-
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
-       
+        
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();

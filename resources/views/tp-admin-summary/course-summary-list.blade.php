@@ -91,7 +91,10 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->course_name }}</td>
-                        <td>{{ $item->course_duration }}</td>
+                        <td>   {{ $item->course_duration_y ?? '' }} Years(s)
+                        {{ $item->course_duration_m ?? '' }} Month(s)
+                        {{ $item->course_duration_d ?? '' }} Day(s)
+                        {{ $item->course_duration_h ?? '' }} Hour(s)</td>
                         <td>{{ $item->eligibility }}</td>
                         <th>
                             @if(Auth::user()->role == 1)

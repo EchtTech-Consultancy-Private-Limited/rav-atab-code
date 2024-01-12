@@ -62,8 +62,15 @@
                     })
                 </script>
             @endif
+            
+            @if($nc_comments[0]->comments=="Request for Final Approval")
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Ooh!</strong> Request sent already for final approval
+            </div>
+            @endif
+            
 
-            @if($form_view===1)
+            @if($form_view==1)
                 <div class="row ">
                     <div class="row clearfix">
                         <div class="col-lg-12 col-md-12">
@@ -261,11 +268,11 @@
         document.getElementById("status").addEventListener("change", function() {
             var comment_text = document.getElementById("comment_text");
             var commentSection = document.getElementById("comment-section");
-            if (this.value === "Accept") { // If "Close" is selected
+            if (this.value == "Accept") { // If "Close" is selected
                 comment_text.value = "Document has been approved";
                 commentSection.style.display = "none"; // Hide the textarea
 
-            } else if(this.value==="Request_For_Final_Approval"){
+            } else if(this.value=="Request_For_Final_Approval"){
                 commentSection.style.display = "block"; // Show the textarea for other options
                 comment_text.value = "Request for Final Approval";
             } else{

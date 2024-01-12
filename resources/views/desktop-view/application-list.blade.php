@@ -121,9 +121,9 @@
                                                   
                                                 </td>
                                                 <td>
-                                                    @if($item->application_list->payment_status===0)
+                                                    @if($item->application_list->payment_status==0)
                                                     <span class="badge badge-main warning">Payment Pending</span>
-                                                    @elseif($item->application_list->payment_status===1)
+                                                    @elseif($item->application_list->payment_status==1)
                                                     <span class="badge badge-main primary">Received</span>
                                                     @else
                                                     <span class="badge badge-main warning">Application in process</span>

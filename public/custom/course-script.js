@@ -17,7 +17,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: "{{ url('course-list') }}",
+            url: `${BASE_URL}/course-list`,
             type: "get",
             data: {
                 id: UserName
@@ -83,7 +83,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: "{{ url('course-edit') }}",
+            url: `${BASE_URL}/course-edit`,
             type: "get",
             data: {
                 id: UserName

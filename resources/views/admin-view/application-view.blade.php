@@ -50,7 +50,10 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-
+                    @if($is_final_submit)
+                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        </a>
+                    @endif
                     <div class="float-right">
                         <a href="{{ url('admin/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
@@ -372,10 +375,11 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($ApplicationPayment->status == 0)
+                                
+                            @if ($ApplicationPayment->status == 0)
                                 N/A
                                 @endif
-                                @if ($ApplicationPayment->status == 1)
+                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
                                 @if (!$ApplicationPayment->payment_proof_by_account)
                                 File not available!
                                 @endif
@@ -386,7 +390,7 @@
                                 @if ($data == 'pdf')
                                 <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
                                     title="Document 3" id="docpdf3" download>
-                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                    <i class="fa fa-download mr-2"></i>Payment pdf 
                                 </a>
                                 @else
                                 @if (isset($ApplicationPayment->payment_proof_by_account))
@@ -416,7 +420,7 @@
             </div>
 
             @if (isset($ApplicationPayment))
-                @if( $application_payment_status->status===0)
+                @if( $application_payment_status->status==0)
                 <div class="card p-relative" id="payment_rcv_card">
                 <div class="box-overlay">
                      <span class="spinner-border"></span>
@@ -454,7 +458,7 @@
                 @endif
 
 
-                @if( $application_payment_status->status===1)
+                @if( $application_payment_status->status==1)
                 <div class="card" id="payment_apr_card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">

@@ -218,12 +218,12 @@
                                     </tbody>
                                 
                                 </table>
-
+                                
                                 <div class="table-responsive">
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Sl. No </th>
+                                                <th>S.No. </th>
                                                 <th>Objective Element</th>
                                                 <th> NC raised</th>
                                                 <th> CAPA by Training Provider</th>
@@ -254,9 +254,9 @@
                                                 <td>
                                                     @foreach($rows->nc as $key=>$row)
                                                     @if($row->nc_raise_code=="NC1")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC1</a>  
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
                                                     @elseif($row->nc_raise_code=="NC2")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-warning m-1" href="">NC2</a>
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
                                                     @endif
                                                     @endforeach
                                                    
@@ -268,19 +268,19 @@
                                                 @endphp
                                              
                                                 @if($count==1)
-                                                    {{$rows->nc[0]->doc_verify_remark??''}}
+                                                    {{$rows->nc[0]->comments??''}}
                                                 @elseif($count==2)
-                                                {{$rows->nc[1]->doc_verify_remark??''}}
+                                                {{$rows->nc[1]->comments??''}}
                                                 @elseif($count==3)
-                                                {{$rows->nc[2]->doc_verify_remark??''}}
+                                                {{$rows->nc[2]->comments??''}}
                                                 @elseif($count==4)
-                                                {{$rows->nc[3]->doc_verify_remark??''}}
+                                                {{$rows->nc[3]->comments??''}}
                                                 @elseif($count==5)
-                                                {{$rows->nc[4]->doc_verify_remark??''}}
+                                                {{$rows->nc[4]->comments??''}}
                                                 @elseif($count==6)
-                                                {{$rows->nc[5]->doc_verify_remark??''}}
+                                                {{$rows->nc[5]->comments??''}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark??''}}
+                                                {{$rows->nc[6]->comments??''}}
                                                 @endif
                                             </td>
                                             </tr>
@@ -293,6 +293,7 @@
                                     <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>
                                     @endif
                                 </div>
+                               
                                 </section>
                             </button>
                                 </div>

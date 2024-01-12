@@ -333,7 +333,7 @@
                         $fileExtension = pathinfo($pdfUrl, PATHINFO_EXTENSION);
                     @endphp
 
-                    @if ($fileExtension === 'pdf')
+                    @if ($fileExtension == 'pdf')
                         <object data="{{ $pdfUrl }}" type="application/pdf" width="100%" height="500px">
                             <p>Unable to display PDF. <a href="{{ $pdfUrl }}" target="_blank">Download
                                     Document</a> </p>
@@ -355,7 +355,7 @@
         document.getElementById("status").addEventListener("change", function() {
             var comment_text = document.getElementById("comment_text");
             var commentSection = document.getElementById("comment-section");
-            if (this.value === "4") { // If "Close" is selected
+            if (this.value == "4") { // If "Close" is selected
                 comment_text.value = "Document has been approved";
                 commentSection.style.display = "none"; // Hide the textarea
 

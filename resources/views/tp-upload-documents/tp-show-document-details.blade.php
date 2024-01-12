@@ -42,15 +42,51 @@
         <div class="container-fluid">
 
 
-            @if (Session::has('sussess'))
+            @if (Session::has('success'))
                 <div class="alert alert-success" role="alert">
-                    {{ session::get('sussess') }}
+                    {{ session::get('success') }}
                 </div>
             @elseif(Session::has('fail'))
                 <div class="alert alert-danger" role="alert">
                     {{ session::get('fail') }}
                 </div>
             @endif
+
+            @if($is_form_view)
+            <div class="card">
+                        <div class="card-header bg-white text-dark">
+                            <h5 class="mt-2">
+                                Remark Form
+                            </h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 p-3">
+                                <form action="{{url('tp-submit-remark')}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="assessor_type" value="{{Request::segment(3)}}">
+                                    <input type="hidden" name="doc_sr_code" value="{{Request::segment(4)}}">
+                                    <input type="hidden" name="application_id" value="{{Request::segment(6)}}">
+                                    <input type="hidden" name="doc_unique_id" value="{{Request::segment(7)}}">
+                                    <input type="hidden" name="application_course_id" value="{{Request::segment(8)}}">
+                                    <input type="hidden" name="nc_type" value="{{$nc_type}}">
+                                    <div class="form-group">
+                                        <label for="tp_remark">Remark(<span class="text-danger">*</span>)</label>
+                                        <input type="text" class="form-control" id="tp_remark"  name ="tp_remark" aria-describedby="tp_remark" placeholder="Please Enter Remark." required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                        
+                        </div>
+                    </div>
+                @endif
+
+
+
 
                     <div class="card">
                         <div class="card-header bg-white text-dark">
