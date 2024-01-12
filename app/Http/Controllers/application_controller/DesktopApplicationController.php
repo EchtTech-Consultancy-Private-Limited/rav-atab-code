@@ -62,7 +62,7 @@ class DesktopApplicationController extends Controller
             }
         return view('desktop-view.application-list',['list'=>$final_data]);
     }
-    /** Whole Application View for Account */
+    /** Whole Application View for desktop */
     public function getApplicationView($id){
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))

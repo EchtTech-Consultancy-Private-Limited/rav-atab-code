@@ -95,21 +95,34 @@ class SummaryController extends Controller
         /*count the no of mandays*/
     $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>dDecrypt($application_id)])->count();
 
+    // dd(dDecrypt($application_id),dDecrypt($application_course_id),$assessor_id);
     $questions = DB::table('questions')->get();
     foreach($questions as $question){
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
-            $value = DB::table('assessor_summary_reports')->where([
-                'application_id' => dDecrypt($application_id),
+            // $value = DB::table('assessor_summary_reports')->where([
+            //     'application_id' => dDecrypt($application_id),
+            //     'assessor_id' => $assessor_id,
+            //     'object_element_id' => $question->id,
+            //     'doc_sr_code' => $question->code,
+            //     'application_course_id' => dDecrypt($application_course_id)
+            // ])->get();
+
+            $value = TblNCComments::where([
+                'application_id' =>  dDecrypt($application_id),
+                'application_courses_id' =>  dDecrypt($application_course_id),
                 'assessor_id' => $assessor_id,
-                'object_element_id' => $question->id,
-                'doc_sr_code' => $question->code,
-                'application_course_id' => dDecrypt($application_course_id)
-            ])->get();
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
                 $obj->nc = $value;
                 $final_data[] = $obj;
-    }
+    }   
        $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way;
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id)])->first();
        if(!empty($is_exists)){
@@ -532,6 +545,7 @@ class SummaryController extends Controller
                 $obj->nc = $value;
                 $onsite_final_data[] = $obj;
     }
+
   
         $onsite_assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;
       /*End here*/    

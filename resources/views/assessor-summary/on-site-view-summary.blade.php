@@ -252,27 +252,38 @@
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
                                                 @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
-                                                      {{$row->nc_raise}}
-                                                      @endif
+                                                      {{$row->nc_type}},
                                                     @endforeach
                                                 </td>
                                                 <td>
 
-                                                @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
-                                                      {{$row->capa_mark}}
-                                                      @endif
+                                                @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},
+                                                    @else
+                                                    N/A
+                                                    @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
                                                 @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code=="NC1")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
-                                                    @elseif($row->nc_raise_code=="NC2")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
-                                                    @endif
-                                                    @endforeach
+                                                        <?php 
+                                                                $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                            @if($row->nc_type=="not_recommended")
+                                                            {{ucfirst($row->nc_type)}}
+                                                            @else
+                                                            {{$row->nc_type}}
+                                                            @endif
+                                                        
+                                                    </a>  
+                                                        @endforeach
                                             
                                             </td>
                                             <td>
