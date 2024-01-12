@@ -470,17 +470,19 @@
                                             <tbody>
                                                 @foreach ($onsite_final_data as $key=>$rows)
                                                 <tr>
-                                                    <td class="fw-bold">{{$rows->code}}</td>
+                                                <td class="fw-bold">{{$rows->code}}</td>
                                                     <td>{{$rows->title}}</td>
-                                                    <td class="fw-bold">
+                                                    <td>
                                                     @foreach($rows->nc as $row)
                                                       {{$row->nc_type}},
                                                     @endforeach
                                                     </td>
                                                     <td>
     
-                                                    @foreach($rows->nc as $row)
-                                                      {{$row->capa_mark}}
+                                                    @foreach($rows->nc as $key=>$row)
+                                                    @if($row->tp_remark!=null)
+                                                        {{$key+1}} : {{ucfirst($row->tp_remark)}},</br>
+                                                    @endif
                                                     @endforeach
                                                     </td>
                                                     <td>

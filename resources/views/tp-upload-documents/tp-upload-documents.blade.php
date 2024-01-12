@@ -306,11 +306,26 @@
 
 
                                     <!-- Onsite nc's list -->
+                                   
                                     @if(count($question['onsite_nc_comments'])>0)
                                                 @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
+                                                <?php
+                                                $nc_status = 1;
+                                                   if($onsite_nc_comment->nc_type=="NC1")
+                                                   $nc_status = 2;
+                                                   else if($onsite_nc_comment->nc_type=="NC2")
+                                                   $nc_status = 3;
+                                                   else if($onsite_nc_comment->nc_type=="not_recommended")
+                                                   $nc_status = 4;
+                                                   else
+                                                   $nc_status = 1;
+                                                   ?>
+
+                                                
                                                 <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail' . '/' . $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $nc_status . '/onsite' .'/'. $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+
                                         class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn docBtn_nc m-1">
                                         {{$onsite_nc_comment->nc_type}} <span>{{ucfirst($onsite_nc_comment->assessor_type)}} Assessor</span></a>
                                        @endforeach
