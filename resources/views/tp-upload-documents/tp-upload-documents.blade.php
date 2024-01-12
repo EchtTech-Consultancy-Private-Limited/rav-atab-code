@@ -223,7 +223,7 @@
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail'. '/' . $nc_type . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                     @elseif($doc->status==1)
