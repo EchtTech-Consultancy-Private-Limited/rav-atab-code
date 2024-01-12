@@ -1030,7 +1030,7 @@
                             });
 
                             $.ajax({
-                                url: "{{ url('get-course-list') }}",
+                                url: `${BASE_URL}/get-course-list`,
                                 type: "get",
                                 data: {
                                     id: UserName
@@ -1083,7 +1083,7 @@
                             });
 
                             $.ajax({
-                                url: "{{ url('course-edit') }}",
+                                url:`${BASE_URL}/course-edit`,
                                 type: "get",
                                 data: {
                                     id: UserName

@@ -210,6 +210,7 @@ $(document).ready(function() {
   $('.my-button').prop('disabled', true)
   $('.modal-footer').hide();
 });
+
 $('.assesorsid').on('click', function() {
   var application_id = $(this).data('application-id');
   var assessor_id = $(this).val();
@@ -218,8 +219,9 @@ $('.assesorsid').on('click', function() {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
   });
+ 
   $.ajax({
-      url: "{{ url('/assigin-check-delete') }}",
+      url: `${BASE_URL}/assigin-check-delete`,
       type: "get",
       data: {
           id: application_id,
@@ -243,6 +245,7 @@ function cancelAssign() {
   location.reload(true);
 }
 $('.dateID').click('on', function() {
+  alert("alertssss")
   var $this = $(this);
   var dataVal = $(this).attr('data-id').split(',');
   var colorid = $(this).attr('date-color');
@@ -257,6 +260,7 @@ $('.dateID').click('on', function() {
       'assessmentType': dataVal[2],
       'selectedDate': dataVal[3]
   };
+ 
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -264,7 +268,7 @@ $('.dateID').click('on', function() {
   });
   $.ajax({
       type: 'POST',
-      url: "{{ url('save-selected-dates') }}",
+      url: `${BASE_URL}/save-selected-dates}`,
       data: data,
       success: function(response) {
           if (response.message == 'deleted') {

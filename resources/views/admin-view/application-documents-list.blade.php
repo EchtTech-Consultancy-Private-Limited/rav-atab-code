@@ -429,7 +429,7 @@
               });
              
               $.ajax({
-                  url: "/tp-add-document", // Your server-side upload endpoint
+                  url: `${BASE_URL}/tp-add-document`, // Your server-side upload endpoint
                   type: 'POST',
                   data: formData,
                   processData: false,

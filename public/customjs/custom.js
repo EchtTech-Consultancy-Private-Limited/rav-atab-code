@@ -17,7 +17,7 @@ var handlePaymentReceived = () => {
             },
         });
         $.ajax({
-            url: "/account-payment-received",
+            url: `${BASE_URL}/account-payment-received`,
             type: "post",
             datatype: "json",
             data: formData,
@@ -80,7 +80,7 @@ function handlePaymentApproved() {
         },
     });
     $.ajax({
-        url: "/account-payment-approved",
+        url: `${BASE_URL}/account-payment-approved`,
         type: "post",
         datatype: "json",
         data: formData,
@@ -137,7 +137,7 @@ function handleAcknowledgementPayment(id) {
             },
         });
         $.ajax({
-            url: "/admin-payment-acknowledge",
+            url: `${BASE_URL}/admin-payment-acknowledge`,
             type: "post",
             datatype: "json",
             data: {
@@ -199,7 +199,7 @@ function desktopDocumentVerfiy() {
         formData.append('doc_file_name',doc_file_name);
 
         $.ajax({
-            url: "/desktop/document-verfiy",
+            url: `${BASE_URL}/desktop/document-verfiy`,
             type: "post",
             datatype: "json",
             data:formData,
@@ -262,7 +262,7 @@ function adminDocumentVerfiy() {
         formData.append('doc_file_name',doc_file_name);
 
         $.ajax({
-            url: "/admin/document-verfiy",
+            url: `${BASE_URL}/admin/document-verfiy`,
             type: "post",
             datatype: "json",
             data:formData,
@@ -345,7 +345,7 @@ function onsiteDocumentVerfiy() {
         }
 
         $.ajax({
-            url: "/onsite/document-verfiy",
+            url:`${BASE_URL}/onsite/document-verfiy`,
             type: "post",
             datatype: "json",
             data:formData,
@@ -425,7 +425,7 @@ function onsitePhotographUpload(question_id) {
         }
       
         $.ajax({
-            url: "/onsite/upload-photograph",
+            url: `${BASE_URL}/onsite/upload-photograph`,
             type: "post",
             datatype: "json",
             data:formData,
@@ -481,6 +481,7 @@ $(".dateID").click("on", function () {
         assessmentType: dataVal[2],
         selectedDate: dataVal[3],
     };
+  
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -488,7 +489,7 @@ $(".dateID").click("on", function () {
     });
     $.ajax({
         type: "POST",
-        url: "/save-selected-dates",
+        url: `${BASE_URL}/save-selected-dates`,
         data: data,
         success: function (response) {
             if (response.message == "deleted") {
@@ -514,7 +515,7 @@ $(".assesorsid").on("click", function () {
         },
     });
     $.ajax({
-        url: "/assigin-check-delete",
+        url: `${BASE_URL}/assigin-check-delete`,
         type: "get",
         data: {
             id: application_id,
@@ -565,7 +566,7 @@ $('#upload_onstie_nc_file').change(function() {
     });
    
     $.ajax({
-        url: "/tp-add-document", // Your server-side upload endpoint
+        url:`${BASE_URL}/tp-add-document`, // Your server-side upload endpoint
         type: 'POST',
         data: formData,
         processData: false,
@@ -592,8 +593,7 @@ $('#upload_onstie_nc_file').change(function() {
 /*nc's end here*/
 
 function handlePdfOrImageForPhotograph(path){
-    const BASE_URL = window.location.origin+'/level/';
-    console.log(BASE_URL,' BASE URL')
+    let BASE_URL = BASE_URL+'/level/';
     const fileExtension = path.split('.').pop().toLowerCase();
     $("#view_photograph_onsite").html("");
     if(fileExtension==="pdf"){
