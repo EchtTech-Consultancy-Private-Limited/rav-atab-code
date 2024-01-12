@@ -189,21 +189,21 @@
                 @if($item->assessor_type=="onsite")
                <div class="form-check form-check-inline radio-ass">
                <label>
-                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked @if($item->assessment_way=='onsite') checked @endif>
                     <span>
                         Onsite                     
                     </span>
                     </label>  
 
                     <label>
-                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="hybrid">
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="hybrid" @if($item->assessment_way=='hybrid') checked @endif>
                     <span>
                         Hybrid                     
                     </span>
                     </label>  
 
                     <label>
-                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="virtual">
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="virtual" @if($item->assessment_way=='virtual') checked @endif>
                     <span>
                         Virtual                     
                     </span>

@@ -56,16 +56,20 @@ class AdminApplicationController extends Controller
                 ])->count();
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
+                
+                $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way;
+
                 if($payment){
                   $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
                    $obj->assessor_type = $payment_count>1?"onsite":"desktop";
                     $obj->payment = $payment;
+                    $obj->assessment_way = $assessment_way;
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
                 }
                 $final_data[] = $obj;
         }
-        // dd($final_data);
+
         
         return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
