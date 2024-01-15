@@ -122,6 +122,7 @@ function handlePaymentApproved() {
 function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");
     if (is_acknowledged) {
+        $(".full_screen_loading").show();
         if (id == "" || id === null || id === undefined) {
             toastr.error("Application id not found", {
                 timeOut: 0,
@@ -129,6 +130,7 @@ function handleAcknowledgementPayment(id) {
                 closeButton: true,
                 closeDuration: 0,
             });
+            $(".full_screen_loading").hide();
             return false;
         }
         $.ajaxSetup({
@@ -152,7 +154,7 @@ function handleAcknowledgementPayment(id) {
                         closeDuration: 1,
                     });
                     $("#acknowledgement_" + id).hide();
-                    setTimeout(function () {}, 1000);
+                    $(".full_screen_loading").hide();
                 } else {
                     toastr.error(resdata.message, {
                         timeOut: 0,
@@ -160,10 +162,17 @@ function handleAcknowledgementPayment(id) {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $(".full_screen_loading").hide();
                 }
             },
             error: (xhr, st) => {
-                console.log(st, "st");
+                toastr.error("Something went wrong!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 0,
+                });
+                $(".full_screen_loading").hide();
             },
         });
     }

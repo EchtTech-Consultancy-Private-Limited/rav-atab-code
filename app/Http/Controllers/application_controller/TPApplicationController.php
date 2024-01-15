@@ -183,10 +183,12 @@ class TPApplicationController extends Controller
             $nc_type="Accept";
         }
 
+        $is_form_view = false;
+        if($nc_status_type!=0){
         // is remark form show to top
         $is_already_remark_exists = TblNCComments::where(['application_id' => $application_id,'application_courses_id' => $application_courses_id,'doc_sr_code' => $doc_sr_code,'doc_unique_id' => $doc_unique_code,'assessor_type' => $assessor_type,'nc_type'=>$nc_type])->first();
         
-        $is_form_view = false;
+        
         if($is_already_remark_exists->nc_type!=="Accept" && $is_already_remark_exists->nc_type!=="Request_For_Final_Approval"){
             // dd($is_already_remark_exists);
             if($is_already_remark_exists->tp_remark!==null){
@@ -195,7 +197,7 @@ class TPApplicationController extends Controller
                 $is_form_view=true;
             }
         }
-
+    }
         // end here for form
 
       $doc_latest_record = TblApplicationCourseDoc::latest('id')

@@ -117,7 +117,7 @@ class AdminApplicationController extends Controller
                 return response()->json(['success' =>false,'message'=>'Payment Acknowledgement Already Done'], 409);
             }
             DB::beginTransaction();
-            DB::table('tbl_application_payment')->update(['aknowledgement_id' => auth()->user()->id]);
+            DB::table('tbl_application_payment')->where('application_id', '=', $request->post('application_id'))->update(['aknowledgement_id' => auth()->user()->id]);
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment acknowledged successfully'], 200);
         }
