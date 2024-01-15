@@ -4,6 +4,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
+use App\Mail\SendEMail;
+
 use App\Models\TblApplication; 
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
@@ -371,6 +373,29 @@ class AdminApplicationController extends Controller
     }catch(Exception $e){
         DB::rollBack();
         return response()->json(['success' => false,'message' =>'Something went wrong'],200);
+    }
+    }
+
+
+    public function updateAdminNotificationStatus(Request $request)
+    {
+        try{
+          $request->validate([
+              'id' => 'required',
+          ]);
+          DB::beginTransaction();
+          $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['admin_received_payment'=>1]);
+          if($update_admin_received_payment_status){
+              DB::commit();
+              return response()->json(['success' => true,'message' =>'Read notification successfully.'],200);
+          }else{
+              DB::rollback();
+              return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+          }
+    }
+    catch(Exception $e){
+          DB::rollback();
+          return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
     }
     }
     

@@ -37,6 +37,7 @@
     </script>
     @endif
     <section class="content">
+    <div class="full_screen_loading">Loading&#8230;</div>
         <div class="block-header">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -333,6 +334,8 @@
                             <th>Slip by User</th>
                             <th>Slip by Approver</th>
                             <th>Remarks</th>
+                            <th>Action</th>
+
                         </tr>
                         @foreach ($application_details->payment as $key=>$ApplicationPayment)
                         <tr>
@@ -396,6 +399,17 @@
                                     Remark not available!
                                 @else
                                 {{ $ApplicationPayment->remark_by_account }}
+                                @endif
+                            </td>
+                            <td>
+                                @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT'))
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation({{ $ApplicationPayment->payment_transaction_no}},{{ $ApplicationPayment->payment_reference_no}},{{$ApplicationPayment->id}})"
+                                title="You can update only once"
+                                ><i class="fa fa-pencil"></i></button>
+                               
+
+                                @else
+                                <span class="text-danger payment_update_fn badge badge-danger">Payment Update Limit Expired</span>
                                 @endif
                             </td>
                         </tr>
@@ -479,6 +493,37 @@
         </div>
 
         </div>
+         <!-- Edit Payment modal  -->
+         <div class="modal fade" id="update_payment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Payment Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <input type="hidden" id="payment_info_id" value="">
+                </div>
+                <div class="modal-body">
+                <div class="mb-3">
+                        <label for="payment_transaction_no" class="form-label">Payment Transaction no<span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control remove_err" id="payment_transaction_no" placeholder="Please enter payment transaction number.">
+                        <span class="err" id="payment_transaction_no_err"></span>
+                </div>
+                <div class="mb-3">
+                        <label for="payment_reference_no" class="form-label">Payment Reference no<span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control remove_err" id="payment_reference_no" placeholder="Please enter payment reference number.">
+                        <span class="err" id="payment_reference_no_err"></span>
+                </div>
+                <div class="mb-3">
+                        <label for="payment_proof_by_account" class="form-label">Slip by Approver</label>
+                        <input type="file" class="form-control" id="payment_proof_by_account">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="handleUpdatePaymentInformationOfAccount()" class="btn btn-primary">Update</button>
+                </div>
+                </div>
+            </div>
+            </div>
+        <!-- end here edit payment modal -->
     </section>
     <script>
     document.addEventListener("DOMContentLoaded", function() {

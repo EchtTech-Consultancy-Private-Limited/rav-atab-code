@@ -425,13 +425,33 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/tp-second-payment', [TpApplicationController::class, 'secondPaymentView']);
     Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
 
-    
+    Route::post('/tp-update-payment', [TpApplicationController::class, 'updatePaynentInfo']);
+    Route::post('/account-update-payment', [AccountApplicationController::class, 'updatePaynentInfo']);
+    Route::post('/account-update-notification-status', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
+
+    Route::post('/admin-update-notification-status', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
+
+    Route::post('/assessor-desktop-update-notification-status', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
+
+    Route::post('/assessor-onsite-update-notification-status', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
+
+
+   
+ 
 
 /*----------------- End Here------------------------*/
     
 
 });
 
+Route::get('email-test', function(){
+  
+    $details['email'] = 'your_email@gmail.com';
+    
+    dispatch(new App\Jobs\SendEmailJob($details));
+  
+    dd('done');
+});
 
 
 

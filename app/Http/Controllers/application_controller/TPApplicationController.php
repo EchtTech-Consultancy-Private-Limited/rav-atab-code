@@ -265,4 +265,51 @@ class TPApplicationController extends Controller
             'remarks' => $get_remarks
         ]);
     }
+
+
+    public function updatePaynentInfo(Request $request)
+  {
+    
+      try{
+        $request->validate([
+            'id' => 'required',
+            'payment_transaction_no' => 'required',
+            'payment_reference_no' => 'required',
+            'payment_proof' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        $slip_by_user_file = "";
+        if ($request->hasfile('payment_proof')) {
+            $file = $request->file('payment_proof');
+            $name = $file->getClientOriginalName();
+            $filename = time() . $name;
+            $file->move('uploads/', $filename);
+            $slip_by_user_file = $filename;
+        }
+
+        $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->first()->tp_update_count;
+       
+        if($get_payment_update_count > (int)env('TP_PAYMENT_UPDATE_COUNT')-1){
+            return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);
+        }
+
+
+
+
+        $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update(['payment_transaction_no'=>$request->payment_transaction_no,'payment_reference_no'=>$request->payment_reference_no,'payment_proof'=>$slip_by_user_file,'tp_update_count'=>$get_payment_update_count+1]);
+
+        if($update_payment_info){
+            DB::commit();
+            return response()->json(['success' => true,'message' =>'Payment info updated successfully'],200);
+        }else{
+            DB::rollback();
+            return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
+        }
+  }
+  catch(Exception $e){
+        DB::rollback();
+        return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
+  }
+  }
 }
