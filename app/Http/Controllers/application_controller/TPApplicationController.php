@@ -16,13 +16,24 @@ use App\Models\Chapter;
 use Carbon\Carbon;
 use App\Models\TblNCComments; 
 use URL;
+use Config;
+use Session;
 class TPApplicationController extends Controller
 {
     public function __construct()
     {
     }
     public function getApplicationList(){
+
+        $pay_list = DB::table('tbl_application_payment')
+          ->where('user_id',Auth::user()->id)
+          ->get()
+          ->pluck('application_id')
+          ->toArray();
+
         $application = DB::table('tbl_application as a')
+        ->where('tp_id',Auth::user()->id)
+        ->whereIn('id',$pay_list)
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -295,8 +306,6 @@ class TPApplicationController extends Controller
         }
 
 
-
-
         $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update(['payment_transaction_no'=>$request->payment_transaction_no,'payment_reference_no'=>$request->payment_reference_no,'payment_proof'=>$slip_by_user_file,'tp_update_count'=>$get_payment_update_count+1]);
 
         if($update_payment_info){
@@ -311,5 +320,23 @@ class TPApplicationController extends Controller
         DB::rollback();
         return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
   }
+  }
+
+
+  public function pendingPaymentlist()
+  {
+
+      $pending_payment_list = DB::table('tbl_application_payment')
+          ->where('user_id',Auth::user()->id)
+          ->get()
+          ->pluck('application_id')
+          ->toArray();
+
+         $pending_list = DB::table('tbl_application')
+         ->where('tp_id',Auth::user()->id)
+         ->whereNotIn('id',$pending_payment_list)
+         ->get();
+
+      return view('tp-view.pending-payment-list', ['pending_payment_list' => $pending_list]);
   }
 }

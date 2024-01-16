@@ -7,7 +7,7 @@
             <a class="custom-nav-link {{ request()->is('/tp/application-list*') ? 'nav-active' : '' }}" href="{{ url('/tp/application-list') }}">Applications</a>
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('pending-payment-list*') || request()->is('edit-application*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
+            <a class="custom-nav-link {{ request()->is('tp-pending-payment-list*') || request()->is('create-new-course*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/tp-pending-payment-list') }}">Pending Payment List</a>
 
         </li>
         <li class="custom-nav-item">

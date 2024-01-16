@@ -27,6 +27,7 @@ use App\Http\Controllers\application_controller\OnsiteApplicationController;
 use App\Http\Controllers\application_controller\DocApplicationController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -435,6 +436,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::post('/assessor-onsite-update-notification-status', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
 
+    Route::get('tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
 
    
  
@@ -446,9 +448,12 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
 Route::get('email-test', function(){
   
-    $details['email'] = 'your_email@gmail.com';
+    $details['email'] = 'surajc414@gmail.com';
+    $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
+    $details['subject'] = 'New Application | Application ID'; 
+    $details['content'] = 'New Application has been created with Application ID'; 
     
-    dispatch(new App\Jobs\SendEmailJob($details));
+    dispatch(new SendEmailJob($details));
   
     dd('done');
 });
