@@ -384,10 +384,12 @@ class AdminApplicationController extends Controller
               'id' => 'required',
           ]);
           DB::beginTransaction();
+          
           $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['admin_received_payment'=>1]);
           if($update_admin_received_payment_status){
               DB::commit();
-              return response()->json(['success' => true,'message' =>'Read notification successfully.'],200);
+              $redirect_url = URL::to('/admin/application-view/'.dEncrypt($request->id));
+              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();
               return response()->json(['success' => false,'message' =>'Failed to read notification'],200);

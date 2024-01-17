@@ -1,4 +1,4 @@
- <style>
+<style>
      ul.menu h5 {
          text-align: center;
          padding: 10px 30px;
@@ -19,6 +19,8 @@
 
         @elseif(Auth::user()->role == 4) @endif
        ">
+
+       <div class="full_screen_loading">Loading&#8230;</div>
      <div class="container-fluid">
          <div class="navbar-header">
              <a href="#" onClick="return false;" class="navbar-toggle collapsed" data-bs-toggle="collapse"
@@ -91,7 +93,7 @@
                                      @if (count($applications)>0)
                                          @foreach ($applications as $application)
                                              <li onclick="handleAdminNotification({{$application->id}})">
-                                                <a href="{{ url('admin/application-view/' . dEncrypt($application->id)) }}"
+                                                <a href="javascript:void(0)"
                                                          style="color: #000;"
                                                          >
                                                          Application ID : RAVAP-{{ $application->id }}
@@ -131,7 +133,7 @@
                                      @if (count($payment_list)>0)
                                          @foreach ($payment_list as $pay_list)
                                              <li onclick="handleNotification({{$pay_list->id}})">
-                                                <a href="{{ url('account/application-view/' . dEncrypt($pay_list->application_id)) }}"
+                                                <a href="javascript:void(0)"
                                                          style="color: #000;"
                                                          >
                                                          Application ID : RAVAP-{{ $pay_list->application_id }}
@@ -211,7 +213,7 @@
                                      @if (count($applications)>0)
                                          @foreach ($applications as $application)
                                              <li onclick="handleDesktopNotification({{$application->id}})">
-                                                <a href="{{ url('desktop/application-view/' . dEncrypt($application->id)) }}"
+                                                <a href="javascript:void(0)"
                                                          style="color: #000;">
                                                          Application ID : RAVAP-{{ $application->id }}
                                                 </a>
@@ -251,7 +253,7 @@
                                      @if (count($applications)>0)
                                          @foreach ($applications as $application)
                                              <li onclick="handleOnsiteNotification({{$application->id}})">
-                                                <a href="{{ url('onsite/application-view/' . dEncrypt($application->id)) }}"
+                                                <a href="javascript:void(0)"
                                                          style="color: #000;">
                                                          Application ID : RAVAP-{{ $application->id }}
                                                 </a>

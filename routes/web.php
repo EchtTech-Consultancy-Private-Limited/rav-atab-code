@@ -428,6 +428,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::post('/tp-update-payment', [TpApplicationController::class, 'updatePaynentInfo']);
     Route::post('/account-update-payment', [AccountApplicationController::class, 'updatePaynentInfo']);
+   
     Route::post('/account-update-notification-status', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
 
     Route::post('/admin-update-notification-status', [AdminApplicationController::class, 'updateAdminNotificationStatus']);

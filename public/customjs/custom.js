@@ -801,8 +801,9 @@ function validateForm() {
 }
 
 function handleNotification(pay_id){
+
     if(pay_id!=null){
-       
+       $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -820,6 +821,8 @@ function handleNotification(pay_id){
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -831,6 +834,7 @@ function handleNotification(pay_id){
                 }
             },
             error: function (xhr, status, error) {
+                $('.full_screen_loading').hide();
                 // Handle errors
             },
         });
@@ -841,12 +845,13 @@ function handleNotification(pay_id){
             closeButton: true,
             closeDuration: 0,
         });
+        $('.full_screen_loading').hide();
     }
 }
 
 function handleAdminNotification(pay_id){
     if(pay_id!=null){
-       
+        $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -858,7 +863,8 @@ function handleAdminNotification(pay_id){
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {
-                    
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -871,6 +877,7 @@ function handleAdminNotification(pay_id){
             },
             error: function (xhr, status, error) {
                 // Handle errors
+                $('.full_screen_loading').hide();
             },
         });
     }else{
@@ -885,7 +892,7 @@ function handleAdminNotification(pay_id){
 
 function handleDesktopNotification(pay_id){
     if(pay_id!=null){
-       
+        $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -897,7 +904,8 @@ function handleDesktopNotification(pay_id){
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {
-                    
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -910,6 +918,7 @@ function handleDesktopNotification(pay_id){
             },
             error: function (xhr, status, error) {
                 // Handle errors
+                $('.full_screen_loading').hide();
             },
         });
     }else{
@@ -919,12 +928,13 @@ function handleDesktopNotification(pay_id){
             closeButton: true,
             closeDuration: 0,
         });
+        $('.full_screen_loading').hide();
     }
 }
 
 function handleOnsiteNotification(pay_id){
     if(pay_id!=null){
-       
+        $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -936,7 +946,8 @@ function handleOnsiteNotification(pay_id){
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {
-                    
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -949,6 +960,7 @@ function handleOnsiteNotification(pay_id){
             },
             error: function (xhr, status, error) {
                 // Handle errors
+                $('.full_screen_loading').hide();
             },
         });
     }else{
@@ -958,10 +970,9 @@ function handleOnsiteNotification(pay_id){
             closeButton: true,
             closeDuration: 0,
         });
+        $('.full_screen_loading').hide();
     }
 }
-
-
 
 
 $(".remove_err").on("keyup", function () {
