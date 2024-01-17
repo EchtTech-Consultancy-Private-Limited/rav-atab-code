@@ -454,7 +454,6 @@ Route::get('email-test', function(){
     $details['content'] = 'New Application has been created with Application ID'; 
     
     dispatch(new SendEmailJob($details));
-  
     dd('done');
 });
 

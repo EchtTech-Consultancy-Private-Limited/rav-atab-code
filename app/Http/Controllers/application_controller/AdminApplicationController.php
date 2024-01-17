@@ -59,7 +59,7 @@ class AdminApplicationController extends Controller
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
                 
-                $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way;
+                $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way??'';
 
                 if($payment){
                   $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;

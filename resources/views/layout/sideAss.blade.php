@@ -46,7 +46,7 @@
                     </a>
             </li>
 
-            @if(Auth::user()->assessment===1)
+            @if(Auth::user()->assessment==1)
                 <?php
                     $url = "desktop/application-list";
                 ?>
