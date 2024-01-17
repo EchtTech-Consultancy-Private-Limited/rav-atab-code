@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>{{$details['title']??''}}</title>
 </head>
 <body>
 
 <p>Dear Team,</p>
-<p>{{$details['body']}}</p>
-  
-<strong>Regards & Thanks</strong>
-<p>RAV Teams</p>
-  
+<p>{{$details['body']??''}}</p>
 </body>
 </html>

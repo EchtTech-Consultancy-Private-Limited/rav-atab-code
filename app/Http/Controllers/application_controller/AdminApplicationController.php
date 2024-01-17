@@ -20,6 +20,8 @@ use App\Models\Chapter;
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
 use URL;
+use App\Jobs\SendEmailJob;
+
 class AdminApplicationController extends Controller
 {
     public function __construct()
@@ -132,6 +134,7 @@ class AdminApplicationController extends Controller
         try{
             DB::beginTransaction();
             $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
+            $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
             $data['application_id']=$request->application_id;
             $data['assessor_id']=$request->assessor_id;
@@ -149,6 +152,68 @@ class AdminApplicationController extends Controller
             }else{
                 $assessment_type = 2;
             }
+
+            /**
+             * Mail Sending
+             * 
+             * */ 
+                
+               //admin mail
+                $title="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $subject="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                I hope this message finds you well. We are thrilled to inform you that you have assigned the ".$request->application_id." to the assessor.
+
+                Here are the transaction details: ".PHP_EOL."
+                Position: Admin ".PHP_EOL."
+                Reporting to: ".$assessor_details->firstname." ".PHP_EOL."
+                Start Date: ".$assessor_details->created_at."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = Auth::user()->email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+    /*end here*/ 
+                
+                //assessor mail
+                $title="Assignment Confirmation - Welcome Aboard! | RAVAP-".$request->application_id;
+                $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$request->application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                I trust this message finds you well. I am delighted to inform you that you have assigned the application with RAVAP-".$request->application_id.".".PHP_EOL."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $assessor_details->email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            /*end here*/
+
+            //tp mail
+                $title="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $subject="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                I trust this message finds you well. I am delighted to inform you that application  with RAVAP-".$request->application_id." has been assigned to ".$assessor_details->firstname."(Assessor) .".PHP_EOL."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $assessor_details->email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            /*end here*/
+
             if ($request->assessment_type == 2) {
                 
                 $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->count()  > 0;

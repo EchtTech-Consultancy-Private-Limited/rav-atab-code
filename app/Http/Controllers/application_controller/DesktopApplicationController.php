@@ -18,6 +18,7 @@ use App\Models\Chapter;
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
 use URL;
+use App\Jobs\SendEmailJob;
 class DesktopApplicationController extends Controller
 {
     public function __construct()
@@ -302,11 +303,34 @@ class DesktopApplicationController extends Controller
         $data['doc_verify_remark'] = $request->remark??'N/A';
         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
         /*end here*/
+
+        //assessor email
+        $title="Notification -  ".$request->nc_type." | RAVAP-".$application_id;
+        $subject="Notification - ".$request->nc_type." | RAVAP-".$application_id;
+        
+        $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
+        I hope this email finds you well. I am writing to inform you that a NC has been generated for [document/project/process] in accordance with our quality management procedures.
+        
+        NC Details:
+
+        Document Name: ".$request->doc_file_name."
+        Document Sr. No.: ".$request->doc_sr_code."
+        Date Created: ".date('d-m-Y')."
+
+        NC Created By: ".Auth::user()->firstname."";
+
+         $details['email'] = Auth::user()->email;
+         $details['title'] = $title; 
+         $details['subject'] = $subject; 
+         $details['body'] = $body; 
+         dispatch(new SendEmailJob($details));
+
+        /*end here*/
        
        
         if($create_nc_comments){
             DB::commit();
-            return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);
+            return response()->json(['success' => true,'message' =>'NC comments created successfully','redirect_to'=>$redirect_to],200);
         }else{
             return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
         }

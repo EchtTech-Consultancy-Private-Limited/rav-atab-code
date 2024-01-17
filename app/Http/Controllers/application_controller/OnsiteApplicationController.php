@@ -19,6 +19,7 @@ use App\Models\Chapter;
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
 use URL;
+use App\Jobs\SendEmailJob;
 class OnsiteApplicationController extends Controller
 {
     public function __construct()
@@ -431,6 +432,27 @@ class OnsiteApplicationController extends Controller
          $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
          /*end here*/
         
+         //assessor email
+        $title="Notification -  ".$request->nc_type." | RAVAP-".$request->application_id;
+        $subject="Notification - ".$request->nc_type." | RAVAP-".$request->application_id;
+        
+        $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
+        I hope this email finds you well. I am writing to inform you that a NC has been generated for [document/project/process] in accordance with our quality management procedures.
+        
+        NC Details:
+
+        Document Name: ".$request->doc_file_name."
+        Document Sr. No.: ".$request->doc_sr_code."
+        Date Created: ".date('d-m-Y')."
+
+        NC Created By: ".Auth::user()->firstname."";
+
+         $details['email'] = Auth::user()->email;
+         $details['title'] = $title; 
+         $details['subject'] = $subject; 
+         $details['body'] = $body; 
+         dispatch(new SendEmailJob($details));
+
  
          if($last_course_doc){
              DB::commit();
