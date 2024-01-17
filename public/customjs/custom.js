@@ -640,9 +640,10 @@ function handleUpdatePaymentInformation() {
     var payment_proof = $(`#payment_proof`)[0].files[0];
     var fileInput = $(`#payment_proof`);
     const isValidated = validateForm();
-    $(".full_screen_loading").show();
+    
     
     if (isValidated) {
+        $(".full_screen_loading").show();
         const formData = new FormData();
         formData.append("payment_transaction_no", payment_transaction_no);
         formData.append("payment_reference_no", payment_reference_no);
@@ -701,6 +702,8 @@ function handleUpdatePaymentInformation() {
                 $(".full_screen_loading").hide();
             },
         });
+    }else{
+        $(".full_screen_loading").hide();
     }
 }
 
@@ -711,9 +714,9 @@ function handleUpdatePaymentInformationOfAccount() {
     var payment_proof_by_account = $(`#payment_proof_by_account`)[0].files[0];
     var fileInput = $(`#payment_proof_by_account`);
     const isValidated = validateForm();
-    $(".full_screen_loading").show();
   
     if (isValidated) {
+        $(".full_screen_loading").show();
         const formData = new FormData();
         formData.append("payment_transaction_no", payment_transaction_no);
         formData.append("payment_reference_no", payment_reference_no);
@@ -772,6 +775,8 @@ function handleUpdatePaymentInformationOfAccount() {
                 $(".full_screen_loading").hide();
             },
         });
+    }else{
+        $(".full_screen_loading").hide();
     }
 }
 
