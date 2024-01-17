@@ -315,7 +315,7 @@
                                      @if($question['onsite_photograph']?->onsite_photograph!=null)
                                            <div>
                                                   <div class="upload-btn-wrapper">
-                                                     <button class="upld-btn upload-btn-fn-size" data-bs-toggle="modal" data-bs-target="#view_photograph_modal" data-bs-whatever="@mdo" onclick="handlePdfOrImageForPhotograph('{{$question['onsite_photograph']->onsite_photograph}}')"><i class="fas fa-cloud-upload-alt"></i> View Photograph</button>
+                                                     <button class="upld-btn upload-btn-fn-size" data-bs-toggle="modal" data-bs-target="#view_photograph_modal" data-bs-whatever="@mdo" onclick="handlePdfOrImageForPhotograph('{{$question['onsite_photograph']->onsite_photograph}}')"><i class="fas fa-eye"></i> View Photograph</button>
                                             </div>
                                                </div>
                                             </div>

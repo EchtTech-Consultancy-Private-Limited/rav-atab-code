@@ -63,6 +63,28 @@ class DocApplicationController extends Controller
             DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>2]); //payment_status = 1 for payment received 2 for payment approved
             
             DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->update(['status'=>2,'approve_remark'=>$request->final_payment_remark??'','accountant_id'=>Auth::user()->id]);
+
+
+             /**
+             * Send Email to Accountant
+             * */ 
+            $tp_id = DB::table('tbl_application')->where('id',$application_id)->first()->tp_id;
+            $tp_email = DB::table('users')->where('id',$tp_id)->first()->email;
+            $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
+
+            if(!empty($tp_id)){
+            array_push($get_all_admin_users,$tp_email);
+            
+            foreach($get_all_admin_users as $email){
+                $details['email'] = $email;
+                $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
+                $details['subject'] = 'New Application | RAVAP-'.$application_id; 
+                $details['content'] = 'New Application has been created with RAVAP-'.$application_id; 
+                dispatch(new SendEmailJob($details));
+            }
+        }
+           
+            /*send email end here*/ 
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment approved successfully.'], 200);
         }

@@ -27,6 +27,7 @@ use App\Http\Controllers\application_controller\OnsiteApplicationController;
 use App\Http\Controllers\application_controller\DocApplicationController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -425,13 +426,37 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('/tp-second-payment', [TpApplicationController::class, 'secondPaymentView']);
     Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
 
-    
+    Route::post('/tp-update-payment', [TpApplicationController::class, 'updatePaynentInfo']);
+    Route::post('/account-update-payment', [AccountApplicationController::class, 'updatePaynentInfo']);
+    Route::post('/account-update-notification-status', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
+
+    Route::post('/admin-update-notification-status', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
+
+    Route::post('/assessor-desktop-update-notification-status', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
+
+    Route::post('/assessor-onsite-update-notification-status', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
+
+    Route::get('tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
+
+   
+ 
 
 /*----------------- End Here------------------------*/
     
 
 });
 
+Route::get('email-test', function(){
+  
+    $details['email'] = 'surajc414@gmail.com';
+    $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
+    $details['subject'] = 'New Application | Application ID'; 
+    $details['content'] = 'New Application has been created with Application ID'; 
+    
+    dispatch(new SendEmailJob($details));
+  
+    dd('done');
+});
 
 
 

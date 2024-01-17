@@ -30,6 +30,7 @@
                     {{ session::get('success') }}
                 </div>
     @endif
+    <div class="full_screen_loading">Loading&#8230;</div>
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">

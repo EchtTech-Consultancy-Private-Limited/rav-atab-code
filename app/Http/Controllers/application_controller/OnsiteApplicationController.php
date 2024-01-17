@@ -558,5 +558,28 @@ class OnsiteApplicationController extends Controller
         return view('onsite-view.onsite-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way'));
     }
 
+
+    public function updateAssessorOnsiteNotificationStatus(Request $request)
+    {
+        try{
+          $request->validate([
+              'id' => 'required',
+          ]);
+          DB::beginTransaction();
+          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['assessor_onsite_received_payment'=>1]);
+          if($update_assessor_received_payment_status){
+              DB::commit();
+              return response()->json(['success' => true,'message' =>'Read notification successfully.'],200);
+          }else{
+              DB::rollback();
+              return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+          }
+    }
+    catch(Exception $e){
+          DB::rollback();
+          return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+    }
+    }
+
 }
 

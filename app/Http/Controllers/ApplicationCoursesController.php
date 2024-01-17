@@ -40,6 +40,7 @@ use App\Mail\assessorToself;
 use App\Mail\assessorSingleAdminFinalApplicationMail;
 use App\Mail\assessorSingleFinalMail;
 use App\Mail\tpApplicationmail;
+use App\Jobs\SendEmailJob;
 class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
@@ -274,6 +275,12 @@ class ApplicationCoursesController extends Controller
     }
     public function newApplicationPayment(Request $request)
     {
+
+        $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
+        $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
+
+        $merged_users= array_merge($get_all_admin_users,$get_all_account_users);
+
         $request->validate([
             'transaction_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,transaction_no',
             'reference_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,reference_no',
@@ -323,30 +330,28 @@ class ApplicationCoursesController extends Controller
         }
         $item->save();
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
-        $userEmail = 'superadmin@yopmail.com';
-        $paymentMail = [
-            'title' => 'Traing Provider Ctreate a New Application. and Course Payment Successfully Done',
-            'body' => '',
-            'type' => 'New Application'
-        ];
-        $mailData =
-            [
-                'from' => "T.P",
-                'applicationNo' => $request->Application_id,
-                'applicationStatus' => "T.P Created Application Successfully",
-                'subject' => "T.P Created Application Successfully",
-            ];
-        $paymentid = $request->Application_id;
+
+        $application_id = $request->Application_id;
         $userid = Auth::user()->firstname;
-        // Mail::to([$userEmail])->send(new SendMail($mailData));
         if ($request->level_id == '1') {
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
                 $ApplicationCourse->update(['payment_status' =>1]);
             }
-            $session_for_redirection = $request->form_step_type;
-            Session::put('session_for_redirections', $session_for_redirection);
-            $session_for_redirections = Session::get('session_for_redirections');
+            
+            /**
+             * Send Email to Accountant
+             * */ 
+            foreach($merged_users as $email){
+                $details['email'] = $email;
+
+                $details['title'] = 'Traning Provider Created a New Application and Course Payment Successfully Done'; 
+                $details['subject'] = 'New Application | RAVAP-'.$application_id; 
+                $details['body'] = 'New Application has been created with RAVAP-'.$application_id; 
+                dispatch(new SendEmailJob($details));
+            }
+           
+            /*send email end here*/ 
             DB::commit();
             return  redirect('get-application-list')->with('success', 'Payment Done successfully');
         } elseif ($request->level_id == '2') {

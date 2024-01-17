@@ -36,6 +36,7 @@
     })
     </script>
     @endif
+    <div class="full_screen_loading">Loading&#8230;</div>
     <section class="content">
         <div class="block-header">
             <div class="row">
@@ -345,6 +346,7 @@
                             <th>Slip by User</th>
                             <th>Slip by Approver</th>
                             <th>Remarks</th>
+                            <th>Action</th>
                         </tr>
                         @foreach ($application_details->payment as $key=>$ApplicationPayment)
                         <tr>
@@ -410,6 +412,15 @@
                                 {{ $ApplicationPayment->remark_by_account }}
                                 @endif
                             </td>
+                            <td>
+                                @if($ApplicationPayment->tp_update_count < (int)env('TP_PAYMENT_UPDATE_COUNT'))
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation({{ $ApplicationPayment->payment_transaction_no}},{{ $ApplicationPayment->payment_reference_no}},{{$ApplicationPayment->id}})"
+                                title="You can update only once"
+                                ><i class="fa fa-pencil"></i></button>
+                                @else
+                                <span class="text-danger payment_update_fn badge badge-danger">Payment Update Limit Expired</span>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </table>
@@ -422,6 +433,38 @@
         </div>
 
         </div>
+
+        <!-- Edit Payment modal  -->
+        <div class="modal fade" id="update_payment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Payment Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <input type="hidden" id="payment_info_id" value="">
+                </div>
+                <div class="modal-body">
+                <div class="mb-3">
+                        <label for="payment_transaction_no" class="form-label">Payment Transaction no<span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control remove_err" id="payment_transaction_no" placeholder="Please enter payment transaction number.">
+                        <span class="err" id="payment_transaction_no_err"></span>
+                </div>
+                <div class="mb-3">
+                        <label for="payment_reference_no" class="form-label">Payment Reference no<span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control remove_err" id="payment_reference_no" placeholder="Please enter payment reference number.">
+                        <span class="err" id="payment_reference_no_err"></span>
+                </div>
+                <div class="mb-3">
+                        <label for="payment_proof" class="form-label">Slip by User</label>
+                        <input type="file" class="form-control" id="payment_proof">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="handleUpdatePaymentInformation()" class="btn btn-primary">Update</button>
+                </div>
+                </div>
+            </div>
+            </div>
+        <!-- end here edit payment modal -->
     </section>
     <script>
     document.addEventListener("DOMContentLoaded", function() {

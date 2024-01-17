@@ -2,8 +2,21 @@
 
 namespace App\Http\Controllers\application_controller;
 use App\Http\Controllers\Controller;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Auth;
+use App\Models\TblApplication; 
+use App\Models\TblApplicationPayment; 
+use App\Models\TblApplicationCourseDoc; 
+use App\Models\DocumentRemark;
+use App\Models\Application;
+use App\Models\Add_Document;
+use App\Models\AssessorApplication; 
+use App\Models\User; 
+use App\Models\Chapter; 
+use Carbon\Carbon;
+use App\Models\TblNCComments; 
+use URL;
 
 class AccountApplicationController extends Controller
 {
@@ -79,6 +92,73 @@ class AccountApplicationController extends Controller
                 }
                 $final_data = $obj;
         return view('account-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status]);
+    }
+
+    public function updatePaynentInfo(Request $request)
+    {
+
+        try{
+          $request->validate([
+              'id' => 'required',
+              'payment_transaction_no' => 'required',
+              'payment_reference_no' => 'required',
+              'payment_proof_by_account' => 'required',
+          ]);
+  
+          DB::beginTransaction();
+          $slip_by_approver_file = "";
+          if ($request->hasfile('payment_proof_by_account')) {
+              $file = $request->file('payment_proof_by_account');
+              $name = $file->getClientOriginalName();
+              $filename = time() . $name;
+              $file->move('documnet/', $filename);
+              $slip_by_approver_file = $filename;
+          }
+  
+          $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->first()->account_update_count;
+         
+          if($get_payment_update_count > (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT')-1){
+              return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);
+          }
+  
+          $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update(['payment_transaction_no'=>$request->payment_transaction_no,'payment_reference_no'=>$request->payment_reference_no,'payment_proof_by_account'=>$slip_by_approver_file,'account_update_count'=>$get_payment_update_count+1]);
+  
+          if($update_payment_info){
+              DB::commit();
+              return response()->json(['success' => true,'message' =>'Payment info updated successfully'],200);
+          }else{
+              DB::rollback();
+              return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
+          }
+    }
+    catch(Exception $e){
+          DB::rollback();
+          return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
+    }
+    }
+
+
+    public function updateAccountNotificationStatus(Request $request)
+    {
+        
+        try{
+          $request->validate([
+              'id' => 'required',
+          ]);
+          DB::beginTransaction();
+          $update_account_received_payment_status = DB::table('tbl_application_payment')->where('id',$request->id)->update(['account_received_payment'=>1]);
+          if($update_account_received_payment_status){
+              DB::commit();
+              return response()->json(['success' => true,'message' =>'Read notification successfully.'],200);
+          }else{
+              DB::rollback();
+              return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+          }
+    }
+    catch(Exception $e){
+          DB::rollback();
+          return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+    }
     }
 }
 

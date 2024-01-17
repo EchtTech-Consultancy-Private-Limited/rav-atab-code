@@ -7,6 +7,7 @@ use App\Models\ApplicationNotification;
 use App\Models\DocComment;
 use App\Models\DocumentRemark;
 use App\Models\TblApplication;
+use App\Models\TblApplicationPayment;
 use App\Models\Question;
 use App\Models\SummaryReport;
 use App\Models\SummaryReportChapter;
@@ -1006,9 +1007,78 @@ function getApplicationListForSecondPayment()
 function getSecondPaymentNotification()
     {
         $applicationsIds = TblApplication::where('tp_id', auth()->user()->id)->get(['id']);
-        $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('second_payment_status',0)->get();
+        $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('second_payment_status',0)
+        ->orderBy('id','desc')
+        ->get();
         if($final_assessor_summary){
             return $final_assessor_summary;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAccount()
+    {
+        $payment_list = TblApplicationPayment::where('accountant_id', auth()->user()->id)
+        ->where('account_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+
+        if($payment_list){
+            return $payment_list;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAdmin()
+    {
+        $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
+        ->where('admin_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+        if($payment_list){
+            return $payment_list;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAssessorDesktop()
+    {
+            $assessor_id = Auth::user()->id;
+            $assessor_application = DB::table('tbl_assessor_assign')
+            ->where('assessor_id',$assessor_id)
+            ->pluck('application_id')->toArray();
+            $final_data=array();
+            $application = DB::table('tbl_application')
+            ->whereIn('payment_status',[1,2,3])
+            ->whereIn('id',$assessor_application)
+            ->where('assessor_desktop_received_payment',0)
+            ->orderBy('id','desc')
+            ->get();
+        if($application){
+            return $application;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAssessorOnsite()
+    {
+        $assessor_id = Auth::user()->id;
+        $assessor_application = DB::table('tbl_assessor_assign')
+        ->where('assessor_id',$assessor_id)
+        ->pluck('application_id')->toArray();
+        $final_data=array();
+        $application = DB::table('tbl_application')
+        ->whereIn('payment_status',[1,2,3])
+        ->whereIn('id',$assessor_application)
+        ->where('assessor_onsite_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+        if($application){
+            return $application;
         }else{
         return [];
         }
