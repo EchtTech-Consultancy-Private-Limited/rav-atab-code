@@ -73,17 +73,17 @@ class DocApplicationController extends Controller
             $tp_email = DB::table('users')->where('id',$tp_id)->first()->email;
             $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
-            if(!empty($tp_id)){
-            array_push($get_all_admin_users,$tp_email);
+        //     if(!empty($tp_id)){
+        //     array_push($get_all_admin_users,$tp_email);
             
-            foreach($get_all_admin_users as $email){
-                $details['email'] = $email;
-                $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
-                $details['subject'] = 'New Application | RAVAP-'.$application_id; 
-                $details['content'] = 'New Application has been created with RAVAP-'.$application_id; 
-                dispatch(new SendEmailJob($details));
-            }
-        }
+        //     foreach($get_all_admin_users as $email){
+        //         $details['email'] = $email;
+        //         $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
+        //         $details['subject'] = 'New Application | RAVAP-'.$application_id; 
+        //         $details['content'] = 'New Application has been created with RAVAP-'.$application_id; 
+        //         dispatch(new SendEmailJob($details));
+        //     }
+        // }
            
             /*send email end here*/ 
             DB::commit();
