@@ -154,6 +154,7 @@ function handleAcknowledgementPayment(id) {
                     });
                     $("#acknowledgement_" + id).hide();
                     $(".full_screen_loading").hide();
+                    window.location.reload();
                 } else {
                     toastr.error(resdata.message, {
                         timeOut: 0,
