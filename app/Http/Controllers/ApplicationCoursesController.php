@@ -342,14 +342,14 @@ class ApplicationCoursesController extends Controller
             /**
              * Send Email to Accountant
              * */ 
-            foreach($merged_users as $email){
-                $details['email'] = $email;
+            // foreach($merged_users as $email){
+            //     $details['email'] = $email;
 
-                $details['title'] = 'Traning Provider Created a New Application and Course Payment Successfully Done'; 
-                $details['subject'] = 'New Application | RAVAP-'.$application_id; 
-                $details['body'] = 'New Application has been created with RAVAP-'.$application_id; 
-                dispatch(new SendEmailJob($details));
-            }
+            //     $details['title'] = 'Traning Provider Created a New Application and Course Payment Successfully Done'; 
+            //     $details['subject'] = 'New Application | RAVAP-'.$application_id; 
+            //     $details['body'] = 'New Application has been created with RAVAP-'.$application_id; 
+            //     dispatch(new SendEmailJob($details));
+            // }
            
             /*send email end here*/ 
             DB::commit();

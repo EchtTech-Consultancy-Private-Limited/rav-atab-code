@@ -613,8 +613,6 @@ function handlePdfOrImageForPhotograph(path) {
     }
 }
 
-
-
 function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
     $("#payment_transaction_no_err").html("");
     $("#payment_reference_no_err").html("");
