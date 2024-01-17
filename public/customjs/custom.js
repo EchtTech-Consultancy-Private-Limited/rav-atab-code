@@ -619,7 +619,6 @@ function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
     if (pay_txn_no != null && pay_ref_no != null && id != null) {
         $("#payment_transaction_no").val("");
         $("#payment_reference_no").val("");
-
         $("#payment_transaction_no").val(pay_txn_no);
         $("#payment_reference_no").val(pay_ref_no);
         $("#payment_info_id").val(id);
