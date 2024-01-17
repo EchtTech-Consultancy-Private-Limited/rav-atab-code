@@ -619,7 +619,6 @@ function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
     if (pay_txn_no != null && pay_ref_no != null && id != null) {
         $("#payment_transaction_no").val("");
         $("#payment_reference_no").val("");
-
         $("#payment_transaction_no").val(pay_txn_no);
         $("#payment_reference_no").val(pay_ref_no);
         $("#payment_info_id").val(id);
@@ -640,9 +639,10 @@ function handleUpdatePaymentInformation() {
     var payment_proof = $(`#payment_proof`)[0].files[0];
     var fileInput = $(`#payment_proof`);
     const isValidated = validateForm();
-    $(".full_screen_loading").show();
+    
     
     if (isValidated) {
+        $(".full_screen_loading").show();
         const formData = new FormData();
         formData.append("payment_transaction_no", payment_transaction_no);
         formData.append("payment_reference_no", payment_reference_no);
@@ -701,6 +701,8 @@ function handleUpdatePaymentInformation() {
                 $(".full_screen_loading").hide();
             },
         });
+    }else{
+        $(".full_screen_loading").hide();
     }
 }
 
@@ -711,9 +713,9 @@ function handleUpdatePaymentInformationOfAccount() {
     var payment_proof_by_account = $(`#payment_proof_by_account`)[0].files[0];
     var fileInput = $(`#payment_proof_by_account`);
     const isValidated = validateForm();
-    $(".full_screen_loading").show();
   
     if (isValidated) {
+        $(".full_screen_loading").show();
         const formData = new FormData();
         formData.append("payment_transaction_no", payment_transaction_no);
         formData.append("payment_reference_no", payment_reference_no);
@@ -772,6 +774,8 @@ function handleUpdatePaymentInformationOfAccount() {
                 $(".full_screen_loading").hide();
             },
         });
+    }else{
+        $(".full_screen_loading").hide();
     }
 }
 
@@ -801,8 +805,9 @@ function validateForm() {
 }
 
 function handleNotification(pay_id){
+
     if(pay_id!=null){
-       
+       $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -820,6 +825,8 @@ function handleNotification(pay_id){
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -831,6 +838,7 @@ function handleNotification(pay_id){
                 }
             },
             error: function (xhr, status, error) {
+                $('.full_screen_loading').hide();
                 // Handle errors
             },
         });
@@ -841,12 +849,13 @@ function handleNotification(pay_id){
             closeButton: true,
             closeDuration: 0,
         });
+        $('.full_screen_loading').hide();
     }
 }
 
 function handleAdminNotification(pay_id){
     if(pay_id!=null){
-       
+        $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -858,7 +867,8 @@ function handleAdminNotification(pay_id){
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {
-                    
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -871,6 +881,7 @@ function handleAdminNotification(pay_id){
             },
             error: function (xhr, status, error) {
                 // Handle errors
+                $('.full_screen_loading').hide();
             },
         });
     }else{
@@ -885,7 +896,7 @@ function handleAdminNotification(pay_id){
 
 function handleDesktopNotification(pay_id){
     if(pay_id!=null){
-       
+        $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -897,7 +908,8 @@ function handleDesktopNotification(pay_id){
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {
-                    
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -910,6 +922,7 @@ function handleDesktopNotification(pay_id){
             },
             error: function (xhr, status, error) {
                 // Handle errors
+                $('.full_screen_loading').hide();
             },
         });
     }else{
@@ -919,12 +932,13 @@ function handleDesktopNotification(pay_id){
             closeButton: true,
             closeDuration: 0,
         });
+        $('.full_screen_loading').hide();
     }
 }
 
 function handleOnsiteNotification(pay_id){
     if(pay_id!=null){
-       
+        $('.full_screen_loading').show();
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -936,7 +950,8 @@ function handleOnsiteNotification(pay_id){
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {
-                    
+                    $('.full_screen_loading').hide();
+                    window.location.href=response.redirect_url;
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -949,6 +964,7 @@ function handleOnsiteNotification(pay_id){
             },
             error: function (xhr, status, error) {
                 // Handle errors
+                $('.full_screen_loading').hide();
             },
         });
     }else{
@@ -958,10 +974,9 @@ function handleOnsiteNotification(pay_id){
             closeButton: true,
             closeDuration: 0,
         });
+        $('.full_screen_loading').hide();
     }
 }
-
-
 
 
 $(".remove_err").on("keyup", function () {
