@@ -9,6 +9,7 @@ use App\Models\TblApplicationCourses;
 use App\Models\TblNCComments; 
 use DB;
 use Auth;
+use App\Jobs\SendEmailJob;
 class SummaryController extends Controller
 {
     public function desktopIndex(Request $request,$application_id,$application_course_id){
@@ -194,6 +195,7 @@ class SummaryController extends Controller
    
     public function desktopFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
+        $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
         if(!empty($check_report)){
             return back()->with('fail', 'This application record already submitted');
         }
@@ -204,6 +206,83 @@ class SummaryController extends Controller
         $data['application_course_id']=dDecrypt($application_course_id);
         $data['assessor_type']='desktop';
         $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
+        $application_id = dDecrypt($application_id);
+        /*Mail to assessor*/
+            $title=" Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
+            $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
+
+            $body = "Dear Team, ".PHP_EOL."
+            I hope this message finds you well. It is with great pleasure that I inform you that your application of RAVAP-".$application_id." has been thoroughly reviewed and approved.
+
+            Application Details:".PHP_EOL."
+
+            Application ID: RAVAP-".$application_id." ".PHP_EOL."
+            Application Date: ".$tbl_application->created_at."".PHP_EOL."
+
+            Best regards,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = Auth::user()->email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+
+            /*end here*/
+
+            /*Mail to tp*/
+            $tp_users = DB::table('users')->where('id',$tbl_application->tp_id)->first();
+
+            $title="Application Approved - Congratulations! | RAVAP-".$application_id;
+            $subject="Application Approved - Congratulations! | RAVAP-".$application_id;
+
+            $body = "Dear Team, ".PHP_EOL."
+            I hope this message finds you well. It is with great pleasure that I inform you that your application of RAVAP-".$application_id." has been thoroughly reviewed and approved.
+
+            Application Details:".PHP_EOL."
+
+            Application ID: RAVAP-".$application_id." ".PHP_EOL."
+            Application Date: ".$tbl_application->created_at."".PHP_EOL."
+
+            Your qualifications, experience, and enthusiasm have made a significant impression on our selection committee, and we are delighted to welcome you to RAVAP. Congratulations on this achievement!".PHP_EOL."
+
+            Best regards,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = $tp_users->email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+
+            /*end here*/
+
+             /*Mail to admin*/
+             $admin = DB::table('tbl_application')->where('id',$application_id)->first();
+             $admin_users = DB::table('users')->where('id',$admin->admin)->first();
+             $title="Application Successfully Assigned | RAVAP-".$application_id;
+             $subject="Application Successfully Assigned | RAVAP-".$application_id;
+ 
+             $body = "Dear Team, ".PHP_EOL."
+             I hope this message finds you well. It is with great pleasure that I inform you that your application of RAVAP-".$application_id." has been thoroughly reviewed and approved.
+ 
+             Application Details:".PHP_EOL."
+ 
+             Application ID: RAVAP-".$application_id." ".PHP_EOL."
+             Application Date: ".$tbl_application->created_at."".PHP_EOL."
+ 
+             Best regards,".PHP_EOL."
+             RAV Team";
+ 
+             $details['email'] = $admin_users->email;
+             $details['title'] = $title; 
+             $details['subject'] = $subject; 
+             $details['body'] = $body; 
+             dispatch(new SendEmailJob($details));
+ 
+             /*end here*/
+
+
         return redirect('desktop/application-view'.'/'.$request->application_id); 
         // return redirect('desktop/document-list'.'/'.$application_id.'/'.$application_course_id); 
 
@@ -211,15 +290,17 @@ class SummaryController extends Controller
        
     public function onSiteFinalSubmitSummaryReport(Request $request){
         try{
-            // dd($request->all());
+
             DB::beginTransaction();
-            $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($request->application_id),'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
+            $application_id = dDecrypt($request->application_id);
+            $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $application_id,'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
+            $tbl_application = DB::table('tbl_application')->where('id',$application_id)->first();
             if(!empty($check_report)){
                 return back()->with('fail', 'This application record already submitted');
             }
             $assessor_id = Auth::user()->id;
             $data = [];
-            $data['application_id']=dDecrypt($request->application_id);
+            $data['application_id']=$application_id;
             $data['assessor_id']=$assessor_id;
             $data['application_course_id']=dDecrypt($request->application_course_id);
             $data['assessor_type']='onsite';
@@ -231,7 +312,7 @@ class SummaryController extends Controller
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
             $dataImprovement= [];
             $dataImprovement['assessor_id']=$assessor_id;
-            $dataImprovement['application_id']=dDecrypt($request->application_id);
+            $dataImprovement['application_id']=$application_id;
             $dataImprovement['application_course_id']=dDecrypt($request->application_course_id);
             $dataImprovement['sr_no']=$request->sr_no??'N/A';
             $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
@@ -241,6 +322,83 @@ class SummaryController extends Controller
             $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
             $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
         
+            /*Mail to assessor*/
+            $title=" Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
+            $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
+
+            $body = "Dear Team, ".PHP_EOL."
+            I hope this message finds you well. It is with great pleasure that I inform you that your application of RAVAP-".$application_id." has been thoroughly reviewed and approved.
+
+            Application Details:".PHP_EOL."
+
+            Application ID: RAVAP-".$application_id." ".PHP_EOL."
+            Application Date: ".$tbl_application->created_at."".PHP_EOL."
+
+            Best regards,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = Auth::user()->email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+
+            /*end here*/
+
+            /*Mail to tp*/
+            $tp_users = DB::table('users')->where('id',$tbl_application->tp_id)->first();
+            
+            $title="Application Approved - Congratulations! | RAVAP-".$application_id;
+            $subject="Application Approved - Congratulations! | RAVAP-".$application_id;
+
+            $body = "Dear Team, ".PHP_EOL."
+            I hope this message finds you well. It is with great pleasure that I inform you that your application of RAVAP-".$application_id." has been thoroughly reviewed and approved.
+
+            Application Details:".PHP_EOL."
+
+            Application ID: RAVAP-".$application_id." ".PHP_EOL."
+            Application Date: ".$tbl_application->created_at."".PHP_EOL."
+
+            Your qualifications, experience, and enthusiasm have made a significant impression on our selection committee, and we are delighted to welcome you to RAVAP. Congratulations on this achievement!".PHP_EOL."
+
+            Best regards,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = $tp_users->email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+
+            /*end here*/
+
+            /*Mail to admin*/
+            $admin = DB::table('tbl_application')->where('id',$application_id)->first();
+            $admin_users = DB::table('users')->where('id',$admin->admin_id)->first();
+            $title="Application Successfully Assigned | RAVAP-".$application_id;
+            $subject="Application Successfully Assigned | RAVAP-".$application_id;
+
+            $body = "Dear Team, ".PHP_EOL."
+            I hope this message finds you well. It is with great pleasure that I inform you that your application of RAVAP-".$application_id." has been thoroughly reviewed and approved.
+
+            Application Details:".PHP_EOL."
+
+            Application ID: RAVAP-".$application_id." ".PHP_EOL."
+            Application Date: ".$tbl_application->created_at."".PHP_EOL."
+
+            Best regards,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = $admin_users->email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+
+            /*end here*/
+
+
+
             DB::commit();
             return redirect('onsite/application-view'.'/'.$request->application_id); 
         }

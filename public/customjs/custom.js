@@ -181,6 +181,7 @@ function handleAcknowledgementPayment(id) {
 function desktopDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
+        $('.full_screen_loading').show();
         let urlObject = new URL(window.location.href);
         let urlPath = urlObject.pathname.split("/");
 
@@ -237,6 +238,7 @@ function desktopDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 1,
                     });
+                    $('.full_screen_loading').hide();
                     setTimeout(() => {
                         window.location.href = resdata.redirect_to;
                     }, 1000);
@@ -247,9 +249,11 @@ function desktopDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
                 }
             },
             error: (xhr, st) => {
+                $('.full_screen_loading').hide();
                 console.log(xhr, "st");
             },
         });
@@ -337,6 +341,7 @@ function onsiteDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
 
     if (is_acknowledged) {
+        $('.full_screen_loading').show();
         let urlObject = new URL(window.location.href);
         let urlPath = urlObject.pathname.split("/");
         let doc_sr_code = "";
@@ -389,6 +394,7 @@ function onsiteDocumentVerfiy() {
             });
             // Clear the file input
             fileInput.val("");
+            $('.full_screen_loading').hide();
             return;
         }
 
@@ -407,6 +413,7 @@ function onsiteDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 1,
                     });
+                    $('.full_screen_loading').hide();
                     setTimeout(() => {
                         window.location.href = resdata.redirect_to;
                     }, 1000);
@@ -417,9 +424,11 @@ function onsiteDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
                 }
             },
             error: (xhr, st) => {
+                $('.full_screen_loading').hide();
                 console.log(xhr, "st");
             },
         });

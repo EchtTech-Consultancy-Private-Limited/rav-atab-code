@@ -372,8 +372,6 @@ class OnsiteApplicationController extends Controller
          $data['nc_type'] = $request->nc_type;
         //  $data['status'] = 1;
 
-
-       
          $nc_comment_status="";
          $nc_raise="";
          if($request->nc_type==="Accept"){
@@ -408,9 +406,12 @@ class OnsiteApplicationController extends Controller
              $create_nc_comments = TblNCComments::insert($data);
          }
         
-        $last_course_doc=  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->latest('id')->first();
+
+        $last_course_doc =  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->latest('id')->first();
         
         TblApplicationCourseDoc::where('id',$last_course_doc->id)->update(['onsite_status'=>$nc_comment_status,'onsite_nc_status'=>$nc_flag]);
+
+        $tp_email = DB::table('users')->where('id',$last_course_doc->tp_id)->first()->email;
 
          /*Create record for summary report*/
          $data=[];
@@ -447,7 +448,7 @@ class OnsiteApplicationController extends Controller
 
         NC Created By: ".Auth::user()->firstname."";
 
-         $details['email'] = Auth::user()->email;
+         $details['email'] = $tp_email;
          $details['title'] = $title; 
          $details['subject'] = $subject; 
          $details['body'] = $body; 
@@ -456,10 +457,10 @@ class OnsiteApplicationController extends Controller
  
          if($last_course_doc){
              DB::commit();
-             return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);
+             return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
          }else{
              DB::rollBack();
-             return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
+             return response()->json(['success' => false,'message' =>'Failed to create '.$request->nc_type.'  and documents'],200);
          }
      }catch(Exception $e){
          DB::rollBack();

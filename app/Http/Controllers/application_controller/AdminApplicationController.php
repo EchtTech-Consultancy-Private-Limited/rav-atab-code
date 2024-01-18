@@ -134,6 +134,8 @@ class AdminApplicationController extends Controller
         try{
             DB::beginTransaction();
             $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
+            $assessor_types = $get_assessor_type==1?'desktop':'onsite';
+
             $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
             $data['application_id']=$request->application_id;
@@ -152,6 +154,11 @@ class AdminApplicationController extends Controller
             }else{
                 $assessment_type = 2;
             }
+
+
+            DB::table('tbl_application')->where('id',$request->application_id)->update(['admin_id'=>Auth::user()->id,'assessor_id'=>$request->assessor_id]);
+
+            DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'assessor_type'=>'desktop'])->update(['admin_id'=>Auth::user()->id,'assessor_id'=>$request->assessor_id]);
 
             /**
              * Mail Sending

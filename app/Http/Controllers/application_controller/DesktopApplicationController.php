@@ -282,6 +282,11 @@ class DesktopApplicationController extends Controller
 
         $create_nc_comments = TblNCComments::insert($data);
         
+
+        $tp_id = TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->first();
+        $tp_email = DB::table('users')->where('id',$tp_id->tp_id)->first();
+
+
         TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
 
         /*Create record for summary report*/
@@ -305,21 +310,21 @@ class DesktopApplicationController extends Controller
         /*end here*/
 
         //assessor email
-        $title="Notification -  ".$request->nc_type." | RAVAP-".$application_id;
-        $subject="Notification - ".$request->nc_type." | RAVAP-".$application_id;
+        $title="Notification -  ".$request->nc_type." | RAVAP-".$request->application_id;
+        $subject="Notification - ".$request->nc_type." | RAVAP-".$request->application_id;
         
-        $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
-        I hope this email finds you well. I am writing to inform you that a NC has been generated for [document/project/process] in accordance with our quality management procedures.
+        $body = "Dear ,".$tp_email->firstname." ".PHP_EOL."
+        I hope this email finds you well. I am writing to inform you that a ".$request->nc_type." has been generated for RAVAP-".$request->application_id." in accordance with our quality management procedures.".PHP_EOL."
         
-        NC Details:
+        NC Details:".PHP_EOL."
 
-        Document Name: ".$request->doc_file_name."
-        Document Sr. No.: ".$request->doc_sr_code."
-        Date Created: ".date('d-m-Y')."
+        Document Name: ".$request->doc_file_name."".PHP_EOL."
+        Document Sr. No.: ".$request->doc_sr_code."".PHP_EOL."
+        Date Created: ".date('d-m-Y')."".PHP_EOL."
 
         NC Created By: ".Auth::user()->firstname."";
 
-         $details['email'] = Auth::user()->email;
+         $details['email'] = $tp_email->email;
          $details['title'] = $title; 
          $details['subject'] = $subject; 
          $details['body'] = $body; 
@@ -327,12 +332,11 @@ class DesktopApplicationController extends Controller
 
         /*end here*/
        
-       
         if($create_nc_comments){
             DB::commit();
-            return response()->json(['success' => true,'message' =>'NC comments created successfully','redirect_to'=>$redirect_to],200);
+            return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
         }else{
-            return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
+            return response()->json(['success' => false,'message' =>'Failed to create '.$request->nc_type.'  and documents'],200);
         }
     }catch(Exception $e){
         DB::rollBack();

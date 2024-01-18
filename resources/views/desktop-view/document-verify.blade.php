@@ -149,6 +149,7 @@
         </div>
 
 
+        <div class="full_screen_loading">Loading&#8230;</div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
