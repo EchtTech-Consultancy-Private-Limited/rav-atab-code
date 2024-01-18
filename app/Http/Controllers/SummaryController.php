@@ -45,13 +45,26 @@ class SummaryController extends Controller
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
-            $value = DB::table('assessor_summary_reports')->where([
-                'application_id' => dDecrypt($application_id),
+            // $value = DB::table('assessor_summary_reports')->where([
+            //     'application_id' => dDecrypt($application_id),
+            //     'assessor_id' => $assessor_id,
+            //     'application_course_id'=>dDecrypt($application_course_id),
+            //     'object_element_id' => $question->id,
+            //     'doc_sr_code' => $question->code,
+            // ])->get();
+
+            $value = TblNCComments::where([
+                'application_id' =>  dDecrypt($application_id),
+                'application_courses_id' =>  dDecrypt($application_course_id),
                 'assessor_id' => $assessor_id,
-                'application_course_id'=>dDecrypt($application_course_id),
-                'object_element_id' => $question->id,
-                'doc_sr_code' => $question->code,
-            ])->get();
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
+
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
@@ -259,7 +272,7 @@ class SummaryController extends Controller
 
              /*Mail to admin*/
              $admin = DB::table('tbl_application')->where('id',$application_id)->first();
-             $admin_users = DB::table('users')->where('id',$admin->admin)->first();
+             $admin_users = DB::table('users')->where('id',$admin->admin_id)->first();
              $title="Application Successfully Assigned | RAVAP-".$application_id;
              $subject="Application Successfully Assigned | RAVAP-".$application_id;
  
