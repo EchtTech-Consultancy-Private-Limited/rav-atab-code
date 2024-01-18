@@ -348,17 +348,21 @@ function onsiteDocumentVerfiy() {
         let doc_file_name = "";
         let application_id = "";
         let doc_unique_id = "";
+        let view_type = "";
         
         if(urlPath[1]=='public'){
              doc_sr_code = urlPath[4];
              doc_file_name = urlPath[5];
              application_id = urlPath[6];
              doc_unique_id = urlPath[7];
+             view_type = urlPath[9];
         }else{
              doc_sr_code = urlPath[3];
              doc_file_name = urlPath[4];
              application_id = urlPath[5];
              doc_unique_id = urlPath[6];
+             view_type = urlPath[8];
+
         }
        
         let application_courses_id = urlPath[7];
@@ -381,6 +385,7 @@ function onsiteDocumentVerfiy() {
         formData.append("comments", doc_comment);
         formData.append("doc_file_name", doc_file_name);
         formData.append("fileup", d);
+        formData.append("view_type", view_type);
 
         var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
@@ -598,6 +603,8 @@ $("#upload_onstie_nc_file").change(function () {
     var formData = new FormData(form);
     var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
     var uploadedFileName = fileInput.val();
+   
+
     var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
         Swal.fire({
