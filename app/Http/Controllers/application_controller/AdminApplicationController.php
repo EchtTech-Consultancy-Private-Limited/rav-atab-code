@@ -317,8 +317,16 @@ class AdminApplicationController extends Controller
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
+            'assessor_type'=>'desktop'
         ])
         ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status')
+        ->get();
+        $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'onsite'
+        ])
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','status')
         ->get();
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -354,7 +362,7 @@ class AdminApplicationController extends Controller
                 $final_data[] = $obj;
         }
         $applicationData = TblApplication::find($application_id);
-        return view('admin-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
+        return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
     }
     public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {

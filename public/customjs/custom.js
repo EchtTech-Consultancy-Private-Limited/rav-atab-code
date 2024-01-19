@@ -597,13 +597,14 @@ $(".assesorsid").on("click", function () {
 
 /*Upload file from onsite assessor for nc's*/
 $("#upload_onstie_nc_file").change(function () {
+    
     var fileInput = $(this);
     var questionId = fileInput.data("question-id");
     var form = $("#submitform_doc_form_" + questionId)[0];
     var formData = new FormData(form);
     var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
     var uploadedFileName = fileInput.val();
-   
+    
 
     var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
