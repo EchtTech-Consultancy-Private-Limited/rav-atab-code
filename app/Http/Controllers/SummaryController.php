@@ -189,7 +189,8 @@ class SummaryController extends Controller
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
                 'nc_raise_code'=>['NC1', 'NC2'],
-                'application_course_id' =>$request->application_course_id
+                'application_course_id' =>$request->application_course_id,
+                'assessor_type'=>'desktop'
             ])->get();
                 $obj->nc = $value;
                 $final_data[] = $obj;
@@ -470,11 +471,12 @@ class SummaryController extends Controller
                 'assessor_id' => $assessor_id,
                 'object_element_id' => $question->id,
                 'doc_sr_code' => $question->code,
+                'assessor_type'=>'onsite'
             ])->get();
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
-    // dd($final_data);
+    
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>$request->application_course_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;

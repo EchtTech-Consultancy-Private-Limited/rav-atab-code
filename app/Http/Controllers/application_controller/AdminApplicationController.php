@@ -364,8 +364,9 @@ class AdminApplicationController extends Controller
         $applicationData = TblApplication::find($application_id);
         return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
     }
-    public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
+        
         try{
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
@@ -405,6 +406,7 @@ class AdminApplicationController extends Controller
             'dropdown_arr'=>$dropdown_arr??[],
             'nc_comments'=>$nc_comments,
             'form_view'=>$form_view,
+            'assessor_type'=>$assessor_type,
         ]);
     }catch(Exception $e){
         return back()->with('fail','Something went wrong');
@@ -428,6 +430,7 @@ class AdminApplicationController extends Controller
         $data['nc_type'] = $request->nc_type;
         $data['assessor_id'] = $assessor_id; 
         $data['doc_file_name'] = $request->doc_file_name;
+
         $nc_comment_status="";
         $admin_nc_flag=0;
         if($request->nc_type==="Accept"){
@@ -442,8 +445,17 @@ class AdminApplicationController extends Controller
             $nc_comment_status=4; //request for final approval
             $nc_flag=1;
         }
+
         $create_nc_comments = TblNCComments::insert($data);
-        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+
+        if($request->assessor_type=="onsite"){
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_status'=>4])->update(['onsite_nc_status'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+        }else{
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+        }
+        
+
+
         if($create_nc_comments){
             DB::commit();
             return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);

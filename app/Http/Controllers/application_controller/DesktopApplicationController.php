@@ -103,6 +103,7 @@ class DesktopApplicationController extends Controller
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
+            'assessor_type'=>'desktop'
         ])
         ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','status')
         ->get();

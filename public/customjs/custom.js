@@ -260,7 +260,7 @@ function desktopDocumentVerfiy() {
     }
 }
 
-function adminDocumentVerfiy() {
+function adminDocumentVerfiy(assessor_type) {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
         let urlObject = new URL(window.location.href);
@@ -273,17 +273,17 @@ function adminDocumentVerfiy() {
         let application_courses_id = "";
 
         if(urlPath[1]=="public"){
+             doc_sr_code = urlPath[5];
+             doc_file_name = urlPath[6];
+             application_id = urlPath[7];
+             doc_unique_id = urlPath[8];
+             application_courses_id = urlPath[9];
+        }else{
              doc_sr_code = urlPath[4];
              doc_file_name = urlPath[5];
              application_id = urlPath[6];
              doc_unique_id = urlPath[7];
              application_courses_id = urlPath[8];
-        }else{
-             doc_sr_code = urlPath[3];
-             doc_file_name = urlPath[4];
-             application_id = urlPath[5];
-             doc_unique_id = urlPath[6];
-             application_courses_id = urlPath[7];
         }
         
         let doc_comment = $("#comment_text").val();
@@ -302,6 +302,7 @@ function adminDocumentVerfiy() {
         formData.append("nc_type", nc_type);
         formData.append("comments", doc_comment);
         formData.append("doc_file_name", doc_file_name);
+        formData.append("assessor_type", assessor_type);
 
         $.ajax({
             url: `${BASE_URL}/admin/document-verfiy`,
@@ -597,7 +598,7 @@ $(".assesorsid").on("click", function () {
 
 /*Upload file from onsite assessor for nc's*/
 $("#upload_onstie_nc_file").change(function () {
-    
+
     var fileInput = $(this);
     var questionId = fileInput.data("question-id");
     var form = $("#submitform_doc_form_" + questionId)[0];
