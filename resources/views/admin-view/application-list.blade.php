@@ -111,12 +111,12 @@
                                                     {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->payment_status==0)
-                                                    <span class="badge badge-main warning">Payment Pending</span>
-                                                    @elseif($item->application_list->payment_status==1)
-                                                    <span class="badge badge-main primary">Received</span>
+                                                @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
+                                                    <span class="badge badge-main danger">{{config('status_text.admin_status_pending')}}</span>
+                                                    @elseif($item->application_list->payment_status===2)
+                                                    <span class="badge badge-main warning">{{config('status_text.admin_status_process')}}</span>
                                                     @else
-                                                    <span class="badge badge-main success">Accepted</span>
+                                                    <span class="badge badge-main success">{{config('status_text.admin_status_completed')}}</span>
                                                     @endif
                                                 </td>
                                                     <td>

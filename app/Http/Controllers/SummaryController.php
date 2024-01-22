@@ -304,7 +304,7 @@ class SummaryController extends Controller
        
     public function onSiteFinalSubmitSummaryReport(Request $request){
         try{
-
+            
             DB::beginTransaction();
             $application_id = dDecrypt($request->application_id);
             $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $application_id,'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
@@ -336,6 +336,12 @@ class SummaryController extends Controller
             $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
             $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
         
+            /*Completed the application and make the app status =3 for completed*/
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>3]);
+            /*end here*/
+
+
+
             /*Mail to assessor*/
             $title=" Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
             $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
