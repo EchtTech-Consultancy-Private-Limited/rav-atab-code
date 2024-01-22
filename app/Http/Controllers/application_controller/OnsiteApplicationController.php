@@ -114,7 +114,7 @@ class OnsiteApplicationController extends Controller
     }
 
 
-    /** Whole Application View for Account */
+    /** Whole Application View for Onsite assessor */
     public function applicationDocumentList($id, $course_id)
     {
         $assessor_id = Auth::user()->id;
@@ -134,7 +134,7 @@ class OnsiteApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status','onsite_photograph')
         ->get();
 
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
@@ -186,7 +186,7 @@ class OnsiteApplicationController extends Controller
                         'onsite_nc_comments' => TblNCComments::where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
-                            //'assessor_type' => 'onsite',
+                            'assessor_type' => 'onsite',
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
                         ])
@@ -194,22 +194,23 @@ class OnsiteApplicationController extends Controller
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
-                        'onsite_photograph' => TblNCComments::where([
+                        'onsite_photograph' =>DB::table('tbl_onsite_photograph')->where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
-                           // 'assessor_type' => 'onsite',
+                            'assessor_type' => 'onsite',
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code
                         ])
                         ->latest('id')
-                        ->select('tbl_nc_comments.onsite_photograph')
-                        ->first(),
+                        ->select('onsite_photograph')
+                        ->first()
                     ];
                 }
 
                 $final_data[] = $obj;
 
         }
+
         return $final_data;
         
     }
@@ -439,7 +440,7 @@ class OnsiteApplicationController extends Controller
    
 
      public function onsiteUploadPhotograph(Request $request){
-
+       
         try{
             DB::beginTransaction();
             $assessor_id  = Auth::user()->id;
@@ -447,34 +448,25 @@ class OnsiteApplicationController extends Controller
             $application_courses_id = $request->application_courses_id;
             $doc_sr_code = $request->doc_sr_code;
             $doc_unique_id = $request->doc_unique_id;
-            $doc_file_name = "";
+            $doc_photograph_name = "";
             if ($request->hasfile('fileup_photograph')) {
                 $file = $request->file('fileup_photograph');
                 $name = $file->getClientOriginalName();
                 $filename = time() . $name;
                 $file->move('level/', $filename);
-                $doc_file_name = $filename;
+                $doc_photograph_name = $filename;
             }
-            $get_last_nc = TblNCComments::where(['application_id'=>$application_id,'application_courses_id'=>$application_courses_id,'doc_sr_code'=>$doc_sr_code,'doc_unique_id'=>$doc_unique_id,'assessor_type'=>'onsite'])->select('id')->latest('id')->first();
-
-            $is_submitted = false;
-            if($get_last_nc){
-                TblNCComments::where('id',$get_last_nc->id)->update(['onsite_photograph'=>$doc_file_name]);
-                $is_submitted=true;
-            }else{
                 $photograph_data=[];
                 $photograph_data['application_id'] = $application_id;
                 $photograph_data['doc_sr_code'] = $doc_sr_code;
                 $photograph_data['doc_unique_id'] = $doc_unique_id;
                 $photograph_data['application_courses_id'] = $application_courses_id;
-                $photograph_data['assessor_type'] = 'onsite';
                 $photograph_data['assessor_id'] = $assessor_id;
-                $photograph_data['onsite_photograph'] = $doc_file_name;
-                TblNCComments::insert($photograph_data);
-                $is_submitted=true;
-            }
+                $photograph_data['assessor_type'] = 'onsite';
+                $photograph_data['onsite_photograph'] = $doc_photograph_name;
 
-            if($is_submitted){
+                $upload_photograph = DB::table('tbl_onsite_photograph')->insert($photograph_data);
+            if($upload_photograph){
                 DB::commit();
                 return response()->json(['success' => true,'message' =>'Photograph uploaded successfully'],200);
             }else{

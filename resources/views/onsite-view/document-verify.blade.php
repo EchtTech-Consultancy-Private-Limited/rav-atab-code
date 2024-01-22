@@ -244,7 +244,7 @@
                 </div>
             @endif
         </div>
-<!-- 
+
         <div class="container">
             <div class="card project-widget">
                 <div class="card-body">
@@ -254,7 +254,7 @@
                         </object>
                 </div>
             </div>
-        </div> -->
+        </div>
 
 
 

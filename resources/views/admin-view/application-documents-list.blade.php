@@ -416,7 +416,7 @@
                                                          @endphp
                                                          {{$resultString}} 
                                                          </td>
-                                                         <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
+                                                         <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}} ({{ucfirst($nc_comment->assessor_type)}})</td>
                                                       </tr>
                                                      @endforeach
                                                      @endisset

@@ -326,7 +326,7 @@ class AdminApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','status')
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status')
         ->get();
         $chapters = Chapter::all();
         foreach($chapters as $chapter){

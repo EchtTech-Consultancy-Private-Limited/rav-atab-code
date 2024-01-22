@@ -30,7 +30,7 @@ class SummaryController extends Controller
         ])
         ->first();
         /*count the no of mandays*/
-        $no_of_mandays = DB::table('tbl_assessor_assign')->where(['assessor_id'=>$assessor_id,'application_id'=>dDecrypt($application_id)])->count();
+        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_id'=>$assessor_id,'application_id'=>dDecrypt($application_id)])->count();
         /*get distinct question id*/
         $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id','asr.assessor_id','asr.object_element_id')

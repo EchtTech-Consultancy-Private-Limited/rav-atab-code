@@ -655,34 +655,40 @@ $("#upload_onstie_nc_file").change(function () {
 /*nc's end here*/
 
 function handlePdfOrImageForPhotograph(path) {
-    let BASE_URL = BASE_URL + "/level/";
+    let MAIN_URL = BASE_URL + "/level/";
     const fileExtension = path.split(".").pop().toLowerCase();
     $("#view_photograph_onsite").html("");
     if (fileExtension === "pdf") {
         const html =
             '<object data="' +
-            BASE_URL +
+            MAIN_URL +
             path +
             '" type="application/pdf" width="100%" height="700px"></object>';
         $("#view_photograph_onsite").html(html);
     } else {
         const html =
             '<img src="' +
-            BASE_URL +
+            MAIN_URL +
             path +
             '" alt="Photograph" title="Photograph" class="img img-responsive"/>';
         $("#view_photograph_onsite").html(html);
     }
 }
-
 function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
     $("#payment_transaction_no_err").html("");
     $("#payment_reference_no_err").html("");
+    
     if (pay_txn_no != null && pay_ref_no != null && id != null) {
         $("#payment_transaction_no").val("");
         $("#payment_reference_no").val("");
-        $("#payment_transaction_no").val(pay_txn_no);
-        $("#payment_reference_no").val(pay_ref_no);
+
+        // Convert the strings to BigInt
+        const pay_txn_no_bigint = BigInt(pay_txn_no);
+        const pay_ref_no_bigint = BigInt(pay_ref_no);
+        console.log(pay_txn_no_bigint.toString(),' skdkd sls ')
+        // Set the values of the elements with the BigInt values
+        $("#payment_transaction_no").val(pay_txn_no_bigint.toString());
+        $("#payment_reference_no").val(pay_ref_no_bigint.toString());
         $("#payment_info_id").val(id);
     } else {
         toastr.success("Something went wrong!", {
