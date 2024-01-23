@@ -35,9 +35,9 @@ class AdminApplicationController extends Controller
         $final_data=array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
         
-        $desktop_assessor_list = DB::table('users')->where(['assessment'=>1,'role'=>3])->orderBy('id', 'DESC')->get();
+        $desktop_assessor_list = DB::table('users')->where(['assessment'=>1,'role'=>3,'status'=>0])->orderBy('id', 'DESC')->get();
         
-        $onsite_assessor_list = DB::table('users')->where(['assessment'=>2,'role'=>3])->orderBy('id', 'DESC')->get();
+        $onsite_assessor_list = DB::table('users')->where(['assessment'=>2,'role'=>3,'status'=>0])->orderBy('id', 'DESC')->get();
        
         $secretariatdata = DB::table('users')->where('role', '5')->orderBy('id', 'DESC')->get();
         foreach($application as $app){
