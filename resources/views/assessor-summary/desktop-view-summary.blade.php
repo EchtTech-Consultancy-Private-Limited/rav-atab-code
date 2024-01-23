@@ -193,7 +193,7 @@
                                             <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">Application No (provided by ATAB): <span> <input type="text" disabled value="{{$summertReport->application_id}}"></span> </td>
+                                            <td class="fw-bold">Application No (provided by ATAB): <span> <input type="text" disabled value="RAVAP-{{$summertReport->application_id}}"></span> </td>
                                             <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->created_at))}}</span> </td>
                                         </tr>
                                         <tr>
@@ -203,7 +203,7 @@
                                                 <span> <input type="text" disabled value="{{$summertReport->course_name??'N/A'}}"></span> </td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">Way of assessment (Desktop): <span> <input type="text" disabled value="{{$assessement_way??'N/A'}}"></span> </td>
+                                            <td class="fw-bold">Way of assessment (Desktop): <span> <input type="text" disabled value="DDA"></span> </td>
                                             <td class="fw-bold">No of Mandays:  <span> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
                                         </tr>
                                 
