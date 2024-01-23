@@ -301,6 +301,13 @@ class OnsiteApplicationController extends Controller
          $assessor_id = Auth::user()->id;
          $assessor_type = Auth::user()->assessment==1?"desktop":"onsite";
 
+
+/*get last record of desktop*/
+$last_course_doc_desktop =  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->latest('id')->first();
+/*end here*/
+
+
+
          $data = [];
 
          if ($request->hasfile('fileup')) {
@@ -361,6 +368,7 @@ class OnsiteApplicationController extends Controller
          $onsite_data['onsite_status'] = $nc_comment_status;
          $onsite_data['onsite_nc_status'] = $nc_flag;
          $onsite_data['onsite_nc_type'] = $nc_raise;
+         $onsite_data['tp_id'] = $last_course_doc_desktop->tp_id;
          
          $get_last_doc_of_onsite = TblApplicationCourseDoc::where(['application_id'=>$request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite','onsite_nc_type'=>0])->latest('id')->first();
 
@@ -379,6 +387,10 @@ class OnsiteApplicationController extends Controller
 
         $last_course_doc =  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'onsite','application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->latest('id')->first();
         
+
+
+
+
         if($last_course_doc){
             TblApplicationCourseDoc::where('id',$last_course_doc->id)->update(['onsite_status'=>$nc_comment_status,'onsite_nc_status'=>$nc_flag]);
         
