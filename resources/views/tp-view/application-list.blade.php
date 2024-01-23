@@ -102,6 +102,7 @@
                                                     @endisset
                                                 </td>
                                                 <td>
+                                                    
                                                 @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
                                                     <span class="badge badge-main danger">{{config('status_text.tp_status_pending')}}</span>
                                                     @elseif($item->application_list->payment_status==2)
