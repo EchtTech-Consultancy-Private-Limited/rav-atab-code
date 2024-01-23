@@ -490,11 +490,12 @@ class ApplicationCoursesController extends Controller
         $file = TblApplicationCourses::find($id);
         $file->course_name = $request->Course_Names;
         $file->mode_of_course = collect($request->mode_of_course)->implode(',');
-        $file->course_brief = $request->Eligibilitys;
+        $file->course_brief = $request->course_brief;
         $file->course_duration_y = $request->years;
         $file->course_duration_m = $request->months;
         $file->course_duration_d = $request->days;
         $file->course_duration_h = $request->hours;
+        $file->eligibility = $request->Eligibilitys;
         if($request->hasfile('doc1')){
             $doc_size_1 = $this->getFileSize($file_size1);
             $doc_extension_1 = $request->file('doc1')->getClientOriginalExtension();
