@@ -303,7 +303,7 @@ class OnsiteApplicationController extends Controller
 
 
         /*get last record of desktop*/
-        $last_course_doc_desktop =  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id])->latest('id')->first();
+        $last_course_doc_desktop =  TblApplication::where(['application_id'=> $request->application_id])->first();
         /*end here*/
 
 
