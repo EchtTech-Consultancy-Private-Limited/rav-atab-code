@@ -81,7 +81,7 @@
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">
                                                                     <label>Select Type</label>
-                                                <input type="hidden" name="application_id" value="{{application_id}}"/>
+                                                <input type="hidden" name="application_id" value="{{$application_id}}"/>
                                                 <input type="hidden" name="doc_unique_id" value="{{$doc_code}}"/>
                                                 <input type="hidden" name="doc_sr_code" value="{{$doc_id}}"/>
                                                 <input type="hidden" name="application_courses_id" value="{{$application_course_id}}"/>
