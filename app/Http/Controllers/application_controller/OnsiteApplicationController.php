@@ -302,9 +302,9 @@ class OnsiteApplicationController extends Controller
          $assessor_type = Auth::user()->assessment==1?"desktop":"onsite";
 
 
-/*get last record of desktop*/
-$last_course_doc_desktop =  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->latest('id')->first();
-/*end here*/
+        /*get last record of desktop*/
+        $last_course_doc_desktop =  TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>'desktop','application_courses_id'=>$request->application_courses_id])->latest('id')->first();
+        /*end here*/
 
 
 
