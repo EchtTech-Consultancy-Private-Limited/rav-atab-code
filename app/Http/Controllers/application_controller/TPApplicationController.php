@@ -42,7 +42,9 @@ class TPApplicationController extends Controller
             $obj->application_list= $app;
                 $course = DB::table('tbl_application_courses')->where([
                     'application_id' => $app->id,
-                ])->count();
+                ])
+                ->whereNull('deleted_at') 
+                ->count();
                 if($course){
                     $obj->course_count = $course;
                 }
@@ -76,7 +78,9 @@ class TPApplicationController extends Controller
             $obj->application= $application;
                 $course = DB::table('tbl_application_courses')->where([
                     'application_id' => $application->id,
-                ])->get();
+                ])
+                ->whereNull('deleted_at') 
+                ->get();
                 if($course){
                     $obj->course = $course;
                 }

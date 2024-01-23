@@ -495,6 +495,7 @@ class ApplicationCoursesController extends Controller
         $file->course_duration_m = $request->months;
         $file->course_duration_d = $request->days;
         $file->course_duration_h = $request->hours;
+        $file->eligibility = $request->Eligibilitys;
         if($request->hasfile('doc1')){
             $doc_size_1 = $this->getFileSize($file_size1);
             $doc_extension_1 = $request->file('doc1')->getClientOriginalExtension();

@@ -854,17 +854,18 @@ function handleUpdatePaymentInformationOfAccount() {
 }
 
 function validateForm() {
-    const MIN_MAX_LENGTH = 18;
+    const MIN_LENGTH = 9;
+    const MAX_LENGTH = 18;
     let pay_txn_no = $("#payment_transaction_no").val();
     let pay_ref_no = $("#payment_reference_no").val();
     let flag = 0;
-    if (pay_txn_no.length != MIN_MAX_LENGTH) {
+    if (pay_txn_no.length != MIN_LENGTH && pay_txn_no.length!= MAX_LENGTH) {
         flag = 1;
         $("#payment_transaction_no_err")
             .html("Please enter a valid transaction number")
             .show();
     }
-    if (pay_ref_no.length != MIN_MAX_LENGTH) {
+    if (pay_ref_no.length != MIN_LENGTH && pay_ref_no.length != MAX_LENGTH) {
         flag = 1;
         $("#payment_reference_no_err")
             .html("Please enter a valid reference number")

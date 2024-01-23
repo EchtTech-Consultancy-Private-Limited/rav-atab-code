@@ -332,7 +332,7 @@
                             <!-- <th>Total Courses</th> -->
                             <th>Amount</th>
                             <th>Slip by User</th>
-                            <th>Slip by Approver</th>
+                            <th>Slip by Accountant Approver</th>
                             <th>Remarks</th>
                             <th>Action</th>
 
@@ -504,12 +504,12 @@
                 <div class="modal-body">
                 <div class="mb-3">
                         <label for="payment_transaction_no" class="form-label">Payment Transaction no<span class="text-danger">(*)</span></label>
-                        <input type="text" class="form-control remove_err" id="payment_transaction_no" placeholder="Please enter payment transaction number." maxlength='18'>
+                        <input type="text" class="form-control remove_err placeholder_fn_size" id="payment_transaction_no" placeholder="Please enter payment transaction number." maxlength='18'>
                         <span class="err" id="payment_transaction_no_err"></span>
                 </div>
                 <div class="mb-3">
                         <label for="payment_reference_no" class="form-label">Payment Reference no<span class="text-danger">(*)</span></label>
-                        <input type="text" class="form-control remove_err" id="payment_reference_no" placeholder="Please enter payment reference number." maxlength='18'>
+                        <input type="text" class="form-control remove_err placeholder_fn_size" id="payment_reference_no" placeholder="Please enter payment reference number." maxlength='18'>
                         <span class="err" id="payment_reference_no_err"></span>
                 </div>
                 <div class="mb-3">
