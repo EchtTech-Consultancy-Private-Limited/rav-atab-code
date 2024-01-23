@@ -381,7 +381,7 @@ class OnsiteApplicationController extends Controller
         
         if($last_course_doc){
             TblApplicationCourseDoc::where('id',$last_course_doc->id)->update(['onsite_status'=>$nc_comment_status,'onsite_nc_status'=>$nc_flag]);
-        }
+        
         
         $tp_email = DB::table('users')->where('id',$last_course_doc->tp_id)->first()->email;
 
@@ -425,7 +425,7 @@ class OnsiteApplicationController extends Controller
          $details['subject'] = $subject; 
          $details['body'] = $body; 
          dispatch(new SendEmailJob($details));
-
+    }
  
          if($last_course_doc){
              DB::commit();
