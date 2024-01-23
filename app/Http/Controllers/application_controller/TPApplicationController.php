@@ -326,8 +326,17 @@ class TPApplicationController extends Controller
             return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);
         }
 
+        $data = [];
+        $data['payment_transaction_no']=$request->payment_transaction_no;
+        $data['payment_reference_no']=$request->payment_reference_no;
+        $data['tp_update_count']=$get_payment_update_count+1;
 
-        $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update(['payment_transaction_no'=>$request->payment_transaction_no,'payment_reference_no'=>$request->payment_reference_no,'payment_proof'=>$slip_by_user_file,'tp_update_count'=>$get_payment_update_count+1]);
+        if ($request->hasfile('payment_proof')) {
+            $data['payment_proof']=$slip_by_user_file;
+        }
+
+
+        $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update($data);
 
         if($update_payment_info){
             DB::commit();

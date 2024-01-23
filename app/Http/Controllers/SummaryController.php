@@ -336,8 +336,8 @@ class SummaryController extends Controller
             $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
             $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
         
-            /*Completed the application and make the app status =3 for completed*/
-                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>3]);
+            /*Completed the application and make the app payment_status =3 for completed*/
+                DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>3]);
             /*end here*/
 
 

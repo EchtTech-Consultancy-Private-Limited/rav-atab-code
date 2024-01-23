@@ -716,21 +716,25 @@ function handleUpdatePaymentInformation() {
         formData.append("payment_proof", payment_proof);
         formData.append("id", payment_info_id);
 
-        var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+        var allowedExtensions = ["pdf", "doc", "docx","jpeg","jpg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
-        if (allowedExtensions.indexOf(fileExtension) == -1) {
-            toastr.error("Invalid file type", {
-                timeOut: 1,
-                extendedTimeOut: 0,
-                closeButton: true,
-                closeDuration: 1,
-            });
-            // Clear the file input
-            fileInput.val("");
-            $(".full_screen_loading").hide();
-            return;
-        }
+       
+        if(payment_proof){
+            var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
+            if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+                // Clear the file input
+                fileInput.val("");
+                $(".full_screen_loading").hide();
+                return;
+            }
+    }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -789,21 +793,23 @@ function handleUpdatePaymentInformationOfAccount() {
         formData.append("payment_proof_by_account", payment_proof_by_account);
         formData.append("id", payment_info_id);
 
-        var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+        var allowedExtensions = ["pdf", "doc", "docx","jpeg","jpg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
-        var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
-        if (allowedExtensions.indexOf(fileExtension) == -1) {
-            toastr.error("Invalid file type", {
-                timeOut: 1,
-                extendedTimeOut: 0,
-                closeButton: true,
-                closeDuration: 1,
-            });
-            // Clear the file input
-            fileInput.val("");
-            $(".full_screen_loading").hide();
-            return;
-        }
+       if(payment_proof_by_account){
+            var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
+            if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+                // Clear the file input
+                fileInput.val("");
+                $(".full_screen_loading").hide();
+                return;
+            }
+    }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
