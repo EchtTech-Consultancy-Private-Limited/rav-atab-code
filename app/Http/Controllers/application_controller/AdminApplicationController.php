@@ -20,6 +20,8 @@ use App\Models\Chapter;
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
 use URL;
+use App\Jobs\SendEmailJob;
+
 class AdminApplicationController extends Controller
 {
     public function __construct()
@@ -132,6 +134,9 @@ class AdminApplicationController extends Controller
         try{
             DB::beginTransaction();
             $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
+            $assessor_types = $get_assessor_type==1?'desktop':'onsite';
+
+            $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
             $data['application_id']=$request->application_id;
             $data['assessor_id']=$request->assessor_id;
@@ -149,6 +154,73 @@ class AdminApplicationController extends Controller
             }else{
                 $assessment_type = 2;
             }
+
+
+            DB::table('tbl_application')->where('id',$request->application_id)->update(['admin_id'=>Auth::user()->id,'assessor_id'=>$request->assessor_id]);
+
+            DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'assessor_type'=>$assessor_types])->update(['admin_id'=>Auth::user()->id,'assessor_id'=>$request->assessor_id]);
+
+            /**
+             * Mail Sending
+             * 
+             * */ 
+                
+               //admin mail
+                $title="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $subject="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                I hope this message finds you well. We are thrilled to inform you that you have assigned the ".$request->application_id." to the assessor.
+
+                Here are the transaction details: ".PHP_EOL."
+                Position: Admin ".PHP_EOL."
+                Reporting to: ".$assessor_details->firstname." ".PHP_EOL."
+                Start Date: ".$assessor_details->created_at."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = Auth::user()->email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+    /*end here*/ 
+                
+                //assessor mail
+                $title="Assignment Confirmation - Welcome Aboard! | RAVAP-".$request->application_id;
+                $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$request->application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                I trust this message finds you well. I am delighted to inform you that you have assigned the application with RAVAP-".$request->application_id.".".PHP_EOL."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $assessor_details->email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            /*end here*/
+
+            //tp mail
+                $title="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $subject="Application Successfully Assigned | RAVAP-".$request->application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                I trust this message finds you well. I am delighted to inform you that application  with RAVAP-".$request->application_id." has been assigned to ".$assessor_details->firstname."(Assessor) .".PHP_EOL."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $assessor_details->email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            /*end here*/
+
             if ($request->assessment_type == 2) {
                 
                 $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->count()  > 0;
@@ -245,8 +317,16 @@ class AdminApplicationController extends Controller
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
+            'assessor_type'=>'desktop'
         ])
         ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status')
+        ->get();
+        $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'onsite'
+        ])
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status')
         ->get();
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -282,10 +362,11 @@ class AdminApplicationController extends Controller
                 $final_data[] = $obj;
         }
         $applicationData = TblApplication::find($application_id);
-        return view('admin-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
+        return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
     }
-    public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
+        
         try{
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
@@ -325,6 +406,7 @@ class AdminApplicationController extends Controller
             'dropdown_arr'=>$dropdown_arr??[],
             'nc_comments'=>$nc_comments,
             'form_view'=>$form_view,
+            'assessor_type'=>$assessor_type,
         ]);
     }catch(Exception $e){
         return back()->with('fail','Something went wrong');
@@ -348,6 +430,7 @@ class AdminApplicationController extends Controller
         $data['nc_type'] = $request->nc_type;
         $data['assessor_id'] = $assessor_id; 
         $data['doc_file_name'] = $request->doc_file_name;
+
         $nc_comment_status="";
         $admin_nc_flag=0;
         if($request->nc_type==="Accept"){
@@ -362,8 +445,17 @@ class AdminApplicationController extends Controller
             $nc_comment_status=4; //request for final approval
             $nc_flag=1;
         }
+
         $create_nc_comments = TblNCComments::insert($data);
-        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+
+        if($request->assessor_type=="onsite"){
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_status'=>4])->update(['onsite_nc_status'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+        }else{
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+        }
+        
+
+
         if($create_nc_comments){
             DB::commit();
             return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);

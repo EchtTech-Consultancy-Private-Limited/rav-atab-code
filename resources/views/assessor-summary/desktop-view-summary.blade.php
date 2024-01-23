@@ -238,8 +238,8 @@
                                                 <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
                                                 <td class="fw-bold">
-                                                    @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
+                                                @foreach($rows->nc as $row)
+                                                    @if($row->nc_type!=="Accept" && $row->nc_type!=="Reject" && $row->nc_type!=="not_recommended" && $row->nc_type!=="Request for final approval")
                                                       {{$row->nc_raise}}
                                                       @endif
                                                     @endforeach
@@ -247,16 +247,16 @@
                                                 <td>
 
                                                 @foreach($rows->nc as $row)
-                                                    @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
+                                                    @if($row->nc_type!=="Accept" && $row->nc_type!=="not_recommended" && $row->nc_type!=="Request for final approval")
                                                       {{$row->capa_mark}}
                                                       @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    @foreach($rows->nc as $key=>$row)
-                                                    @if($row->nc_raise_code=="NC1")
+                                                @foreach($rows->nc as $key=>$row)
+                                                    @if($row->nc_type=="NC1")
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
-                                                    @elseif($row->nc_raise_code=="NC2")
+                                                    @elseif($row->nc_type=="NC2")
                                                     <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
                                                     @endif
                                                     @endforeach
@@ -268,19 +268,19 @@
                                                 @endphp
                                              
                                                 @if($count==1)
-                                                    {{$rows->nc[0]->doc_verify_remark??''}}
+                                                    {{$rows->nc[0]->comments??''}}
                                                 @elseif($count==2)
-                                                {{$rows->nc[1]->doc_verify_remark??''}}
+                                                {{$rows->nc[1]->comments??''}}
                                                 @elseif($count==3)
-                                                {{$rows->nc[2]->doc_verify_remark??''}}
+                                                {{$rows->nc[2]->comments??''}}
                                                 @elseif($count==4)
-                                                {{$rows->nc[3]->doc_verify_remark??''}}
+                                                {{$rows->nc[3]->comments??''}}
                                                 @elseif($count==5)
-                                                {{$rows->nc[4]->doc_verify_remark??''}}
+                                                {{$rows->nc[4]->comments??''}}
                                                 @elseif($count==6)
-                                                {{$rows->nc[5]->doc_verify_remark??''}}
+                                                {{$rows->nc[5]->comments??''}}
                                                 @else
-                                                {{$rows->nc[6]->doc_verify_remark??''}}
+                                                {{$rows->nc[6]->comments??''}}
                                                 @endif
                                             </td>
                                             </tr>

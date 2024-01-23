@@ -1019,8 +1019,7 @@ function getSecondPaymentNotification()
 
     function getNotificationForAccount()
     {
-        $payment_list = TblApplicationPayment::where('accountant_id', auth()->user()->id)
-        ->where('account_received_payment',0)
+        $payment_list = TblApplicationPayment::where('account_received_payment',0)
         ->orderBy('id','desc')
         ->get();
 

@@ -63,12 +63,13 @@
                 </script>
             @endif
             
-            @if($nc_comments[0]->comments=="Request for Final Approval")
+            @if($nc_comments[0]?->comments=="Request for Final Approval")
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Ooh!</strong> Request sent already for final approval
             </div>
             @endif
             
+           
 
             @if($form_view==1)
                 <div class="row ">
@@ -138,7 +139,7 @@
 
                                                     <div class="card-footer">
                                                         <button id="submitBtn" type="button" value="Submit"
-                                                            class="btn btn-primary" onclick="adminDocumentVerfiy()">Submit</button>
+                                                            class="btn btn-primary" onclick="adminDocumentVerfiy('{{$assessor_type}}')">Submit</button>
                                                     </div>
 
                                 </div>

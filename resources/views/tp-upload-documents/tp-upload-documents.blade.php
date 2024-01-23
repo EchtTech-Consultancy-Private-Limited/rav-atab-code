@@ -217,9 +217,11 @@
                                     <input type="hidden" name="doc_unique_id" value="{{$question['question']->id}}">
                                      
                                     @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
+
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
+                                    
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
@@ -306,32 +308,102 @@
 
 
                                     <!-- Onsite nc's list -->
-                                   
-                                    @if(count($question['onsite_nc_comments'])>0)
-                                                @foreach($question['onsite_nc_comments'] as $key=>$onsite_nc_comment)
-                                                <?php
-                                                $nc_status = 1;
-                                                   if($onsite_nc_comment->nc_type=="NC1")
-                                                   $nc_status = 2;
-                                                   else if($onsite_nc_comment->nc_type=="NC2")
-                                                   $nc_status = 3;
-                                                   else if($onsite_nc_comment->nc_type=="not_recommended")
-                                                   $nc_status = 4;
-                                                   else
-                                                   $nc_status = 1;
-                                                   ?>
-
-                                                
-                                                <a target="_blank"
+                                    @if(in_array($question['question']->id,$onsite_course_doc_uploaded->pluck('doc_unique_id')->all())) 
+                                    
+                                    @foreach($onsite_course_doc_uploaded->filter(function ($item) use ($question) {
+                                        return $item['doc_unique_id'] == $question['question']->id;
+                                    }) as $doc)
+                                    @if($doc->onsite_status==0)
+                                       <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail'. '/' . $nc_status . '/onsite' .'/'. $onsite_nc_comment->doc_sr_code .'/' . $onsite_nc_comment->doc_file_name . '/' . $application_id . '/' . $onsite_nc_comment->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->onsite_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        class="btn btn-primary btn-sm docBtn m-1">
+                                        View</a>
+                                    @elseif($doc->onsite_status==1)
+                                    <a target="_blank"
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->onsite_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        class="btn btn-success btn-sm docBtn docBtn_nc m-1">
+                                        Accepted <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                    @elseif($doc->onsite_status==2)
+                                    <a target="_blank"
+                                        title="{{$doc->onsite_doc_file_name}}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->onsite_status . '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                        @if($doc->onsite_nc_status==1)
+                                        <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                             </div>
+                                       @endif
+                                       
 
-                                        class="btn btn-{{$onsite_nc_comment->nc_type=='Accept'?'success':'danger'}} btn-sm docBtn docBtn_nc m-1">
-                                        {{$onsite_nc_comment->nc_type}} <span>{{ucfirst($onsite_nc_comment->assessor_type)}} Assessor</span></a>
-                                       @endforeach
+                                    @elseif($doc->onsite_status==3)
+                                          <a target="_blank"
+                                             title="{{$doc->onsite_doc_file_name}}"
+                                             href="{{ url('tp-document-detail'. '/' . $doc->onsite_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             @if($doc->onsite_nc_status==1)
+                                        <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                             </div>
+                                             @endif
+                                            
+                                             @elseif($doc->onsite_status==6)
+                                             <a target="_blank"
+                                                title="{{$doc->onsite_doc_file_name}}"
+                                                href="{{ url('tp-document-detail'. '/' . $doc->onsite_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                                class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                                Rejected <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                        @elseif($doc->onsite_status==4)
+                                       
+                                          <a target="_blank"
+                                             title="{{$doc->onsite_doc_file_name}}"
+                                             href="{{ url('tp-document-detail'. '/' . $doc->onsite_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             @if($doc->admin_nc_flag==1)
+                                             <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
+                                             Accept <span>By Admin</span></a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a target="_blank"
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Reject <span>By Admin</span></a>
+                                             @endif
+                                            
+                                             @if($doc->onsite_nc_status==1)
+                                        <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />
+                                             </div>
+                                             @endif
+                                                                                
+
+                                    @else
+                                       <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                             </div>
+                                    @endif 
+                                    @endforeach
+                                    
                                     @endif
+                                   
 
                                     <!-- Onsite nc's list end here -->
+
+
+
 
                                  <!--this else for first time upload doc  -->
                                     @else
@@ -398,7 +470,7 @@
                                                          @endphp
                                                          {{$resultString}} 
                                                          </td>
-                                                         <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
+                                                         <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}} ({{ucfirst($nc_comment->assessor_type)}})</td>
                                                       </tr>
                                                      @endforeach
                                                      @endisset
@@ -447,8 +519,16 @@
             $('.full_screen_loading').show();
               var fileInput = $(this);
               var questionId = fileInput.data('question-id');
+              let assessor_type_by_tp = $("#fileup_"+questionId).attr('assessor_type_by_tp');
               var form = $('#submitform_doc_form_' + questionId)[0];
               var formData = new FormData(form);
+              if(assessor_type_by_tp=="onsite"){
+               assessor_type_by_tp="onsite";
+              }else{
+               assessor_type_by_tp="desktop";
+              }
+
+              formData.append('assessor_type',assessor_type_by_tp);
               var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
               var uploadedFileName = fileInput.val();
               var fileExtension = uploadedFileName.split('.').pop().toLowerCase();

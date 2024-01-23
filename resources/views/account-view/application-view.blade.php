@@ -398,15 +398,14 @@
                                 @if ($ApplicationPayment->status == 0)
                                     Remark not available!
                                 @else
-                                {{ $ApplicationPayment->remark_by_account }}
+                                {{ $ApplicationPayment->approve_remark }}
                                 @endif
                             </td>
                             <td>
                                 @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT'))
-                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation({{ $ApplicationPayment->payment_transaction_no}},{{ $ApplicationPayment->payment_reference_no}},{{$ApplicationPayment->id}})"
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
                                 title="You can update only once"
                                 ><i class="fa fa-pencil"></i></button>
-                               
 
                                 @else
                                 <span class="text-danger payment_update_fn badge badge-danger">Payment Update Limit Expired</span>
@@ -444,10 +443,10 @@
                                     <label for="">Payment Proof Upload <span class="text text-danger">(jpg,jpeg,png,pdf)*</span></label>
                                     <input type="file" required class="form-control" name="payment_proof" id="payment_proof" accept="application/pdf,image/png, image/gif, image/jpeg">
                                 </div>
-                                <div class="col-md-5">
+                                <!-- <div class="col-md-5">
                                     <label for="">Remark (Optional)</label>
                                     <textarea class="form-control" name="payment_remark" id="payment_remark" cols="30" rows="10" placeholder="Please Enter the remark"></textarea>
-                                </div>
+                                </div> -->
                                 <div class="col-md-3 mt-4"> 
                                     <button class="btn btn-primary" type="button" onclick="handlePaymentReceived()" id="submit_btn">Payment Received
                                     </button>

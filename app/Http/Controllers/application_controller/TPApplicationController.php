@@ -106,8 +106,18 @@ class TPApplicationController extends Controller
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
-            'tp_id'=>$tp_id
+            'tp_id'=>$tp_id,
+            'assessor_type'=>'desktop'
         ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','status')->get();
+
+        $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'onsite'
+        ])
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status')
+        ->get();
+
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
             $obj = new \stdClass;
@@ -141,8 +151,10 @@ class TPApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
+
+        // dd($final_data);
         $applicationData = TblApplication::find($application_id);
-        return view('tp-upload-documents.tp-upload-documents', compact('final_data', 'course_doc_uploaded','application_id','course_id'));
+        return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
     }
     public function addDocument(Request $request)
     {
@@ -155,7 +167,7 @@ class TPApplicationController extends Controller
         $course_doc->doc_sr_code = $request->doc_sr_code;
         $course_doc->doc_unique_id = $request->doc_unique_id;
         $course_doc->tp_id = $tp_id;
-        $course_doc->assessor_type ='desktop';
+        $course_doc->assessor_type =$request->assessor_type;
         if ($request->hasfile('fileup')) {
             $file = $request->file('fileup');
             $name = $file->getClientOriginalName();
@@ -164,7 +176,16 @@ class TPApplicationController extends Controller
             $course_doc->doc_file_name = $filename;
         }
         $course_doc->save();
-        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
+        TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'desktop'])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
+
+        /*update nc table status oniste*/
+        if($request->assessor_type=="onsite"){
+            TblNCComments::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_nc_flag'=>0])->update(['onsite_nc_flag'=>1]);
+            
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->whereIn('onsite_status',[2,3,4])->update(['onsite_nc_status'=>0]);
+        }
+        /*end here*/ 
+
         if($course_doc){
         DB::commit();
         return response()->json(['success' => true,'message' =>'Document uploaded successfully'],200);
@@ -305,8 +326,17 @@ class TPApplicationController extends Controller
             return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);
         }
 
+        $data = [];
+        $data['payment_transaction_no']=$request->payment_transaction_no;
+        $data['payment_reference_no']=$request->payment_reference_no;
+        $data['tp_update_count']=$get_payment_update_count+1;
 
-        $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update(['payment_transaction_no'=>$request->payment_transaction_no,'payment_reference_no'=>$request->payment_reference_no,'payment_proof'=>$slip_by_user_file,'tp_update_count'=>$get_payment_update_count+1]);
+        if ($request->hasfile('payment_proof')) {
+            $data['payment_proof']=$slip_by_user_file;
+        }
+
+
+        $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update($data);
 
         if($update_payment_info){
             DB::commit();

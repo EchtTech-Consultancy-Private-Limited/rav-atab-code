@@ -18,6 +18,7 @@ use App\Models\Chapter;
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
 use URL;
+use App\Jobs\SendEmailJob;
 class DesktopApplicationController extends Controller
 {
     public function __construct()
@@ -102,6 +103,7 @@ class DesktopApplicationController extends Controller
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
+            'assessor_type'=>'desktop'
         ])
         ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','status')
         ->get();
@@ -281,6 +283,11 @@ class DesktopApplicationController extends Controller
 
         $create_nc_comments = TblNCComments::insert($data);
         
+
+        $tp_id = TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->first();
+        $tp_email = DB::table('users')->where('id',$tp_id->tp_id)->first();
+
+
         TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
 
         /*Create record for summary report*/
@@ -302,13 +309,35 @@ class DesktopApplicationController extends Controller
         $data['doc_verify_remark'] = $request->remark??'N/A';
         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
         /*end here*/
-       
+
+        //assessor email
+        $title="Notification -  ".$request->nc_type." | RAVAP-".$request->application_id;
+        $subject="Notification - ".$request->nc_type." | RAVAP-".$request->application_id;
+        
+        $body = "Dear ,".$tp_email->firstname." ".PHP_EOL."
+        I hope this email finds you well. I am writing to inform you that a ".$request->nc_type." has been generated for RAVAP-".$request->application_id." in accordance with our quality management procedures.".PHP_EOL."
+        
+        NC Details:".PHP_EOL."
+
+        Document Name: ".$request->doc_file_name."".PHP_EOL."
+        Document Sr. No.: ".$request->doc_sr_code."".PHP_EOL."
+        Date Created: ".date('d-m-Y')."".PHP_EOL."
+
+        NC Created By: ".Auth::user()->firstname."";
+
+         $details['email'] = $tp_email->email;
+         $details['title'] = $title; 
+         $details['subject'] = $subject; 
+         $details['body'] = $body; 
+         dispatch(new SendEmailJob($details));
+
+        /*end here*/
        
         if($create_nc_comments){
             DB::commit();
-            return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);
+            return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
         }else{
-            return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
+            return response()->json(['success' => false,'message' =>'Failed to create '.$request->nc_type.'  and documents'],200);
         }
     }catch(Exception $e){
         DB::rollBack();

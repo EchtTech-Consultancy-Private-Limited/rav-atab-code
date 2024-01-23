@@ -43,7 +43,14 @@ class DocApplicationController extends Controller
 
             DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>1]); //payment_status = 1 for payment received 2 for payment approved
 
-            DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->update(['status'=>1,'remark_by_account'=>$request->payment_remark??'','payment_proof_by_account'=>$filename,'accountant_id'=>Auth::user()->id]);
+            $last_payment = DB::table('tbl_application_payment')->where('application_id',$application_id)->latest('id')->first();
+            if($last_payment){
+                DB::table('tbl_application_payment')->where(['application_id'=>$application_id,'id'=>$last_payment->id])->update(['status'=>1,'remark_by_account'=>$request->payment_remark??'','payment_proof_by_account'=>$filename,'accountant_id'=>Auth::user()->id]);
+            }else{
+                DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->update(['status'=>1,'remark_by_account'=>$request->payment_remark??'','payment_proof_by_account'=>$filename,'accountant_id'=>Auth::user()->id]);
+            }
+            
+
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment received successfully.'], 200);
         }
@@ -63,7 +70,8 @@ class DocApplicationController extends Controller
             $application_id = dDecrypt($request->application_id);
             DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>2]); //payment_status = 1 for payment received 2 for payment approved
             
-            DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->update(['status'=>2,'approve_remark'=>$request->final_payment_remark??'','accountant_id'=>Auth::user()->id]);
+            $last_pay=DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->latest('id')->first();
+            DB::table('tbl_application_payment')->where(['application_id'=>$application_id,'id'=>$last_pay->id])->update(['status'=>2,'approve_remark'=>$request->final_payment_remark??'','accountant_id'=>Auth::user()->id]);
 
 
              /**
@@ -71,19 +79,70 @@ class DocApplicationController extends Controller
              * */ 
             $tp_id = DB::table('tbl_application')->where('id',$application_id)->first()->tp_id;
             $tp_email = DB::table('users')->where('id',$tp_id)->first()->email;
+            $account_email = DB::table('users')->where('id',Auth::user()->id)->first()->email;
             $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
-        //     if(!empty($tp_id)){
-        //     array_push($get_all_admin_users,$tp_email);
-            
-        //     foreach($get_all_admin_users as $email){
-        //         $details['email'] = $email;
-        //         $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
-        //         $details['subject'] = 'New Application | RAVAP-'.$application_id; 
-        //         $details['content'] = 'New Application has been created with RAVAP-'.$application_id; 
-        //         dispatch(new SendEmailJob($details));
-        //     }
-        // }
+            if(!empty($tp_id)){
+            foreach($get_all_admin_users as $email){
+                $title="Application Payment Approved : RAVAP-".$application_id;
+                $subject="Application Payment Approved : RAVAP-".$application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                We hope this message finds you well. We are pleased to inform you that your application payment has been successfully processed and approved. Thank you for your prompt and seamless transaction.".PHP_EOL."
+
+                Best regards,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            }
+
+            // tp mail
+                $title="Payment Approved for Your Application | RAVAP-".$application_id;
+                $subject="Payment Approved for Your Application | RAVAP-".$application_id;
+                $body="Dear ".Auth::user()->firstname.",".PHP_EOL."
+
+                I hope this email finds you well. I am writing to inform you that the payment associated with your application for RAVAP-".$application_id." has been successfully approved by our accounting department.".PHP_EOL."
+                
+                Here are the details of your payment:".PHP_EOL."
+                
+                Transaction ID: ".$last_pay->payment_transaction_no." ".PHP_EOL."
+                Payment Amount: ".$last_pay->amount." ".PHP_EOL."
+                Payment Date: ".date('d-m-Y',strtotime($last_pay->created_at))." ".PHP_EOL."
+                
+                Best regards, ".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $tp_email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+
+                 // accountant mail
+                 $title="Application Payment Approved  | RAVAP-".$application_id;
+                 $subject="Application Payment Approved  | RAVAP-".$application_id;
+                 $body="Dear ".Auth::user()->firstname.",".PHP_EOL."
+
+                 We hope this message finds you well. We are pleased to inform you that your application payment has been successfully processed and approved. Thank you for your prompt and seamless transaction.".PHP_EOL."
+                 
+                 Transaction ID: ".$last_pay->payment_transaction_no." ".PHP_EOL."
+                 Payment Amount: ".$last_pay->amount." ".PHP_EOL."
+                 Payment Date: ".date('d-m-Y',strtotime($last_pay->created_at))." ".PHP_EOL."
+                 
+                 Best regards, ".PHP_EOL."
+                 RAV Team";
+ 
+                 $details['email'] = $account_email;
+                 $details['title'] = $title; 
+                 $details['subject'] = $subject; 
+                 $details['body'] = $body; 
+                 dispatch(new SendEmailJob($details));
+
+        }
            
             /*send email end here*/ 
             DB::commit();

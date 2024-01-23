@@ -181,6 +181,7 @@ function handleAcknowledgementPayment(id) {
 function desktopDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
+        $('.full_screen_loading').show();
         let urlObject = new URL(window.location.href);
         let urlPath = urlObject.pathname.split("/");
 
@@ -237,6 +238,7 @@ function desktopDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 1,
                     });
+                    $('.full_screen_loading').hide();
                     setTimeout(() => {
                         window.location.href = resdata.redirect_to;
                     }, 1000);
@@ -247,16 +249,18 @@ function desktopDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
                 }
             },
             error: (xhr, st) => {
+                $('.full_screen_loading').hide();
                 console.log(xhr, "st");
             },
         });
     }
 }
 
-function adminDocumentVerfiy() {
+function adminDocumentVerfiy(assessor_type) {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
         let urlObject = new URL(window.location.href);
@@ -269,17 +273,17 @@ function adminDocumentVerfiy() {
         let application_courses_id = "";
 
         if(urlPath[1]=="public"){
+             doc_sr_code = urlPath[5];
+             doc_file_name = urlPath[6];
+             application_id = urlPath[7];
+             doc_unique_id = urlPath[8];
+             application_courses_id = urlPath[9];
+        }else{
              doc_sr_code = urlPath[4];
              doc_file_name = urlPath[5];
              application_id = urlPath[6];
              doc_unique_id = urlPath[7];
              application_courses_id = urlPath[8];
-        }else{
-             doc_sr_code = urlPath[3];
-             doc_file_name = urlPath[4];
-             application_id = urlPath[5];
-             doc_unique_id = urlPath[6];
-             application_courses_id = urlPath[7];
         }
         
         let doc_comment = $("#comment_text").val();
@@ -298,6 +302,7 @@ function adminDocumentVerfiy() {
         formData.append("nc_type", nc_type);
         formData.append("comments", doc_comment);
         formData.append("doc_file_name", doc_file_name);
+        formData.append("assessor_type", assessor_type);
 
         $.ajax({
             url: `${BASE_URL}/admin/document-verfiy`,
@@ -337,23 +342,28 @@ function onsiteDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
 
     if (is_acknowledged) {
+        $('.full_screen_loading').show();
         let urlObject = new URL(window.location.href);
         let urlPath = urlObject.pathname.split("/");
         let doc_sr_code = "";
         let doc_file_name = "";
         let application_id = "";
         let doc_unique_id = "";
+        let view_type = "";
         
         if(urlPath[1]=='public'){
              doc_sr_code = urlPath[4];
              doc_file_name = urlPath[5];
              application_id = urlPath[6];
              doc_unique_id = urlPath[7];
+             view_type = urlPath[9];
         }else{
              doc_sr_code = urlPath[3];
              doc_file_name = urlPath[4];
              application_id = urlPath[5];
              doc_unique_id = urlPath[6];
+             view_type = urlPath[8];
+
         }
        
         let application_courses_id = urlPath[7];
@@ -376,6 +386,7 @@ function onsiteDocumentVerfiy() {
         formData.append("comments", doc_comment);
         formData.append("doc_file_name", doc_file_name);
         formData.append("fileup", d);
+        formData.append("view_type", view_type);
 
         var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
@@ -389,6 +400,7 @@ function onsiteDocumentVerfiy() {
             });
             // Clear the file input
             fileInput.val("");
+            $('.full_screen_loading').hide();
             return;
         }
 
@@ -407,6 +419,7 @@ function onsiteDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 1,
                     });
+                    $('.full_screen_loading').hide();
                     setTimeout(() => {
                         window.location.href = resdata.redirect_to;
                     }, 1000);
@@ -417,9 +430,11 @@ function onsiteDocumentVerfiy() {
                         closeButton: true,
                         closeDuration: 0,
                     });
+                    $('.full_screen_loading').hide();
                 }
             },
             error: (xhr, st) => {
+                $('.full_screen_loading').hide();
                 console.log(xhr, "st");
             },
         });
@@ -583,12 +598,15 @@ $(".assesorsid").on("click", function () {
 
 /*Upload file from onsite assessor for nc's*/
 $("#upload_onstie_nc_file").change(function () {
+
     var fileInput = $(this);
     var questionId = fileInput.data("question-id");
     var form = $("#submitform_doc_form_" + questionId)[0];
     var formData = new FormData(form);
     var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
     var uploadedFileName = fileInput.val();
+    
+
     var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
         Swal.fire({
@@ -637,34 +655,39 @@ $("#upload_onstie_nc_file").change(function () {
 /*nc's end here*/
 
 function handlePdfOrImageForPhotograph(path) {
-    let BASE_URL = BASE_URL + "/level/";
+    let MAIN_URL = BASE_URL + "/level/";
     const fileExtension = path.split(".").pop().toLowerCase();
     $("#view_photograph_onsite").html("");
     if (fileExtension === "pdf") {
         const html =
             '<object data="' +
-            BASE_URL +
+            MAIN_URL +
             path +
             '" type="application/pdf" width="100%" height="700px"></object>';
         $("#view_photograph_onsite").html(html);
     } else {
         const html =
             '<img src="' +
-            BASE_URL +
+            MAIN_URL +
             path +
             '" alt="Photograph" title="Photograph" class="img img-responsive"/>';
         $("#view_photograph_onsite").html(html);
     }
 }
-
 function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
     $("#payment_transaction_no_err").html("");
     $("#payment_reference_no_err").html("");
+    
     if (pay_txn_no != null && pay_ref_no != null && id != null) {
         $("#payment_transaction_no").val("");
         $("#payment_reference_no").val("");
-        $("#payment_transaction_no").val(pay_txn_no);
-        $("#payment_reference_no").val(pay_ref_no);
+
+        // Convert the strings to BigInt
+        const pay_txn_no_bigint = BigInt(pay_txn_no);
+        const pay_ref_no_bigint = BigInt(pay_ref_no);
+        // Set the values of the elements with the BigInt values
+        $("#payment_transaction_no").val(pay_txn_no_bigint.toString());
+        $("#payment_reference_no").val(pay_ref_no_bigint.toString());
         $("#payment_info_id").val(id);
     } else {
         toastr.success("Something went wrong!", {
@@ -693,21 +716,25 @@ function handleUpdatePaymentInformation() {
         formData.append("payment_proof", payment_proof);
         formData.append("id", payment_info_id);
 
-        var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+        var allowedExtensions = ["pdf", "doc", "docx","jpeg","jpg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
-        if (allowedExtensions.indexOf(fileExtension) == -1) {
-            toastr.error("Invalid file type", {
-                timeOut: 1,
-                extendedTimeOut: 0,
-                closeButton: true,
-                closeDuration: 1,
-            });
-            // Clear the file input
-            fileInput.val("");
-            $(".full_screen_loading").hide();
-            return;
-        }
+       
+        if(payment_proof){
+            var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
+            if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+                // Clear the file input
+                fileInput.val("");
+                $(".full_screen_loading").hide();
+                return;
+            }
+    }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -766,21 +793,23 @@ function handleUpdatePaymentInformationOfAccount() {
         formData.append("payment_proof_by_account", payment_proof_by_account);
         formData.append("id", payment_info_id);
 
-        var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+        var allowedExtensions = ["pdf", "doc", "docx","jpeg","jpg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
-        var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
-        if (allowedExtensions.indexOf(fileExtension) == -1) {
-            toastr.error("Invalid file type", {
-                timeOut: 1,
-                extendedTimeOut: 0,
-                closeButton: true,
-                closeDuration: 1,
-            });
-            // Clear the file input
-            fileInput.val("");
-            $(".full_screen_loading").hide();
-            return;
-        }
+       if(payment_proof_by_account){
+            var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
+            if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+                // Clear the file input
+                fileInput.val("");
+                $(".full_screen_loading").hide();
+                return;
+            }
+    }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),

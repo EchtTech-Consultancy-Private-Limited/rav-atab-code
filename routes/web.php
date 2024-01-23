@@ -403,7 +403,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
 
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
 
-    Route::get('/admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
+    Route::get('/admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
 
     Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
 
@@ -484,4 +484,6 @@ Route::post('payment-transaction-validation', [LevelController::class, 'paymentT
 Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
 
 Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateCheck"])->name('payment.duplicate');
+
+
 

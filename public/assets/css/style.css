@@ -25002,3 +25002,18 @@ font-size:12px !important;
 .payment_update_fn{
 font-size: 9px !important;
 }
+
+.bg-color-btn{
+    background-color:#ededed;
+}
+
+
+.application_success{
+    background-color: "#13ad0b";
+}
+.application_success_error{
+    background-color: "#fb483a";
+}
+.application_warning{
+    background-color: "#ffc107";
+}
