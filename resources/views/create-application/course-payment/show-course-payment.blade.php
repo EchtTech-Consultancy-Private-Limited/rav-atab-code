@@ -547,13 +547,11 @@
                                 'pdf' || doc_payment_files === 'jpeg') {
                                 $('#submitBtn').attr('disabled', false);
                             } else {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'error',
-                                    title: 'Validation error!',
-                                    text: 'Only jpg, png, jpeg, pdf are allowed',
-                                    showConfirmButton: false,
-                                    timer: 3000
+                                toastr.error("Only jpg, png, jpeg, pdf are allowed", {
+                                    timeOut: 0,
+                                    extendedTimeOut: 0,
+                                    closeButton: true,
+                                    closeDuration: 0,
                                 });
                                 $(this).val(""); // Clear the input field
                                 $('#submitBtn').attr('disabled', true);
@@ -580,13 +578,13 @@
                             },
                             success: function(response) {
                                 if (response.paymentExist) {
-                                    Swal.fire({
-                                        position: 'center',
-                                        icon: 'warning',
-                                        title: 'Payment has already been submitted for this application.',
-                                        showConfirmButton: true,
-                                        timer: 5000
-                                    });
+                                    toastr.error("Payment has already been submitted for this application.", {
+                                    timeOut: 0,
+                                    extendedTimeOut: 0,
+                                    closeButton: true,
+                                    closeDuration: 0,
+                                });
+
                                     window.location.href = '{{ url('application-list') }}';
                                 } else {
                                     // Payment does not exist; you can perform another action or show a message.
@@ -610,7 +608,7 @@
                             // Clear the error message
                             $('#payment_transaction_no-error').text('');
                             // Disable the button
-                            $('#submitBtn').attr('disabled', true);
+                            // $('#submitBtn').attr('disabled', true);
                             return;
                         }
 
@@ -625,7 +623,7 @@
                             $('#payment_transaction_no-error').text(
                                 'Payment Transaction no. must not contain special characters');
                             // Disable the button
-                            $('#submitBtn').attr('disabled', true);
+                            // $('#submitBtn').attr('disabled', true);
                             return;
                         }
 
@@ -633,7 +631,7 @@
                         if (paymentTransactionNo.length < 9) {
                             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters');
                             // Disable the button
-                            $('#submitBtn').attr('disabled', true);
+                            // $('#submitBtn').attr('disabled', true);
                             return;
                         }
 
