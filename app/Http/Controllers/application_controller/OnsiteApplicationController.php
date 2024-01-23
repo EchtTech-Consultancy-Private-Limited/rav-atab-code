@@ -284,6 +284,7 @@ class OnsiteApplicationController extends Controller
             'dropdown_arr'=>$dropdown_arr??[],
             'is_nc_exists'=>$is_nc_exists,
             'nc_comments'=>$nc_comments,
+            'application_course_id'=>$application_course_id
         ]);
     }catch(Exception $e){
         return back()->with('fail','Something went wrong');

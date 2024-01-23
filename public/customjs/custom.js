@@ -185,11 +185,11 @@ function desktopDocumentVerfiy() {
         let urlObject = new URL(window.location.href);
         let urlPath = urlObject.pathname.split("/");
 
-        let doc_sr_code = urlPath[3];
-        let doc_file_name = urlPath[4];
-        let application_id = urlPath[5];
-        let doc_unique_id = urlPath[6];
-        let application_courses_id = urlPath[7];
+        let doc_sr_code = "";
+        let doc_file_name = "";
+        let application_id = "";
+        let doc_unique_id = "";
+        let application_courses_id = "";
        
        if(urlPath[1]=="public"){
         doc_sr_code = urlPath[4];
@@ -356,17 +356,18 @@ function onsiteDocumentVerfiy() {
              doc_file_name = urlPath[5];
              application_id = urlPath[6];
              doc_unique_id = urlPath[7];
+             application_courses_id = urlPath[8];
              view_type = urlPath[9];
         }else{
              doc_sr_code = urlPath[3];
              doc_file_name = urlPath[4];
              application_id = urlPath[5];
              doc_unique_id = urlPath[6];
+             application_courses_id = urlPath[7];
              view_type = urlPath[8];
-
         }
        
-        let application_courses_id = urlPath[7];
+       
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
 
