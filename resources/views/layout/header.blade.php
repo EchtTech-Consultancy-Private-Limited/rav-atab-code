@@ -44,7 +44,7 @@
 
     <!-- <link rel="stylesheet" href="{{ asset('assets/css/toastify.min.css') }}"> -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
       const BASE_URL = {!! json_encode(url('/')) !!}
     </script>

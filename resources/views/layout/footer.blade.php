@@ -349,7 +349,6 @@
 
  <script src="{{ asset('assets/js/atab-moment.min.js') }}"></script>
  <!-- <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script> -->
- <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
  <!-- <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> -->
 

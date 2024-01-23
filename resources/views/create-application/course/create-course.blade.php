@@ -259,20 +259,26 @@
                         </ul>
                     </div>
                     @if (Session::has('success'))
+                    
                         <script>
                             var message = "{{ session::get('success') }}";
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Success',
-                                text: message,
-                                showConfirmButton: false,
-                                timer: 3000
-                            })
+                            toastr.success(message, {
+                                timeOut: 0,
+                                extendedTimeOut: 0,
+                                closeButton: true,
+                                closeDuration: 0,
+                            });
                         </script>
                     @elseif(Session::has('fail'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session::get('fail') }}
+                        <script>
+                            toastr.error({{ session::get('fail') }}, {
+                                timeOut: 0,
+                                extendedTimeOut: 0,
+                                closeButton: true,
+                                closeDuration: 0,
+                            });
+                        </script>
+
                         </div>
                     @endif
                     @if (count($errors) > 0)
@@ -1058,7 +1064,7 @@
                                     $("a#docpdf1").attr("href", "{{ url('show-course-pdf') }}" + '/' + data.ApplicationCourse.declaration_pdf);
                                     $("a#docpdf2").attr("href", "{{ url('show-course-pdf') }}" + '/' + data.ApplicationCourse.course_curriculum_pdf);
 
-                                    $("a#docpdf3").attr("href", "{{ asset('/documnet') }}" + '/' + data.ApplicationCourse.course_details_pdf);
+                                    $("a#docpdf3").attr("href", "{{ asset('/documnet') }}" + '/' + data.ApplicationCourse.course_details_xsl);
                                     
 
 
@@ -1141,7 +1147,7 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
-                        var cloneCounter = 1;
+                        var cloneCounter = {{count($course)>0?count($course)+1:1}};
                         var maxClones = 5;
 
                         function updateCloneCount() {
@@ -1174,13 +1180,12 @@
                                     $('#add-course-button').prop('disabled', true);
                                    // Change the background color of the #formCount span to red
                                    $('#formCount').css('background-color', 'red');
-                                    Swal.fire({
-                                        title: "Warning",
-                                        text: "You've reached the maximum limit of " + maxClones +
-                                            " courses, including the original course form.",
-                                        icon: "warning",
-                                        showConfirmButton: false,
-                                        timer: 3000
+                                   toastr.error("You've reached the maximum limit of " + maxClones +
+                                            " courses, including the original course form.", {
+                                        timeOut: 0,
+                                        extendedTimeOut: 0,
+                                        closeButton: true,
+                                        closeDuration: 0,
                                     });
                                 }
 
@@ -1258,6 +1263,8 @@
                         function removeCourse(button) {
                             // Find the parent row and remove it
                             $(button).closest('.new-course-html').remove();
+                            cloneCounter--;
+                            $('#add-course-button').prop('disabled', false);
                         }
 
                         $(document).ready(function() {

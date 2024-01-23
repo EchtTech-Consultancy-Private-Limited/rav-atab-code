@@ -24,10 +24,11 @@
         <div class="container-fluid">
             <div class="block-header">
                 <div class="row">
+                    
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <ul class="breadcrumb breadcrumb-style">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">National Applications</h4>
+                                <h4 class="page-title">Applications</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
@@ -36,8 +37,13 @@
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">Dashboard</a>
                             </li>
-                            <li class="breadcrumb-item active">National Applications</li>
+                            <li class="breadcrumb-item active">Applications</li>
                         </ul>
+                    </div>
+                    <div class="col-md-12">
+                    <div class="card">
+                        @include('level.inner-nav')
+                    </div>
                     </div>
                 </div>
             </div>
