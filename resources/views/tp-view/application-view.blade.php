@@ -26,14 +26,12 @@
     </div>
     @if ($message = Session::get('success'))
     <script>
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: "Success",
-        text: "{{ $message }}",
-        showConfirmButton: false,
-        timer: 3000
-    })
+    toastr.success({{ $message }}, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 0,
+                    });
     </script>
     @endif
     <div class="full_screen_loading">Loading&#8230;</div>
@@ -246,7 +244,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Mode of Course</strong></label>
-                                <label> {{$ApplicationCourses->mode_of_course}}</label>
+                                </br><label>{{$ApplicationCourses->mode_of_course}}</label>
                             </div>
                         </div>
                     </div>

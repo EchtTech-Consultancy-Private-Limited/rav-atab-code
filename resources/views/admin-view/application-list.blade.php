@@ -171,6 +171,7 @@
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
+        
          <div class="modal-body mod-css">
             <form action="{{ url('/admin-assign-assessor') }}"
                method="post">

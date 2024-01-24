@@ -393,7 +393,7 @@ class ApplicationCoursesController extends Controller
            
             /*send email end here*/ 
             DB::commit();
-            return  redirect('get-application-list')->with('success', 'Payment Done successfully');
+            return  redirect()->route('application-list')->with('success', 'Payment Done successfully');
         } elseif ($request->level_id == '2') {
             return  redirect('level-first')->with('success', 'Course  successfully  Added');
             foreach ($request->course_id as $items) {

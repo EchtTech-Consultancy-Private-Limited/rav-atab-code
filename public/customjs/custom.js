@@ -684,8 +684,8 @@ function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
         $("#payment_reference_no").val("");
 
         // Convert the strings to BigInt
-        const pay_txn_no_bigint = BigInt(pay_txn_no);
-        const pay_ref_no_bigint = BigInt(pay_ref_no);
+        const pay_txn_no_bigint = pay_txn_no;
+        const pay_ref_no_bigint = pay_ref_no;
         // Set the values of the elements with the BigInt values
         $("#payment_transaction_no").val(pay_txn_no_bigint.toString());
         $("#payment_reference_no").val(pay_ref_no_bigint.toString());

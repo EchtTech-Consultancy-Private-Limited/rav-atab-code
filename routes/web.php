@@ -362,7 +362,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::get('get-application-courses',[ApplicationCoursesController::class,"getApplicationCourses"]);
     Route::get('get-application-fees',[ApplicationCoursesController::class,"getApplicationFees"]);
     Route::get('get-application-documents',[ApplicationCoursesController::class,"getApplicationDocuments"]);
-    Route::get('get-application-list', [TPApplicationController::class, 'getApplicationList']);
+    Route::get('get-application-list', [TPApplicationController::class, 'getApplicationList'])->name('application-list')->middleware('prevent_back_history');
 
     // =========Courses Route=========//
     Route::get('create-new-course/{id?}', [ApplicationCoursesController::class, 'createNewCourse']);
