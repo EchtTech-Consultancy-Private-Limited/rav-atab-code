@@ -240,7 +240,7 @@
                                                 <td class="fw-bold remove_extra_comma">
                                                 @foreach($rows->nc as $row)
                                                     @if($row->nc_type!=="Accept" && $row->nc_type!=="Reject" && $row->nc_type!=="not_recommended" && $row->nc_type!=="Request for final approval")
-                                                      <span>{{$row->nc_raise}}</span><span>,</span>
+                                                      <span>{{$row->nc_type}}</span><span>,</span>
                                                       @endif
                                                     @endforeach
                                                 </td>
@@ -255,9 +255,9 @@
                                                 <td>
                                                 @foreach($rows->nc as $key=>$row)
                                                     @if($row->nc_type=="NC1")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC1</a>  
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-danger m-1" href="">NC1</a>  
                                                     @elseif($row->nc_type=="NC2")
-                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_path) }}" class="btn btn-danger m-1" href="">NC2</a>
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-danger m-1" href="">NC2</a>
                                                     @endif
                                                     @endforeach
                                             

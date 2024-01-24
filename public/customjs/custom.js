@@ -208,7 +208,16 @@ function desktopDocumentVerfiy() {
 
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-
+       if(doc_comment=="" || nc_type=="" ){
+        toastr.error("All fields are required", {
+            timeOut: 1,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 1,
+        });
+        $('.full_screen_loading').hide();
+        return false;
+       }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -288,7 +297,16 @@ function adminDocumentVerfiy(assessor_type) {
         
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-
+        if(doc_comment=="" || nc_type=="" ){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 1,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+           }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -370,7 +388,16 @@ function onsiteDocumentVerfiy() {
        
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-
+        if(doc_comment=="" || nc_type=="" ){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 1,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+           }
         var d = $(`#fileup_${doc_unique_id}`)[0].files[0];
         var fileInput = $(`#fileup_${doc_unique_id}`);
         $.ajaxSetup({
@@ -859,7 +886,9 @@ function validateForm() {
     let pay_txn_no = $("#payment_transaction_no").val();
     let pay_ref_no = $("#payment_reference_no").val();
     let flag = 0;
-    if (pay_txn_no.length != MIN_LENGTH && pay_txn_no.length!= MAX_LENGTH) {
+    if (pay_txn_no.length >= MIN_LENGTH && pay_txn_no.length<= MAX_LENGTH) {
+        
+    }else{
         flag = 1;
         $("#payment_transaction_no_err")
             .html("Please enter a valid transaction number")
