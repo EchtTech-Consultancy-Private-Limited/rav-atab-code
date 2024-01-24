@@ -250,9 +250,9 @@
                                             <tr>
                                                 <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
-                                                <td class="fw-bold">
+                                                <td class="fw-bold remove_extra_comma">
                                                 @foreach($rows->nc as $row)
-                                                      {{$row->nc_type}},
+                                                      <span>{{$row->nc_type}}</span><span>,</span>
                                                     @endforeach
                                                 </td>
                                                 <td>

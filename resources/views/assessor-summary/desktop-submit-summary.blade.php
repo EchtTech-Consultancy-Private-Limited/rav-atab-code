@@ -236,10 +236,10 @@
                                             <tr>
                                                 <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
-                                                <td class="fw-bold">
+                                                <td class="fw-bold remove_extra_comma">
                                                 @foreach($rows->nc as $row)
                                                     @if($row->nc_raise_code!=="Accept" && $row->nc_raise_code!=="Reject" && $row->nc_raise_code!=="not_recommended" && $row->nc_raise_code!=="Request for final approval")
-                                                      {{$row->nc_raise}}
+                                                      <span>{{$row->nc_raise}}</span><span>,</span>
                                                       @endif
                                                     @endforeach
                                                 </td>
