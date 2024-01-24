@@ -894,7 +894,10 @@ function validateForm() {
             .html("Please enter a valid transaction number")
             .show();
     }
-    if (pay_ref_no.length != MIN_LENGTH && pay_ref_no.length != MAX_LENGTH) {
+
+    if (pay_ref_no.length >= MIN_LENGTH && pay_ref_no.length <= MAX_LENGTH) {
+    
+    }else{
         flag = 1;
         $("#payment_reference_no_err")
             .html("Please enter a valid reference number")
