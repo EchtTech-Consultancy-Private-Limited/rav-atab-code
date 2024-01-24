@@ -77,6 +77,7 @@ class SummaryController extends Controller
         $is_final_submit = false;
        }
        
+    //    dd($final_data);
         return view('assessor-summary.desktop-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessement_way'));
     }
 
@@ -183,18 +184,33 @@ class SummaryController extends Controller
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
-            $value = DB::table('assessor_summary_reports')->where([
+            // $value = DB::table('assessor_summary_reports')->where([
+            //     'application_id' => dDecrypt($application_id),
+            //     'assessor_id' => $assessor_id,
+            //     'object_element_id' => $question->id,
+            //     'doc_sr_code' => $question->code,
+            //     'nc_raise_code'=>['NC1', 'NC2'],
+            //     'application_course_id' =>$request->application_course_id,
+            //     'assessor_type'=>'desktop'
+            // ])->get();
+
+            $value =  TblNCComments::where([
                 'application_id' => dDecrypt($application_id),
-                'assessor_id' => $assessor_id,
-                'object_element_id' => $question->id,
-                'doc_sr_code' => $question->code,
-                'nc_raise_code'=>['NC1', 'NC2'],
-                'application_course_id' =>$request->application_course_id,
-                'assessor_type'=>'desktop'
-            ])->get();
+                'application_courses_id' => dDecrypt($application_course_id),
+                'doc_unique_id' => $question->id,
+                'nc_type'=>['NC1', 'NC2'],
+                'assessor_type'=>'desktop',
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->where('assessor_type','desktop')
+            ->get();
+
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
+    dd($final_data);
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id),'assessor_id'=>$assessor_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
@@ -471,18 +487,31 @@ class SummaryController extends Controller
         $obj = new \stdClass;
         $obj->title= $question->title;
         $obj->code= $question->code;
-            $value = DB::table('assessor_summary_reports')->where([
+            // $value = DB::table('assessor_summary_reports')->where([
+            //     'application_id' => dDecrypt($application_id),
+            //     'application_course_id' => dDecrypt($application_course_id),
+            //     'assessor_id' => $assessor_id,
+            //     'object_element_id' => $question->id,
+            //     'doc_sr_code' => $question->code,
+            //     'assessor_type'=>'onsite'
+            // ])->get();
+
+            $value =  TblNCComments::where([
                 'application_id' => dDecrypt($application_id),
-                'application_course_id' => dDecrypt($application_course_id),
-                'assessor_id' => $assessor_id,
-                'object_element_id' => $question->id,
-                'doc_sr_code' => $question->code,
-                'assessor_type'=>'onsite'
-            ])->get();
+                'application_courses_id' => dDecrypt($application_course_id),
+                'doc_unique_id' => $question->id,
+                // 'nc_type'=>['NC1', 'NC2'],
+                'assessor_type'=>'onsite',
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->where('assessor_type','onsite')
+            ->get();
+
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
-    
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>$request->application_course_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
@@ -822,6 +851,7 @@ class SummaryController extends Controller
     }
         $onsite_assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;
       /*End here*/    
+      
         return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way'));
     }
 }
