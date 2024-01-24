@@ -25021,3 +25021,5 @@ font-size: 9px !important;
 .placeholder_fn_size::placeholder {
     font-size: 12px !important;
 }
+
+td.remove_extra_comma span:last-child{display: none}

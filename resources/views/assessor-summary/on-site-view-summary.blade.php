@@ -195,7 +195,7 @@
                                             <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> {{$summertReport->id}}</span>
+                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> RAVAP-{{$summertReport->id}}</span>
                                             </td>
                                             <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
@@ -250,9 +250,9 @@
                                             <tr>
                                                 <td class="fw-bold">{{$rows->code}}</td>
                                                 <td>{{$rows->title}}</td>
-                                                <td class="fw-bold">
+                                                <td class="fw-bold remove_extra_comma">
                                                 @foreach($rows->nc as $row)
-                                                      {{$row->nc_type}},
+                                                      <span>{{$row->nc_type}}</span><span>,</span>
                                                     @endforeach
                                                 </td>
                                                 <td>

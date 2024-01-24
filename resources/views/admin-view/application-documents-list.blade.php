@@ -262,7 +262,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
-                                             Accept <span>By Admin</span></a>
+                                             Accepted <span>By Admin</span></a>
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
@@ -270,7 +270,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Reject <span>By Admin</span></a>
+                                             Rejected <span>By Admin</span></a>
                                              @endif
 
 
@@ -331,7 +331,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
-                                             Accept <span>By Admin</span></a>
+                                             Accepted <span>By Admin</span></a>
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
@@ -339,7 +339,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Reject <span>By Admin</span></a>
+                                             Rejected <span>By Admin</span></a>
                                              @endif
 
 

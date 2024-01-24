@@ -59,7 +59,9 @@ class AdminApplicationController extends Controller
                 ])->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                ])->count();
+                ])
+                ->whereNotNull('accountant_id')
+                ->count();
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
                 
@@ -371,6 +373,7 @@ class AdminApplicationController extends Controller
     public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
         
+        
         try{
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
@@ -411,6 +414,7 @@ class AdminApplicationController extends Controller
             'nc_comments'=>$nc_comments,
             'form_view'=>$form_view,
             'assessor_type'=>$assessor_type,
+            'nc_type'=>$nc_type,
         ]);
     }catch(Exception $e){
         return back()->with('fail','Something went wrong');

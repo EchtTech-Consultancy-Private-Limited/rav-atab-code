@@ -20,6 +20,24 @@
         @endif
         @include('layout.rightbar')
     </div>
+
+    @php
+    $successMessage = session('success');
+@endphp
+
+@if($successMessage)
+    <script>
+        toastr.success('{{ $successMessage }}', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 0,
+        });
+    </script>
+@endif
+
+
+
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
