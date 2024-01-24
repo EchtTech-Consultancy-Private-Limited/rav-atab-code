@@ -63,11 +63,13 @@
                 </script>
             @endif
             
+            @isset($nc_comments[0])
             @if($nc_comments[0]?->comments=="Request for Final Approval")
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Ooh!</strong> Request sent already for final approval
             </div>
             @endif
+            @endisset
             
            
 
