@@ -185,6 +185,20 @@
         @endif
         @include('layout.rightbar')
     </div>
+    @php
+    $failMessage = session('fail');
+@endphp
+
+@if($failMessage)
+    <script>
+        toastr.error('{{ $failMessage }}', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 0,
+        });
+    </script>
+@endif
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">

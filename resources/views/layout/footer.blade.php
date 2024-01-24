@@ -392,9 +392,62 @@
 
  <script>
      $('.file_size').on('change', function() {
+        const file_name = this.files[0].name;
+        let  fileInput = this;
+        var allowedExtensions = ["pdf"]; // Add more extensions if needed
+        var fileExtension = file_name.split(".").pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+                // Clear the file input
+                fileInput.value='';
+                $(".full_screen_loading").hide();
+                return;
+        }
+        
          if (this.files[0].size > 5242880) {
-             alert("Try to upload file less than 5MB!");
+            toastr.error("Try to upload file less than 5MB!", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
              $(".file_size").val("")
+         } else {
+             $('#GFG_DOWN').text(this.files[0].size + "bytes");
+         }
+     });
+
+     $('.file_size_exl').on('change', function() {
+        let  fileInput = this;
+        const file_name = this.files[0].name;
+        var allowedExtensions = ["xlsx","xls"]; // Add more extensions if needed
+        var fileExtension = file_name.split(".").pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+                // Clear the file input
+                fileInput.value='';
+                $(".full_screen_loading").hide();
+                return;
+        }
+        
+         if (this.files[0].size > 5242880) {
+            toastr.error("Try to upload file less than 5MB!", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
+             $(".file_size_exl").val("")
          } else {
              $('#GFG_DOWN').text(this.files[0].size + "bytes");
          }

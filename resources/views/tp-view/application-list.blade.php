@@ -23,11 +23,23 @@
 
     @php
     $successMessage = session('success');
+    $failMessage = session('fail');
 @endphp
 
 @if($successMessage)
     <script>
         toastr.success('{{ $successMessage }}', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 0,
+        });
+    </script>
+@endif
+
+@if($failMessage)
+    <script>
+        toastr.error('{{ $failMessage }}', {
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,

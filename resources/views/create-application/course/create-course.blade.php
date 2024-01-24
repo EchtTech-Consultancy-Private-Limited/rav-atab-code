@@ -456,7 +456,7 @@
                                                 <label>Course Details (Excel format)<span
                                                         class="text-danger">*</span></label>
                                                 <input type="file" name="doc3[]" id="payment_reference_no"
-                                                    required class="form-control doc_3 file_size">
+                                                    required class="form-control doc_3 file_size_exl">
                                             </div>
                                         </div>
                                     </div>
@@ -733,7 +733,7 @@
                         @if(count($course)>0)
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
-                                    <a href="{{ url('store-new-applications/' . dEncrypt($applicationData->id)) }}"
+                                    <a href="{{ url('tp/application-list/') }}"
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
@@ -1293,14 +1293,7 @@
                             if (doc_file1 == 'pdf') {
                                 // alert("File uploaded is pdf");
                             } else {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'error',
-                                    title: 'Validation error!',
-                                    text: 'Only PDF files are allowed',
-                                    showConfirmButton: false,
-                                    timer: 3000
-                                })
+                                
                                 $('.doc_1').val("");
                             }
 
@@ -1311,19 +1304,11 @@
                         $('.doc_2').on('change', function() {
 
                             doc_file2 = $(".doc_2").val();
-                            console.log(doc_file2);
                             var doc_file2 = doc_file2.split('.').pop();
                             if (doc_file2 == 'pdf') {
                                 // alert("File uploaded is pdf");
                             } else {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'error',
-                                    title: 'Validation error!',
-                                    text: 'Only PDF files are allowed',
-                                    showConfirmButton: false,
-                                    timer: 3000
-                                })
+                                
                                 $('.doc_2').val("");
                             }
 
@@ -1342,14 +1327,7 @@
                                 // alert("File uploaded is pdf");
                             } else {
                                 //  alert("Only csv,xlsx,xls  are allowed")
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'error',
-                                    title: 'Validation error!',
-                                    text: 'Only csv,xlsx, and xlsx are allowed',
-                                    showConfirmButton: false,
-                                    timer: 3000
-                                })
+                               
                                 $('.doc_3').val("");
                             }
 
