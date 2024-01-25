@@ -41,14 +41,12 @@
 
             @if (Session::has('success'))
                 <script>
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: "Success",
-                        text: "{{ session::get('success') }}",
-                        showConfirmButton: false,
-                        timer: 3000
-                    })
+                    toastr.error("{{ session::get('success') }}", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
                 </script>
             @elseif(Session::has('fail'))
                 <script>
