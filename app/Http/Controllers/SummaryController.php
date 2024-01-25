@@ -220,8 +220,6 @@ class SummaryController extends Controller
         return view('assessor-summary.desktop-submit-summary', compact('summertReport', 'no_of_mandays','final_data','is_final_submit'));
     }
 
-
-
    
     public function desktopFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
@@ -313,7 +311,7 @@ class SummaryController extends Controller
              /*end here*/
 
 
-        return redirect('desktop/application-view'.'/'.$request->application_id); 
+        return redirect('desktop/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report'); 
         // return redirect('desktop/document-list'.'/'.$application_id.'/'.$application_course_id); 
 
     }
@@ -436,11 +434,11 @@ class SummaryController extends Controller
 
 
             DB::commit();
-            return redirect('onsite/application-view'.'/'.$request->application_id); 
+            return redirect('onsite/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report'); 
         }
         catch(Exception $e){
             DB::rollback();
-            return redirect('onsite/application-view'.'/'.$request->application_id); 
+            return redirect('onsite/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report');  
 
         }
 

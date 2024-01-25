@@ -215,6 +215,9 @@ class TPApplicationController extends Controller
         else if($nc_status_type==4){
             $nc_type="not_recommended";
         }
+        else if($nc_status_type==6){
+            $nc_type="Reject";
+        }
         else{
             $nc_type="Accept";
         }
@@ -244,11 +247,13 @@ class TPApplicationController extends Controller
         'application_id' => $application_id,
         'doc_unique_id' => $doc_unique_code,
         'doc_sr_code' => $doc_sr_code,
-        'application_courses_id' => $application_courses_id
+        'application_courses_id' => $application_courses_id,
     ])
-    ->select("tbl_nc_comments.comments","tbl_nc_comments.created_at","tbl_nc_comments.assessor_id",'users.firstname','users.middlename','users.lastname','users.id as assessor_id')
-    ->leftJoin('users', 'users.id', '=', 'tbl_nc_comments.assessor_id')
-    ->get();
+    ->whereNotNull("tp_remark")
+    ->where('nc_type',$nc_type)
+    ->select("tbl_nc_comments.tp_remark","tbl_nc_comments.created_at","tbl_nc_comments.assessor_id")
+    ->first();
+
     //   $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
       $doc_path = URL::to("/level").'/'.$doc_name;
       return view('tp-upload-documents.tp-show-document-details', [

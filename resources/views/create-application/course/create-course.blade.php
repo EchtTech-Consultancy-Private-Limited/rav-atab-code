@@ -1199,6 +1199,7 @@
                                     placeholder: "Select a programming language",
                                     allowClear: true
                                 });
+                                
                                 // Reset Select2 for the cloned select element
                                 modeOfCourseSelect.select2();
                                 modeOfCourseSelect.select2('destroy'); // Destroy the previous instance

@@ -26,14 +26,12 @@
     </div>
     @if ($message = Session::get('success'))
     <script>
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: "Success",
-        text: "{{ $message }}",
-        showConfirmButton: false,
-        timer: 3000
-    })
+    toastr.success("{{ $message }}", {
+                    timeOut: 1,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 1,
+                });
     </script>
     @endif
     <section class="content">

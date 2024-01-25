@@ -375,16 +375,20 @@ class AdminApplicationController extends Controller
         
         
         try{
+            if($nc_type=="nr"){
+                $nc_type="not_recommended";
+            }
+
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            ->where('nc_type',$nc_type)
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-            ->latest('id')
-            ->get();
+            ->first();
+
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
             $form_view=0;
-            // dd($tbl_nc_comments->nc_type);
             
-            if($nc_type==="nr" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
+            if($nc_type==="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
                 $form_view=1;
             }else if($nc_type=="reject"){
                 $form_view=0;
@@ -466,9 +470,9 @@ class AdminApplicationController extends Controller
 
         if($create_nc_comments){
             DB::commit();
-            return response()->json(['success' => true,'message' =>'Nc comments created successfully','redirect_to'=>$redirect_to],200);
+            return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
         }else{
-            return response()->json(['success' => false,'message' =>'Failed to create nc and documents'],200);
+            return response()->json(['success' => false,'message' =>'Failed to create '.$request->nc_type.' and documents'],200);
         }
     }catch(Exception $e){
         DB::rollBack();

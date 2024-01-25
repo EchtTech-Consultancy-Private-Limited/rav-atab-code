@@ -90,6 +90,7 @@
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
                                         <th>Status</th>
+                                        <th>Upgrade</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -110,16 +111,7 @@
                                                 <td>
                                                     {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
                                                 </td>
-                                                <td>
-                                                @isset($item->payment)
-                                                    @if($item->payment)
-                                                    {{\Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y')}}
-                                                    @else
-                                                    N/A
-                                                    @endif
-                                                @endisset
-                                                  
-                                                </td>
+                                                
                                                 <td>
                                                 @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
                                                     <span class="badge badge-main danger">{{config('status_text.admin_status_pending')}}</span>
@@ -128,6 +120,9 @@
                                                     @else
                                                     <span class="badge badge-main success">{{config('status_text.admin_status_completed')}}</span>
                                                     @endif
+                                                </td>
+                                                <td>
+                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
                                                 </td>
                                                     <td>
                                                         <a href="{{ url('/admin/application-view', dEncrypt($item->application_list->id)) }}"

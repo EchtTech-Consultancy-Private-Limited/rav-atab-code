@@ -87,7 +87,7 @@
 
 
 
-
+                @isset($remarks)
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h5 class="mt-2">
@@ -99,32 +99,30 @@
                                 <thead>
                                     <th>Sr.No</th>
                                     <th>Remark</th>
-                                    <th>Added By</th>
+                                    <th>Username</th>
                                     <th>Created At</th>
                                 </thead>
                                 <tbody>
-                                    @isset($remarks)
-                                        @foreach($remarks as $k=>$remark)
-                                    
+                                   
                                         <tr>
-                                            <td>{{$k+1}}</td>
-                                            <td>{{$remark->comments}}</td>
+                                            <td>1</td>
+                                            <td>{{$remarks->tp_remark}}</td>
                                             <td>
-                                            {{ $remark->firstname ?? '' }}
-                                                {{ $remark->middlename ?? '' }}
-                                                {{ $remark->lastname ?? '' }}
+                                            {{ Auth::user()->firstname ?? '' }}
+                                                {{ Auth::user()->middlename ?? '' }}
+                                                {{ Auth::user()->lastname ?? '' }}
                                             </td>
                                             <td>
-                                                {{ date('m-d-Y',strtotime($remark->created_at))}}
+                                                {{ date('m-d-Y',strtotime($remarks->created_at))}}
                                             </td>
                                         </tr>
-                                    @endforeach
-                                 @endisset
+                               
                             
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    @endisset
 
 
             <div class="row ">
