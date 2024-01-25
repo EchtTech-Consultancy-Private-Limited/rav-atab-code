@@ -205,9 +205,11 @@ class ApplicationCoursesController extends Controller
     {
         $id = dDecrypt($id);
         $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
+        
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('payment_fail', 'Payment has already been submitted for this application.');
         }
+
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
             $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
@@ -279,8 +281,6 @@ class ApplicationCoursesController extends Controller
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
-       
-
         $request->validate([
             'transaction_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,transaction_no',
             'reference_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,reference_no',
@@ -298,6 +298,15 @@ class ApplicationCoursesController extends Controller
         DB::beginTransaction();
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
+        $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
+                                    ->where('payment_transaction_no', $transactionNumber)
+                                    ->orWhere('payment_reference_no', $referenceNumber)
+                                    ->first();
+        
+        if(!empty($is_exist_t_num_or_ref_num)){
+            return  back()->with('fail', 'Reference number or Transaction number already exists');
+        }
+
         /*Implemented by suraj*/
           $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
           if(!empty($get_final_summary)){

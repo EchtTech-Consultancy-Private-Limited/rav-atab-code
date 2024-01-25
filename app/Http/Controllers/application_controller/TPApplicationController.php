@@ -323,7 +323,7 @@ class TPApplicationController extends Controller
             $file->move('uploads/', $filename);
             $slip_by_user_file = $filename;
         }
-
+        
         $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->first()->tp_update_count;
        
         if($get_payment_update_count > (int)env('TP_PAYMENT_UPDATE_COUNT')-1){

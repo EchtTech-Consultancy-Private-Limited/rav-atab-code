@@ -453,7 +453,7 @@
                                                 <label>Course Details (Excel format)<span
                                                         class="text-danger">*</span></label>
                                                 <input type="file" name="doc3[]" id="payment_reference_no"
-                                                    required class="form-control doc_3 file_size">
+                                                    required class="form-control doc_3 file_size_exl">
                                             </div>
                                         </div>
                                     </div>
