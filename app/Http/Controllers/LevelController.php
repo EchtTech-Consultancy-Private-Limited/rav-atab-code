@@ -2547,8 +2547,7 @@ class LevelController extends Controller
     {
         $contactNumber = $request->contact_number;
 
-        $existingApplication = Application::where('Contact_Number', $contactNumber)->first();
-
+        $existingApplication = DB::table('tbl_application')->where('contact_number', $contactNumber)->first();
         if ($existingApplication) {
             return response()->json(['status' => 'duplicate']);
         }
@@ -2764,7 +2763,7 @@ class LevelController extends Controller
     {
         $email = $request->email;
 
-        $existingApplication = Application::where('Email_ID', $email)->first();
+        $existingApplication = DB::table('tbl_application')->where('email', $email)->first();
 
         if ($existingApplication) {
             return response()->json(['status' => 'duplicate']);

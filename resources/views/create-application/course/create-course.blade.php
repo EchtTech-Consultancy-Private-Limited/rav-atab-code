@@ -733,7 +733,7 @@
                         @if(count($course)>0)
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
-                                    <a href="{{ url('tp/application-list/') }}"
+                                    <a href="{{ url('/create-new-applications/') }}"
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
@@ -1283,7 +1283,7 @@
 
                     </script>
 
-                    <script>
+                    <!-- <script>
                         var doc_file1 = "";
 
                         $('.doc_1').on('change', function() {
@@ -1294,13 +1294,12 @@
                             if (doc_file1 == 'pdf') {
                                 // alert("File uploaded is pdf");
                             } else {
-                                
                                 $('.doc_1').val("");
                             }
 
                         });
-                    </script>
-                    <script>
+                    </script> -->
+                    <!-- <script>
                         var doc_file2 = "";
                         $('.doc_2').on('change', function() {
 
@@ -1333,4 +1332,4 @@
                             }
 
                         });
-                    </script>
+                    </script> -->

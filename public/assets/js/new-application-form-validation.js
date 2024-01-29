@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#backendError').text = '';
         nextBtn.setAttribute('disabled', true);
       }else{
+       var isApplicationEmailExist = '{{ json_encode(Session::get("application_email_id")) }}'
         $.ajax({
           type: 'POST',
           url: routeEmailValidation, // Update with your Laravel route URL
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle AJAX errors if needed
           }
         });
+
       }
     } else {
       // Display an error message for an invalid email format
@@ -73,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkContactNumberDuplicacy(contactNumber) {
     if (/^\d{10}$/.test(contactNumber)) {
       // Send an AJAX request
+      var isApplicationEmailExist = '{{ json_encode(Session::get("application_email_id")) }}'
+
       $.ajax({
         type: 'POST',
         url: routePhoneValidation, // Update with your Laravel route URL

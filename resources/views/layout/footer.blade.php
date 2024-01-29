@@ -391,9 +391,9 @@
 
 
  <script>
-     $('.file_size').on('change', function() {
-        const file_name = this.files[0].name;
+    $(document).on('change', '.file_size', function() {
         let  fileInput = this;
+        const file_name = this.files[0]?.name;
         var allowedExtensions = ["pdf"]; // Add more extensions if needed
         var fileExtension = file_name.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
@@ -420,9 +420,10 @@
          } else {
              $('#GFG_DOWN').text(this.files[0].size + "bytes");
          }
-     });
+     
+    });
 
-     $('.file_size_exl').on('change', function() {
+    $(document).on('change', '.file_size_exl', function() {
         let  fileInput = this;
         const file_name = this.files[0].name;
         var allowedExtensions = ["xlsx","xls"]; // Add more extensions if needed
@@ -451,7 +452,9 @@
          } else {
              $('#GFG_DOWN').text(this.files[0].size + "bytes");
          }
-     });
+    });
+
+     
  </script>
 
  </body>

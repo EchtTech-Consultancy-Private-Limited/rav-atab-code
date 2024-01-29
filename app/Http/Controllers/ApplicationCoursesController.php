@@ -45,11 +45,11 @@ class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
     public function createNewApplication(Request $request,$id=null){
-        if ($id) {
-            $id = dDecrypt($id);
-        }
-        if ($id) {
-            $applicationData = DB::table('tbl_applications')->where('id', $id)->first();
+        
+        $email_id =Session::get('application_email_id'); 
+        
+        if ($email_id) {
+            $applicationData = DB::table('tbl_application')->where('email', $email_id)->first();
         } else {
             $applicationData = null;
         }
@@ -60,9 +60,7 @@ class ApplicationCoursesController extends Controller
     }
     public function  storeNewApplication(Request $request)
     {
-        if ($request->previous_data && $request->application_id) {
-            return redirect(url('create-new-course/' . dEncrypt($request->application_id)));
-        }
+        // dd($request->all());
         $this->validate(
             $request,
             [
@@ -77,20 +75,41 @@ class ApplicationCoursesController extends Controller
             ]
         );
         $currentDateTime = Carbon::now();
-        $application_date = Carbon::now()->addDays(15);
-        $data = [];
-        $data['level_id'] = 1;
-        $data['tp_id'] = $request->user_id;
-        $data['person_name'] = $request->Person_Name;
-        $data['email'] =  $request->Email_ID;
-        $data['contact_number'] = $request->Contact_Number;
-        $data['designation'] = $request->designation;
-        $data['tp_ip'] = getHostByName(getHostName());
-        $data['user_type'] = 'tp';
-        $data['application_date'] = $application_date;
-        $create_new_application = DB::table('tbl_application')->insertGetId($data);
-        return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', 'Application Create Successfully');
+        $application_date = Carbon::now()->addDays(365);
+        /*check if application already created*/
+            
+            if(Session::get('application_email_id')){
+                $data = [];
+                $data['level_id'] = 1;
+                $data['tp_id'] = $request->user_id;
+                $data['person_name'] = $request->Person_Name;
+                $data['email'] =  $request->Email_ID;
+                $data['contact_number'] = $request->Contact_Number;
+                $data['designation'] = $request->designation;
+                $data['tp_ip'] = getHostByName(getHostName());
+                $data['user_type'] = 'tp';
+                $data['application_date'] = $application_date;
+                $create_new_application = DB::table('tbl_application')->where('id',$request->application_id)->update($data);
+                $msg="Application Updated Successfully";
+            }else{
+                $data = [];
+                $data['level_id'] = 1;
+                $data['tp_id'] = $request->user_id;
+                $data['person_name'] = $request->Person_Name;
+                $data['email'] =  $request->Email_ID;
+                $data['contact_number'] = $request->Contact_Number;
+                $data['designation'] = $request->designation;
+                $data['tp_ip'] = getHostByName(getHostName());
+                $data['user_type'] = 'tp';
+                $data['application_date'] = $application_date;
+                $create_new_application = DB::table('tbl_application')->insertGetId($data);
+                Session::put('application_email_id',$request->Email_ID);
+                $msg="Application Created Successfully";
+            }
+        /*end here*/
+        return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
+
     public function getApplicationCourses(Request $request){
         return view('welcome');
     }
