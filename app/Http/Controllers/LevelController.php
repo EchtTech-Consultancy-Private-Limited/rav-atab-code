@@ -2789,7 +2789,6 @@ class LevelController extends Controller
     public function paymentReferenceValidation(Request $request)
     {
         $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->reference_no)->first();
-        dd($transactionNumber);
         if ($transactionNumber) {
             // Transaction number already exists
             return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);

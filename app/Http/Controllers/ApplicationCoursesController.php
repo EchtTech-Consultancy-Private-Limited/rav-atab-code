@@ -545,7 +545,7 @@ class ApplicationCoursesController extends Controller
             $file->xls_file_extension =$doc_extension_3;
         }
         $file->save();
-        return back()->with('sussess', 'Course Update successfull');
+        return back()->with('success', 'Course Update successfully');
     }
     function get_india_id()
     {
