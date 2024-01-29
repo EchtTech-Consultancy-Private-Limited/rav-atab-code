@@ -407,7 +407,14 @@
                                 @if ($ApplicationPayment->status == 0)
                                     Remark not available!
                                 @else
-                                {{ $ApplicationPayment->approve_remark }}
+                                @if($ApplicationPayment->approve_remark)
+                                        {{$ApplicationPayment->approve_remark}}
+                                @else
+                                    @if($ApplicationPayment->remark_by_account)
+                                    {{$ApplicationPayment->remark_by_account}}
+                                    @endif
+                                @endif
+
                                 @endif
                             </td>
                             <td>
