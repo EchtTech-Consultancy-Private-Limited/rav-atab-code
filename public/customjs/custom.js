@@ -4,10 +4,20 @@ var handlePaymentReceived = () => {
     const fileInput = document.getElementById("payment_proof");
     let payment_remark = $("#payment_remark").val();
     let payment_id = $("#payment_id").val();
+    if(payment_remark=="" || payment_remark==null){
+        toastr.error("Please enter the remark.", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 0,
+        });
+        return false;
+    }
     payment_remark = payment_remark ?? "";
     let formData = new FormData();
     if (fileInput.files.length > 0) {
         formData.append("payment_proof", fileInput.files[0]);
+    }
         formData.append("payment_remark", payment_remark);
         formData.append("payment_id", payment_id);
         formData.append("application_id", encoded_application_id);
@@ -55,9 +65,7 @@ var handlePaymentReceived = () => {
                 console.log(xhr, "st");
             },
         });
-    } else {
-        alert("Please select a document to upload.");
-    }
+   
 };
 function handlePaymentApproved() {
     let urlObject = new URL(window.location.href);
@@ -118,6 +126,9 @@ function handlePaymentApproved() {
         },
     });
 }
+
+
+
 function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");
     if (is_acknowledged) {
@@ -805,6 +816,9 @@ function handleUpdatePaymentInformation() {
     }
 }
 
+
+
+
 function handleUpdatePaymentInformationOfAccount() {
     const payment_transaction_no = $("#payment_transaction_no").val();
     const payment_reference_no = $("#payment_reference_no").val();
@@ -880,6 +894,7 @@ function handleUpdatePaymentInformationOfAccount() {
     }
 }
 
+
 function validateForm() {
     const MIN_LENGTH = 9;
     const MAX_LENGTH = 18;
@@ -910,6 +925,73 @@ function validateForm() {
         return true;
     }
 }
+
+
+function handleTransactionNumberValidation() {
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    
+        const formData = new FormData();
+        formData.append("payment_transaction_no", payment_transaction_no);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-payment-transaction-validation`, // Your server-side upload endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status=='error') {
+                    $("#payment_transaction_no_err").html(response.message);
+                  $('#update-payment_info').attr('disabled',true)
+                }else{
+                    $("#payment_transaction_no_err").html("");
+                    $('#update-payment_info').attr('disabled',false)
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+            },
+        });
+}
+
+function handleReferenceNumberValidation() {
+    const payment_reference_no = $("#payment_reference_no").val();
+    
+        const formData = new FormData();
+        formData.append("payment_reference_no", payment_reference_no);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-payment-reference-validation`, // Your server-side upload endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response, ' response222')
+                if (response.status=='error') {
+                    $("#payment_reference_no_err").html(response.message);
+                    $('#update-payment_info').attr('disabled',true)
+                }else{
+                    $("#payment_reference_no_err").html("");
+                    $('#update-payment_info').attr('disabled',false)
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+            },
+        });
+}
+
+
 
 function handleNotification(pay_id){
 

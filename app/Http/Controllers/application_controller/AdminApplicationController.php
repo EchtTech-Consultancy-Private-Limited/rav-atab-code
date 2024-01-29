@@ -53,7 +53,9 @@ class AdminApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                ])->first();
+                    
+                ])
+                ->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])->sum('amount');
@@ -77,7 +79,6 @@ class AdminApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
-
         
         return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
@@ -373,17 +374,19 @@ class AdminApplicationController extends Controller
     public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
         
-        
         try{
             if($nc_type=="nr"){
                 $nc_type="not_recommended";
             }
-
+            
+            
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             ->where('nc_type',$nc_type)
+            ->where('assessor_type',$assessor_type)
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();
+            
 
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
             $form_view=0;

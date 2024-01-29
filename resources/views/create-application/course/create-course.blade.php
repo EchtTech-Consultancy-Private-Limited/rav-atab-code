@@ -218,7 +218,7 @@
                             <li class="breadcrumb-item">
                                 <h4 class="page-title">
                                     Manage Applications
-                                </h4>
+                                </h4> 
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
@@ -495,6 +495,12 @@
 
                             </div>
                             <div class="center">
+                            @isset($course)
+                             @if(count($course) < 1)
+                            <a href="{{ url('create-new-applications/'.dEncrypt($applicationData?->id)) }}" class="btn btn-danger prev-step1">Previous</a>
+                            @endif
+                            @endisset
+                            
                                 <button class="btn btn-primary waves-effect m-r-15 add_course">Save</button>
                             </div>
                             {{-- @endif --}}
@@ -733,7 +739,7 @@
                         @if(count($course)>0)
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
-                                    <a href="{{ url('tp/application-list/') }}"
+                                    <a href="{{ url('create-new-applications/'.dEncrypt($applicationData?->id)) }}"
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
@@ -1002,6 +1008,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 text-center">
+                                                   
                                                     <button type="submit" class="btn btn-primary waves-effect m-r-15"
                                                         onclick="load();">Save</button>
                                                 </div>
@@ -1283,7 +1290,7 @@
 
                     </script>
 
-                    <script>
+                    <!-- <script>
                         var doc_file1 = "";
 
                         $('.doc_1').on('change', function() {
@@ -1294,13 +1301,12 @@
                             if (doc_file1 == 'pdf') {
                                 // alert("File uploaded is pdf");
                             } else {
-                                
                                 $('.doc_1').val("");
                             }
 
                         });
-                    </script>
-                    <script>
+                    </script> -->
+                    <!-- <script>
                         var doc_file2 = "";
                         $('.doc_2').on('change', function() {
 
@@ -1333,4 +1339,4 @@
                             }
 
                         });
-                    </script>
+                    </script> -->

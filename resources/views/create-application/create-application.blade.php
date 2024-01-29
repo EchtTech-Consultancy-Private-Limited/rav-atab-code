@@ -92,7 +92,6 @@
             {{ session::get('fail') }}
         </div>
     @endif
-
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -263,7 +262,7 @@ active @endif"
                                             <!-- Form  -->
                                             <div class="row">
                                                 <div class="header">
-                                                    <h2>Single Point of Contact Details (SPoC) bnm</h2>
+                                                    <h2>Single Point of Contact Details (SPoC)</h2>
 
                                                 </div>
                                                 <div class="col-md-12">
@@ -288,7 +287,7 @@ active @endif"
                                                                                 placeholder="Person Name"
                                                                                 class="preventnumeric"
                                                                                 id="person_name"
-                                                                                value="{{ old('Person_Name', $applicationData->Person_Name ?? '') }}"
+                                                                                value="{{ old('person_name', $applicationData->person_name ?? '') }}"
                                                                                 required maxlength="30">
                                                                             @error('Person_Name')
                                                                                 <span class="text-danger">
@@ -334,7 +333,7 @@ active @endif"
                                                                                 class="preventalpha"
                                                                                 placeholder="Contact Number"
                                                                                 id="Contact_Number"
-                                                                                value="{{ old('Contact_Number', $applicationData->Contact_Number ?? '') }}">
+                                                                                value="{{ old('contact_number', $applicationData->contact_number ?? '') }}">
                                                                         </div>
                                                                         @error('Contact_Number')
                                                                             <span class="text-danger">
@@ -352,7 +351,7 @@ active @endif"
                                                                             <input id="emailId" type="text"
                                                                                 name="Email_ID"
                                                                                 placeholder="Email-ID"
-                                                                                value="{{ old('Email_ID', $applicationData->Email_ID ?? '') }}">
+                                                                                value="{{ old('email', $applicationData->email ?? '') }}">
                                                                         </div>
                                                                         @error('Email_ID')
                                                                             <span id="backendError" class="text-danger">

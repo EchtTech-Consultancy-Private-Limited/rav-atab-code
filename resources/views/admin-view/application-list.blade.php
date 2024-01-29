@@ -130,7 +130,7 @@
                                                                 class="material-icons">visibility</i></a>
 
                                                     @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id==null)
+                                                        @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id)
                                                         <button id="acknowledgement_{{$item->application_list->id}}"
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
@@ -138,7 +138,7 @@
                                                     
 
                                                     @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4    )
+                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4)
                                                     <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                                                     data-bs-target="#View_popup_{{ $item->application_list->id }}"

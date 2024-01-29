@@ -438,6 +438,11 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
     Route::post('/assessor-onsite-update-notification-status', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
 
     Route::get('tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
+    
+   
+    Route::post('tp-payment-transaction-validation', [TpApplicationController::class, 'paymentTransactionValidation'])->name('transaction_validation');
+
+    Route::post('tp-payment-reference-validation', [TpApplicationController::class, 'paymentReferenceValidation'])->name('reference_validation');
 
    
  

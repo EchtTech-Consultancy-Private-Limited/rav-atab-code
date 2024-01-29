@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#backendError').text = '';
         nextBtn.setAttribute('disabled', true);
       }else{
+        const isApplicationEmailExist = window.location.pathname.split('/').length 
+      if(isApplicationEmailExist<3){
         $.ajax({
           type: 'POST',
           url: routeEmailValidation, // Update with your Laravel route URL
@@ -62,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
       }
+      }
     } else {
       // Display an error message for an invalid email format
       emailError.textContent = 'Invalid email format.';
@@ -73,27 +76,31 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkContactNumberDuplicacy(contactNumber) {
     if (/^\d{10}$/.test(contactNumber)) {
       // Send an AJAX request
-      $.ajax({
-        type: 'POST',
-        url: routePhoneValidation, // Update with your Laravel route URL
-        data: {
-          contact_number: contactNumber,
-          _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
-        },
-        success: function (response) {
-          if (response.status === 'duplicate') {
-            // Display the error message in the #contact_error span
-            contactError.textContent = 'Contact number is already in use.';
-          } else {
-            // Clear the error message if the contact number is unique
-            contactError.textContent = '';
+      const isApplicationEmailExist = window.location.pathname.split('/').length 
+      console.log(isApplicationEmailExist,' length')
+      if(isApplicationEmailExist<3){
+        $.ajax({
+          type: 'POST',
+          url: routePhoneValidation, // Update with your Laravel route URL
+          data: {
+            contact_number: contactNumber,
+            _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
+          },
+          success: function (response) {
+            if (response.status === 'duplicate') {
+              // Display the error message in the #contact_error span
+              contactError.textContent = 'Contact number is already in use.';
+            } else {
+              // Clear the error message if the contact number is unique
+              contactError.textContent = '';
+            }
+            checkForm();
+          },
+          error: function (xhr, status, error) {
+            // Handle AJAX errors if needed
           }
-          checkForm();
-        },
-        error: function (xhr, status, error) {
-          // Handle AJAX errors if needed
-        }
-      });
+        });
+      }
     } else {
       // Display an error message for an invalid contact number
       contactError.textContent = 'Contact number must be 10 digits and numeric.';

@@ -2547,8 +2547,7 @@ class LevelController extends Controller
     {
         $contactNumber = $request->contact_number;
 
-        $existingApplication = Application::where('Contact_Number', $contactNumber)->first();
-
+        $existingApplication = DB::table('tbl_application')->where('contact_number', $contactNumber)->first();
         if ($existingApplication) {
             return response()->json(['status' => 'duplicate']);
         }
@@ -2764,7 +2763,7 @@ class LevelController extends Controller
     {
         $email = $request->email;
 
-        $existingApplication = Application::where('Email_ID', $email)->first();
+        $existingApplication = DB::table('tbl_application')->where('email', $email)->first();
 
         if ($existingApplication) {
             return response()->json(['status' => 'duplicate']);
@@ -2775,7 +2774,7 @@ class LevelController extends Controller
 
     public function paymentTransactionValidation(Request $request)
     {
-        $transactionNumber = DB::table('application_payments')->where('transaction_no', $request->transaction_no)->first();
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->transaction_no)->first();
 
         if ($transactionNumber) {
             // Transaction number already exists
@@ -2789,8 +2788,8 @@ class LevelController extends Controller
 
     public function paymentReferenceValidation(Request $request)
     {
-        $transactionNumber = DB::table('application_payments')->where('reference_no', $request->reference_no)->first();
-
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->reference_no)->first();
+        dd($transactionNumber);
         if ($transactionNumber) {
             // Transaction number already exists
             return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);

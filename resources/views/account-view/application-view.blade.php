@@ -398,7 +398,16 @@
                                 @if ($ApplicationPayment->status == 0)
                                     Remark not available!
                                 @else
-                                {{ $ApplicationPayment->approve_remark }}
+
+                                @if($ApplicationPayment->approve_remark)
+                                        {{$ApplicationPayment->approve_remark}}
+                                @else
+                                    @if($ApplicationPayment->remark_by_account)
+                                    {{$ApplicationPayment->remark_by_account}}
+                                    @endif
+                                @endif
+
+
                                 @endif
                             </td>
                             <td>
@@ -440,13 +449,13 @@
                                 
                                 <input type="hidden" name="payment_id" id="payment_id" value="{{$ApplicationPayment->id}}">
                                 <div class="col-md-4">
-                                    <label for="">Payment Proof Upload <span class="text text-danger">(jpg,jpeg,png,pdf)*</span></label>
+                                    <label for="">Payment Proof Upload (jpg,jpeg,png,pdf)*</label>
                                     <input type="file" required class="form-control" name="payment_proof" id="payment_proof" accept="application/pdf,image/png, image/gif, image/jpeg">
                                 </div>
-                                <!-- <div class="col-md-5">
-                                    <label for="">Remark (Optional)</label>
+                                <div class="col-md-5">
+                                    <label for="">Remark<span class="text text-danger">*</span> </label>
                                     <textarea class="form-control" name="payment_remark" id="payment_remark" cols="30" rows="10" placeholder="Please Enter the remark"></textarea>
-                                </div> -->
+                                </div>
                                 <div class="col-md-3 mt-4"> 
                                     <button class="btn btn-primary" type="button" onclick="handlePaymentReceived()" id="submit_btn">Payment Received
                                     </button>
@@ -504,12 +513,12 @@
                 <div class="modal-body">
                 <div class="mb-3">
                         <label for="payment_transaction_no" class="form-label">Payment Transaction no<span class="text-danger">(*)</span></label>
-                        <input type="text" class="form-control remove_err placeholder_fn_size" id="payment_transaction_no" placeholder="Please enter payment transaction number" maxlength='18'>
+                        <input type="text" class="form-control remove_err placeholder_fn_size" id="payment_transaction_no" placeholder="Please enter payment transaction number" maxlength='18' onkeyup="handleTransactionNumberValidation()">
                         <span class="err" id="payment_transaction_no_err"></span>
                 </div>
                 <div class="mb-3">
                         <label for="payment_reference_no" class="form-label">Payment Reference no<span class="text-danger">(*)</span></label>
-                        <input type="text" class="form-control remove_err placeholder_fn_size" id="payment_reference_no" placeholder="Please enter payment reference number" maxlength='18'>
+                        <input type="text" class="form-control remove_err placeholder_fn_size" id="payment_reference_no" placeholder="Please enter payment reference number" maxlength='18' onkeyup="handleReferenceNumberValidation()">
                         <span class="err" id="payment_reference_no_err"></span>
                 </div>
                 <div class="mb-3">
@@ -517,7 +526,7 @@
                         <input type="file" class="form-control" id="payment_proof_by_account">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="handleUpdatePaymentInformationOfAccount()" class="btn btn-primary">Update</button>
+                    <button type="button" onclick="handleUpdatePaymentInformationOfAccount()" id="update-payment_info" class="btn btn-primary">Update</button>
                 </div>
                 </div>
             </div>
