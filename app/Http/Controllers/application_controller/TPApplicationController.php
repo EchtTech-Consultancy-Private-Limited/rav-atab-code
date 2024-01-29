@@ -18,6 +18,7 @@ use App\Models\TblNCComments;
 use URL;
 use Config;
 use Session;
+
 class TPApplicationController extends Controller
 {
     public function __construct()
@@ -67,6 +68,7 @@ class TPApplicationController extends Controller
         }
         return view('tp-view.application-list',['list'=>$final_data]);
     }
+
     /** Whole Application View for Account */
     public function getApplicationView($id){
         $application = DB::table('tbl_application')
@@ -160,6 +162,7 @@ class TPApplicationController extends Controller
         $applicationData = TblApplication::find($application_id);
         return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
     }
+    
     public function addDocument(Request $request)
     {
        try{
@@ -379,6 +382,4 @@ class TPApplicationController extends Controller
       return view('tp-view.pending-payment-list', ['pending_payment_list' => $pending_list]);
   }
 
-
-  
 }
