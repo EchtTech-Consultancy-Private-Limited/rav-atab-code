@@ -44,12 +44,10 @@ use App\Jobs\SendEmailJob;
 class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
+
     public function createNewApplication(Request $request,$id=null){
-        
-        $email_id =Session::get('application_email_id'); 
-        
-        if ($email_id) {
-            $applicationData = DB::table('tbl_application')->where('email', $email_id)->first();
+        if ($id) {
+            $applicationData = DB::table('tbl_application')->where('id', dDecrypt($id))->first();
         } else {
             $applicationData = null;
         }
@@ -60,7 +58,6 @@ class ApplicationCoursesController extends Controller
     }
     public function  storeNewApplication(Request $request)
     {
-        // dd($request->all());
         $this->validate(
             $request,
             [
@@ -78,7 +75,7 @@ class ApplicationCoursesController extends Controller
         $application_date = Carbon::now()->addDays(365);
         /*check if application already created*/
             
-            if(Session::get('application_email_id')){
+            if($request->application_id && $request->previous_data==1){
                 $data = [];
                 $data['level_id'] = 1;
                 $data['tp_id'] = $request->user_id;
@@ -90,6 +87,7 @@ class ApplicationCoursesController extends Controller
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
                 $create_new_application = DB::table('tbl_application')->where('id',$request->application_id)->update($data);
+                $create_new_application = $request->application_id;
                 $msg="Application Updated Successfully";
             }else{
                 $data = [];
@@ -103,7 +101,6 @@ class ApplicationCoursesController extends Controller
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
                 $create_new_application = DB::table('tbl_application')->insertGetId($data);
-                Session::put('application_email_id',$request->Email_ID);
                 $msg="Application Created Successfully";
             }
         /*end here*/
@@ -121,9 +118,13 @@ class ApplicationCoursesController extends Controller
     }
     public function createNewCourse($id = null)
     {
+       
         $id = dDecrypt($id);
+        // dd($id);
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+        }else{
+            $applicationData=null;
         }
         $course = TblApplicationCourses::where('application_id', $id)->get();
         return view('create-application.course.create-course', compact('applicationData', 'course'));
@@ -223,10 +224,11 @@ class ApplicationCoursesController extends Controller
     public function showcoursePayment(Request $request, $id = null)
     {
         $id = dDecrypt($id);
+        // dd($id);
         $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
         
         if ($checkPaymentAlready>1) {
-                return redirect(url('get-application-list'))->with('payment_fail', 'Payment has already been submitted for this application.');
+                return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
 
         if ($id) {

@@ -415,7 +415,8 @@
                                                             id="payment_transaction_no" required name="transaction_no"
                                                             minlength="9" maxlength="18" class="transactionNo"
                                                             value="{{ old('transaction_no') }}"
-                                                            autocomplete="off">
+                                                            autocomplete="off" 
+                                                            >
                                                     </div>
                                                     <label for="payment_transaction_no"
                                                         id="payment_transaction_no-error" class="error">
@@ -438,7 +439,8 @@
                                                             id="payment_reference_no" required name="reference_no"
                                                             minlength="9" maxlength="18" class="referenceNo"
                                                             value="{{ old('reference_no') }}"
-                                                            autocomplete="off">
+                                                            autocomplete="off"
+                                                            >
                                                     </div>
                                                     <label for="payment_reference_no" id="payment_reference_no-error"
                                                         class="error">

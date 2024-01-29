@@ -382,4 +382,31 @@ class TPApplicationController extends Controller
       return view('tp-view.pending-payment-list', ['pending_payment_list' => $pending_list]);
   }
 
+  public function paymentReferenceValidation(Request $request)
+  {
+      $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->payment_reference_no)->first();
+      if ($transactionNumber) {
+          // Transaction number already exists
+          return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);
+      } else {
+          // Transaction number doesn't exist, you can proceed or return a success message
+          // For example, you can return a success message like this:
+          return response()->json(['status' => 'success', 'message' => '']);
+      }
+  }
+
+  public function paymentTransactionValidation(Request $request)
+    {
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->payment_transaction_no)->first();
+
+        if ($transactionNumber) {
+            // Transaction number already exists
+            return response()->json(['status' => 'error', 'message' => 'This transaction ID is already used']);
+        } else {
+            // Transaction number doesn't exist, you can proceed or return a success message
+            // For example, you can return a success message like this:
+            return response()->json(['status' => 'success', 'message' => '']);
+        }
+    }
+
 }

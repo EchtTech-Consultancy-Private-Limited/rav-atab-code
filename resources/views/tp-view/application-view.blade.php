@@ -444,12 +444,12 @@
                 <div class="modal-body">
                 <div class="mb-3">
                         <label for="payment_transaction_no" class="form-label">Payment Transaction no<span class="text-danger">(*)</span></label>
-                        <input type="text" class="form-control remove_err placeholder_fn_size" maxlength='18' id="payment_transaction_no" placeholder="Please enter payment transaction number">
+                        <input type="text" class="form-control remove_err placeholder_fn_size" maxlength='18' id="payment_transaction_no" placeholder="Please enter payment transaction number" onkeyup="handleTransactionNumberValidation()">
                         <span class="err" id="payment_transaction_no_err"></span>
                 </div>
                 <div class="mb-3">
                         <label for="payment_reference_no" class="form-label">Payment Reference no<span class="text-danger">(*)</span></label>
-                        <input type="text" class="form-control remove_err placeholder_fn_size" maxlength='18' id="payment_reference_no" placeholder="Please enter payment reference number">
+                        <input type="text" class="form-control remove_err placeholder_fn_size" maxlength='18' id="payment_reference_no" placeholder="Please enter payment reference number" onkeyup="handleReferenceNumberValidation()">
                         <span class="err" id="payment_reference_no_err"></span>
                 </div>
                 <div class="mb-3">
@@ -457,7 +457,7 @@
                         <input type="file" class="form-control" id="payment_proof">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="handleUpdatePaymentInformation()" class="btn btn-primary">Update</button>
+                    <button type="button" onclick="handleUpdatePaymentInformation()" id="update-payment_info" class="btn btn-primary">Update</button>
                 </div>
                 </div>
             </div>

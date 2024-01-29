@@ -805,6 +805,9 @@ function handleUpdatePaymentInformation() {
     }
 }
 
+
+
+
 function handleUpdatePaymentInformationOfAccount() {
     const payment_transaction_no = $("#payment_transaction_no").val();
     const payment_reference_no = $("#payment_reference_no").val();
@@ -880,6 +883,7 @@ function handleUpdatePaymentInformationOfAccount() {
     }
 }
 
+
 function validateForm() {
     const MIN_LENGTH = 9;
     const MAX_LENGTH = 18;
@@ -910,6 +914,73 @@ function validateForm() {
         return true;
     }
 }
+
+
+function handleTransactionNumberValidation() {
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    
+        const formData = new FormData();
+        formData.append("payment_transaction_no", payment_transaction_no);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-payment-transaction-validation`, // Your server-side upload endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status=='error') {
+                    $("#payment_transaction_no_err").html(response.message);
+                  $('#update-payment_info').attr('disabled',true)
+                }else{
+                    $("#payment_transaction_no_err").html("");
+                    $('#update-payment_info').attr('disabled',false)
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+            },
+        });
+}
+
+function handleReferenceNumberValidation() {
+    const payment_reference_no = $("#payment_reference_no").val();
+    
+        const formData = new FormData();
+        formData.append("payment_reference_no", payment_reference_no);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-payment-reference-validation`, // Your server-side upload endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response, ' response222')
+                if (response.status=='error') {
+                    $("#payment_reference_no_err").html(response.message);
+                    $('#update-payment_info').attr('disabled',true)
+                }else{
+                    $("#payment_reference_no_err").html("");
+                    $('#update-payment_info').attr('disabled',false)
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+            },
+        });
+}
+
+
 
 function handleNotification(pay_id){
 
