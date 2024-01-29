@@ -4,10 +4,20 @@ var handlePaymentReceived = () => {
     const fileInput = document.getElementById("payment_proof");
     let payment_remark = $("#payment_remark").val();
     let payment_id = $("#payment_id").val();
+    if(payment_remark=="" || payment_remark==null){
+        toastr.error("Please enter the remark.", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 0,
+        });
+        return false;
+    }
     payment_remark = payment_remark ?? "";
     let formData = new FormData();
     if (fileInput.files.length > 0) {
         formData.append("payment_proof", fileInput.files[0]);
+    }
         formData.append("payment_remark", payment_remark);
         formData.append("payment_id", payment_id);
         formData.append("application_id", encoded_application_id);
@@ -55,9 +65,7 @@ var handlePaymentReceived = () => {
                 console.log(xhr, "st");
             },
         });
-    } else {
-        alert("Please select a document to upload.");
-    }
+   
 };
 function handlePaymentApproved() {
     let urlObject = new URL(window.location.href);
@@ -118,6 +126,9 @@ function handlePaymentApproved() {
         },
     });
 }
+
+
+
 function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");
     if (is_acknowledged) {
