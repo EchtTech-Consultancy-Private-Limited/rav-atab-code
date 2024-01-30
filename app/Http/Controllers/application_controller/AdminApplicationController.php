@@ -388,7 +388,6 @@ class AdminApplicationController extends Controller
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();
-            
 
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
             $form_view=0;
