@@ -1191,6 +1191,47 @@ function updateFileName(input) {
     }
     $("#selectedFileName").text(selectedFileName);
 }
+$(document).on('keyup', '[name="months[]"]', function() {
+    var monthsInputs = document.getElementsByName('months[]');
+    // Validate Months
+    for (var i = 0; i < monthsInputs.length; i++) {
+        if (!isValidNumber(monthsInputs[i].value, 1, 12)) {
+            monthsInputs[i].value="";
+            return false;
+        }
+    }
+    return true;
+});
+
+$(document).on('keyup', '[name="days[]"]', function() {
+    var daysInputs = document.getElementsByName('days[]');
+
+    for (var i = 0; i < daysInputs.length; i++) {
+        console.log("sss")
+        if (!isValidNumber(daysInputs[i].value, 1, 31)) {
+            daysInputs[i].value="";
+            return false;
+        }
+    }
+
+    return true;
+});
+$(document).on('keyup', '[name="hours[]"]', function() {
+    var hoursInputs = document.getElementsByName('hours[]');
+ 
+    for (var i = 0; i < hoursInputs.length; i++) {
+        if (!isValidNumber(hoursInputs[i].value, 0, 23)) {
+            hoursInputs[i].value="";
+            return false;
+        }
+    }
+    return true;
+});
+
+function isValidNumber(value, min, max) {
+    var number = parseInt(value, 10);
+    return !isNaN(number) && number >= min && number <= max;
+}
 
 
 $(".remove_err").on("keyup", function () {

@@ -197,13 +197,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                    @isset($nc_comments)
                                                     <tr class="gradeX odd ">
                                                         <td class="center sorting_1">1</td>
                                                         <td class="center">{{$nc_comments->comments}}
                                                         </td>
-
-
                                                         <td class="center">
                                                                   {{$nc_comments->firstname??''}} {{$nc_comments->middlename??''}}
                                                                   {{$nc_comments->lastname??''}} ({{ucfirst($nc_comments->assessor_type)}})</td>
@@ -212,6 +210,7 @@
                                                             <a>{{date('d-m-Y',strtotime($nc_comments->created_at))}}</a>
                                                         </td>
                                                     </tr>
+                                                    @endisset
                                             </tbody>
                                         </table>
                                     </div>
