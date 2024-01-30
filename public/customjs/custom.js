@@ -1174,7 +1174,7 @@ function updateFileName(input) {
     if (input.files && input.files.length > 0) {
         selectedFileName = input.files[0].name;
     }
-    var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+    var allowedExtensions = ["pdf", "doc", "docx","jpg","png","jpeg"]; // Add more extensions if needed
     var fileExtension = selectedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
         toastr.error("Invalid file type", {

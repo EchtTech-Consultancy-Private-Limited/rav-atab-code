@@ -29,7 +29,7 @@ class AdminApplicationController extends Controller
     }
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[1,2,3])
+        ->whereIn('a.payment_status',[2,3])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -105,6 +105,7 @@ class AdminApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
+                    'status'=>2 //paymnet approved by accountant 
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;

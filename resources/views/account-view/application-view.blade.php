@@ -457,7 +457,7 @@
                                 
                                 <input type="hidden" name="payment_id" id="payment_id" value="{{$ApplicationPayment->id}}">
                                 <div class="col-md-4">
-                                    <label for="">Payment Proof Upload (jpg,jpeg,png,pdf)*</label>
+                                    <label for="">Payment Proof Upload (jpg,jpeg,png,pdf)</label>
                                     <input type="file" required class="form-control" name="payment_proof" id="payment_proof" accept="application/pdf,image/png, image/gif, image/jpeg">
                                 </div>
                                 <div class="col-md-5">

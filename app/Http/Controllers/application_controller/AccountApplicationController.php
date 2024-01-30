@@ -29,7 +29,7 @@ class AccountApplicationController extends Controller
     public function getApplicationList(){
 
         $application = DB::table('tbl_application as a')
-        ->whereIn('payment_status',[0,1,2])
+        ->whereIn('payment_status',[0,1,2,3])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
