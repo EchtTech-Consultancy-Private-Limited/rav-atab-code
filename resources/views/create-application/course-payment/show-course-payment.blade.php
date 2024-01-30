@@ -578,40 +578,38 @@
 
 
                 <script>
-                    $(document).ready(function() {
+                    // $(document).ready(function() {
 
+                    //     // Get the application_id from your input field or other source.
+                    //     var applicationId = {{ $applicationData->id }};
+                    //     // Send an AJAX request to check for payment duplicacy.
+                    //     $.ajax({
+                    //         type: 'POST',
+                    //         url: '{{ route('payment.duplicate') }}',
+                    //         data: {
+                    //             '_token': '{{ csrf_token() }}',
+                    //             'application_id': applicationId
+                    //         },
+                    //         success: function(response) {
+                    //             if (response.paymentExist) {
+                    //                 toastr.error("Payment has already been submitted for this application.", {
+                    //                 timeOut: 0,
+                    //                 extendedTimeOut: 0,
+                    //                 closeButton: true,
+                    //                 closeDuration: 0,
+                    //             });
 
-                        // Get the application_id from your input field or other source.
-                        var applicationId = {{ $applicationData->id }};
-                        alert(payment.duplicate);
-                        // Send an AJAX request to check for payment duplicacy.
-                        $.ajax({
-                            type: 'POST',
-                            url: '{{ route('payment.duplicate') }}',
-                            data: {
-                                '_token': '{{ csrf_token() }}',
-                                'application_id': applicationId
-                            },
-                            success: function(response) {
-                                if (response.paymentExist) {
-                                    toastr.error("Payment has already been submitted for this application.", {
-                                    timeOut: 0,
-                                    extendedTimeOut: 0,
-                                    closeButton: true,
-                                    closeDuration: 0,
-                                });
+                    //                 window.location.href = '{{ url('get-application-list') }}';
+                    //             } else {
+                    //                 // Payment does not exist; you can perform another action or show a message.
+                    //             }
+                    //         },
+                    //         error: function(error) {
+                    //             console.error('An error occurred: ' + error);
+                    //         }
+                    //     });
 
-                                    window.location.href = '{{ url('application-list') }}';
-                                } else {
-                                    // Payment does not exist; you can perform another action or show a message.
-                                }
-                            },
-                            error: function(error) {
-                                console.error('An error occurred: ' + error);
-                            }
-                        });
-
-                    });
+                    // });
                 </script>
 
                 <script>
@@ -639,16 +637,22 @@
                             $('#payment_transaction_no-error').text(
                                 'Payment Transaction no. must not contain special characters');
                             // Disable the button
-                            // $('#submitBtn').attr('disabled', true);
+                            $('#submitBtn').attr('disabled', true);
                             return;
+                        }else{
+                            $('#submitBtn').attr('disabled', false);
+
                         }
 
                         // Check if the length of the input is less than the minimum required length
                         if (paymentTransactionNo.length < 9) {
                             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters');
                             // Disable the button
-                            // $('#submitBtn').attr('disabled', true);
+                             $('#submitBtn').attr('disabled', true);
                             return;
+                        }else{
+                             $('#submitBtn').attr('disabled', false);
+
                         }
 
                         $.ajax({
@@ -668,12 +672,14 @@
                                 } else if (response.status == 'success') {
                                     $('#payment_transaction_no-error').html('<p class="text-success">' + response
                                         .message + '</p');
+                                        $('#submitBtn').attr('disabled', false);
                                     
                                 }
                             },
                             error: function(xhr, status, error) {
                                 // Handle AJAX errors if any
                                 console.error(error);
+                                $('#submitBtn').attr('disabled', false);
                             }
                         });
                     });
@@ -698,13 +704,18 @@
                         if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
                             $('#payment_reference_no-error').text(
                                 'Payment Reference no. must not contain special characters.');
+                                $('#submitBtn').attr('disabled', true);
                             return;
+                        }else{
+                            $('#submitBtn').attr('disabled', false);
                         }
 
                         // Check if the length of the input is less than the minimum required length
                         if (paymentReferenceNo.length < 9) {
                             $('#payment_reference_no-error').text('Payment Reference no. must be at least 9 characters.');
+                            $('#submitBtn').attr('disabled', true);
                         } else {
+                            $('#submitBtn').attr('disabled', false);
 
                             $.ajax({
                                 type: 'POST', // or 'GET' based on your route
@@ -724,12 +735,15 @@
                                         $('#payment_reference_no-error').html('<p class="text-success">' + response
                                             .message +
                                             '</p>');
+                                            $('#submitBtn').attr('disabled', false);
+
 
                                     }
                                 },
                                 error: function(xhr, status, error) {
                                     // Handle AJAX errors if any
-                                    console.error(error);
+                                    $('#submitBtn').attr('disabled', false);
+
                                 }
                             });
                             // Clear the error message if the length is valid

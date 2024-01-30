@@ -224,12 +224,13 @@ class ApplicationCoursesController extends Controller
     public function showcoursePayment(Request $request, $id = null)
     {
         $id = dDecrypt($id);
-        // dd($id);
+       
         $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
-        
+       
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
+   
 
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
@@ -280,6 +281,7 @@ class ApplicationCoursesController extends Controller
         }
         return view('create-application.course-payment.show-course-payment', compact('applicationData', 'course', 'currency', 'total_amount'));
     }
+    
     public function getCourseList(Request $request)
     {
         $item = LevelInformation::whereid('1')->get();

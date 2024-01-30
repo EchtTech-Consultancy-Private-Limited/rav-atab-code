@@ -58,11 +58,13 @@ class AdminApplicationController extends Controller
                 ->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                ])->sum('amount');
+                ])
+                ->where('status',2)
+                ->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])
-                ->whereNotNull('accountant_id')
+                ->where('status',2)
                 ->count();
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
