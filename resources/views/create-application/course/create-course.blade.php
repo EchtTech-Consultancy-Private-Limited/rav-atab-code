@@ -614,11 +614,11 @@
                                                 <input type="text" placeholder="Years" name="years[]"
                                                     maxlength="4" required class="course_input preventalpha">
                                                 <input type="text" placeholder="Months" name="months[]"
-                                                    maxlength="2" required class="course_input preventalpha">
+                                                    maxlength="2" required class="course_input preventalpha" onkeyup="validateFormTP()">
                                                 <input type="text" maxlength="2" placeholder="Days preventalpha"
-                                                    name="days[]" required class="course_input">
+                                                    name="days[]" required class="course_input" onkeyup="validateFormTP()">
                                                 <input type="number" placeholder="Hours" name="hours[]" required
-                                                    class="course_input">
+                                                    class="course_input" onkeyup="validateFormTP()">
                                             </div>
                                         </div>
                                         @error('course_duration')
