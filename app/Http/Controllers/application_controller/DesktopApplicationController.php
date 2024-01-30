@@ -165,11 +165,7 @@ class DesktopApplicationController extends Controller
     {
         try{
    
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])
-            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
-            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-            ->latest('id')
-            ->get();
+            
 
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])->latest('id')->first();
         
@@ -178,6 +174,7 @@ class DesktopApplicationController extends Controller
             if($nc_type==="view"){
                 $is_nc_exists=true;
             }
+
 
         if(isset($tbl_nc_comments->nc_type)){
             if($tbl_nc_comments->nc_type==="NC1"){
@@ -212,8 +209,13 @@ class DesktopApplicationController extends Controller
                 "Accept"=>"Accept",
             );
         }
-
-
+        if($nc_type=="nr"){
+            $nc_type="not_recommended";
+        }
+        $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop','nc_type'=>$nc_type])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->first();
 
         $doc_latest_record = TblApplicationCourseDoc::latest('id')
         ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
