@@ -224,11 +224,10 @@ class OnsiteApplicationController extends Controller
     {
         
         try{
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite','nc_type'=>$nc_type])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-            ->latest('id')
-            ->get();
+            ->first();
 
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'application_courses_id'=>$application_course_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
         

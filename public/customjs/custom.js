@@ -980,9 +980,11 @@ function handleReferenceNumberValidation() {
                 if (response.status=='error') {
                     $("#payment_reference_no_err").html(response.message);
                     $('#update-payment_info').attr('disabled',true)
+                    $('#submitBtn').attr('disabled',true);
                 }else{
                     $("#payment_reference_no_err").html("");
-                    $('#update-payment_info').attr('disabled',false)
+                    $('#update-payment_info').attr('disabled',false)                
+                    $('#submitBtn').attr('disabled',false)                
                 }
             },
             error: function (xhr, status, error) {
@@ -1165,6 +1167,29 @@ function handleOnsiteNotification(pay_id){
         });
         $('.full_screen_loading').hide();
     }
+}
+
+function updateFileName(input) {
+    var selectedFileName = "";
+    if (input.files && input.files.length > 0) {
+        selectedFileName = input.files[0].name;
+    }
+    var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+    var fileExtension = selectedFileName.split(".").pop().toLowerCase();
+    if (allowedExtensions.indexOf(fileExtension) == -1) {
+        toastr.error("Invalid file type", {
+            timeOut: 1,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 1,
+        });
+        // Clear the file input
+        input.value = ""; // Set the value to an empty string
+        // Update the displayed file name
+        $("#selectedFileName").text("");
+        return;
+    }
+    $("#selectedFileName").text(selectedFileName);
 }
 
 

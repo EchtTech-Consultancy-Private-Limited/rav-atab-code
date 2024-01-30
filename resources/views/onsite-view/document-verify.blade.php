@@ -103,7 +103,8 @@
 
                                             <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" />
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" onchange="updateFileName(this)"/>
+                                                <span id="selectedFileName"></span>
                                              </div>
 
                                              
@@ -157,6 +158,7 @@
         </div>
 
         <div class="full_screen_loading">Loading&#8230;</div>
+        @isset($nc_comments)
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
@@ -197,22 +199,20 @@
 
 
 
-                                                    @foreach($nc_comments as $k=>$comment)
                                                     <tr class="gradeX odd ">
-                                                        <td class="center sorting_1">{{$k+1}}</td>
-                                                        <td class="center">{{$comment->comments}}
+                                                        <td class="center sorting_1">1</td>
+                                                        <td class="center">{{$nc_comments->comments}}
                                                         </td>
 
 
                                                         <td class="center">
-                                                                  {{$comment->firstname??''}} {{$comment->middlename??''}}
-                                                                  {{$comment->lastname??''}}</td>
+                                                                  {{$nc_comments->firstname??''}} {{$nc_comments->middlename??''}}
+                                                                  {{$nc_comments->lastname??''}}</td>
 
                                                         <td class="center">
-                                                            <a>{{date('d-m-Y',strtotime($comment->created_at))}}</a>
+                                                            <a>{{date('d-m-Y',strtotime($nc_comments->created_at))}}</a>
                                                         </td>
                                                     </tr>
-                                                    @endforeach
 
                                             </tbody>
                                         </table>
@@ -226,7 +226,7 @@
                
             </div>
         </div>
-
+        @endisset
 
 
     </section>

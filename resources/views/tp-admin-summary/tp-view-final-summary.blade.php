@@ -281,7 +281,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">Way of assessment (Desktop): </br><span class="fw-normal">
-                                                    N/A
+                                                    DDA
                                                 </span> 
                                                     </td>
                                                 <td class="fw-bold">No of Mandays:  <span class="fw-normal"> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>

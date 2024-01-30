@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var duplicateContact = contactError.textContent === 'Contact number is already in use.';
     var duplicateEmail = emailError.textContent === 'Email is already in use.';
 
-    if (personName !== '' && contactNumber !== '' && email !== '' && designation !== '' && !duplicateContact && !duplicateEmail) {
+    if (personName !== '' && (contactNumber !== '' && contactNumber.length>9 ) && email !== '' && designation !== '' && !duplicateContact && !duplicateEmail) {
       nextBtn.removeAttribute('disabled');
     } else {
       nextBtn.setAttribute('disabled', true);
@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (/^\d{10}$/.test(contactNumber)) {
       // Send an AJAX request
       const isApplicationEmailExist = window.location.pathname.split('/').length 
-      console.log(isApplicationEmailExist,' length')
       if(isApplicationEmailExist<3){
         $.ajax({
           type: 'POST',
@@ -101,9 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
       }
+      $("#nextBtn").attr("disabled",false);
     } else {
       // Display an error message for an invalid contact number
-      contactError.textContent = 'Contact number must be 10 digits and numeric.';
+      contactError.textContent = 'Contact number must be 10 digits and numeric';
+      $("#nextBtn").attr("disabled",true);
       checkForm();
     }
   }

@@ -187,7 +187,7 @@
                                             <td colspan="6">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">Application No (provided by ATAB): <span> {{$summertReport->id}}</span>
+                                            <td colspan="3">Application No (provided by ATAB): <span> RAVAP-{{$summertReport->id}}</span>
                                             </td>
                                             <td colspan="3">Date of Application: <span> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
