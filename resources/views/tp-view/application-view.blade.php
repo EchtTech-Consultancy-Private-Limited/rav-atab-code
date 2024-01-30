@@ -418,7 +418,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($ApplicationPayment->tp_update_count < (int)env('TP_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->accountant_id==null)
+                                @if($ApplicationPayment->tp_update_count < (int)env('TP_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->status!=2)
                                 <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
                                 title="You can update only once"
                                 ><i class="fa fa-pencil"></i></button>
