@@ -816,9 +816,6 @@ function handleUpdatePaymentInformation() {
     }
 }
 
-
-
-
 function handleUpdatePaymentInformationOfAccount() {
     const payment_transaction_no = $("#payment_transaction_no").val();
     const payment_reference_no = $("#payment_reference_no").val();
@@ -894,7 +891,6 @@ function handleUpdatePaymentInformationOfAccount() {
     }
 }
 
-
 function validateForm() {
     const MIN_LENGTH = 9;
     const MAX_LENGTH = 18;
@@ -958,6 +954,17 @@ function handleTransactionNumberValidation() {
         });
 }
 
+function debounceTxn(func, timeout = 300){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
+
+  const handleTransactionNumberValidationDebounce = debounceTxn(() => handleTransactionNumberValidation());
+
+
 function handleReferenceNumberValidation() {
     const payment_reference_no = $("#payment_reference_no").val();
     
@@ -993,6 +1000,14 @@ function handleReferenceNumberValidation() {
         });
 }
 
+function debounceRefe(func, timeout = 300){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
+  const handleReferenceNumberValidationDebounce = debounceRefe(() => handleReferenceNumberValidation());
 
 
 function handleNotification(pay_id){

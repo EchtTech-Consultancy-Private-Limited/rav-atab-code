@@ -613,143 +613,227 @@
                 </script>
 
                 <script>
-                    $('#payment_transaction_no').on('keyup focusout', function() {
-                        // Get the payment transaction number value
-                        var paymentTransactionNo = $(this).val();
+                    // $('#payment_transaction_no').on('keyup focusout', function() {
+                    //     // Get the payment transaction number value
+                    //     var paymentTransactionNo = $(this).val();
 
-                        // Check if the payment transaction number is empty
-                        if (paymentTransactionNo === '') {
-                            // Clear the error message
-                            $('#payment_transaction_no-error').text('');
-                            // Disable the button
-                            // $('#submitBtn').attr('disabled', true);
-                            return;
-                        }
+                    //     // Check if the payment transaction number is empty
+                    //     if (paymentTransactionNo === '') {
+                    //         // Clear the error message
+                    //         $('#payment_transaction_no-error').text('');
+                    //         // Disable the button
+                    //         // $('#submitBtn').attr('disabled', true);
+                    //         return;
+                    //     }
 
-                        // Remove whitespace from the input
-                        paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
+                    //     // Remove whitespace from the input
+                    //     paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
 
-                        // Update the input value
-                        $(this).val(paymentTransactionNo);
+                    //     // Update the input value
+                    //     $(this).val(paymentTransactionNo);
 
-                        // Check if the input contains special characters
-                        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
-                            $('#payment_transaction_no-error').text(
-                                'Payment Transaction no. must not contain special characters');
-                            // Disable the button
-                            $('#submitBtn').attr('disabled', true);
-                            return;
-                        }else{
-                            $('#submitBtn').attr('disabled', false);
+                    //     // Check if the input contains special characters
+                    //     if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                    //         $('#payment_transaction_no-error').text(
+                    //             'Payment Transaction no. must not contain special characters');
+                    //         // Disable the button
+                    //         $('#submitBtn').attr('disabled', true);
+                    //         return;
+                    //     }else{
+                    //         $('#submitBtn').attr('disabled', false);
 
-                        }
+                    //     }
 
-                        // Check if the length of the input is less than the minimum required length
-                        if (paymentTransactionNo.length < 9) {
-                            $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters');
-                            // Disable the button
-                             $('#submitBtn').attr('disabled', true);
-                            return;
-                        }else{
-                             $('#submitBtn').attr('disabled', false);
+                    //     // Check if the length of the input is less than the minimum required length
+                    //     if (paymentTransactionNo.length < 9) {
+                    //         $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters');
+                    //         // Disable the button
+                    //          $('#submitBtn').attr('disabled', true);
+                    //         return;
+                    //     }else{
+                    //          $('#submitBtn').attr('disabled', false);
 
-                        }
+                    //     }
 
-                        $.ajax({
-                            type: 'POST', // or 'GET' based on your route
-                            url: '{{ route('transaction_validation') }}',
-                            data: {
-                                _token: $('input[name="_token"]').val(),
-                                transaction_no: paymentTransactionNo
-                            },
-                            success: function(response) {
-                                // Handle the response from the server
-                                if (response.status == 'error') {
-                                    $('#payment_transaction_no-error').html('<p class="text-danger">' + response
-                                        .message + '</p');
-                                    // Disable the button
-                                    $('#submitBtn').attr('disabled', true);
-                                } else if (response.status == 'success') {
-                                    $('#payment_transaction_no-error').html('<p class="text-success">' + response
-                                        .message + '</p');
-                                        $('#submitBtn').attr('disabled', false);
+                    //     $.ajax({
+                    //         type: 'POST', // or 'GET' based on your route
+                    //         url: '{{ route('transaction_validation') }}',
+                    //         data: {
+                    //             _token: $('input[name="_token"]').val(),
+                    //             transaction_no: paymentTransactionNo
+                    //         },
+                    //         success: function(response) {
+                    //             // Handle the response from the server
+                    //             if (response.status == 'error') {
+                    //                 $('#payment_transaction_no-error').html('<p class="text-danger">' + response
+                    //                     .message + '</p');
+                    //                 // Disable the button
+                    //                 $('#submitBtn').attr('disabled', true);
+                    //             } else if (response.status == 'success') {
+                    //                 $('#payment_transaction_no-error').html('<p class="text-success">' + response
+                    //                     .message + '</p');
+                    //                     $('#submitBtn').attr('disabled', false);
                                     
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                // Handle AJAX errors if any
-                                console.error(error);
-                                $('#submitBtn').attr('disabled', false);
-                            }
-                        });
-                    });
+                    //             }
+                    //         },
+                    //         error: function(xhr, status, error) {
+                    //             // Handle AJAX errors if any
+                    //             console.error(error);
+                    //             $('#submitBtn').attr('disabled', false);
+                    //         }
+                    //     });
+                    // });
+var debounceTimer;
+$('#payment_transaction_no').on('keyup focusout', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+        var paymentTransactionNo = $(this).val();
 
-                    $('#payment_reference_no').on('keyup', function() {
-                        // Get the payment reference number value
-                        var paymentReferenceNo = $(this).val();
-
-                        // Check if the payment reference number is empty
-                        if (paymentReferenceNo === '') {
-                            // Clear the error message and exit
-                            $('#payment_reference_no-error').text('');
-                            return;
-                        }
-
-                        var paymentReferenceNo = $(this).val().replace(/\s/g, '');
-
-                        // Update the input value
-                        $(this).val(paymentReferenceNo);
-
-                        // Check if the input contains special characters
-                        if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
-                            $('#payment_reference_no-error').text(
-                                'Payment Reference no. must not contain special characters.');
-                                $('#submitBtn').attr('disabled', true);
-                            return;
-                        }else{
-                            $('#submitBtn').attr('disabled', false);
-                        }
-
-                        // Check if the length of the input is less than the minimum required length
-                        if (paymentReferenceNo.length < 9) {
-                            $('#payment_reference_no-error').text('Payment Reference no. must be at least 9 characters.');
-                            $('#submitBtn').attr('disabled', true);
-                        } else {
-                            $('#submitBtn').attr('disabled', false);
-
-                            $.ajax({
-                                type: 'POST', // or 'GET' based on your route
-                                url: '{{ route('reference_validation') }}',
-                                data: {
-                                    _token: $('input[name="_token"]').val(),
-                                    reference_no: paymentReferenceNo
-                                },
-                                success: function(response) {
-                                    // Handle the response from the server
-                                    if (response.status === 'error') {
-                                        $('#payment_reference_no-error').html('<p class="text-danger">' + response
-                                            .message +
-                                            '</p>');
-                                        $('#submitBtn').attr('disabled', true);
-                                    } else if (response.status === 'success') {
-                                        $('#payment_reference_no-error').html('<p class="text-success">' + response
-                                            .message +
-                                            '</p>');
-                                            $('#submitBtn').attr('disabled', false);
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('transaction_validation') }}',
+            data: {
+                _token: $('input[name="_token"]').val(),
+                transaction_no: paymentTransactionNo
+            },
+            success: function(response) {
+                if (response.status == 'error') {
+                    $('#payment_transaction_no-error').html('<p class="text-danger">' + response.message + '</p');
+                    $('#submitBtn').attr('disabled', true);
+                } else if (response.status == 'success') {
+                    $('#payment_transaction_no-error').html('<p class="text-success">' + response.message + '</p');
+                    $('#submitBtn').attr('disabled', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#submitBtn').attr('disabled', false);
+            }
+        });
+    }.bind(this), 300);
+});
 
 
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    // Handle AJAX errors if any
-                                    $('#submitBtn').attr('disabled', false);
+                    // $('#payment_reference_no').on('keyup', function() {
+                    //     // Get the payment reference number value
+                    //     var paymentReferenceNo = $(this).val();
 
-                                }
-                            });
-                            // Clear the error message if the length is valid
-                            $('#payment_reference_no-error').text('');
-                        }
-                    });
+                    //     // Check if the payment reference number is empty
+                    //     if (paymentReferenceNo === '') {
+                    //         // Clear the error message and exit
+                    //         $('#payment_reference_no-error').text('');
+                    //         return;
+                    //     }
+
+                    //     var paymentReferenceNo = $(this).val().replace(/\s/g, '');
+
+                    //     // Update the input value
+                    //     $(this).val(paymentReferenceNo);
+
+                    //     // Check if the input contains special characters
+                    //     if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
+                    //         $('#payment_reference_no-error').text(
+                    //             'Payment Reference no. must not contain special characters.');
+                    //             $('#submitBtn').attr('disabled', true);
+                    //         return;
+                    //     }else{
+                    //         $('#submitBtn').attr('disabled', false);
+                    //     }
+
+                    //     // Check if the length of the input is less than the minimum required length
+                    //     if (paymentReferenceNo.length < 9) {
+                    //         $('#payment_reference_no-error').text('Payment Reference no. must be at least 9 characters.');
+                    //         $('#submitBtn').attr('disabled', true);
+                    //     } else {
+                    //         $('#submitBtn').attr('disabled', false);
+
+                    //         $.ajax({
+                    //             type: 'POST', // or 'GET' based on your route
+                    //             url: '{{ route('reference_validation') }}',
+                    //             data: {
+                    //                 _token: $('input[name="_token"]').val(),
+                    //                 reference_no: paymentReferenceNo
+                    //             },
+                    //             success: function(response) {
+                    //                 // Handle the response from the server
+                    //                 if (response.status === 'error') {
+                    //                     $('#payment_reference_no-error').html('<p class="text-danger">' + response
+                    //                         .message +
+                    //                         '</p>');
+                    //                     $('#submitBtn').attr('disabled', true);
+                    //                 } else if (response.status === 'success') {
+                    //                     $('#payment_reference_no-error').html('<p class="text-success">' + response
+                    //                         .message +
+                    //                         '</p>');
+                    //                         $('#submitBtn').attr('disabled', false);
+
+
+                    //                 }
+                    //             },
+                    //             error: function(xhr, status, error) {
+                    //                 // Handle AJAX errors if any
+                    //                 $('#submitBtn').attr('disabled', false);
+
+                    //             }
+                    //         });
+                    //         // Clear the error message if the length is valid
+                    //         $('#payment_reference_no-error').text('');
+                    //     }
+                    // });
+
+var debounceTimerRef;
+$('#payment_reference_no').on('keyup', function() {
+    clearTimeout(debounceTimerRef);
+    debounceTimerRef = setTimeout(function() {
+        var paymentReferenceNo = $(this).val();
+        if (paymentReferenceNo === '') {
+            $('#payment_reference_no-error').text('');
+            return;
+        }
+        paymentReferenceNo = paymentReferenceNo.replace(/\s/g, '');
+        $(this).val(paymentReferenceNo);
+        if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
+            $('#payment_reference_no-error').text(
+                'Payment Reference no. must not contain special characters.');
+            $('#submitBtn').attr('disabled', true);
+            return;
+        } else {
+            $('#submitBtn').attr('disabled', false);
+        }
+
+        if (paymentReferenceNo.length < 9) {
+            $('#payment_reference_no-error').text('Payment Reference no. must be at least 9 characters.');
+            $('#submitBtn').attr('disabled', true);
+        } else {
+            $('#submitBtn').attr('disabled', false);
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('reference_validation') }}',
+                data: {
+                    _token: $('input[name="_token"]').val(),
+                    reference_no: paymentReferenceNo
+                },
+                success: function(response) {
+                    if (response.status === 'error') {
+                        $('#payment_reference_no-error').html('<p class="text-danger">' + response.message +
+                            '</p>');
+                        $('#submitBtn').attr('disabled', true);
+                    } else if (response.status === 'success') {
+                        $('#payment_reference_no-error').html('<p class="text-success">' + response.message +
+                            '</p>');
+                        $('#submitBtn').attr('disabled', false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#submitBtn').attr('disabled', false);
+                }
+            });
+
+            $('#payment_reference_no-error').text('');
+        }
+    }.bind(this), 500);
+});
+
                 </script>
 
 
