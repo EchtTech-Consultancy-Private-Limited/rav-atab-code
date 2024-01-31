@@ -339,6 +339,7 @@ class TPApplicationController extends Controller
          $updateArr['new_payment_transaction_no']=$request->payment_transaction_no;
          $updateArr['old_payment_reference_no']=$update_payment->payment_reference_no;
          $updateArr['new_payment_reference_no']=$request->payment_reference_no;
+         $updateArr['application_id']=$update_payment->application_id;
          $updateArr['user_id']=Auth::user()->id;
          DB::table('payment_history')->insert($updateArr);
        /*end here*/   
