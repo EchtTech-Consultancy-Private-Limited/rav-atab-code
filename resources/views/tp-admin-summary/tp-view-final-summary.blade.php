@@ -453,7 +453,7 @@
                                                 <td class="fw-bold"> Team Leader: </td>
                                                 <td> {{$onsiteSummaryReport->firstname??''}} {{$onsiteSummaryReport->middlename??''}} {{$onsiteSummaryReport->lastname??''}}</td>
                                                 <td colspan="2" class="fw-bold"> Rep. Assessee Orgn:</td>
-                                                <td colspan="2">{{$onsiteSummaryReport->assessee_org}}</td>
+                                                <td colspan="2">{{$onsiteSummaryReport->onsite_assessee_org}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="6" class="fw-bold">Brief about the Opening Meeting: <span class="fw-normal">{{$onsiteSummaryReport->brief_open_meeting}}</span></td>
