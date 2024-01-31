@@ -178,6 +178,22 @@
          </div>
         
          <div class="modal-body mod-css">
+
+
+<div class="container p-4">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-tabs-order" data-bs-toggle="tab" data-bs-target="#tabs-1" type="button" role="tab" aria-controls="tabs-1" aria-selected="true">Orders </button>
+        <button class="nav-link" id="nav-tab-manager" data-bs-toggle="tab" data-bs-target="#tabs-2" type="button" role="tab" aria-controls="tabs-2" aria-selected="false">Managers </button>
+    </div>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="tabs-1" role="tabpanel" aria-labelledby="tabs-tab1"> Orders </div>
+        <div class="tab-pane fade" id="tabs-2" role="tabpanel" aria-labelledby="tabs-2"> Managers </div>
+    </div>
+</div>
+
+
+
+
             <form action="{{ url('/admin-assign-assessor') }}"
                method="post">
                @csrf
@@ -229,23 +245,38 @@
                @foreach ($item->assessor_list as $k => $assesorsData)
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
                   <br>
-                  <label>
+                
+                  <div class="row">
+                    <div class="col-md-5">
+                    <label>
                     
-                  <input type="radio"
-                  id="assesorsid"
-                  class="d-none assesorsid"
-                  name="assessor_id"
-                  value="{{$assesorsData->id}}"
-                  @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
-                 
-                  />
-                  <span>
-                  {{ ucfirst($assesorsData->firstname) }}
-                    {{ ucfirst($assesorsData->lastname) }}
-                    ({{ $assesorsData->email }})
-                  </span>
-                  </label>
-              
+                    <input type="radio"
+                    id="assesorsid"
+                    class="d-none assesorsid"
+                    name="assessor_id"
+                    value="{{$assesorsData->id}}"
+                    @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
+                   
+                    />
+                    
+                    <span>
+                    {{ ucfirst($assesorsData->firstname) }}
+                      {{ ucfirst($assesorsData->lastname) }}
+                      ({{ $assesorsData->email }})
+                    </span>
+                    </label>
+                    </div>
+                    <div class="col-md-3">
+                    <select name="" id="" class="d-block ">
+                      <option value="" disabled selected>Please select option</option>
+                      <option value="lead_assessor">Lead Assessor</option>
+                      <option value="co_assessor">Co-Assessor</option>
+                      <option value="observer_assessor">Observer Assessor</option>
+                    </select>
+                    </div>
+                  
+                  </div>
+                  
                   <div id="assessor_assign_dates_{{$assesorsData->id}}">
                   <?php
                     foreach(get_accessor_date_new($assesorsData->id,$item->application_list->id,$assesorsData->assessment) as $date){
@@ -282,7 +313,13 @@
         </div>
         </div>
 
-
+<script>
+    $("#mybut").click(function() {
+  var sel = document.querySelector('#nav-tab-manager')
+  console.log(sel,' selecc')
+  bootstrap.Tab.getOrCreateInstance(sel).show()
+})
+</script>
    
     </section>
    

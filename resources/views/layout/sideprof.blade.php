@@ -95,7 +95,7 @@
 
 
                     <li>
-                        <a href="{{ url('/view-faqs') }}" class="{{ Request::is('view-faqs')?'active':''; }}" >
+                        <a href="{{ url('/view-faqs') }}" class="{{ Request::is('view-faqs')?'active':'' }}" >
                             <i data-feather="file-text"></i>
                             <span>FAQs</span>
                         </a>
