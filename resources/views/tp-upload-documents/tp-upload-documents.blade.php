@@ -330,14 +330,16 @@
                                         title="{{$doc->onsite_doc_file_name}}"
                                         href="{{ url('tp-document-detail'. '/' . $doc->onsite_status . '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                        
+                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span>
+                                       <!-- <img src="{{url('assets/images/nc1.png')}}" alt=""> -->
+                                       </a>
                                         @if($doc->onsite_nc_status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                        @endif
-                                       
 
                                     @elseif($doc->onsite_status==3)
                                           <a target="_blank"

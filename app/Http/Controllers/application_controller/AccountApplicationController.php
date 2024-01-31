@@ -120,6 +120,18 @@ class AccountApplicationController extends Controller
               $slip_by_approver_file = $filename;
           }
   
+        /*keep history for update payment info*/   
+          $update_payment = DB::table('tbl_application_payment')->where('id',$request->id)->first();
+          $updateArr=[];
+          $updateArr['old_payment_transaction_no']=$update_payment->payment_transaction_no;
+          $updateArr['new_payment_transaction_no']=$request->payment_transaction_no;
+          $updateArr['old_payment_reference_no']=$update_payment->payment_reference_no;
+          $updateArr['new_payment_reference_no']=$request->payment_reference_no;
+          $updateArr['user_id']=Auth::user()->id;
+          DB::table('payment_history')->insert($updateArr);
+        /*end here*/   
+
+
           $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->first()->account_update_count;
          
           if($get_payment_update_count > (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT')-1){
