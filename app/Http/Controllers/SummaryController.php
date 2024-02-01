@@ -671,7 +671,7 @@ class SummaryController extends Controller
         $application_id = $request->input('application');
         $application_course_id = $request->input('course');
         $summeryReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.lastname')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
@@ -710,7 +710,7 @@ class SummaryController extends Controller
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
        /*On Site Final Summary Report*/
         $onsiteSummaryReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.assessee_org as onsite_assessee_org')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.middlename','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.assessee_org as onsite_assessee_org')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
