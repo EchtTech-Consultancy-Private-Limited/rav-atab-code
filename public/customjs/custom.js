@@ -1245,6 +1245,11 @@ function isValidNumber(value, min, max) {
 }
 
 
+function handleAssessorDesignation(id){
+   const assessor_designation =  $('#'+id+ ' option:selected').val();
+   console.log(assessor_designation,'--',id);
+}
+
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");
     $(`#${err_id}_err`).html("");

@@ -25089,3 +25089,10 @@ td.remove_extra_comma span:last-child{display: none}
   }
 
 /*  end here tabs*/
+
+
+
+.opacity-1 {
+    opacity: 1 !important;
+    position: relative !important;
+}

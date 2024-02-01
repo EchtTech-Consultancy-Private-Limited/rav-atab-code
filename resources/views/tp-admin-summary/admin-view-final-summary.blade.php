@@ -179,7 +179,6 @@
             </div>
         @endif
 
-
         <div>
             <tabs-group>
                 <div role="tablist" class="tabs__controls">
