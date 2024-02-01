@@ -66,7 +66,7 @@
                     Basic Information
                 </h5>
                 <div>
-                    <span style="font-weight: bold;">Application ID:</span> RAVAP-{{ $spocData->id }}
+                    <span style="font-weight: bold;">Application ID:</span> {{ $spocData->uhid }}
                 </div>
             </div>
             <div class="card-body">
@@ -376,10 +376,10 @@
                                 @endif
                             </td>
                             <td>
-                            @if ($ApplicationPayment->status == 0)
+                            @if ($ApplicationPayment->status == 0 && $ApplicationPayment->payment_proof_by_account==null)
                                 N/A
                                 @endif
-                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
+                                @if ($ApplicationPayment->status == 0 || $ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
                                 @if (!$ApplicationPayment->payment_proof_by_account)
                                 File not available!
                                 @endif

@@ -142,6 +142,9 @@ class AdminApplicationController extends Controller
     }
     public function assignAssessor(Request $request){
         try{
+            $a_id = "assessor_type_".$request->application_id;
+            $assessor_designation = $a_id;
+            
             DB::beginTransaction();
             $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
             $assessor_types = $get_assessor_type==1?'desktop':'onsite';
@@ -153,6 +156,8 @@ class AdminApplicationController extends Controller
             $data['course_id']=$request->course_id??null;
             $data['assessor_type']=$get_assessor_type==1?'desktop':'onsite';
             $data['due_date']=Carbon::now()->addDay(366);
+            $data['assessor_designation']=$request->$assessor_designation;
+            $data['assessor_category']="atab_assessor";
             
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_id'=>$request->assessor_id,'assessor_type'=>$request->assessor_type])->first();
             if($is_assign_assessor_date!=null){
@@ -280,6 +285,7 @@ class AdminApplicationController extends Controller
                     return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
                 }
             } else {
+                
                 AssessorApplication::where('application_id', $request->application_id)->delete();
                 $assessor = $request->assessor_id;
                 $newApplicationAssign = new AssessorApplication;
@@ -291,23 +297,7 @@ class AdminApplicationController extends Controller
                 $newApplicationAssign->read_by = 0;
                 $newApplicationAssign->assessment_way = $request->on_site_type;
                 $newApplicationAssign->save();
-                $superadminEmail = 'superadmin@yopmail.com';
-                $adminEmail = 'admin@yopmail.com';
-                $mailData = [
-                    'from' => "Admin",
-                    'applicationNo' => $request->application_id,
-                    'applicationStatus' => "Admin Assigned Application to Assessor Successfully",
-                    'subject' => "Application Assigned",
-                ];
-                // Mail::to([$superadminEmail, $adminEmail])->send(new SendMail($mailData));
-                $assessor_email = User::select('email')->where('id', $assessor)->first();
-                $mailData = [
-                    'from' => "Admin",
-                    'applicationNo' => $request->application_id,
-                    'applicationStatus' => "Admin Assigned Application to Assessor Successfully",
-                    'subject' => "Application Assigned",
-                ];
-                // Mail::to($assessor_email)->send(new SendMail($mailData));
+                // dd("hello");
                 DB::commit();
                 return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
             }
@@ -373,7 +363,7 @@ class AdminApplicationController extends Controller
                 $final_data[] = $obj;
         }
         $applicationData = TblApplication::find($application_id);
-        return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
+        return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
     }
     public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {

@@ -193,7 +193,7 @@
                                             <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">Application No (provided by ATAB): <span> <input type="text" disabled value="RAVAP-{{$summertReport->application_id}}"></span> </td>
+                                            <td class="fw-bold">Application No (provided by ATAB): </br><span class="fw-normal">{{$summertReport->uhid}}</span> </td>
                                             <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->created_at))}}</span> </td>
                                         </tr>
                                         <tr>
@@ -213,7 +213,7 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-bold"> Assessor</td>
-                                            <td>{{$summertReport->firstname??''}} {{$summertReport->middlename??''}} {{$summertReport->lastname??''}}</td>
+                                            <td>{{$summertReport->firstname??''}} {{$summertReport->middlename??''}} {{$summertReport->lastname??''}} ({{$assessor_assign->assessor_designation??''}})</td>
                                         </tr>
                                     </tbody>
                                 

@@ -30,6 +30,19 @@
                     {{ session::get('success') }}
                 </div>
     @endif
+
+    @if ($message = Session::get('success'))
+    <script>
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: "Success",
+        text: "{{ $message }}",
+        showConfirmButton: false,
+        timer: 3000
+    })
+    </script>
+    @endif
     <div class="full_screen_loading">Loading&#8230;</div>
     <section class="content">
         <div class="container-fluid">
@@ -101,7 +114,7 @@
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>Level-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>RAVAP-{{ $item->application_list->id }}</td>
+                                                <td>{{ $item->application_list->uhid }}</td>
                                                 <td>Course ({{ $item->course_count ?? '' }})</td>
                                                 <td>
                                             @isset($item->payment)
@@ -258,11 +271,11 @@
                     </label>
                     </div>
                     <div class="col-md-3">
-                    <select required name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $item->application_list->id}}" class="d-block" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}')">
+                    <select name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $item->application_list->id}}" class="d-block" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
                       <option value="" disabled selected>Please select option</option>
-                      <option value="lead_assessor">Lead Assessor</option>
-                      <option value="co_assessor">Co-Assessor</option>
-                      <option value="observer_assessor">Observer Assessor</option>
+                      <option value="Lead Assessor">Lead Assessor</option>
+                      <option value="Co-Assessor">Co-Assessor</option>
+                      <option value="Observer Assessor">Observer Assessor</option>
                     </select>   
                     </div>
                   
@@ -277,26 +290,7 @@
                   </div>
               @endforeach  
                </div>
-         </div>
-        
-      </form>
-                    </div>
-               
-
-                <div role="tabpanel" class="tabs__panel">
-                    <div class="">
-                        hh
-                    </div>
-                </div>
-
-                </tabs-group>
-
-
-
-
-           
-
-      <div class="modal-footer">
+               <div class="modal-footer">
          <button type="button" onclick="cancelAssign()"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
@@ -304,6 +298,26 @@
             class="btn btn-primary my-button">Submit</button>
          </div>
       </div>
+         </div>
+        
+      </form>
+      
+      
+      <div role="tabpanel" class="tabs__panel">
+          <div class="">
+              hh
+            </div>
+        </div>
+        
+    </tabs-group>
+    
+</div>
+
+
+
+           
+
+      
    </div>
 </div>
 

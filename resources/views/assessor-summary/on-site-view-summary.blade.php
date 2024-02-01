@@ -195,7 +195,7 @@
                                             <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal"> RAVAP-{{$summertReport->id}}</span>
+                                            <td colspan="3" class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal">{{$summertReport->uhid}}</span>
                                             </td>
                                             <td colspan="3" class="fw-bold">Date of Application: </br><span class="fw-normal"> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
@@ -223,15 +223,15 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">Assessor Name</td>
-                                            <td> {{$assessor_name??''}} </td>
+                                            <td> {{$assessor_name??''}} ({{$assessor_assign->assessor_designation}}) </td>
                                             <td> </td>
                                             <td> </td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold"> Team Leader: </td>
-                                            <td> {{$assessor_name??''}}</td>
+                                            <td> {{$assessor_name??''}} ({{$assessor_assign->assessor_designation}})</td>
                                             <td colspan="2" class="fw-bold"> Rep. Assessee Orgn:</td>
-                                            <td colspan="2">{{$summertReport->assessee_org}}</td>
+                                            <td colspan="2">{{$summertReport->assessee_org}} </td>
                                         </tr>
                                         <tr>
                                             <td colspan="6" class="fw-bold">Brief about the Opening Meeting: <span class="fw-normal">{{$summertReport->brief_open_meeting}}</span></td>
@@ -366,13 +366,13 @@
                                             <tr>
                                                 <td class="fw-bold">Assessor Name </td>
                                                 
-                                                <td>{{$assessor_name??''}} </td>
+                                                <td>{{$assessor_name??''}} ({{$assessor_assign->assessor_designation}})</td>
                                                 <td> </td>
                                                 
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">Team Leader </td>
-                                                <td>{{$assessor_name??''}}</td>
+                                                <td>{{$assessor_name??''}} ({{$assessor_assign->assessor_designation}})</td>
                                                 
                                                 <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$summertReport->onsite_assessee_org}}</span></td>
                                             </tr>

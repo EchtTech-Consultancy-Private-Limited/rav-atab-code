@@ -3,44 +3,18 @@ namespace App\Http\Controllers;
 use App\Http\Traits\PdfImageSizeTrait;
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationCourse;
-use App\Models\Application;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Models\Country;
-use App\Models\ApplicationPayment;
-use App\Models\ApplicationDocument;
 use App\Models\TblApplication;
 use App\Models\TblApplicationCourses;
 use App\Models\TblApplicationPayment;
 use App\Models\LevelInformation;
-use App\Models\DocumentReportVerified;
-use App\Models\AcknowledgementRecord;
-use App\Models\SummeryReport;
-use App\Models\SummeryReportChapter;
-use App\Models\User;
-use App\Models\Faq;
-use App\Models\SummaryReport;
-use App\Models\SummaryReportChapter;
-use App\Models\ApplicationLevel2;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cookie;
 use Carbon\Carbon;
 use Session;
-use Mail;
-use App\Mail\SendMail;
-use App\Mail\SendAcknowledgment;
-use App\Mail\AdmintoAssessorSingleFinalMail;
-use App\Mail\assessorAdminFinalApplicationMail;
-use App\Mail\adminSingleDocumentMail;
-use App\Mail\uploadDocumentFirstMail;
-use App\Mail\tpAdminApplicationmail;
-use App\Mail\assessorFinalApplicationMail;
-use App\Mail\assessorToself;
-use App\Mail\assessorSingleAdminFinalApplicationMail;
-use App\Mail\assessorSingleFinalMail;
-use App\Mail\tpApplicationmail;
 use App\Jobs\SendEmailJob;
+
 class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
@@ -100,7 +74,12 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
-                $create_new_application = DB::table('tbl_application')->insertGetId($data);
+
+                $application = new TblApplication($data);
+                $application->save();
+
+                $create_new_application = $application->id;
+                // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
             }
         /*end here*/

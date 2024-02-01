@@ -102,12 +102,13 @@ class AccountApplicationController extends Controller
     public function updatePaynentInfo(Request $request)
     {
 
+        // dd($request->all());
         try{
           $request->validate([
               'id' => 'required',
               'payment_transaction_no' => 'required',
               'payment_reference_no' => 'required',
-              'payment_proof_by_account' => 'required',
+              'payment_proof_by_account' => '',
           ]);
   
           DB::beginTransaction();
@@ -147,7 +148,6 @@ class AccountApplicationController extends Controller
           if ($request->hasfile('payment_proof_by_account')) {
               $data['payment_proof_by_account']=$slip_by_approver_file;
           }
-  
           $update_payment_info = DB::table('tbl_application_payment')->where('id',$request->id)->update($data);
   
           if($update_payment_info){

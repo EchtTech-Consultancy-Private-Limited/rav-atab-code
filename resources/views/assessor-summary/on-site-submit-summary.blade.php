@@ -187,7 +187,7 @@
                                             <td colspan="6">ONSITE ASSESSMENT FORM.</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">Application No (provided by ATAB): <span> RAVAP-{{$summertReport->id}}</span>
+                                            <td colspan="3">Application No (provided by ATAB): <span> {{$summertReport->uhid}}</span>
                                             </td>
                                             <td colspan="3">Date of Application: <span> {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</span>
                                             </td>
@@ -215,19 +215,24 @@
                                         </tr>
                                         <tr>
                                             <td>Assessor Name</td>
-                                            <td> {{$assessor_name}} </td>
+                                            <td> {{$assessor_name}} ({{$assessor_assign->assessor_designation}}) </td>
                                             <td> </td>
                                             <td> </td>
                                         </tr>
                                         <tr>
                                             <td> Team Leader: </td>
-                                            <td> {{$assessor_name}}</td>
+                                            <td> {{$assessor_name}} ({{$assessor_assign->assessor_designation}})</td>
                                             <td colspan="2"> Rep. Assessee Orgn:</td>
-                                            <td colspan="2"><input type="text" name="assessee_org" id="assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required></td>
+                                            <td colspan="2"><input type="text" class="remove_err" name="assessee_org" id="assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required>
+                                            <span id="assessee_org_err" class="err"></span>
+                                        
+                                        </td>
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the Opening Meeting: <input
-                                                    type="text" id="brief_open_meeting" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required></td>
+                                                    type="text" id="brief_open_meeting" class="remove_err" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required>
+                                                    <span id="brief_open_meeting_err" class="err"></span>
+                                                </td>
                                         </tr>
                                 
                                         <tr>
@@ -295,11 +300,16 @@
                                         </tbody>
                                         <tr>
                                             <td colspan="6">Brief Summary: <input
-                                                    type="text" id="brief_summary" name="brief_summary" placeholder="Please Enter Brief Summary" required></td>
+                                                    type="text" id="brief_summary" class="remove_err" name="brief_summary" placeholder="Please Enter Brief Summary" required>
+                                                    <span id="brief_summary_err" class="err"></span>
+
+                                                </td>
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the closing meeting: <input
-                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" required></td>
+                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" class="remove_err" required>
+                                                    <span id="brief_closing_meeting_err" class="err"></span>
+                                                </td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -335,9 +345,18 @@
                                                 <td colspan="2"> Standard reference</td>
                                             </tr>
                                             <tr>
-                                                <td> <input type="text" name="sr_no" id="sr_no" placeholder="Enter Serial No." maxLength="10" required></td>
-                                                <td><input type="text" name="improvement_form" id="improvement_form" placeholder="Enter Opportunity for improvement Form" maxLength="1000"> </td>
-                                                <td><input type="text" name="standard_reference" id="standard_reference" maxLength="1000" placeholder="Enter Standard Reference" required> </td>
+                                                <td> <input type="text" name="sr_no" id="sr_no" placeholder="Enter Serial No." maxLength="10" class="remove_err" required>
+                                                <span id="sr_no_err" class="err"></span>
+
+                                            </td>
+                                                <td><input type="text" name="improvement_form" id="improvement_form" placeholder="Enter Opportunity for improvement Form" class="remove_err" maxLength="1000"> 
+                                                <span id="improvement_form_err" class="err"></span>
+
+                                            </td>
+                                                <td><input type="text" name="standard_reference" id="standard_reference" maxLength="1000" placeholder="Enter Standard Reference" class="remove_err" required> 
+                                                <span id="standard_reference_err" class="err"></span>
+
+                                            </td>
                                             </tr>
                                     
                                             <tr>
@@ -349,15 +368,17 @@
                                             <tr>
                                                 <td>Assessor Name </td>
                                                 
-                                                <td>{{$assessor_name}} </td>
+                                                <td>{{$assessor_name}} ({{$assessor_assign->assessor_designation}})</td>
                                                 <td> </td>
                                                 
                                             </tr>
                                             <tr>
                                                 <td>Team Leader </td>
-                                                <td>{{$assessor_name}}</td>
+                                                <td>{{$assessor_name}} ({{$assessor_assign->assessor_designation}})</td>
                                                 
-                                                <td> Rep. Assessee Orgn. <input type="text" name="improve_assessee_org" id="improve_assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required></td>
+                                                <td> Rep. Assessee Orgn. <input type="text" name="improve_assessee_org" id="improve_assessee_org" placeholder="Please Enter Rep. Assessee Orgn" class="remove_err" required>
+                                                <span id="improve_assessee_org_err" class="err"></span>
+                                            </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
@@ -367,7 +388,7 @@
                                         </tbody>
                                     </table>
                                     </br>
-                                    <button type="submit" class="btn btn-success float-right">Submit</button>
+                                    <button type="submit" class="btn btn-success float-right" onclick="handleOnsiteSummerySubmitReport()">Submit</button>
                                 </div>
                             </div>
                             

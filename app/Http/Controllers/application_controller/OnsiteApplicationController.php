@@ -124,7 +124,7 @@ class OnsiteApplicationController extends Controller
         $assessor_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
-        
+        $application_uhid = TblApplication::where('id',$application_id)->first()->uhid??'';
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
@@ -165,7 +165,7 @@ class OnsiteApplicationController extends Controller
 
         $desktopData = $this->onsiteApplicationDocumentList($application_id, $course_id);
     //    dd($onsite_course_doc_uploaded);
-        return view('onsite-view.application-documents-list', compact('desktopData', 'course_doc_uploaded','onsite_course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded'));
+        return view('onsite-view.application-documents-list', compact('desktopData', 'course_doc_uploaded','onsite_course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid'));
     }
 
    

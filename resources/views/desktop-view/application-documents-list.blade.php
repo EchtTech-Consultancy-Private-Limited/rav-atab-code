@@ -151,8 +151,7 @@
             <div class="row clearfix">
                <div class="col-lg-12 col-md-12">
                   <div>
-                     <b>Application ID:</b><span
-                        style="font-weight: bold;">RAVAP-{{$application_id}}</span>
+                     <b class="fw-bold">Application ID:</b><span> {{$application_uhid}}</span>
                   </div>
                   <div>
                      <div>

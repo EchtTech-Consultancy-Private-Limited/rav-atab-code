@@ -207,7 +207,7 @@
                                                 <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> RAVAP-{{$summeryReport->id}}</span> </td>
+                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> RAVAP-{{$summeryReport->uhid}}</span> </td>
                                                 <td class="fw-bold">Date of application: <span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
@@ -230,7 +230,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold"> Assessor</td>
-                                                <td>{{$summeryReport->firstname}}  {{$summeryReport->middlename??''}} {{$summeryReport->lastname??''}}</td>
+                                                <td>{{$summeryReport->firstname}}  {{$summeryReport->middlename??''}} {{$summeryReport->lastname??''}} ({{$assessor_assign[0]->assessor_designation??''}})</td>
                                             </tr>
                                         </tbody>
                                     
@@ -349,7 +349,7 @@
                                                 <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> RAVAP-{{$onsiteSummaryReport->id}}</span>
+                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> RAVAP-{{$onsiteSummaryReport->uhid}}</span>
                                                 </td>
                                                 <td colspan="3" class="fw-bold">Date of Application: <span class="fw-normal"> {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</span>
                                                 </td>
@@ -382,13 +382,13 @@
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">Assessor Name</td>
-                                                <td> {{$onsiteSummaryReport->firstname??''}} {{$onsiteSummaryReport->middlename??''}} {{$onsiteSummaryReport->lastname??''}}</td>
+                                                <td> {{$onsiteSummaryReport->firstname??''}} {{$onsiteSummaryReport->middlename??''}} {{$onsiteSummaryReport->lastname??''}} ({{$assessor_assign[1]->assessor_designation??''}})</td>
                                                 <td> </td>
                                                 <td> </td>
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold"> Team Leader: </td>
-                                                <td> {{$onsiteSummaryReport->firstname??''}} {{$onsiteSummaryReport->middlename??''}} {{$onsiteSummaryReport->lastname??''}}</td>
+                                                <td> {{$onsiteSummaryReport->firstname??''}} {{$onsiteSummaryReport->middlename??''}} {{$onsiteSummaryReport->lastname??''}} ({{$assessor_assign[1]->assessor_designation??''}})</td>
                                                 <td colspan="2" class="fw-bold"> Rep. Assessee Orgn:</td>
                                                 <td colspan="2">{{$onsiteSummaryReport->onsite_assessee_org}}</td>
                                             </tr>
@@ -528,13 +528,13 @@
                                                 <tr>
                                                     <td class="fw-bold">Assessor Name </td>
                                                     
-                                                    <td>{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} </td>
+                                                    <td>{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} ({{$assessor_assign[1]->assessor_designation??''}})</td>
                                                     <td> </td>
                                                     
                                                 </tr>
                                                 <tr>
                                                     <td class="fw-bold">Team Leader </td>
-                                                    <td >{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} </td>
+                                                    <td >{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} ({{$assessor_assign[1]->assessor_designation??''}})</td>
                                                     <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$onsiteSummaryReport->assessee_org}}</span></td>
                                                 </tr>
                                                 <tr>

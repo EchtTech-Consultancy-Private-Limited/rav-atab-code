@@ -1245,10 +1245,74 @@ function isValidNumber(value, min, max) {
 }
 
 
-function handleAssessorDesignation(id){
+function handleAssessorDesignation(id,application_id){
    const assessor_designation =  $('#'+id+ ' option:selected').val();
-   console.log(assessor_designation,'--',id);
+   $("#assessor_category_"+application_id).attr('value',assessor_designation);
+   $("#assessor_designation_"+application_id).attr('value',"atab_assessor");
 }
+
+
+  $(document).ready(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const day = tomorrow.getDate();
+    const month = tomorrow.getMonth() + 1;
+    const year = tomorrow.getFullYear();
+    const output =year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+    $('#summary_date').val(output);
+  });
+  
+
+  function handleOnsiteSummerySubmitReport(){
+    const assessee_org = $("#assessee_org").val();
+    const improve_assessee_org = $("#improve_assessee_org").val();
+    const brief_open_meeting = $("#brief_open_meeting").val();
+    const brief_summary = $("#brief_summary").val();
+    const brief_closing_meeting = $("#brief_closing_meeting").val();
+    const sr_no = $("#sr_no").val();
+    const improvement_form = $("#improvement_form").val();
+    const standard_reference = $("#standard_reference").val();
+    let flag = 0;
+    if(assessee_org==""){
+        $("#assessee_org_err").html("Please enter the assessee org value");
+        flag=1;
+    }
+    if(brief_open_meeting==""){
+        $("#brief_open_meeting_err").html("Please enter the brief open meeting value");
+        flag=1;
+    }
+    if(brief_summary==""){
+        $("#brief_summary_err").html("Please enter the brief summary value");
+        flag=1;
+    }
+    if(brief_closing_meeting==""){
+        $("#brief_closing_meeting_err").html("Please enter the brief closing value");
+        flag=1;
+    }
+    if(sr_no==""){
+        $("#sr_no_err").html("Please enter serial number");
+        flag=1;
+    }
+    if(improvement_form==""){
+        $("#improvement_form_err").html("Please enter improvement form value");
+        flag=1;
+    }
+    if(standard_reference==""){
+        $("#standard_reference_err").html("Please enter standard reference value");
+        flag=1;
+    }
+    if(improve_assessee_org==""){
+        $("#improve_assessee_org_err").html("Please enter imporve assessee org value");
+        flag=1;
+    }
+    if(flag==1){
+        return false;
+    }else{
+        return true;
+    }
+
+  }
 
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");
