@@ -106,6 +106,7 @@ class TPApplicationController extends Controller
     {
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
+        $application_uhid = TblApplication::where('id',$application_id)->first()->uhid??'';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id',$application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
@@ -158,9 +159,8 @@ class TPApplicationController extends Controller
                 $final_data[] = $obj;
         }
 
-        // dd($final_data);
         $applicationData = TblApplication::find($application_id);
-        return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id'));
+        return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','application_uhid'));
     }
     
     public function addDocument(Request $request)
@@ -389,6 +389,7 @@ class TPApplicationController extends Controller
          $pending_list = DB::table('tbl_application')
          ->where('tp_id',Auth::user()->id)
          ->whereNotIn('id',$pending_payment_list)
+         ->orderBy('id','desc')
          ->get();
 
       return view('tp-view.pending-payment-list', ['pending_payment_list' => $pending_list]);

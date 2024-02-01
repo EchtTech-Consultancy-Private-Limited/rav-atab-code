@@ -90,7 +90,7 @@
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>Level-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>RAVAP-{{ $item->application_list->id }}</td>
+                                                <td>{{ $item->application_list->uhid }}</td>
                                                 <td>Course ({{ $item->course_count ?? '' }})</td>
                                                 <td>
                                                 @isset($item->payment)

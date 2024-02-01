@@ -264,7 +264,7 @@
                                                         @foreach ($pending_payment_list as $pending_pay_list)
                                                             <tr>
 
-                                                                <td>RAVAP-{{ $pending_pay_list->id }}</td>
+                                                                <td>{{ $pending_pay_list->uhid }}</td>
 
 
                                                                 <td> {{ $pending_pay_list->level_id ?? '' }}</td>

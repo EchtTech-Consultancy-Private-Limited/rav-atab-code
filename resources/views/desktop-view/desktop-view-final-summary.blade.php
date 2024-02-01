@@ -264,7 +264,7 @@
                                                 <td colspan="2" class="fw-bold">DESKTOP ASSESSMENT FORM</td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Application No (provided by ATAB): <span class="fw-normal">RAVAP-{{$summeryReport->id}}</span> </td>
+                                                <td class="fw-bold">Application No (provided by ATAB):</br> <span class="fw-normal">RAVAP-{{$summeryReport->uhid}}</span> </td>
                                                 <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
@@ -287,7 +287,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold"> Assessor</td>
-                                                <td>{{$summeryReport->firstname??''}}  {{$summeryReport->middlename??''}} {{$summeryReport->lastname??''}}</td>
+                                                <td>{{$summeryReport->firstname??''}}  {{$summeryReport->middlename??''}} {{$summeryReport->lastname??''}} ({{$assessor_assign->assessor_designation}})</td>
                                             </tr>
                                         </tbody>
                                     

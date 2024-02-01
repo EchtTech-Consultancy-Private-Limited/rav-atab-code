@@ -65,7 +65,7 @@
                     Basic Information
                 </h5>
                 <div>
-                    <span style="font-weight: bold;">Application ID:</span> RAVAP-{{ $spocData->id }}
+                    <span style="font-weight: bold;">Application ID:</span> {{ $spocData->uhid }}
                 </div>
             </div>
             <div class="card-body">

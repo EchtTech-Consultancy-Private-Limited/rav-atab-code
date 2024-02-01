@@ -213,7 +213,7 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-bold"> Assessor</td>
-                                            <td>{{$summertReport->firstname??''}} {{$summertReport->middlename??''}} {{$summertReport->lastname??''}}</td>
+                                            <td>{{$summertReport->firstname??''}} {{$summertReport->middlename??''}} {{$summertReport->lastname??''}} ({{$assessor_assign->assessor_designation}})</td>
                                         </tr>
                                     </tbody>
                                 

@@ -8,15 +8,8 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
 use App\Models\TblApplicationCourses; 
-use App\Models\DocumentRemark;
-use App\Models\DocComment;
-use App\Models\Application;
-use App\Models\Add_Document;
-use App\Models\AssessorApplication; 
-use App\Models\User; 
 use App\Models\Chapter; 
 use App\Models\TblNCComments; 
-use Carbon\Carbon;
 use URL;
 use App\Jobs\SendEmailJob;
 class DesktopApplicationController extends Controller
@@ -101,6 +94,7 @@ class DesktopApplicationController extends Controller
     {
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
+        $application_uhid = TblApplication::where('id',$application_id)->first()->uhid??'';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id',$application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
@@ -158,7 +152,7 @@ class DesktopApplicationController extends Controller
         $is_final_submit = false;
        }
         $applicationData = TblApplication::find($application_id);
-        return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded'));
+        return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid'));
     }
 
     public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
@@ -370,7 +364,7 @@ class DesktopApplicationController extends Controller
         $application_id = $request->input('application');
         $application_course_id = $request->input('course');
         $summeryReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.uhid','app.created_at as app_created_at','app_course.course_name','usr.firstname','usr.middlename','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
@@ -382,8 +376,8 @@ class DesktopApplicationController extends Controller
             'asr.assessor_type' => 'desktop',
         ])
         ->first();
+        $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id,'assessor_type'=>'desktop'])->first();
         /*count the no of mandays*/
-        
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$application_id])->count();
         
         $questions = DB::table('questions')->get();
@@ -408,7 +402,7 @@ class DesktopApplicationController extends Controller
 
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
-        return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way'));
+        return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','assessor_assign'));
     }
 
 
