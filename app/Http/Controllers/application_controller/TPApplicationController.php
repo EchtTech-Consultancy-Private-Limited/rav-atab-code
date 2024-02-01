@@ -389,6 +389,7 @@ class TPApplicationController extends Controller
          $pending_list = DB::table('tbl_application')
          ->where('tp_id',Auth::user()->id)
          ->whereNotIn('id',$pending_payment_list)
+         ->orderBy('id','desc')
          ->get();
 
       return view('tp-view.pending-payment-list', ['pending_payment_list' => $pending_list]);
