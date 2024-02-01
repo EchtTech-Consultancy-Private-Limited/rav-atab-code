@@ -424,7 +424,7 @@
                                 ><i class="fa fa-pencil"></i></button>
                                 @else
                                 
-                                    @if($ApplicationPayment->accountant_id==null)
+                                    @if($ApplicationPayment->tp_update_count==(int)env('TP_PAYMENT_UPDATE_COUNT'))
                                     <span class="text-danger payment_update_fn badge badge-danger">
                                     Payment Update Limit Expired
                                     </span>

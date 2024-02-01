@@ -178,7 +178,16 @@
          </div>
         
          <div class="modal-body mod-css">
-            <form action="{{ url('/admin-assign-assessor') }}"
+
+         <tabs-group>
+                <div role="tablist" class="tabs__controls">
+                  <button role="tab" aria-selected="true">ATAB Assessor</button>
+                  <button role="tab">ACB</button>                 
+                </div>
+
+                <div role="tabpanel" class="tabs__panel">
+                    <div class="">
+                    <form action="{{ url('/admin-assign-assessor') }}"
                method="post">
                @csrf
                <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
@@ -219,33 +228,46 @@
               </div>
               @endif
             
-             
-                    
-                   
-
-
-
+   
                <div class="destop-id">
                @foreach ($item->assessor_list as $k => $assesorsData)
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
                   <br>
-                  <label>
+                
+                  <div class="row">
+                    <div class="col-md-5">
+                    <label>
                     
-                  <input type="radio"
-                  id="assesorsid"
-                  class="d-none assesorsid"
-                  name="assessor_id"
-                  value="{{$assesorsData->id}}"
-                  @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
-                 
-                  />
-                  <span>
-                  {{ ucfirst($assesorsData->firstname) }}
-                    {{ ucfirst($assesorsData->lastname) }}
-                    ({{ $assesorsData->email }})
-                  </span>
-                  </label>
-              
+                    <input type="radio"
+                    id="assesorsid"
+                    class="assesorsid opacity-1"
+                    name="assessor_id"
+                    value="{{$assesorsData->id}}"
+                    @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
+                   
+                    />
+
+                    <input type="hidden" value="" name="assessor_designation_{{ $item->application_list->id}}" id="assessor_designation_{{ $item->application_list->id}}">
+                    <input type="hidden" value="" name="assessor_category_{{ $item->application_list->id}}" id="assessor_category_{{ $item->application_list->id}}">
+                    
+                    <span>
+                    {{ ucfirst($assesorsData->firstname) }}
+                      {{ ucfirst($assesorsData->lastname) }}
+                      ({{ $assesorsData->email }})
+                    </span>
+                    </label>
+                    </div>
+                    <div class="col-md-3">
+                    <select required name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $item->application_list->id}}" class="d-block" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}')">
+                      <option value="" disabled selected>Please select option</option>
+                      <option value="lead_assessor">Lead Assessor</option>
+                      <option value="co_assessor">Co-Assessor</option>
+                      <option value="observer_assessor">Observer Assessor</option>
+                    </select>   
+                    </div>
+                  
+                  </div>
+                  
                   <div id="assessor_assign_dates_{{$assesorsData->id}}">
                   <?php
                     foreach(get_accessor_date_new($assesorsData->id,$item->application_list->id,$assesorsData->assessment) as $date){
@@ -256,7 +278,25 @@
               @endforeach  
                </div>
          </div>
-         <div class="modal-footer">
+        
+      </form>
+                    </div>
+               
+
+                <div role="tabpanel" class="tabs__panel">
+                    <div class="">
+                        hh
+                    </div>
+                </div>
+
+                </tabs-group>
+
+
+
+
+           
+
+      <div class="modal-footer">
          <button type="button" onclick="cancelAssign()"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
@@ -264,7 +304,6 @@
             class="btn btn-primary my-button">Submit</button>
          </div>
       </div>
-      </form>
    </div>
 </div>
 
@@ -282,7 +321,72 @@
         </div>
         </div>
 
+<script>
+ class TabsGroup extends HTMLElement {
+    constructor() {
+      super();
+      this.tabs = this.querySelectorAll('[role="tab"]');
+      this.panels = this.querySelectorAll('[role="tabpanel"]');
+    }
 
+    get selected() {
+      return this.querySelector('[role="tab"][aria-selected="true"]');
+    }
+
+    set selected(element) {
+      this.selected?.setAttribute('aria-selected', 'false');
+      element?.setAttribute('aria-selected', 'true');
+      element?.focus();
+      this.updateSelected();
+    }
+
+    connectedCallback() {
+      this.setIds();
+      this.updateSelected();
+      this.initEvents();
+    }
+
+    setIds() {
+      this.tabs.forEach((tab, index) => {
+        const panel = this.panels[index];
+
+        tab.id ||= `tab-${index}`;
+        panel.id ||= `panel-${index}`;
+
+        tab.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('aria-labelledby', tab.id);
+      });
+    }
+
+    updateSelected() {
+      this.tabs.forEach((tab, index) => {
+        const panel = this.panels[index];
+        const isSelected = tab.getAttribute('aria-selected') === 'true';
+
+        tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+        panel.setAttribute('tabindex', isSelected ? '0' : '-1');
+        panel.hidden = !isSelected;
+      });
+    }
+
+    initEvents() {
+      this.tabs.forEach((tab) => {
+        tab.addEventListener('click', () => this.selected = tab);
+
+        tab.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') {
+            this.selected = tab.previousElementSibling ?? this.tabs.at(-1);
+          } else if (event.key === 'ArrowRight') {
+            this.selected = tab.nextElementSibling ?? this.tabs.at(0);
+          }
+        });
+      });
+    }
+  }
+
+  customElements.define('tabs-group', TabsGroup);
+</script>
    
     </section>
    

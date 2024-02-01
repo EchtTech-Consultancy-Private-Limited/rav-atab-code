@@ -118,69 +118,7 @@
     }
 
 
-  .tabs__controls button {
-    width: 100%;
-    padding: 8px 20px;
-    border: none;
-    border-top: 1px solid rgba(40, 40, 40, 0.3);
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    background: gainsboro;
-    font-size: 18px;
-    transition: 0.4s;
-    cursor: pointer;
-    appearance: none;
-  }
-
-  .tabs__controls button:hover,
-  .tabs__controls button:focus {
-    background: darkseagreen;
-  }
-
-  .tabs__controls button[aria-selected="true"] {
-    background: white;
-    /* text-decoration: underline; */
-  }
-
-  .tabs__panel__inner {
-    padding: 20px;
-    background: white;
-  }
-
-  img {
-    width: 100%;
-    max-width: 300px;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-  }
-
-  ul {
-    margin: 20px 0 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li + li {
-    margin-top: 10px;
-  }
-
-  @media screen and (min-width: 768px) {
-    .tabs__controls button {
-      width: auto;
-    }
-
-    .tabs__panel__inner {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 40px;
-    }
-
-    ul {
-      margin: 0;
-    }
-  }
-
+  
 
 </style>
 
@@ -240,7 +178,6 @@
                 {{ session::get('fail') }}
             </div>
         @endif
-
 
         <div>
             <tabs-group>
@@ -453,7 +390,7 @@
                                                 <td class="fw-bold"> Team Leader: </td>
                                                 <td> {{$onsiteSummaryReport->firstname??''}} {{$onsiteSummaryReport->middlename??''}} {{$onsiteSummaryReport->lastname??''}}</td>
                                                 <td colspan="2" class="fw-bold"> Rep. Assessee Orgn:</td>
-                                                <td colspan="2">{{$onsiteSummaryReport->assessee_org}}</td>
+                                                <td colspan="2">{{$onsiteSummaryReport->onsite_assessee_org}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="6" class="fw-bold">Brief about the Opening Meeting: <span class="fw-normal">{{$onsiteSummaryReport->brief_open_meeting}}</span></td>
@@ -598,7 +535,7 @@
                                                 <tr>
                                                     <td class="fw-bold">Team Leader </td>
                                                     <td >{{$onsiteSummaryReport->firstname.' '.$onsiteSummaryReport->middlename.' '. $onsiteSummaryReport->lastname ??''}} </td>
-                                                    <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$onsiteSummaryReport->onsite_assessee_org}}</span></td>
+                                                    <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$onsiteSummaryReport->assessee_org}}</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</td>
@@ -616,7 +553,8 @@
                         </div>
                     </div>
                   </div>
-                </div>               
+                </div>   
+
               </tabs-group>
         </div>
 

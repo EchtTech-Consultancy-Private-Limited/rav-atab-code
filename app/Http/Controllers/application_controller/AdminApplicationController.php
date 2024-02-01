@@ -152,7 +152,8 @@ class AdminApplicationController extends Controller
             $data['assessor_id']=$request->assessor_id;
             $data['course_id']=$request->course_id??null;
             $data['assessor_type']=$get_assessor_type==1?'desktop':'onsite';
-            $data['due_date']=Carbon::now()->addDay(365);
+            $data['due_date']=Carbon::now()->addDay(366);
+            
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_id'=>$request->assessor_id,'assessor_type'=>$request->assessor_type])->first();
             if($is_assign_assessor_date!=null){
                 $update_assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_id'=>$request->assessor_id,'assessor_type'=>$request->assessor_type])->update($data);
@@ -459,6 +460,7 @@ class AdminApplicationController extends Controller
             $admin_nc_flag=2;
             $nc_flag=0;
         }else{
+            $admin_nc_flag=3;
             $nc_comment_status=4; //request for final approval
             $nc_flag=1;
         }
