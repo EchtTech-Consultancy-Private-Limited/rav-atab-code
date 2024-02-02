@@ -1206,6 +1206,18 @@ function updateFileName(input) {
     }
     $("#selectedFileName").text(selectedFileName);
 }
+
+$(document).on('keyup', '[name="years[]"]', function() {
+    var yearsInputs = document.getElementsByName('years[]');
+    // Validate Months
+    for (var i = 0; i < yearsInputs.length; i++) {
+        if (!isValidNumber(yearsInputs[i].value, 1, 12)) {
+            yearsInputs[i].value="";
+            return false;
+        }
+    }
+    return true;
+});
 $(document).on('keyup', '[name="months[]"]', function() {
     var monthsInputs = document.getElementsByName('months[]');
     // Validate Months
