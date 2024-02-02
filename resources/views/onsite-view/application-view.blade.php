@@ -27,10 +27,10 @@
     @if ($message = Session::get('success'))
     <script>
         toastr.success("{{ $message }}", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
     </script>
     @endif

@@ -398,10 +398,10 @@
         var fileExtension = file_name.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
                 toastr.error("Invalid file type", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
                 // Clear the file input
                 fileInput.value='';
@@ -411,10 +411,10 @@
         
          if (this.files[0].size > 5242880) {
             toastr.error("Try to upload file less than 5MB!", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
              $(".file_size").val("")
          } else {
@@ -430,10 +430,10 @@
         var fileExtension = file_name.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
                 toastr.error("Invalid file type", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
                 // Clear the file input
                 fileInput.value='';
@@ -443,10 +443,10 @@
         
          if (this.files[0].size > 5242880) {
             toastr.error("Try to upload file less than 5MB!", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
              $(".file_size_exl").val("")
          } else {

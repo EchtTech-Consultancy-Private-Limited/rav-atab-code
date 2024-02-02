@@ -561,7 +561,7 @@
                             timeOut: 0,
                             extendedTimeOut: 0,
                             closeButton: true,
-                            closeDuration: 0,
+                            closeDuration: 5000,
                         });
                           location.reload();
                       }

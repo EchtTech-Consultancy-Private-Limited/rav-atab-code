@@ -266,7 +266,7 @@
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,
-                                closeDuration: 0,
+                                closeDuration: 5000,
                             });
                         </script>
                     @elseif(Session::has('fail'))
@@ -275,8 +275,11 @@
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,
-                                closeDuration: 0,
+                                closeDuration: 5000,
                             });
+                            @php
+                                Session::forget('fail');
+                            @endphp
                         </script>
 
                         </div>
@@ -330,7 +333,8 @@
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
-                                                    class="preventnumeric" maxlength="50" required>
+                                                    class="preventnumeric remove_err_input_error" maxlength="50" required>
+                                                    <span class="err error_name">Please enter the course name</span>
                                             </div>
                                             @error('course_name')
                                                 <div class="alert alert-danger">{{ $message }}
@@ -352,27 +356,39 @@
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <div class="form-line">
+                                            <div class="form-line"> 
                                                 <label>Course Duration<span class="text-danger">*</span></label>
 
-                                                <div class="course_group">
+                                                <div class="course_group duration-font-s">
 
                                                     <span style="margin-top:10px; margin-right:5px;">Y</span>
-                                                    <input type="text" placeholder="Years" name="years[]"
-                                                        maxlength="4" required class="course_i nput preventalpha">
+                                                  <div>
+                                                  <input type="text" placeholder="Years" name="years[]"
+                                                        maxlength="4" required class="course_i nput preventalpha remove_err_input_error" >
+                                                        <span class="err error_name">Please enter the year</span>
+                                                  </div>
 
                                                     <span style="margin-top:10px; margin-right:5px;">M</span>
-                                                    <input type="text" placeholder="Months" name="months[]"
-                                                        maxlength="2" required class="course_input preventalpha">
+                                                   <div>
+                                                   <input type="text" placeholder="Months" name="months[]"
+                                                        maxlength="2" required class="course_input preventalpha remove_err_input_error">
+                                                        <span class="err error_name">Please enter the month</span>
+                                                   </div>
 
+                                                    <span style="margin-top:10px; margin-right:5px;">D</span> 
+                                                   
+                                                    <div>
+                                                    <input type="text" maxlength="2" placeholder="Days "
+                                                     name="days[]" required class="course_input preventalpha remove_err_input_error">
+                                                        <span class="err error_name">Please enter the day</span>
+                                                    </div>
 
-                                                    <span style="margin-top:10px; margin-right:5px;">D</span> <input
-                                                        type="text" maxlength="2" placeholder="Days "
-                                                        name="days[]" required class="course_input preventalpha">
-
-                                                    <span style="margin-top:10px; margin-right:5px;">H</span><input
-                                                        type="number" placeholder="Hours" name="hours[]" required
-                                                        class="course_input">
+                                                    <span style="margin-top:10px; margin-right:5px;">H</span>
+                                                   <div>
+                                                   <input type="number" placeholder="Hours" name="hours[]" required
+                                                        class="course_input remove_err_input_error">
+                                                        <span class="err error_name">Please enter the hours</span>
+                                                   </div>
                                                 </div>
                                             </div>
                                             @error('course_duration')
@@ -386,7 +402,8 @@
                                             <div class="form-line">
                                                 <label>Eligibility<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Eligibility" name="eligibility[]"
-                                                    required id="eligibility">
+                                                    required id="eligibility" class="remove_err_input_error">
+                                                    <span class="err error_name">Please enter the eligibility</span>
                                             </div>
                                             @error('eligibility')
                                                 <div class="alert alert-danger">{{ $message }}
@@ -400,7 +417,7 @@
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
 
-                                                    <select class="form-control select2" name="mode_of_course[1][]"
+                                                    <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
                                                         required multiple="" style="width:200px;">
                                                         <option disabled>Select Mode of Course</option>
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
@@ -408,6 +425,7 @@
                                                                 {{ $value }}</option>
                                                         @endforeach
                                                     </select>
+                                                    <span class="err error_name">Please select mode of courses</span>
                                                 </div>
                                             </div>
                                             @error('mode_of_course')
@@ -421,7 +439,8 @@
                                             <div class="form-line">
                                                 <label>Course Brief <span class="text-danger">*</span></label>
 
-                                                <textarea rows="4" cols="50" class="form-control" name="course_brief[]" required></textarea>
+                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" name="course_brief[]" required></textarea>
+                                                <span class="err error_name">Please enter the course brief</span>
                                             </div>
                                             @error('course_brief')
                                                 <div class="alert alert-danger">{{ $message }}
@@ -435,7 +454,9 @@
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc1[]"
-                                                    class="form-control doc_1 file_size" required>
+                                                    class="form-control doc_1 file_size remove_err_input_error" required>
+                                                    <span class="err error_name">Please select Declaration (PDF)</span>
+
                                             </div>
                                         </div>
                                     </div>
@@ -445,7 +466,8 @@
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc2[]"
-                                                    class="form-control doc_2 file_size" required>
+                                                    class="form-control doc_2 file_size remove_err_input_error" required>
+                                                    <span class="err error_name">Please select Course Curriculum</span>
                                             </div>
 
                                         </div>
@@ -456,7 +478,8 @@
                                                 <label>Course Details (Excel format)<span
                                                         class="text-danger">*</span></label>
                                                 <input type="file" name="doc3[]" id="payment_reference_no"
-                                                    required class="form-control doc_3 file_size_exl">
+                                                    required class="form-control doc_3 file_size_exl remove_err_input_error">
+                                                    <span class="err error_name">Please select Course Details</span>
                                             </div>
                                         </div>
                                     </div>
@@ -501,7 +524,7 @@
                             @endif
                             @endisset
                             
-                                <button class="btn btn-primary waves-effect m-r-15 add_course">Save</button>
+                                <button class="btn btn-primary waves-effect m-r-15 add_course" onclick="handleCourseValidation()">Save</button>
                             </div>
                             {{-- @endif --}}
                         </form>
@@ -585,7 +608,9 @@
                         </div>
                         @endif
 
-                        <div id="add_courses" style="Display:none" class="faqs-row' + faqs_row + '">
+                     
+                     
+                        <!-- <div id="add_courses" class="faqs-row' + faqs_row + '">
                             <div class="row clearfix">
                                 <div class="col-sm-3">
                                     <div class="form-group">
@@ -753,7 +778,9 @@
                             </div>
                         @endif
                        </div>
-                    </div>
+                    </div> -->
+
+
                     <!-- View Modal Popup -->
                     <div class="modal fade" id="View_popup" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1192,7 +1219,7 @@
                                         timeOut: 0,
                                         extendedTimeOut: 0,
                                         closeButton: true,
-                                        closeDuration: 0,
+                                        closeDuration: 5000,
                                     });
                                 }
 

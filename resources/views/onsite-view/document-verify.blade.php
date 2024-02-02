@@ -42,10 +42,10 @@
             @if (Session::has('success'))
                 <script>
                     toastr.error("{{ session::get('success') }}", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
                 </script>
             @elseif(Session::has('fail'))

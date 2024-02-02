@@ -25096,3 +25096,13 @@ td.remove_extra_comma span:last-child{display: none}
     opacity: 1 !important;
     position: relative !important;
 }
+.error_name{display: none;}
+
+
+.courses_error + span {
+    display: block !important;
+}
+
+.err.error_name {
+    font-size: 11px;
+}

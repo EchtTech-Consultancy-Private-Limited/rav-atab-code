@@ -195,8 +195,11 @@
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
+                    @php
+                           Session::forget('fail');
+                        @endphp
     </script>
 @endif
     <section class="content">
@@ -349,8 +352,7 @@
                                                         <input type="text" name="payment_date"
                                                             class="form-control paymentDate" id="payment_date" required
                                                             placeholder="Payment Date (DD-MM-YY)" aria-label="Date"
-                                                            value="{{ old('payment_date') }}" onfocus="showDatePicker()"
-                                                            autocomplete="off" min="{{ date('Y-m-d') }}">
+                                                           disabled>
                                                     </div>
 
                                                     <label for="payment_date" id="payment_date-error" class="error">
@@ -567,7 +569,7 @@
                                     timeOut: 0,
                                     extendedTimeOut: 0,
                                     closeButton: true,
-                                    closeDuration: 0,
+                                    closeDuration: 5000,
                                 });
                                 $(this).val(""); // Clear the input field
                                 $('#submitBtn').attr('disabled', true);

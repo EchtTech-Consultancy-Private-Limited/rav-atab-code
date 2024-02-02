@@ -144,10 +144,20 @@ class AdminApplicationController extends Controller
         try{
             $a_id = "assessor_type_".$request->application_id;
             $assessor_designation = $a_id;
-            
             DB::beginTransaction();
+           
+
+
             $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
             $assessor_types = $get_assessor_type==1?'desktop':'onsite';
+
+             /*to check date is selected or not*/
+             $get_date_count = DB::table('assessor_assigne_date')->where(['application_id'=>$request->application_id,'assessor_Id'=>$request->assessor_id])->count();
+            // $get_assessor_designation = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_Id'=>$request->assessor_id,'assessor_type'=>$assessor_types])->first();
+             if($get_date_count < 1){
+                    return redirect()->route('admin-app-list')->with('fail', 'Please select date');
+                }
+             /*end here*/
 
             $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
@@ -330,7 +340,7 @@ class AdminApplicationController extends Controller
         ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status')
         ->get();
         $chapters = Chapter::all();
-        foreach($chapters as $chapter){
+        foreach($chapters as $chapter){ 
             $obj = new \stdClass;
             $obj->chapters= $chapter;
             $questions = DB::table('questions')->where([
