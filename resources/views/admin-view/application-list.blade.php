@@ -20,27 +20,26 @@
         @endif
         @include('layout.rightbar')
     </div>
-    @if (Session::has('error'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session::get('error') }}
-                </div>
-    @endif
-    @if (Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session::get('success') }}
-                </div>
-    @endif
+   
 
     @if ($message = Session::get('success'))
     <script>
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: "Success",
-        text: "{{ $message }}",
-        showConfirmButton: false,
-        timer: 3000
-    })
+    toastr.success('{{$message}}', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    </script>
+    @endif
+    @if ($message = Session::get('fail'))
+    <script>
+    toastr.error('{{$message}}', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
     </script>
     @endif
     <div class="full_screen_loading">Loading&#8230;</div>
@@ -255,6 +254,7 @@
                     id="assesorsid"
                     class="assesorsid opacity-1"
                     name="assessor_id"
+                    application-id="{{$item->application_list->id}}"
                     value="{{$assesorsData->id}}"
                     @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
                    
@@ -295,7 +295,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
          <button type="submit"
-            class="btn btn-primary my-button">Submit</button>
+            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
          </div>
       </div>
          </div>

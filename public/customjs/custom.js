@@ -571,8 +571,9 @@ const assessor_dates = [];
 $(".dateID").click("on", function () {
     var $this = $(this);
     var dataVal = $(this).attr("data-id").split(",");
-
+    
     assessor_dates.push(dataVal[3]);
+    $("#assessor_type_"+dataVal[0]).attr("required", true);
     var colorid = $(this).attr("date-color");
     var data = {
         applicationID: dataVal[0],
@@ -604,9 +605,13 @@ $(".dateID").click("on", function () {
 });
 
 $(".assesorsid").on("click", function () {
-    var application_id = $(this).data("application-id");
+    var application_id = $(this).attr("application-id");
     var assessor_id = $(this).val();
     $(`#assessor_id_`).val(assessor_id);
+
+    $(`.dateID_${application_id}`).addClass("disabled");
+
+    $(`#assessor_assign_dates_${assessor_id} span.disabled`).removeClass("disabled");
 
     $.ajaxSetup({
         headers: {
@@ -1273,6 +1278,8 @@ function handleAssessorDesignation(id,application_id){
     const year = tomorrow.getFullYear();
     const output =year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
     $('#summary_date').val(output);
+    $('#payment_date').val(output);
+
 });
   
 
@@ -1326,8 +1333,92 @@ function handleAssessorDesignation(id,application_id){
 
   }
 
+  function handleCourseValidation() {
+    const course_names = document.getElementsByName('course_name[]');
+    const years = document.getElementsByName('years[]');
+    const months = document.getElementsByName('months[]');
+    const days = document.getElementsByName('days[]');
+    const hours = document.getElementsByName('hours[]');
+    const eligibility = document.getElementsByName('eligibility[]');
+    const mode_of_course = document.getElementsByName('mode_of_course[]');
+    const course_brief = document.getElementsByName('course_brief[]');
+    const docs1 = document.getElementsByName('doc1[]');
+    const docs2 = document.getElementsByName('doc2[]');
+    const docs3 = document.getElementsByName('doc3[]');
+    course_names.forEach((elem,i)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    years.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    months.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    days.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    hours.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    eligibility.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    mode_of_course.forEach((elem)=>{
+        console.log(this,' dddkd')
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+    $("select.remove_err_input_error option").each(function (index, elem) {
+        if (mode_of_course[index] === "") {
+            $(elem).addClass('courses_error');
+        }
+  })
+
+    course_brief.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+
+    docs1.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+
+    docs2.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+
+    docs3.forEach((elem)=>{
+        if(elem.value==""){
+            $(elem).addClass('courses_error');
+        }
+    });
+  }
+
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");
     $(`#${err_id}_err`).html("");
 });
+
+$(document).on('keyup change', '.remove_err_input_error', function () {
+    $(this).removeClass('courses_error');
+});
+
 

@@ -633,7 +633,7 @@ class applicationController extends Controller
         if ($existData) {
             return response()->json('success');
         } else {
-            return false;
+            return response()->json('fail');
         }
     }
 

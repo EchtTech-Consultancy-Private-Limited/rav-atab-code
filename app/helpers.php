@@ -375,7 +375,7 @@ function get_accessor_date_new($id, $applicationID, $assessmentType)
         if (in_array($j->format("Y-m-d"), $allSelectedDates)) {
             $eventsDate[] = "<span class='btn btn-danger dateID'  data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "'>" . $j->format("Y-m-d") . "</span>";
         } else {
-            $eventsDate[] = "<span class='btn btn-success dateID' data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "' >" . $j->format("Y-m-d") . "</span>";
+            $eventsDate[] = "<span class='disabled btn btn-success dateID dateID_".$applicationID."' data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "' >" . $j->format("Y-m-d") . "</span>";
         }
     }
     return $eventsDate;
