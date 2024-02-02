@@ -9,7 +9,7 @@ var handlePaymentReceived = () => {
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
         return false;
     }
@@ -45,7 +45,7 @@ var handlePaymentReceived = () => {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $(".box-overlay-2").hide();
                     setTimeout(function () {
@@ -56,7 +56,7 @@ var handlePaymentReceived = () => {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $(".box-overlay-2").hide();
                 }
@@ -105,7 +105,7 @@ function handlePaymentApproved() {
                     timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 0,
+                    closeDuration: 5000,
                 });
                 $(".box-overlay").hide();
                 setTimeout(function () {
@@ -116,7 +116,7 @@ function handlePaymentApproved() {
                     timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 0,
+                    closeDuration: 5000,
                 });
                 $(".box-overlay").hide();
             }
@@ -138,7 +138,7 @@ function handleAcknowledgementPayment(id) {
                 timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
-                closeDuration: 0,
+                closeDuration: 5000,
             });
             $(".full_screen_loading").hide();
             return false;
@@ -161,7 +161,7 @@ function handleAcknowledgementPayment(id) {
                         timeOut: 1,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 1,
+                        closeDuration: 5000,
                     });
                     $("#acknowledgement_" + id).hide();
                     $(".full_screen_loading").hide();
@@ -171,7 +171,7 @@ function handleAcknowledgementPayment(id) {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $(".full_screen_loading").hide();
                 }
@@ -181,7 +181,7 @@ function handleAcknowledgementPayment(id) {
                     timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 0,
+                    closeDuration: 5000,
                 });
                 $(".full_screen_loading").hide();
             },
@@ -224,7 +224,7 @@ function desktopDocumentVerfiy() {
             timeOut: 1,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 1,
+            closeDuration: 5000,
         });
         $('.full_screen_loading').hide();
         return false;
@@ -253,10 +253,10 @@ function desktopDocumentVerfiy() {
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
-                        timeOut: 1,
+                        timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 1,
+                        closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(() => {
@@ -267,7 +267,7 @@ function desktopDocumentVerfiy() {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
                 }
@@ -310,10 +310,10 @@ function adminDocumentVerfiy(assessor_type) {
         let nc_type = $("#status").find(":selected").val();
         if(doc_comment=="" || nc_type=="" ){
             toastr.error("All fields are required", {
-                timeOut: 1,
+                timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
-                closeDuration: 1,
+                closeDuration: 5000,
             });
             $('.full_screen_loading').hide();
             return false;
@@ -343,10 +343,10 @@ function adminDocumentVerfiy(assessor_type) {
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
-                        timeOut: 1,
+                        timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 1,
+                        closeDuration: 5000,
                     });
                     setTimeout(() => {
                         window.location.href = resdata.redirect_to;
@@ -356,7 +356,7 @@ function adminDocumentVerfiy(assessor_type) {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                 }
             },
@@ -401,10 +401,10 @@ function onsiteDocumentVerfiy() {
         let nc_type = $("#status").find(":selected").val();
         if(doc_comment=="" || nc_type=="" ){
             toastr.error("All fields are required", {
-                timeOut: 1,
+                timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
-                closeDuration: 1,
+                closeDuration: 5000,
             });
             $('.full_screen_loading').hide();
             return false;
@@ -432,10 +432,10 @@ function onsiteDocumentVerfiy() {
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
             toastr.error("Invalid file type", {
-                timeOut: 1,
+                timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
-                closeDuration: 1,
+                closeDuration: 5000,
             });
             // Clear the file input
             fileInput.val("");
@@ -453,10 +453,10 @@ function onsiteDocumentVerfiy() {
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
-                        timeOut: 1,
+                        timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 1,
+                        closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(() => {
@@ -467,7 +467,7 @@ function onsiteDocumentVerfiy() {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
                 }
@@ -513,10 +513,10 @@ function onsitePhotographUpload(question_id) {
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
             toastr.error("Invalid file type", {
-                timeOut: 1,
+                timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
-                closeDuration: 1,
+                closeDuration: 5000,
             });
             // Clear the file input
             fileInput.val("");
@@ -534,10 +534,10 @@ function onsitePhotographUpload(question_id) {
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
-                        timeOut: 1,
+                        timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 1,
+                        closeDuration: 5000,
                     });
                     $(".full_screen_loading").hide();
                     setTimeout(() => {
@@ -548,7 +548,7 @@ function onsitePhotographUpload(question_id) {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $(".full_screen_loading").hide();
                 }
@@ -560,7 +560,7 @@ function onsitePhotographUpload(question_id) {
                     timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 0,
+                    closeDuration: 5000,
                 });
             },
         });
@@ -679,7 +679,7 @@ $("#upload_onstie_nc_file").change(function () {
                     timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 0,
+                    closeDuration: 5000,
                 });
                 location.reload();
             }
@@ -733,7 +733,7 @@ function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
     }
 }
@@ -763,10 +763,10 @@ function handleUpdatePaymentInformation() {
             var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
             if (allowedExtensions.indexOf(fileExtension) == -1) {
                 toastr.error("Invalid file type", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
                 // Clear the file input
                 fileInput.val("");
@@ -791,7 +791,7 @@ function handleUpdatePaymentInformation() {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $(".full_screen_loading").hide();
                     location.reload();
@@ -800,7 +800,7 @@ function handleUpdatePaymentInformation() {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
 
                     $(".full_screen_loading").hide();
@@ -838,10 +838,10 @@ function handleUpdatePaymentInformationOfAccount() {
             var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
             if (allowedExtensions.indexOf(fileExtension) == -1) {
                 toastr.error("Invalid file type", {
-                    timeOut: 1,
+                    timeOut: 0,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
                 // Clear the file input
                 fileInput.val("");
@@ -866,7 +866,7 @@ function handleUpdatePaymentInformationOfAccount() {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $(".full_screen_loading").hide();
                     location.reload();
@@ -875,7 +875,7 @@ function handleUpdatePaymentInformationOfAccount() {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
 
                     $(".full_screen_loading").hide();
@@ -1029,7 +1029,7 @@ function handleNotification(pay_id){
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
                     window.location.href=response.redirect_url;
@@ -1038,7 +1038,7 @@ function handleNotification(pay_id){
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
 
                 }
@@ -1053,7 +1053,7 @@ function handleNotification(pay_id){
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
         $('.full_screen_loading').hide();
     }
@@ -1080,7 +1080,7 @@ function handleAdminNotification(pay_id){
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
 
                 }
@@ -1095,7 +1095,7 @@ function handleAdminNotification(pay_id){
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
     }
 }
@@ -1121,7 +1121,7 @@ function handleDesktopNotification(pay_id){
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
 
                 }
@@ -1136,7 +1136,7 @@ function handleDesktopNotification(pay_id){
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
         $('.full_screen_loading').hide();
     }
@@ -1163,7 +1163,7 @@ function handleOnsiteNotification(pay_id){
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
-                        closeDuration: 0,
+                        closeDuration: 5000,
                     });
 
                 }
@@ -1178,7 +1178,7 @@ function handleOnsiteNotification(pay_id){
             timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 0,
+            closeDuration: 5000,
         });
         $('.full_screen_loading').hide();
     }
@@ -1193,10 +1193,10 @@ function updateFileName(input) {
     var fileExtension = selectedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
         toastr.error("Invalid file type", {
-            timeOut: 1,
+            timeOut: 0,
             extendedTimeOut: 0,
             closeButton: true,
-            closeDuration: 1,
+            closeDuration: 5000,
         });
         // Clear the file input
         input.value = ""; // Set the value to an empty string
@@ -1264,7 +1264,7 @@ function handleAssessorDesignation(id,application_id){
 }
 
 
-  $(document).ready(() => {
+ $(document).ready(() => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -1273,7 +1273,7 @@ function handleAssessorDesignation(id,application_id){
     const year = tomorrow.getFullYear();
     const output =year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
     $('#summary_date').val(output);
-  });
+});
   
 
   function handleOnsiteSummerySubmitReport(){

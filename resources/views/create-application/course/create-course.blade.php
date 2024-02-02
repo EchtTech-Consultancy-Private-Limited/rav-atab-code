@@ -266,7 +266,7 @@
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,
-                                closeDuration: 0,
+                                closeDuration: 5000,
                             });
                         </script>
                     @elseif(Session::has('fail'))
@@ -275,7 +275,7 @@
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,
-                                closeDuration: 0,
+                                closeDuration: 5000,
                             });
                         </script>
 
@@ -1192,7 +1192,7 @@
                                         timeOut: 0,
                                         extendedTimeOut: 0,
                                         closeButton: true,
-                                        closeDuration: 0,
+                                        closeDuration: 5000,
                                     });
                                 }
 

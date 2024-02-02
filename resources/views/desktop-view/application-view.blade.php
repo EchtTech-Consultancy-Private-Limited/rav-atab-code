@@ -30,7 +30,7 @@
                     timeOut: 1,
                     extendedTimeOut: 0,
                     closeButton: true,
-                    closeDuration: 1,
+                    closeDuration: 5000,
                 });
     </script>
     @endif

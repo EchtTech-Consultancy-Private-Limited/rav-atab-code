@@ -538,7 +538,7 @@
                             timeOut: 0,
                             extendedTimeOut: 0,
                             closeButton: true,
-                            closeDuration: 0,
+                            closeDuration: 5000,
                         });
                   $('.full_screen_loading').hide();
                   fileInput.val('');
@@ -565,7 +565,7 @@
                             timeOut: 0,
                             extendedTimeOut: 0,
                             closeButton: true,
-                            closeDuration: 0,
+                            closeDuration: 5000,
                         });
                           location.reload();
                       }
@@ -577,7 +577,7 @@
                             timeOut: 0,
                             extendedTimeOut: 0,
                             closeButton: true,
-                            closeDuration: 0,
+                            closeDuration: 5000,
                         });
                   }
               });

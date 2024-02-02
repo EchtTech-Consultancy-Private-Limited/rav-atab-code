@@ -20,6 +20,7 @@
         @endif
         @include('layout.rightbar')
     </div>
+   
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
