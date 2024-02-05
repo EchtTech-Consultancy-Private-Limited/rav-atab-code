@@ -40,8 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
         nextBtn.setAttribute('disabled', true);
       }else{
         const isApplicationEmailExist = window.location.pathname.split('/').length 
-        console.log(isApplicationEmailExist,'length,email')
-      if(isApplicationEmailExist<3){
+        let check_length = 3;
+        if((window.location.href).indexOf('public')!=-1){
+          check_length=4
+        }
+      if(isApplicationEmailExist<check_length){
         $.ajax({
           type: 'POST',
           url: `${BASE_URL}/email-validation`, // Update with your Laravel route URL
@@ -66,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
       }else{
-        console.log('else@e')
         checkForm();
       }
       }
@@ -82,9 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (/^\d{10}$/.test(contactNumber)) {
       // Send an AJAX request
       const isApplicationContactExist = window.location.pathname.split('/').length 
-      console.log(isApplicationContactExist,'length,contact')
-
-      if(isApplicationContactExist<3){
+      let check_length = 3;
+      if((window.location.href).indexOf('public')!=-1){
+        check_length=4
+      }
+      if(isApplicationContactExist<check_length){
         $.ajax({
           type: 'POST',
           url: `${BASE_URL}/phone-validation`, // Update with your Laravel route URL
@@ -108,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
       }else{
-        console.log('else@c')
         checkForm();
       }
     } else {
@@ -119,12 +122,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function isValidIndianMobileNumber(number) {
+    var regex = /^[7896]\d{9}$/;
+    return regex.test(number);
+  }
   // Event listeners for contact number and email input fields
   contactNumberInput.addEventListener('keyup', function () {
     var contactNumber = this.value;
     contactError.textContent = ''; // Clear previous error message
+
     if (contactNumber.trim() !== '') {
-      checkContactNumberDuplicacy(contactNumber);
+      const isValid = isValidIndianMobileNumber(contactNumber)
+      if(isValid){
+        checkContactNumberDuplicacy(contactNumber);
+      }else{
+        $('#nextBtn').attr('disabled',true);
+      }
     }
   });
 
