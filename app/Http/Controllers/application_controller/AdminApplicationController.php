@@ -145,7 +145,6 @@ class AdminApplicationController extends Controller
             $a_id = "assessor_type_".$request->application_id;
             // $a_id = "assessor_type_".$request->assessor_id;
             $assessor_designation = $a_id;
-            dd($request->$assessor_designation);
             if($request->$assessor_designation==null){
                 return redirect()->route('admin-app-list')->with('fail', 'Please select assessor designation');
 
