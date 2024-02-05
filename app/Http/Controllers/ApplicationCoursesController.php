@@ -326,7 +326,7 @@ class ApplicationCoursesController extends Controller
         $item->level_id = $request->level_id;
         $item->user_id = Auth::user()->id;
         $item->amount = $request->amount;
-        $item->payment_date = date("Y-m-d", strtotime($request->payment_date));
+        $item->payment_date = date("d-m-Y");
         $item->payment_mode = $request->payment;
         $item->payment_transaction_no = $transactionNumber;
         $item->payment_reference_no = $referenceNumber;
