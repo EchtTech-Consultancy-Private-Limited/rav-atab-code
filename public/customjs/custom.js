@@ -616,12 +616,7 @@ $(".assesorsid").on("click", function () {
     
     $('.assessor_name_with_email').attr('required',false);
 
-    const elements = document.getElementsByName('assessor_type_'+assessor_id);
-    for (const element of elements) {
-        element.setAttribute('required', true);
-    }
-    
-
+    document.getElementById('assessor_type_' + assessor_id).setAttribute('required', true);
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -1223,11 +1218,12 @@ function updateFileName(input) {
 
 $(document).on('keyup', '[name="years[]"]', function() {
     var yearsInputs = document.getElementsByName('years[]');
-    // Validate Months
+   
     for (var i = 0; i < yearsInputs.length; i++) {
+
         if (!isValidNumber(yearsInputs[i].value, 1, 12)) {
             yearsInputs[i].value="";
-            return false;
+            // return false;
         }
     }
     return true;
@@ -1238,7 +1234,7 @@ $(document).on('keyup', '[name="months[]"]', function() {
     for (var i = 0; i < monthsInputs.length; i++) {
         if (!isValidNumber(monthsInputs[i].value, 1, 12)) {
             monthsInputs[i].value="";
-            return false;
+            // return false;
         }
     }
     return true;
@@ -1249,7 +1245,7 @@ $(document).on('keyup', '[name="days[]"]', function() {
     for (var i = 0; i < daysInputs.length; i++) {
         if (!isValidNumber(daysInputs[i].value, 1, 31)) {
             daysInputs[i].value="";
-            return false;
+            // return false;
         }
     }
     return true;
@@ -1259,7 +1255,7 @@ $(document).on('keyup', '[name="hours[]"]', function() {
     for (var i = 0; i < hoursInputs.length; i++) {
         if (!isValidNumber(hoursInputs[i].value, 0, 23)) {
             hoursInputs[i].value="";
-            return false;
+            // return false;
         }
     }
     return true;
@@ -1267,10 +1263,18 @@ $(document).on('keyup', '[name="hours[]"]', function() {
 
 function isValidNumber(value, min, max) {
     var number = parseInt(value, 10);
-    return !isNaN(number) && number >= min && number <= max;
+    if((!isNaN(number) && number >= min && number <= max) && isValidInput(value)){
+        return true;
+    }
+    return false;
+}
+function isValidInput(value) {
+    var regex = /^[0-9]+$/;
+    return regex.test(value);
 }
 
 function handleAssessorDesignation(id, application_id) {
+    console.log(id,' first id ')
     const assessor_designation = $('#' + id + ' option:selected').val();
     $("#assessor_category_" + application_id).val(assessor_designation);
     $("#assessor_designation_" + application_id).val("atab_assessor");
@@ -1281,7 +1285,7 @@ function handleAssessorDesignation(id, application_id) {
  $(document).ready(() => {
     const today = new Date();
     const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setDate(today.getDate());
     const day = tomorrow.getDate();
     const month = tomorrow.getMonth() + 1;
     const year = tomorrow.getFullYear();

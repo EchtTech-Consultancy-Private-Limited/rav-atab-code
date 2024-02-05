@@ -284,7 +284,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail'. '/' . $doc->status. '/' .'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'.  '/6/' .'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
@@ -377,7 +377,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail'. '/' . '5/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/' . '6/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif

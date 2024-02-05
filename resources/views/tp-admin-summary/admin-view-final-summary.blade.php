@@ -349,7 +349,7 @@
                                                 <td colspan="6" class="fw-bold">ONSITE ASSESSMENT FORM.</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> RAVAP-{{$onsiteSummaryReport->uhid}}</span>
+                                                <td colspan="3" class="fw-bold">Application No (provided by ATAB): <span class="fw-normal"> {{$onsiteSummaryReport->uhid}}</span>
                                                 </td>
                                                 <td colspan="3" class="fw-bold">Date of Application: <span class="fw-normal"> {{date('d-m-Y',strtotime($onsiteSummaryReport->app_created_at))}}</span>
                                                 </td>

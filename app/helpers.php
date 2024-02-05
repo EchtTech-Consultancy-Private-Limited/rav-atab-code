@@ -1007,7 +1007,10 @@ function getApplicationListForSecondPayment()
 function getSecondPaymentNotification()
     {
         $applicationsIds = TblApplication::where('tp_id', auth()->user()->id)->get(['id']);
-        $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('second_payment_status',0)
+        $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')
+        ->select('assessor_final_summary_reports.*','app.uhid')
+        ->leftJoin('tbl_application as app','app.id','=','assessor_final_summary_reports.application_id')
+        ->where('second_payment_status',0)
         ->orderBy('id','desc')
         ->get();
         if($final_assessor_summary){
@@ -1023,8 +1026,12 @@ function getSecondPaymentNotification()
         ->orderBy('id','desc')
         ->get();
 
-        if($payment_list){
-            return $payment_list;
+        
+        $application_ids = collect($payment_list)->pluck('application_id');
+        $payment_list_=TblApplication::whereIn('id', $application_ids)->orderBy('id','desc')->get();
+
+        if($payment_list_){
+            return $payment_list_;
         }else{
         return [];
         }
@@ -1036,6 +1043,7 @@ function getSecondPaymentNotification()
         ->where('admin_received_payment',0)
         ->orderBy('id','desc')
         ->get();
+
         if($payment_list){
             return $payment_list;
         }else{

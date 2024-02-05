@@ -255,11 +255,11 @@
                                                       @endif
                                                     @endforeach
                                                 </td>
-                                                <td>
+                                                <td class="remove_extra_comma">
 
                                                 @foreach($rows->nc as $row)
                                                     @if($row->nc_type!=="Accept" && $row->nc_type!=="not_recommended" && $row->nc_type!=="Request for final approval")
-                                                      {{$row->capa_mark}}
+                                                    <span>{{$row->tp_remark}}</span><span>,</span></br>
                                                       @endif
                                                     @endforeach
                                                 </td>

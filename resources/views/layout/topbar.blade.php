@@ -96,7 +96,7 @@
                                                 <a href="javascript:void(0)"
                                                          style="color: #000;"
                                                          >
-                                                         Application ID : RAVAP-{{ $application->id }}
+                                                         Application ID : {{ $application->uhid }}
                                                 </a>
                                              </li>
                                          @endforeach
@@ -136,7 +136,7 @@
                                                 <a href="javascript:void(0)"
                                                          style="color: #000;"
                                                          >
-                                                         Application ID : RAVAP-{{ $pay_list->application_id }}
+                                                         Application ID : {{ $pay_list->uhid }}
                                                 </a>
                                              </li>
                                          @endforeach
@@ -174,7 +174,7 @@
                                              <li>
                                                 <a href="{{ url('show-course-payment/' . dEncrypt($application->application_id)) }}"
                                                          style="color: #000;">
-                                                         Application ID : RAVAP-{{ $application->application_id }}
+                                                         Application ID : {{ $application->uhid }}
                                                 </a>
                                              </li>
                                          @endforeach
@@ -215,7 +215,7 @@
                                              <li onclick="handleDesktopNotification({{$application->id}})">
                                                 <a href="javascript:void(0)"
                                                          style="color: #000;">
-                                                         Application ID : RAVAP-{{ $application->id }}
+                                                         Application ID : {{ $application->uhid }}
                                                 </a>
                                              </li>
                                          @endforeach
@@ -255,7 +255,7 @@
                                              <li onclick="handleOnsiteNotification({{$application->id}})">
                                                 <a href="javascript:void(0)"
                                                          style="color: #000;">
-                                                         Application ID : RAVAP-{{ $application->id }}
+                                                         Application ID : {{ $application->uhid }}
                                                 </a>
                                              </li>
                                          @endforeach
