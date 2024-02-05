@@ -528,6 +528,7 @@
                             </div>
                             {{-- @endif --}}
                         </form>
+
                         @if(count($course)>0)
                         <div class="body  mt-5">
                             <div class="table-responsive">
@@ -779,6 +780,22 @@
                         @endif
                        </div>
                     </div> -->
+                    @if(count($course)>0)
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div>
+                                    <a href="{{ url('create-new-applications/'.dEncrypt($applicationData?->id)) }}"
+                                        class="btn btn-danger prev-step">Previous</a>
+                                </div>
+                                <div>
+                                    @isset($course)
+                                    @if (count($course) > 0)
+                                        <a href="{{ url('show-course-payment/' . dEncrypt($applicationData->id)) }}"
+                                            class="btn btn-primary next-step1 mr-2">Next</a>
+                                    @endif
+                                @endisset
+                                </div>
+                            </div>
+                        @endif
 
 
                     <!-- View Modal Popup -->
