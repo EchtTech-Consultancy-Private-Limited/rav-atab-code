@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         nextBtn.setAttribute('disabled', true);
       }else{
         const isApplicationEmailExist = window.location.pathname.split('/').length 
+        console.log(isApplicationEmailExist,'length,email')
       if(isApplicationEmailExist<3){
         $.ajax({
           type: 'POST',
@@ -61,8 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           error: function (xhr, status, error) {
             // Handle AJAX errors if needed
+            checkForm();
           }
         });
+      }else{
+        console.log('else@e')
+        checkForm();
       }
       }
     } else {
@@ -76,8 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkContactNumberDuplicacy(contactNumber) {
     if (/^\d{10}$/.test(contactNumber)) {
       // Send an AJAX request
-      const isApplicationEmailExist = window.location.pathname.split('/').length 
-      if(isApplicationEmailExist<3){
+      const isApplicationContactExist = window.location.pathname.split('/').length 
+      console.log(isApplicationContactExist,'length,contact')
+
+      if(isApplicationContactExist<3){
         $.ajax({
           type: 'POST',
           url: `${BASE_URL}/phone-validation`, // Update with your Laravel route URL
@@ -101,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
       }else{
+        console.log('else@c')
         checkForm();
       }
     } else {
