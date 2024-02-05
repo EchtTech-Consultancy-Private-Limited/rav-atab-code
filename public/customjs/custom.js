@@ -427,7 +427,7 @@ function onsiteDocumentVerfiy() {
         formData.append("fileup", d);
         formData.append("view_type", view_type);
 
-        var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+        var allowedExtensions = ["pdf", "doc", "docx","jpg","jpeg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
@@ -508,7 +508,7 @@ function onsitePhotographUpload(question_id) {
         formData.append("doc_file_name", doc_file_name);
         formData.append("fileup_photograph", d);
 
-        var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
+        var allowedExtensions = ["pdf","jpg","jpeg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
@@ -1341,6 +1341,7 @@ function handleAssessorDesignation(id,application_id){
     const hours = document.getElementsByName('hours[]');
     const eligibility = document.getElementsByName('eligibility[]');
     const mode_of_course = document.getElementsByName('mode_of_course[]');
+    const selects2 = $('.select2');
     const course_brief = document.getElementsByName('course_brief[]');
     const docs1 = document.getElementsByName('doc1[]');
     const docs2 = document.getElementsByName('doc2[]');
@@ -1376,11 +1377,11 @@ function handleAssessorDesignation(id,application_id){
         }
     });
     mode_of_course.forEach((elem)=>{
-        console.log(this,' dddkd')
         if(elem.value==""){
             $(elem).addClass('courses_error');
         }
     });
+
     $("select.remove_err_input_error option").each(function (index, elem) {
         if (mode_of_course[index] === "") {
             $(elem).addClass('courses_error');
