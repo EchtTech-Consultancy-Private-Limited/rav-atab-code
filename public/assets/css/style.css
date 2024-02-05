@@ -25106,3 +25106,7 @@ td.remove_extra_comma span:last-child{display: none}
 .err.error_name {
     font-size: 11px;
 }
+
+select.form-control.courses_error + span + span {
+    display: block !important;
+}

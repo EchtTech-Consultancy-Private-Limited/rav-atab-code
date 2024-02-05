@@ -36,7 +36,7 @@ class ApplicationCoursesController extends Controller
             $request,
             [
                 'Email_ID' => ['required', 'regex:/^(?!.*[@]{2,})(?!.*\s)[a-zA-Z0-9\+_\-]+(\.[a-zA-Z0-9\+_\-]+)*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,6}$/i', 'unique:applications,Email_ID'],
-                'Contact_Number' => 'required|numeric|min:10|digits:10|unique:applications,Contact_Number',
+                'Contact_Number' => 'required|numeric|min:10|digits:10,Contact_Number',
                 'Person_Name' => 'required',
                 'designation' => 'required',
             ],
@@ -315,8 +315,10 @@ class ApplicationCoursesController extends Controller
             DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
           }
         /*end here*/
-        $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)->count();
-            if ($checkPaymentAlready>1) {
+        $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+        ->whereNull('remark_by_account')
+        ->count();
+            if ($checkPaymentAlready>2) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
             }
         $this->validate($request, [

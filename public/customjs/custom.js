@@ -571,9 +571,10 @@ const assessor_dates = [];
 $(".dateID").click("on", function () {
     var $this = $(this);
     var dataVal = $(this).attr("data-id").split(",");
-    
+    console.log(dataVal,' data val ')
     assessor_dates.push(dataVal[3]);
-    $("#assessor_type_"+dataVal[0]).attr("required", true);
+    // $("#assessor_type_"+dataVal[0]).attr("required", true);
+
     var colorid = $(this).attr("date-color");
     var data = {
         applicationID: dataVal[0],
@@ -612,6 +613,14 @@ $(".assesorsid").on("click", function () {
     $(`.dateID_${application_id}`).addClass("disabled");
 
     $(`#assessor_assign_dates_${assessor_id} span.disabled`).removeClass("disabled");
+    
+    $('.assessor_name_with_email').attr('required',false);
+    
+    const elements = document.getElementsByName('assessor_type_'+assessor_id);
+    for (const element of elements) {
+        element.setAttribute('required', true);
+    }
+    
 
     $.ajaxSetup({
         headers: {
@@ -1340,8 +1349,7 @@ function handleAssessorDesignation(id,application_id){
     const days = document.getElementsByName('days[]');
     const hours = document.getElementsByName('hours[]');
     const eligibility = document.getElementsByName('eligibility[]');
-    const mode_of_course = document.getElementsByName('mode_of_course[]');
-    const selects2 = $('.select2');
+    const mode_of_course = document.getElementsByName('mode_of_course[1][]');
     const course_brief = document.getElementsByName('course_brief[]');
     const docs1 = document.getElementsByName('doc1[]');
     const docs2 = document.getElementsByName('doc2[]');
@@ -1376,9 +1384,11 @@ function handleAssessorDesignation(id,application_id){
             $(elem).addClass('courses_error');
         }
     });
+
     mode_of_course.forEach((elem)=>{
+        console.log(elem,' element')
         if(elem.value==""){
-            $(elem).addClass('courses_error');
+            $('[name="mode_of_course[1][]"]').addClass('courses_error');
         }
     });
 
@@ -1421,5 +1431,11 @@ $(".remove_err").on("keyup", function () {
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
 });
+
+
+$(document).on('change', '.select2-selection select2-selection--multiple', function () {
+    $(this).removeClass('courses_error');
+});
+
 
 

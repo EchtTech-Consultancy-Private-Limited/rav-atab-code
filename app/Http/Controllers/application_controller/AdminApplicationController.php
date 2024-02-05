@@ -143,10 +143,14 @@ class AdminApplicationController extends Controller
     public function assignAssessor(Request $request){
         try{
             $a_id = "assessor_type_".$request->application_id;
+            // $a_id = "assessor_type_".$request->assessor_id;
             $assessor_designation = $a_id;
-            DB::beginTransaction();
-           
+            dd($request->$assessor_designation);
+            if($request->$assessor_designation==null){
+                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor designation');
 
+            }
+            DB::beginTransaction();
 
             $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
             $assessor_types = $get_assessor_type==1?'desktop':'onsite';
