@@ -615,7 +615,7 @@ $(".assesorsid").on("click", function () {
     $(`#assessor_assign_dates_${assessor_id} span.disabled`).removeClass("disabled");
     
     $('.assessor_name_with_email').attr('required',false);
-    
+
     const elements = document.getElementsByName('assessor_type_'+assessor_id);
     for (const element of elements) {
         element.setAttribute('required', true);
@@ -1270,12 +1270,12 @@ function isValidNumber(value, min, max) {
     return !isNaN(number) && number >= min && number <= max;
 }
 
-
-function handleAssessorDesignation(id,application_id){
-   const assessor_designation =  $('#'+id+ ' option:selected').val();
-   $("#assessor_category_"+application_id).attr('value',assessor_designation);
-   $("#assessor_designation_"+application_id).attr('value',"atab_assessor");
-}
+function handleAssessorDesignation(id, application_id) {
+    const assessor_designation = $('#' + id + ' option:selected').val();
+    $("#assessor_category_" + application_id).val(assessor_designation);
+    $("#assessor_designation_" + application_id).val("atab_assessor");
+ }
+ 
 
 
  $(document).ready(() => {
