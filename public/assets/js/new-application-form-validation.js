@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if(isApplicationEmailExist<3){
         $.ajax({
           type: 'POST',
-          url: routeEmailValidation, // Update with your Laravel route URL
+          url: `${BASE_URL}/email-validation`, // Update with your Laravel route URL
           data: {
             email: email,
             _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if(isApplicationEmailExist<3){
         $.ajax({
           type: 'POST',
-          url: routePhoneValidation, // Update with your Laravel route URL
+          url: `${BASE_URL}/phone-validation`, // Update with your Laravel route URL
           data: {
             contact_number: contactNumber,
             _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
@@ -108,8 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
       checkForm();
     }
   }
-
- 
 
   // Event listeners for contact number and email input fields
   contactNumberInput.addEventListener('keyup', function () {
