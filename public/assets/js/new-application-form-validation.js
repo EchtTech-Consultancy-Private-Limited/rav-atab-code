@@ -97,10 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           error: function (xhr, status, error) {
             // Handle AJAX errors if needed
+            checkForm();
           }
         });
+      }else{
+        checkForm();
       }
-      $("#nextBtn").attr("disabled",false);
     } else {
       // Display an error message for an invalid contact number
       contactError.textContent = 'Contact number must be 10 digits and numeric';
