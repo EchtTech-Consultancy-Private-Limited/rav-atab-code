@@ -70,7 +70,6 @@ class SummaryController extends Controller
                 $obj->nc = $value;
                 $final_data[] = $obj;
     }
-   
     $assessement_way="N/A";
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id)])->first();
        if(!empty($is_exists)){

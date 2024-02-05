@@ -271,7 +271,7 @@
                     </label>
                     </div>
                     <div class="col-md-3">
-                    <select name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $item->application_list->id}}" class="d-block" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
+                    <select name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $assesorsData->id}}" class="d-block assessor_name_with_email" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
                       <option value="" disabled selected>Please select option</option>
                       <option value="Lead Assessor">Lead Assessor</option>
                       <option value="Co-Assessor">Co-Assessor</option>
