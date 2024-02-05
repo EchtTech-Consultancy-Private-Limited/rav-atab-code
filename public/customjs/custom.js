@@ -1276,7 +1276,7 @@ function handleAssessorDesignation(id,application_id){
     const day = tomorrow.getDate();
     const month = tomorrow.getMonth() + 1;
     const year = tomorrow.getFullYear();
-    const output =year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+    const output =(day < 10 ? '0' : '') + day + '-' + (month < 10 ? '0' : '') + month + '-' + year;
     $('#summary_date').val(output);
     $('#payment_date').val(output);
 
