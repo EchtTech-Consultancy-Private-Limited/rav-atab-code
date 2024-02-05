@@ -8,6 +8,7 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationCourses; 
 use App\Models\TblNCComments; 
 use DB;
+use Carbon\Carbon;
 use Auth;
 use App\Jobs\SendEmailJob;
 class SummaryController extends Controller
@@ -321,7 +322,6 @@ class SummaryController extends Controller
        
     public function onSiteFinalSubmitSummaryReport(Request $request){
         try{
-            
             DB::beginTransaction();
             $application_id = dDecrypt($request->application_id);
             $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $application_id,'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
@@ -339,7 +339,7 @@ class SummaryController extends Controller
             $data['brief_summary']=$request->brief_summary??'N/A';
             $data['brief_closing_meeting']=$request->brief_closing_meeting??'N/A';
             $data['assessee_org']=$request->assessee_org??'N/A';
-            $data['summary_date']=$request->summary_date??'N/A';
+            $data['summary_date']=$request->summary_date??Carbon::now();
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
             $dataImprovement= [];
             $dataImprovement['assessor_id']=$assessor_id;
@@ -540,7 +540,6 @@ class SummaryController extends Controller
         $data['doc_against_nc'] = $request->doc_against_nc??'';
         $data['doc_verify_remark'] = $request->remarks;
         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
-        dd($create_summary_report);
         /*End here*/
         $login_id = Auth::user()->role;
         if ($login_id == 3) {

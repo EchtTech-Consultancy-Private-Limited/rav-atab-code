@@ -1284,16 +1284,17 @@ function handleAssessorDesignation(id, application_id) {
 
  $(document).ready(() => {
     const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate());
-    const day = tomorrow.getDate();
-    const month = tomorrow.getMonth() + 1;
-    const year = tomorrow.getFullYear();
+    
+    const day = today.getDate();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
     const output =(day < 10 ? '0' : '') + day + '-' + (month < 10 ? '0' : '') + month + '-' + year;
     $('#summary_date').val(output);
     $('#payment_date').val(output);
-
+  
 });
+
+
   
 
   function handleOnsiteSummerySubmitReport(){
@@ -1305,6 +1306,7 @@ function handleAssessorDesignation(id, application_id) {
     const sr_no = $("#sr_no").val();
     const improvement_form = $("#improvement_form").val();
     const standard_reference = $("#standard_reference").val();
+
     let flag = 0;
     if(assessee_org==""){
         $("#assessee_org_err").html("Please enter the assessee org value");
