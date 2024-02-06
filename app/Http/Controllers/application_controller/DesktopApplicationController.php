@@ -103,7 +103,7 @@ class DesktopApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'desktop'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','admin_nc_flag','status')
         ->get();
 
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
@@ -138,7 +138,7 @@ class DesktopApplicationController extends Controller
                         ])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-                        ->where('assessor_type','desktop')
+                        ->whereIn('assessor_type',['desktop','admin'])
                         ->get(),
                     ];
                 }
@@ -389,17 +389,17 @@ class DesktopApplicationController extends Controller
                             'application_id' => $application_id,
                             'application_courses_id' => $application_course_id,
                             'doc_unique_id' => $question->id,
+                            'assessor_id'=>$assessor_id,
                             'doc_sr_code' => $question->code
                         ])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-                        ->where('assessor_type','desktop')
                         ->get();
                       
                         $obj->nc = $value;
                         $final_data[] = $obj;
         }
-
+        // dd($final_data);
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
         return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','assessor_assign'));
