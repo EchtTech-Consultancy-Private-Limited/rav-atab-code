@@ -313,7 +313,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                Date : <input type="date" id="summary_date" name="summary_date">
+                                                Date : <input type="text" id="summary_date" name="summary_date" value="" disabled>
                                             </td>
                                             <td>
                                                 Signature : ..........

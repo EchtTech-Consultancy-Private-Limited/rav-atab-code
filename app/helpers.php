@@ -151,6 +151,7 @@ function listofapplicationsecretariat($application_id)
 function listofapplicationassessor($application_id)
 {
     $assessors = DB::table('asessor_applications')->where('application_id', '=', $application_id)->get();
+    
     $assessorid = array();
     if (!empty($assessors)) {
 

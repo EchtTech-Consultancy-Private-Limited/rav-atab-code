@@ -8,6 +8,7 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationCourses; 
 use App\Models\TblNCComments; 
 use DB;
+use Carbon\Carbon;
 use Auth;
 use App\Jobs\SendEmailJob;
 class SummaryController extends Controller
@@ -86,7 +87,7 @@ class SummaryController extends Controller
         $assessor_id = Auth::user()->id;
         $assessor_name = Auth::user()->firstname.' '.Auth::user()->middlename.' '.Auth::user()->lastname;
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','ass_impr_form.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','ass_impr_form.assessee_org as onsite_assessee_org')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','final_summary_repo.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','ass_impr_form.assessee_org as onsite_assessee_org')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
@@ -148,7 +149,7 @@ class SummaryController extends Controller
         $is_final_submit = false;
        }
        
-    //    dd("tbl_nc_comments");
+    //    dd($summertReport);
         return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign'));
     }
 
@@ -321,7 +322,6 @@ class SummaryController extends Controller
        
     public function onSiteFinalSubmitSummaryReport(Request $request){
         try{
-            
             DB::beginTransaction();
             $application_id = dDecrypt($request->application_id);
             $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $application_id,'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
@@ -339,7 +339,7 @@ class SummaryController extends Controller
             $data['brief_summary']=$request->brief_summary??'N/A';
             $data['brief_closing_meeting']=$request->brief_closing_meeting??'N/A';
             $data['assessee_org']=$request->assessee_org??'N/A';
-            $data['summary_date']=$request->summary_date??'N/A';
+            $data['summary_date']=$request->summary_date??Carbon::now();
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
             $dataImprovement= [];
             $dataImprovement['assessor_id']=$assessor_id;
@@ -540,7 +540,6 @@ class SummaryController extends Controller
         $data['doc_against_nc'] = $request->doc_against_nc??'';
         $data['doc_verify_remark'] = $request->remarks;
         $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
-        dd($create_summary_report);
         /*End here*/
         $login_id = Auth::user()->role;
         if ($login_id == 3) {

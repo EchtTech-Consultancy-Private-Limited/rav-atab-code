@@ -170,7 +170,7 @@
                                                     @endisset  
                                                 </td>
                                             </tr>
-                                           
+                                  
   <!-- Modal box assessor assign-->
 <div class="modal fade" id="View_popup_{{ $item->application_list->id }}"
    tabindex="-1" role="dialog"
@@ -205,6 +205,8 @@
                <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
                 <input type="hidden" name="assessor_type" value="{{$item->assessor_type=='desktop'?'desktop':'onsite'}}">
                 <?php
+
+
                     $application_assessor_arr = listofapplicationassessor($item->application_list->id);
 
                 ?>

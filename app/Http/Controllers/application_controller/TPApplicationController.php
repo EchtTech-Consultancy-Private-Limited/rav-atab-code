@@ -251,6 +251,7 @@ class TPApplicationController extends Controller
         'doc_unique_id' => $doc_unique_code,
         'doc_sr_code' => $doc_sr_code,
         'application_courses_id' => $application_courses_id,
+        'assessor_type'=>$assessor_type
     ])
     ->whereNotNull("tp_remark")
     ->where('nc_type',$nc_type)
