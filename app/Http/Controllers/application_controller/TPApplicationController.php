@@ -76,6 +76,7 @@ class TPApplicationController extends Controller
         ->first();
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        
             $obj = new \stdClass;
             $obj->application= $application;
                 $course = DB::table('tbl_application_courses')->where([

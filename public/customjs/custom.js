@@ -1041,7 +1041,9 @@ function handleNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
-                    window.location.href=response.redirect_url;
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -1083,7 +1085,16 @@ function handleAdminNotification(pay_id){
             success: function (response) {
                 if (response.success) {
                     $('.full_screen_loading').hide();
-                    window.location.href=response.redirect_url;
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000);
+                    
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -1124,7 +1135,16 @@ function handleDesktopNotification(pay_id){
             success: function (response) {
                 if (response.success) {
                     $('.full_screen_loading').hide();
-                    window.location.href=response.redirect_url;
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000);
+
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
@@ -1166,7 +1186,15 @@ function handleOnsiteNotification(pay_id){
             success: function (response) {
                 if (response.success) {
                     $('.full_screen_loading').hide();
-                    window.location.href=response.redirect_url;
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }else{
                     toastr.error(response.message, {
                         timeOut: 0,
