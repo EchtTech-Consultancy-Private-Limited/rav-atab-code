@@ -1295,7 +1295,9 @@ function handleAssessorDesignation(id, application_id) {
 });
 
 
-  
+$(document).on('change focus','.select2-selection--multiple',function(){
+    $(".select2.remove_err_input_error.courses_error").removeClass('courses_error');
+})
 
   function handleOnsiteSummerySubmitReport(){
     const assessee_org = $("#assessee_org").val();

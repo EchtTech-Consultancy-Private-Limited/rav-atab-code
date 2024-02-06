@@ -164,6 +164,15 @@ function listofapplicationassessor($application_id)
         return $assessorid;
     }
 }
+function getAssessorDesignation($application_id,$assessor_id)
+{
+    $assessors = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id])->first();
+    if (!empty($assessors)) {
+        return $assessors;
+    } else {
+        return null;
+    }
+}
 
 function checkapplicationassessmenttype($application_id)
 {

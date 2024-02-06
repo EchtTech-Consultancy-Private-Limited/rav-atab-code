@@ -142,7 +142,7 @@
                                                                 class="material-icons">visibility</i></a>
 
                                                     @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id)
+                                                        @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)
                                                         <button id="acknowledgement_{{$item->application_list->id}}"
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
@@ -150,7 +150,7 @@
                                                     
 
                                                     @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4)
+                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4 && $item->payment->approve_remark!=null)
                                                     <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                                                     data-bs-target="#View_popup_{{ $item->application_list->id }}"
@@ -170,7 +170,8 @@
                                                     @endisset  
                                                 </td>
                                             </tr>
-                                  
+
+    @isset($item->assessor_type)
   <!-- Modal box assessor assign-->
 <div class="modal fade" id="View_popup_{{ $item->application_list->id }}"
    tabindex="-1" role="dialog"
@@ -208,6 +209,7 @@
 
 
                     $application_assessor_arr = listofapplicationassessor($item->application_list->id);
+                   
 
                 ?>
                <br>
@@ -245,6 +247,9 @@
    
                <div class="destop-id">
                @foreach ($item->assessor_list as $k => $assesorsData)
+               <?php
+                    $assessor_designation_first = getAssessorDesignation($item->application_list->id,$assesorsData->id);
+                ?>
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
                   <br>
                 
@@ -275,9 +280,9 @@
                     <div class="col-md-3">
                     <select name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $assesorsData->id}}" class="d-block assessor_name_with_email" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
                       <option value="" disabled selected>Please select option</option>
-                      <option value="Lead Assessor">Lead Assessor</option>
-                      <option value="Co-Assessor">Co-Assessor</option>
-                      <option value="Observer Assessor">Observer Assessor</option>
+                      <option value="Lead Assessor" @if($assessor_designation_first?->assessor_designation=='Lead Assessor') selected @endif>Lead Assessor</option>
+                      <option value="Co-Assessor" @if($assessor_designation_first?->assessor_designation=='Co-Assessor') selected @endif>Co-Assessor</option>
+                      <option value="Observer Assessor" @if($assessor_designation_first?->assessor_designation=='Observer Assessor') selected @endif>Observer Assessor</option>
                     </select>   
                     </div>
                   
@@ -314,6 +319,9 @@
     </tabs-group>
     
 </div>
+<!-- modal end here -->
+
+@endisset
 
 
 
