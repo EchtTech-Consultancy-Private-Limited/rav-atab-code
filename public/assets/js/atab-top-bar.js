@@ -8,16 +8,16 @@ $(".placeholder_input").mousedown(function() {
         }
     });
 
-    $.ajax({
-        url: "{{ url('/notification') }}",
-        type: "get",
-        data: {
-            myData: myData,
-            _token: '{{ csrf_token() }}'
-        },
-        dataType: 'json',
-        success: function(result) {
+    // $.ajax({
+    //     url: "{{ url('/notification') }}",
+    //     type: "get",
+    //     data: {
+    //         myData: myData,
+    //         _token: '{{ csrf_token() }}'
+    //     },
+    //     dataType: 'json',
+    //     success: function(result) {
 
-        }
-    });
+    //     }
+    // });
 });
