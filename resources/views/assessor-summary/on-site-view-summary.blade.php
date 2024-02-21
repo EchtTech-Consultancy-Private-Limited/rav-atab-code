@@ -216,7 +216,7 @@
                                         </tr>
                                 
                                         <tr>
-                                            <td class="fw-bold"> Signature:</td>
+                                            <td class="fw-bold">Signature:</td>
                                             <td>.................</td>
                                             <td></td>
                                             <td></td>
@@ -279,7 +279,11 @@
                                                             @if($row->nc_type=="not_recommended")
                                                             {{ucfirst($row->nc_type)}}
                                                             @else
-                                                            {{$row->nc_type}}
+                                                                @if($row->assessor_type=='admin')
+                                                                {{$row->nc_type}} by Admin
+                                                                @else
+                                                                {{$row->nc_type}}
+                                                                @endif
                                                             @endif
                                                         
                                                     </a>  

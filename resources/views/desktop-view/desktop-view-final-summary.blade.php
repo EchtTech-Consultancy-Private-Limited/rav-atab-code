@@ -336,7 +336,12 @@
                                                             @if($row->nc_type=="not_recommended")
                                                             {{ucfirst($row->nc_type)}}
                                                             @else
+                                                            @if($row->assessor_type=='admin')
+                                                            {{$row->nc_type}} by Admin
+                                                            @else
                                                             {{$row->nc_type}}
+                                                            @endif
+                                                            
                                                             @endif
                                                         
                                                     </a>  

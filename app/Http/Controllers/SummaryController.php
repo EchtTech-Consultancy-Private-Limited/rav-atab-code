@@ -148,8 +148,9 @@ class SummaryController extends Controller
        }else{
         $is_final_submit = false;
        }
+
+    //    dd($final_data);
        
-    //    dd($summertReport);
         return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign'));
     }
 

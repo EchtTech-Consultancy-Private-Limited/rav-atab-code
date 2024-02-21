@@ -130,7 +130,7 @@ class OnsiteApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'desktop'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','admin_nc_flag','status')
         ->get();
 
         $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
@@ -138,7 +138,7 @@ class OnsiteApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status','onsite_photograph')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status','onsite_photograph','admin_nc_flag')
         ->get();
 
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
@@ -148,7 +148,7 @@ class OnsiteApplicationController extends Controller
         ->groupBy('asr.application_id','asr.application_courses_id')
         ->count();
         /*end here*/
-        
+        // dd($onsite_course_doc_uploaded );
       
         $is_doc_uploaded=false;
         if($doc_uploaded_count>=4){
@@ -550,7 +550,7 @@ class OnsiteApplicationController extends Controller
                         ])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-                        ->where('assessor_type','onsite')
+                        ->whereIn('assessor_type',['onsite','admin'])
                         ->get();
                       
                         $obj->nc = $value;
