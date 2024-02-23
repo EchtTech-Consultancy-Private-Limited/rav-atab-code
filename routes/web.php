@@ -88,7 +88,7 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 //dashboard Route
-Route::group(['middleware' => ['auth','EnsureTokenIsValid']], function () {
+Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');;
     Route::get('/admin-user', [adminController::class, 'user_index']);

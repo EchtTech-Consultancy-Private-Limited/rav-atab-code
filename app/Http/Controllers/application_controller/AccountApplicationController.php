@@ -27,7 +27,6 @@ class AccountApplicationController extends Controller
      
     /** Application List For Account */
     public function getApplicationList(){
-
         $application = DB::table('tbl_application as a')
         ->whereIn('payment_status',[0,1,2,3])
         ->orderBy('id','desc')
