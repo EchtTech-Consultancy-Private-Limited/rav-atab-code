@@ -242,7 +242,7 @@
                                         @if($doc->nc_flag==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                                <input type="file" class="from-control fileup" title="choose file" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
                                              </div>
                                        @endif
                                        
@@ -290,7 +290,7 @@
                                              @endif
                                              
                                              @if($doc->nc_flag==1)
-                                        <div class="upload-btn-wrapper">
+                                             <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
                                              </div>

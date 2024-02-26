@@ -7,7 +7,4 @@ $("document").ready(function(){
     }, 5000 ) // 5 secs
 
 });
-
-
-
-//password policy
+//password policy 
