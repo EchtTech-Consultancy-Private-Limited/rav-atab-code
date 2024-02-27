@@ -222,13 +222,15 @@ class OnsiteApplicationController extends Controller
 
     public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
-        
-        try{
+        try{   
+            if($nc_type == 'nr')
+            {
+                $nc_type = 'not_recommended';
+            } 
             $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite','nc_type'=>$nc_type])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-            ->first();
-
+            ->first();           
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'application_courses_id'=>$application_course_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
         
             $is_nc_exists=false;
