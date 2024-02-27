@@ -399,7 +399,7 @@ function onsiteDocumentVerfiy() {
        
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-        if(doc_comment=="" || nc_type=="" ){
+        if(doc_comment=="" || nc_type==""){
             toastr.error("All fields are required", {
                 timeOut: 0,
                 extendedTimeOut: 0,
@@ -429,6 +429,16 @@ function onsiteDocumentVerfiy() {
 
         var allowedExtensions = ["pdf", "doc", "docx","jpg","jpeg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
+        if(uploadedFileName==""){
+            toastr.error("All fields are required", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+           }
         var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
         if (allowedExtensions.indexOf(fileExtension) == -1) {
             toastr.error("Invalid file type", {
@@ -646,7 +656,6 @@ $(".assesorsid").on("click", function () {
 
 /*Upload file from onsite assessor for nc's*/
 $("#upload_onstie_nc_file").change(function () {
-
     var fileInput = $(this);
     var questionId = fileInput.data("question-id");
     var form = $("#submitform_doc_form_" + questionId)[0];
