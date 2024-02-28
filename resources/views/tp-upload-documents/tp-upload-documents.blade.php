@@ -479,12 +479,9 @@
                                                 </table>
                                              </td>
                                           </tr>
-                                          
-                                        
                                           @endforeach
-                                        @endforeach
-
-
+                                        @endforeach 
+                                        
                                        </tbody>
                                     </table>
                                  </div>
