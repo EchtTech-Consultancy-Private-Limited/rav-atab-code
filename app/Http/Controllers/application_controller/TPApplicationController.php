@@ -66,6 +66,7 @@ class TPApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
+        // dd($final_data);
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 

@@ -235,10 +235,8 @@ $(document).ready(function () {
   });
 
 
-
     let password = document.querySelector('#password');
     let togglePassword = document.querySelector('#togglepassword');
-
     togglePassword.addEventListener('click', (e) => {
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
