@@ -50,7 +50,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <ul class="breadcrumb breadcrumb-style">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">National Applications</h4>
+                                <h4 class="page-title">National Application</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
@@ -59,7 +59,7 @@
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">Dashboard</a>
                             </li>
-                            <li class="breadcrumb-item active">National Applications</li>
+                            <li class="breadcrumb-item active">National Application</li>
                         </ul>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                                                     @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)
                                                         <button id="acknowledgement_{{$item->application_list->id}}"
-                                                            class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledege Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
+                                                            class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
                                                     
