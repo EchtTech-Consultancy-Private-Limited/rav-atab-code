@@ -294,6 +294,7 @@
                                                                 } else {
                                                                     $final_color_value = "danger";
                                                                 }
+                                                                
                                                         ?>
                                                         @if($row->nc_type!=="Request_For_Final_Approval")
                                                         <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
