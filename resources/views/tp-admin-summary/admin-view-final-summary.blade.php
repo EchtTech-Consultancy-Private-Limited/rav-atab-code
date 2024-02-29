@@ -1,126 +1,6 @@
 @include('layout.header')
 <title>RAV Accreditation</title>
-<style>
-    table th {
-        text-align: center;
-        border: 1px solid #eee;
-        color: #000;
-    }
 
-    table td {
-        text-align: left;
-        border: 1px solid #eee;
-        color: #000;
-    }
-
-    .highlight {
-        background-color: #9789894a;
-    }
-
-    .highlight_nc {
-        background-color: #ff000042;
-    }
-
-    .highlight_nc_approved {
-        background-color: #00800040;
-    }
-
-    td select.form-control.text-center {
-        border: 0;
-    }
-
-    .loading-img {
-        z-index: 99999999;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);;
-        overflow: hidden;
-        text-align: center;
-    }
-
-    .loading-img .box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin: auto;
-        transform: translate(-50%, -50%);
-        z-index: 2;
-    }
-
-    .uploading-text {
-        padding-top: 10px;
-        color: #fff;
-        /* font-size: 18px; */
-    }
-
-    td.text-justify {
-        text-align: left;
-    }
-
-    .btnDiv a {
-        margin-right: 10px !important;
-    }
-
-
-    .file-upload {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .file-label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #3498db;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        font-size: 12px;
-    }
-
-    .file-label:hover {
-        background-color: #2980b9;
-    }
-
-    .file-input {
-        display: none;
-    }
-
-    table {
-        /* caption-side: bottom; */
-        border-collapse: collapse;
-        /* border: 1px solid #ddd !important; */
-        background: #fff;
-        padding: 33px !important;
-    }
-
-
-    table th,
-    table td,
-    table tr {
-        text-align: center;
-        border: 1px solid #aaa !important;
-        color: #000;
-    }
-
-    table td {
-        text-align: left;
-        padding: 10px 10px;
-        /* font-weight: 700; */
-    }
-
-
-  
-
-</style>
 
 </head>
 <body class="light">
@@ -183,16 +63,17 @@
             <tabs-group>
                 <div role="tablist" class="tabs__controls">
                   <button role="tab" aria-selected="true">DESKTOP ASSESSMENT</button>
-                  <button role="tab">ONSITE ASSESSMENT</button>                 
+                  <button role="tab">ONSITE ASSESSMENT</button>         
+                  <button class="btn btn-warning float-end" onclick="printDiv('desktop-print')">
+                            <i class="fa fa-print"></i>
+                    </button>        
                 </div>
               
                 <div role="tabpanel" class="tabs__panel">
                   <div class="tabs__panel__inner">
                     <div class="row clearfix">
                         <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
-                            <button class="btn btn-warning" onclick="printDiv('desktop-print')">
-                            <i class="fa fa-print"></i>
-                            </button>
+                           
                         </div>
                         <div class="col-lg-12 col-md-12" id="desktop-print">
                             <form id="submitForm" action="#" method="#">

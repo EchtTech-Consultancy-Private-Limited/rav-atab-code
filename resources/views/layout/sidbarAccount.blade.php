@@ -21,14 +21,14 @@
     
             <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="{{ url('/dashboard') }}">
-                    <i data-feather="monitor"></i>
+                <i class="fa fa-desktop" aria-hidden="true"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
             <li class="{{ Request::is('profile-get') ? 'active' : '' }}">
                 <a href="{{ url('profile-get') }}">
-                    <i data-feather="user"></i>
+                <i class="fa fa-user" aria-hidden="true"></i>
                     <span>Manage Profile</span>
                 </a>
             </li>
@@ -36,7 +36,7 @@
 
             <li class="{{ Request::is('nationl-page') || Request::is('internationl-page') ? 'active' : '' }}">
                 <a href="#" onClick="return false;" class="menu-toggle">
-                    <i data-feather="file"></i>
+                <i class="fa fa-file-text" aria-hidden="true"></i>
                     <span>Manage Application</span>
                 </a>
                 <ul class="ml-menu">
@@ -67,7 +67,7 @@
 
             <li class="{{ Request::is('show-feedback') ? 'active' : '' }}">
                 <a href="{{ url('/show-feedback') }}">
-                    <i data-feather="message-circle"></i>
+                <i class="fa fa-comment" aria-hidden="true"></i>
                     <span>Help Desk</span>
                 </a>
             </li>
