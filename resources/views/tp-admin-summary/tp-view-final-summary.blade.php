@@ -317,7 +317,7 @@
                                                     <td>{{$rows->title}}</td>
                                                     <td class="remove_extra_comma">
                                                     @foreach($rows->nc as $row)
-                                                    <span>{{$row->nc_type}}</span><span>,</span>
+                                                            <span>{{$row->nc_type}}</span><span>,</span>
                                                     @endforeach
                                                     </td>
                                                     <td>
@@ -347,28 +347,66 @@
                                                         
                                                     </a>  
                                                         @endforeach
+
+                                                         <!-- Admin -->
+                                                         @foreach($rows->nc_admin as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["Accept"=>"success","Reject"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        @if($row->nc_type!=="Request_For_Final_Approval")
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                                {{ucfirst($row->nc_type)}} By Admin
+                                                    </a>  
+                                                    @endif
+                                                        @endforeach
+
                                                 
                                                 </td>
                                                 <td>
-                                                    @php
+                                                   @php
                                                     $count = count($rows->nc);
+                                                    $admin_count = count($rows->nc_admin);
                                                     @endphp
-                                                 
-                                                    @if($count==1)
-                                                        {{$rows->nc[0]->comments??''}}
-                                                    @elseif($count==2)
-                                                    {{$rows->nc[1]->comments??''}}
-                                                    @elseif($count==3)
-                                                    {{$rows->nc[2]->comments??''}}
-                                                    @elseif($count==4)
-                                                    {{$rows->nc[3]->comments??''}}
-                                                    @elseif($count==5)
-                                                    {{$rows->nc[4]->comments??''}}
-                                                    @elseif($count==6)
-                                                    {{$rows->nc[5]->comments??''}}
+
+                                                    @if($admin_count>0)
+                                                    
+                                                        @if($admin_count==1)
+                                                            {{$rows->nc_admin[0]->comments??''}}
+                                                        @elseif($admin_count==2)
+                                                            {{$rows->nc_admin[1]->comments??''}}
+                                                        @elseif($admin_count==3)
+                                                            {{$rows->nc_admin[2]->comments??''}}
+                                                        @elseif($admin_count==4)
+                                                            {{$rows->nc_admin[3]->comments??''}}
+                                                        @elseif($admin_count==5)
+                                                            {{$rows->nc_admin[4]->comments??''}}
+                                                        @else
+                                                        {{$rows->nc_admin[5]->comments??''}}
+                                                        @endif
+
                                                     @else
-                                                    {{$rows->nc[6]->comments??''}}
+                                                            @if($count==1)
+                                                            {{$rows->nc[0]->comments??''}}
+                                                            @elseif($count==2)
+                                                            {{$rows->nc[1]->comments??''}}
+                                                            @elseif($count==3)
+                                                            {{$rows->nc[2]->comments??''}}
+                                                            @elseif($count==4)
+                                                            {{$rows->nc[3]->comments??''}}
+                                                            @elseif($count==5)
+                                                            {{$rows->nc[4]->comments??''}}
+                                                            @elseif($count==6)
+                                                            {{$rows->nc[5]->comments??''}}
+                                                            @else
+                                                            {{$rows->nc[6]->comments??''}}
+                                                            @endif
                                                     @endif
+
                                                 </td>
                                                 </tr>
                                                 @endforeach
@@ -504,28 +542,65 @@
                                                         
                                                     </a>  
                                                         @endforeach
+
+                                                         <!-- Admin -->
+                                                         @foreach($rows->nc_admin as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["Accept"=>"success","Reject"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        @if($row->nc_type!=="Request_For_Final_Approval")
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                                {{ucfirst($row->nc_type)}} By Admin
+                                                    </a>  
+                                                    @endif
+                                                        @endforeach
                                                 
                                                 </td>
                                                 <td>
-                                                    @php
+                                                @php
                                                     $count = count($rows->nc);
+                                                    $admin_count = count($rows->nc_admin);
                                                     @endphp
-                                                 
-                                                    @if($count==1)
-                                                        {{$rows->nc[0]->comments??''}}
-                                                    @elseif($count==2)
-                                                    {{$rows->nc[1]->comments??''}}
-                                                    @elseif($count==3)
-                                                    {{$rows->nc[2]->comments??''}}
-                                                    @elseif($count==4)
-                                                    {{$rows->nc[3]->comments??''}}
-                                                    @elseif($count==5)
-                                                    {{$rows->nc[4]->comments??''}}
-                                                    @elseif($count==6)
-                                                    {{$rows->nc[5]->comments??''}}
+
+                                                    @if($admin_count>0)
+                                                    
+                                                        @if($admin_count==1)
+                                                            {{$rows->nc_admin[0]->comments??''}}
+                                                        @elseif($admin_count==2)
+                                                            {{$rows->nc_admin[1]->comments??''}}
+                                                        @elseif($admin_count==3)
+                                                            {{$rows->nc_admin[2]->comments??''}}
+                                                        @elseif($admin_count==4)
+                                                            {{$rows->nc_admin[3]->comments??''}}
+                                                        @elseif($admin_count==5)
+                                                            {{$rows->nc_admin[4]->comments??''}}
+                                                        @else
+                                                        {{$rows->nc_admin[5]->comments??''}}
+                                                        @endif
+
                                                     @else
-                                                    {{$rows->nc[6]->comments??''}}
+                                                            @if($count==1)
+                                                            {{$rows->nc[0]->comments??''}}
+                                                            @elseif($count==2)
+                                                            {{$rows->nc[1]->comments??''}}
+                                                            @elseif($count==3)
+                                                            {{$rows->nc[2]->comments??''}}
+                                                            @elseif($count==4)
+                                                            {{$rows->nc[3]->comments??''}}
+                                                            @elseif($count==5)
+                                                            {{$rows->nc[4]->comments??''}}
+                                                            @elseif($count==6)
+                                                            {{$rows->nc[5]->comments??''}}
+                                                            @else
+                                                            {{$rows->nc[6]->comments??''}}
+                                                            @endif
                                                     @endif
+
                                                 </td>
                                                 </tr>
                                                 @endforeach

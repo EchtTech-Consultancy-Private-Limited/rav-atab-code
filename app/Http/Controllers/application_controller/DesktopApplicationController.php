@@ -127,8 +127,8 @@ class DesktopApplicationController extends Controller
                     'chapter_id' => $chapter->id,
                 ])->get();
 
+            
                 foreach ($questions as $k => $question) {
-
                     $obj->questions[] = [
                         'question' => $question,
                         'nc_comments' => TblNCComments::where([
@@ -137,16 +137,23 @@ class DesktopApplicationController extends Controller
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code
                         ])
-                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
-                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-                        ->whereIn('assessor_type',['desktop','admin'])
-                        // ->whereOr('final_status','desktop')
+                        ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                        ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
+                        ->whereIn('assessor_type', ['desktop', 'admin'])
+                        ->where(function ($query) {
+                            $query->where('assessor_type', 'desktop')
+                                ->orWhere('assessor_type', 'admin')
+                                ->where('final_status', 'desktop');
+                        })
                         ->get(),
                     ];
                 }
+                
 
                 $final_data[] = $obj;
         }
+        // dd($final_data);
+
 
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id])->first();
        if(!empty($is_exists)){
@@ -411,9 +418,25 @@ class DesktopApplicationController extends Controller
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get();
+
+                        $accept_reject = TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $application_course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->select('tbl_nc_comments.*')
+                        ->whereIn('assessor_type', ['onsite', 'admin'])
+                        ->where(function ($query) {
+                            $query->where('assessor_type', 'onsite')
+                                ->orWhere('assessor_type', 'admin')
+                                ->whereIn('nc_type', ['Accept','Reject']);
+                        })
+                        ->first();
                             // dd($value1);
                         $obj->nc = $value;
                         $obj->nc_admin = $value1;
+                        $obj->accept_reject = $accept_reject;
                         $final_data[] = $obj;
         }
 
