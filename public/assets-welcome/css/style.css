@@ -1,0 +1,335 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans:400,700");
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f0f0f0;
+  font-family: "Noto Sans", sans-serif;
+}
+
+.backgorund-img1 {
+  background-image: url("../img/Layer2.png");
+  background-repeat: no-repeat;
+  -o-object-fit: cover;
+     object-fit: cover;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 99;
+  background-position: top;
+}
+
+.backgorund-img2 {
+  background-image: url("../img/atab_bg_img.jpg");
+  background-repeat: no-repeat;
+  -o-object-fit: cover;
+     object-fit: cover;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  filter: brightness(0.5);
+  left: 0;
+}
+
+.backgorund-img3 {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: #000;
+  opacity: 0.4;
+}
+
+.proceed-gif {
+  border-radius: 38px;
+  background-size: cover;
+  width: 100%;
+  height: auto;
+  padding: 59px 0 10px;
+}
+.proceed-gif img {
+  border-radius: 20px;
+}
+
+.main-container {
+  position: absolute;
+  z-index: 9999999;
+  padding: 30px 0;
+  margin: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -70%);
+  transition-delay: 3s;
+  display: none;
+  width: 100%;
+  height: 100%;
+  animation: pageSmoothAnimation 2s ease-in-out;
+}
+
+.curtain {
+  width: 100%;
+  /* Ensures the component is the full screen width */
+  height: 100vh;
+  overflow: hidden;
+  /* Allows you to slide the panels outside the container without them showing */
+}
+
+.curtain__wrapper {
+  /*These make sure the curtain covers the whole container*/
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.curtain__panel {
+  /*These sets a background color as well as an img to make it look like an actual curtain*/
+  background: #8b0000;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 50%;
+  /* Each panel takes up half the container */
+  height: 100vh;
+  /* Used for demo purposes */
+  float: left;
+  /* Makes sure panels are side-by-side */
+  position: relative;
+  /* Needed to define the z-index */
+  z-index: 99999;
+  /* Places the panels in front of the prize */
+  transition: all 2s ease-out;
+  /* Animates the sliding transition */
+}
+
+.curtain__panel--left {
+  /* Slides the panel to the left out of the container */
+  transform: translateX(0);
+}
+
+.curtain__panel--right {
+  /* Slides the panel to the right out of the container */
+  transform: translateX(0);
+}
+
+@keyframes pageSmoothAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.launching-page .header {
+  padding: 15px 25px;
+  background-color: #fff;
+  border-radius: 15px;
+}
+.launching-page .header h3 {
+  font-weight: 700;
+  font-size: 23px;
+  letter-spacing: -1px;
+}
+.launching-page .logo {
+  height: 100px;
+}
+.launching-page .logo img {
+  width: auto;
+  height: 100%;
+}
+.launching-page .content {
+  padding: 60px 0;
+}
+.launching-page .content .about-content {
+  border-radius: 10px;
+  padding: 15px;
+  color: #fff;
+  max-height: 445px;
+  overflow-y: auto;
+}
+.launching-page .content .about-content p {
+  line-height: 1.5;
+  font-size: 12px;
+  text-align: justify;
+}
+.launching-page .content .about-content h1 {
+  font-size: 2em;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  line-height: 65px;
+  color: #fff;
+}
+.launching-page .content .proceed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 32px;
+}
+.launching-page .content .proceed a {
+  text-decoration: none;
+  color: #fff;
+  transition: 0.2s ease-in-out;
+  border: none;
+  padding: 16px 38px;
+  border-radius: 50px;
+  display: inline-block;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+  background: #31d2f2;
+  position: relative;
+  overflow: hidden;
+}
+.launching-page .content .proceed a:hover {
+  background-color: #00adcf;
+  color: #fff;
+}
+.launching-page .content .proceed a i {
+  padding-left: 10px;
+}
+
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+  }
+}
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #92271d #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #92271d;
+  border-radius: 10px;
+  border: 3px solid #ffffff;
+}
+
+
+.launching-page .header_content .logo {
+  height: 76px;
+}
+.width-15 {
+  width: 15%;
+}
+
+.width-70 {
+  width: 70%;
+}
+
+.launching-page .header .header_content {
+  text-align: center;
+}
+.launching-page .header_content .logo img{
+    height: 68px
+}
+.launching-page .header_content .logo-a img{
+    height: 80px
+}
+
+.launching-page .header .header_content h3 {
+  font-weight: 700;
+  font-size: 18px;
+}
+.launching-page .header .header_content h5 {
+  font-size: 16px;
+}
+.launching-page .header .header_content p {
+  font-size: 13px;
+  margin: 0;
+  color: #626262;
+}
+
+.launching-page .content {
+  padding: 30px 0;
+}
+
+.launching-page .content .about-content h1 {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.launching-page .header {
+  padding: 15px 20px;
+  background-color: #fff;
+  border-radius: 15px;
+}
+
+@media (min-width: 1700px) {
+  .backgorund-img1 {
+    height: 800px !important;
+  }
+}
+@media (min-width: 1200px) {
+  .main-container {
+    position: absolute;
+    z-index: 999;
+    padding: 30px 174px;
+    margin: auto;
+  }
+}
+@media (max-width: 1200px) {
+  .backgorund-img1 {
+    height: 526px !important;
+  }
+}
+@media (min-width: 991px) {
+  .backgorund-img1 {
+    height: 633px;
+  }
+  .main-container {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+@media (max-width: 991px) {
+  .main-container {
+    transform: translate(-50%, -50%);
+  }
+}
+.curtain__prize {
+  /*This sets the background color and an image (purposesly small to not take up the whole background).  The image is centered and not repeated so that it looks like an img element was used, but is not*/
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  /* Forces the prize position into the container start */
+  /* Places the prize behind the panels, which are z-index 2 */
+  width: 100%;
+  /*Makes sure that it fills the whole container*/
+  height: 100%;
+}
+.curtain__prize h1 {
+  /*Makes the text white and centers it in the container*/
+  color: white;
+  text-align: center;
+}/*# sourceMappingURL=style.css.map */

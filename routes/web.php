@@ -55,6 +55,7 @@ Route::get('city-list', [AuthController::class, 'city']);
 Route::get("/logout", [AuthController::class, 'logout']);
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/', [AuthController::class, 'landing'])->name('/');
+    Route::get('/login-page', [AuthController::class, 'landingLogin'])->name('login-page');
     Route::get('/login/{slug?}', [AuthController::class, 'login'])->name('login');
     Route::post('/login_post', [AuthController::class, 'login_post']);
     Route::get('{slug}/{sulg}/register', [AuthController::class, 'register']);
