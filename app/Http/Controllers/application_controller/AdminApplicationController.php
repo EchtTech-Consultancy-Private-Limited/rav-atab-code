@@ -81,7 +81,6 @@ class AdminApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
-        
         return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
