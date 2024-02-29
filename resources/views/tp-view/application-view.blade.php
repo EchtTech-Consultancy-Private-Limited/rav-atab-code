@@ -50,7 +50,7 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     @if($is_final_submit)
-                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary ">View Final Summary 
                         </a>
                     @endif
                     <div class="float-right">

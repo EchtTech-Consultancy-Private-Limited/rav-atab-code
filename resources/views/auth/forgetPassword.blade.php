@@ -36,46 +36,7 @@
              background-color: #f5f8fa;
          }
 
-         .navbar-laravel {
-             box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
-         }
-
-         .navbar-brand,
-         .nav-link,
-         .my-form,
-         .login-form {
-             font-family: Raleway, sans-serif;
-         }
-
-         .my-form {
-             padding-top: 1.5rem;
-             padding-bottom: 1.5rem;
-         }
-
-         .my-form .row {
-             margin-left: 0;
-             margin-right: 0;
-         }
-
-         /* for password eye */
-         .eye {
-             position: relative;
-             right: 5%;
-             margin: auto;
-             float: right;
-         }
-
-         .input_password {}
-
-         .login-form {
-             padding-top: 1.5rem;
-             padding-bottom: 1.5rem;
-         }
-
-         .login-form .row {
-             margin-left: 0;
-             margin-right: 0;
-         }
+        
      </style>
  </head>
 
@@ -138,8 +99,7 @@
 
                                      </div>
 
-
-                                     <div class="d-flex">
+                                     <div class="d-flex justify-content-between">
                                          <div class="form-group w-40">
                                              {{-- <input name="Captcha" type="text" class="form-control" placeholder="Enter Captcha" aria-label="Captcha Code"> --}}
                                              <input id="captcha" type="text" class="form-control"
@@ -154,7 +114,7 @@
 
                                          </div>
 
-                                         <div class="form-group w-40 float-right d-flex">
+                                         <div class="form-group w-40 float-right d-flex justify-content-between">
                                              <div class="captcha">
                                                  <span>{!! captcha_img('math') !!}</span>
                                                  <button type="button" class="btn_refresh btn-refresh"
