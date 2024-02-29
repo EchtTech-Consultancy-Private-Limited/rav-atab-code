@@ -143,7 +143,7 @@
                     // Check the file extension
                     let allowedExtensions = ['jpg', 'jpeg', 'png'];
                     let fileExtension = gpsPic.split('.').pop().toLowerCase();
-                    if (allowedExtensions.indexOf(fileExtension) === -1) {
+                    if (allowedExtensions.indexOf(fileExtension) == -1) {
                         Swal.fire({
                             icon: 'error',
                             title: "Invalid File Extension",

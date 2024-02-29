@@ -14,9 +14,12 @@
      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
  </script>
  <script src="{{ asset('assets/js/atab-jquery.validate.min.js') }}"></script>
+ <script src="{{ asset('customjs/custom.js') }}"></script>
+ <script src="{{ asset('customjs/notification.js') }}"></script>
 
  <script>
      $(document).ready(function() {
+ 
          $("#regForm").validate({
              rules: {
                  postal: {
@@ -190,7 +193,7 @@
              var myVar = $("#Country").val();
 
              $.ajax({
-                 url: "{{ url('/state-list') }}",
+                 url:`${BASE_URL}/state-list`,
                  type: "get",
                  data: {
                      "myData": myVar
@@ -238,7 +241,7 @@
 
 
              $.ajax({
-                 url: "{{ url('/city-list') }}",
+                 url:`${BASE_URL}/city-list`,
                  type: "get",
                  data: {
                      "myData": myVars
@@ -282,8 +285,8 @@
      let password = document.querySelector('#password');
      let togglePassword = document.querySelector('#togglepassword');
 
-     togglePassword.addEventListener('click', (e) => {
-         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+     togglePassword.addEventListener('click', (e) => {       
+         const type = password.getAttribute('type') == 'password' ? 'text' : 'password';
          password.setAttribute('type', type);
          this.classlist.toggle('fa fa-eye');
      });
@@ -291,7 +294,7 @@
      let cpassword = document.querySelector('#cpassword');
      let togglecPassword = document.querySelector('#togglecpassword');
      togglecpassword.addEventListener('click', (e) => {
-         const type = cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
+         const type = cpassword.getAttribute('type') == 'password' ? 'text' : 'password';
          cpassword.setAttribute('type', type);
 
          this.classlist.toggle('fa-eye-slash');
@@ -312,6 +315,8 @@
 
  <script>
      // disable alphate
+    
+
      $('#postal').keypress(function(e) {
          var regex = new RegExp("^[0-9_]");
          var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -334,6 +339,7 @@
  <script src="{{ asset('assets/js/pages/index.js') }}"></script>
  <script src="{{ asset('assets/js/pages/todo/todo.js') }}"></script>
 
+ <!-- <script src="{{ asset('assets/js/toastify.min.js') }}"></script> -->
 
  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
  <script src="{{ asset('assets/js/atab-fullcalendar.min.js') }}"></script>
@@ -342,10 +348,9 @@
  <script src="{{ asset('assets/js/table.min.js') }}"></script>
 
  <script src="{{ asset('assets/js/atab-moment.min.js') }}"></script>
- <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script>
+ <!-- <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script> -->
+
  <!-- <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> -->
-
-
 
 
  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -370,6 +375,7 @@
  <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script> --}}
  <script>
      $(document).ready(function() {
+     
          $('#dataTableMain').DataTable({
              dom: 'Bfrtip',
              lengthMenu: [
@@ -385,14 +391,70 @@
 
 
  <script>
-     $('.file_size').on('change', function() {
+    $(document).on('change', '.file_size', function() {
+        let  fileInput = this;
+        const file_name = this.files[0]?.name;
+        var allowedExtensions = ["pdf"]; // Add more extensions if needed
+        var fileExtension = file_name.split(".").pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                // Clear the file input
+                fileInput.value='';
+                $(".full_screen_loading").hide();
+                return;
+        }
+        
          if (this.files[0].size > 5242880) {
-             alert("Try to upload file less than 5MB!");
+            toastr.error("Try to upload file less than 5MB!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
              $(".file_size").val("")
          } else {
              $('#GFG_DOWN').text(this.files[0].size + "bytes");
          }
-     });
+     
+    });
+
+    $(document).on('change', '.file_size_exl', function() {
+        let  fileInput = this;
+        const file_name = this.files[0].name;
+        var allowedExtensions = ["xlsx","xls"]; // Add more extensions if needed
+        var fileExtension = file_name.split(".").pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                // Clear the file input
+                fileInput.value='';
+                $(".full_screen_loading").hide();
+                return;
+        }
+        
+         if (this.files[0].size > 5242880) {
+            toastr.error("Try to upload file less than 5MB!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+             $(".file_size_exl").val("")
+         } else {
+             $('#GFG_DOWN').text(this.files[0].size + "bytes");
+         }
+    });
+
+     
  </script>
 
  </body>

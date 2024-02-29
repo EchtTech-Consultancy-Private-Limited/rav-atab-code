@@ -25,7 +25,7 @@ function display_list() {
 
         $.ajax({
 
-            url: "/alluser",
+            url:`${BASE_URL}/alluser}`,
             type: "GET",
             data: {},
             processData: false,
@@ -64,7 +64,7 @@ function display_list() {
 
         //script for get country list
         $.ajax({
-            url: "/country-list",
+            url:`${BASE_URL}/country-list`,
             type: "GET",
 
 

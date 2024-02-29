@@ -171,9 +171,9 @@ $(document).ready(function () {
 
         var myVars=$("#state").val();
 
-
+       
             $.ajax({
-            url: "{{url('/city-list')}}",
+            url:  `${BASE_URL}/city-list`,
             type: "get",
             data:{"myData":myVars},
             success: function(resdata){
@@ -209,7 +209,7 @@ $(document).ready(function () {
         var myVar=$("#Country").val();
 
             $.ajax({
-            url: "{{url('/state-list')}}",
+            url:`${BASE_URL}/state-list`,
             type: "get",
             data:{"myData":myVar},
             success: function(resdata){
@@ -235,10 +235,8 @@ $(document).ready(function () {
   });
 
 
-
     let password = document.querySelector('#password');
     let togglePassword = document.querySelector('#togglepassword');
-
     togglePassword.addEventListener('click', (e) => {
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
@@ -289,3 +287,10 @@ $(document).ready(function () {
     // end point
 });
 
+function printDiv(divId) {
+    var printContents = document.getElementById(divId).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+}

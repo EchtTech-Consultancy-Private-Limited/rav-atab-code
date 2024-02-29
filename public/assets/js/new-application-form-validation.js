@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var duplicateContact = contactError.textContent === 'Contact number is already in use.';
     var duplicateEmail = emailError.textContent === 'Email is already in use.';
 
-    if (personName !== '' && contactNumber !== '' && email !== '' && designation !== '' && !duplicateContact && !duplicateEmail) {
+    if (personName !== '' && (contactNumber !== '' && contactNumber.length>9 ) && email !== '' && designation !== '' && !duplicateContact && !duplicateEmail) {
       nextBtn.removeAttribute('disabled');
     } else {
       nextBtn.setAttribute('disabled', true);
@@ -39,9 +39,15 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#backendError').text = '';
         nextBtn.setAttribute('disabled', true);
       }else{
+        const isApplicationEmailExist = window.location.pathname.split('/').length 
+        let check_length = 3;
+        if((window.location.href).indexOf('public')!=-1){
+          check_length=4
+        }
+      if(isApplicationEmailExist<check_length){
         $.ajax({
           type: 'POST',
-          url: routeEmailValidation, // Update with your Laravel route URL
+          url: `${BASE_URL}/email-validation`, // Update with your Laravel route URL
           data: {
             email: email,
             _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
@@ -59,8 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           error: function (xhr, status, error) {
             // Handle AJAX errors if needed
+            checkForm();
           }
         });
+      }else{
+        checkForm();
+      }
       }
     } else {
       // Display an error message for an invalid email format
@@ -73,42 +83,61 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkContactNumberDuplicacy(contactNumber) {
     if (/^\d{10}$/.test(contactNumber)) {
       // Send an AJAX request
-      $.ajax({
-        type: 'POST',
-        url: routePhoneValidation, // Update with your Laravel route URL
-        data: {
-          contact_number: contactNumber,
-          _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
-        },
-        success: function (response) {
-          if (response.status === 'duplicate') {
-            // Display the error message in the #contact_error span
-            contactError.textContent = 'Contact number is already in use.';
-          } else {
-            // Clear the error message if the contact number is unique
-            contactError.textContent = '';
+      const isApplicationContactExist = window.location.pathname.split('/').length 
+      let check_length = 3;
+      if((window.location.href).indexOf('public')!=-1){
+        check_length=4
+      }
+      if(isApplicationContactExist<check_length){
+        $.ajax({
+          type: 'POST',
+          url: `${BASE_URL}/phone-validation`, // Update with your Laravel route URL
+          data: {
+            contact_number: contactNumber,
+            _token: csrfToken // Replace with the way you generate CSRF token in your Blade view
+          },
+          success: function (response) {
+            if (response.status === 'duplicate') {
+              // Display the error message in the #contact_error span
+              contactError.textContent = 'Contact number is already in use.';
+            } else {
+              // Clear the error message if the contact number is unique
+              contactError.textContent = '';
+            }
+            checkForm();
+          },
+          error: function (xhr, status, error) {
+            // Handle AJAX errors if needed
+            checkForm();
           }
-          checkForm();
-        },
-        error: function (xhr, status, error) {
-          // Handle AJAX errors if needed
-        }
-      });
+        });
+      }else{
+        checkForm();
+      }
     } else {
       // Display an error message for an invalid contact number
-      contactError.textContent = 'Contact number must be 10 digits and numeric.';
+      contactError.textContent = 'Contact number must be 10 digits and numeric';
+      $("#nextBtn").attr("disabled",true);
       checkForm();
     }
   }
 
- 
-
+  function isValidIndianMobileNumber(number) {
+    var regex = /^[7896]\d{9}$/;
+    return regex.test(number);
+  }
   // Event listeners for contact number and email input fields
   contactNumberInput.addEventListener('keyup', function () {
     var contactNumber = this.value;
     contactError.textContent = ''; // Clear previous error message
+
     if (contactNumber.trim() !== '') {
-      checkContactNumberDuplicacy(contactNumber);
+      const isValid = isValidIndianMobileNumber(contactNumber)
+      if(isValid){
+        checkContactNumberDuplicacy(contactNumber);
+      }else{
+        $('#nextBtn').attr('disabled',true);
+      }
     }
   });
 

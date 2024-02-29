@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}">
 
     <!-- SweetAlert2 -->
-    <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script>
+    <!-- <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script> -->
 
     <!-- DataTables Buttons CSS -->
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> --}}
@@ -41,6 +41,15 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/magnific-popup.css') }}">
+
+    <!-- <link rel="stylesheet" href="{{ asset('assets/css/toastify.min.css') }}"> -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+      const BASE_URL = {!! json_encode(url('/')) !!}
+    </script>
+
+
     <style>
        .docBtn{
         padding: 6px;
@@ -54,4 +63,9 @@
     }
     </style>
 
-    
+<!-- <script type="text/javascript"> 
+  window.history.forward(); 
+  function noBack() { 
+    window.history.forward(); 
+  } 
+</script>  -->

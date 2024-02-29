@@ -348,11 +348,11 @@
                         $("#payments").on('change', function() {
                             var type = $('#payments').val();
 
-                            if (type === 'QR-Code') {
+                            if (type == 'QR-Code') {
                                 $("#bank_id").hide();
                                 $("#QR").show();
                                 submitBtn.disabled = false;
-                            } else if (type === 'Bank') {
+                            } else if (type == 'Bank') {
                                 $("#bank_id").show();
                                 $("#QR").hide();
                                 submitBtn.disabled = false;
@@ -390,8 +390,8 @@
 
                             var doc_payment_files = doc_payment_file.split('.').pop();
 
-                            if (doc_payment_files === 'png' || doc_payment_files === 'jpg' || doc_payment_files ===
-                                'pdf' || doc_payment_files === 'jpeg') {
+                            if (doc_payment_files == 'png' || doc_payment_files == 'jpg' || doc_payment_files ==
+                                'pdf' || doc_payment_files == 'jpeg') {
                                 $('#submitBtn').attr('disabled', false);
                             } else {
                                 Swal.fire({
@@ -415,7 +415,7 @@
         var paymentTransactionNo = $(this).val();
 
         // Check if the payment transaction number is empty
-        if (paymentTransactionNo === '') {
+        if (paymentTransactionNo == '') {
             // Clear the error message
             $('#payment_transaction_no-error').text('');
             // Disable the button
@@ -478,7 +478,7 @@
         var paymentReferenceNo = $(this).val();
 
         // Check if the payment reference number is empty
-        if (paymentReferenceNo === '') {
+        if (paymentReferenceNo == '') {
             // Clear the error message and exit
             $('#payment_reference_no-error').text('');
             return;
@@ -510,12 +510,12 @@
                 },
                 success: function(response) {
                     // Handle the response from the server
-                    if (response.status === 'error') {
+                    if (response.status == 'error') {
                         $('#payment_reference_no-error').html('<p class="text-danger">' + response
                             .message +
                             '</p>');
                         $('#submitBtn').attr('disabled', true);
-                    } else if (response.status === 'success') {
+                    } else if (response.status == 'success') {
                         $('#payment_reference_no-error').html('<p class="text-success">' + response
                             .message +
                             '</p>');

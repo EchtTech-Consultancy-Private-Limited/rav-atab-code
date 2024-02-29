@@ -1,13 +1,13 @@
 <div class="nav-tab">
     <ul class="nav p-3">
         <li class="custom-nav-item ">
-            <a class="custom-nav-link {{ request()->is('new-applications*') || request()->is('create-course*') ? 'nav-active' : '' }}" href="{{ url('/new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('create-new-application*') || request()->is('create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-new-applications') }}">New Application</a>
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('application-list*') ? 'nav-active' : '' }}" href="{{ url('/application-list') }}">Applications</a>
+            <a class="custom-nav-link {{ request()->is('tp/application-list*') ? 'nav-active' : '' }}" href="{{ url('/tp/application-list') }}">Applications</a>
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('pending-payment-list*') || request()->is('edit-application*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/pending-payment-list') }}">Pending Payment List</a>
+            <a class="custom-nav-link {{ request()->is('tp-pending-payment-list*') || request()->is('create-new-course*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/tp-pending-payment-list') }}">Pending Payment List</a>
 
         </li>
         <li class="custom-nav-item">

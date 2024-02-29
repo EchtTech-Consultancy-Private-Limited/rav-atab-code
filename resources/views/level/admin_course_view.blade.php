@@ -67,6 +67,9 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
+                    @if($is_final_submit && auth()->user()->role==1)
+                        <a href="{{ url('application-course-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
+                        @endif
                   <div class="float-right">
                   @if (auth()->user()->role == 1)
                        @if ($applicationData->desktop_status == 1 )
@@ -220,7 +223,7 @@
         <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
-                    Single Point of Contact Details (SPoC)
+                    Single Point of Contact Details (SPoC) 
                 </h5>
             </div>
             <div class="card-body">

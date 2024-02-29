@@ -232,7 +232,7 @@ button#modal-btn-delete, #modal-btn-edit {
         editable: true,
         /*eventRender: function (event, element, view) {
 
-            if (event.allDay === 'true') {
+            if (event.allDay == 'true') {
                     event.allDay = true;
             } else {
                     event.allDay = false;

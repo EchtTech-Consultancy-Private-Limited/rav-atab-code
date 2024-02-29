@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Application;
@@ -92,11 +94,20 @@ class LevelController extends Controller
         $applicationData = Application::find(dDecrypt($id));
         $ApplicationCourse = ApplicationCourse::whereapplication_id($applicationData->id)->get();
         $ApplicationPayment = ApplicationPayment::where('application_id', $applicationData->id)->get();
-        // dd($ApplicationPayment);
+
         $spocData = DB::table('applications')->where('id', $applicationData->id)->first();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($applicationData->id)->get();
         $data = DB::table('users')->where('users.id', $applicationData->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayments' => $ApplicationPayment, 'applicationData' => $applicationData]);
+
+        $final_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$applicationData->id,'application_course_id'=>$ApplicationCourse[0]->id])->whereIn('assessor_type',['desktop','onsite'])->count();
+
+        if($final_count>1){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+
+        return view('level.admin_course_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayments' => $ApplicationPayment, 'applicationData' => $applicationData,'is_final_submit'=>$is_final_submit]);
     }
 
     public function level_view($id)
@@ -1036,6 +1047,14 @@ class LevelController extends Controller
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
 
+
+        /*Implemented by suraj*/
+          $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
+          if(!empty($get_final_summary)){
+            DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
+          }
+        /*end here*/
+
         $checkPaymentAlready = DB::table('application_payments')->where('application_id', $request->Application_id)->first();
         if (!$request->coursePayment) {
             if ($checkPaymentAlready) {
@@ -1176,6 +1195,8 @@ class LevelController extends Controller
 
         $ApplicationCourse = ApplicationCourse::where('user_id', $id)->where('application_id', $application_id)->wherelevel_id($item[0]->id)->get();
 
+        $application_course_id = $ApplicationCourse[0]->id;
+
         $ApplicationPayment = ApplicationPayment::where('user_id', $id)->whereid($application_id)->wherelevel_id($item[0]->id)->get();
 
 
@@ -1188,11 +1209,21 @@ class LevelController extends Controller
             }
         }
 
+        // dd($application_course_id);
+        // dd($application_id);
+
+        $count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id])->whereIn('assessor_type',['desktop','onsite'])->count();
+        if($count>1){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+
 
         //return $ApplicationPayment;
 
 
-        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment]);
+        return view('level.level-previous_view', ['spocData' => $spocData, 'applicationData' => $applicationData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment,'is_final_submit'=>$is_final_submit]);
     }
 
     public function previews_application2($ids)
@@ -1290,6 +1321,7 @@ class LevelController extends Controller
 
     public function accr_upload_document($id, $course_id)
     {
+        $assessor_id = Auth::user()->id;
         $application_id = $id;
         $course_id = $course_id;
         $data = ApplicationPayment::whereapplication_id($id)->get();
@@ -1297,7 +1329,20 @@ class LevelController extends Controller
         $chapters = Chapter::all();
         $applicationData = Application::find($id);
         $summeryReport = SummaryReport::where(['application_id' => $id,'course_id'=> $course_id])->first();
-        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData','summeryReport'));
+
+        /*Created by Suraj*/
+       $count_action_taken_on_doc =  DB::table("assessor_summary_reports")->where(['application_id' => $data[0]->application_id,'application_course_id'=>$course_id,'assessor_id'=> $assessor_id])->count();
+
+        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$data[0]->application_id,'application_course_id'=>$course_id,'assessor_id'=>$assessor_id ])->first();
+
+
+        if(!empty($is_exists) && ($count_action_taken_on_doc <= 44)){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+        /*end here*/
+        return view('asesrar.view_document', compact('chapters', 'course_id', 'data', 'file', 'application_id', 'applicationData','summeryReport','is_final_submit'));
     }
 
     public function document_report_verified_by_assessor($id, $course_id)
@@ -1478,11 +1523,29 @@ class LevelController extends Controller
         if ($oldFile) {
             $notApprove = $oldFile->notApraove_count ?? 0;
         }
+
+//        check assigned assessor
+        $assessor = null;
+        $assignedAssessor = AssessorApplication::where('application_id',$request->application_id)->get();
+
+        if (count($assignedAssessor) > 1){
+            $assessor = AssessorApplication::where('application_id',$request->application_id)->orderBy('id','desc')->first();
+        }elseif(count($assignedAssessor) == 1){
+            $assessor = AssessorApplication::where('application_id',$request->application_id)->first();
+        }
+
+
+
         $course = new Add_Document;
         $course->course_id = $request->course_id;
         $course->doc_id = $request->question_id;
         $course->question_id = $request->question_pid;
         $course->application_id = $request->application_id;
+        if ($assessor){
+            $course->assesment_type = $assessor->assessment_type == 1 ? 'desktop' : 'onsite';
+        }else{
+            $course->assesment_type = 'desktop';
+        }
         $course->user_id = Auth::user()->id;
         if ($oldFile) {
             if ($oldFile->on_site_assessor_Id != null) {
@@ -1542,6 +1605,7 @@ class LevelController extends Controller
         // Fetch the latest document record.
         $doc_latest_record = Add_Document::latest('id')->find($doc_id);
 
+       $application_id = DB::table('application_courses')->where(['id'=>$course_id])->first()->application_id;
 
         return view('asesrar.view-doc-with-comment', [
             'doc_latest_record' => $doc_latest_record,
@@ -1550,29 +1614,71 @@ class LevelController extends Controller
             'doc_latest_record_comment' => $doc_latest_record_comment,
             'doc_code' => $doc_code,
             'comment' => $comment,
-            'application_id' => $course_id
+            'application_id' => $course_id,
+            'app_id'=>$application_id
         ], compact('course_id'));
     }
 
 
-    public function admin_view_doc($doc_code, $id, $doc_id, $course_id)
+    public function admin_view_doc($doc_code, $id, $doc_id, $course_id,$question_id)
     {
+        $assesor_id = Auth::user()->id;
         $comment = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->get();
         $doc_latest_record_comment = DocComment::orderby('id', 'desc')->where('doc_id', $doc_id)->count();
         $doc_latest_record = Add_Document::orderby('id', 'desc')->where('id', $doc_id)->first();
         $docByAdmin = DocComment::orderby('id', 'Desc')->where('doc_id', $doc_id)->where('user_id', auth()->user()->id)->first();
-
-        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id', 'docByAdmin'));
+        $app_id = DB::table('application_courses')->where(['id'=>$course_id])->first()->application_id;
+        return view('asesrar.view-doc-with-comment-admin', ['doc_latest_record' => $doc_latest_record, 'id' => $id, 'doc_id' => $doc_id, 'doc_latest_record_comment' => $doc_latest_record_comment, 'doc_code' => $doc_code, 'comment' => $comment], compact('course_id', 'docByAdmin','question_id','app_id','assesor_id'));
     }
 
     public function acc_doc_comments(Request $request)
     {
+        $check_nc = DB::table('assessor_summary_reports')->where(['application_id'=>$request->application_id,'nc_raise_code'=>$request->status,'object_element_id'=>$request->question_id,'assessor_id'=> $request->assessor_id,'assessor_type'=>$request->assesor_type])->first();
+
+        if(!empty($check_nc)){
+            return redirect("$request->previous_url")->with('error', 'NC already created on this document.');
+        }
+        /*Written By Suraj*/
+        if($request->status==1){
+            $nc_raise = "NC1";
+        }
+        else if($request->status==2){
+            $nc_raise = "NC2";
+        }
+        else if($request->status==3){
+            $nc_raise = "Not Approved";
+        }
+        else if($request->status==4){
+            $nc_raise="Approved";
+        }else{
+            $nc_raise="Request for final approval";
+        }
+
+        $data=[];
+        $data['application_id'] = $request->application_id;
+        $data['application_course_id'] = $request->application_course_id;
+        $data['object_element_id'] = $request->question_id;
+        $data['doc_sr_code'] = $request->doc_code;
+        $data['doc_unique_id'] = $request->doc_unique_id;
+        $data['date_of_assessement'] = $request->date_of_assessement??'';
+        $data['assessor_id'] = $request->assessor_id;
+        $data['assessor_type'] = $request->assesor_type;
+        $data['nc_raise'] = $nc_raise??'';
+        $data['nc_raise_code'] = $request->status??'';
+        $data['doc_path'] = $request->doc_path;
+        $data['capa_mark'] = $request->capa_mark??'';
+        $data['doc_against_nc'] = $request->doc_against_nc??'';
+        $data['doc_verify_remark'] = $request->doc_comment;
+        $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
+
+        /*end here*/
         $login_id = Auth::user()->role;
         if ($login_id == 3) {
             $request->doc_code;
 
-            $document = Add_Document::where('doc_id', $request->doc_code)->first();
+            $document = Add_Document::where('id', $request->doc_id)->first();
             $document->assessor_id = Auth::user()->id;
+            $document->assesment_type = Auth::user()->assessment == 1 ? 'desktop' : 'onsite';
             $document->save();
 
 
@@ -1583,6 +1689,7 @@ class LevelController extends Controller
             $comment->comments = $request->doc_comment;
             $comment->course_id = $request->course_id;
             $comment->user_id = Auth::user()->id;
+
             $comment->save();
 
             if ($request->status != 4) {
@@ -1644,6 +1751,32 @@ class LevelController extends Controller
             //Mail sending script ends here
 
         } elseif ($login_id == 1) {
+            $newDocument = null;
+            if ($request->status == 4){
+                $document = Add_Document::find($request->doc_id);
+
+                $newDocument = new Add_Document;
+                $newDocument->application_id = $document->application_id;
+                $newDocument->course_id = $document->course_id;
+                $newDocument->section_id = $document->section_id;
+                $newDocument->doc_id = $document->doc_id;
+                $newDocument->status = $document->status;
+                $newDocument->doc_file = $document->doc_file;
+                $newDocument->question_id = $document->question_id;
+                $newDocument->user_id = $document->user_id;
+                $newDocument->assessor_id = $document->assessor_id;
+                $newDocument->notApraove_count = $document->notApraove_count;
+                $newDocument->assesment_type = $document->assesment_type;
+                $newDocument->verified_document = $document->verified_document;
+                $newDocument->on_site_assessor_Id = $document->on_site_assessor_Id;
+                $newDocument->photograph = $document->photograph;
+                $newDocument->photograph_comment = $document->photograph_comment;
+                $newDocument->parent_doc_id = $document->parent_doc_id;
+                $newDocument->is_displayed_onsite = $document->is_displayed_onsite;
+                $newDocument->save();
+
+            }
+
             //return $request->course_id;
             $txt = "";
             if ($request->status == 4) {
@@ -1652,7 +1785,7 @@ class LevelController extends Controller
                 $txt = $request->doc_comment;
             }
             $comment = new DocComment;
-            $comment->doc_id = $request->doc_id;
+            $comment->doc_id = $newDocument ? $newDocument->id : $request->doc_id;
             $comment->doc_code = $request->doc_code;
             $comment->status = $request->status;
             $comment->comments = $txt;
@@ -1667,10 +1800,6 @@ class LevelController extends Controller
             if ($user) {
                 $asses_email = $user->email;
             }
-
-
-
-
 
             $user = ApplicationCourse::where('id', $request->course_id)->first();
 
@@ -2154,7 +2283,7 @@ class LevelController extends Controller
             $data->user_id = Auth::user()->id;
             $data->application_id = $aplication->id;
             $data->level_id = $request->level_id;
-           
+
             $data->save();
         }
         if ($request->hasfile('doc3')) {
@@ -2306,12 +2435,26 @@ class LevelController extends Controller
         $ApplicationCourse = ApplicationCourse::whereapplication_id($Application[0]->id)->get();
         $ApplicationPayment = ApplicationPayment::whereapplication_id($Application[0]->id)->get();
         $ApplicationDocument = ApplicationDocument::whereapplication_id($Application[0]->id)->get();
-        // dd($ApplicationDocument);
+        // dd($Application);
+        // dd($ApplicationCourse);
 
         // $spocData =DB::table('applications')->where('user_id',$Application[0]->user_id)->first();
         $spocData = DB::table('applications')->where('id', $Application[0]->id)->first();
         $data = DB::table('users')->where('users.id', $Application[0]->user_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application, 'alreadyPicked' => $alreadyPicked]);
+
+        /*Written by suraj*/
+        // dd($assesorId);
+        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$appId,'assessor_id'=>$assesorId])->first();
+
+        if(!empty($is_exists)){
+         $is_final_submit = true;
+        }else{
+         $is_final_submit = false;
+        }
+
+        /*end here*/
+
+        return view('application.accesser.Assessor_view', ['ApplicationDocument' => $ApplicationDocument, 'spocData' => $spocData, 'data' => $data, 'ApplicationCourse' => $ApplicationCourse, 'ApplicationPayment' => $ApplicationPayment, 'applicationData' => $Application, 'alreadyPicked' => $alreadyPicked,'is_final_submit'=>$is_final_submit]);
     }
 
     public function summery_course_report($applicationID)
@@ -2324,13 +2467,15 @@ class LevelController extends Controller
 
     public function view_summery_report($courseID,$applicationID)
     {
-        $applicationDetails = SummeryReport::with('SummeryReportChapter')->where(['application_id'=> $applicationID,'course_id' => $courseID])->first();
+        $applicationDetails = Application::find($applicationID);
         $chapters = Chapter::all();
+        $summaryReport = SummeryReport::with('SummeryReportChapter')->where(['application_id'=> $applicationID,'course_id' => $courseID])->first();
 
         $documentIds = Add_Document::where('course_id', $courseID)->where('application_id', $applicationID)->get(['id']);
         $totalNc = DocComment::whereIn('doc_id',$documentIds)->where('status','!=',4)->where('status','!=',3)->get()->count();
         $totalAccepted = DocComment::whereIn('doc_id',$documentIds)->where('status',4)->get()->count();
-        return view('application.accesser.assessor_summery_report',compact('chapters','applicationDetails','totalNc','totalAccepted'));
+        $course = $courseID;
+        return view('application.accesser.assessor_summery_report',compact('course','chapters','applicationDetails','totalNc','totalAccepted','summaryReport'));
     }
 
     public function secretariat_view($id)
@@ -2402,8 +2547,7 @@ class LevelController extends Controller
     {
         $contactNumber = $request->contact_number;
 
-        $existingApplication = Application::where('Contact_Number', $contactNumber)->first();
-
+        $existingApplication = DB::table('tbl_application')->where('contact_number', $contactNumber)->first();
         if ($existingApplication) {
             return response()->json(['status' => 'duplicate']);
         }
@@ -2487,7 +2631,7 @@ class LevelController extends Controller
     }
 
     public function newApplications($id = null)
-    { 
+    {
         if ($id) {
             $id = dDecrypt($id);
         }
@@ -2619,7 +2763,7 @@ class LevelController extends Controller
     {
         $email = $request->email;
 
-        $existingApplication = Application::where('Email_ID', $email)->first();
+        $existingApplication = DB::table('tbl_application')->where('email', $email)->first();
 
         if ($existingApplication) {
             return response()->json(['status' => 'duplicate']);
@@ -2630,7 +2774,7 @@ class LevelController extends Controller
 
     public function paymentTransactionValidation(Request $request)
     {
-        $transactionNumber = DB::table('application_payments')->where('transaction_no', $request->transaction_no)->first();
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->transaction_no)->first();
 
         if ($transactionNumber) {
             // Transaction number already exists
@@ -2644,8 +2788,7 @@ class LevelController extends Controller
 
     public function paymentReferenceValidation(Request $request)
     {
-        $transactionNumber = DB::table('application_payments')->where('reference_no', $request->reference_no)->first();
-
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->reference_no)->first();
         if ($transactionNumber) {
             // Transaction number already exists
             return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);
@@ -2804,11 +2947,13 @@ class LevelController extends Controller
 
     public function submitReportByDesktopAssessor($application_id,$course_id)
     {
-        $applicationDetails = Application::with(['courses' => function ($query) use ($course_id) {
-            $query->where('id', $course_id);
-        }])->where('id', $application_id)->first();
+        $applicationDetails = Application::find($application_id);
+
         $chapters = Chapter::all();
-        return view('asesrar.summery_report_form',compact('chapters','applicationDetails'));
+
+        //dd($applicationDetails);
+
+        return view('asesrar.summery_report_form',compact('chapters','applicationDetails','course_id'));
     }
 
     public function submitFinalReportByDesktopAssessor(Request $request)
@@ -2830,7 +2975,7 @@ class LevelController extends Controller
                     'summary_report_application_id' => $summaryReport->id,
                 ];
             }
-            $insrted = SummaryReportChapter::insert($questionData);           
+            $insrted = SummaryReportChapter::insert($questionData);
         }
         $application = Application::find($data['application_id']);
         $updated = $application->update([

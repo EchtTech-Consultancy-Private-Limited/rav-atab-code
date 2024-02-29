@@ -131,7 +131,7 @@
                     <div class="card">
                         <div class="card-header bg-white text-dark">
                             <h4 class="header-title mt-2">
-                                National Applications
+                                National Applications 
                                 </h2>
                         </div>
                         <div class="body">
@@ -199,7 +199,7 @@
                                                             $totalAmount += $payment->amount;
                                                             $paymentNumbers[] = $loop->iteration;
                                                         @endphp
-                                                        @if ($loop->iteration === 1)
+                                                        @if ($loop->iteration == 1)
                                                             {{ $payment->currency }}
                                                         @endif
                                                     @endforeach
@@ -308,11 +308,15 @@
                                                             <i class="material-icons">visibility</i>
                                                         </a>
 
+                                                        @php
+                                                        $total_documents = 4;
+                                                        @endphp
                                                         {{-- @if (totalDocumentsCount($item->id) >= totalQuestionsCount($item->id)) --}}
-                                                        @if (totalDocumentsCount($item->id) >= $totalQuestion &&
+                                                        @if (totalDocumentsCount($item->id) >= $total_documents &&
                                                                 $item->acknowledged_by != null &&
                                                                 $item->is_payment_acknowledge == 1)
                                                             @if (in_array(checktppaymentstatustype($item->id), [2, 3]))
+
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->id }}"
                                                                     data-bs-target="#View_popup_{{ $item->id }}"
@@ -336,6 +340,7 @@
                                                 @endif
                                                 {{-- popup form --}}
                                                 @if (Auth::user()->role != 6)
+
                                                     <div class="modal fade" id="View_popup_{{ $item->id }}"
                                                         tabindex="-1" role="dialog"
                                                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -368,6 +373,7 @@
                                                                         <?php
                                                                         $application_assessor_arr = listofapplicationassessor($item->id);
                                                                         $assessment_type = checkapplicationassessmenttype($item->id);
+                                                                        $is_onsite_payment_status = checkOnsiteAssessorPayment($item->id);
                                                                         ?>
                                                                         <br>
                                                                         <label class="mb-3"><b>Assessment
@@ -380,14 +386,20 @@
                                                                                 <option value="1">Desktop Assessment
                                                                                 </option>
                                                                             @endif
-                                                                            @if (count($item->payments) > 1)
+                                                                          {{--  @if (count($item->payments) > 1)
                                                                                 @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
                                                                                     <option value="2">On-Site
                                                                                         Assessment
                                                                                     </option>
                                                                                 @endif
                                                                             @endif
+                                                                            --}}
 
+                                                                            @if ($is_onsite_payment_status)
+                                                                                    <option value="2">On-Site
+                                                                                        Assessment
+                                                                                    </option>
+                                                                            @endif
 
                                                                         </select>
 
@@ -420,7 +432,7 @@
                                                                                     <div>
                                                                                         <?php
                                                          foreach(get_accessor_date_new($assesorsData->id,$item->id,$assesorsData->assessment) as $date){
-                                                          
+
                                                          ?>
 
                                                                                         {!! $date !!}
@@ -432,10 +444,20 @@
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
+
+
+
+
+
+
+
+
+                                                                        
                                                                         <div class="onsite-id">
                                                                             <div class="mt-3 mb-2">
-                                                                                @if (count($item->payments) > 1)
-                                                                                    @if ($item->desktop_status == 1 && $item->payments[1]->status == 2)
+                                                                            {{-- @if (count($item->payments) > 1) --}}
+                                                                                {{--  @if ($item->desktop_status == 1 && $item->payments[1]->status == 2) --}}
+                                                                                @if ($is_onsite_payment_status)
                                                                                         <label>
                                                                                             <input type="radio"
                                                                                                 id="on_site_type"
@@ -466,7 +488,7 @@
                                                                                                 Virtual
                                                                                             </span>
                                                                                         </label>
-                                                                                    @endif
+                                                                                   {{--  @endif --}}
                                                                                 @endif
                                                                             </div>
                                                                             @foreach ($assesors as $k => $assesorsData)
@@ -512,6 +534,7 @@
                                                             </form>
                                                         </div>
                                                     </div>
+
                                                     <!-- secreate user popup-->
                                                     <div class="modal fade" id="view_secreate_popup_{{ $item->id }}"
                                                         tabindex="-1" role="dialog"
@@ -667,7 +690,7 @@
                 success: function(data) {
                     //alert(data)
 
-                    if (data === 'success') {
+                    if (data == 'success') {
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',

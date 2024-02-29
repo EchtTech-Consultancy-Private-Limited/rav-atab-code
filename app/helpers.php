@@ -5,6 +5,9 @@ use App\Models\Application;
 use App\Models\ApplicationCourse;
 use App\Models\ApplicationNotification;
 use App\Models\DocComment;
+use App\Models\DocumentRemark;
+use App\Models\TblApplication;
+use App\Models\TblApplicationPayment;
 use App\Models\Question;
 use App\Models\SummaryReport;
 use App\Models\SummaryReportChapter;
@@ -69,6 +72,7 @@ function application_submission_date($application_id, $secretariat_id)
     $application_created_at = date('d-m-Y', strtotime($applications->created_at));
     return $application_created_at;
 }
+
 function assessor_assign_date($application_id, $asessor_id)
 {
     // dd($application_id, $asessor_id);
@@ -147,6 +151,7 @@ function listofapplicationsecretariat($application_id)
 function listofapplicationassessor($application_id)
 {
     $assessors = DB::table('asessor_applications')->where('application_id', '=', $application_id)->get();
+    
     $assessorid = array();
     if (!empty($assessors)) {
 
@@ -157,6 +162,15 @@ function listofapplicationassessor($application_id)
     } else {
         $assessorid = array();
         return $assessorid;
+    }
+}
+function getAssessorDesignation($application_id,$assessor_id)
+{
+    $assessors = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id])->first();
+    if (!empty($assessors)) {
+        return $assessors;
+    } else {
+        return null;
     }
 }
 
@@ -173,6 +187,7 @@ function checkapplicationassessmenttype($application_id)
         return $application_assessment_type;
     }
 }
+
 function checkmanualtype($type)
 {
     if ($type == 1)
@@ -210,7 +225,7 @@ function get_all_comments($id = 0)
 {
     //dd($id);
     //return $id;
-    return  $doc_code = App\Models\DocComment::select('comments')->where('doc_id', $id)->get();
+    return $doc_code = App\Models\DocComment::select('comments')->where('doc_id', $id)->get();
     /*if($doc_code)
             {
                $doc_comments = $doc_code->comments;
@@ -318,6 +333,7 @@ function get_course_mode($id)
     //dd("$course_modes");
     //return $course_modes;
 }
+
 function get_accessor_date($id)
 {
 
@@ -369,7 +385,7 @@ function get_accessor_date_new($id, $applicationID, $assessmentType)
         if (in_array($j->format("Y-m-d"), $allSelectedDates)) {
             $eventsDate[] = "<span class='btn btn-danger dateID'  data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "'>" . $j->format("Y-m-d") . "</span>";
         } else {
-            $eventsDate[] = "<span class='btn btn-success dateID' data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "' >" . $j->format("Y-m-d") . "</span>";
+            $eventsDate[] = "<span class='disabled btn btn-success dateID dateID_".$applicationID."' data-id='" . $applicationID . ',' . $id . ',' . $assessmentType . ',' . $j->format("Y-m-d") . "' >" . $j->format("Y-m-d") . "</span>";
         }
     }
     return $eventsDate;
@@ -436,7 +452,7 @@ function show_btn($date)
 
     return $startdate;
 
-    if ($startdate  ==  $mytime->toDateTimeString()) {
+    if ($startdate == $mytime->toDateTimeString()) {
 
         return "1";
     } else {
@@ -444,8 +460,6 @@ function show_btn($date)
         return "0";
     }
 }
-
-
 
 
 function Checknotification($id = 0)
@@ -518,7 +532,7 @@ function checkDocumentCommentStatusreturnText($id)
 }
 
 
-function getComments($id = null, $applicationID)
+function getComments($id, $applicationID)
 {
     $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
@@ -556,7 +570,7 @@ function getComments($id = null, $applicationID)
             } elseif ($comment->status == 5) {
                 $statusCode = "Request final approval";
             } elseif ($comment->status == 6) {
-                $statusCode = "NC3";
+                $statusCode = "Not Accepted";
             } else {
                 $statusCode = "Close";
             }
@@ -584,7 +598,7 @@ function getComments($id = null, $applicationID)
     return $html;
 }
 
-function getCommentsForAdmin($id = null, $applicationID)
+function getCommentsForAdmin($id, $applicationID)
 {
     $documents = DB::table('add_documents')->where('question_id', $id)->where('application_id', $applicationID)->get();
 
@@ -596,7 +610,7 @@ function getCommentsForAdmin($id = null, $applicationID)
     if ($comments) {
         $num = 1;
         $html = "<table class='table table-bordered'>
-     
+
             <tr>
                 <th>Sr. No.</th>
                 <th>Document Code</th>
@@ -605,7 +619,7 @@ function getCommentsForAdmin($id = null, $applicationID)
                 <th>Status Code</th>
                 <th>Approved/Rejected By</th>
             </tr>
-      
+
         <tbody>";
         $class = "";
         foreach ($comments as $comment) {
@@ -622,7 +636,7 @@ function getCommentsForAdmin($id = null, $applicationID)
             } elseif ($comment->status == 5) {
                 $statusCode = "Request final approval";
             } elseif ($comment->status == 6) {
-                $statusCode = "NC3";
+                $statusCode = "Not Accepted";
             } else {
                 $statusCode = "Close";
             }
@@ -651,19 +665,17 @@ function getCommentsForAdmin($id = null, $applicationID)
 }
 
 
-
 function getUserDetails($userId)
 {
-    $user =  DB::table('users')->where('id', $userId)->first();
+    $user = DB::table('users')->where('id', $userId)->first();
     return $user->firstname . ' ' . $user->lastname;
 }
 
-function checkCommentsExist($id = null, $applicationId = null)
+function checkCommentsExist($id = null, $applicationId = null,$course_id=null)
 {
     $authId = auth()->user()->id;
 
-    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id', $authId)->where('application_id', $applicationId)->get();
-
+    $documents = DB::table('add_documents')->where('question_id', $id)->where('user_id', $authId)->where('application_id', $applicationId)->where('course_id',$course_id)->get();
 
     if ($documents) {
         $docIds = $documents->pluck('id');
@@ -734,7 +746,7 @@ function getOnSiteAssessorDocument($questionID, $applicationId, $course_id)
 
 function getMandays($applicationID, $assesorID)
 {
-    $dates =  DB::table('assessor_assigne_date')->where('assessor_Id', $assesorID)->where('application_id', $applicationID)->get();
+    $dates = DB::table('assessor_assigne_date')->where('assessor_Id', $assesorID)->where('application_id', $applicationID)->get();
     return count($dates);
 }
 
@@ -763,8 +775,32 @@ function getAdminDocument($questionID, $applicationId)
     }
 }
 
+function getOnlyDesktopAssessorDoc($questionID, $applicationId)
+{
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->where('assesment_type','desktop')->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
+function getOnlyOnsiteAssessorDoc($questionID, $applicationId)
+{
+
+    $documents = DB::table('add_documents')->where('question_id', $questionID)->where('application_id', $applicationId)->where('assesment_type','onsite')->get();
+
+    if (count($documents) > 0) {
+        return $documents;
+    } else {
+        return $documents = [];
+    }
+}
+
 // only for summery report
-function getSummerDocument($questionID, $applicationId,$courseId)
+function getSummerDocument($questionID, $applicationId, $courseId)
 {
     // dd($questionID);
     $documents = DB::table('add_documents')->where('question_id', $questionID)->where('course_id', $courseId)->where('application_id', $applicationId)->first();
@@ -775,6 +811,7 @@ function getSummerDocument($questionID, $applicationId,$courseId)
     //     return $documents = [];
     // }
 }
+
 // end summery report
 
 function getAssessorComments($docID)
@@ -839,7 +876,7 @@ function getButtonText($id)
         } elseif ($commentData->status == 1) {
             return "NC1";
         } elseif ($commentData->status == 6) {
-            return "NC3";
+            return "Not Accepted";
         } else {
             return "Not Approved";
         }
@@ -865,9 +902,12 @@ function totalQuestionsCount($applicationId)
 
 function totalDocumentsCount($applicationId)
 {
-    $totalDocuments = DB::table('add_documents')->where('application_id', $applicationId)->get()->count();
-
-    return $totalDocuments;
+    return DB::table('add_documents')
+        ->select('question_id')
+        ->where('application_id', $applicationId)
+        ->distinct()
+        ->get()
+        ->count();
 }
 
 function getUserDetail($userId)
@@ -948,11 +988,138 @@ function getVerifiedApplications()
     $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
     return $applications;
 }
+/*created by suraj*/
+function checkOnsiteAssessorPayment($application_id){
 
-function getApplicationPaymentNotificationStatus()
+    $is_exists = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'assessor_type'=>'desktop','payment_status'=>1])->first();
+    if(!empty($is_exists)){
+        return true;
+    }else{
+        return false;
+    }
+
+}
+
+function getApplicationListForSecondPayment()
 {
     $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
     $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->get();
+    $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('payment_status',0)->get();
+    if($final_assessor_summary){
+        return $final_assessor_summary;
+    }else{
+       return [];
+    }
+    
+}
+
+/*Created by Suraj*/
+function getSecondPaymentNotification()
+    {
+        $applicationsIds = TblApplication::where('tp_id', auth()->user()->id)->get(['id']);
+        $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')
+        ->select('assessor_final_summary_reports.*','app.uhid')
+        ->leftJoin('tbl_application as app','app.id','=','assessor_final_summary_reports.application_id')
+        ->where('second_payment_status',0)
+        ->orderBy('id','desc')
+        ->get();
+        if($final_assessor_summary){
+            return $final_assessor_summary;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAccount()
+    {
+        $payment_list = TblApplicationPayment::where('account_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+
+        
+        $application_ids = collect($payment_list)->pluck('application_id');
+        $payment_list_=TblApplication::whereIn('id', $application_ids)->orderBy('id','desc')->get();
+
+        if($payment_list_){
+            return $payment_list_;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAdmin()
+    {
+        $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
+        ->where('admin_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+
+        if($payment_list){
+            return $payment_list;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAssessorDesktop()
+    {
+            $assessor_id = Auth::user()->id;
+            $assessor_application = DB::table('tbl_assessor_assign')
+            ->where('assessor_id',$assessor_id)
+            ->pluck('application_id')->toArray();
+            $final_data=array();
+            $application = DB::table('tbl_application')
+            ->whereIn('payment_status',[1,2,3])
+            ->whereIn('id',$assessor_application)
+            ->where('assessor_desktop_received_payment',0)
+            ->orderBy('id','desc')
+            ->get();
+        if($application){
+            return $application;
+        }else{
+        return [];
+        }
+    }
+
+    function getNotificationForAssessorOnsite()
+    {
+        $assessor_id = Auth::user()->id;
+        $assessor_application = DB::table('tbl_assessor_assign')
+        ->where('assessor_id',$assessor_id)
+        ->pluck('application_id')->toArray();
+        $final_data=array();
+        $application = DB::table('tbl_application')
+        ->whereIn('payment_status',[1,2,3])
+        ->whereIn('id',$assessor_application)
+        ->where('assessor_onsite_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+        if($application){
+            return $application;
+        }else{
+        return [];
+        }
+    }
+/*end here*/
+
+function getNotificationForSecondPayment()
+{
+    $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
+   $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')->where('payment_status',0)->get();
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->orderBy('id', 'desc')->get();
+    
+    if (!empty($final_assessor_summary)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/*end here*/
+function getApplicationPaymentNotificationStatus()
+{
+    $applicationsIds = Application::where('user_id', auth()->user()->id)->get(['id']);
+    $applications = ApplicationNotification::whereIn('application_id', $applicationsIds)->where('is_read', 0)->orderBy('id', 'desc')->get();
     if (count($applications) > 0) {
         return true;
     } else {
@@ -965,8 +1132,8 @@ function checkOnSiteDoc($applicationID, $questionID, $courseID, $assesorID)
     $document = Add_Document::where('question_id', $questionID)
         ->where('application_id', $applicationID)
         ->where('course_id', $courseID)
+        ->where('photograph',null)
         ->where('on_site_assessor_Id', $assesorID)->orderBy('id', 'desc')->first();
-
 
     return $document;
 }
@@ -982,14 +1149,11 @@ function checkOnSitePhotograph($applicationID, $questionID, $courseID, $assesorI
     return $document;
 }
 
+
 function getLastComment($docID)
 {
-
-    $comment = DocComment::where('doc_id', $docID)->first();
-
-    return $comment;
+    return DocComment::where('doc_id', $docID)->orderBy('id', 'desc')->first();
 }
-
 function updatedBy($docId)
 {
     $document = Add_Document::find($docId);
@@ -1041,34 +1205,100 @@ function checkDocumentsStatus($applicationID, $courseID)
 
 function getDocumentComment($questionID, $applicationID, $courseID)
 {
-    $document =  Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->first();
+    $document = Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->first();
     if ($document) {
-        $comment = DB::table('doc_comments')->where('doc_id', $document->id)->first();
-        return $comment;
+        return DB::table('doc_comments')->where('doc_id', $document->id)->where('status', '!=', 4)->first();
+    }
+}
+
+function getDocumentCommentOnSite($questionID, $applicationID, $courseID)
+{
+    $document = Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->where('assesment_type','onsite')->first();
+    if ($document) {
+        return DB::table('doc_comments')->where('doc_id', $document->id)->where('status', '!=', 4)->first();
     }
 }
 
 function getAllDocumentsForSummary($questionID, $applicationID, $courseID)
 {
+
     return Add_Document::where('question_id', $questionID)->where('application_id', $applicationID)->where('course_id', $courseID)->get();
 }
 
+
+
+function getAllDocumentsForSummaryForDesktop($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)->where('assesment_type','desktop')
+        ->get();
+}
+
+function getAllDocumentsNoAction($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+
+        ->get();
+}
+
+function getAllDocumentsNoActionDesktop($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)->where('assesment_type','desktop')
+        ->get();
+}
+
+function getAllDocumentsForSummaryForOnsite($questionID, $applicationID, $courseID)
+{
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)->where('assesment_type','onsite')
+        ->get();
+}
+
+function getNOActionDocuments($questionID, $applicationID, $courseID){
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)
+        ->get();
+}
+
+
+
+
+function getONeDocument($questionID, $applicationID, $courseID)
+{
+
+    return Add_Document::where('question_id', $questionID)
+        ->where('application_id', $applicationID)
+        ->where('course_id', $courseID)
+        ->orderBy('id', 'desc')
+        ->where('photograph',null)
+        ->first();
+}
 function getDocComment($docID)
 {
     return DocComment::where('doc_id', $docID)->first();
 }
 
+function getDocRemarks($docID)
+{
+    return DocumentRemark::where('document_id', $docID)->orderBy('id','desc')->first();
+}
+
+
 function printStatus($docID)
 {
-    $comment = DocComment::where('doc_id', $docID)->first();
+    $comment = DocComment::where('doc_id', $docID)->where('status', '!=', 3)->first();
 
     if ($comment) {
         if ($comment->status == 1) {
             return "NC1";
         } elseif ($comment->status == 2) {
             return "NC2";
-        } elseif ($comment->status == 3) {
-            return "Not Recommended";
         } elseif ($comment->status == 4) {
             return "No NC";
         }
@@ -1124,10 +1354,41 @@ function getNCRecords($question, $course, $application)
         foreach ($commentsData as $comment) {
             // Check the status and add the appropriate string to the array
             if ($comment->status == 1) {
-                $comments[] = 'nc1';
+                $comments[] = 'NC1';
             } elseif ($comment->status == 2) {
-                $comments[] = 'nc2';
+                $comments[] = 'NC2';
             } // Add more conditions as needed
+        }
+    }
+
+    // Use implode to join the array elements with commas
+    return implode(', ', $comments);
+}
+
+
+function getNCRecordsONsite($question, $course, $application)
+{
+    $documents = Add_Document::where('application_id', $application)
+        ->where('course_id', $course)
+        ->where('question_id', $question)
+        ->where('assesment_type','onsite')
+        ->get();
+
+    $comments = [];
+
+    foreach ($documents as $document) {
+        $commentsData = DocComment::where('doc_id', $document->id)
+            ->where('status', '!=', 4)
+            ->get();
+
+        foreach ($commentsData as $comment) {
+            // Check the status and add the appropriate string to the array
+            if ($comment->status == 1) {
+                $comments[] = 'NC1';
+            } elseif ($comment->status == 2) {
+                $comments[] = 'NC2';
+            } // Add more conditions as needed
+
         }
     }
 
@@ -1140,32 +1401,64 @@ function getNCRecordsComments($question, $course, $application)
     $documents = Add_Document::where('application_id', $application)
         ->where('course_id', $course)
         ->where('question_id', $question)
+        ->where('assesment_type','desktop')
+        ->pluck('id'); // Use pluck to retrieve only the 'id' column
+
+    // Use a single query to fetch comments for all documents
+    $comments = DocComment::whereIn('doc_id', $documents)
+        ->where('status', '!=', 4)
+        ->where('status', '!=', 3)
         ->get();
 
-    $comments = []; // Initialize an array to store comments
-
-    foreach ($documents as $document) {
-        $commentsData = DocComment::where('doc_id', $document->id)
-            ->where('status', '!=', 4)
-            ->get();
-
-        // Check if there are any comments for the current document
-        if ($commentsData->isNotEmpty()) {
-            // Add the comments for the current document to the array
-            $comments[] = $commentsData;
-        }
-    }
-
-    // Return the array of comments for all documents
     return $comments;
 }
 
+
+function getQuestionDocumentNCDeskktop($question, $course, $application)
+{
+    //$data = Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
+   
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->get();
+}
 function getQuestionDocument($question, $course, $application)
 {
     return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->get();
 }
 
 
-function getLastDocCommentData($docID){
-    return DocComment::where('doc_id',$docID)->first();
+function getQuestionDocumentDesktop($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->where('assesment_type','desktop')->get();
+}
+
+function getQuestionDocumentOnsite($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->where('assesment_type','onsite')->get();
+}
+
+
+function getSingleDocument($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('parent_doc_id', '!=', null)->first();
+}
+
+function getSingleDocumentForDesktop($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('assesment_type', 'desktop')->orderBy('id','desc')->first();
+}
+
+function getSingleDocumentForONSite($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->where('assesment_type', 'onsite')->orderBy('id','desc')->first();
+}
+
+function getAcceptedDocument($question, $course, $application)
+{
+    return Add_Document::where('question_id', $question)->where('course_id', $course)->where('application_id', $application)->first();
+}
+
+
+function getLastDocCommentData($docID)
+{
+    return DocComment::where('doc_id', $docID)->first();
 }

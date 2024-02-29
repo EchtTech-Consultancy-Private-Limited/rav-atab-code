@@ -261,7 +261,7 @@
                                                                                                     @if ($doc->application_id == $application_id)
                                                                                                         <div>
                                                                                                             <a                                                                                                              title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                                href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                                href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id.'/'.$question->id) }}"
                                                                                                                 class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                                 style="color: #fff ;margin:10px;"
                                                                                                                 id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
@@ -285,7 +285,7 @@
                                                                                                         <div>
                                                                                                             <a
                                                                                                                 title="{{ checkDocumentCommentStatusreturnText($doc->id) }}"
-                                                                                                                href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id) }}"
+                                                                                                                href="{{ url('admin-view-doc' . '/' . $doc->doc_id . '/' . $doc->doc_file . '/' . $doc->id . '/' . $course_id.'/'.$question->id) }}"
                                                                                                                 class="docBtn text-white {{ checkDocumentCommentStatus($doc->id) }}"
                                                                                                                 style="color: #fff ;margin:10px;"
                                                                                                                 id="view_doc1">{{ getButtonText($doc->id) ?? '' }}</a>
@@ -322,7 +322,7 @@
                                                                                         @php
                                                                                             $fileExtension = pathinfo($verifiedDocumentForAdmin->verified_document, PATHINFO_EXTENSION);
                                                                                         @endphp
-                                                                                        @if ($fileExtension === 'pdf')
+                                                                                        @if ($fileExtension == 'pdf')
                                                                                             <a
                                                                                                 href="{{ url('show-course-pdf/' . $verifiedDocumentForAdmin->verified_document) }}"
                                                                                                 class="docBtn bg-primary"
@@ -345,7 +345,7 @@
                                                                                             $fileExtension = pathinfo($verifiedPhotograph->photograph, PATHINFO_EXTENSION);
                                                                                         @endphp
 
-                                                                                        @if ($fileExtension === 'pdf')
+                                                                                        @if ($fileExtension == 'pdf')
                                                                                             <a
                                                                                                 href="{{ url('show-course-pdf/' . $verifiedPhotograph->photograph) }}"
                                                                                                 class="docBtn bg-secondary">View

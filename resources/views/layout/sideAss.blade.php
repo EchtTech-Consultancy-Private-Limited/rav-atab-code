@@ -46,15 +46,25 @@
                     </a>
             </li>
 
-            <li  class="{{ (Request::is('nationl-accesser') ||  Request::is('internationl-accesser') )?'active':''}}" >
+            @if(Auth::user()->assessment==1)
+                <?php
+                    $url = "desktop/application-list";
+                ?>
+            @else
+            <?php
+                    $url = "onsite/application-list";
+                ?>
+            @endif
+
+            <li  class="{{ (Request::is($url) ||  Request::is('internationl-accesser') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                 <i class="fa fa-cog"></i>
                     <span>Manage Application</span>
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('nationl-accesser')?'active':''}}" >
-                        <a  href="{{ url('nationl-accesser') }}">National Application</a>
+                    <li class="{{ Request::is($url)?'active':''}}" >
+                        <a  href="{{ url($url) }}">National Application</a>
                     </li>
 
                     <li class="{{ Request::is('internationl-accesser')?'active':''}}">
@@ -106,14 +116,12 @@
 
                 </a>
             </li>
-
-            <li>
+  
                 <a href="#" onClick="return false;">
                     <i class="fa fa-clipboard"></i>
                     <span>Grievance</span>
                 </a>
             </li>
-
 
             <li class="{{ Request::is('send-feedback')?'active':''}}">
                 <a href="{{ url('/send-feedback') }}">

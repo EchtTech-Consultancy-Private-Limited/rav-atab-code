@@ -79,7 +79,7 @@
             @csrf
 
             <input type="hidden" name="application_id" value="{{ $applicationData->id }}">
-            <input type="hidden" name="course_id" value="{{ $courseDetail->id }}"> 
+            <input type="hidden" name="course_id" value="{{ $courseDetail->id }}">
             <div class="card-body">
                 <table>
 
@@ -90,12 +90,12 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">Name and Location of the Training Provider: <input name="training_provider_name" type="text" value="{{ $applicationData->user->firstname . ' ' . $applicationData->user->middlename . ' ' . $applicationData->user->lastname }}({{ $applicationData->user->address }})"></td>
-                            <td colspan="2">Name of the course  to be assessed:  <input type="text" name="course_name" value="{{ $courseDetail->course_name }} "></td>
+                            <td colspan="2">Name and Location of the Training Provider: <input readonly name="training_provider_name" type="text" value="{{ $applicationData->user->firstname . ' ' . $applicationData->user->middlename . ' ' . $applicationData->user->lastname }}({{ $applicationData->user->address }})"></td>
+                            <td colspan="2">Name of the course  to be assessed:  <input readonly type="text" name="course_name" value="{{ $courseDetail->course_name }} "></td>
                         </tr>
                         <tr>
-                            <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual): <input name="way_of_assessment" type="text" value="{{ $assessorDetail->assessment_way ?? '' }}"></td>
-                            <td colspan="2"> No of Mandays: <input type="text" name="mandays" value="{{ getMandays($applicationData->id, auth()->user()->id) }}"></td>
+                            <td colspan="2"> Way of assessment (onsite/ hybrid/ virtual): <input readonly name="way_of_assessment" type="text" value="{{ $assessorDetail->assessment_way ?? '' }}"></td>
+                            <td colspan="2"> No of Mandays: <input type="text" readonly name="mandays" value="{{ getMandays($applicationData->id, auth()->user()->id) }}"></td>
                         </tr>
                         <tr>
                             <td>  S. No. </td>
@@ -112,16 +112,16 @@
                             <td> </td>
                             <td> </td>
                         </tr>
-                
+
                         <tr>
                             <td> Signatures</td>
                             <td><input type="hidden" name="signature"> </td>
                             <td> </td>
                         </tr>
-                
+
                         <tr>
                             <td>Assessor Name </td>
-                            <td> <input type="text" name="name" value="{{ $assessorDetail->user->firstname.' '.$assessorDetail->user->middlename.' '.$assessorDetail->user->lastname }}"></td>
+                            <td> <input type="text" name="name" readonly value="{{ $assessorDetail->user->firstname.' '.$assessorDetail->user->middlename.' '.$assessorDetail->user->lastname }}"></td>
                             <td> </td>
                             <td> </td>
                         </tr>
@@ -134,18 +134,18 @@
                         <tr>
                             <td> </td>
                             <td> <input type="text" name="team_leader"></td>
-                            <td> <input type="text" name="assessor_name" value="{{ $assessorDetail->user->firstname.' '.$assessorDetail->user->middlename.' '.$assessorDetail->user->lastname }}"></td>
+                            <td> <input type="text" name="assessor_name" readonly value="{{ $assessorDetail->user->firstname.' '.$assessorDetail->user->middlename.' '.$assessorDetail->user->lastname }}"></td>
                             <td> <input type="text" name="rep_assessee_orgn"></td>
                         </tr>
                         <tr>
                             <td colspan="2"> Date:</td>
                             <td colspan="2"> Signature of the Team Leader</td>
-                
+
                         </tr>
                         <tr>
                             <td colspan="2"> <input type="date" name="date_of_submission"></td>
                             <td colspan="2"> </td>
-                
+
                         </tr>
                     </tbody>
                 </table>
@@ -155,8 +155,8 @@
             </div>
            </form>
         </div>
-        
+
     </section>
 
-   
+
     @include('layout.footer')

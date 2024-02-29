@@ -92,6 +92,15 @@
                                                                             <input type="hidden"
                                                                                 value="{{ $course_id }}"
                                                                                 name="course_id">
+
+                                                                                <input type="hidden" name="application_id" value="{{ $app_id }}">
+                                                                <input type="hidden" name="question_id" value="{{ Request()->segment(6) }}">
+                                                                <input type="hidden" name="application_course_id" value="{{ Request()->segment(5) }}">
+
+                                                                <input type="hidden" name="assessor_id" value="{{ $assesor_id }}">
+                                                                <input type="hidden" name="doc_path" value="{{ Request()->segment(3) }}">
+                                                                <input type="hidden" name="assesor_type" value="admin">
+
                                                                             <div class="row">
                                                                                 <div class="col-sm-12 col-md-4">
                                                                                     <label

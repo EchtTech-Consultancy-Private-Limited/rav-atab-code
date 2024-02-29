@@ -90,15 +90,33 @@
                     <th>Action</th>
                 </tr>
                 @foreach ($courses as $item)
+                @if($item->application_id!==null)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->course_name }}</td>
-                        <td>{{ $item->course_duration }}</td>
+                        <td>
+                            {{ $item->years }} Year(s) {{ $item->months }} Month(s) {{ $item->days }} Day(s) {{ $item->hours }} Hour(s)
+                        
+                        </td>
                         <td>{{ $item->eligibility }}</td>
                         <th>
-                            <a href="{{ url('on-site/report-summary?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                            @if(Auth::user()->assessment==2)
+                                @if($item->application_id!==null)
+                                <a href="{{ url('onsite/view?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                                @else
+                                <a href="#" class="btn btn-warning" disabled>Report Not Generated</a>
+                                @endif
+                            
+                            @else
+                                @if($item->application_id!==null)
+                                <a href="{{ url('desktop/view?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary report</a>
+                                @else
+                                <a href="#" class="btn btn-warningg" disabled>Report Not Generated</a>
+                                @endif
+                            @endif
                         </th>
                     </tr>
+                    @endif
                 @endforeach
             </table>
         </div>

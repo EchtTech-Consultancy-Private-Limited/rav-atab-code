@@ -242,7 +242,7 @@
         });
 
         $.ajax({
-            url: "{{ url('Assigan-application') }}",
+            url: `${BASE_URL}/Assigan-application`,
             type: "get",
             data: {
                 id: UserName

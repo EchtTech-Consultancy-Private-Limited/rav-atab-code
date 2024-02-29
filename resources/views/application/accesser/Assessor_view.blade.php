@@ -48,10 +48,17 @@
                             </li>
                             <li class="breadcrumb-item active"> Assessor View Applications </li>
                         </ul>
-                        
-                        @if (auth()->user()->assessment == 2 && $spocData->onsite_status == 1)
-                            <a href="{{ url('get-application-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
+
+                        @if($is_final_submit)
+                        <a href="{{ url('get-application-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
                         @endif
+                        
+
+                        <!-- @if (auth()->user()->assessment == 2 && $spocData->onsite_status == 1)
+                            <a href="{{ url('get-application-summaries?application='.$spocData->id) }}" class="btn btn-primary">View Summary</a>
+                        @endif -->
+
+
                         <a href="{{ url('nationl-accesser') }}" type="button" class="btn btn-primary"
                             style="float:right;">Back </a>
                             @if (auth()->user()->assessment == 1)
@@ -231,7 +238,7 @@
             <div class="card">
                 <div class="card-header bg-white text-dark">
                     <h5 class="mt-2">
-                        Single Point of Contact Details (SPoC)
+                        Single Point of Contact Details (SPoC) 
                     </h5>
                 </div>
                 <div class="card-body">
