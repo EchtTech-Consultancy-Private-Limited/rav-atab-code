@@ -120,7 +120,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <ul class="breadcrumb breadcrumb-style ">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">National Applications</h4>
+                                <h4 class="page-title">National Application</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
@@ -129,7 +129,7 @@
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">Dashboard</a>
                             </li>
-                            <li class="breadcrumb-item active">National Applications</li>
+                            <li class="breadcrumb-item active">National Application</li>
                         </ul>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-header bg-white text-dark">
-                            <h4 class="header-title mt-2"> National Applications</h2>
+                            <h4 class="header-title mt-2"> National Application</h2>
 
                         </div>
                         <div class="body">

@@ -59,7 +59,7 @@
                                  Accountant
                              @endif
 
-
+    </p>
                      </div>
                  </li>
              </ul>
