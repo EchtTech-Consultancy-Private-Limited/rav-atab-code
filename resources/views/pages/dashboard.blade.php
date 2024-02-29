@@ -194,7 +194,7 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
                             <div class="mb-4">
-                               <a href="{{ url('nationl-page') }}"><h5 class="font-20 mb-0">National Applications</h5></a>
+                               <a href="{{ url('nationl-page') }}"><h5 class="font-20 mb-0">National Application</h5></a>
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
@@ -223,7 +223,7 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
                             <div class="mb-4">
-                                <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">International Applications</h5></a>
+                                <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">InterNational Application</h5></a>
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
@@ -350,7 +350,7 @@
                 </div>
 
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">International Applications <small>(Active)</small></h5>
+                        <h5 class="modal-title" id="exampleModalLabel">InterNational Application <small>(Active)</small></h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -378,7 +378,7 @@
              <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
            </div>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">International Applications <small>(Pending)</small></h5>
+                        <h5 class="modal-title" id="exampleModalLabel">InterNational Application <small>(Pending)</small></h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -524,7 +524,7 @@ Highcharts.chart('container3', {
 <script>
 function showHtmlMessageActive() {
     swal({
-        title: "International Applications <small>(Active)</small>",
+        title: "InterNational Application <small>(Active)</small>",
         text: '<div style="float:left; clear:none; width:50%; position:relative;">'
             +'<div>SAARC</div>'
             +'<div style="font-weight:bold;  font-size:20px;">{{@$dataCount['complete']}}</div>'
@@ -542,7 +542,7 @@ function showHtmlMessageActive() {
 function showHtmlMessagePending() {
 
    swal({
-        title: 'International Applications <small>(Pending)</small><button type="button" class="close"  aria-label="Close" style="width:auto;height:auto;"><span aria-hidden="true">×</span></button>',
+        title: 'InterNational Application <small>(Pending)</small><button type="button" class="close"  aria-label="Close" style="width:auto;height:auto;"><span aria-hidden="true">×</span></button>',
         text: '<div style="float:left; clear:none; width:50%; position:relative;">'
             +'<div>SAARC</div>'
             +'<div style="font-weight:bold;  font-size:20px;">{{@$dataCount['pending']}}</div>'
