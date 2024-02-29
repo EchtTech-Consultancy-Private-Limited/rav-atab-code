@@ -191,7 +191,7 @@
                                                     $admin_count = count($rows->nc_admin);
                                                     @endphp
 
-                                                    @if($admin_count>0)
+                                                    @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
                                                     
                                                         @if($admin_count==1)
                                                             {{$rows->nc_admin[0]->comments??''}}
@@ -385,7 +385,7 @@
                                                     $admin_count = count($rows->nc_admin);
                                                     @endphp
 
-                                                    @if($admin_count>0)
+                                                @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
                                                     
                                                         @if($admin_count==1)
                                                             {{$rows->nc_admin[0]->comments??''}}

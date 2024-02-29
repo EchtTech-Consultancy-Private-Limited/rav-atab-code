@@ -261,7 +261,7 @@
                                                     @if($row->tp_remark!=null)
                                                         {{$key+1}} : {{ucfirst($row->tp_remark)}},
                                                     @else
-                                                    N/A
+                                                    <!-- N/A -->
                                                     @endif
                                                     @endforeach
                                                 </td>
@@ -314,22 +314,9 @@
                                                     $admin_count = count($rows->nc_admin);
                                                     @endphp
 
-                                                    @if($admin_count>0)
-                                                    
-                                                        @if($admin_count==1)
-                                                            {{$rows->nc_admin[0]->comments??''}}
-                                                        @elseif($admin_count==2)
-                                                            {{$rows->nc_admin[1]->comments??''}}
-                                                        @elseif($admin_count==3)
-                                                            {{$rows->nc_admin[2]->comments??''}}
-                                                        @elseif($admin_count==4)
-                                                            {{$rows->nc_admin[3]->comments??''}}
-                                                        @elseif($admin_count==5)
-                                                            {{$rows->nc_admin[4]->comments??''}}
-                                                        @else
-                                                        {{$rows->nc_admin[5]->comments??''}}
-                                                        @endif
-
+                                                
+                                                        @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
+                                                        {{$rows->nc_admin[0]->comments??''}}
                                                     @else
                                                             @if($count==1)
                                                             {{$rows->nc[0]->comments??''}}
