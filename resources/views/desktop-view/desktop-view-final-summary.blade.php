@@ -378,8 +378,12 @@
                                                             {{$rows->nc_admin[1]->comments??''}}
                                                         @elseif($admin_count==3)
                                                             {{$rows->nc_admin[2]->comments??''}}
+                                                        @elseif($admin_count==4)
+                                                            {{$rows->nc_admin[3]->comments??''}}
+                                                        @elseif($admin_count==5)
+                                                            {{$rows->nc_admin[4]->comments??''}}
                                                         @else
-
+                                                        {{$rows->nc_admin[5]->comments??''}}
                                                         @endif
 
                                                     @else

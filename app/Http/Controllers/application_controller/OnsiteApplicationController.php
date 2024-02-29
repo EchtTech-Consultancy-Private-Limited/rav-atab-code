@@ -190,15 +190,22 @@ class OnsiteApplicationController extends Controller
                         'onsite_nc_comments' => TblNCComments::where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
-                            'assessor_type' => 'onsite',
+                            // 'assessor_type' => 'onsite',
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
                         ])
                         ->where('nc_type',"!=",null)
                         ->whereIn('assessor_type',['onsite','admin'])
+                        ->where(function ($query) {
+                            $query->where('assessor_type', 'onsite')
+                                ->orWhere('assessor_type', 'admin')
+                                ->where('final_status', 'onsite');
+                        })
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
+
+
                         'onsite_photograph' =>DB::table('tbl_onsite_photograph')->where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
