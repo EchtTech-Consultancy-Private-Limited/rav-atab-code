@@ -145,6 +145,7 @@ class DesktopApplicationController extends Controller
 
                 $final_data[] = $obj;
         }
+
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
@@ -376,6 +377,16 @@ class DesktopApplicationController extends Controller
             'asr.assessor_type' => 'desktop',
         ])
         ->first();
+
+        $course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$application_course_id,
+            'assessor_type'=>'desktop'
+        ])
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','admin_nc_flag','status')
+        ->get();
+
+
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id,'assessor_type'=>'desktop'])->first();
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$application_id])->count();
@@ -390,19 +401,33 @@ class DesktopApplicationController extends Controller
                             'application_courses_id' => $application_course_id,
                             'doc_unique_id' => $question->id,
                             'assessor_id'=>$assessor_id,
-                            'doc_sr_code' => $question->code
+                            'doc_sr_code' => $question->code,
                         ])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get();
                       
+                        $value1 = TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $application_course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code,
+                            'assessor_type'=>'admin',
+                            'final_status'=>'desktop'
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get();
+                            // dd($value1);
                         $obj->nc = $value;
+                        $obj->nc_admin = $value1;
                         $final_data[] = $obj;
         }
+
         // dd($final_data);
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
-        return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','assessor_assign'));
+        return view('desktop-view.desktop-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','assessor_assign','course_doc_uploaded'));
     }
 
 

@@ -323,7 +323,7 @@
                                                     @endforeach
                                                     </td>
                                                     <td>
-                                                        @foreach($rows->nc as $key=>$row)
+                                                    @foreach($rows->nc as $key=>$row)
                                                         <?php 
                                                                 $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
                                                                 if (array_key_exists($row->nc_type, $color_code)) {
@@ -346,11 +346,33 @@
                                                         
                                                     </a>  
                                                         @endforeach
+
+                                                        <!-- Admin -->
+                                                        @foreach($rows->nc_admin as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["Accept"=>"success","Reject"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                           @if($row->nc_type!=="Request_For_Final_Approval")
+                                                                {{ucfirst($row->nc_type)}} By Admin
+                                                            @endif
+                                                    </a>  
+                                                        @endforeach
+
                                                 </td>
                                                 <td>
                                                     @php
                                                     $count = count($rows->nc);
                                                     @endphp
+
+                                                    
+
+
                                                     @if($count==1)
                                                     {{$rows->nc[0]->comments??''}}
                                                     @elseif($count==2)
