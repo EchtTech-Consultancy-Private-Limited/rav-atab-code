@@ -294,7 +294,7 @@
                                                                 } else {
                                                                     $final_color_value = "danger";
                                                                 }
-                                                                
+
                                                         ?>
                                                         @if($row->nc_type!=="Request_For_Final_Approval")
                                                         <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
@@ -306,24 +306,43 @@
                                                 
                                                 </td>
                                                 <td>
-                                                    @php
+                                                  @php
                                                     $count = count($rows->nc);
+                                                    $admin_count = count($rows->nc_admin);
                                                     @endphp
-                                                 
-                                                    @if($count==1)
-                                                        {{$rows->nc[0]->comments??''}}
-                                                    @elseif($count==2)
-                                                    {{$rows->nc[1]->comments??''}}
-                                                    @elseif($count==3)
-                                                    {{$rows->nc[2]->comments??''}}
-                                                    @elseif($count==4)
-                                                    {{$rows->nc[3]->comments??''}}
-                                                    @elseif($count==5)
-                                                    {{$rows->nc[4]->comments??''}}
-                                                    @elseif($count==6)
-                                                    {{$rows->nc[5]->comments??''}}
+
+                                                @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
+                                                    
+                                                        @if($admin_count==1)
+                                                            {{$rows->nc_admin[0]->comments??''}}
+                                                        @elseif($admin_count==2)
+                                                            {{$rows->nc_admin[1]->comments??''}}
+                                                        @elseif($admin_count==3)
+                                                            {{$rows->nc_admin[2]->comments??''}}
+                                                        @elseif($admin_count==4)
+                                                            {{$rows->nc_admin[3]->comments??''}}
+                                                        @elseif($admin_count==5)
+                                                            {{$rows->nc_admin[4]->comments??''}}
+                                                        @else
+                                                        {{$rows->nc_admin[5]->comments??''}}
+                                                        @endif
+
                                                     @else
-                                                    {{$rows->nc[6]->comments??''}}
+                                                            @if($count==1)
+                                                            {{$rows->nc[0]->comments??''}}
+                                                            @elseif($count==2)
+                                                            {{$rows->nc[1]->comments??''}}
+                                                            @elseif($count==3)
+                                                            {{$rows->nc[2]->comments??''}}
+                                                            @elseif($count==4)
+                                                            {{$rows->nc[3]->comments??''}}
+                                                            @elseif($count==5)
+                                                            {{$rows->nc[4]->comments??''}}
+                                                            @elseif($count==6)
+                                                            {{$rows->nc[5]->comments??''}}
+                                                            @else
+                                                            {{$rows->nc[6]->comments??''}}
+                                                            @endif
                                                     @endif
                                                 </td>
                                                 </tr>
@@ -482,24 +501,43 @@
                                                 </td>
                                                 <td>
                                                    
-                                                    @php
+                                                @php
                                                     $count = count($rows->nc);
+                                                    $admin_count = count($rows->nc_admin);
                                                     @endphp
-                                                 
-                                                     @if($count==1)
-                                                        {{$rows->nc[0]->comments??''}}
-                                                    @elseif($count==2)
-                                                    {{$rows->nc[1]->comments??''}}
-                                                    @elseif($count==3)
-                                                    {{$rows->nc[2]->comments??''}}
-                                                    @elseif($count==4)
-                                                    {{$rows->nc[3]->comments??''}}
-                                                    @elseif($count==5)
-                                                    {{$rows->nc[4]->comments??''}}
-                                                    @elseif($count==6)
-                                                    {{$rows->nc[5]->comments??''}}
+
+                                                @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
+                                                    
+                                                        @if($admin_count==1)
+                                                            {{$rows->nc_admin[0]->comments??''}}
+                                                        @elseif($admin_count==2)
+                                                            {{$rows->nc_admin[1]->comments??''}}
+                                                        @elseif($admin_count==3)
+                                                            {{$rows->nc_admin[2]->comments??''}}
+                                                        @elseif($admin_count==4)
+                                                            {{$rows->nc_admin[3]->comments??''}}
+                                                        @elseif($admin_count==5)
+                                                            {{$rows->nc_admin[4]->comments??''}}
+                                                        @else
+                                                        {{$rows->nc_admin[5]->comments??''}}
+                                                        @endif
+
                                                     @else
-                                                    {{$rows->nc[6]->comments??''}}
+                                                            @if($count==1)
+                                                            {{$rows->nc[0]->comments??''}}
+                                                            @elseif($count==2)
+                                                            {{$rows->nc[1]->comments??''}}
+                                                            @elseif($count==3)
+                                                            {{$rows->nc[2]->comments??''}}
+                                                            @elseif($count==4)
+                                                            {{$rows->nc[3]->comments??''}}
+                                                            @elseif($count==5)
+                                                            {{$rows->nc[4]->comments??''}}
+                                                            @elseif($count==6)
+                                                            {{$rows->nc[5]->comments??''}}
+                                                            @else
+                                                            {{$rows->nc[6]->comments??''}}
+                                                            @endif
                                                     @endif
                                                   
                                                 </td>
