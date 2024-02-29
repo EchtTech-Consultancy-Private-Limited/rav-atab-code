@@ -246,6 +246,8 @@ class OnsiteApplicationController extends Controller
             if($nc_type==="view"){
                 $is_nc_exists=true;
             }
+
+            
             // dd($doc_sr_code, $doc_unique_code);
            
         if(isset($tbl_nc_comments->nc_type)){
