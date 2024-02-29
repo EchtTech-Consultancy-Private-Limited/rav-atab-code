@@ -235,7 +235,8 @@ class OnsiteApplicationController extends Controller
             {
                 $nc_type = 'not_recommended';
             } 
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite','nc_type'=>$nc_type])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])
+            ->whereIn('assessor_type',['onsite','admin'])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();           
@@ -245,6 +246,8 @@ class OnsiteApplicationController extends Controller
             if($nc_type==="view"){
                 $is_nc_exists=true;
             }
+
+            
             // dd($doc_sr_code, $doc_unique_code);
            
         if(isset($tbl_nc_comments->nc_type)){

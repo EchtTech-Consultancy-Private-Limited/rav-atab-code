@@ -25450,6 +25450,12 @@ background: white;
 
 
   
+ .text-success td{
+    color:#198754 !important
+ }
 
 
+.text-danger td{
+    color: #dc3545 !important;
+}
 /* ******************************** */
