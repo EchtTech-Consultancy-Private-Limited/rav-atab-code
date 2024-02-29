@@ -171,7 +171,7 @@
                                 <div class="form-group clearfix">
 
                                     <input type="password" autocomplete="new-password"  class="form-control" aria-label="Password" placeholder="Password" onpaste="return false;" ondrop="return false;"  name="password" id="password" minlength="8" required   >
-                                    <i class="fa fa-eye" aria-hidden="true" id="togglePassword" ></i>
+                                    <i class="fa fa-eye-slash" aria-hidden="true" id="togglePassword" ></i>
 
                                     <label for="password"  id="password-error" class="error" >
                                         @error('password')
@@ -442,7 +442,7 @@ function reverseString(str) {
 
         password.setAttribute('type', type);
 
-        this.classlist.toggle('fa-eye-slash');
+        this.classlist.toggle('fa fa-eye-slash');
     });
 </script>
 

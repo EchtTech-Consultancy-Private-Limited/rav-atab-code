@@ -133,8 +133,8 @@
                     <a href="{{ url('/assessor-desktop-assessment') }}">
                     <h5 class="font-20 mb-0">Desktop Applications</h5>
                     </a>
-                  </div>
-                            </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-xl-3 col-lg-6">
@@ -201,7 +201,7 @@
                                     <div class="col-4 text-left">
                                         <span class="span-width">Active</span>
                                         <h2 class="d-flex align-items-left mb-0">
-                                        {{$applications['approved']['india']}}
+                                        {{@$dataCount['complete']}}
                                     </h2>
                                     </div>
 
@@ -209,7 +209,7 @@
                                 <div class="col-4 text-left">
                                     <span class="span-width">Pending</span>
                                     <h2 class="d-flex align-items-right mb-0 mergin-left">
-                                    {{($applications['pending']['india']+$applications['processing']['india'])}}
+                                    {{(@$dataCount['pending']+@$dataCount['processing'])}}
                                     </h2>
                                 </div>
 
@@ -230,7 +230,7 @@
                                     <div class="col-4 text-left"   style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-active-model">
                                         <span class="span-width">Active</span>
                                         <h2 class="d-flex align-items-left mb-0">
-                                        {{($applications['approved']['world']+$applications['approved']['saarc'])}}
+                                        {{(@$dataCount['complete'])}}
                                     </h2>
                                     </div>
 
@@ -238,7 +238,7 @@
                                 <div class="col-4 text-left"  style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-pending-model">
                                     <span class="span-width">Pending</span>
                                     <h2 class="d-flex align-items-right mb-0 mergin-left">
-                                    {{($applications['pending']['world']+$applications['processing']['world']+$applications['pending']['saarc']+$applications['processing']['saarc'])}}
+                                    {{(@$dataCount['pending']+@$dataCount['processing'])}}
                                     </h2>
                                 </div>
 
@@ -358,11 +358,11 @@
                     <div class="modal-body" style="z-index:1000001!important;">
                     <div style="float:left; clear:none; width:50%; position:relative;">
                         <div class="text-white">SAARC</div>
-                        <div style="font-weight:bold;  font-size:20px;" class="text-white">{{$applications['approved']['saarc']}}</div>
+                        <div style="font-weight:bold;  font-size:20px;" class="text-white">{{@$dataCount['complete']}}</div>
                         </div>
                         <div style="float:left; clear:none  width:50%;  position:relative;">
                         <div class="text-white">Rest of The World</div>
-                        <div class="text-white" style="font-weight:bold;  font-size:20px;">{{$applications['approved']['world']}}</div>
+                        <div class="text-white" style="font-weight:bold;  font-size:20px;">{{@$dataCount['complete']}}</div>
                         </div>
                     </div>
 
@@ -386,11 +386,11 @@
                     <div class="modal-body" style="z-index:1000001!important;">
                     <div style="float:left; clear:none; width:50%; position:relative;">
                         <div class="text-white">SAARC</div>
-                        <div class="text-white" style="font-weight:bold;  font-size:20px;">{{$applications['pending']['saarc']}}</div>
+                        <div class="text-white" style="font-weight:bold;  font-size:20px;">{{@$dataCount['pending']}}</div>
                         </div>
                         <div style="float:left; clear:none  width:50%;  position:relative;">
                         <div class="text-white">Rest of The World</div>
-                        <div class="text-white" style="font-weight:bold;  font-size:20px;">{{$applications['pending']['world']}}</div>
+                        <div class="text-white" style="font-weight:bold;  font-size:20px;">{{@$dataCount['pending']}}</div>
                         </div>
                     </div>
 
@@ -420,7 +420,7 @@ Highcharts.chart('container', {
         align: 'left'
     },
     subtitle: {
-        text: 'Total Pending Applications: {{($applications['pending']['india']+$applications['pending']['saarc']+$applications['pending']['world'])}}',
+        text: 'Total Pending Applications: {{(@$dataCount['pending'])}}',
         align: 'left'
     },
     plotOptions: {
@@ -432,9 +432,9 @@ Highcharts.chart('container', {
     series: [{
         name: 'No of Pending Application',
         data: [
-            ['India', {{$applications['pending']['india']}}],
-            ['SAARC',  {{$applications['pending']['saarc']}}],
-            ['Rest of the World',  {{$applications['pending']['world']}}],
+            ['India', {{@$dataCount['pending']}}],
+            ['SAARC',  {{@$dataCount['pending']}}],
+            ['Rest of the World',  {{@$dataCount['pending']}}],
 
         ]
     }]
@@ -452,7 +452,7 @@ Highcharts.chart('container2', {
         align: 'left'
     },
     subtitle: {
-        text: 'Total Processing Applications: {{($applications['processing']['india']+$applications['processing']['saarc']+$applications['processing']['world'])}}',
+        text: 'Total Processing Applications: {{(@$dataCount['pending'])}}',
         align: 'left'
     },
     plotOptions: {
@@ -465,9 +465,9 @@ Highcharts.chart('container2', {
     series: [{
         name: 'No of Processing Application',
         data: [
-            ['India', {{$applications['processing']['india']}}],
-            ['SAARC',  {{$applications['processing']['saarc']}}],
-            ['Rest of the World',  {{$applications['processing']['world']}}],
+            ['India', {{@$dataCount['processing']}}],
+            ['SAARC',  {{@$dataCount['processing']}}],
+            ['Rest of the World',  {{@$dataCount['processing']}}],
 
         ]
     }]
@@ -485,7 +485,7 @@ Highcharts.chart('container3', {
         align: 'left'
     },
     subtitle: {
-        text: 'Total Approved Applications: {{($applications['approved']['india']+$applications['approved']['saarc']+$applications['approved']['world'])}}',
+        text: 'Total Approved Applications: {{(@$dataCount['complete']+@$dataCount['complete']+@$dataCount['complete'])}}',
         align: 'left'
     },
     plotOptions: {
@@ -512,9 +512,9 @@ Highcharts.chart('container3', {
     series: [{
         name: 'No of Approved Application',
         data: [
-            ['India', {{$applications['approved']['india']}}],
-            ['SAARC',  {{$applications['approved']['saarc']}}],
-            ['Rest of the World',  {{$applications['approved']['world']}}],
+            ['India', {{@$dataCount['complete']}}],
+            ['SAARC',  {{@$dataCount['complete']}}],
+            ['Rest of the World',  {{@$dataCount['complete']}}],
 
         ]
     }]
@@ -527,11 +527,11 @@ function showHtmlMessageActive() {
         title: "International Applications <small>(Active)</small>",
         text: '<div style="float:left; clear:none; width:50%; position:relative;">'
             +'<div>SAARC</div>'
-            +'<div style="font-weight:bold;  font-size:20px;">{{$applications['approved']['saarc']}}</div>'
+            +'<div style="font-weight:bold;  font-size:20px;">{{@$dataCount['complete']}}</div>'
             +'</div>'
             +'<div style="float:left; clear:none  width:50%;  position:relative;">'
             +'<div>Rest of The World</div>'
-            +'<div style="font-weight:bold;  font-size:20px;">{{$applications['approved']['world']}}</div>'
+            +'<div style="font-weight:bold;  font-size:20px;">{{@$dataCount['complete']}}</div>'
             +'</div>',
         html: true,
        timer: 2000,
@@ -545,11 +545,11 @@ function showHtmlMessagePending() {
         title: 'International Applications <small>(Pending)</small><button type="button" class="close"  aria-label="Close" style="width:auto;height:auto;"><span aria-hidden="true">×</span></button>',
         text: '<div style="float:left; clear:none; width:50%; position:relative;">'
             +'<div>SAARC</div>'
-            +'<div style="font-weight:bold;  font-size:20px;">{{$applications['pending']['saarc']}}</div>'
+            +'<div style="font-weight:bold;  font-size:20px;">{{@$dataCount['pending']}}</div>'
             +'</div>'
             +'<div style="float:left; clear:none  width:50%;  position:relative;">'
             +'<div>Rest of The World</div>'
-            +'<div style="font-weight:bold;  font-size:20px;">{{$applications['pending']['world']}}</div>'
+            +'<div style="font-weight:bold;  font-size:20px;">{{@$dataCount['pending']}}</div>'
             +'</div>',
         html: true,
         timer: 2000,

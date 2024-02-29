@@ -285,7 +285,7 @@
      let password = document.querySelector('#password');
      let togglePassword = document.querySelector('#togglepassword');
 
-     togglePassword.addEventListener('click', (e) => {
+     togglePassword.addEventListener('click', (e) => {       
          const type = password.getAttribute('type') == 'password' ? 'text' : 'password';
          password.setAttribute('type', type);
          this.classlist.toggle('fa fa-eye');

@@ -138,7 +138,20 @@ class SummaryController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->get();
 
+            $value1 = TblNCComments::where([
+                'application_id' => $application_id,
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code,
+                'assessor_type'=>'admin',
+                'final_status'=>'desktop'
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
                 $obj->nc = $value;
+                $obj->nc_admin = $value1;
                 $final_data[] = $obj;
     }   
        $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way;

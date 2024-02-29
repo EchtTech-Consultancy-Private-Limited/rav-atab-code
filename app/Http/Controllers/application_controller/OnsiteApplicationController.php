@@ -195,6 +195,7 @@ class OnsiteApplicationController extends Controller
                             'doc_sr_code' => $question->code,
                         ])
                         ->where('nc_type',"!=",null)
+                        ->whereIn('assessor_type',['onsite','admin'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),

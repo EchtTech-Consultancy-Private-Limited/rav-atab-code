@@ -81,7 +81,6 @@ class AdminApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
-        
         return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
@@ -162,8 +161,11 @@ class AdminApplicationController extends Controller
                 }
              /*end here*/
             $assessorType = $get_assessor_type==1?'desktop':'onsite';
-            DB::table('assessor_assigne_date')->where('application_id',$request->application_id)->whereNotIn('assessor_id',[$request->assessor_id])->delete();
+            $assessment_type_ = $assessorType=="desktop"?2:1;
+            DB::table('assessor_assigne_date')->where('application_id',$request->application_id)->whereNotIn('assessor_id',[$request->assessor_id])->where('assesment_type',$assessment_type_)->delete();
+
             DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id,'assessor_type' => $assessorType])->whereNotIn('assessor_id',[$request->assessor_id])->delete();
+
             $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
             $data['application_id']=$request->application_id;
@@ -384,27 +386,77 @@ class AdminApplicationController extends Controller
     {
         
         try{
+            $accept_nc_type_status = $nc_type;
+            $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','final_status'=>$assessor_type])
+            ->where('nc_type',"Request_For_Final_Approval")
+            ->latest('id')->first();
+
+            // dd($final_approval);
+            $ass_type = $assessor_type=="desktop"?"desktop":"onsite";
+
             if($nc_type=="nr"){
                 $nc_type="not_recommended";
             }
             
+            if($nc_type!="nc1" && $nc_type!="nc2" && $nc_type!="accept" && $nc_type!="reject"){
+                if(!empty($final_approval)){
+                    $nc_type="Request_For_Final_Approval";
+                    $assessor_type="admin";
+                }else{
+                    $ass_type=null;
+                }
+            }
             
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
-            ->where('nc_type',$nc_type)
-            ->where('assessor_type',$assessor_type)
-            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
-            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            // ->where('nc_type',$nc_type)
+            // ->where('assessor_type',$assessor_type)
+            // ->where('final_status',$ass_type)
+            // ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            // ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            // ->first();
+
+            $query = TblNCComments::where([
+                'doc_sr_code' => $doc_sr_code,
+                'application_id' => $application_id,
+                'doc_unique_id' => $doc_unique_code
+            ])
+            ->where('nc_type', $nc_type)
+            ->where('assessor_type', $assessor_type);
+            if ($nc_type=="not_recommended" || $nc_type=="Request_For_Final_Approval") {
+                $query->where('final_status', $ass_type);
+            }
+            $nc_comments = $query
+                ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
+                ->first();
+            
+            // dd($nc_comments);
+
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            ->where('final_status',$ass_type)
+            ->latest('id')
             ->first();
 
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
-            $form_view=0;
             
+            
+            /*Don't show form if doc is accepted*/ 
+            $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            ->where('nc_type',"Accept")
+            ->where('final_status',$assessor_type)
+            ->latest('id')
+            ->first();
+            
+            /*end here*/
+            $form_view=0;
             if($nc_type==="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
-                $form_view=1;
+                if(empty($accepted_doc)){
+                    $form_view=1;
+                }
             }else if($nc_type=="reject"){
                 $form_view=0;
             }
-            // dd($form_view);
+
+            
         if(isset($tbl_nc_comments->nc_type)){
                 if($tbl_nc_comments->nc_type==="not_recommended"){
                     $dropdown_arr = array(
@@ -438,6 +490,7 @@ class AdminApplicationController extends Controller
     public function adminDocumentVerify(Request $request)
     {
         try{
+            
         $redirect_to=URL::to("/admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
@@ -453,6 +506,7 @@ class AdminApplicationController extends Controller
         $data['nc_type'] = $request->nc_type;
         $data['assessor_id'] = $assessor_id; 
         $data['doc_file_name'] = $request->doc_file_name;
+        $data['final_status'] = $request->assessor_type;
 
         $nc_comment_status="";
         $admin_nc_flag=0;
