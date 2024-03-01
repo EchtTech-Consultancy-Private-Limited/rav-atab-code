@@ -290,28 +290,35 @@ function desktopDocumentVerfiy() {
 function adminDocumentVerfiy(assessor_type) {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
-        let urlObject = new URL(window.location.href);
-        let urlPath = urlObject.pathname.split("/");
+        // let urlObject = new URL(window.location.href);
+        // let urlPath = urlObject.pathname.split("/");
 
-        let doc_sr_code = "";
-        let doc_file_name = "";
-        let application_id = "";
-        let doc_unique_id = "";
-        let application_courses_id = "";
+        let doc_sr_code = $('#onsite_desktop_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#onsite_desktop_application_doc_file_name_nc').val();
+        let application_id = $('#onsite_desktop_application_id_nc').val();
+        let doc_unique_id = $('#onsite_desktop_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#onsite_desktop_application_course_id_nc').val();
+     
+        
+        // let doc_sr_code = "";
+        // let doc_file_name = "";
+        // let application_id = "";
+        // let doc_unique_id = "";
+        // let application_courses_id = "";
 
-        if(urlPath[1]=="public"){
-             doc_sr_code = urlPath[5];
-             doc_file_name = urlPath[6];
-             application_id = urlPath[7];
-             doc_unique_id = urlPath[8];
-             application_courses_id = urlPath[9];
-        }else{
-             doc_sr_code = urlPath[4];
-             doc_file_name = urlPath[5];
-             application_id = urlPath[6];
-             doc_unique_id = urlPath[7];
-             application_courses_id = urlPath[8];
-        }
+        // if(urlPath[1]=="public"){
+        //      doc_sr_code = urlPath[5];
+        //      doc_file_name = urlPath[6];
+        //      application_id = urlPath[7];
+        //      doc_unique_id = urlPath[8];
+        //      application_courses_id = urlPath[9];
+        // }else{
+        //      doc_sr_code = urlPath[4];
+        //      doc_file_name = urlPath[5];
+        //      application_id = urlPath[6];
+        //      doc_unique_id = urlPath[7];
+        //      application_courses_id = urlPath[8];
+        // }
         
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();

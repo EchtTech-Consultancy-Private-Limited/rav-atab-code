@@ -214,43 +214,43 @@
                                    
                                     
                                     @if($doc->onsite_status==0)
-                                       <a target="_blank"
+                                       <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('admin-view/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                         @elseif($doc->onsite_status==1)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->onsite_doc_file_name}}"
                                              href="{{ url('admin-accept/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accept <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                     @elseif($doc->onsite_status==2)
-                                    <a target="_blank"
+                                    <a 
                                         title="{{$doc->onsite_doc_file_name}}"
                                         href="{{ url('admin-nc1/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                         NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @elseif($doc->onsite_status==3)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->onsite_doc_file_name}}"
                                              href="{{ url('admin-nc2/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                              @elseif($doc->onsite_status==6)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->onsite_doc_file_name}}"
                                              href="{{ url('admin-reject/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Reject <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @elseif($doc->onsite_status==4)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->onsite_doc_file_name}}"
                                              href="{{ url('admin-nr/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                              @if($doc->admin_nc_flag==1)
-                                             <a target="_blank"
+                                             <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-accept/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
@@ -258,7 +258,7 @@
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
-                                             <a target="_blank"
+                                             <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-reject/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
