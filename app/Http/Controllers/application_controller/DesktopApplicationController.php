@@ -165,10 +165,9 @@ class DesktopApplicationController extends Controller
         return view('desktop-view.application-documents-list', compact('final_data', 'course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid'));
     }
 
-    public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
         try{
-            
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])->latest('id')->first();
 
             $is_nc_exists=false;
@@ -228,8 +227,10 @@ class DesktopApplicationController extends Controller
          
         return view('desktop-view.document-verify', [
             // 'doc_latest_record' => $doc_latest_record,
+            'application_course_id'=>$application_course_id,
             'doc_id' => $doc_sr_code,
             'doc_code' => $doc_unique_code,
+            'doc_file_name' => $doc_name,
             'application_id' => $application_id,
             'doc_path' => $doc_path,
             'dropdown_arr'=>$dropdown_arr??[],
@@ -245,7 +246,6 @@ class DesktopApplicationController extends Controller
     public function desktopDocumentVerify(Request $request)
     {
         try{
-          
         $redirect_to=URL::to("/desktop/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
        
         DB::beginTransaction();

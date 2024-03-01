@@ -62,7 +62,6 @@
                     })
                 </script>
             @endif
-            
             @if($is_nc_exists)
                 <div class="row ">
                     <div class="row clearfix">
@@ -80,6 +79,18 @@
                                                     <div class="body">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">
+                                                                    <input type="hidden" value="{{$application_id}}" id="desktop_application_id_nc">
+
+                                                                    <input type="hidden" value="{{$application_course_id}}" id="desktop_application_course_id_nc">
+
+                                                                    
+                                                                    <input type="hidden" value="{{$doc_code}}" id="desktop_application_doc_sr_code_nc">
+
+                                                                    <input type="hidden" value="{{$doc_id}}" id="desktop_application_doc_unique_code_nc">
+
+                                                                    <input type="hidden" value="{{$doc_file_name}}" id="desktop_application_doc_file_name_nc">
+
+
                                                                     <label>Select Type</label>
 
                                                                     <select required

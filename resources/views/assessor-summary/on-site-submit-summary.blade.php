@@ -223,14 +223,14 @@
                                             <td> Team Leader: </td>
                                             <td> {{$assessor_name}} ({{$assessor_assign->assessor_designation}})</td>
                                             <td colspan="2"> Rep. Assessee Orgn:</td>
-                                            <td colspan="2"><input type="text" class="remove_err" name="assessee_org" id="assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required>
+                                            <td colspan="2"><input type="text" class="remove_err" name="assessee_org" id="assessee_org" placeholder="Please Enter Rep. Assessee Orgn" required maxLength="100">
                                             <span id="assessee_org_err" class="err"></span>
                                         
                                         </td>
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the Opening Meeting: <input
-                                                    type="text" id="brief_open_meeting" class="remove_err" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required>
+                                                    type="text" id="brief_open_meeting" class="remove_err" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required maxLength="4000">
                                                     <span id="brief_open_meeting_err" class="err"></span>
                                                 </td>
                                         </tr>
@@ -300,14 +300,14 @@
                                         </tbody>
                                         <tr>
                                             <td colspan="6">Brief Summary: <input
-                                                    type="text" id="brief_summary" class="remove_err" name="brief_summary" placeholder="Please Enter Brief Summary" required>
+                                                    type="text" id="brief_summary" class="remove_err" name="brief_summary" placeholder="Please Enter Brief Summary" required maxLength="4000">
                                                     <span id="brief_summary_err" class="err"></span>
 
                                                 </td>
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the closing meeting: <input
-                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" class="remove_err" required>
+                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" class="remove_err" required maxLength="4000">
                                                     <span id="brief_closing_meeting_err" class="err"></span>
                                                 </td>
                                         </tr>
@@ -345,15 +345,15 @@
                                                 <td colspan="2"> Standard reference</td>
                                             </tr>
                                             <tr>
-                                                <td> <input type="text" name="sr_no" id="sr_no" placeholder="Enter Serial No." maxLength="10" class="remove_err" required>
+                                                <td> <input type="text" name="sr_no" id="sr_no" placeholder="Enter Serial No." class="remove_err" required maxlength="10" minlength="1">
                                                 <span id="sr_no_err" class="err"></span>
 
                                             </td>
-                                                <td><input type="text" name="improvement_form" id="improvement_form" placeholder="Enter Opportunity for improvement Form" class="remove_err" maxLength="1000"> 
+                                                <td><input type="text" name="improvement_form" id="improvement_form" placeholder="Enter Opportunity for improvement Form" class="remove_err" maxlength="1000"> 
                                                 <span id="improvement_form_err" class="err"></span>
 
                                             </td>
-                                                <td><input type="text" name="standard_reference" id="standard_reference" maxLength="1000" placeholder="Enter Standard Reference" class="remove_err" required> 
+                                                <td><input type="text" name="standard_reference" id="standard_reference" maxlength="1000" placeholder="Enter Standard Reference" class="remove_err" required> 
                                                 <span id="standard_reference_err" class="err"></span>
 
                                             </td>
@@ -376,7 +376,7 @@
                                                 <td>Team Leader </td>
                                                 <td>{{$assessor_name}} ({{$assessor_assign->assessor_designation}})</td>
                                                 
-                                                <td> Rep. Assessee Orgn. <input type="text" name="improve_assessee_org" id="improve_assessee_org" placeholder="Please Enter Rep. Assessee Orgn" class="remove_err" required>
+                                                <td> Rep. Assessee Orgn. <input type="text" name="improve_assessee_org" id="improve_assessee_org" placeholder="Please Enter Rep. Assessee Orgn" class="remove_err" required maxlength="100">
                                                 <span id="improve_assessee_org_err" class="err"></span>
                                             </td>
                                             </tr>

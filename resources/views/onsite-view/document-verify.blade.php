@@ -79,10 +79,11 @@
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">
                                                                     <label>Select Type</label>
-                                                <input type="hidden" name="application_id" value="{{$application_id}}"/>
-                                                <input type="hidden" name="doc_unique_id" value="{{$doc_code}}"/>
-                                                <input type="hidden" name="doc_sr_code" value="{{$doc_id}}"/>
-                                                <input type="hidden" name="application_courses_id" value="{{$application_course_id}}"/>
+                                                <input type="hidden" name="application_id" value="{{$application_id}}" id="onsite_application_id_nc"/>
+                                                <input type="hidden" name="doc_unique_id" value="{{$doc_code}}" id="onsite_application_doc_unique_code_nc"/>
+                                                <input type="hidden" name="doc_sr_code" value="{{$doc_id}}" id="onsite_application_doc_sr_code_nc"/>
+                                                <input type="hidden" name="application_courses_id" value="{{$application_course_id}}" id="onsite_application_course_id_nc"/>
+                                                <input type="hidden" name="doc_file_name" value="{{$doc_file_name}}" id="onsite_application_doc_file_name_nc"/>
                                                                     <select required
                                                                         class="form-control required text-center"
                                                                         name="status" id="status">

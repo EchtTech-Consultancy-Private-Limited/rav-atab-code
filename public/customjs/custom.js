@@ -193,28 +193,35 @@ function desktopDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
         $('.full_screen_loading').show();
-        let urlObject = new URL(window.location.href);
-        let urlPath = urlObject.pathname.split("/");
+        // let urlObject = new URL(window.location.href);
+        // let urlPath = urlObject.pathname.split("/");
 
-        let doc_sr_code = "";
-        let doc_file_name = "";
-        let application_id = "";
-        let doc_unique_id = "";
-        let application_courses_id = "";
+        let doc_sr_code = $('#desktop_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#desktop_application_doc_file_name_nc').val();
+        let application_id = $('#desktop_application_id_nc').val();
+        let doc_unique_id = $('#desktop_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#desktop_application_course_id_nc').val();
+
+    //     let doc_sr_code = "";
+    //     let doc_file_name = "";
+    //     let application_id = "";
+    //     let doc_unique_id = "";
+    //     let application_courses_id = "";
        
-       if(urlPath[1]=="public"){
-        doc_sr_code = urlPath[4];
-        doc_file_name = urlPath[5];
-        application_id = urlPath[6];
-        doc_unique_id = urlPath[7];
-        application_courses_id = urlPath[8];
-       }else{
-        doc_sr_code = urlPath[3];
-        doc_file_name = urlPath[4];
-        application_id = urlPath[5];
-        doc_unique_id = urlPath[6];
-        application_courses_id = urlPath[7];
-       }
+    //    if(urlPath[1]=="public"){
+    //     doc_sr_code = urlPath[4];
+    //     doc_file_name = urlPath[5];
+    //     application_id = urlPath[6];
+    //     doc_unique_id = urlPath[7];
+    //     application_courses_id = urlPath[8];
+    //    }
+    //    else{
+    //     doc_sr_code = urlPath[3];
+    //     doc_file_name = urlPath[4];
+    //     application_id = urlPath[5];
+    //     doc_unique_id = urlPath[6];
+    //     application_courses_id = urlPath[7];
+    //    }
          
 
         let doc_comment = $("#comment_text").val();
@@ -372,29 +379,36 @@ function onsiteDocumentVerfiy() {
 
     if (is_acknowledged) {
         $('.full_screen_loading').show();
-        let urlObject = new URL(window.location.href);
-        let urlPath = urlObject.pathname.split("/");
-        let doc_sr_code = "";
-        let doc_file_name = "";
-        let application_id = "";
-        let doc_unique_id = "";
-        let view_type = "";
+
+        let doc_sr_code = $('#onsite_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#onsite_application_doc_file_name_nc').val();
+        let application_id = $('#onsite_application_id_nc').val();
+        let doc_unique_id = $('#onsite_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#onsite_application_course_id_nc').val();
+
+        // let urlObject = new URL(window.location.href);
+        // let urlPath = urlObject.pathname.split("/");
+        // let doc_sr_code = "";
+        // let doc_file_name = "";
+        // let application_id = "";
+        // let doc_unique_id = "";
+        // let view_type = "";
         
-        if(urlPath[1]=='public'){
-             doc_sr_code = urlPath[4];
-             doc_file_name = urlPath[5];
-             application_id = urlPath[6];
-             doc_unique_id = urlPath[7];
-             application_courses_id = urlPath[8];
-             view_type = urlPath[9];
-        }else{
-             doc_sr_code = urlPath[3];
-             doc_file_name = urlPath[4];
-             application_id = urlPath[5];
-             doc_unique_id = urlPath[6];
-             application_courses_id = urlPath[7];
-             view_type = urlPath[8];
-        }
+        // if(urlPath[1]=='public'){
+        //      doc_sr_code = urlPath[4];
+        //      doc_file_name = urlPath[5];
+        //      application_id = urlPath[6];
+        //      doc_unique_id = urlPath[7];
+        //      application_courses_id = urlPath[8];
+        //      view_type = urlPath[9];
+        // }else{
+        //      doc_sr_code = urlPath[3];
+        //      doc_file_name = urlPath[4];
+        //      application_id = urlPath[5];
+        //      doc_unique_id = urlPath[6];
+        //      application_courses_id = urlPath[7];
+        //      view_type = urlPath[8];
+        // }
        
        
         let doc_comment = $("#comment_text").val();
@@ -409,6 +423,7 @@ function onsiteDocumentVerfiy() {
             $('.full_screen_loading').hide();
             return false;
            }
+          
         var d = $(`#fileup_${doc_unique_id}`)[0].files[0];
         var fileInput = $(`#fileup_${doc_unique_id}`);
         $.ajaxSetup({
@@ -425,7 +440,7 @@ function onsiteDocumentVerfiy() {
         formData.append("comments", doc_comment);
         formData.append("doc_file_name", doc_file_name);
         formData.append("fileup", d);
-        formData.append("view_type", view_type);
+        formData.append("view_type", 'view_type');
 
         var allowedExtensions = ["pdf", "doc", "docx","jpg","jpeg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
@@ -1467,6 +1482,21 @@ $(document).on('change focus','.select2-selection--multiple',function(){
         }
     });
   }
+
+//   function handleTPRemarkValidation(){
+//     alert("clicked")
+
+//   }
+
+  $("#tp_remark").on('keyup',function(){
+        const value = $(this).val();
+        if(value.length>100){
+            $('#tp_remark_err').html('The max character of the length is 100');
+            $("#tp_remark_sb_btn").attr('disabled',true);
+        }else{
+            $("#tp_remark_sb_btn").attr('disabled',false);
+        }
+  });
 
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");
