@@ -179,10 +179,10 @@
                             @csrf
                              <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
                             <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
-                            <div class="p-3  bg-white">
+                            <div class="p-3  bg-white position-relative">
                                 <div class="row">
                                 <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
-                                    <button class="btn btn-warning" onclick="printDiv('on-site-print')">
+                                    <button class="btn btn-warning printTpBtn" onclick="printDiv('on-site-print')">
                                     <i class="fa fa-print"></i>
                                     </button>
                                 </div>

@@ -25280,6 +25280,7 @@ background: white;
   flex-direction: row;
   align-items: flex-start;
   gap: 40px;
+  position: relative;
 }
 
 }
@@ -25446,6 +25447,7 @@ background: white;
         /* border: 1px solid #ddd !important; */
         background: #fff;
         padding: 33px !important;
+        position: relative !important;
     }
 
 
@@ -25457,5 +25459,14 @@ background: white;
 
 .text-danger td{
     color: #dc3545 !important;
+}
+
+.btn:has(.fa-print){
+    padding: 5px 13px !important;
+}
+
+.printTpBtn{
+ position: absolute;
+ top: -44px;
 }
 /* ******************************** */
