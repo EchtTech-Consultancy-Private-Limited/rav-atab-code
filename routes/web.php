@@ -317,10 +317,10 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
     Route::post('/tp-update-payment', [TpApplicationController::class, 'updatePaynentInfo']);
     Route::post('/account-update-payment', [AccountApplicationController::class, 'updatePaynentInfo']);
-    Route::post('/account-update-notification-status', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
-    Route::post('/admin-update-notification-status', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
-    Route::post('/assessor-desktop-update-notification-status', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
-    Route::post('/assessor-onsite-update-notification-status', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
+    Route::post('/account-update-notification-status/{id}', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
+    Route::post('/admin-update-notification-status/{id}', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
+    Route::post('/assessor-desktop-update-notification-status/{id}', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
+    Route::post('/assessor-onsite-update-notification-status/{id}', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
     Route::get('tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
     Route::post('tp-payment-transaction-validation', [TpApplicationController::class, 'paymentTransactionValidation'])->name('transaction_validation');
     Route::post('tp-payment-reference-validation', [TpApplicationController::class, 'paymentReferenceValidation'])->name('reference_validation');
