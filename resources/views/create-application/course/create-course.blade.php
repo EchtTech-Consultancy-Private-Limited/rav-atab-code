@@ -439,7 +439,7 @@
                                             <div class="form-line">
                                                 <label>Course Brief <span class="text-danger">*</span></label>
 
-                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" name="course_brief[]" required></textarea>
+                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" name="course_brief[]" required maxlength="500"></textarea>
                                                 <span class="err error_name">Please enter the course brief</span>
                                             </div>
                                             @error('course_brief')
@@ -996,10 +996,10 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label>Course Brief <span
+                                                            <label>Course Brief  dddd<span
                                                                     class="text-danger">*</span></label>
                                                             <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
-                                                                name="course_brief" id="course_brief"></textarea>
+                                                                name="course_brief" id="course_brief" maxlength="500"></textarea>
                                                         </div>
                                                         @error('course_brief')
                                                             <div class="alert alert-danger">{{ $message }}
