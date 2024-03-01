@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\emaildomeins;
-use Session;
+use Session, Cookie;
 use Mail;
 use App\Mail\VerificationMobile;
 use App\Mail\VerificationEmail;
@@ -26,16 +26,40 @@ use App\Mail\SendMailRegis;
 class AuthController extends Controller
 {
 
-    public function landing()
-    {
-        return view('auth.landingpage');
+    public function landing(Request $request)
+    {   
+        if(isset($_COOKIE['welcome_cookies']) && $_COOKIE['welcome_cookies'] == 'false'){
+            return view('auth.landingpage');
+        }
+        if(isset($_COOKIE['welcome_cookies']) && $_COOKIE['welcome_cookies'] !='true' && $_COOKIE['welcome_cookies'] !='false'){
+            setcookie('welcome_cookies','false');
+            return view('auth.landingpage');
+            
+        }else{
+            setcookie('welcome_cookies','true');
+            return view('welcomePage');
+        }
+        
     }
-
+    public function landingLogin(Request $request)
+    {   
+        setcookie('welcome_cookies','false');
+        return view('auth.landingpage');
+        
+    }
     public function login()
     {
         return view('auth.login');
     }
-
+    public function getCookie(Request $request)
+    {
+        $value = $request->cookie('welcome_cookies');
+    
+        // Or using the Cookie facade
+        // $value = Cookie::get('cookie_name');
+    
+        return response("Cookie value: $value");
+    }
 
     public function login_post(Request $request)
     {

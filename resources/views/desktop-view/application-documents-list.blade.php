@@ -252,7 +252,7 @@
                                               Not Recommended</a>
                                               <!-- admin accept/reject -->
                                               @if($doc->admin_nc_flag==1)
-                                             <a target="_blank"
+                                             <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
@@ -260,7 +260,7 @@
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
-                                             <a target="_blank"
+                                             <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
