@@ -162,6 +162,7 @@ class AdminApplicationController extends Controller
              /*end here*/
             $assessorType = $get_assessor_type==1?'desktop':'onsite';
             DB::table('assessor_assigne_date')->where('application_id',$request->application_id)->whereNotIn('assessor_id',[$request->assessor_id])->delete();
+            
             DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id,'assessor_type' => $assessorType])->whereNotIn('assessor_id',[$request->assessor_id])->delete();
             $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
