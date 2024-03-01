@@ -1038,7 +1038,7 @@ function handleNotification(pay_id){
             },
         });
         $.ajax({
-            url: `${BASE_URL}/account-update-notification-status/`, // Your server-side upload endpoint
+            url: `${BASE_URL}/account-update-notification-status/${pay_id}`, // Your server-side upload endpoint
             type: "POST",
             data:{id:pay_id},
             success: function (response) {
@@ -1088,7 +1088,7 @@ function handleAdminNotification(pay_id){
             },
         });
         $.ajax({
-            url: `${BASE_URL}/admin-update-notification-status/`, // Your server-side upload endpoint
+            url: `${BASE_URL}/admin-update-notification-status/${pay_id}`, // Your server-side upload endpoint
             type: "POST",
             data:{id:pay_id},
             success: function (response) {
@@ -1138,7 +1138,7 @@ function handleDesktopNotification(pay_id){
             },
         });
         $.ajax({
-            url: `${BASE_URL}/assessor-desktop-update-notification-status/`, // Your server-side upload endpoint
+            url: `${BASE_URL}/assessor-desktop-update-notification-status/${pay_id}`, // Your server-side upload endpoint
             type: "POST",
             data:{id:pay_id},
             success: function (response) {
@@ -1189,7 +1189,7 @@ function handleOnsiteNotification(pay_id){
             },
         });
         $.ajax({
-            url: `${BASE_URL}/assessor-onsite-update-notification-status/`, // Your server-side upload endpoint
+            url: `${BASE_URL}/assessor-onsite-update-notification-status/${pay_id}`, // Your server-side upload endpoint
             type: "POST",
             data:{id:pay_id},
             success: function (response) {
