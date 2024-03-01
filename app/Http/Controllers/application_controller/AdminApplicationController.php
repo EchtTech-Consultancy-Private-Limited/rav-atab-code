@@ -146,7 +146,9 @@ class AdminApplicationController extends Controller
             $assessor_designation = $a_id;
             if($request->$assessor_designation==null){
                 return redirect()->route('admin-app-list')->with('fail', 'Please select assessor designation');
-
+            }
+            if($request->assessor_id==null){
+                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor');
             }
             DB::beginTransaction();
 
