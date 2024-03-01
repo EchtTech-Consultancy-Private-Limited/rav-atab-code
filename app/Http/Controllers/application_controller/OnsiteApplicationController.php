@@ -190,14 +190,22 @@ class OnsiteApplicationController extends Controller
                         'onsite_nc_comments' => TblNCComments::where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
-                            'assessor_type' => 'onsite',
+                            // 'assessor_type' => 'onsite',
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
                         ])
                         ->where('nc_type',"!=",null)
+                        ->whereIn('assessor_type',['onsite','admin'])
+                        ->where(function ($query) {
+                            $query->where('assessor_type', 'onsite')
+                                ->orWhere('assessor_type', 'admin')
+                                ->where('final_status', 'onsite');
+                        })
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
+
+
                         'onsite_photograph' =>DB::table('tbl_onsite_photograph')->where([
                             'application_id' => $application_id,
                             'application_courses_id' => $course_id,
@@ -227,7 +235,8 @@ class OnsiteApplicationController extends Controller
             {
                 $nc_type = 'not_recommended';
             } 
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite','nc_type'=>$nc_type])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])
+            ->whereIn('assessor_type',['onsite','admin'])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();           
@@ -237,6 +246,8 @@ class OnsiteApplicationController extends Controller
             if($nc_type==="view"){
                 $is_nc_exists=true;
             }
+
+            
             // dd($doc_sr_code, $doc_unique_code);
            
         if(isset($tbl_nc_comments->nc_type)){
@@ -563,17 +574,17 @@ class OnsiteApplicationController extends Controller
     }
 
 
-    public function updateAssessorOnsiteNotificationStatus(Request $request)
+    public function updateAssessorOnsiteNotificationStatus(Request $request,$id)
     {
         try{
           $request->validate([
               'id' => 'required',
           ]);
           DB::beginTransaction();
-          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['assessor_onsite_received_payment'=>1]);
+          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['assessor_onsite_received_payment'=>1]);
           if($update_assessor_received_payment_status){
               DB::commit();
-              $redirect_url = URL::to('/onsite/application-view/'.dEncrypt($request->id));
+              $redirect_url = URL::to('/onsite/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();

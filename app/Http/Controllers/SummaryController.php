@@ -138,9 +138,43 @@ class SummaryController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->get();
 
+            $value1 = TblNCComments::where([
+                'application_id' => dDecrypt($application_id),
+                'application_courses_id' => dDecrypt($application_course_id),
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code,
+                'assessor_type'=>'admin',
+                'final_status'=>'onsite'
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
+           $accept_reject = TblNCComments::where([
+                'application_id' => dDecrypt($application_id),
+                'application_courses_id' => dDecrypt($application_course_id),
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code
+            ])
+            ->select('tbl_nc_comments.*')
+            ->whereIn('assessor_type', ['onsite', 'admin'])
+            ->where(function ($query) {
+                $query->where('assessor_type', 'onsite')
+                    ->orWhere('assessor_type', 'admin')
+                    ->whereIn('nc_type', ['Accept','Reject'])
+                    ->where('final_status', 'onsite');
+            })
+            ->latest('id')
+            ->first();
+
+            // dd($accept_reject->nc_type);
                 $obj->nc = $value;
+                $obj->nc_admin = $value1;
+                $obj->accept_reject = $accept_reject;
                 $final_data[] = $obj;
     }   
+
+
        $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way;
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id)])->first();
        if(!empty($is_exists)){
@@ -149,7 +183,6 @@ class SummaryController extends Controller
         $is_final_submit = false;
        }
 
-    //    dd($final_data);
        
         return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign'));
     }
@@ -703,9 +736,24 @@ class SummaryController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->where('assessor_type','desktop')
             ->get();
+
+            $value1 = TblNCComments::where([
+                'application_id' => $application_id,
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code,
+                'assessor_type'=>'admin',
+                'final_status'=>'desktop'
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
                 $obj->nc = $value;
+                $obj->nc_admin = $value1;
                 $final_data[] = $obj;
     }
+
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
        /*On Site Final Summary Report*/
         $onsiteSummaryReport = DB::table('assessor_summary_reports as asr')
@@ -751,7 +799,20 @@ class SummaryController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->where('assessor_type','onsite')
             ->get();
+            $value1 = TblNCComments::where([
+                'application_id' => $application_id,
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code,
+                'assessor_type'=>'admin',
+                'final_status'=>'onsite'
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
                 $obj->nc = $value;
+                $obj->nc_admin = $value1;
                 $onsite_final_data[] = $obj;
     }
 
@@ -800,7 +861,21 @@ class SummaryController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->where('assessor_type','desktop')
             ->get();
+            $value1 = TblNCComments::where([
+                'application_id' => $application_id,
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code,
+                'assessor_type'=>'admin',
+                'final_status'=>'desktop'
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
+
+            
                 $obj->nc = $value;
+                $obj->nc_admin = $value1;
                 $final_data[] = $obj;
     }
      
@@ -848,7 +923,19 @@ class SummaryController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->where('assessor_type','onsite')
             ->get();
+            $value1 = TblNCComments::where([
+                'application_id' => $application_id,
+                'application_courses_id' => $application_course_id,
+                'doc_unique_id' => $question->id,
+                'doc_sr_code' => $question->code,
+                'assessor_type'=>'admin',
+                'final_status'=>'onsite'
+            ])
+            ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            ->get();
                 $obj->nc = $value;
+                $obj->nc_admin = $value1;
                 $onsite_final_data[] = $obj;
     }
         $onsite_assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;

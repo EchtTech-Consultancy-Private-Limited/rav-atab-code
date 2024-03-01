@@ -1,188 +1,5 @@
 @include('layout.header')
 <title>RAV Accreditation</title>
-<style>
-    table th {
-        text-align: center;
-        border: 1px solid #eee;
-        color: #000;
-    }
-
-    table td {
-        text-align: left;
-        border: 1px solid #eee;
-        color: #000;
-    }
-
-    .highlight {
-        background-color: #9789894a;
-    }
-
-    .highlight_nc {
-        background-color: #ff000042;
-    }
-
-    .highlight_nc_approved {
-        background-color: #00800040;
-    }
-
-    td select.form-control.text-center {
-        border: 0;
-    }
-
-    .loading-img {
-        z-index: 99999999;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);;
-        overflow: hidden;
-        text-align: center;
-    }
-
-    .loading-img .box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin: auto;
-        transform: translate(-50%, -50%);
-        z-index: 2;
-    }
-
-    .uploading-text {
-        padding-top: 10px;
-        color: #fff;
-        /* font-size: 18px; */
-    }
-
-    td.text-justify {
-        text-align: left;
-    }
-
-    .btnDiv a {
-        margin-right: 10px !important;
-    }
-
-
-    .file-upload {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .file-label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #3498db;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        font-size: 12px;
-    }
-
-    .file-label:hover {
-        background-color: #2980b9;
-    }
-
-    .file-input {
-        display: none;
-    }
-
-    table {
-        /* caption-side: bottom; */
-        border-collapse: collapse;
-        /* border: 1px solid #ddd !important; */
-        background: #fff;
-        padding: 33px !important;
-    }
-
-
-    table th,
-    table td,
-    table tr {
-        text-align: center;
-        border: 1px solid #aaa !important;
-        color: #000;
-    }
-
-    table td {
-        text-align: left;
-        padding: 10px 10px;
-        /* font-weight: 700; */
-    }
-
-
-  .tabs__controls button {
-    width: 100%;
-    padding: 8px 20px;
-    border: none;
-    border-top: 1px solid rgba(40, 40, 40, 0.3);
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    background: gainsboro;
-    font-size: 18px;
-    transition: 0.4s;
-    cursor: pointer;
-    appearance: none;
-  }
-
-  .tabs__controls button:hover,
-  .tabs__controls button:focus {
-    background: darkseagreen;
-  }
-
-  .tabs__controls button[aria-selected="true"] {
-    background: white;
-    /* text-decoration: underline; */
-  }
-
-  .tabs__panel__inner {
-    padding: 20px;
-    background: white;
-  }
-
-  img {
-    width: 100%;
-    max-width: 300px;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-  }
-
-  ul {
-    margin: 20px 0 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li + li {
-    margin-top: 10px;
-  }
-
-  @media screen and (min-width: 768px) {
-    .tabs__controls button {
-      width: auto;
-    }
-
-    .tabs__panel__inner {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 40px;
-    }
-
-    ul {
-      margin: 0;
-    }
-  }
-
-
-</style>
 
 </head>
 <body class="light">
@@ -323,7 +140,7 @@
                                                     @endforeach
                                                     </td>
                                                     <td>
-                                                        @foreach($rows->nc as $key=>$row)
+                                                    @foreach($rows->nc as $key=>$row)
                                                         <?php 
                                                                 $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
                                                                 if (array_key_exists($row->nc_type, $color_code)) {
@@ -346,26 +163,52 @@
                                                         
                                                     </a>  
                                                         @endforeach
+                                                        <!-- Admin -->
+                                                        @foreach($rows->nc_admin as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["Accept"=>"success","Reject"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        @if($row->nc_type!=="Request_For_Final_Approval")
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                                {{ucfirst($row->nc_type)}} By Admin
+                                                    </a>  
+                                                    @endif
+                                                        @endforeach
+
                                                 </td>
                                                 <td>
                                                     @php
                                                     $count = count($rows->nc);
+                                                    $admin_count = count($rows->nc_admin);
                                                     @endphp
-                                                    @if($count==1)
-                                                    {{$rows->nc[0]->comments??''}}
-                                                    @elseif($count==2)
-                                                    {{$rows->nc[1]->comments??''}}
-                                                    @elseif($count==3)
-                                                    {{$rows->nc[2]->comments??''}}
-                                                    @elseif($count==4)
-                                                    {{$rows->nc[3]->comments??''}}
-                                                    @elseif($count==5)
-                                                    {{$rows->nc[4]->comments??''}}
-                                                    @elseif($count==6)
-                                                    {{$rows->nc[5]->comments??''}}
+
+                                                    @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
+                                                    {{$rows->nc_admin[0]->comments??''}}
                                                     @else
-                                                    {{$rows->nc[6]->comments??''}}
+                                                            @if($count==1)
+                                                            {{$rows->nc[0]->comments??''}}
+                                                            @elseif($count==2)
+                                                            {{$rows->nc[1]->comments??''}}
+                                                            @elseif($count==3)
+                                                            {{$rows->nc[2]->comments??''}}
+                                                            @elseif($count==4)
+                                                            {{$rows->nc[3]->comments??''}}
+                                                            @elseif($count==5)
+                                                            {{$rows->nc[4]->comments??''}}
+                                                            @elseif($count==6)
+                                                            {{$rows->nc[5]->comments??''}}
+                                                            @else
+                                                            {{$rows->nc[6]->comments??''}}
+                                                            @endif
                                                     @endif
+
+
+                                                    
                                                 </td>
                                                 </tr>
                                                 @endforeach

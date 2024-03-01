@@ -50,7 +50,7 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     @if($is_final_submit)
-                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary ">View Final Summary 
                         </a>
                     @endif
                     <div class="float-right">
@@ -349,7 +349,7 @@
                         @foreach ($application_details->payment as $key=>$ApplicationPayment)
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                            <td class="text-nowrap">{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
                             </td>
                             <td>{{ $ApplicationPayment->payment_transaction_no ?? '' }}</td>
                             <td>{{ $ApplicationPayment->payment_reference_no ?? '' }}</td>

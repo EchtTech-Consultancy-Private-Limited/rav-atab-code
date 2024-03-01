@@ -51,14 +51,14 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <ul class="breadcrumb breadcrumb-style ">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">International Applications</h4>
+                                <h4 class="page-title">InterNational Application</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{url('/dashboard')}}">
                                     <i class="fas fa-home"></i> Home</a>
                             </li>
                             <li class="breadcrumb-item active">Dashboard</li>
-                            <li class="breadcrumb-item active">International Applications</li>
+                            <li class="breadcrumb-item active">InterNational Application</li>
                         </ul>
                     </div>
                 </div>

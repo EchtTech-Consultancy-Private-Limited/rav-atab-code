@@ -18,12 +18,7 @@
 
     <!-- Custom Stylesheet -->
     <link type="text/css" rel="stylesheet" href="{{ asset('login/assets/css/style.css') }}">
-<style>
 
-.error{
-   color: red !important;
-}
-</style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>

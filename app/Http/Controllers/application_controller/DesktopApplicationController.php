@@ -127,6 +127,7 @@ class DesktopApplicationController extends Controller
                     'chapter_id' => $chapter->id,
                 ])->get();
 
+            
                 foreach ($questions as $k => $question) {
                     $obj->questions[] = [
                         'question' => $question,
@@ -136,15 +137,24 @@ class DesktopApplicationController extends Controller
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code
                         ])
-                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
-                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-                        ->whereIn('assessor_type',['desktop','admin'])
+                        ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                        ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
+                        ->whereIn('assessor_type', ['desktop', 'admin'])
+                        ->where(function ($query) {
+                            $query->where('assessor_type', 'desktop')
+                                ->orWhere('assessor_type', 'admin')
+                                ->where('final_status', 'desktop');
+                        })
                         ->get(),
                     ];
                 }
+                
 
                 $final_data[] = $obj;
         }
+        // dd($final_data);
+
+
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
@@ -158,17 +168,15 @@ class DesktopApplicationController extends Controller
     public function desktopVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
     {
         try{
-   
             
-
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop'])->latest('id')->first();
-        
-            // dd($tbl_nc_comments);
+
             $is_nc_exists=false;
             if($nc_type==="view"){
                 $is_nc_exists=true;
             }
 
+            // dd($tbl_nc_comments->nc_type,$nc_type);
 
         if(isset($tbl_nc_comments->nc_type)){
             if($tbl_nc_comments->nc_type==="NC1"){
@@ -206,7 +214,8 @@ class DesktopApplicationController extends Controller
         if($nc_type=="nr"){
             $nc_type="not_recommended";
         }
-        $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'desktop','nc_type'=>$nc_type])
+        $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])
+             ->whereIn('assessor_type',['admin','desktop'])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();
@@ -376,10 +385,11 @@ class DesktopApplicationController extends Controller
             'asr.assessor_type' => 'desktop',
         ])
         ->first();
+
+
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id,'assessor_type'=>'desktop'])->first();
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$application_id])->count();
-        
         $questions = DB::table('questions')->get();
         foreach($questions as $question){
             $obj = new \stdClass;
@@ -390,15 +400,45 @@ class DesktopApplicationController extends Controller
                             'application_courses_id' => $application_course_id,
                             'doc_unique_id' => $question->id,
                             'assessor_id'=>$assessor_id,
-                            'doc_sr_code' => $question->code
+                            'doc_sr_code' => $question->code,
                         ])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get();
                       
+                        $value1 = TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $application_course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code,
+                            'assessor_type'=>'admin',
+                            'final_status'=>'desktop'
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get();
+
+                        $accept_reject = TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $application_course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->select('tbl_nc_comments.*')
+                        ->whereIn('assessor_type', ['onsite', 'admin'])
+                        ->where(function ($query) {
+                            $query->where('assessor_type', 'onsite')
+                                ->orWhere('assessor_type', 'admin')
+                                ->whereIn('nc_type', ['Accept','Reject']);
+                        })
+                        ->first();
+                            // dd($value1);
                         $obj->nc = $value;
+                        $obj->nc_admin = $value1;
+                        $obj->accept_reject = $accept_reject;
                         $final_data[] = $obj;
         }
+
         // dd($final_data);
     $assessement_way = DB::table('asessor_applications')->where(['application_id'=>$application_id])->get();
       
@@ -406,7 +446,7 @@ class DesktopApplicationController extends Controller
     }
 
 
-    public function updateAssessorDesktopNotificationStatus(Request $request)
+    public function updateAssessorDesktopNotificationStatus(Request $request,$id)
     {
         try{
           $request->validate([
@@ -414,10 +454,10 @@ class DesktopApplicationController extends Controller
           ]);
           DB::beginTransaction();
 
-          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['assessor_desktop_received_payment'=>1]);
+          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['assessor_desktop_received_payment'=>1]);
           if($update_assessor_received_payment_status){
               DB::commit();
-              $redirect_url = URL::to('/desktop/application-view/'.dEncrypt($request->id));
+              $redirect_url = URL::to('/desktop/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();

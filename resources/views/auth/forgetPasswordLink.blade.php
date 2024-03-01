@@ -26,72 +26,7 @@
     <style type="text/css">
         @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 
-        body {
-            margin: 0;
-            font-size: .9rem;
-            font-weight: 400;
-            line-height: 1.6;
-            color: #212529;
-            text-align: left;
-            background-color: #f5f8fa;
-        }
-
-        .navbar-laravel {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
-        }
-
-        .navbar-brand,
-        .nav-link,
-        .my-form,
-        .login-form {
-            font-family: Raleway, sans-serif;
-        }
-
-        .my-form {
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
-        }
-
-        .my-form .row {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        /* for password eye */
-        .eye {
-            position: relative;
-            right: 5%;
-            margin: auto;
-            float: right;
-        }
-
-        .input_password {}
-
-        .login-form {
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
-        }
-
-        .login-form .row {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        .login-2 .form-section {
-            padding: 70px 70px;
-        }
-
-        i#togglePassword,
-        i#togglecpassword {
-            position: absolute;
-            top: 21.5%;
-            left: 85%;
-            font-size: 18px !important;
-        }
-
-        .justify-content-beetween {
-            justify-content: space-between;
-        }
+      
     </style>
 </head>
 
@@ -150,7 +85,7 @@
                                             Address</label> --}}
                                         <div class="input_password">
                                             <input type="text" id="email_address" class="form-control" name="email"
-                                                value="{{ old('email') }}" placeholder="E-Mail Address" required
+                                                value="{{ old('email') }}" placeholder="Email Address" required
                                                 autofocus>
 
 

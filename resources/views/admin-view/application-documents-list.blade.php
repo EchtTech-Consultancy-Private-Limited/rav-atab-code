@@ -1,82 +1,6 @@
 @include('layout.header')
 <title>RAV Accreditation</title>
-<style>
-   .font-12 {
-   size: 12px;
-   background: rgb(23, 218, 23);
-   padding: 3px;
-   border-radius: 5px;
-   }
-   table th,
-   table td {
-   text-align: center;
-   border: 1px solid #eee;
-   }
-   .highlight {
-   background-color: #9789894a;
-   }
-   .highlight_nc {
-   background-color: #ff000042;
-   }
-   .highlight_nc_approved {
-   background-color: #00800040;
-   }
-   td select.form-control.text-center {
-   border: 0;
-   }
-   .loading-img {
-   z-index: 99999999;
-   position: fixed;
-   top: 0;
-   left: 0;
-   bottom: 0;
-   right: 0;
-   width: 100%;
-   height: 100%;
-   background: rgba(0, 0, 0, 0.5);
-   ;
-   overflow: hidden;
-   text-align: center;
-   }
-   .loading-img .box {
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   margin: auto;
-   transform: translate(-50%, -50%);
-   z-index: 2;
-   }
-   .uploading-text {
-   padding-top: 10px;
-   color: #fff;
-   /* font-size: 18px; */
-   }
-   td.text-justify {
-   text-align: left;
-   }
-   .table th,
-   .table td {
-   padding: 4px !important;
-   /* Adjust this value to your preference */
-   }
-   .table th {
-   font-size: 13px !important;
-   font-weight: bold;
-   }
-   .width-50{
-   width:50%;
-   }
-   .card .header{padding:8px;}
-   .card .header h2{font-size:14px;}
-   .docBtn {
-   padding: 6px 10px !important;
-   color: #fff;
-   border-radius: 4px !important;
-   margin-right: 5px !important;
-   height: 30px;
-   line-height: 18px !important;
-   }
-</style>
+
 </head>
 <body class="light">
    <!-- Page Loader -->
@@ -221,43 +145,43 @@
                                    
                                     
                                     @if($doc->status==0)
-                                       <a target="_blank"
+                                       <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('admin-view/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                         @elseif($doc->status==1)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-accept/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accept <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                     @elseif($doc->status==2)
-                                    <a target="_blank"
+                                    <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('admin-nc1/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                         NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @elseif($doc->status==3)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nc2/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                              @elseif($doc->status==6)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-reject/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Reject <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @elseif($doc->status==4)
-                                          <a target="_blank"
+                                          <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-nr/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                              @if($doc->admin_nc_flag==1)
-                                             <a target="_blank"
+                                             <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-accept/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
@@ -265,7 +189,7 @@
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
-                                             <a target="_blank"
+                                             <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('admin-reject/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">

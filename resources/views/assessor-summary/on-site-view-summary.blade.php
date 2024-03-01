@@ -179,10 +179,10 @@
                             @csrf
                              <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
                             <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
-                            <div class="p-3  bg-white">
+                            <div class="p-3  bg-white position-relative">
                                 <div class="row">
                                 <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
-                                    <button class="btn btn-warning" onclick="printDiv('on-site-print')">
+                                    <button class="btn btn-warning printTpBtn" onclick="printDiv('on-site-print')">
                                     <i class="fa fa-print"></i>
                                     </button>
                                 </div>
@@ -261,7 +261,7 @@
                                                     @if($row->tp_remark!=null)
                                                         {{$key+1}} : {{ucfirst($row->tp_remark)}},
                                                     @else
-                                                    N/A
+                                                    <!-- N/A -->
                                                     @endif
                                                     @endforeach
                                                 </td>
@@ -288,39 +288,63 @@
                                                         
                                                     </a>  
                                                         @endforeach
+
+                                                         <!-- Admin -->
+                                                         @foreach($rows->nc_admin as $key=>$row)
+                                                        <?php 
+                                                                $color_code = ["Accept"=>"success","Reject"=>"danger"];
+                                                                if (array_key_exists($row->nc_type, $color_code)) {
+                                                                    $final_color_value = $color_code[$row->nc_type];
+                                                                } else {
+                                                                    $final_color_value = "danger";
+                                                                }
+                                                        ?>
+                                                        @if($row->nc_type!=="Request_For_Final_Approval")
+                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                                {{ucfirst($row->nc_type)}} By Admin
+                                                    </a>  
+                                                    @endif
+                                                        @endforeach
                                             
                                             </td>
                                             <td>
                                                 
-                                                @php
-                                                $count = count($rows->nc);
-                                                @endphp
-                                             
-                                                @if($count==1)
-                                                    {{$rows->nc[0]->comments??''}}
-                                                @elseif($count==2)
-                                                {{$rows->nc[1]->comments??''}}
-                                                @elseif($count==3)
-                                                {{$rows->nc[2]->comments??''}}
-                                                @elseif($count==4)
-                                                {{$rows->nc[3]->comments??''}}
-                                                @elseif($count==5)
-                                                {{$rows->nc[4]->comments??''}}
-                                                @elseif($count==6)
-                                                {{$rows->nc[5]->comments??''}}
-                                                @else
-                                                {{$rows->nc[6]->comments??''}}
-                                                @endif
+                                            @php
+                                                    $count = count($rows->nc);
+                                                    $admin_count = count($rows->nc_admin);
+                                                    @endphp
+
+                                                
+                                                        @if(@$rows->nc_admin && (@$rows->nc_admin[0]->nc_type=="Accept" || @$rows->nc_admin[0]->nc_type=="Reject"))
+                                                        {{$rows->nc_admin[0]->comments??''}}
+                                                    @else
+                                                            @if($count==1)
+                                                            {{$rows->nc[0]->comments??''}}
+                                                            @elseif($count==2)
+                                                            {{$rows->nc[1]->comments??''}}
+                                                            @elseif($count==3)
+                                                            {{$rows->nc[2]->comments??''}}
+                                                            @elseif($count==4)
+                                                            {{$rows->nc[3]->comments??''}}
+                                                            @elseif($count==5)
+                                                            {{$rows->nc[4]->comments??''}}
+                                                            @elseif($count==6)
+                                                            {{$rows->nc[5]->comments??''}}
+                                                            @else
+                                                            {{$rows->nc[6]->comments??''}}
+                                                            @endif
+                                                    @endif
+
                                            
                                             </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                         <tr>
-                                            <td colspan="6" class="fw-bold">Brief Summary: <span class="fw-normal">{{$summertReport->brief_summary}}</span></td>
+                                            <td colspan="6" class=""><span class="fw-bold">Brief Summary:</span> <span class="">{{$summertReport->brief_summary}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6" class="fw-bold">Brief about the closing meeting: <span class="fw-bold">{{$summertReport->brief_closing_meeting}}</span></td>
+                                            <td colspan="6" class=""><span class="fw-bold">Brief about the closing meeting:</span> <span class="">{{$summertReport->brief_closing_meeting}}</span></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">

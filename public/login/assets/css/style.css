@@ -139,6 +139,7 @@ body {
     text-align: left;
     color: #535353;
     width: 100%;
+    padding: 0 20px;
 }
 
 
@@ -14744,6 +14745,7 @@ button.btn_refresh {
     font-size: 20px;
     border: 0;
     margin-left: 10px;
+    border-radius: 10px;
 }
 
 .w-40 {
@@ -14818,4 +14820,136 @@ i#togglePassword {
 
 a.link-text {
     color: #2392e0 !important;
+}
+
+input#captcha {
+    padding: 10px 0px 10px 20px;
+}
+.captcha{
+    margin-left: 10px;
+}
+.captcha img{
+    height: 41px;
+    border-radius: 9px;
+}
+
+
+.navbar-laravel {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+}
+
+.navbar-brand,
+.nav-link,
+.my-form,
+.login-form {
+    font-family: Raleway, sans-serif;
+}
+
+.my-form {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.my-form .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* for password eye */
+.eye {
+    position: relative;
+    right: 5%;
+    margin: auto;
+    float: right;
+}
+
+
+.login-form {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.login-form .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.navbar-laravel {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+}
+
+.navbar-brand,
+.nav-link,
+.my-form,
+.login-form {
+    font-family: Raleway, sans-serif;
+}
+
+.my-form {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.my-form .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* for password eye */
+.eye {
+    position: relative;
+    right: 5%;
+    margin: auto;
+    float: right;
+}
+
+.input_password {}
+
+.login-form {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.login-form .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.login-2 .form-section {
+    padding: 70px 70px;
+}
+
+i#togglePassword,
+i#togglecpassword {
+    position: absolute;
+    top: 21.5%;
+    left: 85%;
+    font-size: 18px !important;
+}
+
+.justify-content-beetween {
+    justify-content: space-between;
+}
+.error{
+    color: red !important;
+ }
+
+
+ @media(min-width:1200px) and (max-width:1400px){
+    .login-2 .form-section {
+        padding: 70px 64px;
+    
+ }
+}
+ @media(min-width:991px) and (max-width:1200px){
+    .login-2 .form-section {
+        padding: 70px 20px;
+    
+ }
+}
+ @media(min-width:769px) and (max-width:991px){
+    .login-2 .form-section {
+        padding: 70px 30px;
+    
+ }
 }
