@@ -164,21 +164,19 @@ class AccountApplicationController extends Controller
     }
 
 
-    public function updateAccountNotificationStatus(Request $request)
+    public function updateAccountNotificationStatus(Request $request,$id)
     {
-
         try{
           $request->validate([
               'id' => 'required',
           ]);
           DB::beginTransaction();
         //   $application_id = DB::table('tbl_application')->where('id',$request->id)->first()->application_id;
-          $update_account_received_payment_status = DB::table('tbl_application_payment')->where('application_id',$request->id)->update(['account_received_payment'=>1]);
-          
+          $update_account_received_payment_status = DB::table('tbl_application_payment')->where('application_id',$id)->update(['account_received_payment'=>1]);
 
           if($update_account_received_payment_status){
               DB::commit();
-              $redirect_url = URL::to('/account/application-view/'.dEncrypt($request->id));
+              $redirect_url = URL::to('/account/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();

@@ -547,7 +547,7 @@ class AdminApplicationController extends Controller
     }
 
 
-    public function updateAdminNotificationStatus(Request $request)
+    public function updateAdminNotificationStatus(Request $request,$id)
     {
         try{
           $request->validate([
@@ -555,10 +555,10 @@ class AdminApplicationController extends Controller
           ]);
           DB::beginTransaction();
           
-          $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['admin_received_payment'=>1]);
+          $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
           if($update_admin_received_payment_status){
               DB::commit();
-              $redirect_url = URL::to('/admin/application-view/'.dEncrypt($request->id));
+              $redirect_url = URL::to('/admin/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();

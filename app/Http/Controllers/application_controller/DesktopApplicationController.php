@@ -446,7 +446,7 @@ class DesktopApplicationController extends Controller
     }
 
 
-    public function updateAssessorDesktopNotificationStatus(Request $request)
+    public function updateAssessorDesktopNotificationStatus(Request $request,$id)
     {
         try{
           $request->validate([
@@ -454,10 +454,10 @@ class DesktopApplicationController extends Controller
           ]);
           DB::beginTransaction();
 
-          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$request->id)->update(['assessor_desktop_received_payment'=>1]);
+          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['assessor_desktop_received_payment'=>1]);
           if($update_assessor_received_payment_status){
               DB::commit();
-              $redirect_url = URL::to('/desktop/application-view/'.dEncrypt($request->id));
+              $redirect_url = URL::to('/desktop/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();
