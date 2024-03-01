@@ -64,17 +64,17 @@
                 <div role="tablist" class="tabs__controls">
                   <button role="tab" aria-selected="true">DESKTOP ASSESSMENT</button>
                   <button role="tab">ONSITE ASSESSMENT</button> 
-                  <button class="btn btn-warning float-end lh-1" onclick="printDiv('desktop-print')">  <i class="fa fa-print"></i>   </button>                
+                  <!-- <button class="btn btn-warning float-end lh-1" onclick="printDiv('desktop-print')">  <i class="fa fa-print"></i>   </button>                 -->
                 </div>
               
                 <div role="tabpanel" class="tabs__panel">
                   <div class="tabs__panel__inner">
                     <div class="row clearfix">
-                        <!-- <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
-                            <button class="btn btn-warning" onclick="printDiv('desktop-print')">
+                        <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
+                            <button class="btn btn-warning printTpBtn" onclick="printDiv('desktop-print')">
                             <i class="fa fa-print"></i>
                             </button>
-                        </div> -->
+                        </div>
                         <div class="col-lg-12 col-md-12" id="desktop-print">
                             <form id="submitForm" action="#" method="#">
                                 @csrf
@@ -247,7 +247,7 @@
                   <div class="tabs__panel__inner">
                     <div class="row clearfix">
                         <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
-                            <button class="btn btn-warning" onclick="printDiv('on-site-print')">
+                            <button class="btn btn-warning printTpBtn" onclick="printDiv('on-site-print')">
                             <i class="fa fa-print"></i>
                             </button>
                         </div>

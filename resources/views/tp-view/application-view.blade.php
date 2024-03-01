@@ -349,7 +349,7 @@
                         @foreach ($application_details->payment as $key=>$ApplicationPayment)
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                            <td class="text-nowrap">{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
                             </td>
                             <td>{{ $ApplicationPayment->payment_transaction_no ?? '' }}</td>
                             <td>{{ $ApplicationPayment->payment_reference_no ?? '' }}</td>

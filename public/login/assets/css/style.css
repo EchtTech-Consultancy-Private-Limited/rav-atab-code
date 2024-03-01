@@ -139,6 +139,7 @@ body {
     text-align: left;
     color: #535353;
     width: 100%;
+    padding: 0 20px;
 }
 
 
@@ -14932,3 +14933,23 @@ i#togglecpassword {
 .error{
     color: red !important;
  }
+
+
+ @media(min-width:1200px) and (max-width:1400px){
+    .login-2 .form-section {
+        padding: 70px 64px;
+    
+ }
+}
+ @media(min-width:991px) and (max-width:1200px){
+    .login-2 .form-section {
+        padding: 70px 20px;
+    
+ }
+}
+ @media(min-width:769px) and (max-width:991px){
+    .login-2 .form-section {
+        padding: 70px 30px;
+    
+ }
+}
