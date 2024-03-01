@@ -363,7 +363,13 @@ function get_accessor_date($id)
 
 function get_accessor_date_new($id, $applicationID, $assessmentType)
 {
-
+    $assessor_types = $assessmentType==1?'desktop':'onsite';
+    if($id && $applicationID && $assessmentType){
+        $assesorAssigned = DB::table('tbl_assessor_assign')->where(['assessor_id' => $id,'application_id' => $applicationID,'assessor_type' => $assessor_types])->first();
+        if($assesorAssigned == null){
+            $assesorAssigned = DB::table('assessor_assigne_date')->where(['assessor_id' => $id,'application_id' => $applicationID])->delete();
+        }
+    }
     $begin = Carbon\Carbon::now();
     $end = Carbon\Carbon::now()->addDays(15)->format('Y-m-d');
 

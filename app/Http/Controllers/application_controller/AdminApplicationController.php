@@ -146,7 +146,9 @@ class AdminApplicationController extends Controller
             $assessor_designation = $a_id;
             if($request->$assessor_designation==null){
                 return redirect()->route('admin-app-list')->with('fail', 'Please select assessor designation');
-
+            }
+            if($request->assessor_id==null){
+                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor');
             }
             DB::beginTransaction();
 
@@ -382,7 +384,7 @@ class AdminApplicationController extends Controller
         $applicationData = TblApplication::find($application_id);
         return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
     }
-    public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code)
+    public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
         
         try{
@@ -476,7 +478,9 @@ class AdminApplicationController extends Controller
             'doc_id' => $doc_sr_code,
             'doc_code' => $doc_unique_code,
             'application_id' => $application_id,
+            'application_course_id'=>$application_course_id,
             'doc_path' => $doc_path,
+            'doc_file_name'=>$doc_name,
             'dropdown_arr'=>$dropdown_arr??[],
             'nc_comments'=>$nc_comments,
             'form_view'=>$form_view,
@@ -490,7 +494,6 @@ class AdminApplicationController extends Controller
     public function adminDocumentVerify(Request $request)
     {
         try{
-            
         $redirect_to=URL::to("/admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;

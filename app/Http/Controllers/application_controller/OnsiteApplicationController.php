@@ -230,6 +230,7 @@ class OnsiteApplicationController extends Controller
 
     public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
+
         try{   
             if($nc_type == 'nr')
             {
@@ -295,6 +296,7 @@ class OnsiteApplicationController extends Controller
             // 'doc_latest_record' => $doc_latest_record,
             'doc_id' => $doc_sr_code,
             'doc_code' => $doc_unique_code,
+            'doc_file_name'=>$doc_name,
             'application_id' => $application_id,
             'doc_path' => $doc_path,
             'dropdown_arr'=>$dropdown_arr??[],
@@ -311,7 +313,6 @@ class OnsiteApplicationController extends Controller
      public function onsiteDocumentVerify(Request $request)
      {
          try{
-           
          $redirect_to=URL::to("/onsite/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
         
          DB::beginTransaction();

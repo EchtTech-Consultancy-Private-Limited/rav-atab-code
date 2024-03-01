@@ -73,9 +73,10 @@
                                     <input type="hidden" name="nc_type" value="{{$nc_type}}">
                                     <div class="form-group">
                                         <label for="tp_remark">Remark(<span class="text-danger">*</span>)</label>
-                                        <input type="text" class="form-control" id="tp_remark"  name ="tp_remark" aria-describedby="tp_remark" placeholder="Please Enter Remark." required>
+                                        <input type="text" class="form-control remove_err" id="tp_remark"  name ="tp_remark" aria-describedby="tp_remark" placeholder="Please Enter Remark." required maxlength="100" >
+                                        <span class="err remove_err" id="tp_remark_err"></span>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary" id="tp_remark_sb_btn">Submit</button>
                                 </form>
                             </div>
                         </div>
