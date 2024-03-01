@@ -990,7 +990,7 @@ class applicationController extends Controller
             //dd($exitValCheck);
             DB::table('assessor_assigne_date')->insert([
                 'assessor_Id' => $request->assessorID,
-                'assesment_type' => $request->applicationID,
+                'assesment_type' => $request->assessmentType,
                 'application_id' => $request->applicationID,
                 'selected_date' => $request->selectedDate,
                 'status' => 1
