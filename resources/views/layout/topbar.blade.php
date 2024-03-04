@@ -76,7 +76,7 @@
                              $applications = getNotificationForAdmin();
                          @endphp
                      <li class="dropdown">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam numquam perferendis neque, et asperiores distinctio in quos nostrum laudantium nisi explicabo ratione labore aspernatur, minima esse eligendi ipsum sint voluptas!</p>
+                       
                          <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
                              role="button">
                              <i class="far fa-bell"></i>
