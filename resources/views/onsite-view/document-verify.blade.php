@@ -102,7 +102,7 @@
                                                                     <small id="char-count-info">0/100 characters</small>
                                                                 </div>
 
-                                            <div class="upload-btn-wrapper">
+                                            <div class="upload-btn-wrapper col-md-1">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" onchange="updateFileName(this)"/>
                                                 <span id="selectedFileName"></span>
@@ -135,13 +135,9 @@
                                                                         </div>
                                                                     </div> -->
                                                             </div>
-
-
-                                                    </div>
-
-                                                    <div class="card-footer">
-                                                        <button id="submitBtn" type="button" value="Submit"
+                                                            <button id="submitBtn" type="button" value="Submit"
                                                             class="btn btn-primary" onclick="onsiteDocumentVerfiy()">Submit</button>
+
                                                     </div>
 
                                 </div>
