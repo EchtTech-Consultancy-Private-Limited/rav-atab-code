@@ -56,6 +56,12 @@ class AdminApplicationController extends Controller
                     
                 ])
                 ->first();
+                $last_payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                    
+                ])
+                ->latest('id')
+                ->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])
@@ -78,6 +84,7 @@ class AdminApplicationController extends Controller
                     $obj->assessment_way = $assessment_way;
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
+                    $obj->payment->last_payment = $last_payment;
                 }
                 $final_data[] = $obj;
         }
