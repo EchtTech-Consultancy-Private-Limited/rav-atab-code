@@ -11690,7 +11690,7 @@ table .checkbox [type="checkbox"]+label {
 }
 
 .dropdown-menu ul.menu li a {
-    padding: 11px 11px;
+    padding: 0px 11px;
     text-decoration: none;
     -moz-transition: .5s;
     -o-transition: .5s;
@@ -25468,5 +25468,11 @@ background: white;
 .printTpBtn{
  position: absolute;
  top: -44px;
+}
+
+.notification{
+    padding: 0px !important;
+    max-height: 280px;
+    overflow-y: scroll;
 }
 /* ******************************** */
