@@ -1512,6 +1512,18 @@ $(".remove_err").on("keyup", function () {
     $(`#${err_id}_err`).html("");
 });
 
+function handleShowCoursePayment(){
+    const payments = $("#payments option:selected").val();
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_details_file = $("#payment_details_file").val();
+    if(payments!="" && payment_transaction_no!="" && payment_reference_no!="" && payment_details_file!=""){
+        $("#submitBtn").attr('disabled',true);
+        return true;
+    }
+    return false;
+}
+
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
 });
