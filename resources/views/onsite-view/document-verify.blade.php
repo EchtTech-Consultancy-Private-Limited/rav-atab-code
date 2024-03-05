@@ -79,11 +79,11 @@
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-4">
                                                                     <label>Select Type</label>
-                                                <input type="hidden" name="application_id" value="{{$application_id}}" id="onsite_application_id_nc"/>
-                                                <input type="hidden" name="doc_unique_id" value="{{$doc_code}}" id="onsite_application_doc_unique_code_nc"/>
-                                                <input type="hidden" name="doc_sr_code" value="{{$doc_id}}" id="onsite_application_doc_sr_code_nc"/>
-                                                <input type="hidden" name="application_courses_id" value="{{$application_course_id}}" id="onsite_application_course_id_nc"/>
-                                                <input type="hidden" name="doc_file_name" value="{{$doc_file_name}}" id="onsite_application_doc_file_name_nc"/>
+                                                                        <input type="hidden" name="application_id" value="{{$application_id}}" id="onsite_application_id_nc"/>
+                                                                        <input type="hidden" name="doc_unique_id" value="{{$doc_code}}" id="onsite_application_doc_unique_code_nc"/>
+                                                                        <input type="hidden" name="doc_sr_code" value="{{$doc_id}}" id="onsite_application_doc_sr_code_nc"/>
+                                                                        <input type="hidden" name="application_courses_id" value="{{$application_course_id}}" id="onsite_application_course_id_nc"/>
+                                                                        <input type="hidden" name="doc_file_name" value="{{$doc_file_name}}" id="onsite_application_doc_file_name_nc"/>
                                                                     <select required
                                                                         class="form-control required text-center"
                                                                         name="status" id="status">
@@ -101,13 +101,6 @@
                                                                     <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
                                                                     <small id="char-count-info">0/100 characters</small>
                                                                 </div>
-
-                                            <div class="upload-btn-wrapper col-md-1">
-                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" onchange="updateFileName(this)"/>
-                                                <span id="selectedFileName"></span>
-                                             </div>
-
                                              
                                                                     <!-- <div class="col-sm-12">
                                                                         <div>
@@ -134,6 +127,13 @@
                                                                             </div>
                                                                         </div>
                                                                     </div> -->
+                                                            </div>
+                                                            <div class="row">
+                                                            <div class="upload-btn-wrapper col-md-1">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" onchange="updateFileName(this)"/>
+                                                <span id="selectedFileName"></span>
+                                             </div>
                                                             </div>
                                                             <button id="submitBtn" type="button" value="Submit"
                                                             class="btn btn-primary" onclick="onsiteDocumentVerfiy()">Submit</button>
