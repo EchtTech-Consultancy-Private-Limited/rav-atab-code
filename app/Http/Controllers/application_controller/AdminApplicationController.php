@@ -29,7 +29,7 @@ class AdminApplicationController extends Controller
     }
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[0,1,2,3])
+        ->whereIn('a.payment_status',[2,3])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -58,19 +58,18 @@ class AdminApplicationController extends Controller
                 ->first();
                 $last_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    
                 ])
                 ->latest('id')
                 ->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])
-                // ->where('status',2)
+                ->where('status',2)
                 ->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])
-                // ->where('status',2)
+                ->where('status',2)
                 ->count();
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
@@ -88,6 +87,7 @@ class AdminApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
+        // dd($final_data);
         return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
