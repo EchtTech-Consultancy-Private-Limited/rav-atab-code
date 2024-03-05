@@ -30,15 +30,19 @@ class DocApplicationController extends Controller
             if($is_exists){
                 return response()->json(['success' =>false,'message'=>'Payment already done.'], 200);
             }
-            
+            $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
             if ($request->hasfile('payment_proof')) {
                 $payment_proof = $request->file('payment_proof');
                 $name = $payment_proof->getClientOriginalName();
                 $filename = time() . $name;
                 $payment_proof->move('documnet/', $filename);
 
-                $application_id = dDecrypt($request->application_id);
-                DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>1]); //payment_status = 1 for payment received 2 for payment approved
+                // $application_id = dDecrypt($request->application_id);
+                
+                if($get_application->payment_status!=2){
+                    DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>1]); //payment_status = 1 for payment received 2 for payment approved
+                }
+                
     
                 $last_payment = DB::table('tbl_application_payment')->where('application_id',$application_id)->latest('id')->first();
                 if($last_payment){
@@ -48,9 +52,11 @@ class DocApplicationController extends Controller
                 }
             }else{
 
-                $application_id = dDecrypt($request->application_id);
+                // $application_id = dDecrypt($request->application_id);
 
-                DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>1]); //payment_status = 1 for payment received 2 for payment approved
+                if($get_application->payment_status!=2){
+                    DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>1]); //payment_status = 1 for payment received 2 for payment approved
+                }
     
                 $last_payment = DB::table('tbl_application_payment')->where('application_id',$application_id)->latest('id')->first();
                 if($last_payment){
