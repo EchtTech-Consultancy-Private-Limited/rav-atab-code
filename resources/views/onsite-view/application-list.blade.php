@@ -79,6 +79,7 @@
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
                                         <th>Status</th>
+                                        <th>Upgrade</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -127,6 +128,9 @@
                                                     @else
                                                     <span class="badge badge-main success">{{config('status_text.assessor_status_completed')}}</span>
                                                     @endif
+                                                </td>
+                                                <td>
+                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
                                                 </td>
                                                     <td>
                                                         <a href="{{ url('/onsite/application-view', dEncrypt($item->application_list->id)) }}"

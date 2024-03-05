@@ -596,6 +596,8 @@ function onsitePhotographUpload(question_id) {
                 });
             },
         });
+    }else{
+        $(".full_screen_loading").hide();
     }
 }
 

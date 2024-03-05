@@ -64,7 +64,7 @@
             @endif
             
             @isset($nc_comments)
-            @if($nc_comments->comments=="Request for Final Approval")
+            @if($nc_comments->nc_type=="Request_For_Final_Approval")
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Ooh!</strong> Request sent already for final approval
             </div>

@@ -114,7 +114,7 @@
                                                 {{ Auth::user()->lastname ?? '' }}
                                             </td>
                                             <td>
-                                                {{ date('m-d-Y',strtotime($remarks->created_at))}}
+                                                {{ date('d-m-Y',strtotime($remarks->created_at))}}
                                             </td>
                                         </tr>
                                

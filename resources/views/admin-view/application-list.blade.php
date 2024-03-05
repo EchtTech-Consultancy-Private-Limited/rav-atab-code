@@ -148,7 +148,6 @@
                                                         @endif
                                                     @endisset   
                                                     
-
                                                     @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4 && $item->payment->approve_remark!=null)
                                                     <a class="btn btn-tbl-delete bg-primary font-a"

@@ -56,6 +56,12 @@ class AdminApplicationController extends Controller
                     
                 ])
                 ->first();
+                $last_payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                    
+                ])
+                ->latest('id')
+                ->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])
@@ -78,6 +84,7 @@ class AdminApplicationController extends Controller
                     $obj->assessment_way = $assessment_way;
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
+                    $obj->payment->last_payment = $last_payment;
                 }
                 $final_data[] = $obj;
         }
@@ -163,7 +170,7 @@ class AdminApplicationController extends Controller
                 }
              /*end here*/
             $assessorType = $get_assessor_type==1?'desktop':'onsite';
-            $assessment_type_ = $assessorType=="desktop"?2:1;
+            $assessment_type_ = $assessorType=="desktop"?1:2;
             DB::table('assessor_assigne_date')->where('application_id',$request->application_id)->whereNotIn('assessor_id',[$request->assessor_id])->where('assesment_type',$assessment_type_)->delete();
 
             DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id,'assessor_type' => $assessorType])->whereNotIn('assessor_id',[$request->assessor_id])->delete();
@@ -443,7 +450,7 @@ class AdminApplicationController extends Controller
             
             /*Don't show form if doc is accepted*/ 
             $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
-            ->where('nc_type',"Accept")
+            ->whereIn('nc_type',["Accept","Reject"])
             ->where('final_status',$assessor_type)
             ->latest('id')
             ->first();
