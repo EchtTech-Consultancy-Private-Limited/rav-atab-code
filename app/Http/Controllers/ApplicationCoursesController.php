@@ -210,8 +210,6 @@ class ApplicationCoursesController extends Controller
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
-   
-
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
             $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
