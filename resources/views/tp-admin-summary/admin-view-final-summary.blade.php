@@ -462,7 +462,8 @@
                                                         }}
                                                    
                                                     </span></td>
-                                                    <td colspan="2" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$no_of_mandays}}</span></td>
+                                                    
+                                                    <td colspan="2" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$onsite_no_of_mandays}}</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="fw-bold">S.No.</td>

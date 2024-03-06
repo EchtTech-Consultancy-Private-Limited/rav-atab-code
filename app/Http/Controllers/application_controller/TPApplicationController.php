@@ -265,7 +265,9 @@ class TPApplicationController extends Controller
       return view('tp-upload-documents.tp-show-document-details', [
           'doc_latest_record' => $doc_latest_record,
           'doc_id' => $doc_sr_code,
+          'assessor_type'=>$assessor_type,
           'doc_code' => $doc_unique_code,
+          'application_course_id'=>$application_courses_id,
           'application_id' => $application_id,
           'doc_path' => $doc_path,
           'remarks' => $get_remarks,

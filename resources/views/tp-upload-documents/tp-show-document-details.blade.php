@@ -65,11 +65,11 @@
                                 <div class="col-md-12 p-3">
                                 <form action="{{url('tp-submit-remark')}}" method="post">
                                     @csrf
-                                    <input type="hidden" name="assessor_type" value="{{Request::segment(3)}}">
-                                    <input type="hidden" name="doc_sr_code" value="{{Request::segment(4)}}">
-                                    <input type="hidden" name="application_id" value="{{Request::segment(6)}}">
-                                    <input type="hidden" name="doc_unique_id" value="{{Request::segment(7)}}">
-                                    <input type="hidden" name="application_course_id" value="{{Request::segment(8)}}">
+                                    <input type="hidden" name="assessor_type" value="{{$assessor_type}}">
+                                    <input type="hidden" name="doc_sr_code" value="{{$doc_id}}">
+                                    <input type="hidden" name="application_id" value="{{$application_id}}">
+                                    <input type="hidden" name="doc_unique_id" value="{{$doc_code}}">
+                                    <input type="hidden" name="application_course_id" value="{{$application_course_id}}">
                                     <input type="hidden" name="nc_type" value="{{$nc_type}}">
                                     <div class="form-group">
                                         <label for="tp_remark">Remark(<span class="text-danger">*</span>)</label>
@@ -81,12 +81,9 @@
                             </div>
                         </div>
                     </div>
-                        
                         </div>
                     </div>
                 @endif
-
-
 
                 @isset($remarks)
                     <div class="card">
