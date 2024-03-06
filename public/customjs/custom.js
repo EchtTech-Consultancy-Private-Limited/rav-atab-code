@@ -1527,6 +1527,3 @@ $(document).on('keyup change', '.remove_err_input_error', function () {
 $(document).on('change', '.select2-selection select2-selection--multiple', function () {
     $(this).removeClass('courses_error');
 });
-
-
-
