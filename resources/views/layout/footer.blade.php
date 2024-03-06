@@ -334,46 +334,24 @@
  <script src="{{ asset('assets/js/chart.min.js') }}"></script>
  <!-- Custom Js -->
  <script src="{{ asset('assets/js/admin.js') }}"></script>
- {{-- <script src="{{asset('assets/js/bundles/echart/echarts.js')}}"></script> --}}
  <script src="{{ asset('assets/js/bundles/apexcharts/apexcharts.min.js') }}"></script>
  <script src="{{ asset('assets/js/pages/index.js') }}"></script>
  <script src="{{ asset('assets/js/pages/todo/todo.js') }}"></script>
-
- <!-- <script src="{{ asset('assets/js/toastify.min.js') }}"></script> -->
-
- <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
  <script src="{{ asset('assets/js/atab-fullcalendar.min.js') }}"></script>
- <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>  -->
-
  <script src="{{ asset('assets/js/table.min.js') }}"></script>
 
  <script src="{{ asset('assets/js/atab-moment.min.js') }}"></script>
- <!-- <script src="{{ asset('assets/js/atab-toastr.min.js') }}"></script> -->
+ 
+ <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
+ <!-- <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script> -->
+ <script src="{{ asset('assets/js/atab-dataTables.buttons.min.js') }}"></script>
+ <script src="{{ asset('assets/js/atab-jszip.min.js') }}"></script>
+ <script src="{{ asset('assets/js/atab-pdfmake.min.js') }}"></script>
+ <script src="{{ asset('assets/js/atab-vfs_fonts.js') }}"></script>
+ <script src="{{ asset('assets/js/atab-buttons.html5.min.js') }}"></script>
+ <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script>
 
- <!-- <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script> -->
-
-
- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
- <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-
- <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-
- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-
- <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-
- <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-
- {{-- <script src="{{ asset('assets/js/atab-pdfmake.min.js') }}"></script> --}}
- {{-- <script src="{{ asset('assets/js/atab-vfs_fonts.js') }}"></script> --}}
- {{-- <script src="{{ asset('assets/js/atab-buttons.html5.min.js') }}"></script>
- <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script> --}}
- <script>
+<script>
      $(document).ready(function() {
      
          $('#dataTableMain').DataTable({
@@ -387,8 +365,7 @@
              ]
          });
      });
- </script>
-
+</script>
 
  <script>
     $(document).on('change', '.file_size', function() {
