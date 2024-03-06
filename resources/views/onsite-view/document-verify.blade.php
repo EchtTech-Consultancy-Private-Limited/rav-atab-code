@@ -131,7 +131,7 @@
                                                             <div class="row">
                                                             <div class="upload-btn-wrapper col-md-1">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{Request::segment(6)}}" data-question-id="{{Request::segment(6)}}" onchange="updateFileName(this)"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc_code}}" data-question-id="{{$doc_code}}" onchange="updateFileName(this)"/>
                                                 <span id="selectedFileName"></span>
                                              </div>
                                                             </div>

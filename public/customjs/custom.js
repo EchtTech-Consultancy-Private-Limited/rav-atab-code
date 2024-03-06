@@ -1492,11 +1492,6 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     });
   }
 
-//   function handleTPRemarkValidation(){
-//     alert("clicked")
-
-//   }
-
   $("#tp_remark").on('keyup',function(){
         const value = $(this).val();
         if(value.length>100){
