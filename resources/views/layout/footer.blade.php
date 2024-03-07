@@ -1,12 +1,13 @@
  <section>
      <div class="row" style="margin:auto;">
-         <div class="col-lg-12 text-center pb-3">
+         <div class="col-lg-12 text-center mt-4 pb-3">
              <!-- 2023- --> © {{ date('Y') }} Ayurveda Training Accreditation Board. All Rights are Reserved.
          </div>
      </div>
  </section>
 
  {{-- state dropdown --}}
+ <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
  <script src="{{ asset('assets/js/atab-popper.min.js') }}"
      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
  </script>
@@ -350,6 +351,7 @@
  <script src="{{ asset('assets/js/atab-vfs_fonts.js') }}"></script>
  <script src="{{ asset('assets/js/atab-buttons.html5.min.js') }}"></script>
  <script src="{{ asset('assets/js/atab-buttons.print.min.js') }}"></script>
+
 
 <script>
      $(document).ready(function() {
