@@ -4870,6 +4870,12 @@ table .checkbox [type="checkbox"]+label {
         margin-right: 0;
         margin-left: 0
     }
+
+    .card .info-box-5 {
+        min-height: 75px !important;
+    }
+
+
 }
 
 @media(max-width:600px) {
@@ -24293,7 +24299,7 @@ div#QR > div {
 }
 
 .card .info-box-5 {
-    min-height: 120px !important;
+    min-height: 90px !important;
     /* display: flex; */
     align-items: center;
 }
@@ -25477,6 +25483,19 @@ background: white;
 @media screen and (max-width:1599px) {
     g.highcharts-label.highcharts-data-label text {
         font-size: 9px !important;
+    }
+
+    .font-20 {
+        font-size: 14px;
+    }   
+
+
+}
+
+@media (min-width: 1200px){
+    .col-xxl {
+        flex: 0 0 auto;
+        width: 20%;
     }
 }
 

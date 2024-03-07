@@ -124,8 +124,8 @@
 
 @if(Auth::user()->role == 3)
 
-<div class="row ">
-    <div class="col-xl-3 col-sm-6">
+<div class="row acc-dash">
+    <div class="col-xxl col-xl-3 col-sm-4">
         <div class="card l-bg-purple">
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
@@ -137,7 +137,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-lg-6">
+    <div class="col-xxl col-xl-3 col-sm-4">
         <div class="card l-bg-blue-dark">
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
@@ -152,7 +152,7 @@
     </div>
 
 
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-xxl col-xl-3 col-sm-4">
         <div class="card l-bg-purple">
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
@@ -162,7 +162,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-lg-6">
+    <div class="col-xxl col-xl-3 col-sm-4">
         <div class="card l-bg-blue-dark">
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
@@ -173,7 +173,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-lg-6">
+    <div class="col-xxl col-xl-3 col-sm-4">
         <div class="card l-bg-blue-dark">
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
@@ -223,7 +223,7 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
                             <div class="mb-4">
-                                <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">InterNational Application</h5></a>
+                                <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">International Application</h5></a>
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">

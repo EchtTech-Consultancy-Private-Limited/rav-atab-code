@@ -4,6 +4,9 @@
          padding: 10px 30px;
          width: 100%;
      }
+     .slimScrollDiv, .slimScrollDiv ul.text-dark.menu {
+    height: auto !important;
+}
  </style>
 
  <!-- Top Bar -->
@@ -134,9 +137,7 @@
                                      @if (count($payment_list)>0)
                                          @foreach ($payment_list as $pay_list)
                                              <li onclick="handleNotification({{$pay_list->id}})">
-                                                <a href="javascript:void(0)"
-                                                         style="color: #000;"
-                                                         >
+                                                <a href="javascript:void(0)" style="color: #000;">
                                                          Application ID : {{ $pay_list->uhid }}
                                                 </a>
                                              </li>
