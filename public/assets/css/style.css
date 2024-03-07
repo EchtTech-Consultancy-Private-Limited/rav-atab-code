@@ -25475,4 +25475,11 @@ background: white;
     max-height: 280px;
     overflow-y: scroll;
 }
+
+@media screen and (max-width:1599px) {
+    g.highcharts-label.highcharts-data-label text {
+        font-size: 9px !important;
+    }
+}
+
 /* ******************************** */
