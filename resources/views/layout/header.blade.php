@@ -34,7 +34,7 @@
     <!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.dataTables.min.css') }}"> -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/buttons.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/js/toastr.min.js') }}">
+    <script src="{{ asset('assets/js/toastr.min.js') }}"></script>  
     <script>
       const BASE_URL = {!! json_encode(url('/')) !!}
     </script>
