@@ -129,11 +129,11 @@
                                                                     </div> -->
                                                             </div>
                                                             <div class="row">
-                                                            <div class="upload-btn-wrapper col-md-1">
+                                        <div class="upload-btn-wrapper col-md-6">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc_code}}" data-question-id="{{$doc_code}}" onchange="updateFileName(this)"/>
+                                                <input type="file" class="from-control fileup h-w-input" name="fileup" id="fileup_{{$doc_code}}" data-question-id="{{$doc_code}}" onchange="updateFileName(this)" />
                                                 <span id="selectedFileName"></span>
-                                             </div>
+                                        </div>
                                                             </div>
                                                             <button id="submitBtn" type="button" value="Submit"
                                                             class="btn btn-primary" onclick="onsiteDocumentVerfiy()">Submit</button>

@@ -25480,6 +25480,12 @@ background: white;
     overflow-y: scroll;
 }
 
+.slimScrollDiv ul.text-dark.menu li a {
+    padding: 0px 15px;
+    line-height: 35px;
+}
+
+
 @media screen and (max-width:1599px) {
     g.highcharts-label.highcharts-data-label text {
         font-size: 9px !important;
@@ -25497,6 +25503,13 @@ background: white;
         flex: 0 0 auto;
         width: 20%;
     }
+
+    .fileup.h-w-input{
+        width: 60px;
+        height: 40px;
+        cursor: pointer;    
+    }
+
 }
 
 /* ******************************** */
