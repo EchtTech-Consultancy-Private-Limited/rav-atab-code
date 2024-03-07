@@ -304,7 +304,7 @@
  </script>
 
 
- <script>
+ <script> 
      $("document").ready(function() {
          setTimeout(function() {
              $("div.alert").remove();

@@ -304,7 +304,7 @@
                                     {{-- <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span> --}}
 
                                     <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
-                                        data-placement="top" title="You can create a maximum of 10 courses at one time"
+                                        data-placement="top" title="You can create a maximum of 5 courses at one time"
                                         onclick="addNewCourse();">
                                         <i class="fa fa-plus"></i> Add More Course 
                                     </button>
