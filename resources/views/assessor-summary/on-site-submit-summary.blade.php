@@ -113,7 +113,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the Opening Meeting: <input
-                                                    type="text" id="brief_open_meeting" class="remove_err" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required maxLength="4000">
+                                                    type="text" id="brief_open_meeting" class="remove_err" name="brief_open_meeting" placeholder="Brief about the Opening Meeting" required maxLength="2000">
                                                     <span id="brief_open_meeting_err" class="err"></span>
                                                 </td>
                                         </tr>
@@ -195,7 +195,8 @@
                                         </tr>
                                         <tr>
                                             <td colspan="6">Brief about the closing meeting: <input
-                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" class="remove_err" required maxLength="4000">
+                                                    type="text" id="brief_closing_meeting" name="brief_closing_meeting" placeholder="Please Enter Brief about the closing meeting" class="remove_err" required maxLength="2000
+                                                    ">
                                                     <span id="brief_closing_meeting_err" class="err"></span>
                                                 </td>
                                         </tr>

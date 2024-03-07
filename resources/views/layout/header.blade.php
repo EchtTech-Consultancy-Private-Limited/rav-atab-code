@@ -11,7 +11,6 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
-    <!-- You can choose a theme from css/styles instead of getting all themes -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles/all-themes.css') }}">
 
     <!-- jQuery -->
@@ -21,30 +20,21 @@
     <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}">
 
     <!-- Template CSS -->
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/plugins/dataTables.bootstrap4.min.css') }}"> --}}
+   
 
     <!-- Custom JavaScript -->
     <link rel="stylesheet" href="{{ asset('custom/costam.js') }}" class="js">
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">           
 
     <!-- FullCalendar CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.css') }}">
 
-    <!-- SweetAlert2 -->
-    <!-- <script src="{{ asset('assets/js/sweetalert2@11.js') }}"></script> -->
-
-    <!-- DataTables Buttons CSS -->
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> --}}
-    
-    
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/magnific-popup.css') }}">
-
-    <!-- <link rel="stylesheet" href="{{ asset('assets/css/toastify.min.css') }}"> -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.dataTables.min.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/toastr.min.js') }}">
     <script>
       const BASE_URL = {!! json_encode(url('/')) !!}
     </script>
