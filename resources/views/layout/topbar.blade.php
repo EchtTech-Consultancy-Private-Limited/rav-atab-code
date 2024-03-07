@@ -4,9 +4,7 @@
          padding: 10px 30px;
          width: 100%;
      }
-     .slimScrollDiv, .slimScrollDiv ul.text-dark.menu {
-    height: auto !important;
-}
+   
  </style>
 
  <!-- Top Bar -->

@@ -25485,6 +25485,10 @@ background: white;
     line-height: 35px;
 }
 
+.slimScrollDiv, .slimScrollDiv ul.text-dark.menu {
+    height: auto !important;
+}
+
 
 @media screen and (max-width:1599px) {
     g.highcharts-label.highcharts-data-label text {
