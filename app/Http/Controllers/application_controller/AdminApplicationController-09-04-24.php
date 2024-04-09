@@ -30,7 +30,6 @@ class AdminApplicationController extends Controller
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
         ->whereIn('a.payment_status',[2,3])
-        ->where('secretariat_id',Auth::user()->id)
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -99,8 +98,6 @@ class AdminApplicationController extends Controller
         ->where('id', dDecrypt($id))
         ->first();
 
-        
-
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
@@ -130,7 +127,7 @@ class AdminApplicationController extends Controller
                  $is_final_submit = false;
                 }
 
-                
+
         return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
     public function adminPaymentAcknowledge(Request $request)
@@ -585,8 +582,5 @@ class AdminApplicationController extends Controller
           return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
     }
     }
-
-
-
     
 }

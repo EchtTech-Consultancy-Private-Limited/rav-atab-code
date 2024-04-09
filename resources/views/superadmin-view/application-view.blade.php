@@ -3,9 +3,6 @@
     RAV Accreditation Previous Applications View</title>
 <link rel="stylesheet" type="text/css"
     href="https://rawgithub.com/dimsemenov/Magnific-Popup/master/dist/magnific-popup.css">
-    
- 
-
 </head>
 
 <body class="light">
@@ -54,30 +51,26 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     @if($is_final_submit)
-                        <a href="{{ url('application-course-summaries') . '?application=' . $spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
                     <div class="float-right">
-                        <a href="{{ url('admin/application-list') }}" type="button" class="btn btn-primary">Back
+                        <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="row form-margin-min">
-            <div class="col-md-8 pr-2">
-            <div class="card h-181">
+        <div class="card">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     Basic Information
                 </h5>
                 <div>
-                    <span style="font-weight: bold;" class="mr-3">Reference ID:</span> {{ $spocData->refid }} &nbsp;&nbsp;&nbsp;
                     <span style="font-weight: bold;">Application ID:</span> {{ $spocData->uhid }}
                 </div>
             </div>
-            <div class="card-body ">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
@@ -168,17 +161,15 @@
                 </div>
             </div>
         </div>
-            </div>
-            <div class="col-md-4 pl-0">
-            <div class="card">
+        <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
                     Single Point of Contact Details (SPoC)
                 </h5>
             </div>
-            <div class="card-body fixed-label-w">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Person Name :</strong></label>
@@ -187,7 +178,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Contact Number :</strong></label>
@@ -195,15 +186,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Email Id :</strong></label>
-                                <label>{{ $spocData->email ?? '' }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Designation :</strong></label>
@@ -211,24 +194,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label><strong>Email Id :</strong></label>
+                                <label>{{ $spocData->email ?? '' }}</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-            </div>
-        </div>
-
-      
-       
         @foreach ($application_details->course as $k => $ApplicationCourses)
         <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
-                    View Course Information Record No: {{ $k + 1 }}
+                    View Course Information Record No: {{ $k+1 }}
                 </h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Name</strong></label><br>
@@ -236,7 +222,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Duration</strong></label><br>
@@ -247,7 +233,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Eligibility</strong></label><br>
@@ -255,7 +241,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Mode of Course</strong></label>
@@ -263,7 +249,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Brief</strong></label><br>
@@ -272,168 +258,54 @@
                         </div>
                     </div>
                     <div class="row">
-
-                    <div class="col-md-12">
-                        <table class="table table-bordered text-left">
-                            <thead>
-                                <tr>
-                                    <th class="width-100">S.No.</th>
-                                    <th>Declaration</th>                                   
-                                    <th>Verfiy Document</th>
-                                    <th>Comments</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="document-row">
-                                    <td>1</td>
-                                    <td>Declaration</td>                             
-                                    <td class="d-flex"> 
-                                         <!-- <a href="{{url('doc') . '/' . $ApplicationCourses->declaration_pdf}}"
-                                            target="_blank" title="Download Document" class="d-flex ">
-                                            <i class="fa fa-eye mr-2"></i>
-                                            <span>&nbsp;Document</span>
-                                        </a> -->
-                                        <a href="{{ url('secretariat-view/verify-doc' . '/co01'.'/' . $ApplicationCourses->declaration_pdf . '/' . $spocData->id . '/co-declaration' .'/'.$ApplicationCourses->id) }}"
-                                            target="_blank" title="Download Document" class="d-flex ">
-                                            <i class="fa fa-eye mr-2"></i>
-                                            <span>&nbsp;Document</span>
-                                        </a>
-                                    
-                                    </td>
-                                        <td>
-                                                  <button
-                                                   class="expand-button btn btn-primary btn-sm mt-3"
-                                                   onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                    </td>
-                                </tr>
-                                <!-- accordion -->
-                            <tr class="document-details" style="display: none">
-                                             <td colspan="4">
-                                                <table>
-                                                   <thead>
-                                                      <tr>
-                                                         <th>Sr. No.</th>
-                                                         <th>Document Code</th>
-                                                         <th>Date</th>
-                                                         <th>Comments</th>
-                                                         <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
-                                                      </tr>
-                                                   </thead>
-                                                   <tbody>
-                                                   <tr class="text" style="border-left:3px solid red">
-                                                         <td width="60">1</td>
-                                                         <td width="130">1</td>
-                                                         <td width="120">1</td>
-                                                         <td>1</td>
-                                                         <td>
-                                                         1
-                                                         </td>
-                                                         <td>2</td>
-                                                      </tr>
-                                                   </tbody>
-                                                </table>
-                                             </td>
-                                          </tr>
-                                <tr class="document-row">
-                                    <td>2</td>
-                                    <td>Course Curriculum / Material / Syllabus</td>                             
-                                    <td class="d-flex">
-                                    <a href=href="{{ url('secretariat-view/verify-doc' . '/co02'.'/' . $ApplicationCourses->course_curriculum_pdf . '/' . $spocData->id . '/co-curiculam' .'/'.$ApplicationCourses->id) }}"
-                                            target="_blank" title="Download Document" class="d-flex">
-                                            <i class="fa fa-eye"></i><span>&nbsp;Document</span>
-                                        </a>
-                                    </td>
-                                    <td>
-                                                 <button
-                                                   class="expand-button btn btn-primary btn-sm mt-3"
-                                                   onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                    </td>
-                                </tr>
-                                <!-- accordion -->
-                            <tr class="document-details" style="display: none">
-                                             <td colspan="4">
-                                                <table>
-                                                   <thead>
-                                                      <tr>
-                                                         <th>Sr. No.</th>
-                                                         <th>Document Code</th>
-                                                         <th>Date</th>
-                                                         <th>Comments</th>
-                                                         <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
-                                                      </tr>
-                                                   </thead>
-                                                   <tbody>
-                                                   <tr class="text" style="border-left:3px solid red">
-                                                         <td width="60">1</td>
-                                                         <td width="130">1</td>
-                                                         <td width="120">1</td>
-                                                         <td>1</td>
-                                                         <td>
-                                                         1
-                                                         </td>
-                                                         <td>2</td>
-                                                      </tr>
-                                                   </tbody>
-                                                </table>
-                                             </td>
-                                          </tr>
-                                <tr class="document-row">
-                                    <td>3</td>
-                                    <td>Course Details (Excel format)</td>                             
-                                    <td>
-                                    <!-- <a href="{{url('doc') . '/' . $ApplicationCourses->course_details_xsl}}"
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="Declaration">Declaration</label></br>
+                                    <span class="badge badge-success">
+                                        <a href="{{url('doc').'/'.$ApplicationCourses->declaration_pdf}}"
+                                            target="_blank" title="Download Document">
+                                            <i class="fa fa-eye mr-2">&nbsp;Document</i>
+                                        </a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="Declaration">Course Curriculum / Material / Syllabus</label></br>
+                                    <span class="badge badge-success">
+                                        <a href="{{url('doc').'/'.$ApplicationCourses->course_curriculum_pdf}}"
+                                            target="_blank" title="Download Document">
+                                            <i class="fa fa-eye">&nbsp; Document</i>
+                                        </a></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <label for="Declaration">Course Details (Excel format)
+                                    </label>
+                                    <span class="badge badge-success">
+                                        <a href="{{url('doc').'/'.$ApplicationCourses->course_details_xsl}}"
                                             target="_blank" download title="Download Document">
                                             <i class="fa fa-download mr-2"></i>&nbsp; Download
                                             Document
-                                        </a> -->
-                                    <a href="{{ url('secretariat-view/verify-doc' . '/co03'.'/' . $ApplicationCourses->course_curriculum_pdf . '/' . $spocData->id . '/co-details' .'/'.$ApplicationCourses->id) }}" >
-                                            <i class="fa fa-download mr-2"></i>&nbsp; Download
-                                            Document
-                                        </a>
-                                    </td>
-                                    <td>
-                                                 <button
-                                                   class="expand-button btn btn-primary btn-sm mt-3"
-                                                   onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                    </td>
-                                </tr>
-                            <!-- accordion -->
-                            <tr class="document-details" style="display: none">
-                                             <td colspan="4">
-                                                <table>
-                                                   <thead>
-                                                      <tr>
-                                                         <th>Sr. No.</th>
-                                                         <th>Document Code</th>
-                                                         <th>Date</th>
-                                                         <th>Comments</th>
-                                                         <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
-                                                      </tr>
-                                                   </thead>
-                                                   <tbody>
-                                                   <tr class="text" style="border-left:3px solid red">
-                                                         <td width="60">1</td>
-                                                         <td width="130">1</td>
-                                                         <td width="120">1</td>
-                                                         <td>1</td>
-                                                         <td>
-                                                         1
-                                                         </td>
-                                                         <td>2</td>
-                                                      </tr>
-                                                   </tbody>
-                                                </table>
-                                             </td>
-                                          </tr>
-
-
-                            </thead>
-                        </table>
-                    </div>
-
+                                        </a></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-12 d-flex justify-content-end">
+                       
+                                <a href="{{ url('/super-admin/document-list' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
+                       
+                           
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -473,9 +345,9 @@
                             <th>Slip by Approver</th>
                             <th>Remarks</th>
                         </tr>
-                        @foreach ($application_details->payment as $key => $ApplicationPayment)
+                        @foreach ($application_details->payment as $key=>$ApplicationPayment)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $key+1 }}</td>
                             <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
                             </td>
                             <td>{{ $ApplicationPayment->payment_transaction_no ?? '' }}</td>
@@ -484,8 +356,8 @@
                             <td>
                                 ₹ {{ $ApplicationPayment->amount }}</td>
                             <td><?php
-        substr($ApplicationPayment->payment_proof, -3);
-        $data = substr($ApplicationPayment->payment_proof, -3);
+                                        substr($ApplicationPayment->payment_proof, -3);
+                                        $data = substr($ApplicationPayment->payment_proof, -3);
                                         ?>
                                 @if ($data == 'pdf')
                                 <a href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}" target="_blank"
@@ -507,13 +379,13 @@
                             @if ($ApplicationPayment->status == 0)
                                 N/A
                                 @endif
-                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status == 2)
+                                @if ($ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
                                 @if (!$ApplicationPayment->payment_proof_by_account)
                                 File not available!
                                 @endif
                                 <?php
-            substr($ApplicationPayment->payment_proof_by_account, -3);
-            $data = substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                $data = substr($ApplicationPayment->payment_proof_by_account, -3);
                                                 ?>
                                 @if ($data == 'pdf')
                                 <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
@@ -551,22 +423,6 @@
 
         </div>
     </section>
-    <script>
-      function toggleDocumentDetails(button) {
-          const documentRow = button.closest('.document-row');
-          console.log(documentRow,' button')
-          const documentDetails = documentRow.nextElementSibling;
-          if (documentDetails && (documentDetails.classList.contains('document-details'))) {
-              if (documentDetails.style.display == 'none' || documentDetails.style.display == '') {
-                  documentDetails.style.display = 'table-row';
-                  button.textContent = 'Hide Comments';
-              } else {
-                  documentDetails.style.display = 'none';
-                  button.textContent = 'Show Comments';
-              }
-          }
-      }
-   </script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("paymentApproveForm"); // Change this to your form's actual ID

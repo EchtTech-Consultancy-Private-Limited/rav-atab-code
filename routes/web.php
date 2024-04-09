@@ -18,11 +18,13 @@ use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
 use App\Http\Controllers\application_controller\AdminApplicationController;
+use App\Http\Controllers\application_controller\SuperAdminApplicationController;
 use App\Http\Controllers\application_controller\TPApplicationController;
 use App\Http\Controllers\application_controller\AccountApplicationController;
 use App\Http\Controllers\application_controller\DesktopApplicationController;
 use App\Http\Controllers\application_controller\OnsiteApplicationController;
 use App\Http\Controllers\application_controller\DocApplicationController;
+use App\Http\Controllers\application_controller\SecretariatDocumentVerifyController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -282,17 +284,35 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/course-edit', [ApplicationCoursesController::class, 'course_edit']);
     Route::post('/course-update/{id?}', [ApplicationCoursesController::class, 'course_update']);
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
+    Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
+    Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
+    Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
+    Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
+    Route::get('/admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
+    Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
+    Route::post('/admin-update-notification-status/{id}', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
     Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);
     Route::get('/account/application-list', [AccountApplicationController::class, 'getApplicationList']);
     Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
     Route::get('/onsite/application-list', [OnsiteApplicationController::class, 'getApplicationList']);
-    Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
     Route::get('/tp/application-view/{id}', [TPApplicationController::class, 'getApplicationView']);
     Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
     Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
     Route::get('/onsite/application-view/{id}', [OnsiteApplicationController::class, 'getApplicationView']);
     // Doc Routes
+
+    
+    
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
+    
+    Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
+
+    Route::post('/secretariat/document-verfiy', [SecretariatDocumentVerifyController::class, 'secretariatDocumentVerify']);
+
+
+
+
+
     Route::get('/tp-upload-document/{id}/{course_id}', [TPApplicationController::class, 'upload_document']);
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
@@ -300,25 +320,19 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/tp-submit-remark', [TPApplicationController::class, 'tpSubmitRemark']);
     Route::get('/desktop/document-list/{id}/{course_id}', [DesktopApplicationController::class, 'applicationDocumentList']);
     Route::get('/onsite/document-list/{id}/{course_id}', [OnsiteApplicationController::class, 'applicationDocumentList']);
-    Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
-    Route::get('/admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
-    Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
+    Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'secretariatVerfiyDocument']);
     Route::get('/onsite-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [OnsiteApplicationController::class, 'onsiteVerfiyDocument']);
     Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
     Route::post('/onsite/document-verfiy', [OnsiteApplicationController::class, 'onsiteDocumentVerify']);
     Route::post('/onsite/upload-photograph', [OnsiteApplicationController::class, 'onsiteUploadPhotograph']);
-    Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
-    Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
-    Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
     Route::get('/tp-second-payment', [TpApplicationController::class, 'secondPaymentView']);
     Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
     Route::post('/tp-update-payment', [TpApplicationController::class, 'updatePaynentInfo']);
     Route::post('/account-update-payment', [AccountApplicationController::class, 'updatePaynentInfo']);
     Route::post('/account-update-notification-status/{id}', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
-    Route::post('/admin-update-notification-status/{id}', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
     Route::post('/assessor-desktop-update-notification-status/{id}', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
     Route::post('/assessor-onsite-update-notification-status/{id}', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
     Route::get('tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
@@ -347,3 +361,16 @@ Route::post('email-validation', [LevelController::class, 'emailValidaion'])->nam
 Route::post('payment-transaction-validation', [LevelController::class, 'paymentTransactionValidation'])->name('transaction_validation');
 Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
 Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateCheck"])->name('payment.duplicate');
+
+
+
+/*super admin routes*/
+Route::get('/super-admin/application-list', [SuperAdminApplicationController::class, 'getApplicationList'])->name('superadmin-app-list');
+    Route::get('/super-admin/application-view/{id}', [SuperAdminApplicationController::class, 'getApplicationView']);
+    Route::get('/super-admin/document-list/{id}/{course_id}', [SuperAdminApplicationController::class, 'applicationDocumentList']);
+    Route::post('/super-admin/document-verfiy', [SuperAdminApplicationController::class, 'adminDocumentVerify']);
+    Route::post('/super-admin-assign-secretariat', [SuperAdminApplicationController::class, 'assignSecretariat']);
+    Route::get('/super-admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
+    Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
+    Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
+/*--end here--*/

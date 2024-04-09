@@ -30,6 +30,7 @@ class ApplicationCoursesController extends Controller
         $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         return view('create-application.create-application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
     }
+    
     public function  storeNewApplication(Request $request)
     {
         $this->validate(

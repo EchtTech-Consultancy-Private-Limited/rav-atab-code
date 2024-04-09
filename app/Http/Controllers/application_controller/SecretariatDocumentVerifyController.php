@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use URL;
 use App\Jobs\SendEmailJob;
-class DocApplicationController extends Controller
+class SecretariatDocumentVerifyController extends Controller
 {
     public function __construct()
     {
@@ -243,6 +243,119 @@ class DocApplicationController extends Controller
             return response()->json(['success' => false,'message' => 'Failed approved payment.'], 500);
         }
        
+    }
+
+
+
+    
+    public function secretariatDocumentVerify(Request $request)
+    {
+        // dd($request->all());
+        try{
+        $redirect_to=URL::to("/admin/application-view").'/'.dEncrypt($request->application_id);
+       
+        DB::beginTransaction();
+        $secretariat_id = Auth::user()->id;
+        
+        $data = [];
+        $data['application_id'] = $request->application_id;
+        $data['doc_sr_code'] = $request->doc_sr_code;
+        $data['doc_unique_id'] = $request->doc_unique_id;
+        $data['application_courses_id'] = $request->application_courses_id;
+        $data['comments'] = $request->comments;
+        $data['nc_type'] = $request->nc_type;
+        $data['secretariat_id'] = $secretariat_id;
+        $data['doc_file_name'] = $request->doc_file_name;
+
+        $nc_comment_status="";
+        $nc_raise="";
+        if($request->nc_type==="Accept"){
+            $nc_comment_status=1;
+            $nc_flag=0;
+            $nc_raise="Accept";
+        }else if($request->nc_type=="NC1"){
+            $nc_comment_status=2;
+            $nc_flag=1;
+            $nc_raise = "NC1";
+        }else if($request->nc_type=="NC2"){
+            $nc_comment_status=3;
+            $nc_flag=1; 
+            $nc_raise = "NC2";
+        }
+        else if($request->nc_type=="Reject"){
+            $nc_comment_status=6;
+            $nc_flag=0; 
+            $nc_raise = "Reject";
+        }
+        else{
+            $nc_comment_status=4; //not recommended
+            $nc_flag=0;
+            $nc_raise="Request for final approval";
+        }
+
+        $create_nc_comments = DB::table('tbl_nc_comments_secretariat')->insert($data);
+        
+
+        // $tp_id = TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->first();
+
+        // $tp_email = DB::table('users')->where('id',$tp_id->tp_id)->first();
+
+
+        // TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
+
+        /*Create record for summary report*/
+        // $data=[];
+        // $data['application_id'] = $request->application_id;
+        // $data['object_element_id'] = $request->doc_unique_id;
+        // $data['application_course_id'] = $request->application_courses_id;
+        // $data['doc_sr_code'] = $request->doc_sr_code;
+        // $data['doc_unique_id'] = $request->doc_unique_id;
+        
+        // $data['date_of_assessement'] = $request->date_of_assessement??'N/A';
+        // $data['secretariat_id'] = Auth::user()->id;
+        // $data['assessor_type'] = $assessor_type;
+        // $data['nc_raise'] = $nc_raise??'N/A';
+        // $data['nc_raise_code'] = $nc_raise??'N/A';
+        // $data['doc_path'] = $request->doc_file_name;
+        // $data['capa_mark'] = $request->capa_mark??'N/A';
+        // $data['doc_against_nc'] = $request->doc_against_nc??'N/A';
+        // $data['doc_verify_remark'] = $request->remark??'N/A';
+        // $create_summary_report = DB::table('assessor_summary_reports')->insert($data);
+        /*end here*/
+
+        //assessor email
+        // $title="Notification -  ".$request->nc_type." | RAVAP-".$request->application_id;
+        // $subject="Notification - ".$request->nc_type." | RAVAP-".$request->application_id;
+        
+        // $body = "Dear ,".$tp_email->firstname." ".PHP_EOL."
+        // I hope this email finds you well. I am writing to inform you that a ".$request->nc_type." has been generated for RAVAP-".$request->application_id." in accordance with our quality management procedures.".PHP_EOL."
+        
+        // NC Details:".PHP_EOL."
+
+        // Document Name: ".$request->doc_file_name."".PHP_EOL."
+        // Document Sr. No.: ".$request->doc_sr_code."".PHP_EOL."
+        // Date Created: ".date('d-m-Y')."".PHP_EOL."
+
+        // NC Created By: ".Auth::user()->firstname."";
+
+        //  $details['email'] = $tp_email->email;
+        //  $details['title'] = $title; 
+        //  $details['subject'] = $subject; 
+        //  $details['body'] = $body; 
+        //  dispatch(new SendEmailJob($details));
+
+        /*end here*/
+       
+        if($create_nc_comments){
+            DB::commit();
+            return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
+        }else{
+            return response()->json(['success' => false,'message' =>'Failed to create '.$request->nc_type.'  and documents'],200);
+        }
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' => false,'message' =>'Something went wrong'],200);
+    }
     }
 
 

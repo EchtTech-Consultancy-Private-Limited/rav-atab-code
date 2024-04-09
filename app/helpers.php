@@ -132,6 +132,11 @@ function secretariat_due_date($application_id, $secretariat_id)
     return $application_due_date;
 }
 
+function listOfApplicationAssignToSecretariat($application_id)
+{
+    // $secretariat = DB::table('users')->where('application_id', '=', $application_id)->get();
+}
+
 function listofapplicationsecretariat($application_id)
 {
     $assessors = DB::table('secretariat')->where('application_id', '=', $application_id)->get();
@@ -164,6 +169,7 @@ function listofapplicationassessor($application_id)
         return $assessorid;
     }
 }
+
 function getAssessorDesignation($application_id,$assessor_id)
 {
     $assessors = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id])->first();

@@ -72,6 +72,56 @@
             @endif
 
             <div class="row ">
+            <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12">
+
+                            <div class="tab-content">
+
+                                <div>
+                                        <div class="row clearfix">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <div class="card project_widget">
+                                                    <div class="card-header">
+                                                        <h4>Create NC</h4>
+                                                    </div>
+                                                    <div class="body">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-4">
+                                                                  
+
+                                                                    <label>Select Type</label>
+
+                                                                    <select required
+                                                                        class="form-control required text-center"
+                                                                        name="status" id="status">
+                                                                        <option value="" selected disabled>--Select--</option>
+                                                                        
+                                                                    </select>
+
+                                                                </div>
+
+
+                                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text">Remark</label>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
+                                                                    <small id="char-count-info">0/100 characters</small>
+                                                                </div>
+                                                            </div>
+
+
+                                                    </div>
+
+                                                    <div class="card-footer">
+                                                        <button id="submitBtn" type="button" value="Submit"
+                                                            class="btn btn-primary" onclick="desktopDocumentVerfiy()">Submit</button>
+                                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
 
             <div class="row clearfix">
 

@@ -4,25 +4,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
-use App\Mail\SendEMail;
-
 use App\Models\TblApplication; 
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
-use App\Models\DocumentRemark;
-use App\Models\DocComment;
-use App\Models\Application;
-use App\Models\Add_Document;
 use App\Models\AssessorApplication; 
 use App\Models\asessor_application; 
-use App\Models\User; 
 use App\Models\Chapter; 
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
 use URL;
 use App\Jobs\SendEmailJob;
 
-class AdminApplicationController extends Controller
+class SuperAdminApplicationController extends Controller
 {
     public function __construct()
     {
@@ -30,7 +23,6 @@ class AdminApplicationController extends Controller
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
         ->whereIn('a.payment_status',[2,3])
-        ->where('secretariat_id',Auth::user()->id)
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -91,15 +83,13 @@ class AdminApplicationController extends Controller
                 $final_data[] = $obj;
         }
         // dd($final_data);
-        return view('admin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
+        return view('superadmin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
     public function getApplicationView($id){
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
-
-        
 
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
@@ -130,8 +120,8 @@ class AdminApplicationController extends Controller
                  $is_final_submit = false;
                 }
 
-                
-        return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
+
+        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
     public function adminPaymentAcknowledge(Request $request)
     {
@@ -151,61 +141,38 @@ class AdminApplicationController extends Controller
             return response()->json(['success' =>false,'message'=>'Failed to make acknowledged payment'], 500);
         }
     }
-    public function assignAssessor(Request $request){
+    public function assignSecretariat(Request $request){
         try{
-            $a_id = "assessor_type_".$request->application_id;
-            // $a_id = "assessor_type_".$request->assessor_id;
-            $assessor_designation = $a_id;
-            if($request->$assessor_designation==null){
-                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor designation');
-            }
-            if($request->assessor_id==null){
-                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor');
+            if($request->secretariat_id==null){
+                return redirect()->route('superadmin-app-list')->with('fail', 'Please select secretariat');
             }
             DB::beginTransaction();
 
-            $get_assessor_type = DB::table('users')->where('id',$request->assessor_id)->first()->assessment;
-            $assessor_types = $get_assessor_type==1?'desktop':'onsite';
+            $get_secretariat_type = DB::table('users')->where('id',$request->secretariat_id)->first()->role;
 
-             /*to check date is selected or not*/
-             $get_date_count = DB::table('assessor_assigne_date')->where(['application_id'=>$request->application_id,'assessor_Id'=>$request->assessor_id])->count();
-            // $get_assessor_designation = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_Id'=>$request->assessor_id,'assessor_type'=>$assessor_types])->first();
-             if($get_date_count < 1){
-                    return redirect()->route('admin-app-list')->with('fail', 'Please select date');
-                }
-             /*end here*/
-            $assessorType = $get_assessor_type==1?'desktop':'onsite';
-            $assessment_type_ = $assessorType=="desktop"?1:2;
-            DB::table('assessor_assigne_date')->where('application_id',$request->application_id)->whereNotIn('assessor_id',[$request->assessor_id])->where('assesment_type',$assessment_type_)->delete();
+            DB::table('tbl_secretariat_assign')->where(['application_id' => $request->application_id])->whereNotIn('secretariat_id',[$request->secretariat_id])->delete();
 
-            DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id,'assessor_type' => $assessorType])->whereNotIn('assessor_id',[$request->assessor_id])->delete();
+            $secretariat_details = DB::table('users')->where('id',$request->secretariat_id)->first();
 
-            $assessor_details = DB::table('users')->where('id',$request->assessor_id)->first();
             $data = [];
             $data['application_id']=$request->application_id;
-            $data['assessor_id']=$request->assessor_id;
+            $data['secretariat_id']=$request->secretariat_id;
             $data['course_id']=$request->course_id??null;
-            $data['assessor_type']=$get_assessor_type==1?'desktop':'onsite';
+            $data['secretariat_type']=$get_secretariat_type==5?'secretariat':'';
             $data['due_date']=Carbon::now()->addDay(366);
-            $data['assessor_designation']=$request->$assessor_designation;
-            $data['assessor_category']="atab_assessor";
+            $data['secretariat_designation']=$request->secretariat_designation??"";
+            $data['secretariat_category']="atab_secretariat";
             
-            $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_id'=>$request->assessor_id,'assessor_type'=>$request->assessor_type])->first();
-            if($is_assign_assessor_date!=null){
-                $update_assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_id'=>$request->assessor_id,'assessor_type'=>$request->assessor_type])->update($data);
+            $is_assigned_secretariat = DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id])->first();
+
+            if($is_assigned_secretariat!=null){
+                DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id,'secretariat_type'=>$request->secretariat_type])->update($data);
             }else{
-                $create_assessor_assign = DB::table('tbl_assessor_assign')->insert($data);
-            }
-            if($request->assessor_type==="desktop"){
-                $assessment_type = 1;
-            }else{
-                $assessment_type = 2;
+                DB::table('tbl_secretariat_assign')->insert($data);
+               
             }
 
-
-            DB::table('tbl_application')->where('id',$request->application_id)->update(['admin_id'=>Auth::user()->id,'assessor_id'=>$request->assessor_id]);
-
-            DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'assessor_type'=>$assessor_types])->update(['admin_id'=>Auth::user()->id,'assessor_id'=>$request->assessor_id]);
+            DB::table('tbl_application')->where('id',$request->application_id)->update(['admin_id'=>Auth::user()->id,'secretariat_id'=>$request->secretariat_id]);
 
             /**
              * Mail Sending
@@ -213,125 +180,10 @@ class AdminApplicationController extends Controller
              * */ 
                 
                //admin mail
-                $title="Application Successfully Assigned | RAVAP-".$request->application_id;
-                $subject="Application Successfully Assigned | RAVAP-".$request->application_id;
-                $body="Dear Team,".PHP_EOL."
-
-                I hope this message finds you well. We are thrilled to inform you that you have assigned the ".$request->application_id." to the assessor.
-
-                Here are the transaction details: ".PHP_EOL."
-                Position: Admin ".PHP_EOL."
-                Reporting to: ".$assessor_details->firstname." ".PHP_EOL."
-                Start Date: ".$assessor_details->created_at."
                 
-                Best regard,".PHP_EOL."
-                RAV Team";
-
-                $details['email'] = Auth::user()->email;
-                $details['title'] = $title; 
-                $details['subject'] = $subject; 
-                $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
-    /*end here*/ 
-                
-                //assessor mail
-                $title="Assignment Confirmation - Welcome Aboard! | RAVAP-".$request->application_id;
-                $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$request->application_id;
-                $body="Dear Team,".PHP_EOL."
-
-                I trust this message finds you well. I am delighted to inform you that you have assigned the application with RAVAP-".$request->application_id.".".PHP_EOL."
-                
-                Best regard,".PHP_EOL."
-                RAV Team";
-
-                $details['email'] = $assessor_details->email;
-                $details['title'] = $title; 
-                $details['subject'] = $subject; 
-                $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
             /*end here*/
-
-            //tp mail
-                $title="Application Successfully Assigned | RAVAP-".$request->application_id;
-                $subject="Application Successfully Assigned | RAVAP-".$request->application_id;
-                $body="Dear Team,".PHP_EOL."
-
-                I trust this message finds you well. I am delighted to inform you that application  with RAVAP-".$request->application_id." has been assigned to ".$assessor_details->firstname."(Assessor) .".PHP_EOL."
-                
-                Best regard,".PHP_EOL."
-                RAV Team";
-
-                $details['email'] = $assessor_details->email;
-                $details['title'] = $title; 
-                $details['subject'] = $subject; 
-                $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
-            /*end here*/
-
-            if ($request->assessment_type == 2) {
-                
-                $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->count()  > 0;
-                if ($data == false) {   
-                    $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->count() > 0;
-                    if ($value == false) {
-                        $data = new asessor_application();
-                        $data->assessor_id = $request->assessor_id;
-                        $data->application_id = $request->application_id;
-                        $data->status = 1;
-                        $data->assessment_type = $assessment_type;
-                        $data->due_date = $due_date = Carbon::now()->addDay(15);
-                        $data->notification_status = 0;
-                        $data->read_by = 0;
-                        $data->assessment_way = $request->on_site_type;
-                        $data->save();
-                        return  back()->with('success', 'Application has been successfully assigned to assessor');
-                    } else {
-                        $item = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->first();
-                        $data = asessor_application::find($item->id);
-                        $data->assessor_id = $request->assessor_id;
-                        $data->application_id = $request->application_id;
-                        $data->status = 1;
-                        $data->assessment_type = $assessment_type;
-                        $data->due_date = $due_date = Carbon::now()->addDay(15);
-                        $data->notification_status = 0;
-                        $data->read_by = 0;
-                        $data->assessment_way = $request->on_site_type;
-                        $data->save();
-                        return  back()->with('success', 'Application has been successfully assigned to assessor');
-                    }
-                } else {
-                    $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $request->assessor_id)->first();
-                    // dd($value);
-                    $data = asessor_application::find($value->id);
-                    $data->assessor_id = $request->assessor_id;
-                    $data->application_id = $request->application_id;
-                    $data->status = 1;
-                    $data->assessment_type = $assessment_type;
-                    $data->due_date = $due_date = Carbon::now()->addDay(15);
-                    $data->notification_status = 0;
-                    $data->read_by = 0;
-                    $data->assessment_way = $request->on_site_type;
-                    $data->save();
-                    DB::commit();
-                    return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
-                }
-            } else {
-                
-                AssessorApplication::where('application_id', $request->application_id)->delete();
-                $assessor = $request->assessor_id;
-                $newApplicationAssign = new AssessorApplication;
-                $newApplicationAssign->application_id = $request->application_id;
-                $newApplicationAssign->assessment_type = $assessment_type;
-                $newApplicationAssign->assessor_id = $assessor;
-                $newApplicationAssign->status = 1;
-                $newApplicationAssign->notification_status = 0;
-                $newApplicationAssign->read_by = 0;
-                $newApplicationAssign->assessment_way = $request->on_site_type;
-                $newApplicationAssign->save();
-                // dd("hello");
-                DB::commit();
-                return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
-            }
+            DB::commit();
+            return redirect()->route('superadmin-app-list')->with('success', 'Application has been successfully assigned to Secretariat');
         }
 
         catch(Exception $e){
@@ -394,7 +246,7 @@ class AdminApplicationController extends Controller
                 $final_data[] = $obj;
         }
         $applicationData = TblApplication::find($application_id);
-        return view('admin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
+        return view('superadmin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
     }
     public function adminVerfiyDocument($nc_type,$assessor_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
@@ -485,7 +337,7 @@ class AdminApplicationController extends Controller
         ->first();
         // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
         $doc_path = URL::to("/level").'/'.$doc_name;
-        return view('admin-view.document-verify', [
+        return view('superadmin-view.document-verify', [
             'doc_latest_record' => $doc_latest_record,
             'doc_id' => $doc_sr_code,
             'doc_code' => $doc_unique_code,
@@ -585,8 +437,5 @@ class AdminApplicationController extends Controller
           return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
     }
     }
-
-
-
     
 }

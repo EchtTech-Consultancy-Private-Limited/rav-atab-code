@@ -496,9 +496,10 @@ class LevelController extends Controller
             $item = LevelInformation::whereid('1')->get();
 
             /*$course=ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
-
+            
+            if(isset($item[0])){
             $course = ApplicationCourse::whereapplication_id($id)->wherestatus('0')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();
-
+       
             /*$collection=ApplicationPayment::orderBy('id','desc')->whereuser_id(Auth::user()->id)->wherelevel_id($item[0]->id)->get();*/
 
             //we show previous application listing without copmare level below
@@ -556,14 +557,15 @@ class LevelController extends Controller
                 }
             }
             /*level list */
-
+        }
             $level_list_data = DB::table('applications')
                 ->where('applications.user_id', Auth::user()->id)
                 ->where('applications.status', '0')
                 ->select('applications.*', 'countries.name as country_name')
                 ->join('countries', 'applications.country', '=', 'countries.id')->orderBy('applications.id', 'desc')->get();
             /*end level list */
-
+            $collection = "";
+            $collections="";
             return view('level.leveltp', ['level_list_data' => $level_list_data, 'collection' => $collection, 'collections' => $collections, 'item' => $item, 'data' => $data, 'faqs' => $faqs], compact('form_step_type'));
         }
     }
@@ -1291,7 +1293,12 @@ class LevelController extends Controller
     function get_india_id()
     {
         $india = Country::where('name', 'India')->get('id')->first();
-        return $india->id;
+        if($india){
+            return $india->id;
+        }else{
+            return null;
+        }
+        
     }
 
     function get_saarc_ids()

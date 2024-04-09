@@ -147,6 +147,26 @@
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
+                                                    
+                                                    @isset($item->payment)
+                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4 && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2)
+                                                    <a class="btn btn-tbl-delete bg-primary font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
+                                                    </a>
+
+
+                                                    <a class="btn btn-tbl-delete bg-danger font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#view_secreate_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                                    <i class="fa fa-scribd" aria-hidden="true"
+                                                                        title=""></i>
+                                                    </a>
+                                                    @endif
+                                                    @endisset  
                                                 </td>
                                             </tr>
 

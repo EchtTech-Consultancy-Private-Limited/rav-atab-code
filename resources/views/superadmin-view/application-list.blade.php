@@ -137,7 +137,7 @@
                                                 {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/admin/application-view', dEncrypt($item->application_list->id)) }}"
+                                                        <a href="{{ url('/super-admin/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
 
@@ -147,6 +147,16 @@
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
+                                                    
+
+                                                    <a class="btn btn-tbl-delete bg-danger font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                                    <i class="fa fa-scribd" aria-hidden="true"
+                                                                        title=""></i>
+                                                    </a>
+                                                  
                                                 </td>
                                             </tr>
 
@@ -161,7 +171,7 @@
          <div class="modal-header">
             <h5 class="modal-title" id="exampleModalCenterTitle">
                Assign an
-               Assessor to the application from the below list
+               Secretariat to the application from the below list
             </h5>
             <button type="button" class="close"
                data-bs-dismiss="modal" aria-label="Close">
@@ -170,64 +180,22 @@
          </div>
         
          <div class="modal-body mod-css">
-
-         <tabs-group>
-                <div role="tablist" class="tabs__controls">
-                  <button role="tab" aria-selected="true">ATAB Assessor</button>
-                  <button role="tab">ACB</button>                 
-                </div>
-
-                <div role="tabpanel" class="tabs__panel">
                     <div class="">
-                    <form action="{{ url('/admin-assign-assessor') }}"
+                    <form action="{{ url('/super-admin-assign-secretariat') }}"
                method="post">
                @csrf
-               <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
-                <input type="hidden" name="assessor_type" value="{{$item->assessor_type=='desktop'?'desktop':'onsite'}}">
                 <?php
 
-
-                    $application_assessor_arr = listofapplicationassessor($item->application_list->id);
-                   
-
+                    $application_assessor_arr = listofapplicationsecretariat($item->application_list->id);
                 ?>
                <br>
-               <label class="mb-3"><b>Assessment
-               Type</b></label><br>
-
-               <p>{{$item->assessor_type=="desktop"?'Desktop Assessment':'Onsite Assessment'}}</p>
-               <!--   -->
-                @if($item->assessor_type=="onsite")
-               <div class="form-check form-check-inline radio-ass">
-               <label>
-                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked @if($item->assessment_way=='onsite') checked @endif>
-                    <span>
-                        Onsite                     
-                    </span>
-                    </label>  
-
-                    <label>
-                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="hybrid" @if($item->assessment_way=='hybrid') checked @endif>
-                    <span>
-                        Hybrid                     
-                    </span>
-                    </label>  
-
-                    <label>
-                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="virtual" @if($item->assessment_way=='virtual') checked @endif>
-                    <span>
-                        Virtual                     
-                    </span>
-                    </label>  
-
-              </div>
-              @endif
+              
             
    
                <div class="destop-id">
-               @foreach ($item->assessor_list as $k => $assesorsData)
+               @foreach ($secretariatdata as $k => $secretariatData)
                <?php
-                    $assessor_designation_first = getAssessorDesignation($item->application_list->id,$assesorsData->id);
+                    $assessor_designation_first = getAssessorDesignation($item->application_list->id,$secretariatData->id);
                 ?>
                <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
                   <br>
@@ -237,42 +205,25 @@
                     <label>
                     
                     <input type="radio"
-                    id="assesorsid"
+                    id="secretariatid"
                     class="assesorsid opacity-1"
-                    name="assessor_id"
+                    name="secretariat_id"
                     application-id="{{$item->application_list->id}}"
-                    value="{{$assesorsData->id}}"
-                    @if (in_array($assesorsData->id, $application_assessor_arr)) checked @endif 
+                    value="{{$secretariatData->id}}"
+                    @if (in_array($secretariatData->id, $application_assessor_arr)) checked @endif 
                    
                     />
 
-                    <input type="hidden" value="" name="assessor_designation_{{ $item->application_list->id}}" id="assessor_designation_{{ $item->application_list->id}}">
-                    <input type="hidden" value="" name="assessor_category_{{ $item->application_list->id}}" id="assessor_category_{{ $item->application_list->id}}">
+                    <input type="hidden" value="" name="secretariat_designation_{{ $item->application_list->id}}" id="secretariat_designation_{{ $item->application_list->id}}">
+                    <input type="hidden" value="" name="secretariat_category_{{ $item->application_list->id}}" id="secretariat_category_{{ $item->application_list->id}}">
                     
                     <span>
-                    {{ ucfirst($assesorsData->firstname) }}
-                      {{ ucfirst($assesorsData->lastname) }}
-                      ({{ $assesorsData->email }})
+                    {{ ucfirst($secretariatData->firstname) }}
+                      {{ ucfirst($secretariatData->lastname) }}
+                      ({{ $secretariatData->email }})
                     </span>
                     </label>
                     </div>
-                    <div class="col-md-3">
-                    <select name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $assesorsData->id}}" class="d-block assessor_name_with_email" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
-                      <option value="" disabled selected>Please select option</option>
-                      <option value="Lead Assessor" @if($assessor_designation_first?->assessor_designation=='Lead Assessor') selected @endif>Lead Assessor</option>
-                      <option value="Co-Assessor" @if($assessor_designation_first?->assessor_designation=='Co-Assessor') selected @endif>Co-Assessor</option>
-                      <option value="Observer Assessor" @if($assessor_designation_first?->assessor_designation=='Observer Assessor') selected @endif>Observer Assessor</option>
-                    </select>   
-                    </div>
-                  
-                  </div>
-                  
-                  <div id="assessor_assign_dates_{{$assesorsData->id}}">
-                  <?php
-                    foreach(get_accessor_date_new($assesorsData->id,$item->application_list->id,$assesorsData->assessment) as $date){
-                    ?>
-                    {!! $date !!}
-                <?php }   ?>
                   </div>
               @endforeach  
                </div>
@@ -284,18 +235,10 @@
             class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
          </div>
       </div>
-         </div>
         
       </form>
-      
-      
-      <div role="tabpanel" class="tabs__panel">
-          <div class="">
-             Demo
-            </div>
-        </div>
+  
         
-    </tabs-group>
     
 </div>
 <!-- modal end here -->
