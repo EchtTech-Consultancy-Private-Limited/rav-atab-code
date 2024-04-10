@@ -301,7 +301,9 @@ class SecretariatDocumentVerifyController extends Controller
         // $tp_email = DB::table('users')->where('id',$tp_id->tp_id)->first();
 
 
-        // TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
+        // DB::table('tbl_course_wise_document')->where(['application_id'=> $request->application_id,'course_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
+
+        DB::table('tbl_course_wise_document')->where(['application_id'=> $request->application_id,'course_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status]);
 
         /*Create record for summary report*/
         // $data=[];
@@ -357,6 +359,31 @@ class SecretariatDocumentVerifyController extends Controller
         return response()->json(['success' => false,'message' =>'Something went wrong'],200);
     }
     }
+
+
+
+    public function secretariatUpdateNCFlag($application_id,$course_id)
+    {
+        
+        try{
+        $redirect_to=URL::to("/admin/application-view").'/'.dEncrypt($application_id);
+       
+        DB::beginTransaction();
+        $secretariat_id = Auth::user()->id;
+
+       $d =  DB::table('tbl_course_wise_document')
+        ->whereNotIn('status',[0,4])  //view and not recommended
+        ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
+        DB::commit();
+        return back()->with('fail','Something went wrong');
+        // return redirect($redirect_to);
+        
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' => false,'message' =>'Something went wrong'],200);
+    }
+    }
+
 
 
 }

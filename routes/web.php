@@ -308,11 +308,18 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
 
     Route::post('/secretariat/document-verfiy', [SecretariatDocumentVerifyController::class, 'secretariatDocumentVerify']);
+    Route::post('/secretariat/update-nc-flag/{application_id}/{course_id}', [SecretariatDocumentVerifyController::class, 'secretariatUpdateNCFlag']);
+
+    Route::get('/tp-course-document-detail/{nc_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpCourseDocumentDetails']);
+    Route::post('/tp-course-submit-remark', [TPApplicationController::class, 'tpCourseSubmitRemark']);
 
 
-
-
-
+   
+   
+   
+   
+   
+   
     Route::get('/tp-upload-document/{id}/{course_id}', [TPApplicationController::class, 'upload_document']);
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);

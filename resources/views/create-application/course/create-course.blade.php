@@ -456,7 +456,6 @@
                                                 <input type="file" name="doc1[]"
                                                     class="form-control doc_1 file_size remove_err_input_error" required>
                                                     <span class="err error_name">Please select Declaration (PDF)</span>
-
                                             </div>
                                         </div>
                                     </div>
@@ -468,6 +467,7 @@
                                                 <input type="file" name="doc2[]"
                                                     class="form-control doc_2 file_size remove_err_input_error" required>
                                                     <span class="err error_name">Please select Course Curriculum</span>
+                                            
                                             </div>
 
                                         </div>

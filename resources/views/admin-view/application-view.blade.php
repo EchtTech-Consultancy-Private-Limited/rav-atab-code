@@ -220,6 +220,7 @@
       
        
         @foreach ($application_details->course as $k => $ApplicationCourses)
+            
         <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
@@ -232,7 +233,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Name</strong></label><br>
-                                <label>{{ $ApplicationCourses->course_name }}</label>
+                                <label>{{ $ApplicationCourses['course']->course_name }}</label>
                             </div>
                         </div>
                     </div>
@@ -240,10 +241,10 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Duration</strong></label><br>
-                                {{ $ApplicationCourses->course_duration_y ?? '' }} Years(s)
-                                {{ $ApplicationCourses->course_duration_m ?? '' }} Month(s)
-                                {{ $ApplicationCourses->course_duration_d ?? '' }} Day(s)
-                                {{ $ApplicationCourses->course_duration_h ?? '' }} Hour(s)
+                                {{ $ApplicationCourses['course']->course_duration_y ?? '' }} Years(s)
+                                {{ $ApplicationCourses['course']->course_duration_m ?? '' }} Month(s)
+                                {{ $ApplicationCourses['course']->course_duration_d ?? '' }} Day(s)
+                                {{ $ApplicationCourses['course']->course_duration_h ?? '' }} Hour(s)
                             </div>
                         </div>
                     </div>
@@ -251,7 +252,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Eligibility</strong></label><br>
-                                <label>{{ $ApplicationCourses->eligibility ?? '' }}</label>
+                                <label>{{ $ApplicationCourses['course']->eligibility ?? '' }}</label>
                             </div>
                         </div>
                     </div>
@@ -259,7 +260,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Mode of Course</strong></label>
-                                <label> {{$ApplicationCourses->mode_of_course}}</label>
+                                <label> {{$ApplicationCourses['course']->mode_of_course}}</label>
                             </div>
                         </div>
                     </div>
@@ -267,14 +268,16 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Brief</strong></label><br>
-                                <label>{{ $ApplicationCourses->course_brief ?? '' }}</label>
+                                <label>{{ $ApplicationCourses['course']->course_brief ?? '' }}</label>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
 
-                    <div class="col-md-12">
-                        <table class="table table-bordered text-left">
+
+
+                <div class="row">
+                    <div class="col-md-12 text-table-center">
+                        <table class="table table-bordered text-center">
                             <thead>
                                 <tr>
                                     <th class="width-100">S.No.</th>
@@ -287,17 +290,77 @@
                                 <tr class="document-row">
                                     <td>1</td>
                                     <td>Declaration</td>                             
-                                    <td class="d-flex"> 
-                                         <!-- <a href="{{url('doc') . '/' . $ApplicationCourses->declaration_pdf}}"
-                                            target="_blank" title="Download Document" class="d-flex ">
-                                            <i class="fa fa-eye mr-2"></i>
-                                            <span>&nbsp;Document</span>
-                                        </a> -->
-                                        <a href="{{ url('secretariat-view/verify-doc' . '/co01'.'/' . $ApplicationCourses->declaration_pdf . '/' . $spocData->id . '/co-declaration' .'/'.$ApplicationCourses->id) }}"
-                                            target="_blank" title="Download Document" class="d-flex ">
-                                            <i class="fa fa-eye mr-2"></i>
-                                            <span>&nbsp;Document</span>
-                                        </a>
+                                    <td> 
+                                        
+                                          @foreach($ApplicationCourses['course_wise_document_declaration'] as $doc)
+
+
+
+
+                                @if($doc->status==0)
+                                       <a 
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                        class="btn btn-primary btn-sm docBtn m-1">
+                                        View</a>
+                                        @elseif($doc->status==1)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn m-1">
+                                             Accepted</a>
+                                    @elseif($doc->status==2)
+                                    <a 
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('secretariat-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                        class="btn btn-danger btn-sm docBtn m-1">
+                                        NC1</a>
+                                        @elseif($doc->status==3)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('secretariat-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                             NC2</a>
+                                        @elseif($doc->status==4)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('secretariat-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                              Not Recommended</a>
+                                              <!-- admin accept/reject -->
+                                              @if($doc->nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
+                                             Accepted <span>By Admin</span></a>
+                                             @endif
+
+                                             @if($doc->nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected <span>By Admin</span></a>
+                                             @endif
+                                             <!-- end here -->
+                                             @elseif($doc->status==6)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn m-1">
+                                             Rejected</a>
+                                    @else
+                                       <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                             </div>
+                                    @endif 
+
+                                          @endforeach
+                                        
+                                        
+                                        
                                     
                                     </td>
                                         <td>
@@ -312,7 +375,7 @@
                                                 <table>
                                                    <thead>
                                                       <tr>
-                                                         <th>Sr. No.</th>
+                                                         <th class="width-100">Sr. No.</th>
                                                          <th>Document Code</th>
                                                          <th>Date</th>
                                                          <th>Comments</th>
@@ -321,16 +384,25 @@
                                                       </tr>
                                                    </thead>
                                                    <tbody>
-                                                   <tr class="text" style="border-left:3px solid red">
-                                                         <td width="60">1</td>
-                                                         <td width="130">1</td>
-                                                         <td width="120">1</td>
-                                                         <td>1</td>
+                                                    @foreach($ApplicationCourses['nc_comments_course_declaration'] as $k=>$nc)
+                                                   <tr class="text text-{{$nc->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+
+                                                         <td>{{$k+1}}</td>
+                                                         <td>{{$nc->doc_sr_code}}</td>
+                                                         <td>{{date('d-m-Y',strtotime($nc->created_at))}}</td>
+                                                         <td>{{$nc->comments}}</td>
                                                          <td>
-                                                         1
+                                                         @php
+                                                            $string = $nc->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
                                                          </td>
-                                                         <td>2</td>
+                                                         <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} (Secretariat)</td>
                                                       </tr>
+                                                    @endforeach
                                                    </tbody>
                                                 </table>
                                              </td>
@@ -338,11 +410,71 @@
                                 <tr class="document-row">
                                     <td>2</td>
                                     <td>Course Curriculum / Material / Syllabus</td>                             
-                                    <td class="d-flex">
-                                    <a href=href="{{ url('secretariat-view/verify-doc' . '/co02'.'/' . $ApplicationCourses->course_curriculum_pdf . '/' . $spocData->id . '/co-curiculam' .'/'.$ApplicationCourses->id) }}"
-                                            target="_blank" title="Download Document" class="d-flex">
-                                            <i class="fa fa-eye"></i><span>&nbsp;Document</span>
-                                        </a>
+                                    <td>
+
+                                    @foreach($ApplicationCourses['course_wise_document_curiculum'] as $doc)
+
+                                            @if($doc->status==0)
+                                                <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-primary btn-sm docBtn m-1">
+                                                    View</a>
+                                                    @elseif($doc->status==1)
+                                                    <a 
+                                                        title="{{$doc->doc_file_name}}"
+                                                        href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                        class="btn btn-success btn-sm docBtn m-1">
+                                                        Accepted</a>
+                                                @elseif($doc->status==2)
+                                                <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-danger btn-sm docBtn m-1">
+                                                    NC1</a>
+                                                    @elseif($doc->status==3)
+                                                    <a 
+                                                        title="{{$doc->doc_file_name}}"
+                                                        href="{{ url('secretariat-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                        class="btn btn-danger btn-sm docBtn m-1">
+                                                        NC2</a>
+                                                    @elseif($doc->status==4)
+                                                    <a 
+                                                        title="{{$doc->doc_file_name}}"
+                                                        href="{{ url('secretariat-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                        class="btn btn-danger btn-sm docBtn m-1">
+                                                        Not Recommended</a>
+                                                        <!-- admin accept/reject -->
+                                                        @if($doc->nc_flag==1)
+                                                        <a 
+                                                        title="{{$doc->doc_file_name}}"
+                                                        href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                        class="btn btn-success btn-sm docBtn docBtn_nc m-1">
+                                                        Accepted <span>By Admin</span></a>
+                                                        @endif
+
+                                                        @if($doc->nc_flag==2)
+                                                        <a 
+                                                        title="{{$doc->doc_file_name}}"
+                                                        href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                        class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                                        Rejected <span>By Admin</span></a>
+                                                        @endif
+                                                        <!-- end here -->
+                                                        @elseif($doc->status==6)
+                                                    <a 
+                                                        title="{{$doc->doc_file_name}}"
+                                                        href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                        class="btn btn-danger btn-sm docBtn m-1">
+                                                        Rejected</a>
+                                                @else
+                                                <div class="upload-btn-wrapper">
+                                                            <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                            <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                                        </div>
+                                                @endif 
+
+                                                    @endforeach
                                     </td>
                                     <td>
                                                  <button
@@ -365,16 +497,25 @@
                                                       </tr>
                                                    </thead>
                                                    <tbody>
-                                                   <tr class="text" style="border-left:3px solid red">
-                                                         <td width="60">1</td>
-                                                         <td width="130">1</td>
-                                                         <td width="120">1</td>
-                                                         <td>1</td>
+                                                   @foreach($ApplicationCourses['nc_comments_course_curiculam'] as $k=>$nc)
+                                                   <tr class="text text-{{$nc->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+
+                                                         <td>{{$k+1}}</td>
+                                                         <td>{{$nc->doc_sr_code}}</td>
+                                                         <td>{{date('d-m-Y',strtotime($nc->created_at))}}</td>
+                                                         <td>{{$nc->comments}}</td>
                                                          <td>
-                                                         1
+                                                         @php
+                                                            $string = $nc->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
                                                          </td>
-                                                         <td>2</td>
+                                                         <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} (Secretariat)</td>
                                                       </tr>
+                                                    @endforeach
                                                    </tbody>
                                                 </table>
                                              </td>
@@ -383,15 +524,68 @@
                                     <td>3</td>
                                     <td>Course Details (Excel format)</td>                             
                                     <td>
-                                    <!-- <a href="{{url('doc') . '/' . $ApplicationCourses->course_details_xsl}}"
-                                            target="_blank" download title="Download Document">
-                                            <i class="fa fa-download mr-2"></i>&nbsp; Download
-                                            Document
-                                        </a> -->
-                                    <a href="{{ url('secretariat-view/verify-doc' . '/co03'.'/' . $ApplicationCourses->course_curriculum_pdf . '/' . $spocData->id . '/co-details' .'/'.$ApplicationCourses->id) }}" >
-                                            <i class="fa fa-download mr-2"></i>&nbsp; Download
-                                            Document
-                                        </a>
+                                    @foreach($ApplicationCourses['course_wise_document_details'] as $doc)
+                                        @if($doc->status==0)
+                                            <a 
+                                                title="{{$doc->doc_file_name}}"
+                                                href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                class="btn btn-primary btn-sm docBtn m-1">
+                                                View</a>
+                                                @elseif($doc->status==1)
+                                                <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-success btn-sm docBtn m-1">
+                                                    Accepted</a>
+                                            @elseif($doc->status==2)
+                                            <a 
+                                                title="{{$doc->doc_file_name}}"
+                                                href="{{ url('secretariat-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                class="btn btn-danger btn-sm docBtn m-1">
+                                                NC1</a>
+                                                @elseif($doc->status==3)
+                                                <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-danger btn-sm docBtn m-1">
+                                                    NC2</a>
+                                                @elseif($doc->status==4)
+                                                <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-danger btn-sm docBtn m-1">
+                                                    Not Recommended</a>
+                                                    <!-- admin accept/reject -->
+                                                    @if($doc->nc_flag==1)
+                                                    <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-success btn-sm docBtn docBtn_nc m-1">
+                                                    Accepted <span>By Admin</span></a>
+                                                    @endif
+
+                                                    @if($doc->nc_flag==2)
+                                                    <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                                    Rejected <span>By Admin</span></a>
+                                                    @endif
+                                                    <!-- end here -->
+                                                    @elseif($doc->status==6)
+                                                <a 
+                                                    title="{{$doc->doc_file_name}}"
+                                                    href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                    class="btn btn-danger btn-sm docBtn m-1">
+                                                    Rejected</a>
+                                            @else
+                                            <div class="upload-btn-wrapper">
+                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                                    </div>
+                                            @endif 
+
+                                                @endforeach
                                     </td>
                                     <td>
                                                  <button
@@ -414,16 +608,26 @@
                                                       </tr>
                                                    </thead>
                                                    <tbody>
-                                                   <tr class="text" style="border-left:3px solid red">
-                                                         <td width="60">1</td>
-                                                         <td width="130">1</td>
-                                                         <td width="120">1</td>
-                                                         <td>1</td>
+
+                                                   @foreach($ApplicationCourses['nc_comments_course_details'] as $k=>$nc)
+                                                   <tr class="text text-{{$nc->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+
+                                                         <td>{{$k+1}}</td>
+                                                         <td>{{$nc->doc_sr_code}}</td>
+                                                         <td>{{date('d-m-Y',strtotime($nc->created_at))}}</td>
+                                                         <td>{{$nc->comments}}</td>
                                                          <td>
-                                                         1
+                                                         @php
+                                                            $string = $nc->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
                                                          </td>
-                                                         <td>2</td>
+                                                         <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} (Secretariat)</td>
                                                       </tr>
+                                                    @endforeach
                                                    </tbody>
                                                 </table>
                                              </td>
@@ -433,7 +637,14 @@
                             </thead>
                         </table>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="{{url('secretariat/update-nc-flag/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit">
+                            </form>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>

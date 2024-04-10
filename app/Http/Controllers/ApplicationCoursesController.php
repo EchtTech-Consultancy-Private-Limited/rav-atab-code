@@ -9,6 +9,7 @@ use Auth;
 use App\Models\Country;
 use App\Models\TblApplication;
 use App\Models\TblApplicationCourses;
+use App\Models\TblcoursesWiseDocument;
 use App\Models\TblApplicationPayment;
 use App\Models\LevelInformation;
 use Carbon\Carbon;
@@ -136,6 +137,7 @@ class ApplicationCoursesController extends Controller
         $hours = $request->hours;
         $user_id = Auth::user()->id;
         //document upload
+        
         if ($request->hasfile('doc1')) {
             $doc1 = $request->file('doc1');
         }
@@ -150,6 +152,7 @@ class ApplicationCoursesController extends Controller
                 continue;
             }
             $file = new TblApplicationCourses();
+            
             $file->application_id = $request->application_id;
             $file->course_name = $course_name[$i];
             $file->course_duration_y = $years[$i];
@@ -161,26 +164,39 @@ class ApplicationCoursesController extends Controller
             $file->mode_of_course = collect($mode_of_course[$i + 1])->implode(',');
             $file->course_brief = $course_brief[$i];
             $file->tp_id = Auth::user()->id;
+           
+
+
             $doc_size_1 = $this->getFileSize($request->file('doc1')[$i]->getSize());
             $doc_extension_1 = $request->file('doc1')[$i]->getClientOriginalExtension();
             $doc_size_2 = $this->getFileSize($request->file('doc2')[$i]->getSize());
             $doc_extension_2 = $request->file('doc2')[$i]->getClientOriginalExtension();
             $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
             $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
+
             $name = $doc1[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc1[$i]->move('documnet/', $filename);
             $file->declaration_pdf =  $filename;
+            
+            
+
             $doc2 = $request->file('doc2');
             $name = $doc2[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc2[$i]->move('documnet/', $filename);
             $file->course_curriculum_pdf =  $filename;
+            
+            
+
             $img = $request->file('doc3');
             $name = $doc3[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc3[$i]->move('documnet/', $filename);
             $file->course_details_xsl =  $filename;
+            
+
+
             $file->pdf_1_file_size = $doc_size_1 ;
             $file->pdf_1_file_extension =$doc_extension_1;
             $file->pdf_2_file_size = $doc_size_2 ;
@@ -188,7 +204,36 @@ class ApplicationCoursesController extends Controller
             $file->xls_file_size = $doc_size_3 ;
             $file->xls_file_extension =$doc_extension_3;
             $file->save();
+            
+             /*course wise doc create*/ 
+             
+             for($j=0;$j<3;$j++){
+             $data = [];
+             if($j===0){
+                $data['doc_file_name'] = $file->declaration_pdf;
+                $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
+             }
+             if($j===1){
+                $data['doc_file_name'] = $file->course_curriculum_pdf;
+                $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
+             }
+             if($j===2){
+                $data['doc_file_name'] = $file->course_details_xsl;
+                $data['doc_sr_code'] = config('constant.details.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.details.doc_unique_id');
+             }
+             $data['application_id'] = $request->application_id;
+             $data['course_id'] = $file->id;
+             $data['tp_id'] = Auth::user()->id;
+             $data['level_id'] = $request->level_id;
+             $data['course_name'] = $course_name[$i];
+             
+             DB::table('tbl_course_wise_document')->insert($data);
+            }
         }
+
         $session_for_redirection = $request->form_step_type;
         Session::put('session_for_redirections', $session_for_redirection);
         $session_for_redirections = Session::get('session_for_redirections');

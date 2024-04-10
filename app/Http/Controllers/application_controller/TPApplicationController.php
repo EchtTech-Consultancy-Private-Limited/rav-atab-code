@@ -80,14 +80,68 @@ class TPApplicationController extends Controller
         
             $obj = new \stdClass;
             $obj->application= $application;
-                $course = DB::table('tbl_application_courses')->where([
-                    'application_id' => $application->id,
-                ])
-                ->whereNull('deleted_at') 
-                ->get();
-                if($course){
-                    $obj->course = $course;
+            $courses = DB::table('tbl_application_courses')->where([
+                'application_id' => $application->id,
+            ])
+            ->whereNull('deleted_at') 
+            ->get();
+            foreach ($courses as $course) {
+                if ($course) {
+                    $obj->course[] = [
+                        "course" => $course,
+                        'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                            'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        ])->get(),
+
+                            'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                                'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                            ])->get(),
+            
+                            'course_wise_document_details' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.details.doc_sr_code'),
+                                'doc_unique_id' => config('constant.details.doc_unique_id'),
+                            ])->get(),
+                        'nc_comments_course_declaration' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                            'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get(),
+            
+                        'nc_comments_course_curiculam' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                            'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get(),
+            
+                        'nc_comments_course_details' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.details.doc_sr_code'),
+                            'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get()
+                    ]; // Added semicolon here
                 }
+            }
+
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                 ])->get();
@@ -425,5 +479,102 @@ class TPApplicationController extends Controller
             return response()->json(['status' => 'success', 'message' => '']);
         }
     }
+
+
+
+
+    /*new scope*/
+    
+  public function tpCourseDocumentDetails($nc_status_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_courses_id)
+  {
+      try{
+        $nc_type = "NC1";
+        if($nc_status_type==2){
+            $nc_type="NC1";
+        }
+        else if($nc_status_type==3){
+            $nc_type="NC2";
+        }
+        else if($nc_status_type==4){
+            $nc_type="not_recommended";
+        }
+        else if($nc_status_type==6){
+            $nc_type="Reject";
+        }
+        else{
+            $nc_type="Accept";
+        }
+
+        
+
+        $is_form_view = false;
+        if($nc_status_type!=0){
+        // is remark form show to top
+        $is_already_remark_exists = DB::table('tbl_nc_comments_secretariat')->where(['application_id' => $application_id,'application_courses_id' => $application_courses_id,'doc_sr_code' => $doc_sr_code,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])->first();
+        
+        if($is_already_remark_exists->nc_type!=="Accept" && $is_already_remark_exists->nc_type!=="Request_For_Final_Approval"){
+            if($is_already_remark_exists->tp_remark!==null){
+                $is_form_view=false;
+            }else{
+                $is_form_view=true;
+            }
+        }
+    }
+        // end here for form
+        
+      $doc_latest_record = DB::table('tbl_course_wise_document')->orderBy('id', 'desc')
+      ->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+      ->first();
+
+      $get_remarks = DB::table('tbl_nc_comments_secretariat')->where([
+        'application_id' => $application_id,
+        'doc_unique_id' => $doc_unique_code,
+        'doc_sr_code' => $doc_sr_code,                    
+        'application_courses_id' => $application_courses_id
+        
+    ])
+    ->whereNotNull("tp_remark")
+    ->where('nc_type',$nc_type)
+    ->select("tbl_nc_comments_secretariat.tp_remark","tbl_nc_comments_secretariat.created_at","tbl_nc_comments_secretariat.secretariat_id")
+    ->first();
+
+    //   $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+      $doc_path = URL::to("/documnet").'/'.$doc_name;
+      return view('tp-upload-documents.tp-course-show-document-details', [
+          'doc_latest_record' => $doc_latest_record,
+          'doc_id' => $doc_sr_code,
+          'doc_code' => $doc_unique_code,
+          'application_course_id'=>$application_courses_id,
+          'application_id' => $application_id,
+          'doc_path' => $doc_path,
+          'remarks' => $get_remarks,
+          'nc_type'=>$nc_type,
+          'is_form_view'=>$is_form_view,
+      ]);
+  }catch(Exception $e){
+      return back()->with('fail','Something went wrong');
+  }
+  }
+
+
+  public function tpCourseSubmitRemark(Request $request)
+  {
+      try{
+        DB::beginTransaction();
+        $submit_remark = DB::table('tbl_nc_comments_secretariat')->where(['application_id' => $request->application_id,'application_courses_id' => $request->application_course_id,'doc_sr_code' => $request->doc_sr_code,'doc_unique_id' => $request->doc_unique_id,'nc_type'=>$request->nc_type])->update(['tp_remark'=>$request->tp_remark]);
+        if($submit_remark){
+            DB::commit();
+            return back()->with('success','Remark created successfully');
+        }else{
+            DB::rollback();
+            return back()->with('fail','Failed to create remark');
+        }
+  }
+  catch(Exception $e){
+        DB::rollback();
+      return back()->with('fail','Something went wrong');
+  }
+  }
+
 
 }

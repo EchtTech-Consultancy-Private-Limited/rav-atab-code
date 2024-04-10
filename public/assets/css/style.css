@@ -25533,4 +25533,8 @@ background: white;
     width: 100px;
   }
 
+  .text-table-center table tr td{
+    text-align: center;
+  }
+
 /* ******************************** */

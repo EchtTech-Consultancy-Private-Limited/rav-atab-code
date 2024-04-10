@@ -106,14 +106,73 @@ class AdminApplicationController extends Controller
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
-                $course = DB::table('tbl_application_courses')->where([
+                $courses = DB::table('tbl_application_courses')->where([
                     'application_id' => $application->id,
                 ])
                 ->whereNull('deleted_at') 
                 ->get();
-                if($course){
-                    $obj->course = $course;
+
+                foreach ($courses as $course) {
+                    if ($course) {
+                        $obj->course[] = [
+                            "course" => $course,
+                            
+                            'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                                'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                            ])->get(),
+
+                                'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
+                                    'application_id' => $application->id,
+                                    'course_id' => $course->id,
+                                    'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                                    'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                                ])->get(),
+                
+                                'course_wise_document_details' => DB::table('tbl_course_wise_document')->where([
+                                    'application_id' => $application->id,
+                                    'course_id' => $course->id,
+                                    'doc_sr_code' => config('constant.details.doc_sr_code'),
+                                    'doc_unique_id' => config('constant.details.doc_unique_id'),
+                                ])->get(),
+                
+
+                            'nc_comments_course_declaration' => DB::table('tbl_nc_comments_secretariat')->where([
+                                'application_id' => $application->id,
+                                'application_courses_id' => $course->id,
+                                'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                                'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                            ])
+                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                                ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                                ->get(),
+                
+                            'nc_comments_course_curiculam' => DB::table('tbl_nc_comments_secretariat')->where([
+                                'application_id' => $application->id,
+                                'application_courses_id' => $course->id,
+                                'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                                'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                            ])
+                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                                ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                                ->get(),
+                
+                            'nc_comments_course_details' => DB::table('tbl_nc_comments_secretariat')->where([
+                                'application_id' => $application->id,
+                                'application_courses_id' => $course->id,
+                                'doc_sr_code' => config('constant.details.doc_sr_code'),
+                                'doc_unique_id' => config('constant.details.doc_unique_id'),
+                            ])
+                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                                ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                                ->get()
+                        ]; // Added semicolon here
+                    }
                 }
+                
+
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                     'status'=>2 //paymnet approved by accountant 
@@ -130,7 +189,7 @@ class AdminApplicationController extends Controller
                  $is_final_submit = false;
                 }
 
-                
+                // dd($final_data);
         return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
     }
     public function adminPaymentAcknowledge(Request $request)
