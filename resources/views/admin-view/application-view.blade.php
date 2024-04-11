@@ -328,7 +328,7 @@
                                              class="btn btn-danger btn-sm docBtn m-1">
                                               Not Recommended</a>
                                               <!-- admin accept/reject -->
-                                              @if($doc->nc_flag==1)
+                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -336,7 +336,7 @@
                                              Accepted <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->nc_flag==2)
+                                             @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -445,7 +445,7 @@
                                                         class="btn btn-danger btn-sm docBtn m-1">
                                                         Not Recommended</a>
                                                         <!-- admin accept/reject -->
-                                                        @if($doc->nc_flag==1)
+                                                        @if($doc->admin_nc_flag==1)
                                                         <a 
                                                         title="{{$doc->doc_file_name}}"
                                                         href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -453,7 +453,7 @@
                                                         Accepted <span>By Admin</span></a>
                                                         @endif
 
-                                                        @if($doc->nc_flag==2)
+                                                        @if($doc->admin_nc_flag==2)
                                                         <a 
                                                         title="{{$doc->doc_file_name}}"
                                                         href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -556,7 +556,7 @@
                                                     class="btn btn-danger btn-sm docBtn m-1">
                                                     Not Recommended</a>
                                                     <!-- admin accept/reject -->
-                                                    @if($doc->nc_flag==1)
+                                                    @if($doc->admin_nc_flag==1)
                                                     <a 
                                                     title="{{$doc->doc_file_name}}"
                                                     href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -564,7 +564,7 @@
                                                     Accepted <span>By Admin</span></a>
                                                     @endif
 
-                                                    @if($doc->nc_flag==2)
+                                                    @if($doc->admin_nc_flag==2)
                                                     <a 
                                                     title="{{$doc->doc_file_name}}"
                                                     href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"

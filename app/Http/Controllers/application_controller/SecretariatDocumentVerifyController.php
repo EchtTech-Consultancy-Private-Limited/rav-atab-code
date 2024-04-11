@@ -370,10 +370,36 @@ class SecretariatDocumentVerifyController extends Controller
        
         DB::beginTransaction();
         $secretariat_id = Auth::user()->id;
+        
+        $delaration = DB::table('tbl_course_wise_document')
+        ->where(['application_id'=>$application_id,'course_id'=>$course_id,'doc_sr_code'=>config('constant.declaration.doc_sr_code')])
+        ->latest('id')->first();
+        
+        $curiculum = DB::table('tbl_course_wise_document')
+        ->where(['application_id'=>$application_id,'course_id'=>$course_id,'doc_sr_code'=>config('constant.curiculum.doc_sr_code')])
+        ->latest('id')->first();
+        
+        $details = DB::table('tbl_course_wise_document')
+        ->where(['application_id'=>$application_id,'course_id'=>$course_id,'doc_sr_code'=>config('constant.details.doc_sr_code')])
+        ->latest('id')->first();
+       
 
-       $d =  DB::table('tbl_course_wise_document')
-        ->whereNotIn('status',[0,4])  //view and not recommended
+        
+        DB::table('tbl_course_wise_document')
+        ->where(['id'=>$delaration->id,'application_id'=>$application_id,'course_id'=>$course_id])
+        ->whereNotIn('status',[0,1,4,6])
         ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
+        
+        DB::table('tbl_course_wise_document')
+        ->where(['id'=>$curiculum->id,'application_id'=>$application_id,'course_id'=>$course_id])
+        ->whereNotIn('status',[0,1,4,6])
+        ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
+        
+        DB::table('tbl_course_wise_document')
+        ->where(['id'=>$details->id,'application_id'=>$application_id,'course_id'=>$course_id])
+        ->whereNotIn('status',[0,1,4,6])
+        ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
+
         DB::commit();
         return back()->with('fail','Something went wrong');
         // return redirect($redirect_to);

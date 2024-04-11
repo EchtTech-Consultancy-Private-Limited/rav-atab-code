@@ -25,13 +25,17 @@
     @include('layout.topbar')
     <div>
         @if (Auth::user()->role == '1')
-            @include('layout.sidebar')
+        @include('layout.sidebar')
         @elseif(Auth::user()->role == '2')
-            @include('layout.siderTp')
+        @include('layout.siderTp')
         @elseif(Auth::user()->role == '3')
-            @include('layout.sideAss')
+        @include('layout.sideAss')
         @elseif(Auth::user()->role == '4')
-            @include('layout.sideprof')
+        @include('layout.sideprof')
+        @elseif(Auth::user()->role == '5')
+        @include('layout.secretariat')
+        @elseif(Auth::user()->role == '6')
+        @include('layout.sidbarAccount')
         @endif
         @include('layout.rightbar')
     </div>
@@ -71,99 +75,7 @@
             @endif
             @endisset
             
-           
-
-            @if($form_view==1)
-                <div class="row ">
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12">
-
-                            <div class="tab-content">
-
-                                <div>
-                                        <div class="row clearfix">
-                                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                                <div class="card project_widget">
-                                                    <div class="card-header">
-                                                        <h4>Create NC</h4>
-                                                    </div>
-                                                    <div class="body">
-                                                            <div class="row">
-                                                                <input type="hidden" value="{{$application_id}}" id="secretariat_application_id_nc">
-
-                                                                <input type="hidden" value="{{$application_course_id}}" id="secretariat_application_course_id_nc">
-
-
-                                                                <input type="hidden" value="{{$doc_id}}" id="secretariat_application_doc_sr_code_nc">
-
-                                                                <input type="hidden" value="{{$doc_code}}" id="secretariat_application_doc_unique_code_nc">
-
-                                                                <input type="hidden" value="{{$doc_file_name}}" id="secretariat_application_doc_file_name_nc">
-
-                                                                <div class="col-sm-12 col-md-4">
-                                                                    <label>Select Type</label>
-
-                                                                    <select required
-                                                                        class="form-control required text-center"
-                                                                        name="status" id="status">
-                                                                        <option value="" selected disabled>--Select--</option>
-                                                                        @foreach($dropdown_arr as $key=>$arr)
-                                                                        <option value="{{$key}}">{{$arr}}</option>
-                                                                        @endforeach
-                                                                    </select>
-
-                                                                </div>
-
-
-                                                                <div class="col-sm-12" id="comment-section">
-                                                                    <label for="comment_text">Remark</label>
-                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
-                                                                    <small id="char-count-info">0/100 characters</small>
-                                                                </div>
-                                                                    <!-- <div class="col-sm-12">
-                                                                        <div>
-                                                                            <div class="bg-warning p-2">
-
-                                                                                    <p>
-                                                                                        <strong>Final Approval
-                                                                                            Request</strong>
-                                                                                    </p>
-                                                                                    <p>
-                                                                                        <small>This request has been
-                                                                                            received, and
-                                                                                            it
-                                                                                            marks the last opportunity
-                                                                                            for
-                                                                                            review. If this file is
-                                                                                            found to
-                                                                                            be incorrect, the user will
-                                                                                            not
-                                                                                            be able to upload another
-                                                                                            file
-                                                                                            after this point.</small>
-                                                                                    </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> -->
-                                                            </div>
-
-
-                                                    </div>
-
-                                                    <div class="card-footer">
-                                                        <button id="submitBtn" type="button" value="Submit"
-                                                            class="btn btn-primary" onclick="adminCourseDocumentVerfiy('admin')">Submit</button>
-                                                    </div>
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-              
+            
         </div>
         </div>
         </div>

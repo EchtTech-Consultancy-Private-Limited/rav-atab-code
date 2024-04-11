@@ -69,25 +69,79 @@ class AccountApplicationController extends Controller
 
     /** Whole Application View for Account */
     public function getApplicationView($id){
-
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+
         
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
     
-                $course = DB::table('tbl_application_courses')->where([
-                    'application_id' => $application->id,
-                ])
-                ->whereNull('deleted_at') 
-                ->get();
-                if($course){
-                    $obj->course = $course;
+            $courses = DB::table('tbl_application_courses')->where([
+                'application_id' => $application->id,
+            ])
+            ->whereNull('deleted_at') 
+            ->get();
+            
+            foreach ($courses as $course) {
+                if ($course) {
+                    $obj->course[] = [
+                        "course" => $course,
+                        'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                            'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        ])->get(),
+
+                            'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                                'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                            ])->get(),
+            
+                            'course_wise_document_details' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.details.doc_sr_code'),
+                                'doc_unique_id' => config('constant.details.doc_unique_id'),
+                            ])->get(),
+                        'nc_comments_course_declaration' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                            'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get(),
+            
+                        'nc_comments_course_curiculam' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                            'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get(),
+            
+                        'nc_comments_course_details' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.details.doc_sr_code'),
+                            'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get()
+                    ]; // Added semicolon here
                 }
+            }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                 ])->get();
@@ -186,6 +240,104 @@ class AccountApplicationController extends Controller
     catch(Exception $e){
           DB::rollback();
           return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+    }
+    }
+
+
+
+    public function accountantVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
+    {
+        
+        try{
+            $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin'])
+            ->where('nc_type',"Request_For_Final_Approval")
+            ->latest('id')->first();
+
+            // dd($final_approval);
+            // $ass_type = $assessor_type=="desktop"?"desktop":"onsite";
+
+            if($nc_type=="nr"){
+                $nc_type="not_recommended";
+            }
+            
+            if($nc_type!="nc1" && $nc_type!="nc2" && $nc_type!="accept" && $nc_type!="reject"){
+                if(!empty($final_approval)){
+                    $nc_type="Request_For_Final_Approval";
+                    $assessor_type="admin";
+                }else{
+                    // $ass_type=null;
+                }
+            }
+          
+
+            $query = DB::table('tbl_nc_comments_secretariat')->where([
+                'doc_sr_code' => $doc_sr_code,
+                'application_id' => $application_id,
+                'doc_unique_id' => $doc_unique_code
+            ])
+            ->where('nc_type', $nc_type);
+            
+
+            // if ($nc_type=="not_recommended" || $nc_type=="Request_For_Final_Approval") {
+            //     $query->where('final_status', $ass_type);
+            // }
+            $nc_comments = $query
+                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role', 'users.role')
+                ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                ->first();
+            
+            // dd($nc_comments);
+
+            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            // ->where('final_status',$ass_type)
+            ->latest('id')
+            ->first();
+
+            
+            
+            /*Don't show form if doc is accepted*/ 
+            $accepted_doc = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            ->whereIn('nc_type',["Accept","Reject"])
+            // ->where('final_status',$assessor_type)
+            ->latest('id')
+            ->first();
+            
+            /*end here*/
+            $form_view=0;
+            if($nc_type==="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
+                if(empty($accepted_doc)){
+                    $form_view=1;
+                }
+            }else if($nc_type=="reject"){
+                $form_view=0;
+            }
+
+            
+        if(isset($tbl_nc_comments->nc_type)){
+                if($tbl_nc_comments->nc_type==="not_recommended"){
+                    $dropdown_arr = array(
+                                "Reject"=>"Reject",
+                                "Accept"=>"Accept",
+                                "Request_For_Final_Approval"=>'Request For Final Approval'
+                            );
+                }
+       }
+        
+        $doc_path = URL::to("/documnet").'/'.$doc_name;
+        return view('account-view.document-verify', [
+            'doc_id' => $doc_sr_code,
+            'doc_code' => $doc_unique_code,
+            'application_id' => $application_id,
+            'application_course_id'=>$application_course_id,
+            'doc_path' => $doc_path,
+            'doc_file_name'=>$doc_name,
+            'dropdown_arr'=>$dropdown_arr??[],
+            'nc_comments'=>$nc_comments,
+            'form_view'=>$form_view,
+            'nc_type'=>$nc_type,
+        ]);
+    }catch(Exception $e){
+        return back()->with('fail','Something went wrong');
     }
     }
 }

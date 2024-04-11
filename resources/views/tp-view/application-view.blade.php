@@ -34,7 +34,16 @@
                     });
     </script>
     @endif
-    <div class="full_screen_loading">Loading&#8230;</div>
+    <div class="loading-img d-none" id="loader">
+      <div class="box">
+         <img src="{{ asset('assets/img/VAyR.gif') }}">
+         <h5 class="uploading-text"> Uploading... </h5>
+      </div>
+   </div>
+   <div class="full_screen_loading">Loading&#8230;</div>
+
+   <!-- Overlay For Sidebars -->
+   <div class="overlay"></div>
     <section class="content">
         <div class="block-header">
             <div class="row">
@@ -275,7 +284,18 @@
                                     <td>1</td>
                                     <td>Declaration</td>                             
                                     <td> 
+                                        <span class="d-flex flex-wrap">
                                     @foreach($ApplicationCourses['course_wise_document_declaration'] as $doc)
+                                    <form
+                                                         name="submitform_doc_form_{{$doc->id}}"
+                                                         id="submitform_doc_form_{{$doc->id}}"
+                                                         class="submitform_doc_form"
+                                                         enctype="multipart/form-data">
+                                    
+                                    <input type="hidden" name="application_id" value="{{$spocData->id}}">
+                                    <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
+                                    <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
+                                    <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
 
                                     @if($doc->status==0)
                                        <a target="_blank"
@@ -301,7 +321,7 @@
                                         @if($doc->status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                        @endif
 
@@ -314,56 +334,64 @@
                                              @if($doc->status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                              @endif
                                             
                                              @elseif($doc->status==6)
                                              <a target="_blank"
                                                 title="{{$doc->doc_file_name}}"
-                                                href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                href="{{ url('tp-course-document-detail'. '/' . $doc->status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                 class="btn btn-danger btn-sm docBtn  m-1">
                                                 Rejected</span></a>
                                         @elseif($doc->status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('tp-course-document-detail'. '/' . $doc->status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn  m-1">
                                              Not Recommended</span></a>
-                                             @if($doc->nc_flag==1)
+                                             @if($doc->admin_nc_flag==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . '5/'  . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-success btn-sm docBtn  m-1">
+                                             href="{{ url('tp-course-document-detail'. '/' . '5/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->nc_flag==2)
+                                             @if($doc->admin_nc_flag==2)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . '6/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-danger btn-sm docBtn  m-1">
+                                             href="{{ url('tp-course-document-detail'. '/' . '6/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc  m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                             
                                              @if($doc->status==1)
-                                        <div class="upload-btn-wrapper">
+                                             <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                             </div>
                                              </div>
                                              @endif
                                                                                 
 
                                     @else
-                                       <div class="upload-btn-wrapper">
+                                    <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
                                              </div>
                                     @endif 
+                                    @if($doc->nc_flag==1)
+                                    <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
+                                             </div>
+                                    @endif
 
+                </form>
                                                 @endforeach
-                                    
+                                                </span>
                                     </td>
                                         <td>
                                                   <button
@@ -413,8 +441,19 @@
                                     <td>2</td>
                                     <td>Course Curriculum / Material / Syllabus</td>                             
                                     <td>
-
+                                    <span class="d-flex flex-wrap">
                                     @foreach($ApplicationCourses['course_wise_document_curiculum'] as $doc)
+                                    <form
+                                                         name="submitform_doc_form_{{$doc->id}}"
+                                                         id="submitform_doc_form_{{$doc->id}}"
+                                                         class="submitform_doc_form"
+                                                         enctype="multipart/form-data">
+                                    
+                                    <input type="hidden" name="application_id" value="{{$spocData->id}}">
+                                    <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
+                                    <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
+                                    <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
+
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
@@ -439,7 +478,7 @@
                                         @if($doc->status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                        @endif
 
@@ -452,55 +491,63 @@
                                              @if($doc->status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                              @endif
                                             
                                              @elseif($doc->status==6)
                                              <a target="_blank"
                                                 title="{{$doc->doc_file_name}}"
-                                                href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                 class="btn btn-danger btn-sm docBtn  m-1">
                                                 Rejected</span></a>
                                         @elseif($doc->status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn  m-1">
                                              Not Recommended</span></a>
-                                             @if($doc->nc_flag==1)
+                                             @if($doc->admin_nc_flag==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . '5/'  . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-success btn-sm docBtn  m-1">
+                                             href="{{ url('tp-course-document-detail'. '/' . '5/'  . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->nc_flag==2)
+                                             @if($doc->admin_nc_flag==2)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . '6/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-danger btn-sm docBtn  m-1">
+                                             href="{{ url('tp-course-document-detail'. '/' . '6/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc  m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                             
                                              @if($doc->status==1)
-                                        <div class="upload-btn-wrapper">
+                                             <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                              </div>
                                              @endif
                                                                                 
 
                                     @else
-                                       <div class="upload-btn-wrapper">
+                                    <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
                                              </div>
                                     @endif 
+                                    @if($doc->nc_flag==1)
+                                    <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                             </div>
+                                    @endif
 
+                                </form>
                                                 @endforeach
+                </span>
                                     </td>
                                     <td>
                                                  <button
@@ -550,7 +597,19 @@
                                     <td>3</td>
                                     <td>Course Details (Excel format)</td>                             
                                     <td>
+                                    <span class="d-flex flex-wrap">
                                     @foreach($ApplicationCourses['course_wise_document_details'] as $doc)
+                                    <form
+                                                         name="submitform_doc_form_{{$doc->id}}"
+                                                         id="submitform_doc_form_{{$doc->id}}"
+                                                         class="submitform_doc_form"
+                                                         enctype="multipart/form-data">
+                                    
+                                    <input type="hidden" name="application_id" value="{{$spocData->id}}">
+                                    <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
+                                    <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
+                                    <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
+                                    
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
@@ -575,7 +634,7 @@
                                         @if($doc->status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                        @endif
 
@@ -588,55 +647,64 @@
                                              @if($doc->status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
                                              </div>
                                              @endif
                                             
                                              @elseif($doc->status==6)
                                              <a target="_blank"
                                                 title="{{$doc->doc_file_name}}"
-                                                href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                class="btn btn-danger btn-sm docBtn  m-1">
+                                                href="{{ url('tp-course-document-detail'. '/' . $doc->status . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                class="btn btn-danger btn-sm docBtn   m-1">
+                                                <span>
                                                 Rejected</span></a>
                                         @elseif($doc->status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-course-document-detail'. '/' . $doc->status. '/'  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('tp-course-document-detail'. '/' . $doc->status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn  m-1">
                                              Not Recommended</span></a>
-                                             @if($doc->nc_flag==1)
+                                             @if($doc->admin_nc_flag==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-course-document-detail'. '/' . '5/'  . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-success btn-sm docBtn  m-1">
+                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->nc_flag==2)
+                                             @if($doc->admin_nc_flag==2)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-course-document-detail'. '/' . '6/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-danger btn-sm docBtn  m-1">
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                             
                                              @if($doc->status==1)
-                                        <div class="upload-btn-wrapper">
+                                             <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
                                              </div>
                                              @endif
                                                                                 
 
                                     @else
-                                       <div class="upload-btn-wrapper">
+                                    <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
                                              </div>
                                     @endif 
 
+                                    @if($doc->nc_flag==1)
+                                    <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
+                                             </div>
+                                    @endif
+                </form>
                                                 @endforeach
+                </span>
                                     </td>
                                     <td>
                                                  <button
@@ -937,5 +1005,85 @@
         alert('Payment confirmation is mandatory.Kindly upload a reference file to proceed.')
     });
     </script>
+
+<script>
+      $(document).ready(function() {
+          $('.fileup').change(function() {
+              const fileInput = $(this);
+              const doc_primary_id = fileInput.attr('doc-primary-id');
+              const doc_sr_code  = fileInput.attr('doc-sr-code');
+              const form = $('#submitform_doc_form_' + doc_primary_id)[0];
+
+              const formData = new FormData(form);
+              
+              let allowedExtensions="";
+              let uploadedFileName="";
+              let fileExtension="";
+
+              if(doc_sr_code==="co03"){
+              allowedExtensions = ['xlsx', 'xls', 'xlsb']; // Add more extensions if needed
+              uploadedFileName = fileInput.val();
+              fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+              }else{
+              allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+              uploadedFileName = fileInput.val();
+              fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+              }
+              
+
+              if (allowedExtensions.indexOf(fileExtension) == -1) {
+                if(doc_sr_code==="co03"){
+                    toastr.error("Please upload a xls file.", "Invalid File type",{
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                }else{
+                    toastr.error("Please upload a PDF or DOC file.", "Invalid File type",{
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                }
+                
+                  // Clear the file input
+                  fileInput.val('');
+                  return;
+              }
+              $("#loader").removeClass('d-none');
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+             
+              $.ajax({
+                  url: "/tp-course-add-document", // Your server-side upload endpoint
+                  type: 'POST',
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  success: function(response) {
+                      $("#loader").addClass('d-none');
+                      if (response.success) {
+                        toastr.success(response.message, {
+                            timeOut: 0,
+                            extendedTimeOut: 0,
+                            closeButton: true,
+                            closeDuration: 5000,
+                        });
+                          location.reload();
+                      }
+                  },
+                  error: function(xhr, status, error) {
+                      // Handle errors
+                      console.error(error);
+                  }
+              });
+          });
+      });
+   </script>
     @include('layout.footer')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>

@@ -457,6 +457,77 @@ function adminDocumentVerfiy(assessor_type) {
     }
 }
 
+function adminCourseDocumentVerfiy(assessor_type) {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+
+        let doc_sr_code = $('#secretariat_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#secretariat_application_doc_file_name_nc').val();
+        let application_id = $('#secretariat_application_id_nc').val();
+        let doc_unique_id = $('#secretariat_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#secretariat_application_course_id_nc').val();
+     
+        let doc_comment = $("#comment_text").val();
+        let nc_type = $("#status").find(":selected").val();
+        if(doc_comment=="" || nc_type=="" ){
+            toastr.error("All fields are required", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+           }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("application_courses_id", application_courses_id);
+        formData.append("doc_sr_code", doc_sr_code);
+        formData.append("doc_unique_id", doc_unique_id);
+        formData.append("nc_type", nc_type);
+        formData.append("comments", doc_comment);
+        formData.append("doc_file_name", doc_file_name);
+        formData.append("assessor_type", assessor_type);
+
+        $.ajax({
+            url: `${BASE_URL}/super-admin/document-verfiy`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(() => {
+                        window.location.href = resdata.redirect_to;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
 function onsiteDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
 
@@ -808,6 +879,7 @@ $("#upload_onstie_nc_file").change(function () {
         },
     });
 });
+
 
 /*nc's end here*/
 

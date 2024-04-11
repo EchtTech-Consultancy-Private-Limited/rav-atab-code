@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\application_controller;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\PdfImageSizeTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
@@ -21,6 +22,7 @@ use Session;
 
 class TPApplicationController extends Controller
 {
+    use PdfImageSizeTrait;
     public function __construct()
     {
     }
@@ -576,5 +578,77 @@ class TPApplicationController extends Controller
   }
   }
 
+
+  
+  public function addCourseDocument(Request $request)
+  {
+     try{
+      DB::beginTransaction();
+      $tp_id = Auth::user()->id;
+      $courseData = [];
+      $courseData['application_id'] = $request->application_id;
+      $courseData['course_id'] = $request->application_courses_id;
+      $courseData['doc_sr_code'] = $request->doc_sr_code;
+      $courseData['doc_unique_id'] = $request->doc_unique_id;
+      $courseData['tp_id'] = $tp_id;
+      
+      $doc_extension = $request->file('fileup')->getClientOriginalExtension();
+      if($request->doc_sr_code==config('constant.details.doc_sr_code') && (strtolower($doc_extension)!=='xlsx' && strtolower($doc_extension)!=='xls' && strtolower($doc_extension)!=='xlsb')){
+        return response()->json(['success' => false,'message' =>'Invalid File Type'],200);
+      }
+
+      if ($request->hasfile('fileup')) {
+          $file = $request->file('fileup');
+          $name = $file->getClientOriginalName();
+          $filename = time() . $name;
+          $file->move('documnet/', $filename);
+          $courseData['doc_file_name'] = $filename;
+      }
+     
+      $course_doc_get = DB::table('tbl_course_wise_document')->where('id',$request->application_courses_id)->first();
+      $courseData['course_name'] = $course_doc_get->course_name;
+      $courseData['level_id'] = $course_doc_get->level_id;
+
+      
+      $course_doc =  DB::table('tbl_course_wise_document')->insert($courseData);
+      DB::table('tbl_course_wise_document')->where(['application_id'=> $request->application_id,'course_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
+
+      
+            
+    
+    //   $doc_size = $this->getFileSize($request->file('fileup')->getSize());
+      
+      
+      $query = DB::table('tbl_application_courses')->where(['id'=>$request->application_courses_id,"application_id"=>$request->application_id]);
+      if($request->doc_sr_code==config('constant.declaration.doc_sr_code')){
+        $query->update(['declaration_pdf'=>$courseData['doc_file_name'],'pdf_1_file_extension'=>$doc_extension]);
+      }
+      if($request->doc_sr_code==config('constant.curiculam.doc_sr_code')){
+        $query->update(['course_curriculum_pdf'=>$courseData['doc_file_name'],'pdf_2_file_extension'=>$doc_extension]);
+      }
+      if($request->doc_sr_code==config('constant.details.doc_sr_code')){
+        $query->update(['course_details_xsl'=>$courseData['doc_file_name'],'xls_file_extension'=>$doc_extension]);
+      }
+
+      /*update nc table status oniste*/
+    //   if($request->assessor_type=="onsite"){
+    //       TblNCComments::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_nc_flag'=>0])->update(['onsite_nc_flag'=>1]);
+          
+    //       TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->whereIn('onsite_status',[2,3,4])->update(['onsite_nc_status'=>0]);
+    //   }
+      /*end here*/ 
+
+      if($course_doc){
+      DB::commit();
+      return response()->json(['success' => true,'message' =>'Document uploaded successfully'],200);
+      }else{
+          return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
+      }
+  }
+  catch(Exception $e){
+      DB::rollback();
+      return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
+  }
+}
 
 }

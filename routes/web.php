@@ -312,8 +312,9 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
     Route::get('/tp-course-document-detail/{nc_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpCourseDocumentDetails']);
     Route::post('/tp-course-submit-remark', [TPApplicationController::class, 'tpCourseSubmitRemark']);
+    Route::post('/tp-course-add-document', [TPApplicationController::class, 'addCourseDocument']);
 
-
+    Route::get('/account-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AccountApplicationController::class, 'accountantVerfiyDocument']);
    
    
    
@@ -375,9 +376,9 @@ Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateC
 Route::get('/super-admin/application-list', [SuperAdminApplicationController::class, 'getApplicationList'])->name('superadmin-app-list');
     Route::get('/super-admin/application-view/{id}', [SuperAdminApplicationController::class, 'getApplicationView']);
     Route::get('/super-admin/document-list/{id}/{course_id}', [SuperAdminApplicationController::class, 'applicationDocumentList']);
-    Route::post('/super-admin/document-verfiy', [SuperAdminApplicationController::class, 'adminDocumentVerify']);
+    Route::post('/super-admin/document-verfiy', [SuperAdminApplicationController::class, 'adminCourseDocumentVerify']);
     Route::post('/super-admin-assign-secretariat', [SuperAdminApplicationController::class, 'assignSecretariat']);
-    Route::get('/super-admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
+    Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
     Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
     Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
 /*--end here--*/
