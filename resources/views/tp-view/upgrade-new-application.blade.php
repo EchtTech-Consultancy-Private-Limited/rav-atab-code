@@ -267,14 +267,21 @@ active @endif"
                                         <hr class="mt-0 mb-2"/>
 
                                                 <div class="col-md-12 mb-0">
-                                                    <form class="form" id="spocForm"
-                                                        action="{{ url('/store-new-applications') }}" method="post">
+                                                    <form class="form" id="upgradespocForm"
+                                                        action="{{ url('/upgrade-store-new-applications') }}" method="post">
 
                                                         @csrf
                                                         @if ($applicationData)
                                                             <input type="hidden" name="previous_data" value="1">
+                                                            <input type="hidden" name="reference_id" value="{{$applicationData->refid}}">
                                                             <input type="hidden" name="application_id"
                                                                 value="{{ $applicationData->id }}">
+
+                                                        <input type="hidden" name="person_name" value="{{ $applicationData->person_name }}">
+                                                        <input type="hidden" name="contact_number" value="{{ $applicationData->contact_number }}">
+                                                        <input type="hidden" name="email" value="{{ $applicationData->email }}">
+                                                        <input type="hidden" name="designation" value="{{ $applicationData->designation }}">
+
                                                         @endif
                                                         <div class="body p-0 pt-2">
                                                             <!-- level start -->
@@ -284,19 +291,10 @@ active @endif"
                                                                         <div class="form-line">
                                                                             <label>Person Name<span
                                                                                     class="text-danger">*</span></label>
-                                                                            <input type="text" name="Person_Name"
-                                                                                placeholder="Person Name"
-                                                                                class="preventnumeric"
-                                                                                id="person_name"
+                                                                            <input type="text"
                                                                                 disabled
-                                                                                value="{{ old('person_name', $applicationData->person_name ?? '') }}"
-                                                                                required maxlength="30">
-                                                                            @error('Person_Name')
-                                                                                <span class="text-danger">
-                                                                                    {{ $message }}</span>
-                                                                            @enderror
-                                                                            <span class="text-danger"
-                                                                                id="person_error"></span>
+                                                                                value="{{ $applicationData->person_name }}"
+                                                                                >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -330,13 +328,9 @@ active @endif"
                                                                         <div class="form-line">
                                                                             <label>Contact Number<span
                                                                                     class="text-danger">*</span></label>
-                                                                            <input type="text" required="required"
-                                                                                maxlength="10" name="Contact_Number"
-                                                                                class="preventalpha"
-                                                                                placeholder="Contact Number"
+                                                                            <input type="text"
                                                                                 disabled
-                                                                                id="Contact_Number"
-                                                                                value="{{ old('contact_number', $applicationData->contact_number ?? '') }}">
+                                                                                value="{{ $applicationData->contact_number }}">
                                                                         </div>
                                                                         @error('Contact_Number')
                                                                             <span class="text-danger">
@@ -351,18 +345,11 @@ active @endif"
                                                                         <div class="form-line">
                                                                             <label>Email-ID<span
                                                                                     class="text-danger">*</span></label>
-                                                                            <input id="emailId" type="text"
-                                                                                name="Email_ID"
-                                                                                placeholder="Email-ID"
+                                                                            <input  type="text"
                                                                                 disabled
-                                                                                value="{{ old('email', $applicationData->email ?? '') }}">
+                                                                                value="{{ $applicationData->email }}">
                                                                         </div>
-                                                                        @error('Email_ID')
-                                                                            <span id="backendError" class="text-danger">
-                                                                                {{ $message }}</span>
-                                                                        @enderror
-                                                                        <span class="text-danger"
-                                                                            id="email_id_error"></span>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-3 mb-1">
@@ -372,17 +359,12 @@ active @endif"
                                                                                 Designation
                                                                                 <span class="text-danger">*</span>
                                                                             </label>
-                                                                            <input type="text" name="designation"
-                                                                                placeholder="Designation"
+                                                                            <input type="text" 
+                                                                                
                                                                                 disabled
-                                                                                value="{{ old('designation', $applicationData->designation ?? '') }}">
+                                                                                value="{{ $applicationData->designation }}">
                                                                         </div>
-                                                                        @error('designation')
-                                                                            <span class="text-danger">
-                                                                                {{ $message }}</span>
-                                                                        @enderror
-                                                                        <span class="text-danger"
-                                                                            id="designation_error"></span>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -393,7 +375,7 @@ active @endif"
                                             <ul class="list-inline pull-right">
                                                 <li>
                                                     <button id="nextBtn" type="submit"
-                                                        class="btn btn-primary next-step" disabled>
+                                                        class="btn btn-primary next-step">
                                                         Next
                                                     </button>
                                                 </li>
@@ -403,11 +385,4 @@ active @endif"
                                     </div>
                                 </div>
 
-
-                                <script>
-                                    var routePhoneValidation = "{{ route('phone.validation') }}";
-                                    var routeEmailValidation = "{{ route('email.validation') }}";
-                                    var csrfToken = "{{ csrf_token() }}";
-                                </script>
-                                <script src="{{ asset('assets/js/new-application-form-validation.js') }}"></script>
                                 @include('layout.footer')

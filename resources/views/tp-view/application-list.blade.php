@@ -158,7 +158,7 @@
 
                                                         
                                                     @if($item->application_list->is_all_course_doc_verified==1)
-                                                    <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->refid)) }}"
+                                                    <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-warning">Upgrade</a>
 
                                                     @endif

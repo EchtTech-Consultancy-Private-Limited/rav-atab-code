@@ -9,17 +9,11 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
 use App\Models\LevelInformation;
-use App\Models\DocumentRemark;
-use App\Models\Application;
-use App\Models\Add_Document;
-use App\Models\AssessorApplication; 
-use App\Models\User; 
+use App\Models\TblApplicationCourses;
 use App\Models\Chapter; 
 use Carbon\Carbon;
 use App\Models\TblNCComments; 
 use URL;
-use Config;
-use Session;
 use File;
 class TPApplicationController extends Controller
 {
@@ -664,9 +658,9 @@ class TPApplicationController extends Controller
 
 
 /*--Level 2----*/ 
-public function upgradeNewApplication(Request $request,$reference_id=null){
-    if ($reference_id) {
-        $applicationData = DB::table('tbl_application')->where('refid', dDecrypt($reference_id))->first();
+public function upgradeNewApplication(Request $request,$application_id=null){
+    if ($application_id) {
+        $applicationData = DB::table('tbl_application')->where('id', dDecrypt($application_id))->first();
     } else {
         $applicationData = null;
     }
@@ -681,61 +675,52 @@ public function upgradeNewApplication(Request $request,$reference_id=null){
 
 public function  storeNewApplication(Request $request)
 {
-    $this->validate(
-        $request,
-        [
-            // 'Email_ID' => ['required', 'regex:/^(?!.*[@]{2,})(?!.*\s)[a-zA-Z0-9\+_\-]+(\.[a-zA-Z0-9\+_\-]+)*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,6}$/i', 'unique:applications,Email_ID'],
-            'Email_ID' => ['required', 'regex:/^(?!.*[@]{2,})(?!.*\s)[a-zA-Z0-9\+_\-]+(\.[a-zA-Z0-9\+_\-]+)*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,6}$/i'],
-            'Contact_Number' => 'required|numeric|min:10|digits:10,Contact_Number',
-            'Person_Name' => 'required',
-            'designation' => 'required',
-        ],
-        [
-            'Email_ID.regex' => "Please Enter a Valid Email Id.",
-            'Email_ID.required' => "Please Enter an Email Id.",
-        ]
-    );
-    $currentDateTime = Carbon::now();
+    dd($request->all());
+   
     $application_date = Carbon::now()->addDays(365);
+    
     /*check if application already created*/
         
-        if($request->application_id && $request->previous_data==1){
             $data = [];
-            $data['level_id'] = 1;
+            $data['level_id'] = 2;
             $data['tp_id'] = $request->user_id;
-            $data['person_name'] = $request->Person_Name;
+            $data['person_name'] = $request->person_name;
             $data['email'] =  $request->Email_ID;
             $data['contact_number'] = $request->Contact_Number;
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['application_date'] = $application_date;
-            $create_new_application = DB::table('tbl_application')->where('id',$request->application_id)->update($data);
-            $create_new_application = $request->application_id;
-            $msg="Application Updated Successfully";
-        }else{
-            $data = [];
-            $data['level_id'] = 1;
-            $data['tp_id'] = $request->user_id;
-            $data['person_name'] = $request->Person_Name;
-            $data['email'] =  $request->Email_ID;
-            $data['contact_number'] = $request->Contact_Number;
-            $data['designation'] = $request->designation;
-            $data['tp_ip'] = getHostByName(getHostName());
-            $data['user_type'] = 'tp';
+            $data['is_all_course_doc_verified'] = $request->reference_id;
             $data['application_date'] = $application_date;
 
             $application = new TblApplication($data);
             $application->save();
 
             $create_new_application = $application->id;
-            // $create_new_application = DB::table('tbl_application')->insertGetId($data);
             $msg="Application Created Successfully";
-        }
+        
     /*end here*/
-    return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
+    return redirect(url('upgrade-create-new-course/' . dEncrypt($create_new_application).'/'.dEncrypt($request->reference_id)))->with('success', $msg);
 }
 
 /*end here*/ 
+
+
+
+
+public function upgradeCreateNewCourse($id = null,$refid=null)
+{
+   
+    $id = dDecrypt($id);
+    $refid = dDecrypt($refid);
+    // dd($id);
+    if ($id) {
+        $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+    }else{
+        $applicationData=null;
+    }
+    $course = TblApplicationCourses::where('application_id', $id)->get();
+    return view('tp-view.create-course', compact('applicationData', 'course'));
+}
 
 }
