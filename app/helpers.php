@@ -134,7 +134,18 @@ function secretariat_due_date($application_id, $secretariat_id)
 
 function listOfApplicationAssignToSecretariat($application_id)
 {
-    // $secretariat = DB::table('users')->where('application_id', '=', $application_id)->get();
+    $assessors = DB::table('tbl_secretariat_assign')->where('application_id', '=', $application_id)->get();
+    $assessorid = array();
+    if (!empty($assessors)) {
+
+        foreach ($assessors as $assessorids) {
+            $assessorid[] = $assessorids->secretariat_id;
+        }
+        return $assessorid;
+    } else {
+        $assessorid = array();
+        return $assessorid;
+    }
 }
 
 function listofapplicationsecretariat($application_id)
@@ -1060,6 +1071,19 @@ function getSecondPaymentNotification()
     }
 
     function getNotificationForAdmin()
+    {
+        $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
+        ->where('admin_received_payment',0)
+        ->orderBy('id','desc')
+        ->get();
+
+        if($payment_list){
+            return $payment_list;
+        }else{
+        return [];
+        }
+    }
+    function getNotificationForSuperAdmin()
     {
         $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
         ->where('admin_received_payment',0)

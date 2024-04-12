@@ -610,7 +610,8 @@ class TPApplicationController extends Controller
           $courseData['doc_file_name'] = $filename;
       }
      
-      $course_doc_get = DB::table('tbl_course_wise_document')->where('id',$request->application_courses_id)->first();
+      $course_doc_get = DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->first();
+      
       $courseData['course_name'] = $course_doc_get->course_name;
       $courseData['level_id'] = $course_doc_get->level_id;
 

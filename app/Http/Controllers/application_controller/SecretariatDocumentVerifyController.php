@@ -401,7 +401,7 @@ class SecretariatDocumentVerifyController extends Controller
         ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
 
         DB::commit();
-        return back()->with('fail','Something went wrong');
+        return back()->with('success','Enabled Course Doc upload button to TP.');
         // return redirect($redirect_to);
         
     }catch(Exception $e){

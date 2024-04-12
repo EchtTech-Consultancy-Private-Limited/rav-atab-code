@@ -1301,6 +1301,57 @@ function handleAdminNotification(pay_id){
     }
 }
 
+function handleSuperAdminNotification(pay_id){
+    if(pay_id!=null){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-update-notification-status/${pay_id}`, // Your server-side upload endpoint
+            type: "POST",
+            data:{id:pay_id},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
 function handleDesktopNotification(pay_id){
     if(pay_id!=null){
         $('.full_screen_loading').show();

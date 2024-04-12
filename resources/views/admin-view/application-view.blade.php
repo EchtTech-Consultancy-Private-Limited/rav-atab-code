@@ -27,16 +27,16 @@
         @endif
         @include('layout.rightbar')
     </div>
+  
     @if ($message = Session::get('success'))
+    
     <script>
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: "Success",
-        text: "{{ $message }}",
-        showConfirmButton: false,
-        timer: 3000
-    })
+        toastr.success("{{$message}}", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
     </script>
     @endif
     <section class="content">
