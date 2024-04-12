@@ -302,7 +302,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     // Doc Routes
 
     
-    
+    //new scope
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
     
     Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
@@ -316,8 +316,9 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
     Route::get('/account-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AccountApplicationController::class, 'accountantVerfiyDocument']);
    
-   
-   
+    Route::get('upgrade-new-application/{reference_id?}',[TPApplicationController::class,"upgradeNewApplication"]);
+    Route::post('upgrade-store-new-applications',[TPApplicationController::class,"storeNewApplication"]);
+   //end here
    
    
    

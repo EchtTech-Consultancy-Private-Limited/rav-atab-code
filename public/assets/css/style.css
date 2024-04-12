@@ -20912,7 +20912,7 @@ span.badge {
 
 .card .header h2 {
     margin: 0;
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: normal;
     color: #12171d;
     font-weight: 600
@@ -25536,5 +25536,19 @@ background: white;
   .text-table-center table tr td{
     text-align: center;
   }
+
+ .b-info .form-group {
+    margin-bottom: 5px;
+}
+.pl-10{padding-left: 10px !important;}
+
+p.ref-number {
+    margin-bottom: 0;
+    float: right;
+    text-align: right;
+    font-size: 14px;
+}
+
+p.ref-number b{ font-weight: 600;}
 
 /* ******************************** */

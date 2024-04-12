@@ -8,6 +8,7 @@ use Auth;
 use App\Models\TblApplication; 
 use App\Models\TblApplicationPayment; 
 use App\Models\TblApplicationCourseDoc; 
+use App\Models\LevelInformation;
 use App\Models\DocumentRemark;
 use App\Models\Application;
 use App\Models\Add_Document;
@@ -656,5 +657,85 @@ class TPApplicationController extends Controller
       return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
   }
 }
+
+
+
+
+
+
+/*--Level 2----*/ 
+public function upgradeNewApplication(Request $request,$reference_id=null){
+    if ($reference_id) {
+        $applicationData = DB::table('tbl_application')->where('refid', dDecrypt($reference_id))->first();
+    } else {
+        $applicationData = null;
+    }
+    
+    $id = Auth::user()->id;
+    $item = LevelInformation::whereid('2')->get();
+    
+    $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+    
+    return view('tp-view.upgrade-new-application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
+}
+
+public function  storeNewApplication(Request $request)
+{
+    $this->validate(
+        $request,
+        [
+            // 'Email_ID' => ['required', 'regex:/^(?!.*[@]{2,})(?!.*\s)[a-zA-Z0-9\+_\-]+(\.[a-zA-Z0-9\+_\-]+)*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,6}$/i', 'unique:applications,Email_ID'],
+            'Email_ID' => ['required', 'regex:/^(?!.*[@]{2,})(?!.*\s)[a-zA-Z0-9\+_\-]+(\.[a-zA-Z0-9\+_\-]+)*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,6}$/i'],
+            'Contact_Number' => 'required|numeric|min:10|digits:10,Contact_Number',
+            'Person_Name' => 'required',
+            'designation' => 'required',
+        ],
+        [
+            'Email_ID.regex' => "Please Enter a Valid Email Id.",
+            'Email_ID.required' => "Please Enter an Email Id.",
+        ]
+    );
+    $currentDateTime = Carbon::now();
+    $application_date = Carbon::now()->addDays(365);
+    /*check if application already created*/
+        
+        if($request->application_id && $request->previous_data==1){
+            $data = [];
+            $data['level_id'] = 1;
+            $data['tp_id'] = $request->user_id;
+            $data['person_name'] = $request->Person_Name;
+            $data['email'] =  $request->Email_ID;
+            $data['contact_number'] = $request->Contact_Number;
+            $data['designation'] = $request->designation;
+            $data['tp_ip'] = getHostByName(getHostName());
+            $data['user_type'] = 'tp';
+            $data['application_date'] = $application_date;
+            $create_new_application = DB::table('tbl_application')->where('id',$request->application_id)->update($data);
+            $create_new_application = $request->application_id;
+            $msg="Application Updated Successfully";
+        }else{
+            $data = [];
+            $data['level_id'] = 1;
+            $data['tp_id'] = $request->user_id;
+            $data['person_name'] = $request->Person_Name;
+            $data['email'] =  $request->Email_ID;
+            $data['contact_number'] = $request->Contact_Number;
+            $data['designation'] = $request->designation;
+            $data['tp_ip'] = getHostByName(getHostName());
+            $data['user_type'] = 'tp';
+            $data['application_date'] = $application_date;
+
+            $application = new TblApplication($data);
+            $application->save();
+
+            $create_new_application = $application->id;
+            // $create_new_application = DB::table('tbl_application')->insertGetId($data);
+            $msg="Application Created Successfully";
+        }
+    /*end here*/
+    return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
+}
+
+/*end here*/ 
 
 }

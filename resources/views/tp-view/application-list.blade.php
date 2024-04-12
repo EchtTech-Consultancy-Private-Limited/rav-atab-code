@@ -155,6 +155,13 @@
                                                         <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
+
+                                                        
+                                                    @if($item->application_list->is_all_course_doc_verified==1)
+                                                    <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->refid)) }}"
+                                                            class="btn btn-warning">Upgrade</a>
+
+                                                    @endif
                                                     </td>
                                             </tr>
                                         @endforeach

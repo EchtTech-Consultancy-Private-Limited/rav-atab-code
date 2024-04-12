@@ -416,6 +416,8 @@
                             </thead>
                         </table>
                     </div>
+
+                    @if($spocData->is_all_course_doc_verified==0)
                     <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="post">
@@ -424,6 +426,9 @@
                             </form>
                         </div>
                     </div>
+                    @endif
+
+
                     </div>
                 </div>
             </div>

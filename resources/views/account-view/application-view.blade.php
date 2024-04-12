@@ -59,16 +59,19 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="row form-margin-min">
+            <div class="col-md-8 pr-2">
+            <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     Basic Information
                 </h5>
                 <div>
+                    <span style="font-weight: bold;" class="mr-3">Reference ID:</span> {{ $spocData->refid }} &nbsp;&nbsp;&nbsp;
                     <span style="font-weight: bold;">Application ID:</span> {{ $spocData->uhid }}
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body ">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
@@ -159,15 +162,17 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+            </div>
+            <div class="col-md-4 pl-0">
+            <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
                     Single Point of Contact Details (SPoC)
                 </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body fixed-label-w">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Person Name :</strong></label>
@@ -176,7 +181,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Contact Number :</strong></label>
@@ -184,15 +189,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Designation :</strong></label>
-                                {{ $spocData->designation ?? '' }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Email Id :</strong></label>
@@ -200,7 +197,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label><strong>Designation :</strong></label>
+                                {{ $spocData->designation ?? '' }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
