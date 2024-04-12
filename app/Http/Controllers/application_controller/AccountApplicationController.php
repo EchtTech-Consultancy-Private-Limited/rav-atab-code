@@ -5,18 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
-use App\Models\TblApplication; 
-use App\Models\TblApplicationPayment; 
-use App\Models\TblApplicationCourseDoc; 
-use App\Models\DocumentRemark;
-use App\Models\Application;
-use App\Models\Add_Document;
-use App\Models\AssessorApplication; 
-use App\Models\User; 
-use App\Models\Chapter; 
-use Carbon\Carbon;
-use App\Models\TblNCComments; 
 use URL;
+use File;
 
 class AccountApplicationController extends Controller
 {
@@ -72,7 +62,9 @@ class AccountApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
-        
+        $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+        $decoded_json_courses_doc = json_decode($json_course_doc);
+                
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
         
@@ -149,7 +141,7 @@ class AccountApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
-        return view('account-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status]);
+        return view('account-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'courses_doc'=>$decoded_json_courses_doc]);
     }
 
     public function updatePaynentInfo(Request $request)

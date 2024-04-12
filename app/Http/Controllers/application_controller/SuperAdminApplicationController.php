@@ -14,7 +14,7 @@ use App\Models\TblNCComments;
 use Carbon\Carbon;
 use URL;
 use App\Jobs\SendEmailJob;
-
+use File;
 class SuperAdminApplicationController extends Controller
 {
     public function __construct()
@@ -90,6 +90,9 @@ class SuperAdminApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
+
+        $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+        $decoded_json_courses_doc = json_decode($json_course_doc);
 
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
@@ -174,7 +177,7 @@ class SuperAdminApplicationController extends Controller
                 }
 
 
-        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
+        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
     public function adminPaymentAcknowledge(Request $request)
     {

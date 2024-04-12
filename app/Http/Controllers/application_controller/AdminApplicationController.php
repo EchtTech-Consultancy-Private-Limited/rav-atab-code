@@ -21,7 +21,7 @@ use App\Models\TblNCComments;
 use Carbon\Carbon;
 use URL;
 use App\Jobs\SendEmailJob;
-
+use File;
 class AdminApplicationController extends Controller
 {
     public function __construct()
@@ -95,6 +95,9 @@ class AdminApplicationController extends Controller
     }
     /** Whole Application View for Account */
     public function getApplicationView($id){
+        $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+        $decoded_json_courses_doc = json_decode($json_course_doc);
+        
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
@@ -145,7 +148,7 @@ class AdminApplicationController extends Controller
                                 'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                                 'doc_unique_id' => config('constant.declaration.doc_unique_id'),
                             ])
-                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                                 ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                                 ->get(),
                 
@@ -155,7 +158,7 @@ class AdminApplicationController extends Controller
                                 'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
                                 'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
                             ])
-                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                                 ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                                 ->get(),
                 
@@ -165,7 +168,7 @@ class AdminApplicationController extends Controller
                                 'doc_sr_code' => config('constant.details.doc_sr_code'),
                                 'doc_unique_id' => config('constant.details.doc_unique_id'),
                             ])
-                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                                ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                                 ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                                 ->get()
                         ]; // Added semicolon here
@@ -190,7 +193,7 @@ class AdminApplicationController extends Controller
                 }
 
                 // dd($final_data);
-        return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
+        return view('admin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
     public function adminPaymentAcknowledge(Request $request)
     {

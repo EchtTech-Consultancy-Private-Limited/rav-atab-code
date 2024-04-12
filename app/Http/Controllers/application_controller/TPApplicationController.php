@@ -19,7 +19,7 @@ use App\Models\TblNCComments;
 use URL;
 use Config;
 use Session;
-
+use File;
 class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
@@ -74,9 +74,14 @@ class TPApplicationController extends Controller
 
     /** Whole Application View for Account */
     public function getApplicationView($id){
+        
+
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
+        $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+        $decoded_json_courses_doc = json_decode($json_course_doc);
+        
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
         
@@ -117,7 +122,7 @@ class TPApplicationController extends Controller
                             'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                             'doc_unique_id' => config('constant.declaration.doc_unique_id'),
                         ])
-                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get(),
             
@@ -127,7 +132,7 @@ class TPApplicationController extends Controller
                             'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
                             'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
                         ])
-                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get(),
             
@@ -137,7 +142,7 @@ class TPApplicationController extends Controller
                             'doc_sr_code' => config('constant.details.doc_sr_code'),
                             'doc_unique_id' => config('constant.details.doc_unique_id'),
                         ])
-                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get()
                     ]; // Added semicolon here
@@ -158,7 +163,7 @@ class TPApplicationController extends Controller
                  $is_final_submit = false;
                 }
 
-        return view('tp-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
+        return view('tp-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
     public function upload_document($id, $course_id)
     {
