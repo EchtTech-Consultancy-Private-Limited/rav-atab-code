@@ -291,7 +291,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
     Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
     Route::post('/admin-update-notification-status/{id}', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
-    Route::get('/tp/application-list', [TPApplicationController::class, 'getApplicationList']);
+    Route::get('/{level_type?}/tp/application-list/', [TPApplicationController::class, 'getApplicationList'])->name('upgrade.application-list');
     Route::get('/account/application-list', [AccountApplicationController::class, 'getApplicationList']);
     Route::get('/desktop/application-list', [DesktopApplicationController::class, 'getApplicationList']);
     Route::get('/onsite/application-list', [OnsiteApplicationController::class, 'getApplicationList']);
@@ -316,9 +316,15 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
     Route::get('/account-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AccountApplicationController::class, 'accountantVerfiyDocument']);
    
-    Route::get('upgrade-new-application/{application_id?}',[TPApplicationController::class,"upgradeNewApplication"]);
-    Route::post('upgrade-store-new-applications',[TPApplicationController::class,"storeNewApplication"]);
-    Route::get('upgrade-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourse']);
+    
+    Route::get('/upgrade-new-application/{application_id?}',[TPApplicationController::class,"upgradeNewApplication"]);
+    Route::post('/upgrade-store-new-applications',[TPApplicationController::class,"storeNewApplication"]);
+    Route::get('/upgrade-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourse']);
+    Route::post('/upgrade-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourse']);
+    Route::get('/upgrade-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePayment'])->name('course.payment');
+    Route::post('/upgrade-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPayment']);
+
+    Route::get('/upgrade/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationView']);
    //end here
    
    
@@ -345,7 +351,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/account-update-notification-status/{id}', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
     Route::post('/assessor-desktop-update-notification-status/{id}', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
     Route::post('/assessor-onsite-update-notification-status/{id}', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);
-    Route::get('tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
+    Route::get('{level_type?}/tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
     Route::post('tp-payment-transaction-validation', [TpApplicationController::class, 'paymentTransactionValidation'])->name('transaction_validation');
     Route::post('tp-payment-reference-validation', [TpApplicationController::class, 'paymentReferenceValidation'])->name('reference_validation');
 /*----------------- End Here------------------------*/

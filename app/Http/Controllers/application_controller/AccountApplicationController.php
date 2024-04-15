@@ -25,13 +25,24 @@ class AccountApplicationController extends Controller
         foreach($application as $app){
             $obj = new \stdClass;
             $obj->application_list= $app;
-    
-                $course = DB::table('tbl_application_courses')->where([
-                    'application_id' => $app->id,
-                ])
-                ->whereNull('deleted_at') 
-                ->count();
 
+                if($app->level_id==1){
+                    $course = DB::table('tbl_application_courses')->where([
+                        'application_id' => $app->id,
+                    ])
+                    ->whereNull('deleted_at') 
+                    ->count();
+    
+                }
+                if($app->level_id==2){
+                    $course = DB::table('tbl_application_courses')->where([
+                        'refid' => $app->refid,
+                    ])
+                    ->whereNull('deleted_at') 
+                    ->count();
+                        
+                }
+                
                 if($course){
                     $obj->course_count = $course;
                 }
@@ -42,6 +53,7 @@ class AccountApplicationController extends Controller
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])->sum('amount');
+                
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])->count();

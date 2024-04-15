@@ -311,12 +311,14 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="{{ url('/store-new-application-course') }}" enctype="multipart/form-data" method="post"
+                        <form action="{{ url('/upgrade-store-new-application-course') }}" enctype="multipart/form-data" method="post"
                             class="form">
                             @csrf
                             <input type="hidden" name="form_step_type" value="add-course">
                             <div class="body pb-0" id="courses_body">
                                 <!-- level start -->
+                                @foreach($old_courses as $crs)
+
                                 <div class="row clearfix" id="new_course_html">
                                     <div class="col-sm-12 text-righ">
 
@@ -328,11 +330,13 @@
                                             </button>
                                         </div>
                                     </div>
+                                
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
+                                                value="{{$crs->course_name}}"
                                                     class="preventnumeric remove_err_input_error" maxlength="50" required>
                                                     <span class="err error_name">Please enter the course name</span>
                                             </div>
@@ -345,6 +349,8 @@
                                     <input type="hidden" name="application" class="content_id" readonly>
 
                                     <input type="hidden" name="application_id" value="{{ $applicationData->id ?? '' }}"
+                                        class="form-control" readonly>
+                                        <input type="hidden" name="reference_id" value="{{ $applicationData->refid ?? '' }}"
                                         class="form-control" readonly>
 
 
@@ -364,6 +370,7 @@
                                                     <span style="margin-top:10px; margin-right:5px;">Y</span>
                                                   <div>
                                                   <input type="text" placeholder="Years" name="years[]"
+                                                        value="{{$crs->course_duration_y}}"
                                                         maxlength="4" required class="course_i nput preventalpha remove_err_input_error" >
                                                         <span class="err error_name">Please enter the year</span>
                                                   </div>
@@ -371,6 +378,7 @@
                                                     <span style="margin-top:10px; margin-right:5px;">M</span>
                                                    <div>
                                                    <input type="text" placeholder="Months" name="months[]"
+                                                        value="{{$crs->course_duration_m}}"
                                                         maxlength="2" required class="course_input preventalpha remove_err_input_error">
                                                         <span class="err error_name">Please enter the month</span>
                                                    </div>
@@ -379,6 +387,7 @@
                                                    
                                                     <div>
                                                     <input type="text" maxlength="2" placeholder="Days "
+                                                    value="{{$crs->course_duration_d}}"
                                                      name="days[]" required class="course_input preventalpha remove_err_input_error">
                                                         <span class="err error_name">Please enter the day</span>
                                                     </div>
@@ -386,6 +395,7 @@
                                                     <span style="margin-top:10px; margin-right:5px;">H</span>
                                                    <div>
                                                    <input type="number" placeholder="Hours" name="hours[]" required
+                                                        value="{{$crs->course_duration_h}}"
                                                         class="course_input remove_err_input_error">
                                                         <span class="err error_name">Please enter the hours</span>
                                                    </div>
@@ -402,6 +412,7 @@
                                             <div class="form-line">
                                                 <label>Eligibility<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Eligibility" name="eligibility[]"
+                                                value="{{$crs->eligibility}}"
                                                     required id="eligibility" class="remove_err_input_error">
                                                     <span class="err error_name">Please enter the eligibility</span>
                                             </div>
@@ -416,10 +427,11 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-
+                                                    
                                                     <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
                                                         required multiple="">
                                                         <option disabled>Select Mode of Course</option>
+
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                             <option value="{{ $value }}">
                                                                 {{ $value }}</option>
@@ -439,7 +451,9 @@
                                             <div class="form-line">
                                                 <label>Course Brief <span class="text-danger">*</span></label>
 
-                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" name="course_brief[]" required maxlength="500"></textarea>
+                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" 
+                                                
+                                                name="course_brief[]" required maxlength="500">{{$crs->course_brief}}</textarea>
                                                 <span class="err error_name">Please enter the course brief</span>
                                             </div>
                                             @error('course_brief')
@@ -483,33 +497,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if (request()->path() == 'level-first')
-                                        <input type="hidden" placeholder="level_id" name="level_id"
-                                            value="{{ 1 }}">
-                                    @elseif(request()->path() == 'level-second')
-                                        <input type="hidden" placeholder="level_id" name="level_id"
+                                    <input type="hidden" placeholder="level_id" name="level_id"
                                             value="{{ 2 }}">
-                                    @elseif(request()->path() == 'level-third')
-                                        <input type="hidden" placeholder="level_id" name="level_id"
-                                            value="{{ 3 }}">
-                                    @elseif(request()->path() == 'level-fourth')
-                                        <input type="hidden" placeholder="level_id" name="level_id"
-                                            value="{{ 4 }}">
-                                    @endif
+                                   
                                 </div>
-                                @if (request()->path() == 'level-first')
-                                    <input type="hidden" placeholder="level_id" name="level_id"
-                                        value="{{ 1 }}">
-                                @elseif(request()->path() == 'level-second')
-                                    <input type="hidden" placeholder="level_id" name="level_id"
-                                        value="{{ 2 }}">
-                                @elseif(request()->path() == 'level-third')
-                                    <input type="hidden" placeholder="level_id" name="level_id"
-                                        value="{{ 3 }}">
-                                @elseif(request()->path() == 'level-fourth')
-                                    <input type="hidden" placeholder="level_id" name="level_id"
-                                        value="{{ 4 }}">
-                                @endif
+                               @endforeach
                                 <!-- level end -->
                             </div>
 
@@ -783,13 +775,13 @@
                     @if(count($course)>0)
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
-                                    <a href="{{ url('create-new-applications/'.dEncrypt($applicationData?->id)) }}"
+                                    <a href="{{ url('upgrade-new-applications/'.dEncrypt($applicationData?->id)) }}"
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
                                     @isset($course)
                                     @if (count($course) > 0)
-                                        <a href="{{ url('show-course-payment/' . dEncrypt($applicationData->id)) }}"
+                                        <a href="{{ url('upgrade-show-course-payment/' . dEncrypt($applicationData->id)) }}"
                                             class="btn btn-primary next-step1 mr-2">Next</a>
                                     @endif
                                 @endisset
@@ -1198,7 +1190,7 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
-                        var cloneCounter = {{count($course)>0?count($course)+1:1}};
+                        var cloneCounter = {{$original_course_count>0?$original_course_count+1:1}};
                         var maxClones = 5;
 
                         function updateCloneCount() {
@@ -1207,6 +1199,7 @@
                         }
 
                         function addNewCourse() {
+                            
                             if (!isAppending && cloneCounter <= maxClones) {
                                 isAppending = true;
 

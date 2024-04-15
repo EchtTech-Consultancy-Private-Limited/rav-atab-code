@@ -113,10 +113,10 @@ class ApplicationCoursesController extends Controller
     }
     public function storeNewApplicationCourse(Request $request)
     {
-        // dd($request->all());
+        
         $course_name = $request->course_name;
         $lowercase_course_name = array_map('strtolower', $course_name);
-        $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null])->whereIn('course_name', $lowercase_course_name)->get();
+        $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>'1'])->whereIn('course_name', $lowercase_course_name)->get();
         if(count($is_course_name_already_exists)>0){
             return  redirect('create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
         }
@@ -164,6 +164,7 @@ class ApplicationCoursesController extends Controller
             $file->mode_of_course = collect($mode_of_course[$i + 1])->implode(',');
             $file->course_brief = $course_brief[$i];
             $file->tp_id = Auth::user()->id;
+            $file->refid = $request->reference_id;
            
 
 

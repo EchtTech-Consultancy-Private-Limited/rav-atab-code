@@ -152,15 +152,23 @@
                                                 {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}"
+                                                    
+                                                    @if($item->application_list->level_id==1)
+
+                                                    <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-
+                                                    @elseif($item->application_list->level_id==2)
+                                                    <a href="{{ url('/upgrade/tp/application-view', dEncrypt($item->application_list->id)) }}"
+                                                            class="btn btn-tbl-edit"><i
+                                                                class="material-icons">visibility</i></a>
+                                                    @endif
                                                         
                                                     @if($item->application_list->is_all_course_doc_verified==1)
                                                     <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-warning">Upgrade</a>
-
+                                                    @elseif($item->application_list->is_all_course_doc_verified==2)
+                                                        <span class="badge badge-main success">Upgraded</span>
                                                     @endif
                                                     </td>
                                             </tr>
