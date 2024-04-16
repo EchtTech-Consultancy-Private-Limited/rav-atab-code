@@ -180,6 +180,7 @@ class AdminApplicationController extends Controller
                     'application_id' => $application->id,
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
+
                 if($payment){
                     $obj->payment = $payment;
                 }

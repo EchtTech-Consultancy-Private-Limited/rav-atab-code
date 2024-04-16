@@ -122,6 +122,7 @@
                                 <tbody>
                                     @isset($list)
                                         @foreach ($list as $k => $item)
+                                        
                                             <tr
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
@@ -168,7 +169,10 @@
                                                     <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-warning">Upgrade</a>
                                                     @elseif($item->application_list->is_all_course_doc_verified==2)
-                                                        <span class="badge badge-main success">Upgraded</span>
+                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
+                                                            class="btn btn-success">Upgraded</a>
+                                                            @elseif($item->application_list->is_all_course_doc_verified==3)
+                                                            <span class="badge badge-main success">Upgraded</span>
                                                     @endif
                                                     </td>
                                             </tr>

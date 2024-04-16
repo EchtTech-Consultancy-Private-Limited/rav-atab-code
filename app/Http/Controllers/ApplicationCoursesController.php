@@ -113,7 +113,8 @@ class ApplicationCoursesController extends Controller
     }
     public function storeNewApplicationCourse(Request $request)
     {
-        
+        // dd($request->all());
+        $get_application_refid = TblApplication::where('id',$request->application_id)->first()->refid;
         $course_name = $request->course_name;
         $lowercase_course_name = array_map('strtolower', $course_name);
         $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>'1'])->whereIn('course_name', $lowercase_course_name)->get();
@@ -204,6 +205,7 @@ class ApplicationCoursesController extends Controller
             $file->pdf_2_file_extension =$doc_extension_2;
             $file->xls_file_size = $doc_size_3 ;
             $file->xls_file_extension =$doc_extension_3;
+            $file->refid =$get_application_refid;
             $file->save();
             
              /*course wise doc create*/ 
@@ -326,6 +328,7 @@ class ApplicationCoursesController extends Controller
     public function newApplicationPayment(Request $request)
     {
 
+        
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
@@ -454,13 +457,13 @@ class ApplicationCoursesController extends Controller
             DB::commit();
             return  redirect()->route('application-list')->with('success', 'Payment Done successfully');
         } elseif ($request->level_id == '2') {
-            return  redirect('level-first')->with('success', 'Course  successfully  Added');
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
                 $ApplicationCourse->update(['payment_status' =>1]);
             }
             DB::commit();
-            return  redirect('/level-second')->with('success', 'Payment Done successfully');;
+            return  redirect(url('/level-second/tp/application-list'))->with('success', 'Payment Done successfully');
+            
         } elseif ($request->level_id == '3') {
             foreach ($request->course_id as $item) {
                 $ApplicationCourse = ApplicationCourse::find($item);

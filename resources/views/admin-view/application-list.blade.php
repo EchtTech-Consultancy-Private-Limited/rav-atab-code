@@ -140,6 +140,20 @@
                                                         <a href="{{ url('/admin/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
+                                                               
+                                                                @isset($item->payment)
+                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4 && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2)
+                                                               
+                                                                <a class="btn btn-tbl-delete bg-primary font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
+                                                    </a>
+
+                                                    @endif
+                                                    @endisset  
+
 
                                                     @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)

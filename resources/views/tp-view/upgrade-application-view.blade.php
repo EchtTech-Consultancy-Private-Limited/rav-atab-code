@@ -78,7 +78,7 @@
             <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
-                    Basic Information
+                    Basic Information 
                 </h5>
                 <div>
                     <span style="font-weight: bold;" class="mr-3">Reference ID:</span> {{ $spocData->refid }} &nbsp;&nbsp;&nbsp;
@@ -224,6 +224,7 @@
         </div>
             </div>
         </div>
+        
         @foreach ($application_details->course as $k => $ApplicationCourses)
         <div class="card">
             <div class="card-header bg-white text-dark">
@@ -453,15 +454,29 @@
                             </thead>
                         </table>
                     </div>
-                    </div>
-
-                    <!--  -->
-                    
+                   
+  <!--  -->
+                     <!-- Tp Upload doc -->
+                     <div class="col-md-9"></div>
+        <div class="col-md-3 text-center">
+                        @if ($spocData->payment_status == 2 &&  $spocData->is_all_course_doc_verified==1)
+                                <a href="{{ url('/tp-upload-document' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="color: #fff ; line-height: 25px;">Upload
+                                    Documents</a>
+                        @endif
+                           
+                        </div>
+        <!-- end here -->
+                  
+                     </div>
                 </div>
             </div>
         </div>
         </div>  
         @endforeach
+        
+       
 
         <div class="card p-relative">
             <div class="box-overlay">

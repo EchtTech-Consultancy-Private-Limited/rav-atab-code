@@ -350,11 +350,13 @@
 
                                     <input type="hidden" placeholder="level_id" name="level_id"
                                         value="@if (isset($applicationData)) {{ $applicationData->level_id ?? '' }} @endif">
+                                    <input type="hidden" placeholder="reference_id" name="reference_id"
+                                        value="@if (isset($applicationData)) {{ $applicationData->refid ?? '' }} @endif">
 
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
-                                    <input type="hidden" name="reference_id" value=" {{ $applicationData->refid ?? '' }}">
+                                    
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line"> 

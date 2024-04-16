@@ -49,22 +49,12 @@ class TPApplicationController extends Controller
         foreach($application as $app){
             $obj = new \stdClass;
             $obj->application_list = $app;
-            if($app->level_id==1){
-                $course = DB::table('tbl_application_courses')->where([
-                    'application_id' => $app->id,
-                ])
-                ->whereNull('deleted_at') 
-                ->count();
-
-            }
-            if($app->level_id==2){
-                $course = DB::table('tbl_application_courses')->where([
-                    'refid' => $app->refid,
-                ])
-                ->whereNull('deleted_at') 
-                ->count();
-                    
-            }
+            $course = DB::table('tbl_application_courses')->where([
+                'application_id' => $app->id,
+            ])
+            ->whereNull('deleted_at') 
+            ->count();
+            
                 if($course){
                     $obj->course_count = $course;
                 }
@@ -755,10 +745,12 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
         $applicationData=null;
     }
     $first_application_id = TblApplication::where('refid',$refid)->first();
+    $last_application_id = TblApplication::where('refid',$refid)->latest()->first()->id;
+    
     $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
-    $course = TblApplicationCourses::where('application_id', $id)->get();
+    $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
     
     return view('tp-view.create-course', compact('applicationData', 'course','original_course_count','old_courses'));
@@ -971,6 +963,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
     {
         // dd($request->all());
 
+        $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
+        $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->first();
+        
+
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
@@ -1033,6 +1029,13 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $item->payment_proof = $filename;
         }
         $item->save();
+
+
+        if(isset($first_app_id)){
+            DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
+        }
+
+
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;
@@ -1097,7 +1100,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
            
             /*send email end here*/ 
             DB::commit();
-            return  redirect()->route('upgrade.application-list')->with('success', 'Payment Done successfully');
+            return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
         }  
        }
        catch(Exception $e){
@@ -1200,6 +1203,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                  $is_final_submit = false;
                 }
 
+                
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
 

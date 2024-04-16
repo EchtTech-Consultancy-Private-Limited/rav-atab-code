@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use URL;
 use App\Jobs\SendEmailJob;
+
 class SecretariatDocumentVerifyController extends Controller
 {
     public function __construct()
@@ -250,7 +251,7 @@ class SecretariatDocumentVerifyController extends Controller
     
     public function secretariatDocumentVerify(Request $request)
     {
-        // dd($request->all());
+        
         try{
         $redirect_to=URL::to("/admin/application-view").'/'.dEncrypt($request->application_id);
        
@@ -304,6 +305,12 @@ class SecretariatDocumentVerifyController extends Controller
         // DB::table('tbl_course_wise_document')->where(['application_id'=> $request->application_id,'course_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status,'nc_flag'=>$nc_flag]);
 
         DB::table('tbl_course_wise_document')->where(['application_id'=> $request->application_id,'course_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status]);
+
+        /*--------To Check All Course Doc Approved----------*/ 
+            
+        $this->checkApplicationIsReadyForNextLevel($request->application_id);
+    
+        /*------end here------*/
 
         /*Create record for summary report*/
         // $data=[];
@@ -398,56 +405,11 @@ class SecretariatDocumentVerifyController extends Controller
         ->where(['id'=>$details->id,'application_id'=>$application_id,'course_id'=>$course_id])
         ->whereNotIn('status',[0,1,4,6])
         ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
-
-        /*--------To Check All Course Doc Approved----------*/ 
-                    $results = DB::table('tbl_course_wise_document')
-                    ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
-                    ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
-                    ->where(['application_id' => $application_id, 'course_id' => $course_id])
-                    ->get();
-    
-
-                $additionalFields = DB::table('tbl_course_wise_document')
-                    ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
-                        $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
-                            ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
-                            ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
-                            ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
-                            ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
-                    })
-                    ->orderBy('tbl_course_wise_document.id', 'desc') 
-                    ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status','id','admin_nc_flag']);
-    
-                
-                foreach ($results as $key => $result) {
-                    $additionalField = $additionalFields->where('application_id', $result->application_id)
-                                                        ->where('course_id', $result->course_id)
-                                                        ->where('doc_sr_code', $result->doc_sr_code)
-                                                        ->where('doc_unique_id', $result->doc_unique_id)
-                                                        ->first();
-                    if ($additionalField) {
-                        $results[$key]->status = $additionalField->status;
-                        $results[$key]->id = $additionalField->id;
-                        $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
-                    }
-                }
+          /*--------To Check All Course Doc Approved----------*/ 
             
-                
-                    $flag = 0;
-                    foreach($results as $result){
-                        if($result->status===1 || ($result->status==4 && $result->admin_nc_flag==1) ){
-                            $flag=0;
-                        }else{
-                            $flag=1;
-                            break;
-                        }
-                    }
-                if($flag===0){
-                    DB::table('tbl_application')->where('id',$application_id)->update(['is_all_course_doc_verified'=>1]);
-                }            
-                /*------end here------*/
+          $this->checkApplicationIsReadyForNextLevel($application_id);
     
-
+        /*------end here------*/
         DB::commit();
         return back()->with('success','Enabled Course Doc upload button to TP.');
         // return redirect($redirect_to);
@@ -460,6 +422,63 @@ class SecretariatDocumentVerifyController extends Controller
 
 
 
+    protected function checkApplicationIsReadyForNextLevel($application_id){
+      
+        
+        $all_courses_id = DB::table('tbl_application_courses')->where('application_id',$application_id)->pluck('id');
+            
+
+        $results = DB::table('tbl_course_wise_document')
+        ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+        ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
+        ->whereIn('course_id',$all_courses_id)
+        ->where('application_id', $application_id)
+        ->get();
+
+        // dd($results);
+
+    $additionalFields = DB::table('tbl_course_wise_document')
+        ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+            $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
+                ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
+                ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
+                ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
+                ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
+        })
+        ->orderBy('tbl_course_wise_document.id', 'desc') 
+        ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status','id','admin_nc_flag']);
+
+        // dd($additionalFields);
+    
+    foreach ($results as $key => $result) {
+        $additionalField = $additionalFields->where('application_id', $result->application_id)
+                                            ->where('course_id', $result->course_id)
+                                            ->where('doc_sr_code', $result->doc_sr_code)
+                                            ->where('doc_unique_id', $result->doc_unique_id)
+                                            ->first();
+        if ($additionalField) {
+            $results[$key]->status = $additionalField->status;
+            $results[$key]->id = $additionalField->id;
+            $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+        }
+    }
+    
+    // dd($results);
+    
+        $flag = 0;
+        foreach($results as $result){
+            if($result->status===1 || ($result->status==4 && $result->admin_nc_flag==1) ){
+                $flag=0;
+            }else{
+                $flag=1;
+                break;
+            }
+        }
+    if($flag===0){
+        DB::table('tbl_application')->where('id',$application_id)->update(['is_all_course_doc_verified'=>1]);
+    }            
+    
+    }
 
 
 

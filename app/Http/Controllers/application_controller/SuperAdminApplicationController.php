@@ -489,7 +489,8 @@ class SuperAdminApplicationController extends Controller
     public function adminCourseDocumentVerify(Request $request)
     {
         try{
-        $redirect_to=URL::to("/super-admin/application-view").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
+        $redirect_to=URL::to("/super-admin/application-view").'/'.dEncrypt($request->application_id);
+        
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
         $assessor_type = 'admin';

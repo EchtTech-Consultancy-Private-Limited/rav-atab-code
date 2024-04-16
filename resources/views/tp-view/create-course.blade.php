@@ -427,13 +427,20 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                    
+                                                    <?php
+
+                                                            
+                                                            if(isset($modes[1])){
+                                                                echo $modes[1];
+                                                            }
+                                                    ?>
                                                     <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
                                                         required multiple="">
                                                         <option disabled>Select Mode of Course</option>
 
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
-                                                            <option value="{{ $value }}">
+                                                        
+                                                            <option value="{{ $value }}" >
                                                                 {{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -1190,8 +1197,8 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
-                        var cloneCounter = {{$original_course_count>0?$original_course_count+1:1}};
-                        var maxClones = 5;
+                        var cloneCounter = {{count($course)>0?count($course):1}};
+                        var maxClones = 6;
 
                         function updateCloneCount() {
                             // Update the formCount span with the current clone count
@@ -1224,7 +1231,7 @@
                                     $('#add-course-button').prop('disabled', true);
                                    // Change the background color of the #formCount span to red
                                    $('#formCount').css('background-color', 'red');
-                                   toastr.error("You've reached the maximum limit of " + maxClones +
+                                   toastr.error("You've reached the maximum limit of " + 5 +
                                             " courses, including the original course form.", {
                                         timeOut: 0,
                                         extendedTimeOut: 0,

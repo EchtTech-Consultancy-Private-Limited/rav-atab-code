@@ -21,9 +21,10 @@ class DocApplicationController extends Controller
 
     public function secretariatVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
+       
         try{
-            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])->latest('id')->first();
-
+            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])->latest('id')->first();
+            
             $is_nc_exists=false;
             if($nc_type==="view"){
                 $is_nc_exists=true;
