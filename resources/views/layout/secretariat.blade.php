@@ -43,15 +43,15 @@
                     </a>
             </li>
 
-            <li  class="{{ (Request::is('nationl-secretariat') ||  Request::is('internationl-secretariat') )?'active':''}}" >
+            <li  class="{{ (Request::is('admin/application-list') ||  Request::is('internationl-secretariat') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>
                     <span>Manage Application</span>
                 </a>
                 <ul class="ml-menu">
 
-                    <li class="{{ Request::is('nationl-secretariat')?'active':''}}" >
-                        <a  href="{{ url('nationl-secretariat') }}">National Application</a>
+                    <li class="{{ Request::is('admin/application-list')?'active':''}}" >
+                        <a  href="{{ url('admin/application-list') }}">National Application</a>
                     </li>
 
                     <li class="{{ Request::is('internationl-secretariat')?'active':''}}">

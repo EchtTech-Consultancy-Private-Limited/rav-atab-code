@@ -4,9 +4,7 @@
          padding: 10px 30px;
          width: 100%;
      }
-     .slimScrollDiv, .slimScrollDiv ul.text-dark.menu {
-    height: auto !important;
-}
+   
  </style>
 
  <!-- Top Bar -->
@@ -76,6 +74,48 @@
 
                  @if (Auth::user()->role == 1)
                          @php
+                             $applications = getNotificationForSuperAdmin();
+                         @endphp
+                     <li class="dropdown">
+                       
+                         <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
+                             role="button">
+                             <i class="far fa-bell"></i>
+                             @isset($applications)
+                             @if(count($applications)>0)
+                                 <span class="notify" style="background-color: #ff5722 !important;"></span>
+                                 <span class="heartbeat" style="background-color: #ff5722 !important;"></span>
+                             @endif
+                             @endisset
+                         </a>
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
+                             <li class="header">NOTIFICATIONS </li>
+                             <li class="body col-md-12">
+                                 <ul class="text-dark menu" style="padding: 0px !important;">
+                                     @if (count($applications)>0)
+                                         @foreach ($applications as $application)
+                                             <li onclick="handleSuperAdminNotification({{$application->id}})">
+                                                <a href="javascript:void(0)"
+                                                         style="color: #000;"
+                                                         >
+                                                         Application ID : {{ $application->uhid }}
+                                                </a>
+                                             </li>
+                                         @endforeach
+                                     @else
+                                         <li class="text-center">
+                                             No New Notifications!
+                                         </li>
+                                     @endif
+                                 </ul>
+                             </li>
+                         </ul>
+                 @endif
+
+
+
+                 @if (Auth::user()->role == 5)
+                         @php
                              $applications = getNotificationForAdmin();
                          @endphp
                      <li class="dropdown">
@@ -113,6 +153,8 @@
                              </li>
                          </ul>
                  @endif
+
+                 
 
 
                  @if (Auth::user()->role == 6)

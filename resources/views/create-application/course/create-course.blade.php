@@ -350,10 +350,13 @@
 
                                     <input type="hidden" placeholder="level_id" name="level_id"
                                         value="@if (isset($applicationData)) {{ $applicationData->level_id ?? '' }} @endif">
+                                    <input type="hidden" placeholder="reference_id" name="reference_id"
+                                        value="@if (isset($applicationData)) {{ $applicationData->refid ?? '' }} @endif">
 
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
+                                    
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line"> 
@@ -456,7 +459,6 @@
                                                 <input type="file" name="doc1[]"
                                                     class="form-control doc_1 file_size remove_err_input_error" required>
                                                     <span class="err error_name">Please select Declaration (PDF)</span>
-
                                             </div>
                                         </div>
                                     </div>
@@ -468,6 +470,7 @@
                                                 <input type="file" name="doc2[]"
                                                     class="form-control doc_2 file_size remove_err_input_error" required>
                                                     <span class="err error_name">Please select Course Curriculum</span>
+                                            
                                             </div>
 
                                         </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
+use URL;
 use App\Jobs\SendEmailJob;
 class DocApplicationController extends Controller
 {
@@ -17,6 +18,81 @@ class DocApplicationController extends Controller
         $data = $name;
         return view('doc-view.file-view', ['data' => $data]);
     }
+
+    public function secretariatVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
+    {
+       
+        try{
+            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])->latest('id')->first();
+            
+            $is_nc_exists=false;
+            if($nc_type==="view"){
+                $is_nc_exists=true;
+            }
+
+            
+
+        if(isset($tbl_nc_comments->nc_type)){
+            if($tbl_nc_comments->nc_type==="NC1"){
+                $dropdown_arr = array(
+                            "NC2"=>"NC2",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="NC2"){
+                $dropdown_arr = array(
+                            "not_recommended"=>"Not Recommended",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="not_recommended"){
+                $dropdown_arr = array(
+                            "Reject"=>"Reject",
+                            "Accept"=>"Accept",
+                        );
+             }else if($tbl_nc_comments->nc_type==="Request_For_Final_Approval"){
+                $dropdown_arr = array(
+                    "Reject"=>"Reject",
+                    "Accept"=>"Accept",
+                );
+             }else{
+                $dropdown_arr = array(
+                    "NC1"=>"NC1",
+                    "Accept"=>"Accept",
+                );
+             }
+        }else{
+            $dropdown_arr = array(
+                "NC1"=>"NC1",
+                "Accept"=>"Accept",
+            );
+        }
+        if($nc_type=="nr"){
+            $nc_type="not_recommended";
+        }
+
+        $nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])
+            ->select('tbl_nc_comments_secretariat.*','users.firstname','users.middlename','users.lastname')
+            ->leftJoin('users','tbl_nc_comments_secretariat.secretariat_id','=','users.id')
+            ->first();
+
+        $doc_path = URL::to("/documnet").'/'.$doc_name;
+         
+        return view('admin-view.course-verify', [
+            // 'doc_latest_record' => $doc_latest_record,
+            'application_course_id'=>$application_course_id,
+            'doc_id' => $doc_sr_code,
+            'doc_code' => $doc_unique_code,
+            'doc_file_name' => $doc_name,
+            'application_id' => $application_id,
+            'doc_path' => $doc_path,
+            'dropdown_arr'=>$dropdown_arr??[],
+            'is_nc_exists'=>$is_nc_exists,
+            'nc_comments'=>$nc_comments,
+        ]);
+    }catch(Exception $e){
+        return back()->with('fail','Something went wrong');
+    }
+    }
+
 
     public function accountReceivedPayment(Request $request)
     {
@@ -169,4 +245,6 @@ class DocApplicationController extends Controller
         }
        
     }
+
+
 }

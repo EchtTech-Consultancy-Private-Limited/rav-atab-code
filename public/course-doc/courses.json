@@ -1,0 +1,8 @@
+{
+    "courses_doc":
+    [
+        {"id":1,"name":"Declaration","nc":"course_wise_document_declaration","comments":"nc_comments_course_declaration"},
+        {"id":2,"name":"Course Curriculum / Material / Syllabus","nc":"course_wise_document_curiculum","comments":"nc_comments_course_curiculam"},
+        {"id":3,"name":"Course Details (Excel format)","nc":"course_wise_document_details","comments":"nc_comments_course_details"}
+    ]
+}

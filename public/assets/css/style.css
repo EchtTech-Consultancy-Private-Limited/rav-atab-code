@@ -20912,7 +20912,7 @@ span.badge {
 
 .card .header h2 {
     margin: 0;
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: normal;
     color: #12171d;
     font-weight: 600
@@ -25485,6 +25485,10 @@ background: white;
     line-height: 35px;
 }
 
+.slimScrollDiv, .slimScrollDiv ul.text-dark.menu {
+    height: auto !important;
+}
+
 
 @media screen and (max-width:1599px) {
     g.highcharts-label.highcharts-data-label text {
@@ -25511,5 +25515,40 @@ background: white;
     }
 
 }
+
+.form-margin-min .form-group {
+    margin-bottom: 8px !important;
+  }
+
+.pl-0{padding-left: 0px !important;}
+.pr-2{padding-right: 4px !important;}
+.h-181{height: 181px !important;}
+
+.form-margin-min .fixed-label-w .form-group label strong {
+    width: 110px;
+    display: block;
+  }
+
+  .width-100 {
+    width: 100px;
+  }
+
+  .text-table-center table tr td{
+    text-align: center;
+  }
+
+ .b-info .form-group {
+    margin-bottom: 5px;
+}
+.pl-10{padding-left: 10px !important;}
+
+p.ref-number {
+    margin-bottom: 0;
+    float: right;
+    text-align: right;
+    font-size: 14px;
+}
+
+p.ref-number b{ font-weight: 600;}
 
 /* ******************************** */

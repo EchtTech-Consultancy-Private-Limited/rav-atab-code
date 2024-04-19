@@ -9,6 +9,7 @@ use Auth;
 use App\Models\Country;
 use App\Models\TblApplication;
 use App\Models\TblApplicationCourses;
+use App\Models\TblcoursesWiseDocument;
 use App\Models\TblApplicationPayment;
 use App\Models\LevelInformation;
 use Carbon\Carbon;
@@ -30,6 +31,7 @@ class ApplicationCoursesController extends Controller
         $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         return view('create-application.create-application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
     }
+    
     public function  storeNewApplication(Request $request)
     {
         $this->validate(
@@ -112,9 +114,10 @@ class ApplicationCoursesController extends Controller
     public function storeNewApplicationCourse(Request $request)
     {
         // dd($request->all());
+        $get_application_refid = TblApplication::where('id',$request->application_id)->first()->refid;
         $course_name = $request->course_name;
         $lowercase_course_name = array_map('strtolower', $course_name);
-        $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null])->whereIn('course_name', $lowercase_course_name)->get();
+        $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>'1'])->whereIn('course_name', $lowercase_course_name)->get();
         if(count($is_course_name_already_exists)>0){
             return  redirect('create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
         }
@@ -135,6 +138,7 @@ class ApplicationCoursesController extends Controller
         $hours = $request->hours;
         $user_id = Auth::user()->id;
         //document upload
+        
         if ($request->hasfile('doc1')) {
             $doc1 = $request->file('doc1');
         }
@@ -149,6 +153,7 @@ class ApplicationCoursesController extends Controller
                 continue;
             }
             $file = new TblApplicationCourses();
+            
             $file->application_id = $request->application_id;
             $file->course_name = $course_name[$i];
             $file->course_duration_y = $years[$i];
@@ -160,34 +165,78 @@ class ApplicationCoursesController extends Controller
             $file->mode_of_course = collect($mode_of_course[$i + 1])->implode(',');
             $file->course_brief = $course_brief[$i];
             $file->tp_id = Auth::user()->id;
+            $file->refid = $request->reference_id;
+           
+
+
             $doc_size_1 = $this->getFileSize($request->file('doc1')[$i]->getSize());
             $doc_extension_1 = $request->file('doc1')[$i]->getClientOriginalExtension();
             $doc_size_2 = $this->getFileSize($request->file('doc2')[$i]->getSize());
             $doc_extension_2 = $request->file('doc2')[$i]->getClientOriginalExtension();
             $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
             $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
+
             $name = $doc1[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc1[$i]->move('documnet/', $filename);
             $file->declaration_pdf =  $filename;
+            
+            
+
             $doc2 = $request->file('doc2');
             $name = $doc2[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc2[$i]->move('documnet/', $filename);
             $file->course_curriculum_pdf =  $filename;
+            
+            
+
             $img = $request->file('doc3');
             $name = $doc3[$i]->getClientOriginalName();
             $filename = time() . $name;
             $doc3[$i]->move('documnet/', $filename);
             $file->course_details_xsl =  $filename;
+            
+
+
             $file->pdf_1_file_size = $doc_size_1 ;
             $file->pdf_1_file_extension =$doc_extension_1;
             $file->pdf_2_file_size = $doc_size_2 ;
             $file->pdf_2_file_extension =$doc_extension_2;
             $file->xls_file_size = $doc_size_3 ;
             $file->xls_file_extension =$doc_extension_3;
+            $file->refid =$get_application_refid;
             $file->save();
+            
+             /*course wise doc create*/ 
+             
+             for($j=0;$j<3;$j++){
+             $data = [];
+             if($j===0){
+                $data['doc_file_name'] = $file->declaration_pdf;
+                $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
+             }
+             if($j===1){
+                $data['doc_file_name'] = $file->course_curriculum_pdf;
+                $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
+             }
+             if($j===2){
+                $data['doc_file_name'] = $file->course_details_xsl;
+                $data['doc_sr_code'] = config('constant.details.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.details.doc_unique_id');
+             }
+             $data['application_id'] = $request->application_id;
+             $data['course_id'] = $file->id;
+             $data['tp_id'] = Auth::user()->id;
+             $data['level_id'] = $request->level_id;
+             $data['course_name'] = $course_name[$i];
+             
+             DB::table('tbl_course_wise_document')->insert($data);
+            }
         }
+
         $session_for_redirection = $request->form_step_type;
         Session::put('session_for_redirections', $session_for_redirection);
         $session_for_redirections = Session::get('session_for_redirections');
@@ -279,6 +328,7 @@ class ApplicationCoursesController extends Controller
     public function newApplicationPayment(Request $request)
     {
 
+        
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
@@ -407,13 +457,13 @@ class ApplicationCoursesController extends Controller
             DB::commit();
             return  redirect()->route('application-list')->with('success', 'Payment Done successfully');
         } elseif ($request->level_id == '2') {
-            return  redirect('level-first')->with('success', 'Course  successfully  Added');
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
                 $ApplicationCourse->update(['payment_status' =>1]);
             }
             DB::commit();
-            return  redirect('/level-second')->with('success', 'Payment Done successfully');;
+            return  redirect(url('/level-second/tp/application-list'))->with('success', 'Payment Done successfully');
+            
         } elseif ($request->level_id == '3') {
             foreach ($request->course_id as $item) {
                 $ApplicationCourse = ApplicationCourse::find($item);
