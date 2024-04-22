@@ -317,6 +317,7 @@
                             <input type="hidden" name="form_step_type" value="add-course">
                             <div class="body pb-0" id="courses_body">
                                 <!-- level start -->
+                            @if(count($course)<1 && count($old_courses)>0)
                                 @foreach($old_courses as $crs)
 
                                 <div class="row clearfix" id="new_course_html">
@@ -324,8 +325,8 @@
 
                                         <div class="d-flex justify-content-end">
                                             <button type="button" title="Remove course form"
-                                                class="btn_remove remove-course" onclick="removeCourse(this);"
-                                                style="display: none;">
+                                                class="btn_remove remove-course" onclick="removeCourseByTP('{{$applicationData->id}}','{{$crs->id}}');"
+                                                >
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
                                         </div>
@@ -509,6 +510,198 @@
                                    
                                 </div>
                                @endforeach
+                               
+                                @else
+
+                                <div class="row clearfix" id="new_course_html">
+                                    <div class="col-sm-12 text-righ">
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" title="Remove course form"
+                                                class="btn_remove remove-course" onclick="removeCourse(this);"
+                                                style="display: none;">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>Course Name<span class="text-danger">*</span></label>
+                                                <input type="text" placeholder="Course Name" name="course_name[]"
+                                                
+                                                    class="preventnumeric remove_err_input_error" maxlength="50" required>
+                                                    <span class="err error_name">Please enter the course name</span>
+                                            </div>
+                                            @error('course_name')
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="application" class="content_id" readonly>
+
+                                    <input type="hidden" name="application_id" value="{{ $applicationData->id ?? '' }}"
+                                        class="form-control" readonly>
+                                        <input type="hidden" name="reference_id" value="{{ $applicationData->refid ?? '' }}"
+                                        class="form-control" readonly>
+
+
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                        value="@if (isset($applicationData)) {{ $applicationData->level_id ?? '' }} @endif">
+
+
+                                    <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
+                                    <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"> 
+                                                <label>Course Duration<span class="text-danger">*</span></label>
+
+                                                <div class="course_group duration-font-s">
+
+                                                    <span style="margin-top:10px; margin-right:5px;">Y</span>
+                                                  <div>
+                                                  <input type="text" placeholder="Years" name="years[]"
+                                                        
+                                                        maxlength="4" required class="course_i nput preventalpha remove_err_input_error" >
+                                                        <span class="err error_name">Please enter the year</span>
+                                                  </div>
+
+                                                    <span style="margin-top:10px; margin-right:5px;">M</span>
+                                                   <div>
+                                                   <input type="text" placeholder="Months" name="months[]"
+                                                        
+                                                        maxlength="2" required class="course_input preventalpha remove_err_input_error">
+                                                        <span class="err error_name">Please enter the month</span>
+                                                   </div>
+
+                                                    <span style="margin-top:10px; margin-right:5px;">D</span> 
+                                                   
+                                                    <div>
+                                                    <input type="text" maxlength="2" placeholder="Days "
+                                                    
+                                                     name="days[]" required class="course_input preventalpha remove_err_input_error">
+                                                        <span class="err error_name">Please enter the day</span>
+                                                    </div>
+
+                                                    <span style="margin-top:10px; margin-right:5px;">H</span>
+                                                   <div>
+                                                   <input type="number" placeholder="Hours" name="hours[]" required
+                                                        
+                                                        class="course_input remove_err_input_error">
+                                                        <span class="err error_name">Please enter the hours</span>
+                                                   </div>
+                                                </div>
+                                            </div>
+                                            @error('course_duration')
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>Eligibility<span class="text-danger">*</span></label>
+                                                <input type="text" placeholder="Eligibility" name="eligibility[]"
+                                                    required id="eligibility" class="remove_err_input_error">
+                                                    <span class="err error_name">Please enter the eligibility</span>
+                                            </div>
+                                            @error('eligibility')
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group" style="margin-top: 5px;">
+                                            <div class="form-line">
+                                                <label>Mode of Course <span class="text-danger">*</span></label>
+                                                <div class="form-group default-select">
+                                                    <?php
+
+                                                            
+                                                            if(isset($modes[1])){
+                                                                echo $modes[1];
+                                                            }
+                                                    ?>
+                                                    <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
+                                                        required multiple="">
+                                                        <option disabled>Select Mode of Course</option>
+
+                                                        @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
+                                                        
+                                                            <option value="{{ $value }}" >
+                                                                {{ $value }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <span class="err error_name">Please select mode of courses</span>
+                                                </div>
+                                            </div>
+                                            @error('mode_of_course')
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>Course Brief <span class="text-danger">*</span></label>
+
+                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" 
+                                                
+                                                name="course_brief[]" required maxlength="500"></textarea>
+                                                <span class="err error_name">Please enter the course brief</span>
+                                            </div>
+                                            @error('course_brief')
+                                                <div class="alert alert-danger">{{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>Declaration (PDF)<span class="text-danger">*</span></label>
+                                                <input type="file" name="doc1[]"
+                                                    class="form-control doc_1 file_size remove_err_input_error" required>
+                                                    <span class="err error_name">Please select Declaration (PDF)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>Course Curriculum / Material / Syllabus
+                                                    (PDF)<span class="text-danger">*</span></label>
+                                                <input type="file" name="doc2[]"
+                                                    class="form-control doc_2 file_size remove_err_input_error" required>
+                                                    <span class="err error_name">Please select Course Curriculum</span>
+                                            
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label>Course Details (Excel format)<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="file" name="doc3[]" id="payment_reference_no"
+                                                    required class="form-control doc_3 file_size_exl remove_err_input_error">
+                                                    <span class="err error_name">Please select Course Details</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" placeholder="level_id" name="level_id"
+                                            value="{{ 2 }}">
+                                   
+                                </div>
+                            @endif
                                 <!-- level end -->
                             </div>
 
@@ -1197,9 +1390,21 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
-                        var cloneCounter = {{count($course)>0?count($course):1}};
-                        var maxClones = 6;
 
+
+                        let cloneCounter =0;
+                        let maxClones = 5;
+                        if("{{count($course)>0}}"){
+                            cloneCounter = {{count($course)>0?count($course)+1:1}}
+                            maxClones = 5;
+                        }else{
+                            cloneCounter = {{count($course)>0?count($course):1}}
+                            maxClones = 6;
+                        }
+                        if("{{count($old_courses)<1}}"){
+                            maxClones = 5;
+                        }
+                        
                         function updateCloneCount() {
                             // Update the formCount span with the current clone count
                             // $('#formCount').text(cloneCounter);
@@ -1222,6 +1427,22 @@
 
                                 // Show the remove button for the new row
                                 newRow.find('.remove-course').show();
+
+
+
+                            // Find the button with class "remove-course"
+                            var removeButton = newRow.find('.remove-course');
+
+                            // Remove the existing onclick attribute
+                            removeButton.removeAttr('onclick');
+
+                            // Add a new onclick attribute with the desired function name
+                            removeButton.attr('onclick', 'removeCourse(this)');
+
+
+
+
+
 
                                 // Increment the cloneCounter for unique IDs
                                 cloneCounter++;

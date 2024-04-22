@@ -328,7 +328,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
    //end here
    
    
-   
+    Route::post('/tp-delete-course/{id}/{course_id}', [TPApplicationController::class, 'deleteCourse']);
+
     Route::get('/tp-upload-document/{id}/{course_id}', [TPApplicationController::class, 'upload_document']);
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);

@@ -747,15 +747,33 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     $first_application_id = TblApplication::where('refid',$refid)->first();
     $last_application_id = TblApplication::where('refid',$refid)->latest()->first()->id;
     
-    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->get();
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
+    
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
     
     return view('tp-view.create-course', compact('applicationData', 'course','original_course_count','old_courses'));
 }
 
+
+public function deleteCourse($id,$course_id){
+    try{
+        DB::beginTransaction();
+        $is_course_deleted = TblApplicationCourses::where('id',$course_id)->update(['deleted_by_tp'=>1]);
+        if($is_course_deleted){
+            DB::commit();
+            return response()->json(['success' => true,'message' =>'Course Deleted Successfully.'],200);
+        }else{
+            DB::rollBack();
+            return response()->json(['success' => false,'message' =>'Failed to delete course.'],400);
+        }
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' => false,'message' =>'Failed to delete course.'],500);
+    }
+}
 
 
 public function upgradeStoreNewApplicationCourse(Request $request)

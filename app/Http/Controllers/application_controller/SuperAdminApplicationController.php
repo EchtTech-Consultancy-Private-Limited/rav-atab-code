@@ -228,7 +228,7 @@ class SuperAdminApplicationController extends Controller
                
             }
 
-            DB::table('tbl_application')->where('id',$request->application_id)->update(['admin_id'=>Auth::user()->id,'secretariat_id'=>$request->secretariat_id]);
+            DB::table('tbl_application')->where('id',$request->application_id)->update(['admin_id'=>Auth::user()->id,'secretariat_id'=>$request->secretariat_id,'assign_secretariat'=>1]);
 
             /**
              * Mail Sending
@@ -306,14 +306,12 @@ class SuperAdminApplicationController extends Controller
     }
     public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
-        
         try{
             $accept_nc_type_status = $nc_type;
             $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin'])
             ->where('nc_type',"Request_For_Final_Approval")
             ->latest('id')->first();
-
-            // dd($final_approval);
+            
             // $ass_type = $assessor_type=="desktop"?"desktop":"onsite";
 
             if($nc_type=="nr"){
@@ -365,13 +363,13 @@ class SuperAdminApplicationController extends Controller
             /*end here*/
             $form_view=0;
             if($nc_type==="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
-                if(empty($accepted_doc)){
+
+                if(!empty($accepted_doc)){
                     $form_view=1;
                 }
             }else if($nc_type=="reject"){
                 $form_view=0;
             }
-
             
         if(isset($tbl_nc_comments->nc_type)){
                 if($tbl_nc_comments->nc_type==="not_recommended"){

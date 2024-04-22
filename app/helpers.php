@@ -1074,6 +1074,7 @@ function getSecondPaymentNotification()
     {
         $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
         ->where('admin_received_payment',0)
+        ->where('assign_secretariat',1)
         ->orderBy('id','desc')
         ->get();
 
