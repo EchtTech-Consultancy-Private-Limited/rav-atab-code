@@ -48,10 +48,10 @@ class ApplicationCoursesController extends Controller
                 'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
-        $currentDateTime = Carbon::now();
+        
         $application_date = Carbon::now()->addDays(365);
         /*check if application already created*/
-            
+
             if($request->application_id && $request->previous_data==1){
                 $data = [];
                 $data['level_id'] = 1;
@@ -77,7 +77,6 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
-
                 $application = new TblApplication($data);
                 $application->save();
 
