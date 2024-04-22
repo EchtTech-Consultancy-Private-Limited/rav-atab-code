@@ -407,10 +407,16 @@ class SecretariatDocumentVerifyController extends Controller
         ->update(['nc_flag'=>1,'secretariat_id'=>$secretariat_id]);
           /*--------To Check All Course Doc Approved----------*/ 
             
-          $this->checkApplicationIsReadyForNextLevel($application_id);
-    
+         $check_all_doc_verified= $this->checkApplicationIsReadyForNextLevel($application_id);
+            
         /*------end here------*/
         DB::commit();
+        if(!$check_all_doc_verified){
+            return back()->with('fail','First create NCs on courses doc');
+        }
+        if($check_all_doc_verified==="all_verified"){
+            return back()->with('success','All course docs Accepted successfully.');
+        }
         return back()->with('success','Enabled Course Doc upload button to TP.');
         // return redirect($redirect_to);
         
@@ -422,7 +428,7 @@ class SecretariatDocumentVerifyController extends Controller
 
 
 
-    protected function checkApplicationIsReadyForNextLevel($application_id){
+    public function checkApplicationIsReadyForNextLevel($application_id){
       
         
         $all_courses_id = DB::table('tbl_application_courses')->where('application_id',$application_id)->pluck('id');
@@ -435,7 +441,6 @@ class SecretariatDocumentVerifyController extends Controller
         ->where('application_id', $application_id)
         ->get();
 
-        // dd($results);
 
     $additionalFields = DB::table('tbl_course_wise_document')
         ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
@@ -448,7 +453,6 @@ class SecretariatDocumentVerifyController extends Controller
         ->orderBy('tbl_course_wise_document.id', 'desc') 
         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status','id','admin_nc_flag']);
 
-        // dd($additionalFields);
     
     foreach ($results as $key => $result) {
         $additionalField = $additionalFields->where('application_id', $result->application_id)
@@ -463,9 +467,9 @@ class SecretariatDocumentVerifyController extends Controller
         }
     }
     
-    // dd($results);
     
         $flag = 0;
+        $nc_flag=0;
         foreach($results as $result){
             if($result->status===1 || ($result->status==4 && $result->admin_nc_flag==1) ){
                 $flag=0;
@@ -474,8 +478,23 @@ class SecretariatDocumentVerifyController extends Controller
                 break;
             }
         }
+
+        foreach($results as $result){
+            if($result->status!=0){
+                $nc_flag=1;
+                break;
+            }
+        }
+
     if($flag===0){
         DB::table('tbl_application')->where('id',$application_id)->update(['is_all_course_doc_verified'=>1]);
+        return "all_verified";
+    }
+
+    if($nc_flag==1){
+        return true;
+    }else{
+        return false;
     }            
     
     }

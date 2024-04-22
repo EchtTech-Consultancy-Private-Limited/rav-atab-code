@@ -458,6 +458,14 @@
         </div>
         </div>  
         @endforeach
+        @if($spocData->is_all_course_doc_verified==1)
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+            <a href="{{ url('/upgrade-new-application', dEncrypt($spocData->id)) }}"
+                                                            class="btn btn-warning">Upgrade</a>
+            </div>
+        </div>
+        @endif
 
         <div class="card p-relative">
             <div class="box-overlay">
@@ -755,7 +763,7 @@
               });
              
               $.ajax({
-                  url: "/tp-course-add-document", // Your server-side upload endpoint
+                  url: `${BASE_URL}/tp-course-add-document`, // Your server-side upload endpoint
                   type: 'POST',
                   data: formData,
                   processData: false,
