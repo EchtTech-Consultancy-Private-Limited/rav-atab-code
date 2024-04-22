@@ -165,7 +165,7 @@ class ApplicationCoursesController extends Controller
             $file->mode_of_course = collect($mode_of_course[$i + 1])->implode(',');
             $file->course_brief = $course_brief[$i];
             $file->tp_id = Auth::user()->id;
-            $file->refid = $request->reference_id;
+            
            
 
 

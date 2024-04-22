@@ -470,7 +470,7 @@ class SuperAdminApplicationController extends Controller
           $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
           if($update_admin_received_payment_status){
               DB::commit();
-              $redirect_url = URL::to('/admin/application-view/'.dEncrypt($id));
+              $redirect_url = URL::to('/super-admin/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
           }else{
               DB::rollback();

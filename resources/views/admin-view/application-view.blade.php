@@ -39,6 +39,17 @@
         });
     </script>
     @endif
+    @if ($message = Session::get('fail'))
+    
+    <script>
+        toastr.error("{{$message}}", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    </script>
+    @endif
     <section class="content">
         <div class="block-header">
             <div class="row">
@@ -416,19 +427,17 @@
                             </thead>
                         </table>
                     </div>
-
-                    @if($spocData->is_all_course_doc_verified==0)
+                    
+                    @if($ApplicationCourses['show_submit_btn_to_secretariat'])
                     <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="post">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit">
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($ApplicationCourses['course_doc_flag'] > 2) ? "" : "disabled"; ?>>
                             </form>
                         </div>
                     </div>
                     @endif
-
-
                     </div>
                 </div>
             </div>

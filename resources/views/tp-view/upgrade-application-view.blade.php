@@ -774,7 +774,7 @@
               });
              
               $.ajax({
-                  url: "/tp-course-add-document", // Your server-side upload endpoint
+                  url: `${BASE_URL}/tp-course-add-document`, // Your server-side upload endpoint
                   type: 'POST',
                   data: formData,
                   processData: false,

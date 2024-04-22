@@ -95,7 +95,6 @@ class AdminApplicationController extends Controller
     /** Whole Application View for Account */
     public function getApplicationView($id){
         $a = File::json(base_path('/course-doc/course.json'));
-        dd($a);
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
