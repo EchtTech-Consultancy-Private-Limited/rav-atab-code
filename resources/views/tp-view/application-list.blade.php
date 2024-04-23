@@ -165,7 +165,7 @@
                                                                 class="material-icons">visibility</i></a>
                                                     @endif
                                                         
-                                                    @if($item->application_list->is_all_course_doc_verified==1)
+                                                    <!-- @if($item->application_list->is_all_course_doc_verified==1)
                                                     <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-warning">Upgrade</a>
                                                     @elseif($item->application_list->is_all_course_doc_verified==2)
@@ -173,7 +173,7 @@
                                                             class="btn btn-success">Upgraded</a>
                                                             @elseif($item->application_list->is_all_course_doc_verified==3)
                                                             <span class="badge badge-main success">Upgraded</span>
-                                                    @endif
+                                                    @endif -->
                                                     </td>
                                             </tr>
                                         @endforeach
