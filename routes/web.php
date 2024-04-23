@@ -323,8 +323,17 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/upgrade-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourse']);
     Route::get('/upgrade-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePayment'])->name('course.payment');
     Route::post('/upgrade-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPayment']);
-
     Route::get('/upgrade/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationView']);
+
+
+    
+    Route::get('/upgrade-level-3-new-application/{application_id?}',[TPApplicationController::class,"upgradeNewApplicationLevel3"]);
+    Route::post('/upgrade-level-3-store-new-applications',[TPApplicationController::class,"storeNewApplicationLevel3"]);
+    Route::get('/upgrade-level-3-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourseLevel3']);
+    Route::post('/upgrade-level-3-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourseLevel3']);
+    Route::get('/upgrade-level-3-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePaymentLevel3'])->name('course.payment');
+    Route::post('/upgrade-level-3-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPaymentLevel3']);
+    Route::get('/upgrade/level-3/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationViewLevel3']);
    //end here
    
    

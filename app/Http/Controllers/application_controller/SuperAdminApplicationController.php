@@ -364,7 +364,7 @@ class SuperAdminApplicationController extends Controller
             $form_view=0;
             if($nc_type==="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
 
-                if(!empty($accepted_doc)){
+                if(empty($accepted_doc)){
                     $form_view=1;
                 }
             }else if($nc_type=="reject"){

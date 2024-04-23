@@ -311,7 +311,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="{{ url('/upgrade-store-new-application-course') }}" enctype="multipart/form-data" method="post"
+                        <form action="{{ url('/upgrade-level-3-store-new-application-course') }}" enctype="multipart/form-data" method="post"
                             class="form">
                             @csrf
                             <input type="hidden" name="form_step_type" value="add-course">
@@ -775,14 +775,13 @@
 
                                                     <td class="center btn-ved">
                                                         <a class="btn btn-tbl-delete bg-primary" data-bs-toggle="modal"
-                                                            data-id='{{ $courses->id }}' level-id='{{$applicationData->level_id}}' data-bs-target="#View_popup"
+                                                            data-id='{{ $courses->id }}' data-bs-target="#View_popup"
                                                             id="view">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
                                                         
                                                             <a href="#" data-bs-toggle="modal"
                                                                 data-id="{{ $courses->id }}"
-                                                                level-id='{{$applicationData->level_id}}'
                                                                 data-bs-target="#edit_popup" id="edit_course"
                                                                 class="btn btn-tbl-delete bg-primary">
                                                                 <i class="material-icons">edit</i>
@@ -976,13 +975,13 @@
                     @if(count($course)>0)
                             <div class="d-flex justify-content-end align-items-center">
                                 <div>
-                                    <a href="{{ url('upgrade-new-applications/'.dEncrypt($applicationData?->id)) }}"
+                                    <a href="{{ url('upgrade-level-3-new-application/'.dEncrypt($applicationData?->id)) }}"
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
                                     @isset($course)
                                     @if (count($course) > 0)
-                                        <a href="{{ url('upgrade-show-course-payment/' . dEncrypt($applicationData->id)) }}"
+                                        <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($applicationData->id)) }}"
                                             class="btn btn-primary next-step1 mr-2">Next</a>
                                     @endif
                                 @endisset
@@ -1189,7 +1188,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label>Course Brief<span
+                                                            <label>Course Brief  dddd<span
                                                                     class="text-danger">*</span></label>
                                                             <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
                                                                 name="course_brief" id="course_brief" maxlength="500"></textarea>
@@ -1270,8 +1269,9 @@
                     <script>
                         $(document).on("click", "#view", function() {
 
-                            const UserName = $(this).data('id');
-                            const level_id = $(this).attr('level-id');
+                            var UserName = $(this).data('id');
+                            console.log(UserName);
+
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1282,8 +1282,7 @@
                                 url: `${BASE_URL}/get-course-list`,
                                 type: "get",
                                 data: {
-                                    id: UserName,
-                                    level_id:level_id
+                                    id: UserName
                                 },
                                 success: function(data) {
 
@@ -1325,8 +1324,7 @@
                             var online_checkbox = $('#online_checkbox').val();
                             var hybrid_checkbox = $('#hybrid_checkbox').val();
 
-                            const UserName = $(this).data('id');
-                            const level_id = $(this).attr('level-id');
+                            var UserName = $(this).data('id');
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1337,13 +1335,11 @@
                                 url:`${BASE_URL}/course-edit`,
                                 type: "get",
                                 data: {
-                                    id: UserName,
-                                    level_id:level_id
+                                    id: UserName
                                 },
                                 success: function(data) {
 
                                     var values = data.ApplicationCourse[0].mode_of_course?.split(',');
-                                   
                                     $.each(values, function(i, e) {
                                         $("#mode_of_course_edit option[value='" + e + "']").prop("selected",
                                             true);
@@ -1359,7 +1355,6 @@
                                     var modeOfCourseItems = data.ApplicationCourse[0].mode_of_course;
 
                                     checkboxes.forEach(checkbox => {
-                                        
                                         if (modeOfCourseItems.includes(checkbox.value)) {
                                             checkbox.checked = true;
                                         } else {
