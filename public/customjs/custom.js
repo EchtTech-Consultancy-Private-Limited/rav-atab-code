@@ -1718,6 +1718,58 @@ function handleShowCoursePayment(){
     return false;
 }
 
+
+
+function removeCourseByTP(app_id,course_id){
+    const delete_course_flag = window.confirm("Are you sure to delete course");
+    if(app_id!=null && delete_course_flag){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-delete-course/${app_id}/${course_id}`, // Your server-side upload endpoint
+            type: "post",
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+                toastr.error("Something went wrong!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+            },
+        });
+    }
+}
+
+
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
 });

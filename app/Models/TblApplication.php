@@ -47,19 +47,15 @@ class TblApplication extends Model
     {
         $prefix = 'ATAB/REF-';
         $suffix = date('Y');
-
-        $maxCode = static::where('refid', 'like', "$prefix%$suffix")->max('refid');
-
-        if (!$maxCode) {
-            $newCode = "$prefix" . str_pad('001', 3, '0', STR_PAD_LEFT) . "/$suffix";
-        } else {
-            $codeNumber = (int)substr($maxCode, -7, 3) + 1;
-            $newCode = "$prefix" . str_pad($codeNumber, 3, '0', STR_PAD_LEFT) . "/$suffix";
+        $codeNumber = 1;
+        $lastCode = static::where('refid', 'like', "$prefix%$suffix")->latest()->value('uhid');
+        if ($lastCode) {
+            $lastCodeNumber = (int)substr($lastCode, -7, 3);
+            $codeNumber = $lastCodeNumber + 1;
         }
-
+        $newCode = "$prefix" . str_pad($codeNumber, 3, '0', STR_PAD_LEFT) . "/$suffix";
         $this->refid = $newCode;
     }
-
     public function getCodeAttribute()
     {
         return strtoupper($this->attributes['uhid']);

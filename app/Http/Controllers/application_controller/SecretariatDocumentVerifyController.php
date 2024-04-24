@@ -417,6 +417,9 @@ class SecretariatDocumentVerifyController extends Controller
         if($check_all_doc_verified==="all_verified"){
             return back()->with('success','All course docs Accepted successfully.');
         }
+        if($check_all_doc_verified==="action_not_taken"){
+            return back()->with('fail','Please take any action on course doc.');
+        }
         return back()->with('success','Enabled Course Doc upload button to TP.');
         // return redirect($redirect_to);
         
@@ -470,6 +473,7 @@ class SecretariatDocumentVerifyController extends Controller
     
         $flag = 0;
         $nc_flag=0;
+        $not_any_action_flag = 0;
         foreach($results as $result){
             if($result->status===1 || ($result->status==4 && $result->admin_nc_flag==1) ){
                 $flag=0;
@@ -485,10 +489,19 @@ class SecretariatDocumentVerifyController extends Controller
                 break;
             }
         }
+        foreach($results as $result){
+            if($result->status==0){
+                $not_any_action_flag=1;
+                break;
+            }
+        }
 
     if($flag===0){
         DB::table('tbl_application')->where('id',$application_id)->update(['is_all_course_doc_verified'=>1]);
         return "all_verified";
+    }
+    if($not_any_action_flag===1){
+        return "action_not_taken";
     }
 
     if($nc_flag==1){

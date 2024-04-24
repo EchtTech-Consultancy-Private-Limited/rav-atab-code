@@ -75,7 +75,7 @@ class TPApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
-        // dd($final_data);
+        
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 
@@ -697,7 +697,7 @@ public function upgradeNewApplication(Request $request,$application_id=null){
 
 public function  storeNewApplication(Request $request)
 {
-    // dd($request->all());
+    
    
     $application_date = Carbon::now()->addDays(365);
     
@@ -714,6 +714,9 @@ public function  storeNewApplication(Request $request)
             $data['user_type'] = 'tp';
             $data['refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
+
+            TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
+            
 
             $application = new TblApplication($data);
             $application->save();
@@ -747,15 +750,33 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     $first_application_id = TblApplication::where('refid',$refid)->first();
     $last_application_id = TblApplication::where('refid',$refid)->latest()->first()->id;
     
-    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->get();
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
+    
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
     
     return view('tp-view.create-course', compact('applicationData', 'course','original_course_count','old_courses'));
 }
 
+
+public function deleteCourse($id,$course_id){
+    try{
+        DB::beginTransaction();
+        $is_course_deleted = TblApplicationCourses::where('id',$course_id)->update(['deleted_by_tp'=>1]);
+        if($is_course_deleted){
+            DB::commit();
+            return response()->json(['success' => true,'message' =>'Course Deleted Successfully.'],200);
+        }else{
+            DB::rollBack();
+            return response()->json(['success' => false,'message' =>'Failed to delete course.'],400);
+        }
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' => false,'message' =>'Failed to delete course.'],500);
+    }
+}
 
 
 public function upgradeStoreNewApplicationCourse(Request $request)
@@ -961,7 +982,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
     public function upgradeNewApplicationPayment(Request $request)
     {
-        // dd($request->all());
+        
 
         $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
         $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->first();
@@ -1035,11 +1056,12 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
         }
 
-
+        
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;
         $userid = Auth::user()->firstname;
+        
         if ($request->level_id == '2') {
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
@@ -1085,7 +1107,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['body'] = $body; 
                 dispatch(new SendEmailJob($details));
             }
-
+            
             //tp email
                $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
                We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make. ".PHP_EOL."
@@ -1097,10 +1119,13 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
                 dispatch(new SendEmailJob($details));
-           
+                
             /*send email end here*/ 
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
+        }else{
+            DB::rollBack();
+            return  redirect(url('/level-second/tp/application-list/'))->with('failed', 'Failed to make payment');
         }  
        }
        catch(Exception $e){
@@ -1213,4 +1238,564 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         return $india->id;
     }
 /*end here*/ 
+
+
+
+
+
+
+
+
+
+
+
+
+/*--Level 3----*/ 
+public function upgradeNewApplicationLevel3(Request $request,$application_id=null){
+    if ($application_id) {
+        $applicationData = DB::table('tbl_application')->where('id', dDecrypt($application_id))->first();
+    } else {
+        $applicationData = null;
+    }
+    
+    $id = Auth::user()->id;
+    $item = LevelInformation::whereid('2')->get();
+    
+    $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+    
+    return view('tp-view.level3-upgrade-new-application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
+}
+
+public function  storeNewApplicationLevel3(Request $request)
+{
+   
+    
+    $application_date = Carbon::now()->addDays(365);
+    
+    /*check if application already created*/
+
+            $data = [];
+            $data['level_id'] = 3;
+            $data['tp_id'] = $request->user_id;
+            $data['person_name'] = $request->person_name;
+            $data['email'] =  $request->email;
+            $data['contact_number'] = $request->contact_number;
+            $data['designation'] = $request->designation;
+            $data['tp_ip'] = getHostByName(getHostName());
+            $data['user_type'] = 'tp';
+            $data['refid'] = $request->reference_id;
+            $data['application_date'] = $application_date;
+           
+            TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3,'is_all_course_doc_verified'=>2]);
+
+            
+
+            $application = new TblApplication($data);
+            $application->save();
+
+            $application->refid = $request->reference_id;
+            $application->save();
+
+            $create_new_application = $request->application_id;
+            $msg="Application Created Successfully";
+            $first_application = TblApplication::where('refid',$request->reference_id)->first();
+            if(!empty($first_application)){
+                TblApplication::where('id',$first_application->id)->update(['is_all_course_doc_verified'=>2]);
+            }
+
+        
+    /*end here*/
+    return redirect(url('upgrade-level-3-create-new-course/' . dEncrypt($create_new_application).'/'.dEncrypt($request->reference_id)))->with('success', $msg);
+}
+
+public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
+{
+    
+    $id = dDecrypt($id);
+    $refid = dDecrypt($refid);
+    
+    if ($id) {
+        $applicationData = TblApplication::where('refid',$refid)->latest()->first();
+    }else{
+        $applicationData=null;
+    }
+    $first_application_id = TblApplication::where('refid',$refid)->first();
+    $last_application_id = TblApplication::where('refid',$refid)->latest()->first()->id;
+    
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->get();
+    
+    // $last_application = TblApplication::where('refid',$refid)->first();
+    $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
+    
+    $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
+    
+    return view('tp-view.level3-create-course', compact('applicationData', 'course','original_course_count','old_courses'));
+}
+
+
+public function deleteCourseLevel3($id,$course_id){
+    try{
+        DB::beginTransaction();
+        $is_course_deleted = TblApplicationCourses::where('id',$course_id)->update(['deleted_by_tp'=>1]);
+        if($is_course_deleted){
+            DB::commit();
+            return response()->json(['success' => true,'message' =>'Course Deleted Successfully.'],200);
+        }else{
+            DB::rollBack();
+            return response()->json(['success' => false,'message' =>'Failed to delete course.'],400);
+        }
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' => false,'message' =>'Failed to delete course.'],500);
+    }
+}
+
+
+public function upgradeStoreNewApplicationCourseLevel3(Request $request)
+{
+
+    
+    try{
+        // dd($request->all());
+        $reference_id = TblApplication::where('id',$request->application_id)->first()->refid;
+        $course_name = $request->course_name;
+        $lowercase_course_name = array_map('strtolower', $course_name);
+        $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>3])->whereIn('course_name', $lowercase_course_name)->get();
+        if(count($is_course_name_already_exists)>0){
+            return  redirect('upgrade-create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
+        }
+        $value_counts = array_count_values($lowercase_course_name);
+            foreach ($value_counts as $value => $count) {
+                if ($count > 1) {
+                    return  redirect('upgrade-create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Failed to create course with same course name');
+                }
+            }
+        $course_duration = $request->course_duration;
+        $eligibility = $request->eligibility;
+        $mode_of_course = $request->mode_of_course;
+        $course_brief = $request->course_brief;
+        $years = $request->years;
+        $months = $request->months;
+        $days = $request->days;
+        $hours = $request->hours;
+        //document upload
+        
+        if ($request->hasfile('doc1')) {
+            $doc1 = $request->file('doc1');
+        }
+        if ($request->hasfile('doc2')) {
+            $doc2 = $request->file('doc2');
+        }
+        if ($request->hasfile('doc3')) {
+            $doc3 = $request->file('doc3');
+        }
+        
+        for ($i = 0; $i < count($course_name); $i++) {
+            if (empty($course_name[$i])) {
+                continue;
+            }
+            $file = new TblApplicationCourses();
+            
+            $file->application_id = $request->application_id;
+            $file->course_name = $course_name[$i];
+            $file->course_duration_y = $years[$i];
+            $file->course_duration_m = $months[$i];
+            $file->course_duration_d = $days[$i];
+            $file->course_duration_h = $hours[$i];
+            $file->level_id = 3;
+            $file->eligibility = $eligibility[$i];
+            $file->mode_of_course = "online";
+            // $file->mode_of_course = collect($mode_of_course[$i])->implode(',');
+            $file->course_brief = $course_brief[$i];
+            $file->tp_id = Auth::user()->id;
+            $file->refid = $request->reference_id;
+           
+    
+    
+            $doc_size_1 = $this->getFileSize($request->file('doc1')[$i]->getSize());
+            $doc_extension_1 = $request->file('doc1')[$i]->getClientOriginalExtension();
+            $doc_size_2 = $this->getFileSize($request->file('doc2')[$i]->getSize());
+            $doc_extension_2 = $request->file('doc2')[$i]->getClientOriginalExtension();
+            $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
+            $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
+    
+            $name = $doc1[$i]->getClientOriginalName();
+            $filename = time() . $name;
+            $doc1[$i]->move('documnet/', $filename);
+            $file->declaration_pdf =  $filename;
+            
+            
+    
+            $doc2 = $request->file('doc2');
+            $name = $doc2[$i]->getClientOriginalName();
+            $filename = time() . $name;
+            $doc2[$i]->move('documnet/', $filename);
+            $file->course_curriculum_pdf =  $filename;
+            
+            
+    
+            $img = $request->file('doc3');
+            $name = $doc3[$i]->getClientOriginalName();
+            $filename = time() . $name;
+            $doc3[$i]->move('documnet/', $filename);
+            $file->course_details_xsl =  $filename;
+            
+    
+    
+            $file->pdf_1_file_size = $doc_size_1 ;
+            $file->pdf_1_file_extension =$doc_extension_1;
+            $file->pdf_2_file_size = $doc_size_2 ;
+            $file->pdf_2_file_extension =$doc_extension_2;
+            $file->xls_file_size = $doc_size_3 ;
+            $file->xls_file_extension =$doc_extension_3;
+            $file->refid =$reference_id;
+            $file->save();
+            
+             /*course wise doc create*/ 
+             
+             for($j=0;$j<3;$j++){
+             $data = [];
+             if($j===0){
+                $data['doc_file_name'] = $file->declaration_pdf;
+                $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
+             }
+             if($j===1){
+                $data['doc_file_name'] = $file->course_curriculum_pdf;
+                $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
+             }
+             if($j===2){
+                $data['doc_file_name'] = $file->course_details_xsl;
+                $data['doc_sr_code'] = config('constant.details.doc_sr_code');
+                $data['doc_unique_id'] = config('constant.details.doc_unique_id');
+             }
+             $data['application_id'] = $request->application_id;
+             $data['course_id'] = $file->id;
+             $data['tp_id'] = Auth::user()->id;
+             $data['level_id'] = 3;
+             $data['course_name'] = $course_name[$i];
+             
+             DB::table('tbl_course_wise_document')->insert($data);
+            }
+        }
+        
+        
+          return redirect('/upgrade-level-3-create-new-course/' . dEncrypt($request->application_id).'/'.dEncrypt($reference_id))->with('success', 'Course  successfully  Added');
+    }  catch(Exception $e){
+          return redirect('upgrade-level-3-create-new-course/' . dEncrypt($request->application_id).'/'.dEncrypt($reference_id))->with('fail', 'Failed to create course');
+    }
+   
+    
+}
+
+
+public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
+    {
+        $id = dDecrypt($id);
+    
+        $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
+    
+        if ($checkPaymentAlready>1) {
+                return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
+        }
+        if ($id) {
+            $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+            $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
+            if (Auth::user()->country == $this->get_india_id()) {
+                if (count($course) == '0') {
+                    $currency = '₹';
+                    $total_amount = '0';
+                } elseif (count($course) <= 5) {
+                    $currency = '₹';
+                    $total_amount = '1000';
+                } elseif (count($course) <= 10) {
+                    $currency = '₹';
+                    $total_amount =  '2000';
+                } else {
+                    $currency = '₹';
+                    $total_amount =   '3000';
+                }
+            } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
+                if (count($course) == '0') {
+                    $currency = 'US $';
+                    $total_amount = '0';
+                } elseif (count($course) <= 5) {
+                    $currency = 'US $';
+                    $total_amount =  '15';
+                } elseif (count($course) <= 10) {
+                    $currency = 'US $';
+                    $total_amount = '30';
+                } else {
+                    $currency = 'US $';
+                    $total_amount =  '45';
+                }
+            } else {
+                if (count($course) == '0') {
+                    $currency = 'US $';
+                    $total_amount = '';
+                } elseif (count($course) <= 5) {
+                    $currency = 'US $';
+                    $total_amount = '50';
+                } elseif (count($course) <= 10) {
+                    $currency = 'US $';
+                    $total_amount = '100';
+                } else {
+                    $currency = 'US $';
+                    $total_amount =  '150';
+                }
+            }
+        }
+        return view('tp-view.level3-show-course-payment', compact('applicationData', 'course', 'currency', 'total_amount'));
+    }
+    
+public function upgradeNewApplicationPaymentLevel3(Request $request)
+{
+
+    $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
+    $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->get();
+
+    $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
+    $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
+
+    $request->validate([
+        'transaction_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,transaction_no',
+        'reference_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,reference_no',
+        'payment' => 'required',
+    ], [
+        'transaction_no.required' => 'The transaction number is required.',
+        'transaction_no.unique' => 'The transaction number is already in use.',
+        'transaction_no.regex' => 'The transaction number must not contain special characters or spaces.',
+        'reference_no.required' => 'The reference number is required.',
+        'reference_no.unique' => 'The reference number is already in use.',
+        'reference_no.regex' => 'The reference number must not contain special characters or spaces.',
+        'payment.required' => 'Please select a payment mode.'
+    ]);
+    try{
+    DB::beginTransaction();
+    $transactionNumber = trim($request->transaction_no);
+    $referenceNumber = trim($request->reference_no);
+    $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
+                                ->where('payment_transaction_no', $transactionNumber)
+                                ->orWhere('payment_reference_no', $referenceNumber)
+                                ->first();
+    
+    if(!empty($is_exist_t_num_or_ref_num)){
+        return  back()->with('fail', 'Reference number or Transaction number already exists');
+    }
+
+    /*Implemented by suraj*/
+        $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
+        if(!empty($get_final_summary)){
+        DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
+        }
+    /*end here*/
+    $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+    ->whereNull('remark_by_account')
+    ->count();
+        if ($checkPaymentAlready>2) {
+            return redirect(url('level-second/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
+        }
+    $this->validate($request, [
+        'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
+    ]);
+    $item = new TblApplicationPayment;
+    $item->level_id = $request->level_id;
+    $item->user_id = Auth::user()->id;
+    $item->amount = $request->amount;
+    $item->payment_date = date("d-m-Y");
+    $item->payment_mode = $request->payment;
+    $item->payment_transaction_no = $transactionNumber;
+    $item->payment_reference_no = $referenceNumber;
+    // $item->currency = $request->currency;
+    $item->application_id = $request->Application_id;
+    if ($request->hasfile('payment_details_file')) {
+        $img = $request->file('payment_details_file');
+        $name = $img->getClientOriginalName();
+        $filename = time() . $name;
+        $img->move('uploads/', $filename);
+        $item->payment_proof = $filename;
+    }
+    $item->save();
+
+
+    if(isset($first_app_id)){
+        DB::table('tbl_application')->whereIn('id',[$first_app_id[0]->id??0,$first_app_id[1]->id??0])->update(['is_all_course_doc_verified'=>3]);
+    }
+
+
+    DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
+
+    $application_id = $request->Application_id;
+    $userid = Auth::user()->firstname;
+    if ($request->level_id == '3') {
+        foreach ($request->course_id as $items) {
+            $ApplicationCourse = TblApplicationCourses::where('id',$items);
+            $ApplicationCourse->update(['payment_status' =>1]);
+        }
+        
+        /**
+         * Send Email to Accountant
+         * */ 
+        foreach($get_all_account_users as $email){
+            $title="New Application Created - Welcome Aboard : RAVAP-".$application_id;
+            $subject="New Application Created - Welcome Aboard : RAVAP-".$application_id;
+            
+            $body="Dear Team,".PHP_EOL."
+            I trust this message finds you well. I am writing to request the approval of the payment associated with my recent application for RAVAP-".$application_id." submitted on ".date('d-m-Y').". As part of the application process, a payment of Rs.".$request->amount." was made under the transaction reference ID ".$referenceNumber.". ".PHP_EOL."
+            Here are the transaction details: ".PHP_EOL."
+            Transaction ID: ".$transactionNumber." ".PHP_EOL."
+            Payment Amount: ".$request->amount." ".PHP_EOL."
+            Payment Date: ".date("Y-m-d", strtotime($request->payment_date))." ".PHP_EOL."
+            
+            Best regard,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = $email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+        }
+
+        foreach($get_all_admin_users as $email){
+            $title="New Application Created | RAVAP-".$application_id;
+            $subject="New Application Created | RAVAP-".$application_id;
+            $body="Dear Team,".PHP_EOL."
+
+            We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make.".PHP_EOL."
+            Best regard,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = $email;
+            $details['title'] = $title; 
+            $details['subject'] = $subject; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+        }
+
+        //tp email
+            $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
+            We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make. ".PHP_EOL."
+            Best regards,".PHP_EOL."
+            RAV Team";
+
+            $details['email'] = Auth::user()->email;
+            $details['title'] = "Payment Approval | RAVAP-".$application_id; 
+            $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
+            $details['body'] = $body; 
+            dispatch(new SendEmailJob($details));
+        
+        /*send email end here*/ 
+        DB::commit();
+        return  redirect(url('/level-third/tp/application-list/'))->with('success', 'Payment Done successfully');
+    }  
+    }
+    catch(Exception $e){
+    DB::rollback();
+    return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+    }
+}
+
+public function upgradeGetApplicationViewLevel3($id){
+    
+    
+    $application = DB::table('tbl_application')
+    ->where('id', dDecrypt($id))
+    ->first();
+    $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+    $decoded_json_courses_doc = json_decode($json_course_doc);
+    
+    $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+    $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+    
+        $obj = new \stdClass;
+        $obj->application= $application;
+        $courses = DB::table('tbl_application_courses')->where([
+            'application_id'=>$application->id
+        ])
+        ->whereNull('deleted_at') 
+        ->get();
+        
+        foreach ($courses as $course) {
+            if ($course) {
+                $obj->course[] = [
+                    "course" => $course,
+                    'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
+                        'application_id' => $application->id,
+                        'course_id' => $course->id,
+                        'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                        'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                    ])->get(),
+
+                        'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                            'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        ])->get(),
+        
+                        'course_wise_document_details' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.details.doc_sr_code'),
+                            'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        ])->get(),
+                    'nc_comments_course_declaration' => DB::table('tbl_nc_comments_secretariat')->where([
+                        'application_id' => $application->id,
+                        'application_courses_id' => $course->id,
+                        'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                        'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                    ])
+                        ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                        ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                        ->get(),
+        
+                    'nc_comments_course_curiculam' => DB::table('tbl_nc_comments_secretariat')->where([
+                        'application_id' => $application->id,
+                        'application_courses_id' => $course->id,
+                        'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                        'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                    ])
+                        ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                        ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                        ->get(),
+        
+                    'nc_comments_course_details' => DB::table('tbl_nc_comments_secretariat')->where([
+                        'application_id' => $application->id,
+                        'application_courses_id' => $course->id,
+                        'doc_sr_code' => config('constant.details.doc_sr_code'),
+                        'doc_unique_id' => config('constant.details.doc_unique_id'),
+                    ])
+                        ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                        ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                        ->get()
+                ]; // Added semicolon here
+            }
+        }
+
+            $payment = DB::table('tbl_application_payment')->where([
+                'application_id' => $application->id,
+            ])->get();
+            if($payment){
+                $obj->payment = $payment;
+            }
+            $final_data = $obj;
+            $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
+            if($tp_final_summary_count>1){
+                $is_final_submit = true;
+            }else{
+                $is_final_submit = false;
+            }
+
+            
+    return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
+}
+/*end here*/ 
+
+
+
+
+
+
 }

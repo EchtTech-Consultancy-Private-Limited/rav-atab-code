@@ -163,17 +163,60 @@
                                                     <a href="{{ url('/upgrade/tp/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
+                                                    @elseif($item->application_list->level_id==3)
+                                                    <a href="{{ url('/upgrade/level-3/tp/application-view', dEncrypt($item->application_list->id)) }}"
+                                                            class="btn btn-tbl-edit"><i
+                                                                class="material-icons">visibility</i></a>
                                                     @endif
+
+                                                                                           
+                                                    <!-- If level - 1 -->
+                                                    
+                                                @if($item->application_list->level_id==1)
+                                                        @if($item->application_list->is_all_course_doc_verified==1)
+                                                        <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-2</a>
+                                                        <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
                                                         
-                                                    @if($item->application_list->is_all_course_doc_verified==1)
-                                                    <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}"
-                                                            class="btn btn-warning">Upgrade</a>
-                                                    @elseif($item->application_list->is_all_course_doc_verified==2)
-                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
-                                                            class="btn btn-success">Upgraded</a>
-                                                            @elseif($item->application_list->is_all_course_doc_verified==3)
-                                                            <span class="badge badge-main success">Upgraded</span>
+                                                        
+                                                        @elseif($item->application_list->is_all_course_doc_verified==2)
+                                                        
+                                                                        @if($item->application_list->upgraded_level_id==2)
+                                                                            <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
+                                                                            class="btn btn-success">Upgraded</a>
+                                                                        
+                                                                        @elseif($item->application_list->upgraded_level_id==3)
+                                                                            <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
+                                                                            class="btn btn-success">Upgraded</a>
+                                                                            @endif
+                                                        @elseif($item->application_list->is_all_course_doc_verified==3)
+                                                                <span class="badge badge-main success">Upgraded</span>
+                                                       
+                                                        @endif
+                                                 @endif
+                                                    <!-- End here level - 1  -->
+
+
+                                                     <!-- If level - 2 -->
+                                                     @if($item->application_list->level_id==2)
+                                                     
+                                                                @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1)
+                                                                <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
+
+                                                                @elseif($item->application_list->is_all_course_doc_verified==2)
+                                                                
+                                                                        @if($item->application_list->upgraded_level_id==3)
+                                                                            <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
+                                                                            class="btn btn-success">Upgraded</a>
+                                                                @endif
+                                                        @elseif($item->application_list->is_all_course_doc_verified==3)
+                                                                <span class="badge badge-main success">Upgraded</span>
+                                                                    
+                                                               
+                                                       
+                                                        @endif
                                                     @endif
+                                                    <!-- End here level - 2  -->
+
                                                     </td>
                                             </tr>
                                         @endforeach
