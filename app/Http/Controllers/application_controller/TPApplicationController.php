@@ -229,6 +229,7 @@ class TPApplicationController extends Controller
                 $final_data[] = $obj;
         }
 
+        
         $applicationData = TblApplication::find($application_id);
         return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','application_uhid'));
     }

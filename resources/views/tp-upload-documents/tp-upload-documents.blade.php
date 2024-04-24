@@ -143,7 +143,7 @@
                                     @foreach($course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
-                                    
+                                    {{$doc->status}}
                                     @if($doc->status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
