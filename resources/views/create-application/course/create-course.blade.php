@@ -586,13 +586,14 @@
 
                                                     <td class="center btn-ved">
                                                         <a class="btn btn-tbl-delete bg-primary" data-bs-toggle="modal"
-                                                            data-id='{{ $courses->id }}' data-bs-target="#View_popup"
+                                                            data-id='{{ $courses->id }}' level-id='{{$applicationData->level_id}}' data-bs-target="#View_popup"
                                                             id="view">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
                                                         
                                                             <a href="#" data-bs-toggle="modal"
                                                                 data-id="{{ $courses->id }}"
+                                                                level-id='{{$applicationData->level_id}}'
                                                                 data-bs-target="#edit_popup" id="edit_course"
                                                                 class="btn btn-tbl-delete bg-primary">
                                                                 <i class="material-icons">edit</i>
@@ -1080,8 +1081,8 @@
                     <script>
                         $(document).on("click", "#view", function() {
 
-                            var UserName = $(this).data('id');
-                            console.log(UserName);
+                            const UserName = $(this).data('id');
+                            const level_id = $(this).attr('level-id');
 
                             $.ajaxSetup({
                                 headers: {
@@ -1093,7 +1094,8 @@
                                 url: `${BASE_URL}/get-course-list`,
                                 type: "get",
                                 data: {
-                                    id: UserName
+                                    id: UserName,
+                                    level_id:level_id
                                 },
                                 success: function(data) {
 
@@ -1135,7 +1137,8 @@
                             var online_checkbox = $('#online_checkbox').val();
                             var hybrid_checkbox = $('#hybrid_checkbox').val();
 
-                            var UserName = $(this).data('id');
+                            const UserName = $(this).data('id');
+                            const level_id = $(this).attr('level-id');
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1146,7 +1149,8 @@
                                 url:`${BASE_URL}/course-edit`,
                                 type: "get",
                                 data: {
-                                    id: UserName
+                                    id: UserName,
+                                    level_id:level_id
                                 },
                                 success: function(data) {
 
