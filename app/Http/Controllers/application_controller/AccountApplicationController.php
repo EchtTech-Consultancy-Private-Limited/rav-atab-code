@@ -26,22 +26,28 @@ class AccountApplicationController extends Controller
             $obj = new \stdClass;
             $obj->application_list= $app;
 
-                if($app->level_id==1){
-                    $course = DB::table('tbl_application_courses')->where([
-                        'application_id' => $app->id,
-                    ])
-                    ->whereNull('deleted_at') 
-                    ->count();
+                // if($app->level_id==1){
+                //     $course = DB::table('tbl_application_courses')->where([
+                //         'application_id' => $app->id,
+                //     ])
+                //     ->whereNull('deleted_at') 
+                //     ->count();
     
-                }
-                if($app->level_id==2){
-                    $course = DB::table('tbl_application_courses')->where([
-                        'refid' => $app->refid,
-                    ])
-                    ->whereNull('deleted_at') 
-                    ->count();
+                // }
+                // if($app->level_id==2 || $app->level_id==3){
+                //     $course = DB::table('tbl_application_courses')->where([
+                //         'refid' => $app->refid,
+                //     ])
+                //     ->whereNull('deleted_at') 
+                //     ->count();
                         
-                }
+                // }
+
+                $course = DB::table('tbl_application_courses')->where([
+                    'application_id' => $app->id,
+                ])
+                ->whereNull('deleted_at') 
+                ->count();
                 
                 if($course){
                     $obj->course_count = $course;
