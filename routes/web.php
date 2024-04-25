@@ -334,6 +334,14 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/upgrade-level-3-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePaymentLevel3'])->name('course.payment');
     Route::post('/upgrade-level-3-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPaymentLevel3']);
     Route::get('/upgrade/level-3/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationViewLevel3']);
+
+
+/*Deskotop*/
+Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopApplicationController::class, 'desktopUpdateNCFlag']);
+
+
+
+
    //end here
    
    

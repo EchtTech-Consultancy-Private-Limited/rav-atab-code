@@ -185,7 +185,7 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'desktop'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status')->get();
 
         $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
