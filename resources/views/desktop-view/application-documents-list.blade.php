@@ -135,6 +135,13 @@
                      <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
                   </div>
+                  <!-- <div class="d-flex justify-content-end gap-5">
+                  <form action="{{url('desktop/update-nc-flag/'.$application_id.'/'.$course_id)}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info me-3" value="Submit">
+                            </form>
+                  </div> -->
+
                </div>
             </div>
          </div>

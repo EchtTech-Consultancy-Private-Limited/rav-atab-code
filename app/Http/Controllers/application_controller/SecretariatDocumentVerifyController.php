@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\application_controller;
 
 use App\Http\Controllers\Controller;
+use App\Models\TblApplicationCourseDoc; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
@@ -374,34 +375,68 @@ class SecretariatDocumentVerifyController extends Controller
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
 
-            $delaration = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.declaration.doc_sr_code')])
-                ->latest('id')->first();
+            // $delaration = DB::table('tbl_course_wise_document')
+            //     ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.declaration.doc_sr_code')])
+            //     ->latest('id')->first();
 
-            $curiculum = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.curiculum.doc_sr_code')])
-                ->latest('id')->first();
+            // $curiculum = DB::table('tbl_course_wise_document')
+            //     ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.curiculum.doc_sr_code')])
+            //     ->latest('id')->first();
 
-            $details = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.details.doc_sr_code')])
-                ->latest('id')->first();
+            // $details = DB::table('tbl_course_wise_document')
+            //     ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.details.doc_sr_code')])
+            //     ->latest('id')->first();
+
+            $get_course_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $application_id, 'course_id' => $course_id])
+                ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
+                ->latest('id')->get();
+
+                // dd($get_course_docs);
+
+                foreach($get_course_docs as $course_doc){
+                    $nc_comment_status = "";
+                    $nc_flag=0;
+                    if ($course_doc->status == 1) {
+                        $nc_comment_status = 1;
+                        $nc_flag = 0;
+                    } else if ($course_doc->status == 2) {
+                        $nc_comment_status = 2;
+                        $nc_flag = 1;
+                    } else if ($course_doc->status == 3) {
+                        $nc_comment_status = 3;
+                        $nc_flag = 1;
+                    } else if ($course_doc->status == 6) {
+                        $nc_comment_status = 6;
+                        $nc_flag = 0;
+                    } else {
+                        $nc_comment_status = 4; //not recommended
+                        $nc_flag = 0;
+                    }
+
+                DB::table('tbl_course_wise_document')
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id, 'course_id' => $course_id,'nc_show_status'=>0])
+                ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status]);
+
+            }
 
 
 
-            DB::table('tbl_course_wise_document')
-                ->where(['id' => $delaration->id, 'application_id' => $application_id, 'course_id' => $course_id])
-                ->whereNotIn('status', [0, 1, 4, 6])
-                ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
+            // DB::table('tbl_course_wise_document')
+            //     ->where(['id' => $delaration->id, 'application_id' => $application_id, 'course_id' => $course_id])
+            //     ->whereNotIn('status', [0, 1, 4, 6])
+            //     ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
 
-            DB::table('tbl_course_wise_document')
-                ->where(['id' => $curiculum->id, 'application_id' => $application_id, 'course_id' => $course_id])
-                ->whereNotIn('status', [0, 1, 4, 6])
-                ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
+            // DB::table('tbl_course_wise_document')
+            //     ->where(['id' => $curiculum->id, 'application_id' => $application_id, 'course_id' => $course_id])
+            //     ->whereNotIn('status', [0, 1, 4, 6])
+            //     ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
 
-            DB::table('tbl_course_wise_document')
-                ->where(['id' => $details->id, 'application_id' => $application_id, 'course_id' => $course_id])
-                ->whereNotIn('status', [0, 1, 4, 6])
-                ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
+            // DB::table('tbl_course_wise_document')
+            //     ->where(['id' => $details->id, 'application_id' => $application_id, 'course_id' => $course_id])
+            //     ->whereNotIn('status', [0, 1, 4, 6])
+            //     ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
+
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);

@@ -1205,7 +1205,8 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
-                        var cloneCounter = {{count($course)>0?count($course)+1:1}};
+                        // var cloneCounter = {{count($course)>0?count($course)+1:1}};
+                        var cloneCounter = 1;
                         var maxClones = 5;
 
                         function updateCloneCount() {
