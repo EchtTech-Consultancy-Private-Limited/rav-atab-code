@@ -261,20 +261,15 @@ class ApplicationCoursesController extends Controller
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
             $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
+
+            /*to get payment from db*/
+                $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>'inr','level'=>1])->get();
+                
+            /*end here*/
+            
             if (Auth::user()->country == $this->get_india_id()) {
-                if (count($course) == '0') {
-                    $currency = '₹';
-                    $total_amount = '0';
-                } elseif (count($course) <= 5) {
-                    $currency = '₹';
-                    $total_amount = '1000';
-                } elseif (count($course) <= 10) {
-                    $currency = '₹';
-                    $total_amount =  '2000';
-                } else {
-                    $currency = '₹';
-                    $total_amount =   '3000';
-                }
+                $total_amount = $this->getPaymentFee(1,"inr",$id);
+                $currency = '₹';
             } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
                 if (count($course) == '0') {
                     $currency = 'US $';
@@ -347,6 +342,8 @@ class ApplicationCoursesController extends Controller
         ]);
        try{
         DB::beginTransaction();
+        $total_amount = $this->getPaymentFee(1,"inr",$request->Application_id);
+        
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
         $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
@@ -373,10 +370,11 @@ class ApplicationCoursesController extends Controller
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
         ]);
+
         $item = new TblApplicationPayment;
         $item->level_id = $request->level_id;
         $item->user_id = Auth::user()->id;
-        $item->amount = $request->amount;
+        $item->amount = $total_amount;
         $item->payment_date = date("d-m-Y");
         $item->payment_mode = $request->payment;
         $item->payment_transaction_no = $transactionNumber;
@@ -584,5 +582,31 @@ class ApplicationCoursesController extends Controller
     {
         $india = Country::where('name', 'India')->get('id')->first();
         return $india->id;
+    }
+
+
+    function getPaymentFee($level,$currency,$application_id){
+
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
+        $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
+
+        if (Auth::user()->country == $this->get_india_id()) {
+            if (count($course) == '0') {
+              
+                $total_amount = '0';
+            } elseif (count($course) <= 5) {
+                
+                $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+    
+            } elseif (count($course)>=5 && count($course) <= 10) {
+                
+                $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+            } elseif(count($course)>10) {
+                
+                $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+            }    
+        } 
+
+        return $total_amount;
     }
 }
