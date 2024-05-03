@@ -97,6 +97,7 @@ class TPApplicationController extends Controller
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id' => $application->id,
             ])
+            ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
             foreach ($courses as $course) {
@@ -1155,8 +1156,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id'=>$application->id,
-                'status'=>0
+                
             ])
+            ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
             
@@ -1189,6 +1191,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                             'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                            'nc_show_status'=>1
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -1199,6 +1202,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
                             'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                            'nc_show_status'=>1
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -1209,6 +1213,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.details.doc_sr_code'),
                             'doc_unique_id' => config('constant.details.doc_unique_id'),
+                            'nc_show_status'=>1
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
