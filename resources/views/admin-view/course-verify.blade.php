@@ -300,7 +300,7 @@
 
             } else {
                 commentSection.style.display = "block"; // Show the textarea for other options
-                comment_text.value = "Document Not approved!";
+                comment_text.value = "";
             }
         });
     </script>

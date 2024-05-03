@@ -213,7 +213,7 @@
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
+        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
@@ -411,6 +411,22 @@
                             </thead>
                         </table>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="{{url('admin/approve-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="get">
+                            @csrf
+                            @if($ApplicationCourses['course']->status==1)
+                            <input type="submit" class="btn btn-success float-right" value="Approve">
+                            @elseif($ApplicationCourses['course']->status==2)
+                            <div class="badge badge-main success float-right">Approved by you</div>
+                            @endif
+                            </form>
+                        </div>
+                    </div>
+
+
+
                     </div>
 
                     <!--  -->
@@ -420,6 +436,24 @@
         </div>
         </div>  
         @endforeach
+
+        <div class="row">
+        @if($spocData->approve_status==2)
+                        <div class="col-md-12">
+                            <form action="{{url('super-admin-approved-application/'.dEncrypt($spocData->id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-success float-right" value="Approve">
+                            </form>
+                        </div>
+                        @elseif($spocData->approve_status==1)
+                        <div class="col-md-12">
+                            <div class="badge badge-main success float-right">Application Approved by you</div>
+                        </div>
+                        @endif
+                    </div>
+                        
+                            
+                        
 
         <div class="card p-relative">
             <div class="box-overlay">

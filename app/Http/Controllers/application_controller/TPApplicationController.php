@@ -128,6 +128,7 @@ class TPApplicationController extends Controller
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                             'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                            'nc_show_status'=>1
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -138,6 +139,7 @@ class TPApplicationController extends Controller
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
                             'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                            'nc_show_status'=>1
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -148,6 +150,7 @@ class TPApplicationController extends Controller
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.details.doc_sr_code'),
                             'doc_unique_id' => config('constant.details.doc_unique_id'),
+                            'nc_show_status'=>1
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')

@@ -267,7 +267,7 @@ class SecretariatDocumentVerifyController extends Controller
             $data['nc_type'] = $request->nc_type;
             $data['secretariat_id'] = $secretariat_id;
             $data['doc_file_name'] = $request->doc_file_name;
-
+            
             $nc_comment_status = "";
             $nc_raise = "";
             if ($request->nc_type === "Accept") {
@@ -306,7 +306,7 @@ class SecretariatDocumentVerifyController extends Controller
 
             /*--------To Check All Course Doc Approved----------*/
 
-            $this->checkApplicationIsReadyForNextLevel($request->application_id);
+            //  $this->checkApplicationIsReadyForNextLevel($request->application_id); //02/05/2024
 
             /*------end here------*/
 
@@ -367,33 +367,20 @@ class SecretariatDocumentVerifyController extends Controller
 
 
 
-    public function secretariatUpdateNCFlag($application_id, $course_id)
+    public function secretariatUpdateNCFlag($application_id)
     {
-
+        
         try {
-
+            
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
-
-            // $delaration = DB::table('tbl_course_wise_document')
-            //     ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.declaration.doc_sr_code')])
-            //     ->latest('id')->first();
-
-            // $curiculum = DB::table('tbl_course_wise_document')
-            //     ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.curiculum.doc_sr_code')])
-            //     ->latest('id')->first();
-
-            // $details = DB::table('tbl_course_wise_document')
-            //     ->where(['application_id' => $application_id, 'course_id' => $course_id, 'doc_sr_code' => config('constant.details.doc_sr_code')])
-            //     ->latest('id')->first();
-
+            
             $get_course_docs = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $application_id, 'course_id' => $course_id])
+                ->where(['application_id' => $application_id,'approve_status'=>1])
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
 
-                // dd($get_course_docs);
-
+                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -409,14 +396,23 @@ class SecretariatDocumentVerifyController extends Controller
                     } else if ($course_doc->status == 6) {
                         $nc_comment_status = 6;
                         $nc_flag = 0;
-                    } else {
+                    } else if($course_doc->status==0){
+                        $nc_comment_status = $course_doc->status;
+                        $nc_flag = 0;
+                    }
+                    else {
                         $nc_comment_status = 4; //not recommended
                         $nc_flag = 0;
                     }
 
+                    
                 DB::table('tbl_course_wise_document')
-                ->where(['id' => $course_doc->id, 'application_id' => $application_id, 'course_id' => $course_id,'nc_show_status'=>0])
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
                 ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status]);
+
+                DB::table('tbl_nc_comments_secretariat')
+                ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->course_id,'nc_show_status'=>0])
+                ->update(['nc_show_status' => 1]);
 
             }
 
@@ -461,6 +457,61 @@ class SecretariatDocumentVerifyController extends Controller
         }
     }
 
+
+    public function secretariatRejectCourse($application_id, $course_id)
+    {
+
+        try {
+            
+            DB::beginTransaction();
+            $get_course_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $application_id,'course_id'=>$course_id])
+                ->update(['approve_status'=>0]);
+
+                DB::table('tbl_application_courses')
+                ->where(['id'=>$course_id])
+                ->update(['status'=>1]);
+
+                if($get_course_docs){
+                    DB::commit();
+                    return back()->with('success', 'Course rejected by secretariat successfully.');
+                }else{
+                    DB::rollBack();
+                    return back()->with('fail', 'Failed to reject course');
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+
+    public function sendAdminApproval($application_id)
+    {
+
+        $app_id = dDecrypt($application_id);
+        try {
+            DB::beginTransaction();
+            $approve_app = DB::table('tbl_application')
+                ->where(['id' => $app_id])
+                ->update(['approve_status'=>2]);
+
+                if($approve_app){
+                    DB::commit();
+                    return back()->with('success', 'Application send for approval to admin.');
+                }else{
+                    DB::rollBack();
+                    return back()->with('fail', 'Failed to send the application for approval to admin');
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+   
+    
 
 
     public function checkApplicationIsReadyForNextLevel($application_id)
@@ -544,6 +595,7 @@ class SecretariatDocumentVerifyController extends Controller
         }
 
     }
+
 
 
 

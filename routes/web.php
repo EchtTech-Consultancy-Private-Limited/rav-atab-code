@@ -285,6 +285,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/course-update/{id?}', [ApplicationCoursesController::class, 'course_update']);
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
+    Route::get('/admin/approve-course/{id}/{course_id}', [AdminApplicationController::class, 'approveCourseRejectBySecretariat']);
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
     Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
@@ -308,7 +309,12 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
 
     Route::post('/secretariat/document-verfiy', [SecretariatDocumentVerifyController::class, 'secretariatDocumentVerify']);
-    Route::post('/secretariat/update-nc-flag/{application_id}/{course_id}', [SecretariatDocumentVerifyController::class, 'secretariatUpdateNCFlag']);
+    Route::post('/secretariat/update-nc-flag/{application_id}/{course_id?}', [SecretariatDocumentVerifyController::class, 'secretariatUpdateNCFlag']);
+
+    Route::post('/secretariat/reject-course/{application_id}/{course_id}', [SecretariatDocumentVerifyController::class, 'secretariatRejectCourse']);
+
+    Route::get('send-admin-approval/{application_id}', [SecretariatDocumentVerifyController::class, 'sendAdminApproval']);
+
 
     Route::get('/tp-course-document-detail/{nc_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpCourseDocumentDetails']);
     Route::post('/tp-course-submit-remark', [TPApplicationController::class, 'tpCourseSubmitRemark']);
@@ -338,9 +344,6 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
 /*Deskotop*/
 Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopApplicationController::class, 'desktopUpdateNCFlag']);
-
-
-
 
    //end here
    
@@ -411,4 +414,5 @@ Route::get('/super-admin/application-list', [SuperAdminApplicationController::cl
     Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
     Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
     Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
+    Route::get('/super-admin-approved-application/{id}', [SuperAdminApplicationController::class, 'approvedApplication']);
 /*--end here--*/
