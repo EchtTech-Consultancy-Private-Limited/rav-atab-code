@@ -123,7 +123,6 @@
                                 <tbody>
                                     @isset($list)
                                         @foreach ($list as $k => $item)
-                                        
                                             <tr
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
@@ -154,8 +153,10 @@
                                                 <td>
                                                 {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
                                                 </td>
-                                                    <td>
+                                                    <td class="p-0-lg1">
                                                     
+                                                    <div class="d-flex align-items-center justify-content-center">
+
                                                     @if($item->application_list->level_id==1)
 
                                                     <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}"
@@ -171,16 +172,19 @@
                                                                 class="material-icons">visibility</i></a>
                                                     @endif
 
-                                                                                           
+                                                                                   
                                                     <!-- If level - 1 -->
-                                                    
+                                                
                                                 @if($item->application_list->level_id==1)
-                                                        @if($item->application_list->is_all_course_doc_verified==1)
+                                                        @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->approve_status==1)
+                                                            
+                                                <div class="d-flex action-button-div">
+                                              
                                                         <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-2</a>
                                                         <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
                                                         
                                                         
-                                                        @elseif($item->application_list->is_all_course_doc_verified==2)
+                                                        @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
                                                         
                                                                         @if($item->application_list->upgraded_level_id==2)
                                                                             <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
@@ -190,7 +194,7 @@
                                                                             <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
                                                                             class="btn btn-success">Upgraded</a>
                                                                             @endif
-                                                        @elseif($item->application_list->is_all_course_doc_verified==3)
+                                                        @elseif($item->application_list->is_all_course_doc_verified==3 && $item->application_list->approve_status==1)
                                                                 <span class="badge badge-main success">Upgraded</span>
                                                        
                                                         @endif
@@ -201,25 +205,26 @@
                                                      <!-- If level - 2 -->
                                                      @if($item->application_list->level_id==2)
                                                      
-                                                                @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1)
+                                                                @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
                                                                 <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
 
-                                                                @elseif($item->application_list->is_all_course_doc_verified==2)
+                                                                @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
                                                                 
                                                                         @if($item->application_list->upgraded_level_id==3)
                                                                             <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
                                                                             class="btn btn-success">Upgraded</a>
                                                                 @endif
-                                                        @elseif($item->application_list->is_all_course_doc_verified==3)
+                                                        @elseif($item->application_list->is_all_course_doc_verified==3 && $item->application_list->approve_status==1)
                                                                 <span class="badge badge-main success">Upgraded</span>
                                                                     
-                                                               
-                                                       
-                                                        @endif
-                                                    @endif
-                                                    <!-- End here level - 2  -->
+                                                                </div>
+                                                                @endif
+                                                                @endif
+                                                                <!-- End here level - 2  -->
+    </div>
+                                                            </td>
 
-                                                    </td>
+                                                    
                                             </tr>
                                         @endforeach
                                     @endisset

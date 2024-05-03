@@ -526,6 +526,10 @@ class SuperAdminApplicationController extends Controller
             DB::table('tbl_course_wise_document')
             ->where(['application_id'=> $request->application_id,'course_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
 
+            DB::table('tbl_nc_comments_secretariat')
+                ->where(['application_id' => $request->application_id, 'application_courses_id' => $request->application_courses_id,'nc_show_status'=>0])
+                ->update(['nc_show_status' => 1]);
+
         if($create_nc_comments){
             DB::commit();
             return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
@@ -538,6 +542,30 @@ class SuperAdminApplicationController extends Controller
     }
     }
 
+    public function approvedApplication($id)
+    {
+
+        $app_id = dDecrypt($id);
+        
+        try {
+            DB::beginTransaction();
+            $approve_app = DB::table('tbl_application')
+                ->where(['id' => $app_id])
+                ->update(['approve_status'=>1]);
+
+                if($approve_app){
+                    DB::commit();
+                    return back()->with('success', 'Application approved successfully.');
+                }else{
+                    DB::rollBack();
+                    return back()->with('fail', 'Failed to approved successfully.');
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
 
 
 }

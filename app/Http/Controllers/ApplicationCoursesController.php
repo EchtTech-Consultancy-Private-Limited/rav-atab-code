@@ -586,22 +586,22 @@ class ApplicationCoursesController extends Controller
 
 
     function getPaymentFee($level,$currency,$application_id){
-
         $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
+        
         $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
-
+        
         if (Auth::user()->country == $this->get_india_id()) {
             if (count($course) == '0') {
               
                 $total_amount = '0';
-            } elseif (count($course) <= 5) {
+            } elseif (count($course) <= 5 && count($get_payment_list)>0) {
                 
                 $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
     
-            } elseif (count($course)>=5 && count($course) <= 10) {
+            } elseif (count($course)>=5 && count($course) <= 10 && count($get_payment_list)>0) {
                 
                 $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
-            } elseif(count($course)>10) {
+            } elseif(count($course)>10 && count($get_payment_list)>0) {
                 
                 $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
             }    

@@ -25551,4 +25551,20 @@ p.ref-number {
 
 p.ref-number b{ font-weight: 600;}
 
+.width-10{width: 10%;}
+
+.action-button-div {
+    margin-left: 5px;
+    border-left: 2px solid #aaa;
+    height: 100%;
+    min-height: 58px;
+    align-items: center;
+}
+.table td.p-0-lg1{padding: 0px !important;}
+.action-button-div a{margin-left: 5px;}
+
+.border-reject{
+    border:1px solid red;
+}
+
 /* ******************************** */
