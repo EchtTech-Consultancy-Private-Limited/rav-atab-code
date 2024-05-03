@@ -455,7 +455,7 @@
 
         
         
-        @if($application_details->show_submit_btn_to_secretariat || $application_details->application->is_secretariat_submit_btn_show==1) 
+        @if($application_details->application->is_secretariat_submit_btn_show==1) 
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">

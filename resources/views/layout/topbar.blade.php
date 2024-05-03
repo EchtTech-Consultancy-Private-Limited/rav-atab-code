@@ -215,12 +215,28 @@
                                  <ul class="text-dark menu" style="padding: 0px !important;">
                                      @if (count($applications)>0)
                                          @foreach ($applications as $application)
+                                         @if($application->level_id==1)
                                              <li>
                                                 <a href="{{ url('show-course-payment/' . dEncrypt($application->application_id)) }}"
                                                          style="color: #000;">
                                                          Application ID : {{ $application->uhid }}
                                                 </a>
                                              </li>
+                                             @elseif($application->level_id==2)
+                                             <li>
+                                                <a href="{{ url('upgrade-show-course-payment/' . dEncrypt($application->application_id)) }}"
+                                                         style="color: #000;">
+                                                         Application ID : {{ $application->uhid }}
+                                                </a>
+                                             </li>
+                                             @elseif($application->level_id==3)
+                                             <li>
+                                                <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($application->application_id)) }}"
+                                                         style="color: #000;">
+                                                         Application ID : {{ $application->uhid }}
+                                                </a>
+                                             </li>
+                                             @endif
                                          @endforeach
                                      @else
                                          <li class="text-center">

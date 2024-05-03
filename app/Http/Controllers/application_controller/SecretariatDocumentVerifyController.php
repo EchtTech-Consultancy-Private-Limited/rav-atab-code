@@ -443,9 +443,8 @@ class SecretariatDocumentVerifyController extends Controller
                 return back()->with('fail', 'First create NCs on courses doc');
             }
             if ($check_all_doc_verified === "all_verified") {
-                
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
-
+                
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
             if ($check_all_doc_verified === "action_not_taken") {
