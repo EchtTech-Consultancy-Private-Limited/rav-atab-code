@@ -326,7 +326,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/upgrade-new-application/{application_id?}',[TPApplicationController::class,"upgradeNewApplication"]);
     Route::post('/upgrade-store-new-applications',[TPApplicationController::class,"storeNewApplication"]);
     Route::get('/upgrade-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourse']);
-    Route::post('/upgrade-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNupgrade-show-course-paymentewApplicationCourse']);
+    Route::post('/upgrade-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourse']);
     Route::get('/upgrade-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePayment'])->name('course.payment');
     Route::post('/upgrade-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPayment']);
     Route::get('/upgrade/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationView']);

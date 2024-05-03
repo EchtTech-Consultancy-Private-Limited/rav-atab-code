@@ -789,9 +789,7 @@ public function deleteCourse($id,$course_id){
 public function upgradeStoreNewApplicationCourse(Request $request)
 {
 
-    
     try{
-        
         $reference_id = TblApplication::where('id',$request->application_id)->first()->refid;
         
         $course_name = $request->course_name;
@@ -1156,7 +1154,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $obj = new \stdClass;
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
-                'application_id'=>$application->id
+                'application_id'=>$application->id,
+                'status'=>0
             ])
             ->whereNull('deleted_at') 
             ->get();
