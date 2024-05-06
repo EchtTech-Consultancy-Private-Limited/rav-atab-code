@@ -82,7 +82,9 @@ class TPApplicationController extends Controller
     /** Whole Application View for Account */
     public function getApplicationView($id){
         
+        
 
+        
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
@@ -937,9 +939,16 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         }
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+            
+            $get_assessor_user = DB::table('assessor_final_summary_reports')->where('application_id',$id)->count();
+
             $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
             if (Auth::user()->country == $this->get_india_id()) {
-                $total_amount = $this->getPaymentFee('desktop',"inr",$id);
+                  
+                    $assessor_type = $get_assessor_user==0 ?'desktop':'onsite';
+                    $total_amount = $this->getPaymentFee($assessor_type,"inr",$id,$assessor_type);
+                    
+                
                 $currency = '₹';
             } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
                 if (count($course) == '0') {
@@ -985,6 +994,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->first();
         
 
+        $get_assessor_user = DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->count();
+        
+
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
@@ -1004,7 +1016,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
        try{
         DB::beginTransaction();
         if (Auth::user()->country == $this->get_india_id()) {
-            $total_amount = $this->getPaymentFee('desktop',"inr",$request->Application_id);
+            $assessor_type = $get_assessor_user==0 ?'desktop':'onsite';
+
+            $total_amount = $this->getPaymentFee($assessor_type,"inr",$request->Application_id,$assessor_type);
             $currency = '₹';
         } 
         
@@ -1141,7 +1155,6 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
     
     public function upgradeGetApplicationView($id){
-        
         
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
@@ -1501,6 +1514,7 @@ public function upgradeStoreNewApplicationCourseLevel3(Request $request)
 public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
     {
         $id = dDecrypt($id);
+        
     
         $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
     
@@ -1509,21 +1523,15 @@ public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
         }
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+            $get_assessor_user = DB::table('assessor_final_summary_reports')->where('application_id',$id)->count();
             $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
             if (Auth::user()->country == $this->get_india_id()) {
-                if (count($course) == '0') {
-                    $currency = '₹';
-                    $total_amount = '0';
-                } elseif (count($course) <= 5) {
-                    $currency = '₹';
-                    $total_amount = '1000';
-                } elseif (count($course) <= 10) {
-                    $currency = '₹';
-                    $total_amount =  '2000';
-                } else {
-                    $currency = '₹';
-                    $total_amount =   '3000';
-                }
+                
+                $assessor_type = $get_assessor_user==0 ?'desktop':'onsite';
+                
+                $total_amount = $this->getPaymentFee($assessor_type,"inr",$id,$assessor_type);
+                $currency = '₹';
+
             } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
                 if (count($course) == '0') {
                     $currency = 'US $';
@@ -1722,6 +1730,7 @@ public function upgradeGetApplicationViewLevel3($id){
         $courses = DB::table('tbl_application_courses')->where([
             'application_id'=>$application->id
         ])
+        ->whereIn('status',[0,2])
         ->whereNull('deleted_at') 
         ->get();
         
@@ -1754,6 +1763,7 @@ public function upgradeGetApplicationViewLevel3($id){
                         'application_courses_id' => $course->id,
                         'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                         'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        'nc_show_status'=>1
                     ])
                         ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                         ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -1764,6 +1774,7 @@ public function upgradeGetApplicationViewLevel3($id){
                         'application_courses_id' => $course->id,
                         'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
                         'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        'nc_show_status'=>1
                     ])
                         ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                         ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -1774,6 +1785,7 @@ public function upgradeGetApplicationViewLevel3($id){
                         'application_courses_id' => $course->id,
                         'doc_sr_code' => config('constant.details.doc_sr_code'),
                         'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        'nc_show_status'=>1
                     ])
                         ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                         ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -1801,12 +1813,12 @@ public function upgradeGetApplicationViewLevel3($id){
 }
 
 
-function getPaymentFee($level,$currency,$application_id){
+function getPaymentFee($level,$currency,$application_id,$assessment=null){
 
-    $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
     $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
-    
-    if (Auth::user()->country == $this->get_india_id()) {
+
+    if (Auth::user()->country == $this->get_india_id() && $assessment=='desktop') {
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>'desktop'])->get();
         if (count($course) == '0') {
           
             $total_amount = '0';
@@ -1824,6 +1836,26 @@ function getPaymentFee($level,$currency,$application_id){
         }    
     } 
 
+    if (Auth::user()->country == $this->get_india_id() && $assessment=='onsite') {
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>'inr'])->whereIn('level',['annual','assessment'])->get();
+        
+        if (count($course) == '0') {
+          
+            $total_amount = '0';
+        } elseif (count($course) <= 5) {
+            
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+
+        } elseif (count($course)>=5 && count($course) <= 10) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+            
+        } elseif(count($course)>10) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[3]->courses_fee +((int)$get_payment_list[3]->courses_fee * 0.18);
+        }    
+    } 
     return $total_amount;
 }
 /*end here*/ 

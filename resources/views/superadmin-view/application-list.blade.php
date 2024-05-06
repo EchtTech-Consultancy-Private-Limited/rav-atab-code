@@ -142,7 +142,6 @@
                                                         <a href="{{ url('/super-admin/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-
                                                                 
                                                     @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)
@@ -151,11 +150,10 @@
                                                         @endif
                                                     @endisset   
                                                     
-
-                                                  
-
+                                                    
+                                                    
                                                     @isset($item->payment)
-                                                        
+                                                      
                                                         @if($item->payment->aknowledgement_id!==null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2)
                                                         
                                                     <a class="btn btn-tbl-delete bg-danger font-a"

@@ -255,7 +255,7 @@
                                 <div class="header">
                                     <h2 style="float:left; clear:none;">Payment</h2>
                                     <h6 style="float:right; clear:none;" id="counter">
-                                        Total Amount (with 18% GST): {{ $total_amount + $total_amount * 0.18 ?? 0 }}
+                                        Total Amount (with 18% GST): {{ $total_amount }}
                                     </h6>
                                 </div>
                                 <div class="body">
@@ -364,7 +364,7 @@
                                             </div>
                                             <input type='hidden' name="amount"
                                                 @isset($total_amount) @if (Auth::user()->country == '101')
-                                             value="{{ $total_amount + $total_amount * (18 / 100) }}"
+                                             value="{{ $total_amount }}"
                                              @else
                                              value="{{ $total_amount }}"
                                              @endif
