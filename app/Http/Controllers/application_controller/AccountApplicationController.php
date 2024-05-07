@@ -159,6 +159,7 @@ class AccountApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
+                // dd($final_data);
         return view('account-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'courses_doc'=>$decoded_json_courses_doc]);
     }
 

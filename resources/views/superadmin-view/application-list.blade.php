@@ -149,9 +149,7 @@
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
-                                                    
-                                                    
-                                                    
+                                                
                                                     @isset($item->payment)
                                                       
                                                         @if($item->payment->aknowledgement_id!==null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2)

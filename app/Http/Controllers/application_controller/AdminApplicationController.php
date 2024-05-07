@@ -131,6 +131,7 @@ class AdminApplicationController extends Controller
 
                     ])->where('status', '<>', 0)->count(),
                     // "show_submit_btn_to_secretariat" => $this->checkApplicationIsReadyForNextLevel($application->id, $course->id),
+                    "show_reject_button_to_tp" => $this->checkApplicationIsReadyForNextLevelByCourseAndApplication($application->id, $course->id),
 
                     'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
                         'application_id' => $application->id,
@@ -218,6 +219,67 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('course_id', $course_id)
+            ->where('application_id', $application_id)
+            ->where('approve_status',1)
+            ->get();
+
+            
+
+        $additionalFields = DB::table('tbl_course_wise_document')
+            ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+                $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
+                    ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
+                    ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
+                    ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
+                    ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
+            })
+            ->orderBy('tbl_course_wise_document.id', 'desc')
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+        foreach ($results as $key => $result) {
+            $additionalField = $additionalFields->where('application_id', $result->application_id)
+                ->where('course_id', $result->course_id)
+                ->where('doc_sr_code', $result->doc_sr_code)
+                ->where('doc_unique_id', $result->doc_unique_id)
+                ->first();
+            if ($additionalField) {
+                $results[$key]->status = $additionalField->status;
+                $results[$key]->id = $additionalField->id;
+                $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $results[$key]->approve_status = $additionalField->approve_status;
+            }
+        }
+
+        
+        $flag = 0;
+
+        foreach ($results as $result) {
+            
+            if (($result->status === 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+                $flag = 0;
+            } else {
+                $flag = 1;
+                break;
+            }
+        }
+
+        if ($flag === 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    public function checkApplicationIsReadyForNextLevelByCourseAndApplication($application_id,$course_id)
+    {
+
+        $results = DB::table('tbl_course_wise_document')
+            ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+            ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
+            ->where('course_id', $course_id)
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
