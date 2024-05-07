@@ -286,6 +286,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
     Route::get('/admin/approve-course/{id}/{course_id}', [AdminApplicationController::class, 'approveCourseRejectBySecretariat']);
+    Route::get('/admin/reject-course/{id}/{course_id}', [AdminApplicationController::class, 'adminRejectCourse']);
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
     Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
@@ -414,7 +415,9 @@ Route::get('/super-admin/application-list', [SuperAdminApplicationController::cl
     Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
     Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"]);
     Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
-    Route::get('/super-admin-approved-application/{id}', [SuperAdminApplicationController::class, 'approvedApplication']);
+    Route::get('/super-admin-approved-application/{id}', [SuperAdminApplicationController::class, 'approvedApplication']); 
+    Route::post('/super-admin-approved-course', [SuperAdminApplicationController::class, 'approveCourseRejectBySecretariat']); 
+    Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 /*--end here--*/
 
 

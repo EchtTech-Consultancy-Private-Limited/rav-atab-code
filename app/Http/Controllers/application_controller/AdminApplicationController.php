@@ -348,10 +348,36 @@ class AdminApplicationController extends Controller
 
                 if($get_course_docs){
                     DB::commit();
-                    return back()->with('success', 'Course approved  successfully.');
+                    return response()->json(['success' => true, 'message' => 'Course approved  successfully'], 200);
                 }else{
                     DB::rollBack();
-                    return back()->with('fail', 'Failed to approved course');
+                    return response()->json(['success' =>false, 'message' => 'Failed to approved course'], 200);
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+    public function adminRejectCourse($id,$course_id){
+        try {
+            
+            DB::beginTransaction();
+            $get_course_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $id,'course_id'=>$course_id])
+                ->update(['approve_status'=>2]); 
+
+                DB::table('tbl_application_courses')
+                ->where(['id'=>$course_id])
+                ->update(['status'=>3]); //reject by admin
+
+                if($get_course_docs){
+                    DB::commit();
+                    return response()->json(['success' => true, 'message' => 'Course rejected  successfully.'], 200);
+                }else{
+                    DB::rollBack();
+                    return response()->json(['success' => false, 'message' => 'Failed to reject course'], 200);
                 }
 
         } catch (Exception $e) {

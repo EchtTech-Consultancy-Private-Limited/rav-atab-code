@@ -413,16 +413,20 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
-                            <form action="{{url('admin/approve-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="get">
-                            @csrf
-                            @if($ApplicationCourses['course']->status==1)
-                            <input type="submit" class="btn btn-success float-right" value="Approve">
+                    <div class="col-md-6">
+                            test
+                    </div>
+                        <div class="col-md-6 d-flex justify-content-end gap-2">
+                            <!-- <form action="{{url('admin/approve-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="get"> -->
+                            
+                            @if($ApplicationCourses['course']->status==1 || $ApplicationCourses['course']->status==0)
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
                             @elseif($ApplicationCourses['course']->status==2)
                             <div class="badge badge-main success float-right">Approved by you</div>
                             @endif
-                            </form>
                         </div>
+                       
                     </div>
 
 
@@ -440,10 +444,11 @@
         <div class="row">
         @if($spocData->approve_status==2)
                         <div class="col-md-12">
-                            <form action="{{url('super-admin-approved-application/'.dEncrypt($spocData->id))}}" method="get">
-                            @csrf
-                            <input type="submit" class="btn btn-success float-right" value="Approve">
-                            </form>
+                            <!-- <form action="{{url('super-admin-approved-application/'.dEncrypt($spocData->id))}}" method="get"> -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
+                            
+                            
                         </div>
                         @elseif($spocData->approve_status==1)
                         <div class="col-md-12">
@@ -564,6 +569,39 @@
         </div>
 
         </div>
+
+        <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><span class="course_btn_type"></span> Course : <span id="rejectionCourseName"></span></h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="rejectionCouurseReasonRemark">Please enter remark.</label>
+                        <textarea class="form-control" id="rejectionCouurseReasonRemark" rows="3"></textarea>
+                        <input type="hidden" id="reject_app_id" value="">
+                        <input type="hidden" id="reject_course_id" value="">
+                        <input type="hidden" id="reject_course_name" value="">
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="handleRejectCourse()"><span class="course_btn_type"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end here  -->
     </section>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
