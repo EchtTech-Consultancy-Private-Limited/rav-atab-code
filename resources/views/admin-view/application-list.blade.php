@@ -108,6 +108,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     @isset($list)
                                         @foreach ($list as $k => $item)
                                             <tr
@@ -127,13 +128,8 @@
                                                 </td>
                                                 
                                                 <td>
-                                                @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
-                                                    <span class="badge badge-main danger">{{config('status_text.admin_status_pending')}}</span>
-                                                @elseif($item->application_list->payment_status==2)
-                                                    <span class="badge badge-main warning">{{config('status_text.admin_status_process')}}</span>
-                                                @else
-                                                    <span class="badge badge-main success">{{config('status_text.admin_status_completed')}}</span>
-                                                @endif
+                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
+                                                
                                                 </td>
                                                 <td>
                                                 {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
@@ -163,6 +159,11 @@
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
+
+                                                    <a class="btn btn-tbl-delete bg-history font-a"  data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
+                                                    History
+                                                    </a>
+
                                                 </td>
                                             </tr>
 
@@ -327,7 +328,6 @@
 </div>
 
 
-
                                         @endforeach
                                     @endisset
                                 </tbody>
@@ -339,6 +339,56 @@
         </div>
         </div>
         </div>
+
+
+            
+        
+
+@foreach($list as $item)
+<!-- Modal reject -->
+<div class="modal fade" id="view_history_{{$item->application_list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Application History</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                       <table class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>User Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($item->appHistory as $key=>$hist)
+                        <tr>
+                            <td>{{$key+1}}</td>
+                            <td>{{$hist->firstname??''}} {{$hist->middlename??''}} {{$hist->lastname??''}}</td>
+                            <td>{{$hist->created_at}}</td>
+                            <td><span class="badge badge-main {{$hist->status_color}}">{{$hist->status_text}}</span></td>
+                            
+                        </tr>
+                        @endforeach
+                        </tbody>
+                       </table>
+            </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+@endforeach
+<!-- end here  -->
 
 <script>
  class TabsGroup extends HTMLElement {
@@ -406,6 +456,9 @@
 
   customElements.define('tabs-group', TabsGroup);
 </script>
+
+
+
    
     </section>
    

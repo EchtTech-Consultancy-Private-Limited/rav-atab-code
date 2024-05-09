@@ -811,7 +811,6 @@ $(".assesorsid").on("click", function () {
             assessor_id,
         },
         success: function (data) {
-            //alert(data)
             if (data === "success") {
                 Swal.fire({
                     icon: "success",
@@ -1769,6 +1768,352 @@ function removeCourseByTP(app_id,course_id){
     }
 }
 
+
+function setRejectionCourseId(application_id,course_id,course_name){
+   $("#reject_app_id").val(application_id);
+   $('#reject_course_id').val(course_id);
+   document.getElementById('rejectionCourseName').innerHTML = course_name
+}
+
+
+
+function handleRejectCourse(){
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+    
+
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const rejectCourseRemark = $("#rejectionCouurseReasonRemark").val();
+        if(rejectCourseRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat/reject-course/${application_id}/${course_id}`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,reject_remark:rejectCourseRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#rejectionCouurseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
+function setModelData(application_id,course_id,course_name,action){
+    console.log('application_id ',application_id,'---',course_id,'----',course_name,'-----',action)
+    $("#reject_app_id").val(application_id);
+    $('#reject_course_id').val(course_id);
+    document.getElementById('rejectionCourseName').innerHTML = course_name
+    document.getElementById('approveCourseName').innerHTML = course_name
+ }
+ 
+function handleRejectCourseByAdmin(){
+
+
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+    
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const courseRemark = $("#rejectionCouurseReasonRemark").val();
+        if(courseRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-reject-course`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,remark:courseRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#rejectionCouurseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleAcceptCourseByAdmin(){
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+   
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const approveCourseRemark = $("#approveCourseReasonRemark").val();
+        if(approveCourseRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-approved-course`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,approve_remark:approveCourseRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#approveCourseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleRejectApplicationByAdmin(){
+
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+    
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const applicationRemark = $("#rejectionApplicationReasonRemark").val();
+        if(applicationRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-reject-application`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,remark:applicationRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#rejectionCouurseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleAcceptApplicationByAdmin(){
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+   
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const approveApplicationRemark = $("#approveApplicationReasonRemark").val();
+        if(approveApplicationRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-approved-application`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,approve_remark:approveApplicationRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#approveCourseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
 
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');

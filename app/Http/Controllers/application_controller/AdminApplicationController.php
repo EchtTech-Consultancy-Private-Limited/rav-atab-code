@@ -77,6 +77,12 @@ class AdminApplicationController extends Controller
                 ->where('status', 2)
                 ->count();
 
+                $app_history = DB::table('tbl_application_status_history')
+                ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
+                ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
+                ->where('tbl_application_status_history.application_id', $app->id)
+                ->get();
+
             $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
             $obj->doc_uploaded_count = $doc_uploaded_count;
 
@@ -90,10 +96,11 @@ class AdminApplicationController extends Controller
                 $obj->payment->payment_count = $payment_count;
                 $obj->payment->payment_amount = $payment_amount;
                 $obj->payment->last_payment = $last_payment;
+                $obj->appHistory= $app_history;
             }
             $final_data[] = $obj;
         }
-        // dd($final_data);
+        
         return view('admin-view.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
@@ -130,7 +137,8 @@ class AdminApplicationController extends Controller
                         'course_id' => $course->id
 
                     ])->where('status', '<>', 0)->count(),
-                    // "show_submit_btn_to_secretariat" => $this->checkApplicationIsReadyForNextLevel($application->id, $course->id),
+                    "show_submit_btn_to_secretariat" => $this->checkApplicationIsReadyForNextLevel($application->id),
+                    // "show_reject_button_to_tp" => $this->checkApplicationIsReadyForNextLevelByCourseAndApplication($application->id, $course->id),
 
                     'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
                         'application_id' => $application->id,
@@ -262,6 +270,67 @@ class AdminApplicationController extends Controller
                 break;
             }
         }
+        
+        if ($flag === 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    public function checkApplicationIsReadyForNextLevelByCourseAndApplication($application_id,$course_id)
+    {
+
+        $results = DB::table('tbl_course_wise_document')
+            ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+            ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
+            ->where('course_id', $course_id)
+            ->where('application_id', $application_id)
+            ->where('approve_status',1)
+            ->get();
+
+            
+
+        $additionalFields = DB::table('tbl_course_wise_document')
+            ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+                $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
+                    ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
+                    ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
+                    ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
+                    ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
+            })
+            ->orderBy('tbl_course_wise_document.id', 'desc')
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+        foreach ($results as $key => $result) {
+            $additionalField = $additionalFields->where('application_id', $result->application_id)
+                ->where('course_id', $result->course_id)
+                ->where('doc_sr_code', $result->doc_sr_code)
+                ->where('doc_unique_id', $result->doc_unique_id)
+                ->first();
+            if ($additionalField) {
+                $results[$key]->status = $additionalField->status;
+                $results[$key]->id = $additionalField->id;
+                $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $results[$key]->approve_status = $additionalField->approve_status;
+            }
+        }
+
+        
+        $flag = 0;
+
+        foreach ($results as $result) {
+            
+            if (($result->status === 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+                $flag = 0;
+            } else {
+                $flag = 1;
+                break;
+            }
+        }
 
         if ($flag === 0) {
             return false;
@@ -286,10 +355,36 @@ class AdminApplicationController extends Controller
 
                 if($get_course_docs){
                     DB::commit();
-                    return back()->with('success', 'Course approved  successfully.');
+                    return response()->json(['success' => true, 'message' => 'Course approved  successfully'], 200);
                 }else{
                     DB::rollBack();
-                    return back()->with('fail', 'Failed to approved course');
+                    return response()->json(['success' =>false, 'message' => 'Failed to approved course'], 200);
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+    public function adminRejectCourse($id,$course_id){
+        try {
+            
+            DB::beginTransaction();
+            $get_course_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $id,'course_id'=>$course_id])
+                ->update(['approve_status'=>2]); 
+
+                DB::table('tbl_application_courses')
+                ->where(['id'=>$course_id])
+                ->update(['status'=>3]); //reject by admin
+
+                if($get_course_docs){
+                    DB::commit();
+                    return response()->json(['success' => true, 'message' => 'Course rejected  successfully.'], 200);
+                }else{
+                    DB::rollBack();
+                    return response()->json(['success' => false, 'message' => 'Failed to reject course'], 200);
                 }
 
         } catch (Exception $e) {

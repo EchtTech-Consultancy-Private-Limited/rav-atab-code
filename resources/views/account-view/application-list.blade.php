@@ -123,13 +123,8 @@
                                                   
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
-                                                    <span class="badge badge-main danger">{{config('status_text.accountant_status_pending')}}</span>
-                                                    @elseif($item->application_list->payment_status==2)
-                                                    <span class="badge badge-main warning">{{config('status_text.accountant_status_process')}}</span>
-                                                    @else
-                                                    <span class="badge badge-main success">{{config('status_text.accountant_status_completed')}}</span>
-                                                    @endif
+                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
+                                                
                                                 </td>
                                                 <td>
                                                 {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}

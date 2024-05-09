@@ -99,15 +99,17 @@ class ApplicationCoursesController extends Controller
     }
     public function createNewCourse($id = null)
     {
-       
         $id = dDecrypt($id);
-        // dd($id);
+        
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
         }else{
             $applicationData=null;
         }
         $course = TblApplicationCourses::where('application_id', $id)->get();
+        
+        createApplicationHistory($id,null,config('history.tp.status'),config('history.color.danger'));
+
         return view('create-application.course.create-course', compact('applicationData', 'course'));
     }
     public function storeNewApplicationCourse(Request $request)

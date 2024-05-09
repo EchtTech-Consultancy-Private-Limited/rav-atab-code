@@ -1137,6 +1137,30 @@ function getSecondPaymentNotification()
         return [];
         }
     }
+
+
+    /*Update History*/ 
+    function createApplicationHistory($app_id,$course_id=null,$status,$color)
+    {
+        
+        if($app_id!=null || $app_id!=""){
+        $user_id = Auth::user()->id;
+        $arr = [];
+        $arr['user_id']=$user_id;
+        $arr['application_id']=$app_id;
+        $arr['course_id']=$course_id;
+        $arr['status_text']=$status;
+        $arr['status_color']=$color;
+        $createHistory = DB::table('tbl_application_status_history')->insert($arr);
+        if($createHistory){
+            DB::table('tbl_application')->where('id',$app_id)->update(['status_text'=>$status,'status_color'=>$color]);
+        }
+    }
+        
+    }
+    
+    /*end here*/ 
+
 /*end here*/
 
 function getNotificationForSecondPayment()

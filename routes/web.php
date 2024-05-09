@@ -279,18 +279,19 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/store-new-application-course', [ApplicationCoursesController::class, 'storeNewApplicationCourse']);
     Route::get('/get-course-list', [ApplicationCoursesController::class, 'getCourseList']);
     Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
-    Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment'])->name('course.payment');
+    Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment']);
     Route::post('/create-application-payment', [ApplicationCoursesController::class, 'newApplicationPayment']);
     Route::get('/course-edit', [ApplicationCoursesController::class, 'course_edit']);
     Route::post('/course-update/{id?}', [ApplicationCoursesController::class, 'course_update']);
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
     Route::get('/admin/approve-course/{id}/{course_id}', [AdminApplicationController::class, 'approveCourseRejectBySecretariat']);
+    Route::get('/admin/reject-course/{id}/{course_id}', [AdminApplicationController::class, 'adminRejectCourse']);
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
     Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
     Route::get('/admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
-    Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
+    Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"]);
     Route::post('/admin-update-notification-status/{id}', [AdminApplicationController::class, 'updateAdminNotificationStatus']);
     Route::get('/{level_type?}/tp/application-list/', [TPApplicationController::class, 'getApplicationList'])->name('upgrade.application-list');
     Route::get('/account/application-list', [AccountApplicationController::class, 'getApplicationList']);
@@ -327,7 +328,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/upgrade-store-new-applications',[TPApplicationController::class,"storeNewApplication"]);
     Route::get('/upgrade-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourse']);
     Route::post('/upgrade-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourse']);
-    Route::get('/upgrade-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePayment'])->name('course.payment');
+    Route::get('/upgrade-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePayment']);
     Route::post('/upgrade-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPayment']);
     Route::get('/upgrade/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationView']);
 
@@ -337,7 +338,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/upgrade-level-3-store-new-applications',[TPApplicationController::class,"storeNewApplicationLevel3"]);
     Route::get('/upgrade-level-3-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourseLevel3']);
     Route::post('/upgrade-level-3-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourseLevel3']);
-    Route::get('/upgrade-level-3-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePaymentLevel3'])->name('course.payment');
+    Route::get('/upgrade-level-3-show-course-payment/{id?}', [TPApplicationController::class, 'upgradeShowcoursePaymentLevel3']);
     Route::post('/upgrade-level-3-create-application-payment', [TPApplicationController::class, 'upgradeNewApplicationPaymentLevel3']);
     Route::get('/upgrade/level-3/tp/application-view/{id}', [TPApplicationController::class, 'upgradeGetApplicationViewLevel3']);
 
@@ -399,8 +400,8 @@ Route::post('update-model/{id}', [MenuController::class, 'update_model']);
 Route::get('model-dlt/{id}', [MenuController::class, 'delete_model']);
 Route::post('phone-validation', [LevelController::class, 'phoneValidaion'])->name('phone.validation');
 Route::post('email-validation', [LevelController::class, 'emailValidaion'])->name('email.validation');
-Route::post('payment-transaction-validation', [LevelController::class, 'paymentTransactionValidation'])->name('transaction_validation');
-Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation'])->name('reference_validation');
+Route::post('payment-transaction-validation', [LevelController::class, 'paymentTransactionValidation']);
+Route::post('payment-reference-validation', [LevelController::class, 'paymentReferenceValidation']);
 Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateCheck"])->name('payment.duplicate');
 
 
@@ -412,7 +413,13 @@ Route::get('/super-admin/application-list', [SuperAdminApplicationController::cl
     Route::post('/super-admin/document-verfiy', [SuperAdminApplicationController::class, 'adminCourseDocumentVerify']);
     Route::post('/super-admin-assign-secretariat', [SuperAdminApplicationController::class, 'assignSecretariat']);
     Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
-    Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"])->name('payment.acknowledge');
+    Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"]);
     Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
-    Route::get('/super-admin-approved-application/{id}', [SuperAdminApplicationController::class, 'approvedApplication']);
+    Route::post('/super-admin-approved-application/', [SuperAdminApplicationController::class, 'approvedApplication']); 
+    Route::post('/super-admin-reject-application/', [SuperAdminApplicationController::class, 'rejectApplication']); 
+    Route::post('/super-admin-approved-course', [SuperAdminApplicationController::class, 'approveCourseRejectBySecretariat']); 
+    Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 /*--end here--*/
+
+
+/*qr code generation*/

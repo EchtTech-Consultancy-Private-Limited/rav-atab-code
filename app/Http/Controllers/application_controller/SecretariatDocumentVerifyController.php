@@ -460,26 +460,25 @@ class SecretariatDocumentVerifyController extends Controller
     }
 
 
-    public function secretariatRejectCourse($application_id, $course_id)
+    public function secretariatRejectCourse(Request $request)
     {
 
         try {
             
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $application_id,'course_id'=>$course_id])
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>0]);
-
                 DB::table('tbl_application_courses')
-                ->where(['id'=>$course_id])
-                ->update(['status'=>1]);
+                ->where(['id'=>$request->course_id])
+                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remarks]);
 
                 if($get_course_docs){
                     DB::commit();
-                    return back()->with('success', 'Course rejected by secretariat successfully.');
+                    return response()->json(['success' => true, 'message' => 'Course rejected by secretariat successfully.'], 200);
                 }else{
                     DB::rollBack();
-                    return back()->with('fail', 'Failed to reject course');
+                    return response()->json(['success' => false, 'message' => 'Failed to reject course'], 200);
                 }
 
         } catch (Exception $e) {
@@ -500,6 +499,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['approve_status'=>2]);
 
                 if($approve_app){
+                    createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();
                     return back()->with('success', 'Application send for approval to admin.');
                 }else{

@@ -431,18 +431,16 @@
                     
                    {{--  @if($ApplicationCourses['show_submit_btn_to_secretariat']) --}}
                     <div class="row">
-                        <div class="col-md-12">
-                            <form action="{{url('secretariat/reject-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="post">
-                            @csrf
-                            <!-- <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($ApplicationCourses['course_doc_flag'] > 2) ? "" : "disabled"; ?>> -->
-                            @if($ApplicationCourses['course']->status==0)
-                            <input type="submit" class="btn btn-danger float-right" value="Reject">
+                        <div class="col-md-12  d-flex justify-content-end">
+                            
+                            @if($ApplicationCourses['course']->status==0 && $ApplicationCourses['show_submit_btn_to_secretariat']!=false)
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
+                            
                             @elseif($ApplicationCourses['course']->status==1)
                             <div class="badge badge-main danger float-right">Rejected by you</div>
                             @elseif($ApplicationCourses['course']->status==2)
                             <div class="badge badge-main success float-right">Approved by admin</div>
                             @endif
-                            </form>
                         </div>
                     </div>
                     {{-- @endif --}}
@@ -453,9 +451,7 @@
         </div>  
         @endforeach
 
-        
-        
-        @if($application_details->application->is_secretariat_submit_btn_show==1) 
+        @if($application_details->application->is_secretariat_submit_btn_show==1 ) 
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
@@ -464,6 +460,13 @@
                             </form>
                         </div>
                     </div>
+        @elseif($application_details->show_submit_btn_to_secretariat)
+        <div class="col-md-12">
+                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            </form>
+                        </div>
         @else 
         <div class="row">
                         @if($application_details->application->approve_status==1) 
@@ -473,6 +476,10 @@
                         @elseif($application_details->application->approve_status==2) 
                         <div class="col-md-12">
                         <div class="badge badge-main success float-right">Send Request for Approval</div>
+                        </div>
+                        @elseif($application_details->application->approve_status==3) 
+                        <div class="col-md-12">
+                        <div class="badge badge-main danger float-right">Rejected by admin</div>
                         </div>
                         @else
                         <div class="col-md-12">
@@ -485,6 +492,59 @@
                     </div>
 
         @endif 
+
+
+
+<!-- Modal box for rejection course remarks -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Reject Course : <span id="rejectionCourseName"></span></h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="rejectionCouurseReasonRemark">Please enter remark.</label>
+                        <textarea class="form-control" id="rejectionCouurseReasonRemark" rows="3"></textarea>
+                        <input type="hidden" id="reject_app_id" value="">
+                        <input type="hidden" id="reject_course_id" value="">
+                        <input type="hidden" id="reject_course_name" value="">
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="handleRejectCourse()">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end here  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="card p-relative">
             <div class="box-overlay">
