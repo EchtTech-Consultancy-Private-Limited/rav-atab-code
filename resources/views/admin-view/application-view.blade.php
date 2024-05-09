@@ -433,7 +433,7 @@
                     <div class="row">
                         <div class="col-md-12  d-flex justify-content-end">
                             
-                            @if($ApplicationCourses['course']->status==0 && $ApplicationCourses['show_reject_button_to_tp']!=false)
+                            @if($ApplicationCourses['course']->status==0 && $ApplicationCourses['show_submit_btn_to_secretariat']!=false)
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
                             
                             @elseif($ApplicationCourses['course']->status==1)
@@ -451,9 +451,7 @@
         </div>  
         @endforeach
 
-        
-        
-        @if($application_details->application->is_secretariat_submit_btn_show==1) 
+        @if($application_details->application->is_secretariat_submit_btn_show==1 ) 
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
@@ -462,6 +460,13 @@
                             </form>
                         </div>
                     </div>
+        @elseif($application_details->show_submit_btn_to_secretariat)
+        <div class="col-md-12">
+                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            </form>
+                        </div>
         @else 
         <div class="row">
                         @if($application_details->application->approve_status==1) 
@@ -471,6 +476,10 @@
                         @elseif($application_details->application->approve_status==2) 
                         <div class="col-md-12">
                         <div class="badge badge-main success float-right">Send Request for Approval</div>
+                        </div>
+                        @elseif($application_details->application->approve_status==3) 
+                        <div class="col-md-12">
+                        <div class="badge badge-main danger float-right">Rejected by admin</div>
                         </div>
                         @else
                         <div class="col-md-12">

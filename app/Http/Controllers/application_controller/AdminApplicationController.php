@@ -77,6 +77,12 @@ class AdminApplicationController extends Controller
                 ->where('status', 2)
                 ->count();
 
+                $app_history = DB::table('tbl_application_status_history')
+                ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
+                ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
+                ->where('tbl_application_status_history.application_id', $app->id)
+                ->get();
+
             $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
             $obj->doc_uploaded_count = $doc_uploaded_count;
 
@@ -90,10 +96,11 @@ class AdminApplicationController extends Controller
                 $obj->payment->payment_count = $payment_count;
                 $obj->payment->payment_amount = $payment_amount;
                 $obj->payment->last_payment = $last_payment;
+                $obj->appHistory= $app_history;
             }
             $final_data[] = $obj;
         }
-        // dd($final_data);
+        
         return view('admin-view.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
     }
     /** Whole Application View for Account */
@@ -130,8 +137,8 @@ class AdminApplicationController extends Controller
                         'course_id' => $course->id
 
                     ])->where('status', '<>', 0)->count(),
-                    // "show_submit_btn_to_secretariat" => $this->checkApplicationIsReadyForNextLevel($application->id, $course->id),
-                    "show_reject_button_to_tp" => $this->checkApplicationIsReadyForNextLevelByCourseAndApplication($application->id, $course->id),
+                    "show_submit_btn_to_secretariat" => $this->checkApplicationIsReadyForNextLevel($application->id),
+                    // "show_reject_button_to_tp" => $this->checkApplicationIsReadyForNextLevelByCourseAndApplication($application->id, $course->id),
 
                     'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
                         'application_id' => $application->id,
@@ -263,7 +270,7 @@ class AdminApplicationController extends Controller
                 break;
             }
         }
-
+        
         if ($flag === 0) {
             return false;
         } else {

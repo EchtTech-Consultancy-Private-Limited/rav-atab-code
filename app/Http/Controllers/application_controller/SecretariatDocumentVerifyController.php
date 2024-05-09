@@ -499,6 +499,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['approve_status'=>2]);
 
                 if($approve_app){
+                    createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();
                     return back()->with('success', 'Application send for approval to admin.');
                 }else{

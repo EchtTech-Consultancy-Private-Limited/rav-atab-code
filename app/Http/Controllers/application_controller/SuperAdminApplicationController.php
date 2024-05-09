@@ -65,7 +65,12 @@ class SuperAdminApplicationController extends Controller
                 ])
                 ->where('status',2)
                 ->count();
-              
+                $app_history = DB::table('tbl_application_status_history')
+                ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
+                ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
+                ->where('tbl_application_status_history.application_id', $app->id)
+                ->get();
+
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
                 
@@ -79,6 +84,8 @@ class SuperAdminApplicationController extends Controller
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
                     $obj->payment->last_payment = $last_payment;
+                    $obj->appHistory= $app_history;
+
                 }
                 $final_data[] = $obj;
         }
@@ -189,6 +196,8 @@ class SuperAdminApplicationController extends Controller
             }
             DB::beginTransaction();
             DB::table('tbl_application_payment')->where('application_id', '=', $request->post('application_id'))->update(['aknowledgement_id' => auth()->user()->id]);
+
+            createApplicationHistory($request->post('application_id'),null,config('history.admin.status'),config('history.color.warning'));
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment acknowledged successfully'], 200);
         }
@@ -238,6 +247,7 @@ class SuperAdminApplicationController extends Controller
                //admin mail
                 
             /*end here*/
+            createApplicationHistory($request->application_id,null,config('history.admin.assign'),config('history.color.warning'));
             DB::commit();
             return redirect()->route('superadmin-app-list')->with('success', 'Application has been successfully assigned to Secretariat');
         }
@@ -542,23 +552,22 @@ class SuperAdminApplicationController extends Controller
     }
     }
 
-    public function approvedApplication($id)
+    public function approvedApplication(Request $request)
     {
-
-        $app_id = dDecrypt($id);
-        
+        $app_id = $request->application_id;
         try {
             DB::beginTransaction();
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>1]);
+                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark]);
 
                 if($approve_app){
+                    createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.warning'));
                     DB::commit();
-                    return back()->with('success', 'Application approved successfully.');
+                    return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
                 }else{
                     DB::rollBack();
-                    return back()->with('fail', 'Failed to approved successfully.');
+                    return response()->json(['success' => false, 'message' => 'Failed to approved successfully.'], 200);
                 }
 
         } catch (Exception $e) {
@@ -567,18 +576,41 @@ class SuperAdminApplicationController extends Controller
         }
     }
 
-    
-    public function approveCourseRejectBySecretariat($id,$course_id){
+    public function rejectApplication(Request $request)
+    {
+        $app_id = $request->application_id;
         try {
-            
+            DB::beginTransaction();
+            $approve_app = DB::table('tbl_application')
+                ->where(['id' => $app_id])
+                ->update(['approve_status'=>3,'reject_remark'=>$request->remark]); //3 for rejected application by admin
+
+                if($approve_app){
+                    createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
+                    DB::commit();
+                    return response()->json(['success' => true, 'message' => 'Application rejected successfully.'], 200);
+                }else{
+                    DB::rollBack();
+                    return response()->json(['success' => false, 'message' => 'Failed to reject  application.'], 200);
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+    public function approveCourseRejectBySecretariat(Request $request){
+        try {
+            dd($request->all());
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $id,'course_id'=>$course_id])
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>1]); 
 
                 DB::table('tbl_application_courses')
-                ->where(['id'=>$course_id])
-                ->update(['status'=>2,'admin_accept_remark'=>]); //approved by admin
+                ->where(['id'=>$request->course_id])
+                ->update(['status'=>2,'admin_accept_remark'=>$request->approve_remark]); //approved by admin
 
                 if($get_course_docs){
                     DB::commit();
@@ -594,16 +626,16 @@ class SuperAdminApplicationController extends Controller
         }
     }
 
-    public function adminRejectCourse($id,$course_id){
+    public function adminRejectCourse(Request $request){
         try {
-            
+            dd($request->all());
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
-                ->where(['application_id' => $id,'course_id'=>$course_id])
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>2]); 
 
                 DB::table('tbl_application_courses')
-                ->where(['id'=>$course_id])
+                ->where(['id'=>$request->course_id])
                 ->update(['status'=>3]); //reject by admin
 
                 if($get_course_docs){

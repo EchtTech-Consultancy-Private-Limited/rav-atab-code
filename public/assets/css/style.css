@@ -25567,4 +25567,9 @@ p.ref-number b{ font-weight: 600;}
     border:1px solid red;
 }
 
+.bg-history {
+    background: #064888;
+    line-height: 18px !important;
+}
+
 /* ******************************** */

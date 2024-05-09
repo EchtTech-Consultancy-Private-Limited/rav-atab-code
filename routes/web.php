@@ -415,7 +415,8 @@ Route::get('/super-admin/application-list', [SuperAdminApplicationController::cl
     Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
     Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"]);
     Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
-    Route::get('/super-admin-approved-application/{id}', [SuperAdminApplicationController::class, 'approvedApplication']); 
+    Route::post('/super-admin-approved-application/', [SuperAdminApplicationController::class, 'approvedApplication']); 
+    Route::post('/super-admin-reject-application/', [SuperAdminApplicationController::class, 'rejectApplication']); 
     Route::post('/super-admin-approved-course', [SuperAdminApplicationController::class, 'approveCourseRejectBySecretariat']); 
     Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 /*--end here--*/
