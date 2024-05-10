@@ -719,7 +719,7 @@ public function  storeNewApplication(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
 
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
@@ -728,8 +728,8 @@ public function  storeNewApplication(Request $request)
             $application = new TblApplication($data);
             $application->save();
 
-            $application->refid = $request->reference_id;
-            $application->save();
+            // $application->prev_refid = $request->reference_id;
+            // $application->save();
 
             $create_new_application = $request->application_id;
             $msg="Application Created Successfully";
@@ -1304,7 +1304,7 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3,'is_all_course_doc_verified'=>2]);
@@ -1314,8 +1314,8 @@ public function  storeNewApplicationLevel3(Request $request)
             $application = new TblApplication($data);
             $application->save();
 
-            $application->refid = $request->reference_id;
-            $application->save();
+            // $application->refid = $request->reference_id;
+            // $application->save();
 
             $create_new_application = $request->application_id;
             $msg="Application Created Successfully";

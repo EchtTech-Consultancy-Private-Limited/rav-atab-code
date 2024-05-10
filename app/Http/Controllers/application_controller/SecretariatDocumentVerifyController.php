@@ -471,7 +471,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['approve_status'=>0]);
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
-                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remarks]);
+                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
 
                 if($get_course_docs){
                     DB::commit();
@@ -528,6 +528,7 @@ class SecretariatDocumentVerifyController extends Controller
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             ->whereIn('course_id', $all_courses_id)
             ->where('application_id', $application_id)
+            ->where('approve_status',1)
             ->get();
 
 
@@ -540,7 +541,7 @@ class SecretariatDocumentVerifyController extends Controller
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
             ->orderBy('tbl_course_wise_document.id', 'desc')
-            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag']);
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
 
         foreach ($results as $key => $result) {
@@ -548,6 +549,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
+                ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -555,7 +557,6 @@ class SecretariatDocumentVerifyController extends Controller
                 $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
             }
         }
-
 
         $flag = 0;
         $nc_flag = 0;

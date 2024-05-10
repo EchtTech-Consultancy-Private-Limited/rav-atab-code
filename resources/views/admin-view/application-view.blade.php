@@ -232,12 +232,34 @@
        
         @foreach ($application_details->course as $k => $ApplicationCourses)
             
-        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
+        <div class="card <?php if($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) echo 'border-reject'; else echo ''; ?>">
 
-            <div class="card-header bg-white text-dark">
+            <div class="card-header <?php echo ($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3)? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k + 1 }}
                 </h5>
+                <div class="pe-4">
+                @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
+                    <div class="row">
+                        <div class="col-md-12  d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
+                        </div>
+                    </div>
+                     @endif 
+
+                     <div class="row">
+                        <div class="col-md-12  d-flex justify-content-end">
+                        
+                            @if($ApplicationCourses['course']->status==1)
+                            <div class="badge badge-main danger float-right">Rejected by you</div>
+                            @elseif($ApplicationCourses['course']->status==2)
+                            <div class="badge badge-main success float-right">Approved by admin</div>
+                            @elseif($ApplicationCourses['course']->status==3)
+                            <div class="badge badge-main success float-right">Rejected by Admin</div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -428,22 +450,10 @@
                             </thead>
                         </table>
                     </div>
-                    
-                   {{--  @if($ApplicationCourses['show_submit_btn_to_secretariat']) --}}
-                    <div class="row">
-                        <div class="col-md-12  d-flex justify-content-end">
-                            
-                            @if($ApplicationCourses['course']->status==0 && $ApplicationCourses['show_submit_btn_to_secretariat']!=false)
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
-                            
-                            @elseif($ApplicationCourses['course']->status==1)
-                            <div class="badge badge-main danger float-right">Rejected by you</div>
-                            @elseif($ApplicationCourses['course']->status==2)
-                            <div class="badge badge-main success float-right">Approved by admin</div>
-                            @endif
-                        </div>
-                    </div>
-                    {{-- @endif --}}
+                    @if($ApplicationCourses['course']->status == 1)
+                    <p class="text-danger"> <b>Note : </b> {{$ApplicationCourses['course']->sec_reject_remark}}</p>
+                    @endif
+                 
                     </div>
                 </div>
             </div>
@@ -451,23 +461,26 @@
         </div>  
         @endforeach
 
-        @if($application_details->application->is_secretariat_submit_btn_show==1 ) 
+        <!-- @if($application_details->application->is_secretariat_submit_btn_show==1 )  -->
+        @if($application_details->show_submit_btn_to_secretariat && $application_details->application->approve_status==0) 
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit">
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $application_details->enable_disable_submit_btn==true?'disabled':'';?> >
                             </form>
                         </div>
                     </div>
-        @elseif($application_details->show_submit_btn_to_secretariat)
-        <div class="col-md-12">
+        @elseif($application_details->application->approve_status==0)
+                        <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
                             </form>
                         </div>
-        @else 
+        @endif
+
+        
         <div class="row">
                         @if($application_details->application->approve_status==1) 
                         <div class="col-md-12">
@@ -481,16 +494,8 @@
                         <div class="col-md-12">
                         <div class="badge badge-main danger float-right">Rejected by admin</div>
                         </div>
-                        @else
-                        <div class="col-md-12">
-                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
-                            @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
-                            </form>
-                        </div>
                         @endif
                     </div>
-
         @endif 
 
 

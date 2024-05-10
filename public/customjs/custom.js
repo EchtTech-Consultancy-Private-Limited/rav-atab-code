@@ -1860,7 +1860,7 @@ function handleRejectCourseByAdmin(){
     
     if(application_id!=null && course_id!=null ){
         $('.full_screen_loading').show();
-        const courseRemark = $("#rejectionCouurseReasonRemark").val();
+        const courseRemark = $("#rejectionCourseReasonRemark").val();
         if(courseRemark==""){
             $('.full_screen_loading').hide();
             toastr.error("Please enter the remarks first.", {

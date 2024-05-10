@@ -25,9 +25,13 @@ class DocApplicationController extends Controller
         try{
             $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])->latest('id')->first();
             
-            $is_nc_exists=false;
-            if($nc_type==="view"){
-                $is_nc_exists=true;
+            $is_course_rejected = DB::table('tbl_application_courses')
+            ->where(['id'=>$application_course_id])
+            ->whereIn('status',[1,3])
+            ->first();
+            $is_nc_exists = false;
+            if ($nc_type === "view" && empty($is_course_rejected)) {
+                $is_nc_exists = true;
             }
 
             
@@ -87,6 +91,7 @@ class DocApplicationController extends Controller
             'dropdown_arr'=>$dropdown_arr??[],
             'is_nc_exists'=>$is_nc_exists,
             'nc_comments'=>$nc_comments,
+            'is_course_rejected'=>$is_course_rejected
         ]);
     }catch(Exception $e){
         return back()->with('fail','Something went wrong');

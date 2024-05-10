@@ -171,7 +171,7 @@
                                                     <!-- If level - 1 -->
                                                 
                                                 @if($item->application_list->level_id==1)
-                                                        @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->approve_status==1)
+                                                        @if($item->application_list->approve_status==1)
                                                             
                                                 <div class="d-flex action-button-div">
                                               

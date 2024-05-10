@@ -173,6 +173,12 @@
                         </div>
                     </div>
                 </div>
+                @elseif(!empty($is_course_rejected))
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="badge badge-main warning">This course is already rejected. You can take any action on this document after approval from admin</span>
+                    </div>
+                </div>
             @endif
               
         </div>
