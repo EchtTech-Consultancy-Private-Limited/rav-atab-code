@@ -327,20 +327,25 @@ class AdminApplicationController extends Controller
 
         
         $flag = 0;
-
+        $accepted_count = 0;
         foreach ($results as $result) {
             
             // if (($result->status === 2 || $result->status === 3 || $result->status === 4) && ($result->status == 4 && $result->admin_nc_flag == 0)) {
-
-            if ($result->status === 0) {
+            
+            if ($result->status == 0) {
                 $flag = 0;
-            } else {
+            } 
+            else if($result->status==1){
+                $accepted_count++;
+            }
+            else {
                 $flag = 1;
                 break;
             }
         }
-
-        if ($flag === 0) {
+        
+        
+        if ($flag === 0 && $accepted_count<3) {
             return true;
         } else {
             return false;

@@ -607,6 +607,28 @@ class SuperAdminApplicationController extends Controller
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>1]); 
 
+                $all_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id,'approve_status'=>1])
+                ->whereNotIn('status',[1,2,3,4,6])
+                ->get(); 
+                
+                foreach($all_docs as $doc){
+                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5]);
+
+                    $data = [];
+                        $data['application_id'] = $doc->application_id;
+                        $data['application_courses_id'] = $doc->course_id;
+                        $data['secretariat_id'] = Auth::user()->id;
+                        $data['doc_sr_code'] = $doc->doc_sr_code;
+                        $data['doc_unique_id'] = $doc->doc_unique_id;
+                        $data['nc_type'] = 'Accept';
+                        $data['doc_file_name'] = $doc->doc_file_name;
+                        $data['comments'] = 'Document has been approved';
+                        $data['nc_show_status'] = 1;
+                        DB::table('tbl_nc_comments_secretariat')->insert($data);
+
+                }
+
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>2,'admin_accept_remark'=>$request->approve_remark]); //approved by admin
@@ -635,6 +657,32 @@ class SuperAdminApplicationController extends Controller
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
+
+
+                $all_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id,'approve_status'=>2])
+                ->whereNotIn('status',[1,2,3,4,6])
+                ->get(); 
+
+                // dd($all_docs);
+
+                foreach($all_docs as $doc){
+                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5]);
+
+                    $data = [];
+                        $data['application_id'] = $doc->application_id;
+                        $data['application_courses_id'] = $doc->course_id;
+                        $data['secretariat_id'] = Auth::user()->id;
+                        $data['doc_sr_code'] = $doc->doc_sr_code;
+                        $data['doc_unique_id'] = $doc->doc_unique_id;
+                        $data['nc_type'] = 'Reject';
+                        $data['doc_file_name'] = $doc->doc_file_name;
+                        $data['comments'] = 'Document Not Approved';
+                        $data['nc_show_status'] = 1;
+                        DB::table('tbl_nc_comments_secretariat')->insert($data);
+
+                }
+
 
                 if($get_course_docs){
                     DB::commit();

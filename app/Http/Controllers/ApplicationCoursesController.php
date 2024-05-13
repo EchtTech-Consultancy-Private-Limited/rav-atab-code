@@ -108,7 +108,7 @@ class ApplicationCoursesController extends Controller
         }
         $course = TblApplicationCourses::where('application_id', $id)->get();
         
-        createApplicationHistory($id,null,config('history.tp.status'),config('history.color.danger'));
+        
 
         return view('create-application.course.create-course', compact('applicationData', 'course'));
     }
@@ -452,7 +452,7 @@ class ApplicationCoursesController extends Controller
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
                 dispatch(new SendEmailJob($details));
-           
+                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
             return  redirect()->route('application-list')->with('success', 'Payment Done successfully');

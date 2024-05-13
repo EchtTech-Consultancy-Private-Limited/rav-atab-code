@@ -239,14 +239,7 @@
                     View Course Information Record No: {{ $k + 1 }}
                 </h5>
                 <div class="pe-4">
-                @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
-                    <div class="row">
-                        <div class="col-md-12  d-flex justify-content-end">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
-                        </div>
-                    </div>
-                     @endif 
-
+              
                      <div class="row">
                         <div class="col-md-12  d-flex justify-content-end">
                         
@@ -377,6 +370,36 @@
                                                             Rejected <span>By Admin</span></a>
                                                             @endif
                                                             <!-- end here -->
+
+
+
+
+
+
+
+
+                                        @elseif($doc->status==5)
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted <span>By Admin</span></a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected <span>By Admin</span></a>
+                                             @endif
+
+
+
+
+
+
                                                             @elseif($doc->status==6)
                                                         <a 
                                                             title="{{$doc->doc_file_name}}"
@@ -449,6 +472,16 @@
 
                             </thead>
                         </table>
+                    </div>
+                    <div class="">
+                    @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
+                    <div class="row">
+                        <div class="col-md-12  d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
+                        </div>
+                    </div>
+                     @endif 
+
                     </div>
                     @if($ApplicationCourses['course']->status == 1)
                     <p class="text-danger"> <b>Note : </b> {{$ApplicationCourses['course']->sec_reject_remark}}</p>

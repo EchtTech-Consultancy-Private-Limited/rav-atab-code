@@ -253,8 +253,16 @@ class SecretariatDocumentVerifyController extends Controller
     {
 
         try {
+            $nc_type="";
+            $doc_comment = "";
             $redirect_to = URL::to("/admin/application-view") . '/' . dEncrypt($request->application_id);
-
+            if($request->nc_type=="Accept" && $request->comments==""){
+               $nc_type="Accept";
+               $doc_comment="Document has been approved";
+            }else{
+                $nc_type=$request->nc_type;
+                $doc_comment=$request->comments;
+            }
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
 
@@ -263,8 +271,8 @@ class SecretariatDocumentVerifyController extends Controller
             $data['doc_sr_code'] = $request->doc_sr_code;
             $data['doc_unique_id'] = $request->doc_unique_id;
             $data['application_courses_id'] = $request->application_courses_id;
-            $data['comments'] = $request->comments;
-            $data['nc_type'] = $request->nc_type;
+            $data['comments'] = $doc_comment;
+            $data['nc_type'] = $nc_type;
             $data['secretariat_id'] = $secretariat_id;
             $data['doc_file_name'] = $request->doc_file_name;
             
