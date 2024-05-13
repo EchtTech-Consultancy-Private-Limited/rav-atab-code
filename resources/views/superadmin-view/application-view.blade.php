@@ -214,7 +214,7 @@
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
         <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
-            <div class="card-header bg-white text-dark">
+            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>
@@ -351,6 +351,45 @@
                                              @endif
 
 
+
+
+
+
+                                    
+                                    @elseif($doc->status==5)
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted <span>By Admin</span></a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected <span>By Admin</span></a>
+                                             @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                     @else
                                        <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
@@ -411,7 +450,9 @@
                             </thead>
                         </table>
                     </div>
-
+                    @if($ApplicationCourses['course']->status == 1)
+                    <p class="text-danger"> <b>Note : </b> {{$ApplicationCourses['course']->sec_reject_remark}}</p>
+                    @endif
                     <div class="row">
                     <div class="col-md-6">
                             
@@ -419,7 +460,7 @@
                         <div class="col-md-6 d-flex justify-content-end gap-2">
                             <!-- <form action="{{url('admin/approve-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="get"> -->
                             
-                            @if($ApplicationCourses['course']->status==1 || $ApplicationCourses['course']->status==0)
+                            @if($ApplicationCourses['course']->status==1)
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
                             @elseif($ApplicationCourses['course']->status==2)
@@ -441,13 +482,12 @@
         </div>  
         @endforeach
 
-        <div class="row">
-        @if($spocData->approve_status==2)
+        @if($spocData->approve_status==2 && $application_details->is_course_rejected!=1)
                         <div class="col-md-12">
                             
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve Application</button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve Application</button>
 
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button>
                             
                             
                             
@@ -460,10 +500,13 @@
                         <div class="col-md-12">
                             <div class="badge badge-main danger float-right">Application Rejected by you</div>
                         </div>
-                        @endif
-                    </div>
                         
-                            
+                    </div>
+        @endif   
+        
+        <div class="row">
+        
+        
                         
 
         <div class="card p-relative">
@@ -576,8 +619,85 @@
 
         </div>
 
-        <!-- Modal reject -->
+
+
+<!-- Modal reject course-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Reject Course : <span id="rejectionCourseName"></span></h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="rejectionCourseReasonRemark">Please enter remark.</label>
+                        <textarea class="form-control" id="rejectionCourseReasonRemark" rows="3"></textarea>
+                        <input type="hidden" id="reject_app_id" value="">
+                        <input type="hidden" id="reject_course_id" value="">
+                        <input type="hidden" id="reject_course_name" value="">
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" onclick="handleRejectCourseByAdmin()">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end here  -->
+
+
+<!-- Modal approve course-->
+<div class="modal fade" id="approve_modal_by_admin" tabindex="-1" role="dialog" aria-labelledby="approve_modal_by_admin" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="approve_modal_by_admin"><span class="course_btn_type">Approve</span> Course : <span id="approveCourseName"></span></h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="approveCourseReasonRemark">Please enter remark.</label>
+                        <textarea class="form-control" id="approveCourseReasonRemark" rows="3"></textarea>
+                        <input type="hidden" id="reject_app_id" value="">
+                        <input type="hidden" id="reject_course_id" value="">
+                        <input type="hidden" id="reject_course_name" value="">
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="handleAcceptCourseByAdmin()">Approve</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end here  -->
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal reject -->
+<div class="modal fade" id="reject_application_admin" tabindex="-1" role="dialog" aria-labelledby="reject_application_admin" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -606,12 +726,11 @@
     </div>
   </div>
 </div>
-
 <!-- end here  -->
 
 
 <!-- Modal approve -->
-<div class="modal fade" id="approve_modal_by_admin" tabindex="-1" role="dialog" aria-labelledby="approve_modal_by_admin" aria-hidden="true">
+<div class="modal fade" id="approve_application_admin" tabindex="-1" role="dialog" aria-labelledby="approve_application_admin" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -640,7 +759,6 @@
     </div>
   </div>
 </div>
-
 <!-- end here  -->
     </section>
     <script>

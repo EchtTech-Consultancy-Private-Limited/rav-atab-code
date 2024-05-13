@@ -106,6 +106,7 @@ class SuperAdminApplicationController extends Controller
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
+            $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id' => $application->id,
             ])
@@ -182,9 +183,8 @@ class SuperAdminApplicationController extends Controller
                 }else{
                  $is_final_submit = false;
                 }
-
-
-        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
+            
+        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'']);
     }
     public function adminPaymentAcknowledge(Request $request)
     {
@@ -562,7 +562,7 @@ class SuperAdminApplicationController extends Controller
                 ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark]);
 
                 if($approve_app){
-                    createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.warning'));
+                    createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
                 }else{
@@ -602,11 +602,32 @@ class SuperAdminApplicationController extends Controller
 
     public function approveCourseRejectBySecretariat(Request $request){
         try {
-            dd($request->all());
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>1]); 
+
+                $all_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id,'approve_status'=>1])
+                ->whereNotIn('status',[1,2,3,4,6])
+                ->get(); 
+                
+                foreach($all_docs as $doc){
+                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5]);
+
+                    $data = [];
+                        $data['application_id'] = $doc->application_id;
+                        $data['application_courses_id'] = $doc->course_id;
+                        $data['secretariat_id'] = Auth::user()->id;
+                        $data['doc_sr_code'] = $doc->doc_sr_code;
+                        $data['doc_unique_id'] = $doc->doc_unique_id;
+                        $data['nc_type'] = 'Accept';
+                        $data['doc_file_name'] = $doc->doc_file_name;
+                        $data['comments'] = 'Document has been approved';
+                        $data['nc_show_status'] = 1;
+                        DB::table('tbl_nc_comments_secretariat')->insert($data);
+
+                }
 
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
@@ -628,7 +649,6 @@ class SuperAdminApplicationController extends Controller
 
     public function adminRejectCourse(Request $request){
         try {
-            dd($request->all());
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
@@ -636,7 +656,33 @@ class SuperAdminApplicationController extends Controller
 
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
-                ->update(['status'=>3]); //reject by admin
+                ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
+
+
+                $all_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id,'approve_status'=>2])
+                ->whereNotIn('status',[1,2,3,4,6])
+                ->get(); 
+
+                // dd($all_docs);
+
+                foreach($all_docs as $doc){
+                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5]);
+
+                    $data = [];
+                        $data['application_id'] = $doc->application_id;
+                        $data['application_courses_id'] = $doc->course_id;
+                        $data['secretariat_id'] = Auth::user()->id;
+                        $data['doc_sr_code'] = $doc->doc_sr_code;
+                        $data['doc_unique_id'] = $doc->doc_unique_id;
+                        $data['nc_type'] = 'Reject';
+                        $data['doc_file_name'] = $doc->doc_file_name;
+                        $data['comments'] = 'Document Not Approved';
+                        $data['nc_show_status'] = 1;
+                        DB::table('tbl_nc_comments_secretariat')->insert($data);
+
+                }
+
 
                 if($get_course_docs){
                     DB::commit();
@@ -652,5 +698,16 @@ class SuperAdminApplicationController extends Controller
         }
     }
 
+    public function checkAnyCoursesRejected($application_id){
+        $is_any_courses_rejected = DB::table('tbl_application_courses')
+        ->where('application_id',$application_id)
+        ->where('status',1)->first();
+        $flag=0;
+        if(!empty($is_any_courses_rejected)){
+            $flag=1;
+        }
+
+        return $flag;
+    }
 
 }

@@ -253,8 +253,16 @@ class SecretariatDocumentVerifyController extends Controller
     {
 
         try {
+            $nc_type="";
+            $doc_comment = "";
             $redirect_to = URL::to("/admin/application-view") . '/' . dEncrypt($request->application_id);
-
+            if($request->nc_type=="Accept" && $request->comments==""){
+               $nc_type="Accept";
+               $doc_comment="Document has been approved";
+            }else{
+                $nc_type=$request->nc_type;
+                $doc_comment=$request->comments;
+            }
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
 
@@ -263,8 +271,8 @@ class SecretariatDocumentVerifyController extends Controller
             $data['doc_sr_code'] = $request->doc_sr_code;
             $data['doc_unique_id'] = $request->doc_unique_id;
             $data['application_courses_id'] = $request->application_courses_id;
-            $data['comments'] = $request->comments;
-            $data['nc_type'] = $request->nc_type;
+            $data['comments'] = $doc_comment;
+            $data['nc_type'] = $nc_type;
             $data['secretariat_id'] = $secretariat_id;
             $data['doc_file_name'] = $request->doc_file_name;
             
@@ -471,7 +479,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['approve_status'=>0]);
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
-                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remarks]);
+                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
 
                 if($get_course_docs){
                     DB::commit();
@@ -528,6 +536,7 @@ class SecretariatDocumentVerifyController extends Controller
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             ->whereIn('course_id', $all_courses_id)
             ->where('application_id', $application_id)
+            ->where('approve_status',1)
             ->get();
 
 
@@ -540,7 +549,7 @@ class SecretariatDocumentVerifyController extends Controller
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
             ->orderBy('tbl_course_wise_document.id', 'desc')
-            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag']);
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
 
         foreach ($results as $key => $result) {
@@ -548,6 +557,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
+                ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -555,7 +565,6 @@ class SecretariatDocumentVerifyController extends Controller
                 $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
             }
         }
-
 
         $flag = 0;
         $nc_flag = 0;

@@ -537,12 +537,12 @@ class TPApplicationController extends Controller
         }
 
         
-
+        
         $is_form_view = false;
         if($nc_status_type!=0){
         // is remark form show to top
         $is_already_remark_exists = DB::table('tbl_nc_comments_secretariat')->where(['application_id' => $application_id,'application_courses_id' => $application_courses_id,'doc_sr_code' => $doc_sr_code,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])->first();
-        
+        $is_form_view=false;
         if($is_already_remark_exists->nc_type!=="Accept" && $is_already_remark_exists->nc_type!=="Request_For_Final_Approval"){
             if($is_already_remark_exists->tp_remark!==null){
                 $is_form_view=false;
@@ -719,7 +719,7 @@ public function  storeNewApplication(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
 
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
@@ -728,8 +728,8 @@ public function  storeNewApplication(Request $request)
             $application = new TblApplication($data);
             $application->save();
 
-            $application->refid = $request->reference_id;
-            $application->save();
+            // $application->prev_refid = $request->reference_id;
+            // $application->save();
 
             $create_new_application = $request->application_id;
             $msg="Application Created Successfully";
@@ -1304,7 +1304,7 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3,'is_all_course_doc_verified'=>2]);
@@ -1314,8 +1314,8 @@ public function  storeNewApplicationLevel3(Request $request)
             $application = new TblApplication($data);
             $application->save();
 
-            $application->refid = $request->reference_id;
-            $application->save();
+            // $application->refid = $request->reference_id;
+            // $application->save();
 
             $create_new_application = $request->application_id;
             $msg="Application Created Successfully";

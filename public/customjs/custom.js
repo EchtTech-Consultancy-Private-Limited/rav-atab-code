@@ -301,17 +301,21 @@ function secretariatDocumentVerfiy() {
 
 
         let doc_comment = $("#comment_text").val();
+        
         let nc_type = $("#status").find(":selected").val();
-       if(doc_comment=="" || nc_type=="" ){
-        toastr.error("All fields are required", {
-            timeOut: 1,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-        $('.full_screen_loading').hide();
-        return false;
-       }
+        if(doc_comment=="" && nc_type=="Accept"){
+            
+        }else if(doc_comment=="" || nc_type==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
+       
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -1860,7 +1864,7 @@ function handleRejectCourseByAdmin(){
     
     if(application_id!=null && course_id!=null ){
         $('.full_screen_loading').show();
-        const courseRemark = $("#rejectionCouurseReasonRemark").val();
+        const courseRemark = $("#rejectionCourseReasonRemark").val();
         if(courseRemark==""){
             $('.full_screen_loading').hide();
             toastr.error("Please enter the remarks first.", {
