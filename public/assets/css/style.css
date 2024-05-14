@@ -25572,4 +25572,15 @@ p.ref-number b{ font-weight: 600;}
     line-height: 18px !important;
 }
 
+.blink-btn {
+    animation: blinker 1.5s linear infinite;
+    color: red;
+    font-family: sans-serif;
+}
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
 /* ******************************** */

@@ -13,7 +13,7 @@ class TblApplication extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $table = 'tbl_application';
-    protected $fillable = ['refid','uhid','level_id','tp_id','person_name','email','contact_number','designation','tp_ip','user_type','application_date'];
+    protected $fillable = ['refid','prev_refid','uhid','level_id','tp_id','person_name','email','contact_number','designation','tp_ip','user_type','application_date'];
 
     public static function boot()
     {

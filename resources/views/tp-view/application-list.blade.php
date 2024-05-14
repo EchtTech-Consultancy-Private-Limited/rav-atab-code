@@ -174,9 +174,17 @@
                                                         @if($item->application_list->approve_status==1)
                                                             
                                                 <div class="d-flex action-button-div">
-                                              
+                                                        <?php
+                                                        $isApplicationBeingExpired = checkApplicationValidityExpire($item->application_list->id,$item->application_list->valid_till)
+                                                        ?>
+                                                        @if($isApplicationBeingExpired)
+                                                            <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
+                                                        @else
                                                         <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-2</a>
                                                         <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
+                                                        
+                                                        @endif
+
                                                         
                                                         
                                                         @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
@@ -232,6 +240,30 @@
         </div>
         </div>
         </div>
+
+
+             <!-- Edit Payment modal  -->
+             <div class="modal fade" id="expiry_popup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Expiry </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  
+                </div>
+                <div class="modal-body">
+                <div class="mb-4 text-center">
+                    <button type="button" class="btn btn-primary bg-history me-3">Level 2</button>
+                    <button type="button" class="btn btn-success">Level 3</button>
+                </div>
+              <p class="font-16"> <b class="text-danger">Note :</b> Now your application is ready to move into next level. So please upgrade your application</p>
+                </div>
+            </div>
+            </div>
+        <!-- end here edit payment modal -->
+
+
+
     </section>
    
     @include('layout.footer')

@@ -13,7 +13,7 @@ use App\Models\SummaryReport;
 use App\Models\SummaryReportChapter;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-
+// use Carbon\Carbon;
 function encode5t($str)
 {
     for ($i = 0; $i < 5; $i++) //increase the level
@@ -1157,6 +1157,23 @@ function getSecondPaymentNotification()
         }
     }
         
+    }
+
+     function checkApplicationValidityExpire($app_id,$date){
+            $get_app = DB::table('tbl_application')->where('id',$app_id)->first();
+            if(!empty($get_app)){
+                $valid_till_date = \Carbon\Carbon::parse($date);
+                $beforeTwoMonths = $valid_till_date->copy()->subMonths(2);
+                $currentDate = \Carbon\Carbon::now();;
+                // $currentDate = Carbon::parse('2025-03-13 15:37:27');
+                if ($currentDate->gte($beforeTwoMonths)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else{
+                return false;
+            }
     }
     
     /*end here*/ 
