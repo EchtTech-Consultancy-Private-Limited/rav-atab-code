@@ -49,7 +49,7 @@ class ApplicationCoursesController extends Controller
             ]
         );
         
-        $application_date = Carbon::now()->addDays(365);
+        $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
 
             if($request->application_id && $request->previous_data==1){

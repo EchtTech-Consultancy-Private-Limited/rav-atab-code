@@ -557,7 +557,7 @@ class SuperAdminApplicationController extends Controller
         $app_id = $request->application_id;
         try {
             DB::beginTransaction();
-            $valid_till = Carbon::now()->addDays(365);
+            $valid_till = Carbon::now()->addDays(364);
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
                 ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till]);

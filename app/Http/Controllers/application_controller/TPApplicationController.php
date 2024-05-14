@@ -704,7 +704,7 @@ public function upgradeNewApplication(Request $request,$application_id=null){
 
 public function  storeNewApplication(Request $request)
 {
-    $application_date = Carbon::now()->addDays(365);
+    $application_date = Carbon::now()->addDays(364);
     /*check if application already created*/
             $data = [];
             $data['level_id'] = 2;
@@ -1286,7 +1286,7 @@ public function  storeNewApplicationLevel3(Request $request)
 {
    
     
-    $application_date = Carbon::now()->addDays(365);
+    $application_date = Carbon::now()->addDays(364);
     
     /*check if application already created*/
 

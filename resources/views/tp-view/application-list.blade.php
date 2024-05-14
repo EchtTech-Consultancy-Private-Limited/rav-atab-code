@@ -116,7 +116,8 @@
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
                                         <th>Status</th>
-                                        <th>Upgrade</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -146,7 +147,14 @@
                                                 
                                                 </td>
                                                 <td>
-                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
+                                                {{\Carbon\Carbon::parse($item->application_list->created_at)->format('d-m-Y')}}
+                                                </td>
+                                                <td>
+                                                @if($item->application_list->valid_till)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
                                                 </td>
                                                     <td class="p-0-lg1">
                                                     
