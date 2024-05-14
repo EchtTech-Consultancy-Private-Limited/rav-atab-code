@@ -24,7 +24,7 @@ class TPApplicationController extends Controller
     {
     }
     public function getApplicationList($level_type='level-first'){
-
+        
         $pay_list = DB::table('tbl_application_payment')
           ->where('user_id',Auth::user()->id)
           ->get()
@@ -687,7 +687,8 @@ class TPApplicationController extends Controller
 
 
 /*--Level 2----*/ 
-public function upgradeNewApplication(Request $request,$application_id=null){
+public function upgradeNewApplication(Request $request){
+    $application_id = $request->application_id;
     if ($application_id) {
         $applicationData = DB::table('tbl_application')->where('id', dDecrypt($application_id))->first();
     } else {
@@ -1269,7 +1270,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
 
 /*--Level 3----*/ 
-public function upgradeNewApplicationLevel3(Request $request,$application_id=null){
+public function upgradeNewApplicationLevel3(Request $request,$application_id=null,$prev_refid=null){
+    
     if ($application_id) {
         $applicationData = DB::table('tbl_application')->where('id', dDecrypt($application_id))->first();
     } else {
@@ -1281,7 +1283,7 @@ public function upgradeNewApplicationLevel3(Request $request,$application_id=nul
     
     $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
     
-    return view('tp-view.level3-upgrade-new-application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
+    return view('tp-view.level3-upgrade-new-application', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item,'prev_refid'=>$prev_refid]);
 }
 
 public function  storeNewApplicationLevel3(Request $request)
@@ -1351,7 +1353,7 @@ public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
     // dd($course);
     
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
-    
+
     return view('tp-view.level3-create-course', compact('applicationData', 'course','original_course_count','old_courses'));
 }
 

@@ -87,7 +87,7 @@
                     } 
                     
                 @endphp
-
+                
                 <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                 @endif
             </div>
