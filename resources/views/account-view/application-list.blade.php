@@ -74,7 +74,6 @@
                                     <tr>
                                         <th>Sr.No</th>
                                         <th>Level </th>
-                                        <th>Reference No. </th>
                                         <th>Application No. </th>
                                         <th>Courses</th>
                                         <th>Total Fee</th>
@@ -91,7 +90,6 @@
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>L-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>{{ $item->application_list->refid }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
                                                 <td>{{ $item->course_count ?? '' }}</td>
                                                 <td>

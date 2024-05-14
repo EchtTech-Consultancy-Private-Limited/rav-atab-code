@@ -110,7 +110,6 @@
                                     <tr>
                                         <th>Sr.No</th>
                                         <th>Level </th>
-                                        <th>Reference No. </th>
                                         <th>Application No. </th>
                                         <th>Courses</th>
                                         <th>Total Fee</th>
@@ -128,7 +127,6 @@
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>L-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>{{ $item->application_list->refid }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
                                                 <td>{{ $item->course_count ?? '' }}</td>
                                                 <td>
@@ -138,7 +136,7 @@
                                                 </td>
                                                 <td>
                                                 @isset($item->payment)
-                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
+                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date)->format('d-m-Y') }}
                                                     @endisset
                                                 </td>
                                                 <td>
@@ -147,7 +145,11 @@
                                                 
                                                 </td>
                                                 <td>
-                                                {{\Carbon\Carbon::parse($item->application_list->created_at)->format('d-m-Y')}}
+                                                @if($item->application_list->valid_from)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
                                                 </td>
                                                 <td>
                                                 @if($item->application_list->valid_till)
@@ -192,8 +194,6 @@
                                                         <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
                                                         
                                                         @endif
-
-                                                        
                                                         
                                                         @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
                                                         
@@ -216,7 +216,10 @@
                                                      <!-- If level - 2 -->
                                                      @if($item->application_list->level_id==2)
                                                      
-                                                                @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
+                                                     
+                                                                {{--  @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1) -->
+                                                                --}}
+                                                                @if($item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
                                                                 <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
 
                                                                 @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)

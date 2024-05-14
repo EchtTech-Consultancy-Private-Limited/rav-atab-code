@@ -704,6 +704,8 @@ public function upgradeNewApplication(Request $request,$application_id=null){
 
 public function  storeNewApplication(Request $request)
 {
+    
+    
     $application_date = Carbon::now()->addDays(364);
     /*check if application already created*/
             $data = [];
@@ -715,17 +717,18 @@ public function  storeNewApplication(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['refid'] = $request->reference_id;
+            // $data['refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
             
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
             $application = new TblApplication($data);
             $application->save();
             
-            $application->refid = $request->reference_id;
+            $application->prev_refid = $request->reference_id;
             $application->save();
 
-            $create_new_application = $request->application_id;
+            $create_new_application = $application->id;
             $msg="Application Created Successfully";
             $first_application = TblApplication::where('refid',$request->reference_id)->first();
             if(!empty($first_application)){
@@ -740,25 +743,23 @@ public function  storeNewApplication(Request $request)
 public function upgradeCreateNewCourse($id = null,$refid=null)
 {
  
- 
-    
     if($id) $id = dDecrypt($id);
     if($refid) $refid = dDecrypt($refid);
     
-    
     if ($id) {
-        $applicationData = TblApplication::where('refid',$refid)->latest()->first();
+        $applicationData = TblApplication::where('id',$id)->latest()->first();
     }else{
         $applicationData=null;
     }
     $first_application_id = TblApplication::where('refid',$refid)->first();
     
-    $last_application_id = TblApplication::where('refid',$refid)->latest()->first()->id;
+    $last_application_id = TblApplication::where('id',$id)->first()->id;
     
     $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
+    // dd($course);
     
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
     
@@ -787,6 +788,7 @@ public function deleteCourse($id,$course_id){
 public function upgradeStoreNewApplicationCourse(Request $request)
 {
 
+    
     try{
         $reference_id = TblApplication::where('id',$request->application_id)->first()->refid;
         
@@ -1131,7 +1133,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
                 dispatch(new SendEmailJob($details));
-                
+                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
@@ -1275,7 +1277,7 @@ public function upgradeNewApplicationLevel3(Request $request,$application_id=nul
     }
     
     $id = Auth::user()->id;
-    $item = LevelInformation::whereid('2')->get();
+    $item = LevelInformation::whereid('3')->get();
     
     $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
     
@@ -1299,20 +1301,23 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            $data['refid'] = $request->reference_id;
+            // $data['refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
            
-            TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3,'is_all_course_doc_verified'=>2]);
+            TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3]);
 
             
 
             $application = new TblApplication($data);
             $application->save();
 
-            $application->refid = $request->reference_id;
+            // $application->refid = $request->reference_id;
+            $application->prev_refid = $request->reference_id;
             $application->save();
 
-            $create_new_application = $request->application_id;
+            // $create_new_application = $request->application_id;
+            $create_new_application = $application->id;
             $msg="Application Created Successfully";
             $first_application = TblApplication::where('refid',$request->reference_id)->first();
             if(!empty($first_application)){
@@ -1327,21 +1332,23 @@ public function  storeNewApplicationLevel3(Request $request)
 public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
 {
     
-    $id = dDecrypt($id);
-    $refid = dDecrypt($refid);
+    if($id) $id = dDecrypt($id);
+    if($refid) $refid = dDecrypt($refid);
     
     if ($id) {
-        $applicationData = TblApplication::where('refid',$refid)->latest()->first();
+        $applicationData = TblApplication::where('id',$id)->latest()->first();
     }else{
         $applicationData=null;
     }
     $first_application_id = TblApplication::where('refid',$refid)->first();
-    $last_application_id = TblApplication::where('refid',$refid)->latest()->first()->id;
+    
+    $last_application_id = TblApplication::where('id',$id)->first()->id;
     
     $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
+    // dd($course);
     
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
     

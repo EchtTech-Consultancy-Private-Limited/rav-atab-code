@@ -557,10 +557,11 @@ class SuperAdminApplicationController extends Controller
         $app_id = $request->application_id;
         try {
             DB::beginTransaction();
+            $valid_from = Carbon::now();
             $valid_till = Carbon::now()->addDays(364);
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till]);
+                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from]);
                 $get_application= DB::table('tbl_application')->where('id',$app_id)->first();
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
@@ -570,6 +571,7 @@ class SuperAdminApplicationController extends Controller
                     $data['refid'] = '123';
                     $data['certificate_no'] = 1;
                     $data['certificate_file'] = 1;
+                    $data['valid_from'] = $valid_from;
                     $data['valid_till'] = $valid_till;
                     $data['level_id'] = $get_application->level_id;
                     DB::table('tbl_certificate')->insert($data);

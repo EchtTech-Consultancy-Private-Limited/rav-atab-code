@@ -62,6 +62,23 @@
             </div>
         </div>
         <div class="row form-margin-min">
+        <div class="previous_refid">
+                @if(!empty($spocData->prev_refid))
+                @php
+                    $text = $spocData->prev_refid;
+                    $parts = explode("/", $text);
+                    $app_id = explode('-',implode('-',$parts))[2];
+                    $lastDigit=0;
+                    if($app_id<10){
+                        $number = $app_id;
+                        $app_id = substr((string)$number, -1);
+                    } 
+                    
+                @endphp
+
+                <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+                @endif
+            </div>
             <div class="col-md-8 pr-2">
             <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
