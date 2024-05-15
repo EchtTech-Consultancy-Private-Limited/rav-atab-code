@@ -297,8 +297,6 @@ class AdminApplicationController extends Controller
             // ->where('approve_status',1)
             ->get();
 
-            
-
         $additionalFields = DB::table('tbl_course_wise_document')
             ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
                 $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
@@ -330,25 +328,20 @@ class AdminApplicationController extends Controller
         $accepted_count = 0;
         foreach ($results as $result) {
             
-            // if (($result->status === 2 || $result->status === 3 || $result->status === 4) && ($result->status == 4 && $result->admin_nc_flag == 0)) {
-            
-            if ($result->status == 0) {
+            if ($result->status === 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
-            } 
-            else if($result->status==1){
-                $accepted_count++;
-            }
-            else {
+            } else {
                 $flag = 1;
                 break;
             }
+            
         }
         
         
-        if ($flag === 0 && $accepted_count<3) {
-            return true;
-        } else {
+        if ($flag === 0) {
             return false;
+        } else {
+            return true;
         }
 
     }

@@ -392,35 +392,29 @@ class SecretariatDocumentVerifyController extends Controller
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
-                    if ($course_doc->status == 1) {
-                        $nc_comment_status = 1;
-                        $nc_flag = 0;
-                    } else if ($course_doc->status == 2) {
+                    $nc_comments = 0;
+                   if ($course_doc->status == 2) {
                         $nc_comment_status = 2;
                         $nc_flag = 1;
+                        $nc_comments=1;
                     } else if ($course_doc->status == 3) {
                         $nc_comment_status = 3;
                         $nc_flag = 1;
-                    } else if ($course_doc->status == 6) {
-                        $nc_comment_status = 6;
-                        $nc_flag = 0;
-                    } else if($course_doc->status==0){
-                        $nc_comment_status = $course_doc->status;
-                        $nc_flag = 0;
-                    }
+                        $nc_comments=1;
+                    } 
                     else {
-                        $nc_comment_status = 4; //not recommended
+                        $nc_comment_status = 0; //not recommended
                         $nc_flag = 0;
+                        $nc_comments=0;
                     }
 
-                    
                 DB::table('tbl_course_wise_document')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
                 ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status]);
 
                 DB::table('tbl_nc_comments_secretariat')
                 ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->course_id,'nc_show_status'=>0])
-                ->update(['nc_show_status' => 1]);
+                ->update(['nc_show_status' => $nc_comments]);
 
             }
 

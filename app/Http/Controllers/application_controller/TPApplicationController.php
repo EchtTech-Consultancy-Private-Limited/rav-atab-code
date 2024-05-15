@@ -683,9 +683,6 @@ class TPApplicationController extends Controller
 
 
 
-
-
-
 /*--Level 2----*/ 
 public function upgradeNewApplication(Request $request){
     $application_id = $request->application_id;
