@@ -250,12 +250,13 @@
                                 Payment
                             </li>
                         </ul>
+                        <input type="hidden" id="application_id" value="{{$applicationData->id}}" />
                         <div class="taboanel" role="tabpanel" id="step3">
                             <div class="card">
                                 <div class="header">
                                     <h2 style="float:left; clear:none;">Payment</h2>
                                     <h6 style="float:right; clear:none;" id="counter">
-                                        Total Amount (with 18% GST): {{ $total_amount }}
+                                        Total Amount (with 18% GST): <span id="total_add_fee">N/A</span>
                                     </h6>
                                 </div>
                                 <div class="body">
@@ -288,15 +289,23 @@
                                             <div class="select-box-hide-class col-md-4">
                                                 <label>Payment Type<span class="text-danger">*</span></label>
                                                 <select  class="form-control payment_mode" 
-                                                    required>
+                                                    required name="payment_type" id="payment_type" onchange="getAdditionalPaymentDetails()">
                                                     <option value="">Select Option</option>
-                                                     <option value=""> demo </option>
+                                                    @foreach($fee_structure as $list)
+                                                        <option value="{{ $list->level }}">
+                                                            {{ strtoupper($list->level) }} Fee
+                                                        </option>
+                                                    @endforeach
+                                                    <option value="OTHER">
+                                                            Other Fee
+                                                        </option>
+
                                                 </select>                                              
                                             </div>
 
-                                            <div class="select-box-hide-class col-md-4">
+                                            <div class="select-box-hide-class col-md-4 show_hide_amt">
                                                 <label>Amount<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" placeholder="Amount">                                             
+                                                <input type="number" class="form-control" min='0' maxLength='10' placeholder="Amount" name="fee_amount" id = "fee_amount" onkeydown="handleOnChange()"/>                                             
                                             </div>
 
                                         </div>
@@ -387,8 +396,7 @@
                                             <input type='hidden' name="course_count"
                                                 @isset($course) value="{{ count($course) }}">
                                              @endisset
-                                                <input type='hidden' name="currency"
-                                                @isset($currency) value="{{ $currency }}" @endisset>
+                                                
                                             @isset($course)
                                                 @foreach ($course as $k => $courses)
                                                     <input type='hidden' name="course_id[]"
@@ -496,7 +504,7 @@
                                             </li>
                                         </ul>
                                     </form>
-                                </div>
+                              t/div>
                                 <!-- payment end -->
                             </div>
                         </div>
@@ -722,7 +730,7 @@ $('#payment_transaction_no').on('keyup focusout', function() {
         }else{
             $.ajax({
             type: 'POST',
-            url: '{{ route('transaction_validation') }}',
+            url: '{{ route('additional_transaction_validation') }}',
             data: {
                 _token: $('input[name="_token"]').val(),
                 transaction_no: paymentTransactionNo
@@ -843,7 +851,7 @@ $('#payment_reference_no').on('keyup', function() {
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route('reference_validation') }}',
+                url: '{{ route('additional_reference_validation') }}',
                 data: {
                     _token: $('input[name="_token"]').val(),
                     reference_no: paymentReferenceNo

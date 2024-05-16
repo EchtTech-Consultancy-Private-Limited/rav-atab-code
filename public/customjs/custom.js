@@ -1721,6 +1721,80 @@ function handleShowCoursePayment(){
     return false;
 }
 
+function handleShowCoursePaymentFee(){
+    const payments = $("#payments option:selected").val();
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_details_file = $("#payment_details_file").val();
+    const amount = $("#fee_amount").val();
+    const payment_type = $("#payment_type option:selected").val();
+    
+    if(payments!="" && payment_transaction_no!="" && payment_reference_no!="" && payment_details_file!="" && amount!="" && payment_type!=""){
+        $("#submitBtn").attr('disabled',true);
+        return true;
+    }
+    return false;
+}
+$('.show_hide_amt').hide();
+function getAdditionalPaymentDetails(){
+    const payments = $("#payment_type option:selected").val();
+    const application_id = $('#application_id').val();
+    if(payments!=null){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        
+        if(payments=="OTHER"){
+            $('.show_hide_amt').show();
+            $('#fee_amount').attr('required',true)
+        }else{
+            $('.show_hide_amt').hide();
+        }
+        $.ajax({
+            url: `${BASE_URL}/tp/get-total-amount`,
+            type: "POST",
+            data:{level:payments,application_id:application_id},
+            success: function (response) {
+                if (response.success) {
+                    console.log(response);
+                    $('.full_screen_loading').hide();
+                    $('#total_add_fee').html(response.total);
+
+                }else{
+                    $('.full_screen_loading').hide();
+                    $('#total_add_fee').html("N/A");
+                    // toastr.error(response.message, {
+                    //     timeOut: 0,
+                    //     extendedTimeOut: 0,
+                    //     closeButton: true,
+                    //     closeDuration: 5000,
+                    // });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleOnChange(){
+    const total = $('#fee_amount').val();
+    $('#total_add_fee').html(total);
+}
+
 
 
 function removeCourseByTP(app_id,course_id){

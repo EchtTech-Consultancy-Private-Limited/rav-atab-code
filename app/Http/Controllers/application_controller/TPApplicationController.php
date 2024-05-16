@@ -513,6 +513,33 @@ class TPApplicationController extends Controller
 
 
 
+    public function paymentAdditionalReferenceValidation(Request $request)
+    {
+        $transactionNumber = DB::table('tbl_additional_fee')->where('payment_reference_no', $request->payment_reference_no)->first();
+        if ($transactionNumber) {
+            // Transaction number already exists
+            return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);
+        } else {
+            // Transaction number doesn't exist, you can proceed or return a success message
+            // For example, you can return a success message like this:
+            return response()->json(['status' => 'success', 'message' => '']);
+        }
+    }
+  
+    public function paymentAdditionalTransactionValidation(Request $request)
+      {
+          $transactionNumber = DB::table('tbl_additional_fee')->where('payment_transaction_no', $request->payment_transaction_no)->first();
+  
+          if ($transactionNumber) {
+              // Transaction number already exists
+              return response()->json(['status' => 'error', 'message' => 'This transaction ID is already used']);
+          } else {
+              // Transaction number doesn't exist, you can proceed or return a success message
+              // For example, you can return a success message like this:
+              return response()->json(['status' => 'success', 'message' => '']);
+          }
+      }
+  
 
     /*new scope*/
     

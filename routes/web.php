@@ -321,6 +321,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/tp/application-payment-fee-view/{id}', [TPApplicationController::class, 'getApplicationPaymentFeeView']);
 
     Route::get('/tp/show-course-additional-payment/{id}', [ApplicationCoursesController::class, 'showcourseAdditionalPayment']);
+    Route::post('/tp/get-total-amount',[ApplicationCoursesController::class, 'getTotalAmount']);
 
     // Doc Routes
 
@@ -402,6 +403,11 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     Route::get('{level_type?}/tp-pending-payment-list', [TpApplicationController::class, 'pendingPaymentlist']);
     Route::post('tp-payment-transaction-validation', [TpApplicationController::class, 'paymentTransactionValidation'])->name('transaction_validation');
     Route::post('tp-payment-reference-validation', [TpApplicationController::class, 'paymentReferenceValidation'])->name('reference_validation');
+
+
+    Route::post('tp-additional-payment-transaction-validation', [TpApplicationController::class, 'paymentAdditionalTransactionValidation'])->name('additional_transaction_validation');
+
+    Route::post('tp-additional-payment-reference-validation', [TpApplicationController::class, 'paymentAdditionalReferenceValidation'])->name('additional_reference_validation');
 /*----------------- End Here------------------------*/
 });
 Route::get('email-test', function(){
