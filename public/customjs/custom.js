@@ -1849,7 +1849,6 @@ function handleRejectCourse(){
 
 
 function setModelData(application_id,course_id,course_name,action){
-    console.log('application_id ',application_id,'---',course_id,'----',course_name,'-----',action)
     $("#reject_app_id").val(application_id);
     $('#reject_course_id').val(course_id);
     document.getElementById('rejectionCourseName').innerHTML = course_name
@@ -2118,6 +2117,76 @@ function handleAcceptApplicationByAdmin(){
         });
     }
 }
+
+
+
+function handleRaiseQueryForAdditionalPayment(){
+    const application_id = $('#application_id').val();
+    const raise_query_remark = $('#raise_query_remark').val();
+    if(application_id!=null && raise_query_remark!=null){
+        $('.full_screen_loading').show();
+        if(raise_query_remark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter query raise remark.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/admin/raise/payment/query`,
+            type: "POST",
+            data:{application_id:application_id,raise_query_remark:raise_query_remark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#raise_query_remark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
+function setPayModalData(application_id){
+    $("#application_id").val(application_id);
+ }
 
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');

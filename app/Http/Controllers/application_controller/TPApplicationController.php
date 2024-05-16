@@ -1248,6 +1248,178 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
 
+
+
+    public function newAdditionalApplicationPaymentFee(Request $request)
+    {
+        
+        dd($request->all());
+        $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
+        $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->first();
+        
+
+        $get_assessor_user = DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->count();
+        
+
+        $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
+        $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
+
+        $request->validate([
+            'transaction_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,transaction_no',
+            'reference_no' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:application_payments,reference_no',
+            'payment' => 'required',
+        ], [
+            'transaction_no.required' => 'The transaction number is required.',
+            'transaction_no.unique' => 'The transaction number is already in use.',
+            'transaction_no.regex' => 'The transaction number must not contain special characters or spaces.',
+            'reference_no.required' => 'The reference number is required.',
+            'reference_no.unique' => 'The reference number is already in use.',
+            'reference_no.regex' => 'The reference number must not contain special characters or spaces.',
+            'payment.required' => 'Please select a payment mode.'
+        ]);
+       try{
+        DB::beginTransaction();
+        if (Auth::user()->country == $this->get_india_id()) {
+            $assessor_type = $get_assessor_user==0 ?'desktop':'onsite';
+
+            $total_amount = $this->getPaymentFee($assessor_type,"inr",$request->Application_id,$assessor_type);
+            $currency = '₹';
+        } 
+        
+        $transactionNumber = trim($request->transaction_no);
+        $referenceNumber = trim($request->reference_no);
+        $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
+                                    ->where('payment_transaction_no', $transactionNumber)
+                                    ->orWhere('payment_reference_no', $referenceNumber)
+                                    ->first();
+        
+        if(!empty($is_exist_t_num_or_ref_num)){
+            return  back()->with('fail', 'Reference number or Transaction number already exists');
+        }
+
+        /*Implemented by suraj*/
+          $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
+          if(!empty($get_final_summary)){
+            DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
+          }
+        /*end here*/
+        $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+        ->whereNull('remark_by_account')
+        ->count();
+            if ($checkPaymentAlready>2) {
+                return redirect(url('level-second/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
+            }
+        $this->validate($request, [
+            'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
+        ]);
+        $item = new TblApplicationPayment;
+        $item->level_id = $request->level_id;
+        $item->user_id = Auth::user()->id;
+        $item->amount = $total_amount;
+        $item->payment_date = date("d-m-Y");
+        $item->payment_mode = $request->payment;
+        $item->payment_transaction_no = $transactionNumber;
+        $item->payment_reference_no = $referenceNumber;
+        // $item->currency = $request->currency;
+        $item->application_id = $request->Application_id;
+        if ($request->hasfile('payment_details_file')) {
+            $img = $request->file('payment_details_file');
+            $name = $img->getClientOriginalName();
+            $filename = time() . $name;
+            $img->move('uploads/', $filename);
+            $item->payment_proof = $filename;
+        }
+        $item->save();
+
+
+        if(isset($first_app_id)){
+
+            DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
+        }
+
+        
+        DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
+
+        $application_id = $request->Application_id;
+        $userid = Auth::user()->firstname;
+        
+        if ($request->level_id == '2') {
+            foreach ($request->course_id as $items) {
+                $ApplicationCourse = TblApplicationCourses::where('id',$items);
+                $ApplicationCourse->update(['payment_status' =>1]);
+            }
+            
+            /**
+             * Send Email to Accountant
+             * */ 
+            foreach($get_all_account_users as $email){
+                $title="New Application Created - Welcome Aboard : RAVAP-".$application_id;
+                $subject="New Application Created - Welcome Aboard : RAVAP-".$application_id;
+                
+                $body="Dear Team,".PHP_EOL."
+                I trust this message finds you well. I am writing to request the approval of the payment associated with my recent application for RAVAP-".$application_id." submitted on ".date('d-m-Y').". As part of the application process, a payment of Rs.".$request->amount." was made under the transaction reference ID ".$referenceNumber.". ".PHP_EOL."
+                Here are the transaction details: ".PHP_EOL."
+                Transaction ID: ".$transactionNumber." ".PHP_EOL."
+                Payment Amount: ".$request->amount." ".PHP_EOL."
+                Payment Date: ".date("Y-m-d", strtotime($request->payment_date))." ".PHP_EOL."
+                
+                Best regard,".PHP_EOL."
+                RAV Team";
+
+                $details['email'] = $email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            }
+
+            foreach($get_all_admin_users as $email){
+                $title="New Application Created | RAVAP-".$application_id;
+                $subject="New Application Created | RAVAP-".$application_id;
+                $body="Dear Team,".PHP_EOL."
+
+                We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make.".PHP_EOL."
+               Best regard,".PHP_EOL."
+               RAV Team";
+
+                $details['email'] = $email;
+                $details['title'] = $title; 
+                $details['subject'] = $subject; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+            }
+            
+            //tp email
+               $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
+               We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make. ".PHP_EOL."
+               Best regards,".PHP_EOL."
+               RAV Team";
+
+                $details['email'] = Auth::user()->email;
+                $details['title'] = "Payment Approval | RAVAP-".$application_id; 
+                $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
+                $details['body'] = $body; 
+                dispatch(new SendEmailJob($details));
+                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
+            /*send email end here*/ 
+            DB::commit();
+            return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
+        }else{
+            DB::rollBack();
+            return  redirect(url('/level-second/tp/application-list/'))->with('failed', 'Failed to make payment');
+        }  
+       }
+       catch(Exception $e){
+        DB::rollback();
+        return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+       }
+    }
+
+
+
+
+
+
     function get_india_id()
     {
         $india = Country::where('name', 'India')->get('id')->first();
@@ -1860,6 +2032,153 @@ function getPaymentFee($level,$currency,$application_id,$assessment=null){
     return $total_amount;
 }
 /*end here*/ 
+
+
+
+public function getApplicationPaymentFeeList(){
+        
+    $pay_list = DB::table('tbl_application_payment')
+      ->where('user_id',Auth::user()->id)
+      ->get()
+      ->pluck('application_id')
+      ->toArray();
+    
+    $application = DB::table('tbl_application as a')
+    ->where('tp_id',Auth::user()->id)
+    ->whereIn('id',$pay_list)
+    ->orderBy('id','desc')
+    ->get();
+
+    $final_data=array();
+    foreach($application as $app){
+        $obj = new \stdClass;
+        $obj->application_list = $app;
+        $course = DB::table('tbl_application_courses')->where([
+            'application_id' => $app->id,
+        ])
+        ->whereNull('deleted_at') 
+        ->count();
+        
+            if($course){
+                $obj->course_count = $course;
+            }
+            $payment = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+            ])->latest('created_at')->first();
+            $payment_amount = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+            ])->sum('amount');
+            $payment_count = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+            ])->count();
+            
+            if($payment){
+                $obj->payment = $payment;
+                $obj->payment->payment_count = $payment_count;
+                $obj->payment->payment_amount = $payment_amount ;
+            }
+            $final_data[] = $obj;
+    }
+    
+    return view('tp-view.payment.application-list',['list'=>$final_data]);
+}
+
+/** Whole Application View for Account */
+public function getApplicationPaymentFeeView($id){
+    
+    $application = DB::table('tbl_application')
+    ->where('id', dDecrypt($id))
+    ->first();
+    $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+    $decoded_json_courses_doc = json_decode($json_course_doc);
+    
+    $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+    $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+    
+        $obj = new \stdClass;
+        $obj->application= $application;
+        $courses = DB::table('tbl_application_courses')->where([
+            'application_id' => $application->id,
+        ])
+        ->whereIn('status',[0,2]) 
+        ->whereNull('deleted_at') 
+        ->get();
+        foreach ($courses as $course) {
+            if ($course) {
+                $obj->course[] = [
+                    "course" => $course,
+                    'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
+                        'application_id' => $application->id,
+                        'course_id' => $course->id,
+                        'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                        'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                    ])->get(),
+
+                        'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                            'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        ])->get(),
+        
+                        'course_wise_document_details' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.details.doc_sr_code'),
+                            'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        ])->get(),
+                    'nc_comments_course_declaration' => DB::table('tbl_nc_comments_secretariat')->where([
+                        'application_id' => $application->id,
+                        'application_courses_id' => $course->id,
+                        'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                        'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        'nc_show_status'=>1
+                    ])
+                        ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                        ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                        ->get(),
+        
+                    'nc_comments_course_curiculam' => DB::table('tbl_nc_comments_secretariat')->where([
+                        'application_id' => $application->id,
+                        'application_courses_id' => $course->id,
+                        'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                        'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        'nc_show_status'=>1
+                    ])
+                        ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                        ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                        ->get(),
+        
+                    'nc_comments_course_details' => DB::table('tbl_nc_comments_secretariat')->where([
+                        'application_id' => $application->id,
+                        'application_courses_id' => $course->id,
+                        'doc_sr_code' => config('constant.details.doc_sr_code'),
+                        'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        'nc_show_status'=>1
+                    ])
+                        ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                        ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                        ->get()
+                ]; // Added semicolon here
+            }
+        }
+
+            $payment = DB::table('tbl_application_payment')->where([
+                'application_id' => $application->id,
+            ])->get();
+            if($payment){
+                $obj->payment = $payment;
+            }
+            $final_data = $obj;
+            $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
+            if($tp_final_summary_count>1){
+             $is_final_submit = true;
+            }else{
+             $is_final_submit = false;
+            }
+
+    return view('tp-view.payment.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
+}
 
 
 

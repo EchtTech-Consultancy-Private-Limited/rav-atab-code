@@ -83,6 +83,14 @@
         </ul>
         </li>
 
+        <li class="{{ Request::is('tp/application-payment-fee-list') ? 'active' : '' }}">
+            <a href="{{ url('tp/application-payment-fee-list') }}">
+                <!-- <i data-feather="clipboard"></i> -->
+                <i class="material-icons">payment</i>
+                <span>Payment Fee</span>
+            </a>
+        </li>
+
         <li class="{{ Request::is('show-previous-level') ? 'active' : '' }}">
             <a href="#" onClick="return false;" class="menu-toggle">
                 {{-- <i data-feather="history"></i> --}}

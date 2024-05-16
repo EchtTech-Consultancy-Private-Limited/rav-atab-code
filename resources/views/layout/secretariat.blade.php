@@ -61,6 +61,13 @@
                 </ul>
             </li>
 
+            <li class="{{ Request::is('admin/application-payment-fee-list') ? 'active' : '' }}">
+            <a href="javascript:void(0)">
+                <!-- <i data-feather="clipboard"></i> -->
+                <i class="material-icons">payment</i>
+                <span>Payment Fee</span>
+            </a>
+        </li>
             <!-- <li  class="{{ (Request::is('assessor-desktop-assessment') ||  Request::is('assessor-onsite-assessment-page') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                     <i data-feather="file"></i>

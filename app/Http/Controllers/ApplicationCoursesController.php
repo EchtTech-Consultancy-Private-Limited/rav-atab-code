@@ -611,4 +611,55 @@ class ApplicationCoursesController extends Controller
 
         return $total_amount;
     }
+
+
+    public function showcourseAdditionalPayment(Request $request)
+    {
+        $id = dDecrypt($request->id);
+        
+        if ($id) {
+            $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+            $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
+
+            /*to get payment from db*/
+                $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>'inr','level'=>1])->get();
+                
+            /*end here*/
+            
+            if (Auth::user()->country == $this->get_india_id()) {
+                $total_amount = $this->getPaymentFee(1,"inr",$id);
+                $currency = '₹';
+            } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
+                if (count($course) == '0') {
+                    $currency = 'US $';
+                    $total_amount = '0';
+                } elseif (count($course) <= 5) {
+                    $currency = 'US $';
+                    $total_amount =  '15';
+                } elseif (count($course) <= 10) {
+                    $currency = 'US $';
+                    $total_amount = '30';
+                } else {
+                    $currency = 'US $';
+                    $total_amount =  '45';
+                }
+            } else {
+                if (count($course) == '0') {
+                    $currency = 'US $';
+                    $total_amount = '';
+                } elseif (count($course) <= 5) {
+                    $currency = 'US $';
+                    $total_amount = '50';
+                } elseif (count($course) <= 10) {
+                    $currency = 'US $';
+                    $total_amount = '100';
+                } else {
+                    $currency = 'US $';
+                    $total_amount =  '150';
+                }
+            }
+        }
+        return view('tp-view.show-course-additional-payment', compact('applicationData', 'course', 'currency', 'total_amount'));
+    }
+    
 }

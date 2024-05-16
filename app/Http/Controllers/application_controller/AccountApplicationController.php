@@ -74,8 +74,6 @@ class AccountApplicationController extends Controller
         
         return view('account-view.application-list',['list'=>$final_data]);
     }
-
-    /** Whole Application View for Account */
     public function getApplicationView($id){
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
@@ -351,5 +349,152 @@ class AccountApplicationController extends Controller
         return back()->with('fail','Something went wrong');
     }
     }
+
+
+    public function getApplicationPaymentFeeList(){
+        $application = DB::table('tbl_application as a')
+        ->whereIn('payment_status',[0,1,2,3])
+        ->orderBy('id','desc')
+        ->get();
+        $final_data=array();
+        foreach($application as $app){
+            $obj = new \stdClass;
+            $obj->application_list= $app;
+
+                // if($app->level_id==1){
+                //     $course = DB::table('tbl_application_courses')->where([
+                //         'application_id' => $app->id,
+                //     ])
+                //     ->whereNull('deleted_at') 
+                //     ->count();
+    
+                // }
+                // if($app->level_id==2 || $app->level_id==3){
+                //     $course = DB::table('tbl_application_courses')->where([
+                //         'refid' => $app->refid,
+                //     ])
+                //     ->whereNull('deleted_at') 
+                //     ->count();
+                        
+                // }
+
+                $course = DB::table('tbl_application_courses')->where([
+                    'application_id' => $app->id,
+                ])
+                ->whereNull('deleted_at') 
+                ->count();
+                
+                if($course){
+                    $obj->course_count = $course;
+                }
+                
+                $payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->latest('created_at')->first();
+                $payment_amount = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->sum('amount');
+                
+                $payment_count = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                ])->count();
+                if($payment){
+                    $obj->payment = $payment;
+                    $obj->payment->payment_count = $payment_count;
+                    $obj->payment->payment_amount = $payment_amount ;
+                }
+                $final_data[] = $obj;
+                
+        }
+        
+        return view('account-view.payment.application-list',['list'=>$final_data]);
+    }
+    public function getApplicationPaymentFeeView($id){
+        $application = DB::table('tbl_application')
+        ->where('id', dDecrypt($id))
+        ->first();
+        $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
+        $decoded_json_courses_doc = json_decode($json_course_doc);
+                
+        $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+
+        
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+            $obj = new \stdClass;
+            $obj->application= $application;
+    
+            $courses = DB::table('tbl_application_courses')->where([
+                'application_id' => $application->id,
+            ])
+            ->whereNull('deleted_at') 
+            ->get();
+            
+            foreach ($courses as $course) {
+                if ($course) {
+                    $obj->course[] = [
+                        "course" => $course,
+                        'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
+                            'application_id' => $application->id,
+                            'course_id' => $course->id,
+                            'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                            'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        ])->get(),
+
+                            'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                                'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                            ])->get(),
+            
+                            'course_wise_document_details' => DB::table('tbl_course_wise_document')->where([
+                                'application_id' => $application->id,
+                                'course_id' => $course->id,
+                                'doc_sr_code' => config('constant.details.doc_sr_code'),
+                                'doc_unique_id' => config('constant.details.doc_unique_id'),
+                            ])->get(),
+                        'nc_comments_course_declaration' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.declaration.doc_sr_code'),
+                            'doc_unique_id' => config('constant.declaration.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get(),
+            
+                        'nc_comments_course_curiculam' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.curiculum.doc_sr_code'),
+                            'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get(),
+            
+                        'nc_comments_course_details' => DB::table('tbl_nc_comments_secretariat')->where([
+                            'application_id' => $application->id,
+                            'application_courses_id' => $course->id,
+                            'doc_sr_code' => config('constant.details.doc_sr_code'),
+                            'doc_unique_id' => config('constant.details.doc_unique_id'),
+                        ])
+                            ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
+                            ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
+                            ->get()
+                    ]; // Added semicolon here
+                }
+            }
+                $payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $application->id,
+                ])->get();
+                if($payment){
+                    $obj->payment = $payment;
+                }
+                $final_data = $obj;
+                // dd($final_data);
+        return view('account-view.payment.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'courses_doc'=>$decoded_json_courses_doc]);
+    }
+
 }
 
