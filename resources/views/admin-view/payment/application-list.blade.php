@@ -144,10 +144,9 @@
                                                 @endif
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/super-admin/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
+                                                        <a href="{{ url('/admin/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-
 
                                                     @if($item->application_list->is_query_raise===0)
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#raise_query_payment"

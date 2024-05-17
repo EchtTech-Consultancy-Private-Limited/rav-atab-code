@@ -257,7 +257,7 @@
                                     <h2 style="float:left; clear:none;">Payment</h2>
                                     <h6 style="float:right; clear:none;" id="counter">
                                         Total Amount (with 18% GST): <span id="total_add_fee">N/A</span>
-                                    </h6>
+                                 
                                 </div>
                                 <div class="body">
                                     <form action="{{ url('/additional-application-payment-fee') }}" method="post" class="form"
@@ -503,8 +503,7 @@
                                                     class="btn btn-primary btn-info-full">Submit</button>
                                             </li>
                                         </ul>
-                                    </form>
-                              t/div>
+                                 </form>
                                 <!-- payment end -->
                             </div>
                         </div>

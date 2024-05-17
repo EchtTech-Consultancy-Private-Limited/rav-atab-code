@@ -226,6 +226,70 @@ class AccountApplicationController extends Controller
     }
     }
 
+    public function updateAdditionalPaynentInfo(Request $request)
+    {
+
+        
+        try{
+          $request->validate([
+              'id' => 'required',
+              'payment_transaction_no' => 'required',
+              'payment_reference_no' => 'required',
+              'payment_proof_by_account' => '',
+          ]);
+  
+          DB::beginTransaction();
+          $slip_by_approver_file = "";
+          if ($request->hasfile('payment_proof_by_account')) {
+              $file = $request->file('payment_proof_by_account');
+              $name = $file->getClientOriginalName();
+              $filename = time() . $name;
+              $file->move('documnet/', $filename);
+              $slip_by_approver_file = $filename;
+          }
+  
+        /*keep history for update payment info*/   
+          $update_payment = DB::table('tbl_additional_fee')->where('id',$request->id)->first();
+          $updateArr=[];
+          $updateArr['old_payment_transaction_no']=$update_payment->payment_transaction_no;
+          $updateArr['new_payment_transaction_no']=$request->payment_transaction_no;
+          $updateArr['old_payment_reference_no']=$update_payment->payment_reference_no;
+          $updateArr['new_payment_reference_no']=$request->payment_reference_no;
+          $updateArr['application_id']=$update_payment->application_id;
+          $updateArr['user_id']=Auth::user()->id;
+          DB::table('payment_history')->insert($updateArr);
+        /*end here*/   
+
+
+          $get_payment_update_count = DB::table('tbl_additional_fee')->where('id',$request->id)->first()->account_update_count;
+         
+          if($get_payment_update_count > (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT')-1){
+              return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);
+          }
+
+          $data = [];
+          $data['payment_transaction_no']=$request->payment_transaction_no;
+          $data['payment_reference_no']=$request->payment_reference_no;
+          $data['account_update_count']=$get_payment_update_count+1;
+
+          if ($request->hasfile('payment_proof_by_account')) {
+              $data['payment_proof_by_account']=$slip_by_approver_file;
+          }
+          $update_payment_info = DB::table('tbl_additional_fee')->where('id',$request->id)->update($data);
+          if($update_payment_info){
+              DB::commit();
+              return response()->json(['success' => true,'message' =>'Payment info updated successfully'],200);
+          }else{
+              DB::rollback();
+              return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
+          }
+    }
+    catch(Exception $e){
+          DB::rollback();
+          return response()->json(['success' => false,'message' =>'Failed to update payment info'],200);
+    }
+    }
+
 
     public function updateAccountNotificationStatus(Request $request,$id)
     {
@@ -419,7 +483,7 @@ class AccountApplicationController extends Controller
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
         
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        $application_payment_status = DB::table('tbl_additional_fee')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
     
@@ -488,8 +552,12 @@ class AccountApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
                 // dd($final_data);

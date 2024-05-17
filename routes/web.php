@@ -393,10 +393,22 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
+
+
+    Route::post('/account-additional-payment-received', [DocApplicationController::class, 'accountReceivedAdditionalPayment']);
+    Route::post('/account-additional-payment-approved', [DocApplicationController::class, 'accountApproveAdditionalPayment']);
+
+
+
+
+
     Route::get('/tp-second-payment', [TpApplicationController::class, 'secondPaymentView']);
     Route::post('/tp-second-payment', [TpApplicationController::class, 'storeSecondPayment']);
     Route::post('/tp-update-payment', [TpApplicationController::class, 'updatePaynentInfo']);
     Route::post('/account-update-payment', [AccountApplicationController::class, 'updatePaynentInfo']);
+
+    Route::post('/account-update-additional-payment', [AccountApplicationController::class, 'updateAdditionalPaynentInfo']);
+    
     Route::post('/account-update-notification-status/{id}', [AccountApplicationController::class, 'updateAccountNotificationStatus']);
     Route::post('/assessor-desktop-update-notification-status/{id}', [DesktopApplicationController::class, 'updateAssessorDesktopNotificationStatus']);
     Route::post('/assessor-onsite-update-notification-status/{id}', [OnsiteApplicationController::class, 'updateAssessorOnsiteNotificationStatus']);

@@ -144,7 +144,7 @@
                                                 @endif
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/super-admin/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
+                                                        <a href="{{ url('/account/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                 </td>

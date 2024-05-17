@@ -1280,7 +1280,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
     public function newAdditionalApplicationPaymentFee(Request $request)
     {
         
-        dd($request->all());
+        
         $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
         $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->first();
         
@@ -1306,16 +1306,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         ]);
        try{
         DB::beginTransaction();
-        if (Auth::user()->country == $this->get_india_id()) {
-            $assessor_type = $get_assessor_user==0 ?'desktop':'onsite';
-
-            $total_amount = $this->getPaymentFee($assessor_type,"inr",$request->Application_id,$assessor_type);
-            $currency = '₹';
-        } 
         
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
-        $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
+        $is_exist_t_num_or_ref_num = DB::table('tbl_additional_fee')
                                     ->where('payment_transaction_no', $transactionNumber)
                                     ->orWhere('payment_reference_no', $referenceNumber)
                                     ->first();
@@ -1324,58 +1318,52 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             return  back()->with('fail', 'Reference number or Transaction number already exists');
         }
 
-        /*Implemented by suraj*/
-          $get_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'payment_status'=>0,'assessor_type'=>'desktop'])->first();
-          if(!empty($get_final_summary)){
-            DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
-          }
-        /*end here*/
-        $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
-        ->whereNull('remark_by_account')
-        ->count();
-            if ($checkPaymentAlready>2) {
-                return redirect(url('level-second/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
-            }
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
         ]);
-        $item = new TblApplicationPayment;
-        $item->level_id = $request->level_id;
-        $item->user_id = Auth::user()->id;
-        $item->amount = $total_amount;
-        $item->payment_date = date("d-m-Y");
-        $item->payment_mode = $request->payment;
-        $item->payment_transaction_no = $transactionNumber;
-        $item->payment_reference_no = $referenceNumber;
-        // $item->currency = $request->currency;
-        $item->application_id = $request->Application_id;
+        $application_id = $request->Application_id;
+/*calculate amount according to level and courses*/ 
+
+                $course = DB::table('tbl_application_courses')->where(['application_id'=>$application_id])->get();
+                    
+                $level = $request->payment_type;
+                $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+                $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$country_details->currency,'level'=>$level])->get();
+                
+                if (count($course) == '0') {
+                    $total_amount = '0';
+                } elseif (count($course) <= 5) {
+                    $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+                } elseif (count($course)>=5 && count($course) <= 10) {
+                    $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+                } elseif(count($course)>10) {
+                    $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+                }
+/*end here to calculating the amount*/ 
+        if($request->payment_type=="OTHER"){
+            $total_amount=$request->fee_amount;
+        }
+        
+        $data = [];
+        $data['application_id'] = $request->Application_id;
+        $data['payment_type'] = $request->payment_type;
+        $data['payment_mode'] = $request->payment;
+        $data['amount'] =$total_amount; 
+        $data['currency'] = $country_details->currency;
+        $data['payment_date'] = date("d-m-Y");
+        $data['payment_transaction_no'] = $request->transaction_no;
+        $data['payment_reference_no'] = $request->reference_no;
+        $data['tp_id'] = Auth::user()->id;
+        
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
             $name = $img->getClientOriginalName();
             $filename = time() . $name;
             $img->move('uploads/', $filename);
-            $item->payment_proof = $filename;
+            $data['payment_proof'] = $filename;
         }
-        $item->save();
+        $make_additional_pay = DB::table('tbl_additional_fee')->insert($data);
 
-
-        if(isset($first_app_id)){
-
-            DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
-        }
-
-        
-        DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
-
-        $application_id = $request->Application_id;
-        $userid = Auth::user()->firstname;
-        
-        if ($request->level_id == '2') {
-            foreach ($request->course_id as $items) {
-                $ApplicationCourse = TblApplicationCourses::where('id',$items);
-                $ApplicationCourse->update(['payment_status' =>1]);
-            }
-            
             /**
              * Send Email to Accountant
              * */ 
@@ -1427,18 +1415,21 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
                 dispatch(new SendEmailJob($details));
-                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
+                // createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
-            DB::commit();
-            return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
-        }else{
-            DB::rollBack();
-            return  redirect(url('/level-second/tp/application-list/'))->with('failed', 'Failed to make payment');
-        }  
+            
+            DB::table('tbl_application')->where('id',$application_id)->update(['is_query_raise'=>2]);/*additional payment done by tp*/
+            if($make_additional_pay){
+                DB::commit();
+                return  redirect(url('/tp/application-payment-fee-list'))->with('success', 'Payment Done successfully');
+            }else{
+                DB::commit();
+                return  redirect(url('/tp/application-payment-fee-list'))->with('fail', 'Failed to make additional payment');
+            }
        }
        catch(Exception $e){
         DB::rollback();
-        return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+        return  redirect(url('/tp/application-payment-fee-list'))->with('fail', 'Something went wrong!');
        }
     }
 

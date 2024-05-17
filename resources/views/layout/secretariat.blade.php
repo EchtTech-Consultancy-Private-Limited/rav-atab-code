@@ -62,7 +62,7 @@
             </li>
 
             <li class="{{ Request::is('admin/application-payment-fee-list') ? 'active' : '' }}">
-            <a href="javascript:void(0)">
+            <a href="{{url('admin/application-payment-fee-list')}}">
                 <!-- <i data-feather="clipboard"></i> -->
                 <i class="material-icons">payment</i>
                 <span>Payment Fee</span>
