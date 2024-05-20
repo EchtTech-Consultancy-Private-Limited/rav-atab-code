@@ -2495,6 +2495,63 @@ function handleAdditionalPaymentApproved() {
 
 
 
+function handleRevertAction(application_id,course_id,doc_file_name){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat-revert-course-doc-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".box-overlay").show();
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\application_controller;
 
 use App\Http\Controllers\Controller;
 use App\Models\TblApplicationCourseDoc; 
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
@@ -389,6 +390,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->latest('id')->get();
 
                 
+                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -410,15 +412,13 @@ class SecretariatDocumentVerifyController extends Controller
 
                 DB::table('tbl_course_wise_document')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
-                ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status]);
+                ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
 
                 DB::table('tbl_nc_comments_secretariat')
                 ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->course_id,'nc_show_status'=>0])
                 ->update(['nc_show_status' => $nc_comments]);
 
             }
-
-
 
             // DB::table('tbl_course_wise_document')
             //     ->where(['id' => $delaration->id, 'application_id' => $application_id, 'course_id' => $course_id])
@@ -438,7 +438,7 @@ class SecretariatDocumentVerifyController extends Controller
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
-
+            
             /*------end here------*/
             DB::commit();
             if (!$check_all_doc_verified) {
@@ -599,6 +599,40 @@ class SecretariatDocumentVerifyController extends Controller
             return false;
         }
 
+    }
+
+
+    function revertCourseDocAction(Request $request){
+        try{
+            
+            DB::beginTransaction();
+
+            
+            $get_course_doc = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->latest('id')->first();
+
+            
+                if($get_course_doc->status==4){
+                    $revertAction = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0,'admin_nc_flag'=>0]);
+ 
+                }else{
+                    $revertAction = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0]);
+                }
+
+                    /*Delete nc on course doc*/ 
+                    $delete_= DB::table('tbl_nc_comments_secretariat')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$get_course_doc->doc_file_name])->delete();
+                    
+                     /*end here*/            
+            if($revertAction){
+                DB::commit();
+                return response()->json(['success' => true, 'message' => 'Action reverted successfully.'], 200);
+            }else{
+                DB::rollBack();
+                return response()->json(['success' =>false, 'message' => 'Failed to revert action.'], 200);
+            }
+        }catch(Exception $e){
+            DB::rollBack();
+            return response()->json(['success' =>false, 'message' => 'Something went wrong!'], 200);
+        }
     }
 
 

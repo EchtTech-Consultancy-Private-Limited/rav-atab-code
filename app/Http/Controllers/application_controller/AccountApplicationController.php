@@ -153,8 +153,12 @@ class AccountApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
                 // dd($final_data);

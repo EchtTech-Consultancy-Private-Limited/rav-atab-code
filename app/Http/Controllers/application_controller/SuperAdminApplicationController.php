@@ -173,8 +173,12 @@ class SuperAdminApplicationController extends Controller
                     'application_id' => $application->id,
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
 
@@ -560,7 +564,7 @@ class SuperAdminApplicationController extends Controller
             $valid_till = Carbon::now()->addDays(364);
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from]);
+                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from,'is_all_course_doc_verified'=>1]);
                 $get_application= DB::table('tbl_application')->where('id',$app_id)->first();
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
@@ -666,7 +670,7 @@ class SuperAdminApplicationController extends Controller
 
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>3,'reject_remark'=>$request->remark]); //3 for rejected application by admin
+                ->update(['approve_status'=>3,'reject_remark'=>$request->remark,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
 
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
@@ -803,6 +807,7 @@ class SuperAdminApplicationController extends Controller
     public function getApplicationPaymentFeeList(){
         $application = DB::table('tbl_application as a')
         ->whereIn('a.payment_status',[2,3])
+        ->whereIn('a.is_query_raise',[1,2])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -883,7 +888,7 @@ class SuperAdminApplicationController extends Controller
 
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        $application_payment_status = DB::table('tbl_additional_fee')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
             $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
@@ -953,8 +958,12 @@ class SuperAdminApplicationController extends Controller
                     'application_id' => $application->id,
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
 

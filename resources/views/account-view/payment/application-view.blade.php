@@ -558,7 +558,7 @@
                             <td>
                                 
                                 @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->status!=2)
-                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_additional_payment_modal" onclick="handleShowAdditionalPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_additional_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
                                 title="You can update only once"
                                 ><i class="fa fa-pencil"></i></button>
 
@@ -582,77 +582,7 @@
                     @endif
                 </div>
             </div>
-
-            @if (isset($ApplicationPayment))
-                @if( $application_payment_status->status==0)
-                <div class="card p-relative" id="payment_rcv_card">
-                <div class="box-overlay-2">
-                     <span class="spinner-border"></span>
-                </div>
-                    <div class="card-header bg-white text-dark">
-                        <h5 class="mt-2">
-                            Payment Process
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                    
-                        <div>
-                            
-                        <form action="#" name="payment_approve_form" id="payment_approve_form" enctype="multipart/form-data">
-                            <div class="row">
-                                
-                                <input type="hidden" name="payment_id" id="payment_id" value="{{$ApplicationPayment->id}}">
-                                <div class="col-md-4">
-                                    <label for="">Payment Proof Upload (jpg,jpeg,png,pdf)</label>
-                                    <input type="file" required class="form-control" name="payment_proof" id="payment_proof" accept="application/pdf,image/png, image/gif, image/jpeg">
-                                </div>
-                                <div class="col-md-5">
-                                    <label for="">Remark<span class="text text-danger">*</span> </label>
-                                    <textarea class="form-control" name="payment_remark" id="payment_remark" cols="30" rows="10" placeholder="Please Enter the remark"></textarea>
-                                </div>
-                                <div class="col-md-3 mt-4"> 
-                                    <button class="btn btn-primary" type="button" onclick="handleAdditionalPaymentReceived()" id="submit_btn">Payment Received
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        </div>  
-                    </div>
-                </div>
-                @endif
-
-
-                @if( $application_payment_status->status==1)
-                <div class="card" id="payment_apr_card">
-                    <div class="card-header bg-white text-dark">
-                        <h5 class="mt-2">
-                            Payment Process
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div>
-                        <form  action="#" name="final_payment_approve_form" id="final_payment_approve_form" >
-                            <div class="row" >
-                                <input type="hidden" name="payment_id" id="payment_id" value="{{$ApplicationPayment->id}}">
-                                <div class="col-md-5">
-                                    <label for="">Remark<span class="text text-danger">*</span> </label>
-                                    <textarea class="form-control remove_err" required name="final_payment_remark" id="final_payment_remark" cols="30" rows="10" placeholder="Please Enter the remark"></textarea>
-                                    <span class="err" id="final_payment_remark_err"></span>
-                                </div>
-                                <div class="col-md-3 mt-4"> 
-                                    <button class="btn btn-primary" type="button" onclick="handleAdditionalPaymentApproved()" id="submit_btn_2">Payment Approved
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                </div>
-                @endif
-        @endif
-
-
-        </div>
+        
 
 
 
@@ -792,7 +722,7 @@
             </div>
 
             @if (isset($ApplicationPayment))
-                @if( $application_payment_status->status==0)
+                @if($application_payment_status &&  $application_payment_status->status==0)
                 <div class="card p-relative" id="payment_rcv_card">
                 <div class="box-overlay-2">
                      <span class="spinner-border"></span>
@@ -828,9 +758,8 @@
                     </div>
                 </div>
                 @endif
-
-
-                @if( $application_payment_status->status==1)
+                
+                @if($application_payment_status &&  $application_payment_status->status==1)
                 <div class="card" id="payment_apr_card">
                     <div class="card-header bg-white text-dark">
                         <h5 class="mt-2">

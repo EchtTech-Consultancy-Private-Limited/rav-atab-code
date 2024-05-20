@@ -82,9 +82,6 @@ class TPApplicationController extends Controller
     /** Whole Application View for Account */
     public function getApplicationView($id){
         
-        
-
-        
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
@@ -131,7 +128,8 @@ class TPApplicationController extends Controller
                             'application_courses_id' => $course->id,
                             'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                             'doc_unique_id' => config('constant.declaration.doc_unique_id'),
-                            'nc_show_status'=>1
+                            'nc_show_status'=>1,
+                            
                         ])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
@@ -165,8 +163,12 @@ class TPApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
                 $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
@@ -1260,8 +1262,12 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
                 $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
@@ -1457,14 +1463,17 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
 
 /*--Level 3----*/ 
-public function upgradeNewApplicationLevel3(Request $request,$application_id=null,$prev_refid=null){
+public function upgradeNewApplicationLevel3(Request $request,$application_id,$prev_refid){
+
+    
     
     if ($application_id) {
         $applicationData = DB::table('tbl_application')->where('id', dDecrypt($application_id))->first();
     } else {
         $applicationData = null;
     }
-    
+
+    $prev_refid = dDecrypt($prev_refid);
     $id = Auth::user()->id;
     $item = LevelInformation::whereid('3')->get();
     
@@ -1475,7 +1484,6 @@ public function upgradeNewApplicationLevel3(Request $request,$application_id=nul
 
 public function  storeNewApplicationLevel3(Request $request)
 {
-   
     
     $application_date = Carbon::now()->addDays(364);
     
@@ -1491,7 +1499,7 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
             // $data['refid'] = $request->reference_id;
-            $data['prev_refid'] = $request->reference_id;
+            $data['prev_refid'] = $request->prev_refid;
             $data['application_date'] = $application_date;
            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3]);
@@ -1501,8 +1509,8 @@ public function  storeNewApplicationLevel3(Request $request)
             $application = new TblApplication($data);
             $application->save();
 
-            // $application->refid = $request->reference_id;
-            $application->prev_refid = $request->reference_id;
+            // $application->refid = $request->prev_refid;
+            $application->prev_refid = $request->prev_refid;
             $application->save();
 
             // $create_new_application = $request->application_id;
@@ -2063,6 +2071,7 @@ public function getApplicationPaymentFeeList(){
     
     $application = DB::table('tbl_application as a')
     ->where('tp_id',Auth::user()->id)
+    ->whereIn('is_query_raise',[1,2])
     ->whereIn('id',$pay_list)
     ->orderBy('id','desc')
     ->get();
@@ -2184,8 +2193,12 @@ public function getApplicationPaymentFeeView($id){
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,
             ])->get();
+            $additional_payment = DB::table('tbl_additional_fee')->where([
+                'application_id' => $application->id,
+            ])->get();
             if($payment){
                 $obj->payment = $payment;
+                $obj->additional_payment = $additional_payment;
             }
             $final_data = $obj;
             $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();

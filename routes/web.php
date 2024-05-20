@@ -328,6 +328,9 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     
     //new scope
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
+
+
+    Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
     
     Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
 
@@ -346,7 +349,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/account-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AccountApplicationController::class, 'accountantVerfiyDocument']);
    
     
-    Route::get('/upgrade-new-application/{application_id?}',[TPApplicationController::class,"upgradeNewApplication"]);
+    Route::get('/upgrade-new-application/{application_id?}/{prev_refid?}',[TPApplicationController::class,"upgradeNewApplication"]);
     Route::post('/upgrade-store-new-applications',[TPApplicationController::class,"storeNewApplication"]);
     Route::get('/upgrade-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourse']);
     Route::post('/upgrade-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourse']);
@@ -357,7 +360,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/additional-application-payment-fee', [TPApplicationController::class, 'newAdditionalApplicationPaymentFee']);
 
     
-    Route::get('/upgrade-level-3-new-application/{application_id?}',[TPApplicationController::class,"upgradeNewApplicationLevel3"]);
+    Route::get('/upgrade-level-3-new-application/{application_id?}/{prev_refid?}',[TPApplicationController::class,"upgradeNewApplicationLevel3"]);
     Route::post('/upgrade-level-3-store-new-applications',[TPApplicationController::class,"storeNewApplicationLevel3"]);
     Route::get('/upgrade-level-3-create-new-course/{id?}/{refid?}', [TPApplicationController::class, 'upgradeCreateNewCourseLevel3']);
     Route::post('/upgrade-level-3-store-new-application-course', [TPApplicationController::class, 'upgradeStoreNewApplicationCourseLevel3']);
