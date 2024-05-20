@@ -74,6 +74,23 @@
             </div>
         </div>
         <div class="row form-margin-min">
+        <div class="previous_refid">
+                @if(!empty($spocData->prev_refid))
+                @php
+                    $text = $spocData->prev_refid;
+                    $parts = explode("/", $text);
+                    $app_id = explode('-',implode('-',$parts))[2];
+                    $lastDigit=0;
+                    if($app_id<10){
+                        $number = $app_id;
+                        $app_id = substr((string)$number, -1);
+                    } 
+                    
+                @endphp
+                
+                <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+                @endif
+            </div>
             <div class="col-md-8 pr-2">
             <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
@@ -306,6 +323,7 @@
                                                          enctype="multipart/form-data">
                                     
                                     <input type="hidden" name="application_id" value="{{$spocData->id}}">
+                                    
                                     <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
                                     <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                     <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">

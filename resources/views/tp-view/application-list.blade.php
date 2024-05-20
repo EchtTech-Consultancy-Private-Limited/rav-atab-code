@@ -110,13 +110,13 @@
                                     <tr>
                                         <th>Sr.No</th>
                                         <th>Level </th>
-                                        <th>Reference No. </th>
                                         <th>Application No. </th>
                                         <th>Courses</th>
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
                                         <th>Status</th>
-                                        <th>Upgrade</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -127,7 +127,6 @@
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>L-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>{{ $item->application_list->refid }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
                                                 <td>{{ $item->course_count ?? '' }}</td>
                                                 <td>
@@ -137,7 +136,7 @@
                                                 </td>
                                                 <td>
                                                 @isset($item->payment)
-                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date ?? '')->format('d-m-Y') }}
+                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date)->format('d-m-Y') }}
                                                     @endisset
                                                 </td>
                                                 <td>
@@ -146,7 +145,18 @@
                                                 
                                                 </td>
                                                 <td>
-                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
+                                                @if($item->application_list->valid_from)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
+                                                </td>
+                                                <td>
+                                                @if($item->application_list->valid_till)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
                                                 </td>
                                                     <td class="p-0-lg1">
                                                     
@@ -166,7 +176,8 @@
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                     @endif
-
+        
+        
                                                                                    
                                                     <!-- If level - 1 -->
                                                 
@@ -174,10 +185,16 @@
                                                         @if($item->application_list->approve_status==1)
                                                             
                                                 <div class="d-flex action-button-div">
-                                              
-                                                        <a href="{{ url('/upgrade-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-2</a>
+                                                        <?php
+                                                        $isApplicationBeingExpired = checkApplicationValidityExpire($item->application_list->id,$item->application_list->valid_till)
+                                                        ?>
+                                                        @if($isApplicationBeingExpired)
+                                                            <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
+                                                        @else
+                                                        <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id) ) }}" class="btn btn-warning">L-2</a>
                                                         <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
                                                         
+                                                        @endif
                                                         
                                                         @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
                                                         
@@ -200,8 +217,11 @@
                                                      <!-- If level - 2 -->
                                                      @if($item->application_list->level_id==2)
                                                      
-                                                                @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
-                                                                <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
+                                                     
+                                                                {{--  @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1) -->
+                                                                --}}
+                                                                @if($item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
+                                                                <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id),dEncrypt($item->application_list->prev_refid)) }}" class="btn btn-warning">L-3</a>
 
                                                                 @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
                                                                 
@@ -232,6 +252,30 @@
         </div>
         </div>
         </div>
+
+
+             <!-- Edit Payment modal  -->
+             <div class="modal fade" id="expiry_popup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Expiry </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  
+                </div>
+                <div class="modal-body">
+                <div class="mb-4 text-center">
+                    <button type="button" class="btn btn-primary bg-history me-3">Level 2</button>
+                    <button type="button" class="btn btn-success">Level 3</button>
+                </div>
+              <p class="font-16"> <b class="text-danger">Note :</b> Now your application is ready to move into next level. So please upgrade your application</p>
+                </div>
+            </div>
+            </div>
+        <!-- end here edit payment modal -->
+
+
+
     </section>
    
     @include('layout.footer')

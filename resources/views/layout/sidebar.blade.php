@@ -98,6 +98,13 @@
                     </ul>
                 </li>
 
+                <li class="{{ Request::is('super-admin/payment-fee-list') ? 'active' : '' }}">
+            <a href="{{ url('super-admin/payment-fee-list') }}">
+                <!-- <i data-feather="clipboard"></i> -->
+                <i class="material-icons">payment</i>
+                <span>Payment Fee</span>
+            </a>
+        </li>
 
                     <li class="{{ Request::is('levels')?'active':''}}" >
                         <a href="{{ url('/levels') }}"   >

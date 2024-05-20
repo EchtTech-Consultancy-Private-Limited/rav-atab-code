@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\PdfImageSizeTrait;
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationCourse;
+use Exception;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
@@ -49,7 +50,7 @@ class ApplicationCoursesController extends Controller
             ]
         );
         
-        $application_date = Carbon::now()->addDays(365);
+        $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
 
             if($request->application_id && $request->previous_data==1){
@@ -270,7 +271,7 @@ class ApplicationCoursesController extends Controller
             /*end here*/
             
             if (Auth::user()->country == $this->get_india_id()) {
-                $total_amount = $this->getPaymentFee(1,"inr",$id);
+                $total_amount = $this->getPaymentFee('level-1',"inr",$id);
                 $currency = '₹';
             } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
                 if (count($course) == '0') {
@@ -344,7 +345,7 @@ class ApplicationCoursesController extends Controller
         ]);
        try{
         DB::beginTransaction();
-        $total_amount = $this->getPaymentFee(1,"inr",$request->Application_id);
+        $total_amount = $this->getPaymentFee('level-1',"inr",$request->Application_id);
         
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
@@ -611,4 +612,61 @@ class ApplicationCoursesController extends Controller
 
         return $total_amount;
     }
+
+
+    public function showcourseAdditionalPayment(Request $request)
+    {
+        $id = dDecrypt($request->id);
+        if ($id) {
+            $applicationData = DB::table('tbl_application')->where('id', $id)->first();
+            $course = DB::table('tbl_application_courses')->where('application_id', $id)->get();
+            
+            $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+
+           
+            /*to get payment from db*/
+                $fee_structure = DB::table('tbl_fee_structure')->select('currency_type', 'level')
+                ->where('currency_type',$country_details->currency)
+                ->groupBy('currency_type', 'level')
+                ->get();
+              
+            /*end here*/
+            
+        }
+        return view('tp-view.show-course-additional-payment', compact('applicationData', 'course', 'fee_structure'));
+    }
+
+    
+function getTotalAmount(Request $request){
+    try{
+       
+       $course = DB::table('tbl_application_courses')->where(['application_id'=>$request->application_id])->get();
+    
+       $level = $request->level;
+       $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+       $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$country_details->currency,'level'=>$level])->get();
+        
+       if (count($course) == '0') {
+           $total_amount = '0';
+       } elseif (count($course) <= 5) {
+           $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+       } elseif (count($course)>=5 && count($course) <= 10) {
+           $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+       } elseif(count($course)>10) {
+           $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+       }
+   
+   
+       $getTotal = DB::table('tbl_fee_structure')->where(['currency_type'=>$country_details->currency,'level'=>$level])->get();
+       if(count($getTotal)>0){
+           return response()->json(['success' => true,'message' =>'successfully','total'=>$total_amount],200);
+       }else{
+           return response()->json(['success' =>false,'message' =>'Payment details not found','total'=>0],200);
+       }
+    }catch(Exception $e){
+           return response()->json(['success' => false,'message' =>'Failed to get payment details'],200);
+    }
+   }
+    
 }
+

@@ -931,6 +931,32 @@ function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
     }
 }
 
+function handleShowAdditionalPaymentInformation(pay_txn_no, pay_ref_no, id) {
+    $("#payment_transaction_no_err").html("");
+    $("#payment_reference_no_err").html("");
+    
+    if (pay_txn_no != null && pay_ref_no != null && id != null) {
+        $("#payment_transaction_no").val("");
+        $("#payment_reference_no").val("");
+
+        // Convert the strings to BigInt
+        const pay_txn_no_bigint = pay_txn_no;
+        const pay_ref_no_bigint = pay_ref_no;
+        // Set the values of the elements with the BigInt values
+        $("#payment_transaction_no").val(pay_txn_no_bigint.toString());
+        $("#payment_reference_no").val(pay_ref_no_bigint.toString());
+        $("#payment_info_id").val(id);
+    } else {
+        toastr.success("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
 function handleUpdatePaymentInformation() {
     const payment_transaction_no = $("#payment_transaction_no").val();
     const payment_reference_no = $("#payment_reference_no").val();
@@ -1049,6 +1075,81 @@ function handleUpdatePaymentInformationOfAccount() {
         });
         $.ajax({
             url: `${BASE_URL}/account-update-payment`, // Your server-side upload endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".full_screen_loading").hide();
+                    location.reload();
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                    $(".full_screen_loading").hide();
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $(".full_screen_loading").hide();
+            },
+        });
+    }else{
+        $(".full_screen_loading").hide();
+    }
+}
+
+function handleUpdateAdditionalPaymentInformationOfAccount() {
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_info_id = $("#payment_info_id").val();
+    var payment_proof_by_account = $(`#payment_proof_by_account`)[0].files[0];
+    var fileInput = $(`#payment_proof_by_account`);
+    const isValidated = validateForm();
+  
+    if (isValidated) {
+        $(".full_screen_loading").show();
+        const formData = new FormData();
+        formData.append("payment_transaction_no", payment_transaction_no);
+        formData.append("payment_reference_no", payment_reference_no);
+        formData.append("payment_proof_by_account", payment_proof_by_account);
+        formData.append("id", payment_info_id);
+
+        var allowedExtensions = ["pdf", "doc", "docx","jpeg","jpg","png"]; // Add more extensions if needed
+        var uploadedFileName = fileInput.val();
+       if(payment_proof_by_account){
+            var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
+            if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                // Clear the file input
+                fileInput.val("");
+                $(".full_screen_loading").hide();
+                return;
+            }
+    }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/account-update-additional-payment`, // Your server-side upload endpoint
             type: "POST",
             data: formData,
             processData: false,
@@ -1721,6 +1822,80 @@ function handleShowCoursePayment(){
     return false;
 }
 
+function handleShowCoursePaymentFee(){
+    const payments = $("#payments option:selected").val();
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_details_file = $("#payment_details_file").val();
+    const amount = $("#fee_amount").val();
+    const payment_type = $("#payment_type option:selected").val();
+    
+    if(payments!="" && payment_transaction_no!="" && payment_reference_no!="" && payment_details_file!="" && amount!="" && payment_type!=""){
+        $("#submitBtn").attr('disabled',true);
+        return true;
+    }
+    return false;
+}
+$('.show_hide_amt').hide();
+function getAdditionalPaymentDetails(){
+    const payments = $("#payment_type option:selected").val();
+    const application_id = $('#application_id').val();
+    if(payments!=null){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        
+        if(payments=="OTHER"){
+            $('.show_hide_amt').show();
+            $('#fee_amount').attr('required',true)
+        }else{
+            $('.show_hide_amt').hide();
+        }
+        $.ajax({
+            url: `${BASE_URL}/tp/get-total-amount`,
+            type: "POST",
+            data:{level:payments,application_id:application_id},
+            success: function (response) {
+                if (response.success) {
+                    console.log(response);
+                    $('.full_screen_loading').hide();
+                    $('#total_add_fee').html(response.total);
+
+                }else{
+                    $('.full_screen_loading').hide();
+                    $('#total_add_fee').html("N/A");
+                    // toastr.error(response.message, {
+                    //     timeOut: 0,
+                    //     extendedTimeOut: 0,
+                    //     closeButton: true,
+                    //     closeDuration: 5000,
+                    // });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleOnChange(){
+    const total = $('#fee_amount').val();
+    $('#total_add_fee').html(total);
+}
+
 
 
 function removeCourseByTP(app_id,course_id){
@@ -1849,7 +2024,6 @@ function handleRejectCourse(){
 
 
 function setModelData(application_id,course_id,course_name,action){
-    console.log('application_id ',application_id,'---',course_id,'----',course_name,'-----',action)
     $("#reject_app_id").val(application_id);
     $('#reject_course_id').val(course_id);
     document.getElementById('rejectionCourseName').innerHTML = course_name
@@ -2118,6 +2292,211 @@ function handleAcceptApplicationByAdmin(){
         });
     }
 }
+
+
+
+function handleRaiseQueryForAdditionalPayment(){
+    const application_id = $('#application_id').val();
+    const raise_query_remark = $('#raise_query_remark').val();
+    if(application_id!=null && raise_query_remark!=null){
+        $('.full_screen_loading').show();
+        if(raise_query_remark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter query raise remark.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/admin/raise/payment/query`,
+            type: "POST",
+            data:{application_id:application_id,raise_query_remark:raise_query_remark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#raise_query_remark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
+function setPayModalData(application_id){
+    $("#application_id").val(application_id);
+ }
+
+
+ var handleAdditionalPaymentReceived = () => {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    const fileInput = document.getElementById("payment_proof");
+    let payment_remark = $("#payment_remark").val();
+    let payment_id = $("#payment_id").val();
+    if(payment_remark=="" || payment_remark==null){
+        toastr.error("Please enter the remark.", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }
+    payment_remark = payment_remark ?? "";
+    let formData = new FormData();
+    if (fileInput.files.length > 0) {
+        formData.append("payment_proof", fileInput.files[0]);
+    }
+        formData.append("payment_remark", payment_remark);
+        formData.append("payment_id", payment_id);
+        formData.append("application_id", encoded_application_id);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/account-additional-payment-received`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".box-overlay-2").show();
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+   
+};
+function handleAdditionalPaymentApproved() {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    let final_payment_remark = $("#final_payment_remark").val();
+    final_payment_remark = final_payment_remark ?? "";
+    if (final_payment_remark === "") {
+        $("#final_payment_remark_err").html(
+            "Please enter the approve payment remark."
+        );
+        return false;
+    }
+    let formData = new FormData();
+    formData.append("final_payment_remark", final_payment_remark);
+    formData.append("application_id", encoded_application_id);
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: `${BASE_URL}/account-additional-payment-approved`,
+        type: "post",
+        datatype: "json",
+        data: formData,
+        contentType: false,
+        processData: false,
+        beforeSend: function () {
+            $(".box-overlay").show();
+        },
+        complete: function () {
+            $("#loading").hide();
+        },
+        success: function (resdata) {
+            if (resdata.success) {
+                toastr.success(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+            }
+        },
+        error: (xhr, st) => {
+            console.log(st, "st");
+        },
+    });
+}
+
+
+
+
+
 
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
