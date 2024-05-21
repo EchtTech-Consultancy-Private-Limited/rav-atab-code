@@ -65,7 +65,7 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     @if($is_final_submit)
-                        <a href="{{ url('application-course-summaries') . '?application=' . $spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        <a href="{{ url('admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
                     <div class="float-right">
@@ -501,6 +501,15 @@
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
                         </div>
                     </div>
+                    @else
+                        @if($spocData->level_id==2)
+                        
+                    <div class="col-md-12 d-flex justify-content-end">
+                                <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
+                        </div> 
+                        @endif
                      @endif 
 
                     </div>
@@ -509,6 +518,9 @@
                     @endif
                  
                     </div>
+
+
+
                 </div>
             </div>
         </div>

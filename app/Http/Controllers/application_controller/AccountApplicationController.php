@@ -71,6 +71,7 @@ class AccountApplicationController extends Controller
                 ->get();
 
                 if($payment){
+                    
                     $obj->payment = $payment;
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
