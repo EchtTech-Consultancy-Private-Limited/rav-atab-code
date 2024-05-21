@@ -63,11 +63,19 @@ class AccountApplicationController extends Controller
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                 ])->count();
+                
+                $app_history = DB::table('tbl_application_status_history')
+                ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
+                ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
+                ->where('tbl_application_status_history.application_id', $app->id)
+                ->get();
+
                 if($payment){
                     $obj->payment = $payment;
                     $obj->payment->payment_count = $payment_count;
-                    $obj->payment->payment_amount = $payment_amount ;
+                    $obj->payment->payment_amount = $payment_amount;
                 }
+                $obj->appHistory= $app_history;
                 $final_data[] = $obj;
                 
         }
