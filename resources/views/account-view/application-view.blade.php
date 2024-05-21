@@ -655,6 +655,154 @@
         </div>
 
         </div>
+
+
+
+
+        <div class="card p-relative">
+            <div class="box-overlay">
+                <span class="spinner-border"></span>
+            </div>
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                   Additional Payment Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @if (count($application_details->additional_payment) > 0)
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                S.No.
+                            </th>
+                            <th>
+                                Payment Date
+                            </th>
+                            <th>
+                                Payment Transaction no
+                            </th>
+                            <th>
+                                Payment Reference no
+                            </th>
+                            <!-- <th>Total Courses</th> -->
+                            <th>Amount</th>
+                            <th>Slip by User</th>
+                            <th>Slip by Accountant Approver</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+
+                        </tr>
+                        @foreach ($application_details->additional_payment as $key=>$ApplicationPayment)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                            </td>
+                            <td>{{ $ApplicationPayment->payment_transaction_no ?? '' }}</td>
+                            <td>{{ $ApplicationPayment->payment_reference_no ?? '' }}</td>
+                            <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
+                            <td>
+                                ₹ {{ $ApplicationPayment->amount }}</td>
+                            <td><?php
+                                        substr($ApplicationPayment->payment_proof, -3);
+                                        $data = substr($ApplicationPayment->payment_proof, -3);
+                                        ?>
+                                @if ($data == 'pdf')
+                                <a href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}" target="_blank"
+                                    title="Document 3" id="docpdf3" download>
+                                    <i class="fa fa-download mr-2"></i> Payment pdf
+                                </a>
+                                @else
+                                @if (isset($ApplicationPayment->payment_proof))
+                                <a target="_blank" class="image-link"
+                                    href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}">
+                                    <img src="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}"
+                                        style="width:100px;height:70px;">
+                                </a>
+                                @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ApplicationPayment->status == 0 && $ApplicationPayment->payment_proof_by_account==null)
+                                N/A
+                                @endif
+                                @if ($ApplicationPayment->status ==0 || $ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
+                                @if (!$ApplicationPayment->payment_proof_by_account)
+                                File not available!
+                                @endif
+                                <?php
+                                                substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                $data = substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                ?>
+                                @if ($data == 'pdf')
+                                <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
+                                    title="Document 3" id="docpdf3" download>
+                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                </a>
+                                @else
+                                @if (isset($ApplicationPayment->payment_proof_by_account))
+                                <a target="_blank" class="image-link"
+                                    href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}">
+                                    <img src="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}"
+                                        style="width:100px;height:70px;">
+                                </a>
+                                @endif
+                                @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ApplicationPayment->status == 0)
+                                    Remark not available!
+                                @else
+
+                                @if($ApplicationPayment->approve_remark)
+                                        {{$ApplicationPayment->approve_remark}}
+                                @else
+                                    @if($ApplicationPayment->remark_by_account)
+                                    {{$ApplicationPayment->remark_by_account}}
+                                    @endif
+                                @endif
+
+
+                                @endif
+                            </td>
+                            <td>
+                                
+                                @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->status!=2)
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
+                                title="You can update only once"
+                                ><i class="fa fa-pencil"></i></button>
+
+                                @else
+                                @if($ApplicationPayment->account_update_count==(int)env('ACCOUNT_PAYMENT_UPDATE_COUNT'))
+                                    <span class="text-danger payment_update_fn badge badge-danger">
+                                    Payment Update Limit Expired
+                                    </span>
+                                    @else
+                                    <span class="text-success payment_update_fn badge badge-success">
+                                    Payment Approved
+                                    </span>
+                                    @endif
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                    @else
+                    <p>Payment has not been completed yet.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
          <!-- Edit Payment modal  -->
          <div class="modal fade" id="update_payment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

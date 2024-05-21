@@ -173,8 +173,12 @@ class SuperAdminApplicationController extends Controller
                     'application_id' => $application->id,
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
 
@@ -468,6 +472,218 @@ class SuperAdminApplicationController extends Controller
     }
 
 
+    /*Secretariat nc's from admin side*/ 
+    public function applicationDocumentListLevel2($id, $course_id)
+    {
+        $tp_id = Auth::user()->id;
+        $application_id = $id ? dDecrypt($id) : $id;
+        $course_id = $course_id ? dDecrypt($course_id) : $course_id;
+        $data = TblApplicationPayment::where('application_id',$application_id)->get();
+        $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+        $course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'secretariat'
+        ])
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status')
+        ->get();
+        
+        $chapters = Chapter::all();
+        foreach($chapters as $chapter){ 
+            $obj = new \stdClass;
+            $obj->chapters= $chapter;
+            $questions = DB::table('questions')->where([
+                    'chapter_id' => $chapter->id,
+                ])->get();
+                foreach ($questions as $k => $question) {
+                    $obj->questions[] = [
+                        'question' => $question,
+                        'nc_comments' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get(),
+                    ];
+                }
+                $final_data[] = $obj;
+        }
+        $applicationData = TblApplication::find($application_id);
+        return view('superadmin-view.secretariat.application-documents-list', compact('final_data','course_doc_uploaded','application_id','course_id','applicationData'));
+    }
+    
+    public function superAdminVerfiyDocumentLevel2($nc_type, $assessor_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
+    {
+        
+        try {
+            $accept_nc_type_status = $nc_type;
+            $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type])
+                ->where('nc_type', "Request_For_Final_Approval")
+                ->latest('id')->first();
+
+            // dd($final_approval);
+            $ass_type = $assessor_type == "desktop" ? "desktop" : "onsite";
+
+            if ($nc_type == "nr") {
+                $nc_type = "not_recommended";
+            }
+
+            if ($nc_type != "nc1" && $nc_type != "nc2" && $nc_type != "accept" && $nc_type != "reject") {
+                if (!empty($final_approval)) {
+                    $nc_type = "Request_For_Final_Approval";
+                    $assessor_type = "admin";
+                } else {
+                    $ass_type = null;
+                }
+            }
+
+            // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            // ->where('nc_type',$nc_type)
+            // ->where('assessor_type',$assessor_type)
+            // ->where('final_status',$ass_type)
+            // ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+            // ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+            // ->first();
+
+            $query = TblNCComments::where([
+                'doc_sr_code' => $doc_sr_code,
+                'application_id' => $application_id,
+                'doc_unique_id' => $doc_unique_code
+            ])
+                ->where('nc_type', $nc_type)
+                ->where('assessor_type', $assessor_type);
+            if ($nc_type == "not_recommended" || $nc_type == "Request_For_Final_Approval") {
+                $query->where('final_status', $ass_type);
+            }
+            $nc_comments = $query
+                ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
+                ->first();
+
+            // dd($nc_comments);
+
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])
+                ->where('final_status', $ass_type)
+                ->latest('id')
+                ->first();
+
+
+
+            /*Don't show form if doc is accepted*/
+            $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])
+                ->whereIn('nc_type', ["Accept", "Reject"])
+                ->where('final_status', $assessor_type)
+                ->latest('id')
+                ->first();
+
+            /*end here*/
+            $form_view = 0;
+            if ($nc_type === "not_recommended" && ($tbl_nc_comments->nc_type !== "Reject") && ($tbl_nc_comments->nc_type !== "Accept") && ($tbl_nc_comments->nc_type !== "NC1") && ($tbl_nc_comments->nc_type !== "NC2") && ($tbl_nc_comments->nc_type !== "Request_For_Final_Approval")) {
+                if (empty($accepted_doc)) {
+                    $form_view = 1;
+                }
+            } else if ($nc_type == "reject") {
+                $form_view = 0;
+            }
+
+
+            if (isset($tbl_nc_comments->nc_type)) {
+                if ($tbl_nc_comments->nc_type === "not_recommended") {
+                    $dropdown_arr = array(
+                        "Reject" => "Reject",
+                        "Accept" => "Accept",
+                        "Request_For_Final_Approval" => 'Request For Final Approval'
+                    );
+                }
+            }
+            $doc_latest_record = TblApplicationCourseDoc::latest('id')
+                ->where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])
+                ->first();
+            // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
+            $doc_path = URL::to("/level") . '/' . $doc_name;
+            return view('superadmin-view.secretariat.document-verify', [
+                'doc_latest_record' => $doc_latest_record,
+                'doc_id' => $doc_sr_code,
+                'doc_code' => $doc_unique_code,
+                'application_id' => $application_id,
+                'application_course_id' => $application_course_id,
+                'doc_path' => $doc_path,
+                'doc_file_name' => $doc_name,
+                'dropdown_arr' => $dropdown_arr ?? [],
+                'nc_comments' => $nc_comments,
+                'form_view' => $form_view,
+                'assessor_type' => $assessor_type,
+                'nc_type' => $nc_type,
+            ]);
+        } catch (Exception $e) {
+            return back()->with('fail', 'Something went wrong');
+        }
+    }
+
+    public function adminDocumentVerifyLevel2(Request $request)
+    {
+        
+        try{
+        $redirect_to=URL::to("/super-admin/document-list-level-2").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
+        DB::beginTransaction();
+        $assessor_id = Auth::user()->id;
+        $assessor_type = 'admin';
+        /*end here*/
+        $data = [];
+        $data['application_id'] = $request->application_id;
+        $data['doc_sr_code'] = $request->doc_sr_code;
+        $data['doc_unique_id'] = $request->doc_unique_id;
+        $data['application_courses_id'] = $request->application_courses_id;
+        $data['assessor_type'] = $assessor_type;
+        $data['comments'] = $request->comments;
+        $data['nc_type'] = $request->nc_type;
+        $data['assessor_id'] = $assessor_id; 
+        $data['doc_file_name'] = $request->doc_file_name;
+        $data['final_status'] = $request->assessor_type;
+
+        $nc_comment_status="";
+        $admin_nc_flag=0;
+        if($request->nc_type==="Accept"){
+            $nc_comment_status=1;
+            $admin_nc_flag=1;
+            $nc_flag=0;
+        }else if($request->nc_type=="Reject"){
+            $nc_comment_status=1;
+            $admin_nc_flag=2;
+            $nc_flag=0;
+        }else{
+            $admin_nc_flag=3;
+            $nc_comment_status=4; //request for final approval
+            $nc_flag=1;
+        }
+
+        $create_nc_comments = TblNCComments::insert($data);
+
+        if($request->assessor_type=="onsite"){
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_status'=>4])->update(['onsite_nc_status'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+        }else{
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+        }
+        
+
+
+        if($create_nc_comments){
+            DB::commit();
+            return response()->json(['success' => true,'message' =>''.$request->nc_type.' comments created successfully','redirect_to'=>$redirect_to],200);
+        }else{
+            return response()->json(['success' => false,'message' =>'Failed to create '.$request->nc_type.' and documents'],200);
+        }
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' => false,'message' =>'Something went wrong'],200);
+    }
+    }
+
+    /*end here*/ 
+
     public function updateAdminNotificationStatus(Request $request,$id)
     {
         try{
@@ -560,7 +776,7 @@ class SuperAdminApplicationController extends Controller
             $valid_till = Carbon::now()->addDays(364);
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from]);
+                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from,'is_all_course_doc_verified'=>1]);
                 $get_application= DB::table('tbl_application')->where('id',$app_id)->first();
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
@@ -666,7 +882,7 @@ class SuperAdminApplicationController extends Controller
 
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>3,'reject_remark'=>$request->remark]); //3 for rejected application by admin
+                ->update(['approve_status'=>3,'reject_remark'=>$request->remark,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
 
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
@@ -803,6 +1019,7 @@ class SuperAdminApplicationController extends Controller
     public function getApplicationPaymentFeeList(){
         $application = DB::table('tbl_application as a')
         ->whereIn('a.payment_status',[2,3])
+        ->whereIn('a.is_query_raise',[1,2])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -883,7 +1100,7 @@ class SuperAdminApplicationController extends Controller
 
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        $application_payment_status = DB::table('tbl_additional_fee')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
             $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
@@ -953,8 +1170,12 @@ class SuperAdminApplicationController extends Controller
                     'application_id' => $application->id,
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
+                $additional_payment = DB::table('tbl_additional_fee')->where([
+                    'application_id' => $application->id,
+                ])->get();
                 if($payment){
                     $obj->payment = $payment;
+                    $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
 

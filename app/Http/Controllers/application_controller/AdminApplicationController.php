@@ -106,6 +106,7 @@ class AdminApplicationController extends Controller
     
     public function getApplicationView($id)
     {
+        
         $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
         $decoded_json_courses_doc = json_decode($json_course_doc);
 
@@ -122,7 +123,7 @@ class AdminApplicationController extends Controller
         $obj->application = $application;
         $obj->show_submit_btn_to_secretariat = $this->checkApplicationIsReadyForNextLevel($application->id);
         $obj->enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application->id);
-        
+        $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
         $courses = DB::table('tbl_application_courses')->where([
             'application_id' => $application->id,
         ])
@@ -202,20 +203,24 @@ class AdminApplicationController extends Controller
             'application_id' => $application->id,
             'status' => 2 //paymnet approved by accountant 
         ])->get();
-
+        $additional_payment = DB::table('tbl_additional_fee')->where([
+            'application_id' => $application->id
+        ])->get();
         if ($payment) {
             $obj->payment = $payment;
+            $obj->additional_payment = $additional_payment;
         }
         $final_data = $obj;
 
         $admin_final_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])->count();
-        if ($admin_final_summary_count > 1) {
+        
+        if ($admin_final_summary_count > 0) {
             $is_final_submit = true;
         } else {
             $is_final_submit = false;
         }
 
-        // dd($final_data);
+        
         return view('admin-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc]);
     }
 
@@ -407,7 +412,68 @@ class AdminApplicationController extends Controller
 
     }
 
-   
+    public function checkAllActionDoneOnRevert($application_id)
+    {
+
+        $results = DB::table('tbl_course_wise_document')
+            ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+            ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
+            // ->where('course_id', $course_id)
+            ->where('application_id', $application_id)
+            ->where('approve_status',1)
+            ->get();
+
+            
+            
+
+        $additionalFields = DB::table('tbl_course_wise_document')
+            ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+                $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
+                    ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
+                    ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
+                    ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
+                    ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
+            })
+            ->orderBy('tbl_course_wise_document.id', 'desc')
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
+
+
+        foreach ($results as $key => $result) {
+            $additionalField = $additionalFields->where('application_id', $result->application_id)
+                ->where('course_id', $result->course_id)
+                ->where('doc_sr_code', $result->doc_sr_code)
+                ->where('doc_unique_id', $result->doc_unique_id)
+                ->where('approve_status',1)
+                ->first();
+            if ($additionalField) {
+                $results[$key]->status = $additionalField->status;
+                $results[$key]->id = $additionalField->id;
+                $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $results[$key]->approve_status = $additionalField->approve_status;
+                $results[$key]->is_revert = $additionalField->is_revert;
+            }
+        }
+
+        
+        $flag = 0;
+
+        foreach ($results as $result) {
+            if (($result->is_revert === 1)) {
+                $flag = 0;
+            } else {
+                $flag = 1;
+                break;
+            }
+        }
+        
+        if ($flag === 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 
     public function approveCourseRejectBySecretariat($id,$course_id){
         try {
@@ -1003,7 +1069,7 @@ class AdminApplicationController extends Controller
 
         $user_data = DB::table('users')->where('users.id', $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        $application_payment_status = DB::table('tbl_additional_fee')->where('application_id', '=', $application->id)->latest('id')->first();
         $obj = new \stdClass;
         $obj->application = $application;
         $obj->show_submit_btn_to_secretariat = $this->checkApplicationIsReadyForNextLevel($application->id);
@@ -1088,9 +1154,13 @@ class AdminApplicationController extends Controller
             'application_id' => $application->id,
             'status' => 2 //paymnet approved by accountant 
         ])->get();
-
+        
+        $additional_payment = DB::table('tbl_additional_fee')->where([
+            'application_id' => $application->id,
+        ])->get();
         if ($payment) {
             $obj->payment = $payment;
+            $obj->additional_payment = $additional_payment;
         }
         $final_data = $obj;
 

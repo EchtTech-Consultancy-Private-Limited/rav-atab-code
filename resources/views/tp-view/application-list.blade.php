@@ -176,11 +176,15 @@
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                     @endif
+                                                    
+                                                    <a class="btn btn-tbl-delete bg-history font-a"  data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
+                                                    History
+                                                    </a>
         
         
                                                                                    
                                                     <!-- If level - 1 -->
-                                                
+                                                    
                                                 @if($item->application_list->level_id==1)
                                                         @if($item->application_list->approve_status==1)
                                                             
@@ -191,8 +195,8 @@
                                                         @if($isApplicationBeingExpired)
                                                             <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
                                                         @else
-                                                        <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id) ) }}" class="btn btn-warning">L-2</a>
-                                                        <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id)) }}" class="btn btn-warning">L-3</a>
+                                                        <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-2</a>
+                                                        <a href="{{ url('/upgrade-level-3-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-3</a>
                                                         
                                                         @endif
                                                         
@@ -216,12 +220,19 @@
 
                                                      <!-- If level - 2 -->
                                                      @if($item->application_list->level_id==2)
+
+                                                     @php
+
+                                                        $reference_id = $item->application_list->prev_refid==null?$item->application_list->refid:$item->application_list->prev_refid;
+                                                        
+                                                     @endphp
+                                                        
                                                      
                                                      
                                                                 {{--  @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1) -->
                                                                 --}}
                                                                 @if($item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
-                                                                <a href="{{ url('/upgrade-level-3-new-application', dEncrypt($item->application_list->id),dEncrypt($item->application_list->prev_refid)) }}" class="btn btn-warning">L-3</a>
+                                                                <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id) ) }}" class="btn btn-warning">L-3</a>
 
                                                                 @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
                                                                 
@@ -249,6 +260,55 @@
                     </div>
                 </div>
             </div>
+
+
+            
+@foreach($list as $item)
+
+<!-- Modal history -->
+<div class="modal fade" id="view_history_{{$item->application_list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Application History</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                       <table class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($item->appHistory as $key=>$hist)
+                        <tr>
+                            <td>{{$key+1}}</td>
+                            <td>{{$hist->created_at}}</td>
+                            <td><span class="badge badge-main {{$hist->status_color}}">{{$hist->status_text}}</span></td>
+                            
+                        </tr>
+                        @endforeach
+                        </tbody>
+                       </table>
+            </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+@endforeach
+<!-- end here  -->
+
+
         </div>
         </div>
         </div>

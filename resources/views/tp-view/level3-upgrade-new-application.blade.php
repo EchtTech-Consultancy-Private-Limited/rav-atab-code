@@ -262,7 +262,7 @@ active @endif"
                                             <div class="row pl-10">
                                                 <div class="header pb-3">
                                                     <h2>Single Point of Contact Details (SPoC)</h2>
-
+                                                    
                                                 </div>
                                         <hr class="mt-0 mb-2"/>
 
@@ -276,7 +276,7 @@ active @endif"
                                                             <input type="hidden" name="reference_id" value="{{$applicationData->refid}}">
                                                             <input type="hidden" name="application_id"
                                                                 value="{{ $applicationData->id }}">
-
+                                                        <input type="hidden" name="prev_refid" value="{{$applicationData->prev_refid}}"/>
                                                         <input type="hidden" name="person_name" value="{{ $applicationData->person_name }}">
                                                         <input type="hidden" name="contact_number" value="{{ $applicationData->contact_number }}">
                                                         <input type="hidden" name="email" value="{{ $applicationData->email }}">
