@@ -183,7 +183,7 @@ class SuperAdminApplicationController extends Controller
                 $final_data = $obj;
 
                 $admin_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
-                if($admin_final_summary_count>1){
+                if($admin_final_summary_count>0){
                  $is_final_submit = true;
                 }else{
                  $is_final_submit = false;
@@ -665,7 +665,7 @@ class SuperAdminApplicationController extends Controller
         if($request->assessor_type=="onsite"){
             TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_status'=>4])->update(['onsite_nc_status'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
         }else{
-            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
+            TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag,'nc_show_status'=>4]);
         }
         
 
@@ -776,7 +776,7 @@ class SuperAdminApplicationController extends Controller
             $valid_till = Carbon::now()->addDays(364);
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from,'is_all_course_doc_verified'=>1]);
+                ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from,'is_all_course_doc_verified'=>1,'is_revert'=>1]);
                 $get_application= DB::table('tbl_application')->where('id',$app_id)->first();
                 if($approve_app){
                     
@@ -855,7 +855,7 @@ class SuperAdminApplicationController extends Controller
             /*TP show ncs*/
             DB::table('tbl_course_wise_document')
             ->where(['application_id' => $request->application_id])
-            ->update(['approve_status'=>2]); 
+            ->update(['approve_status'=>2,'is_revert'=>1]); 
 
 
             $all_docs = DB::table('tbl_course_wise_document')

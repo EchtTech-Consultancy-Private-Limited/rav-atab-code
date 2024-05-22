@@ -262,7 +262,7 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'secretariat'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','nc_show_status','status')->get();
         
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -279,7 +279,9 @@ class TPApplicationController extends Controller
                             'application_courses_id' => $course_id,
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
+                            
                         ])
+                        ->whereIn('tbl_nc_comments.nc_type',['NC1','NC2','not_recommended'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),

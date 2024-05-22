@@ -466,6 +466,82 @@ class SecretariatDocumentVerifyController extends Controller
     }
 
 
+    public function secretariatUpdateNCFlagDocList($application_id)
+    {
+
+        try {
+            $application_id = dDecrypt($application_id);
+            
+            DB::beginTransaction();
+            $secretariat_id = Auth::user()->id;
+            $get_course_docs = DB::table('tbl_application_course_doc')
+                ->where(['application_id' => $application_id,'approve_status'=>1])
+                // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
+                ->latest('id')->get();
+                foreach($get_course_docs as $course_doc){
+                    $nc_comment_status = "";
+                    $nc_flag=0;
+                    $nc_comments = 0;
+                   if ($course_doc->status == 2) {
+                        $nc_comment_status = 2;
+                        $nc_flag = 1;
+                        $nc_comments=1;
+                    } else if ($course_doc->status == 3) {
+                        $nc_comment_status = 3;
+                        $nc_flag = 1;
+                        $nc_comments=1;
+                    }
+                    // else if ($course_doc->status == 4) {
+                    //     $nc_comment_status = 4;
+                    //     $nc_flag = 1;
+                    //     $nc_comments=1;
+                    // } 
+                    else {
+                        $nc_comment_status = 0; //not recommended
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    }
+
+                    
+                    
+                DB::table('tbl_application_course_doc')
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
+                ->update(['nc_flag' => $nc_flag, 'assessor_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
+
+                DB::table('tbl_nc_comments')
+                ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->application_courses_id,'nc_show_status'=>0])
+                ->update(['nc_show_status' => $nc_comments]);
+
+                
+            }
+
+            /*--------To Check All 44 Doc Approved----------*/
+
+            $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
+            /*------end here------*/
+            DB::commit();
+            if (!$check_all_doc_verified) {
+                return back()->with('fail', 'First create NCs on courses doc');
+            }
+            if ($check_all_doc_verified === "all_verified") {
+                DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                
+                return back()->with('success', 'All course docs Accepted successfully.');
+            }
+            if ($check_all_doc_verified === "action_not_taken") {
+                return back()->with('fail', 'Please take any action on course doc.');
+            }
+            return back()->with('success', 'Enabled Course Doc upload button to TP.');
+            // return redirect($redirect_to);
+
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+            return back()->with('fail', 'Something went wrong');
+        }
+    }
+
+
     public function secretariatRejectCourse(Request $request)
     {
 
@@ -503,6 +579,32 @@ class SecretariatDocumentVerifyController extends Controller
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
                 ->update(['approve_status'=>2]);
+
+                if($approve_app){
+                    createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
+                    DB::commit();
+                    return back()->with('success', 'Application send for approval to admin.');
+                }else{
+                    DB::rollBack();
+                    return back()->with('fail', 'Failed to send the application for approval to admin');
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+
+    public function sendAdminApprovalDocList($application_id)
+    {
+
+        $app_id = dDecrypt($application_id);
+        try {
+            DB::beginTransaction();
+            $approve_app = DB::table('tbl_application')
+                ->where(['id' => $app_id])
+                ->update(['doc_list_approve_status'=>2]);
 
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
@@ -639,11 +741,44 @@ class SecretariatDocumentVerifyController extends Controller
         }
     }
 
+    function revertCourseDocListAction(Request $request){
+        try{
+            
+            DB::beginTransaction();
+            
+            $get_course_doc = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->latest('id')->first();
+
+            
+                if($get_course_doc->status==4){
+                    $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0,'admin_nc_flag'=>0]);
+ 
+                }else{
+                    $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0]);
+                }
+
+                    /*Delete nc on course doc*/ 
+                    $delete_= DB::table('tbl_nc_comments')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$get_course_doc->doc_file_name])->delete();
+                    
+                     /*end here*/            
+            if($revertAction){
+                DB::commit();
+                return response()->json(['success' => true, 'message' => 'Action reverted successfully.'], 200);
+            }else{
+                DB::rollBack();
+                return response()->json(['success' =>false, 'message' => 'Failed to revert action.'], 200);
+            }
+        }catch(Exception $e){
+            DB::rollBack();
+            return response()->json(['success' =>false, 'message' => 'Something went wrong!'], 200);
+        }
+    }
+
 
 
     /*secretariat nc's 44 documents*/ 
     public function applicationDocumentList($id, $course_id)
     {
+        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $application_uhid = TblApplication::where('id', $application_id)->first()->uhid ?? '';
@@ -655,7 +790,7 @@ class SecretariatDocumentVerifyController extends Controller
             'application_courses_id' => $course_id,
             'assessor_type' => 'secretariat'
         ])
-            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status')
+            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")
@@ -668,9 +803,14 @@ class SecretariatDocumentVerifyController extends Controller
         if ($doc_uploaded_count >= 4) {
             $is_doc_uploaded = true;
         }
+        
+        $show_submit_btn_to_secretariat = $this->isShowSubmitBtnToSecretariat($application_id);
+        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id);
+        $is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application_id);
+
         $chapters = Chapter::all();
         foreach ($chapters as $chapter) {
-            $obj = new \stdClass;
+            $obj = new \stdClass;    
             $obj->chapters = $chapter;
             $questions = DB::table('questions')->where([
                 'chapter_id' => $chapter->id,
@@ -704,8 +844,9 @@ class SecretariatDocumentVerifyController extends Controller
         } else {
             $is_final_submit = false;
         }
-        $applicationData = TblApplication::find($application_id);
-        return view('admin-view.secretariat.application-documents-list', compact('final_data', 'course_doc_uploaded', 'application_id', 'course_id', 'is_final_submit', 'is_doc_uploaded', 'application_uhid'));
+        
+        $application_details = TblApplication::find($application_id);
+        return view('admin-view.secretariat.application-documents-list', compact('final_data', 'course_doc_uploaded', 'application_id', 'course_id', 'is_final_submit', 'is_doc_uploaded', 'application_uhid','application_details','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done'));
     }
     public function secretariatVerfiyDocumentLevel2($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
@@ -781,12 +922,19 @@ class SecretariatDocumentVerifyController extends Controller
     
     public function secretariatDocumentVerifyLevel2(Request $request)
     {
- 
+        
         try {
             $redirect_to = URL::to("/secretariat/document-list") . '/' . dEncrypt($request->application_id) . '/' . dEncrypt($request->application_courses_id);
             DB::beginTransaction();
             $assessor_id = Auth::user()->id;
             $assessor_type = 'secretariat';
+            if($request->nc_type=="Accept" && $request->comments==""){
+                $nc_type="Accept";
+                $doc_comment="Document has been approved";
+             }else{
+                 $nc_type=$request->nc_type;
+                 $doc_comment=$request->comments;
+             }
             /*end here*/
             $data = [];
             $data['application_id'] = $request->application_id;
@@ -795,8 +943,8 @@ class SecretariatDocumentVerifyController extends Controller
             $data['doc_unique_id'] = $request->doc_unique_id;
             $data['application_courses_id'] = $request->application_courses_id;
             $data['assessor_type'] = $assessor_type;
-            $data['comments'] = $request->comments;
-            $data['nc_type'] = $request->nc_type;
+            $data['comments'] = $doc_comment;
+            $data['nc_type'] = $nc_type;
             $data['assessor_id'] = $assessor_id;
             $data['doc_file_name'] = $request->doc_file_name;
             $nc_comment_status = "";
@@ -826,7 +974,7 @@ class SecretariatDocumentVerifyController extends Controller
             $tp_id = TblApplicationCourseDoc::where(['application_id' => $request->application_id, 'assessor_type' => $assessor_type, 'application_courses_id' => $request->application_courses_id, 'doc_sr_code' => $request->doc_sr_code, 'doc_unique_id' => $request->doc_unique_id])->first();
             $tp_email = DB::table('users')->where('id', $tp_id->tp_id)->first();
             //commented on 24/04/24
-            TblApplicationCourseDoc::where(['application_id' => $request->application_id, 'assessor_type' => $assessor_type, 'application_courses_id' => $request->application_courses_id, 'doc_sr_code' => $request->doc_sr_code, 'doc_unique_id' => $request->doc_unique_id, 'status' => 0])->update(['status' => $nc_comment_status, 'nc_flag' => $nc_flag]);
+            TblApplicationCourseDoc::where(['application_id' => $request->application_id, 'assessor_type' => $assessor_type, 'application_courses_id' => $request->application_courses_id, 'doc_sr_code' => $request->doc_sr_code, 'doc_unique_id' => $request->doc_unique_id, 'status' => 0])->update(['status' => $nc_comment_status, 'nc_flag' => $nc_flag,'assessor_id'=>$assessor_id]);
             
             // TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'assessor_type'=>$assessor_type,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>0])->update(['status'=>$nc_comment_status]);
             /*Create record for summary report*/
@@ -919,6 +1067,278 @@ class SecretariatDocumentVerifyController extends Controller
     }
   }
 
-  
+
+  public function checkApplicationIsReadyForNextLevelDocList($application_id)
+  {
+
+    
+      $all_courses_id = DB::table('tbl_application_courses')->where('application_id', $application_id)->pluck('id');
+
+    
+      $results = DB::table('tbl_application_course_doc')
+          ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+          ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
+          ->whereIn('application_courses_id', $all_courses_id)
+          ->where('application_id', $application_id)
+          ->where('approve_status',1)
+          ->get();
+    
+
+      $additionalFields = DB::table('tbl_application_course_doc')
+          ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+              $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                  ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                  ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                  ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                  ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+          })
+          ->orderBy('tbl_application_course_doc.id', 'desc')
+          ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+      foreach ($results as $key => $result) {
+          $additionalField = $additionalFields->where('application_id', $result->application_id)
+              ->where('application_courses_id', $result->application_courses_id)
+              ->where('doc_sr_code', $result->doc_sr_code)
+              ->where('doc_unique_id', $result->doc_unique_id)
+              ->where('approve_status',1)
+              ->first();
+          if ($additionalField) {
+              $results[$key]->status = $additionalField->status;
+              $results[$key]->id = $additionalField->id;
+              $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+          }
+      }
+
+      $flag = 0;
+      $nc_flag = 0;
+      $not_any_action_flag = 0;
+      foreach ($results as $result) {
+          if ($result->status === 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+              $flag = 0;
+          } else {
+              $flag = 1;
+              break;
+          }
+      }
+
+      foreach ($results as $result) {
+          if ($result->status != 0) {
+              $nc_flag = 1;
+              break;
+          }
+      }
+      foreach ($results as $result) {
+          if ($result->status == 0) {
+              $not_any_action_flag = 1;
+              break;
+          }
+      }
+
+      if ($flag === 0) {
+        //   DB::table('tbl_application')->where('id', $application_id)->update(['is_all_course_doc_verified' => 1]);
+          return "all_verified";
+      }
+      if ($not_any_action_flag === 1) {
+          return "action_not_taken";
+      }
+
+      if ($nc_flag == 1) {
+          return true;
+      } else {
+          return false;
+      }
+
+  }
+
+//   
+
+public function isShowSubmitBtnToSecretariat($application_id)
+{
+
+    $results = DB::table('tbl_application_course_doc')
+        ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+        ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
+        // ->where('application_courses_id', $application_courses_id)
+        ->where('application_id', $application_id)
+        ->where('approve_status',1)
+        ->get();
+
+        
+        
+
+    $additionalFields = DB::table('tbl_application_course_doc')
+        ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+            $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+        })
+        ->orderBy('tbl_application_course_doc.id', 'desc')
+        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+    foreach ($results as $key => $result) {
+        $additionalField = $additionalFields->where('application_id', $result->application_id)
+            ->where('application_courses_id', $result->application_courses_id)
+            ->where('doc_sr_code', $result->doc_sr_code)
+            ->where('doc_unique_id', $result->doc_unique_id)
+            ->where('approve_status',1)
+            ->first();
+        if ($additionalField) {
+            $results[$key]->status = $additionalField->status;
+            $results[$key]->id = $additionalField->id;
+            $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+            $results[$key]->approve_status = $additionalField->approve_status;
+        }
+    }
+
+    
+    $flag = 0;
+
+    foreach ($results as $result) {
+        
+        // if (($result->status === 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+
+        if (($result->status === 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            $flag = 0;
+        } else {
+            $flag = 1;
+            break;
+        }
+    }
+    
+    if ($flag === 0) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+public function checkSubmitButtonEnableOrDisable($application_id)
+{
+
+    $results = DB::table('tbl_application_course_doc')
+        ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+        ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
+        // ->where('application_courses_id', $application_courses_id)
+        ->where('application_id', $application_id)
+        ->where('approve_status',1)
+        ->get();
+
+        
+
+    $additionalFields = DB::table('tbl_application_course_doc')
+        ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+            $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+        })
+        ->orderBy('tbl_application_course_doc.id', 'desc')
+        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+    foreach ($results as $key => $result) {
+        $additionalField = $additionalFields->where('application_id', $result->application_id)
+            ->where('application_courses_id', $result->application_courses_id)
+            ->where('doc_sr_code', $result->doc_sr_code)
+            ->where('doc_unique_id', $result->doc_unique_id)
+            ->where('approve_status',1)
+            ->first();
+        if ($additionalField) {
+            $results[$key]->status = $additionalField->status;
+            $results[$key]->id = $additionalField->id;
+            $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+            $results[$key]->approve_status = $additionalField->approve_status;
+        }
+    }
+
+    
+    $flag = 0;
+
+    foreach ($results as $result) {
+
+        if (($result->status!=0)) {
+            $flag = 0;
+        } else {
+            $flag = 1;
+            break;
+        }
+    }
+    
+    if ($flag === 0) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+public function checkAllActionDoneOnRevert($application_id)
+{
+
+    $results = DB::table('tbl_application_course_doc')
+        ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+        ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
+        // ->where('application_courses_id', $application_courses_id)
+        ->where('application_id', $application_id)
+        ->where('approve_status',1)
+        ->get();
+
+        
+        
+
+    $additionalFields = DB::table('tbl_application_course_doc')
+        ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+            $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+        })
+        ->orderBy('tbl_application_course_doc.id', 'desc')
+        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
+
+
+    foreach ($results as $key => $result) {
+        $additionalField = $additionalFields->where('application_id', $result->application_id)
+            ->where('application_courses_id', $result->application_courses_id)
+            ->where('doc_sr_code', $result->doc_sr_code)
+            ->where('doc_unique_id', $result->doc_unique_id)
+            ->where('approve_status',1)
+            ->first();
+        if ($additionalField) {
+            $results[$key]->status = $additionalField->status;
+            $results[$key]->id = $additionalField->id;
+            $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+            $results[$key]->approve_status = $additionalField->approve_status;
+            $results[$key]->is_revert = $additionalField->is_revert;
+        }
+    }
+
+    
+    $flag = 0;
+
+    foreach ($results as $result) {
+        if (($result->is_revert === 1)) {
+            $flag = 0;
+        } else {
+            $flag = 1;
+            break;
+        }
+    }
+    
+    if ($flag === 0) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
 
 }

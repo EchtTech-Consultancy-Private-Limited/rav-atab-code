@@ -55,9 +55,24 @@
                   </ul>
                </div>
                <div class="col-sm-6">
-                  <div class="pr-2">
-                     <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
+                  <div class="ml-auto">
+                    
+
+                        
+                        <div class="col-md-12 d-flex justify-content-end gap-2">
+
+                           @if($applicationData->doc_list_approve_status==3)
+                           <div class="badge badge-main danger float-right">Rejected by you</div>
+                            @elseif($applicationData->doc_list_approve_status==2)
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$applicationData->id}},"reject")'>Reject</button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$applicationData->id}},"approve")'>Approve</button>
+                            @elseif($applicationData->doc_list_approve_status==1)
+                            <div class="badge badge-main success float-right">Approved by you</div>
+                            @endif
+
+                            <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
+                        </div>
                   </div>
                </div>
             </div>
