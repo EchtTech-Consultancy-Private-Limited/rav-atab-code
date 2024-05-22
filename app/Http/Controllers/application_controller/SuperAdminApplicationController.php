@@ -779,7 +779,14 @@ class SuperAdminApplicationController extends Controller
                 ->update(['approve_status'=>1,'accept_remark'=>$request->approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from,'is_all_course_doc_verified'=>1]);
                 $get_application= DB::table('tbl_application')->where('id',$app_id)->first();
                 if($approve_app){
-                    createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
+                    
+                    if($get_application->level_id==1){
+                        createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
+                    }
+                    if($get_application->level_id==2){
+                        createApplicationHistory($app_id,null,config('history.admin.approvedApplication'),config('history.color.success'));
+                    }
+
                     /*Certificate generation*/ 
                     $data = [];
                     $data['application_id'] = $app_id;
@@ -794,7 +801,8 @@ class SuperAdminApplicationController extends Controller
 
                     /*To show docs to TP*/ 
                     $all_docs = DB::table('tbl_course_wise_document')
-                    ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                    // ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                    ->where(['application_id' => $request->application_id])
                     ->whereNotIn('status',[2,3,4,6]) 
                     ->get(); 
                  

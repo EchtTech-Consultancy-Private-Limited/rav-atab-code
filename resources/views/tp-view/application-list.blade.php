@@ -195,8 +195,12 @@
                                                         @if($isApplicationBeingExpired)
                                                             <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
                                                         @else
-                                                        <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-2</a>
-                                                        <a href="{{ url('/upgrade-level-3-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-3</a>
+
+                                                        <!-- If previouse application upgraded then need not to show l-1 and l-2 -->
+                                                               @if($item->application_list->upgraded_level_id==1)
+                                                               <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-2</a>
+                                                                <a href="{{ url('/upgrade-level-3-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-3</a>
+                                                                @endif
                                                         
                                                         @endif
                                                         

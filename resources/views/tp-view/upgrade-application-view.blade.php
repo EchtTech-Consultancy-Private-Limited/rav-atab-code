@@ -238,8 +238,8 @@
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
-            <div class="card-header bg-white text-dark">
+        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
+            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>

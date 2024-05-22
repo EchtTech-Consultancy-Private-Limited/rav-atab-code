@@ -102,7 +102,7 @@ class TPApplicationController extends Controller
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id' => $application->id,
             ])
-            ->whereIn('status',[0,2]) 
+            // ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
             foreach ($courses as $course) {
@@ -1357,7 +1357,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 'application_id'=>$application->id,
                 
             ])
-            ->whereIn('status',[0,2]) 
+            // ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
             
