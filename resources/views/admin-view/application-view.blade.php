@@ -537,7 +537,6 @@
         </div>  
         @endforeach
 
-        
                 
         @if($application_details->show_submit_btn_to_secretariat && $application_details->application->approve_status==0) 
         
@@ -559,7 +558,8 @@
                             </form>
                         </div>
                     </div>
-        @elseif($application_details->application->approve_status==0)
+             
+                    @elseif($application_details->application->approve_status==0 &&$application_details->application->level_id==1) 
         
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
@@ -567,7 +567,14 @@
                             <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
                             </form>
                         </div>
+        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $application_details->is_final_summary_generated && $application_details->application->level_id==2) 
         
+                        <div class="col-md-12">
+                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            </form>
+                        </div>
         @endif
 
         

@@ -1333,8 +1333,8 @@ class SummaryController extends Controller
                 'app_course.id' => $application_course_id,
                 'asr.assessor_type' => 'secretariat',
             ])
-            ->first();
-
+ /*           ->first();
+/
             
             
             

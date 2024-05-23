@@ -500,12 +500,12 @@
                      <!-- Tp Upload doc -->
                      <div class="col-md-9"></div>
         <div class="col-md-3 text-center">
-                        @if ($spocData->payment_status == 2 && $spocData->approve_status==1)
+                       {{--  @if ($spocData->payment_status == 2 && $spocData->approve_status==1) --}}
                                 <a href="{{ url('/tp-upload-document-level-2' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="color: #fff ; line-height: 25px;">Upload
                                     Documents</a>
-                        @endif
+                        {{-- @endif --}}
                            
                         </div>
         <!-- end here -->

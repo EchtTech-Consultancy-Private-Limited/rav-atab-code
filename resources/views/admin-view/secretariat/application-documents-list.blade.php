@@ -150,7 +150,7 @@
                             </form>
                         </div>
                     </div>
-        @elseif($is_all_revert_action_done)
+         @elseif($is_all_revert_action_done)
         
         <div class="row pt-2">
                         <div class="col-md-12">
@@ -160,37 +160,7 @@
                             </form>
                         </div>
                     </div>
-                    @elseif($is_final_submit && $is_doc_uploaded && $application_details->doc_list_approve_status==0)
-                    <div class="col-md-12">
-                            <form action="{{url('send-admin-approval-doc-list/'.dEncrypt($application_id))}}" method="get">
-                            @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
-                            </form>
-                        </div>
                      @endif
-
-                     <div class="row pt-2">
-                        @if($application_details->doc_list_approve_status==1) 
-                        <div class="col-md-12">
-                          <div class="badge badge-main success float-right">Approved by admin</div>
-                        </div>
-                        @elseif($application_details->doc_list_approve_status==2) 
-                        <div class="col-md-12">
-                        <div class="badge badge-main success float-right">Send Request for Approval</div>
-                        </div>
-                        @elseif($application_details->doc_list_approve_status==3) 
-                        <div class="col-md-12">
-                        <div class="badge badge-main danger float-right">Rejected by admin</div>
-                        </div>
-                        @endif
-                    </div>
-        
-
-
-
-
-
-
 
 
 

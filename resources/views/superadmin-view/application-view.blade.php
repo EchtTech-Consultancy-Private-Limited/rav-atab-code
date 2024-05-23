@@ -76,7 +76,7 @@
                     <div class="float-right">
                    
                     @if($is_final_submit)
-                    <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                    <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
                         </a>
                     @endif
                     
