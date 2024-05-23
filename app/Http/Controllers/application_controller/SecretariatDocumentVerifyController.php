@@ -33,29 +33,29 @@ class SecretariatDocumentVerifyController extends Controller
             $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])->latest('id')->first();
 
             $is_nc_exists = false;
-            if ($nc_type === "view") {
+            if ($nc_type == "view") {
                 $is_nc_exists = true;
             }
 
 
 
             if (isset($tbl_nc_comments->nc_type)) {
-                if ($tbl_nc_comments->nc_type === "NC1") {
+                if ($tbl_nc_comments->nc_type == "NC1") {
                     $dropdown_arr = array(
                         "NC2" => "NC2",
                         "Accept" => "Accept",
                     );
-                } else if ($tbl_nc_comments->nc_type === "NC2") {
+                } else if ($tbl_nc_comments->nc_type == "NC2") {
                     $dropdown_arr = array(
                         "not_recommended" => "Not Recommended",
                         "Accept" => "Accept",
                     );
-                } else if ($tbl_nc_comments->nc_type === "not_recommended") {
+                } else if ($tbl_nc_comments->nc_type == "not_recommended") {
                     $dropdown_arr = array(
                         "Reject" => "Reject",
                         "Accept" => "Accept",
                     );
-                } else if ($tbl_nc_comments->nc_type === "Request_For_Final_Approval") {
+                } else if ($tbl_nc_comments->nc_type == "Request_For_Final_Approval") {
                     $dropdown_arr = array(
                         "Reject" => "Reject",
                         "Accept" => "Accept",
@@ -283,7 +283,7 @@ class SecretariatDocumentVerifyController extends Controller
             
             $nc_comment_status = "";
             $nc_raise = "";
-            if ($request->nc_type === "Accept") {
+            if ($request->nc_type == "Accept") {
                 $nc_comment_status = 1;
                 $nc_flag = 0;
                 $nc_raise = "Accept";
@@ -448,12 +448,12 @@ class SecretariatDocumentVerifyController extends Controller
             if (!$check_all_doc_verified) {
                 return back()->with('fail', 'First create NCs on courses doc');
             }
-            if ($check_all_doc_verified === "all_verified") {
+            if ($check_all_doc_verified == "all_verified") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
-            if ($check_all_doc_verified === "action_not_taken") {
+            if ($check_all_doc_verified == "action_not_taken") {
                 return back()->with('fail', 'Please take any action on course doc.');
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
@@ -502,8 +502,6 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_comments=0;
                     }
 
-                    
-                    
                 DB::table('tbl_application_course_doc')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
                 ->update(['nc_flag' => $nc_flag, 'assessor_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
@@ -523,12 +521,12 @@ class SecretariatDocumentVerifyController extends Controller
             if (!$check_all_doc_verified) {
                 return back()->with('fail', 'First create NCs on courses doc');
             }
-            if ($check_all_doc_verified === "all_verified") {
+            if ($check_all_doc_verified == "all_verified") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
-            if ($check_all_doc_verified === "action_not_taken") {
+            if ($check_all_doc_verified == "action_not_taken") {
                 return back()->with('fail', 'Please take any action on course doc.');
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
@@ -670,7 +668,7 @@ class SecretariatDocumentVerifyController extends Controller
         $nc_flag = 0;
         $not_any_action_flag = 0;
         foreach ($results as $result) {
-            if ($result->status === 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -691,11 +689,11 @@ class SecretariatDocumentVerifyController extends Controller
             }
         }
 
-        if ($flag === 0) {
+        if ($flag == 0) {
             DB::table('tbl_application')->where('id', $application_id)->update(['is_all_course_doc_verified' => 1]);
             return "all_verified";
         }
-        if ($not_any_action_flag === 1) {
+        if ($not_any_action_flag == 1) {
             return "action_not_taken";
         }
 
@@ -853,27 +851,27 @@ class SecretariatDocumentVerifyController extends Controller
         try {
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat'])->latest('id')->first();
             $is_nc_exists = false;
-            if ($nc_type === "view") {
+            if ($nc_type == "view") {
                 $is_nc_exists = true;
             }
             // dd($tbl_nc_comments->nc_type,$nc_type);
             if (isset($tbl_nc_comments->nc_type)) {
-                if ($tbl_nc_comments->nc_type === "NC1") {
+                if ($tbl_nc_comments->nc_type == "NC1") {
                     $dropdown_arr = array(
                         "NC2" => "NC2",
                         "Accept" => "Accept",
                     );
-                } else if ($tbl_nc_comments->nc_type === "NC2") {
+                } else if ($tbl_nc_comments->nc_type == "NC2") {
                     $dropdown_arr = array(
                         "not_recommended" => "Not Recommended",
                         "Accept" => "Accept",
                     );
-                } else if ($tbl_nc_comments->nc_type === "not_recommended") {
+                } else if ($tbl_nc_comments->nc_type == "not_recommended") {
                     $dropdown_arr = array(
                         "Reject" => "Reject",
                         "Accept" => "Accept",
                     );
-                } else if ($tbl_nc_comments->nc_type === "Request_For_Final_Approval") {
+                } else if ($tbl_nc_comments->nc_type == "Request_For_Final_Approval") {
                     $dropdown_arr = array(
                         "Reject" => "Reject",
                         "Accept" => "Accept",
@@ -949,7 +947,7 @@ class SecretariatDocumentVerifyController extends Controller
             $data['doc_file_name'] = $request->doc_file_name;
             $nc_comment_status = "";
             $nc_raise = "";
-            if ($request->nc_type === "Accept") {
+            if ($request->nc_type == "Accept") {
                 $nc_comment_status = 1;
                 $nc_flag = 0;
                 $nc_raise = "Accept";
@@ -1114,7 +1112,7 @@ class SecretariatDocumentVerifyController extends Controller
       $nc_flag = 0;
       $not_any_action_flag = 0;
       foreach ($results as $result) {
-          if ($result->status === 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+          if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
               $flag = 0;
           } else {
               $flag = 1;
@@ -1135,11 +1133,11 @@ class SecretariatDocumentVerifyController extends Controller
           }
       }
 
-      if ($flag === 0) {
+      if ($flag == 0) {
         //   DB::table('tbl_application')->where('id', $application_id)->update(['is_all_course_doc_verified' => 1]);
           return "all_verified";
       }
-      if ($not_any_action_flag === 1) {
+      if ($not_any_action_flag == 1) {
           return "action_not_taken";
       }
 
@@ -1199,9 +1197,9 @@ public function isShowSubmitBtnToSecretariat($application_id)
 
     foreach ($results as $result) {
         
-        // if (($result->status === 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+        // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
 
-        if (($result->status === 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+        if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             $flag = 0;
         } else {
             $flag = 1;
@@ -1209,7 +1207,7 @@ public function isShowSubmitBtnToSecretariat($application_id)
         }
     }
     
-    if ($flag === 0) {
+    if ($flag == 0) {
         return false;
     } else {
         return true;
@@ -1270,7 +1268,7 @@ public function checkSubmitButtonEnableOrDisable($application_id)
         }
     }
     
-    if ($flag === 0) {
+    if ($flag == 0) {
         return false;
     } else {
         return true;
@@ -1324,7 +1322,7 @@ public function checkAllActionDoneOnRevert($application_id)
     $flag = 0;
 
     foreach ($results as $result) {
-        if (($result->is_revert === 1)) {
+        if (($result->is_revert == 1)) {
             $flag = 0;
         } else {
             $flag = 1;
@@ -1332,7 +1330,7 @@ public function checkAllActionDoneOnRevert($application_id)
         }
     }
     
-    if ($flag === 0) {
+    if ($flag == 0) {
         return false;
     } else {
         return true;

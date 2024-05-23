@@ -390,7 +390,7 @@ class AccountApplicationController extends Controller
             
             /*end here*/
             $form_view=0;
-            if($nc_type==="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
+            if($nc_type=="not_recommended" && ($tbl_nc_comments->nc_type!=="Reject") && ($tbl_nc_comments->nc_type!=="Accept") && ($tbl_nc_comments->nc_type!=="NC1") && ($tbl_nc_comments->nc_type!=="NC2") && ($tbl_nc_comments->nc_type!=="Request_For_Final_Approval")){
                 if(empty($accepted_doc)){
                     $form_view=1;
                 }
@@ -400,7 +400,7 @@ class AccountApplicationController extends Controller
 
             
         if(isset($tbl_nc_comments->nc_type)){
-                if($tbl_nc_comments->nc_type==="not_recommended"){
+                if($tbl_nc_comments->nc_type=="not_recommended"){
                     $dropdown_arr = array(
                                 "Reject"=>"Reject",
                                 "Accept"=>"Accept",
