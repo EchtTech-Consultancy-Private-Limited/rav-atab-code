@@ -511,7 +511,7 @@
                         </div>
                     </div>
                     @else
-                        @if($spocData->level_id==2)
+                    @if($spocData->level_id==2)
                         
                     <div class="col-md-12 d-flex justify-content-end">
                                 <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"

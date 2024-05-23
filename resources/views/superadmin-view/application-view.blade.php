@@ -79,6 +79,7 @@
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
+                    
                         <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
@@ -496,9 +497,17 @@
                         </div>
                        
                     </div>
-                    @if($spocData->level_id==2 || $spocData->level_id==3)
+                    @if($spocData->level_id==2)
                     <div class="col-md-12 d-flex justify-content-end">
                                 <a href="{{ url('/super-admin/document-list-level-2' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
+                        </div>
+                    @endif
+
+                    @if($spocData->level_id==3)
+                    <div class="col-md-12 d-flex justify-content-end">
+                                <a href="{{ url('/super-admin/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
                         </div>

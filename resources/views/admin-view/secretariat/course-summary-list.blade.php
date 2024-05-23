@@ -99,8 +99,11 @@
                         {{ $item->course_duration_h ?? '' }} Hour(s)</td>
                         <td>{{ $item->eligibility }}</td>
                         <th>
-                            @if(Auth::user()->role == 5 || Auth::user()->role == 1)
+                            @if(Auth::user()->role == 5 && $applicationDetails->level_id==2)
                             <a href="{{ url('admin/view-final-summary?application='.dEncrypt($applicationDetails->id).'&course='.dEncrypt($item->id)) }}" class="btn btn-primary">View Summary Report</a>
+                            @endif
+                            @if(Auth::user()->role == 5  && $applicationDetails->level_id==3)
+                            <a href="{{ url('admin-view-final_summaries?application='.dEncrypt($applicationDetails->id).'&course='.dEncrypt($item->id)) }}" class="btn btn-primary">View Summary Report</a>
                             @endif
                         </th>
                     </tr>

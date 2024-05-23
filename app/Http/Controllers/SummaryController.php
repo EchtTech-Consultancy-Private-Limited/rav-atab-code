@@ -724,8 +724,8 @@ class SummaryController extends Controller
 
 
     public function tpViewFinalSummary(Request $request){
-        $application_id = $request->input('application');
-        $application_course_id = $request->input('course');
+        $application_id = dDecrypt($request->input('application'));
+        $application_course_id = dDecrypt($request->input('course'));
         $summeryReport = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
@@ -848,8 +848,8 @@ class SummaryController extends Controller
 
 
     public function adminViewFinalSummary(Request $request){
-        $application_id = $request->input('application');
-        $application_course_id = $request->input('course');
+        $application_id = dDecrypt($request->input('application'));
+        $application_course_id = dDecrypt($request->input('course'));
         $summeryReport = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
