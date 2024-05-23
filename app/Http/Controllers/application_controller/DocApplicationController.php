@@ -30,29 +30,29 @@ class DocApplicationController extends Controller
             ->whereIn('status',[1,3])
             ->first();
             $is_nc_exists = false;
-            if ($nc_type === "view" && empty($is_course_rejected)) {
+            if ($nc_type == "view" && empty($is_course_rejected)) {
                 $is_nc_exists = true;
             }
 
             
 
         if(isset($tbl_nc_comments->nc_type)){
-            if($tbl_nc_comments->nc_type==="NC1"){
+            if($tbl_nc_comments->nc_type=="NC1"){
                 $dropdown_arr = array(
                             "NC2"=>"NC2",
                             "Accept"=>"Accept",
                         );
-             }else if($tbl_nc_comments->nc_type==="NC2"){
+             }else if($tbl_nc_comments->nc_type=="NC2"){
                 $dropdown_arr = array(
                             "not_recommended"=>"Not Recommended",
                             "Accept"=>"Accept",
                         );
-             }else if($tbl_nc_comments->nc_type==="not_recommended"){
+             }else if($tbl_nc_comments->nc_type=="not_recommended"){
                 $dropdown_arr = array(
                             "Reject"=>"Reject",
                             "Accept"=>"Accept",
                         );
-             }else if($tbl_nc_comments->nc_type==="Request_For_Final_Approval"){
+             }else if($tbl_nc_comments->nc_type=="Request_For_Final_Approval"){
                 $dropdown_arr = array(
                     "Reject"=>"Reject",
                     "Accept"=>"Accept",

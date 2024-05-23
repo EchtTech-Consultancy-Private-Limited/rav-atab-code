@@ -272,9 +272,9 @@ class AdminApplicationController extends Controller
 
         foreach ($results as $result) {
             
-            // if (($result->status === 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
 
-            if (($result->status === 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -282,7 +282,7 @@ class AdminApplicationController extends Controller
             }
         }
         
-        if ($flag === 0) {
+        if ($flag == 0) {
             return false;
         } else {
             return true;
@@ -333,7 +333,7 @@ class AdminApplicationController extends Controller
         $accepted_count = 0;
         foreach ($results as $result) {
             
-            if ($result->status === 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -343,7 +343,7 @@ class AdminApplicationController extends Controller
         }
         
         
-        if ($flag === 0) {
+        if ($flag == 0) {
             return false;
         } else {
             return true;
@@ -404,7 +404,7 @@ class AdminApplicationController extends Controller
             }
         }
         
-        if ($flag === 0) {
+        if ($flag == 0) {
             return false;
         } else {
             return true;
@@ -458,7 +458,7 @@ class AdminApplicationController extends Controller
         $flag = 0;
 
         foreach ($results as $result) {
-            if (($result->is_revert === 1)) {
+            if (($result->is_revert == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -466,7 +466,7 @@ class AdminApplicationController extends Controller
             }
         }
         
-        if ($flag === 0) {
+        if ($flag == 0) {
             return false;
         } else {
             return true;
@@ -590,7 +590,7 @@ class AdminApplicationController extends Controller
             } else {
                 $create_assessor_assign = DB::table('tbl_assessor_assign')->insert($data);
             }
-            if ($request->assessor_type === "desktop") {
+            if ($request->assessor_type == "desktop") {
                 $assessment_type = 1;
             } else {
                 $assessment_type = 2;
@@ -854,7 +854,7 @@ class AdminApplicationController extends Controller
 
             /*end here*/
             $form_view = 0;
-            if ($nc_type === "not_recommended" && ($tbl_nc_comments->nc_type !== "Reject") && ($tbl_nc_comments->nc_type !== "Accept") && ($tbl_nc_comments->nc_type !== "NC1") && ($tbl_nc_comments->nc_type !== "NC2") && ($tbl_nc_comments->nc_type !== "Request_For_Final_Approval")) {
+            if ($nc_type == "not_recommended" && ($tbl_nc_comments->nc_type !== "Reject") && ($tbl_nc_comments->nc_type !== "Accept") && ($tbl_nc_comments->nc_type !== "NC1") && ($tbl_nc_comments->nc_type !== "NC2") && ($tbl_nc_comments->nc_type !== "Request_For_Final_Approval")) {
                 if (empty($accepted_doc)) {
                     $form_view = 1;
                 }
@@ -864,7 +864,7 @@ class AdminApplicationController extends Controller
 
 
             if (isset($tbl_nc_comments->nc_type)) {
-                if ($tbl_nc_comments->nc_type === "not_recommended") {
+                if ($tbl_nc_comments->nc_type == "not_recommended") {
                     $dropdown_arr = array(
                         "Reject" => "Reject",
                         "Accept" => "Accept",
@@ -917,7 +917,7 @@ class AdminApplicationController extends Controller
 
             $nc_comment_status = "";
             $admin_nc_flag = 0;
-            if ($request->nc_type === "Accept") {
+            if ($request->nc_type == "Accept") {
                 $nc_comment_status = 1;
                 $admin_nc_flag = 1;
                 $nc_flag = 0;

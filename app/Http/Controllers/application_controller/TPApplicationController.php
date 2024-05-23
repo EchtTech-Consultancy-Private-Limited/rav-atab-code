@@ -1080,17 +1080,17 @@ public function upgradeStoreNewApplicationCourse(Request $request)
              
              for($j=0;$j<3;$j++){
              $data = [];
-             if($j===0){
+             if($j==0){
                 $data['doc_file_name'] = $file->declaration_pdf;
                 $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
              }
-             if($j===1){
+             if($j==1){
                 $data['doc_file_name'] = $file->course_curriculum_pdf;
                 $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
              }
-             if($j===2){
+             if($j==2){
                 $data['doc_file_name'] = $file->course_details_xsl;
                 $data['doc_sr_code'] = config('constant.details.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.details.doc_unique_id');
@@ -1839,17 +1839,17 @@ public function upgradeStoreNewApplicationCourseLevel3(Request $request)
              
              for($j=0;$j<3;$j++){
              $data = [];
-             if($j===0){
+             if($j==0){
                 $data['doc_file_name'] = $file->declaration_pdf;
                 $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
              }
-             if($j===1){
+             if($j==1){
                 $data['doc_file_name'] = $file->course_curriculum_pdf;
                 $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
              }
-             if($j===2){
+             if($j==2){
                 $data['doc_file_name'] = $file->course_details_xsl;
                 $data['doc_sr_code'] = config('constant.details.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.details.doc_unique_id');
