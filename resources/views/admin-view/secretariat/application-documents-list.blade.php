@@ -136,8 +136,64 @@
                </div>
                <div class="col-sm-6">
                   <div class="pr-2">
-                     <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
+                   
+                  <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
+      
+      @if($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) 
+        
+        <div class="row pt-2">
+                        <div class="col-md-12">
+                            <form action="{{url('secretariat/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                            </form>
+                        </div>
+                    </div>
+        @elseif($is_all_revert_action_done)
+        
+        <div class="row pt-2">
+                        <div class="col-md-12">
+                            <form action="{{url('secretariat/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post" return="confirm('Are you sure to reject this course')">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                            </form>
+                        </div>
+                    </div>
+                    @elseif($is_final_submit && $is_doc_uploaded && $application_details->doc_list_approve_status==0)
+                    <div class="col-md-12">
+                            <form action="{{url('send-admin-approval-doc-list/'.dEncrypt($application_id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            </form>
+                        </div>
+                     @endif
+
+                     <div class="row pt-2">
+                        @if($application_details->doc_list_approve_status==1) 
+                        <div class="col-md-12">
+                          <div class="badge badge-main success float-right">Approved by admin</div>
+                        </div>
+                        @elseif($application_details->doc_list_approve_status==2) 
+                        <div class="col-md-12">
+                        <div class="badge badge-main success float-right">Send Request for Approval</div>
+                        </div>
+                        @elseif($application_details->doc_list_approve_status==3) 
+                        <div class="col-md-12">
+                        <div class="badge badge-main danger float-right">Rejected by admin</div>
+                        </div>
+                        @endif
+                    </div>
+        
+
+
+
+
+
+
+
+
+
                   </div>
                   <!-- <div class="d-flex justify-content-end gap-5">
                   <form action="{{url('desktop/update-nc-flag/'.$application_id.'/'.$course_id)}}" method="post">
@@ -278,6 +334,26 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                              <!-- end here -->
+
+                                             @elseif($doc->nc_show_status==5)
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted</a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected</a>
+                                             @endif
+
+
+
                                              @elseif($doc->status==6)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
@@ -310,10 +386,14 @@
                                              </td>
                                              <td>
                                              @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
-                                   
+                                                
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                             @if($doc->status!=0 && $doc->is_revert!=1)
+                                                <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocList('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
+
+                                                @endif
                                     @else
                                   
                                                 <span class="text-danger"

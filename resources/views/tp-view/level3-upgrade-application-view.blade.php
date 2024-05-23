@@ -63,11 +63,7 @@
                         </a>
                     @endif
                     <div class="float-right">
-                        @if($spocData->level_id==1)
-                            <a href="{{ url('tp/application-list') }}" type="button" class="btn btn-primary">Back
-                        @elseif($spocData->level_id==2)
-                            <a href="{{ url('/level-second/tp/application-list') }}" type="button" class="btn btn-primary">Back
-                        @endif
+                        <a href="{{ url('level-first/tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>
@@ -87,15 +83,15 @@
                     } 
                     
                 @endphp
-                
-                <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+
+                <span><a href="{{url('tp/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                 @endif
             </div>
             <div class="col-md-8 pr-2">
             <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
-                    Basic Information 
+                    Basic Information
                 </h5>
                 <div>
                     <span style="font-weight: bold;" class="mr-3">Reference ID:</span> {{ $spocData->refid }} &nbsp;&nbsp;&nbsp;
@@ -241,10 +237,9 @@
         </div>
             </div>
         </div>
-        
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
-            <div class="card-header bg-white text-dark">
+        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
+            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>
@@ -323,7 +318,6 @@
                                                          enctype="multipart/form-data">
                                     
                                     <input type="hidden" name="application_id" value="{{$spocData->id}}">
-                                    
                                     <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
                                     <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                     <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
@@ -397,6 +391,35 @@
                                              class="btn btn-danger btn-sm docBtn docBtn_nc  m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
+
+
+
+
+                                            
+                                            @elseif($doc->nc_show_status==5)
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted</a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected</a>
+                                             @endif
+
+
+
+
+
+
+
+
                                             
                                              @if($doc->nc_show_status==1)
                                              <div class="upload-btn-wrapper">
@@ -472,12 +495,12 @@
                             </thead>
                         </table>
                     </div>
-                   
-  <!--  -->
+
+
                      <!-- Tp Upload doc -->
                      <div class="col-md-9"></div>
         <div class="col-md-3 text-center">
-                        @if ($spocData->payment_status == 2 &&  $spocData->is_all_course_doc_verified==1 && $spocData->approve_status==1)
+                        @if ($spocData->payment_status == 2 && $spocData->approve_status==1)
                                 <a href="{{ url('/tp-upload-document' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="color: #fff ; line-height: 25px;">Upload
@@ -486,15 +509,27 @@
                            
                         </div>
         <!-- end here -->
-                  
-                     </div>
+
+
+
+
+                    </div>
+
+                    <!--  -->
+                    
                 </div>
             </div>
         </div>
         </div>  
         @endforeach
-        
-       
+        @if($spocData->is_all_course_doc_verified==1)
+        <!-- <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+            <a href="{{ url('/upgrade-new-application', dEncrypt($spocData->id)) }}"
+                                                            class="btn btn-warning">Upgrade</a>
+            </div>
+        </div> -->
+        @endif
 
         <div class="card p-relative">
             <div class="box-overlay">
@@ -631,6 +666,160 @@
         </div>
 
         </div>
+
+
+
+
+
+
+
+        <div class="card p-relative">
+            <div class="box-overlay">
+                <span class="spinner-border"></span>
+            </div>
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                   Additional Payment Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @if (count($application_details->additional_payment) > 0)
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                S.No.
+                            </th>
+                            <th>
+                                Payment Date
+                            </th>
+                            <th>
+                                Payment Transaction no
+                            </th>
+                            <th>
+                                Payment Reference no
+                            </th>
+                            <!-- <th>Total Courses</th> -->
+                            <th>Amount</th>
+                            <th>Slip by User</th>
+                            <th>Slip by Accountant Approver</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+
+                        </tr>
+                        @foreach ($application_details->additional_payment as $key=>$ApplicationPayment)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                            </td>
+                            <td>{{ $ApplicationPayment->payment_transaction_no ?? '' }}</td>
+                            <td>{{ $ApplicationPayment->payment_reference_no ?? '' }}</td>
+                            <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
+                            <td>
+                                ₹ {{ $ApplicationPayment->amount }}</td>
+                            <td><?php
+                                        substr($ApplicationPayment->payment_proof, -3);
+                                        $data = substr($ApplicationPayment->payment_proof, -3);
+                                        ?>
+                                @if ($data == 'pdf')
+                                <a href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}" target="_blank"
+                                    title="Document 3" id="docpdf3" download>
+                                    <i class="fa fa-download mr-2"></i> Payment pdf
+                                </a>
+                                @else
+                                @if (isset($ApplicationPayment->payment_proof))
+                                <a target="_blank" class="image-link"
+                                    href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}">
+                                    <img src="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}"
+                                        style="width:100px;height:70px;">
+                                </a>
+                                @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ApplicationPayment->status == 0 && $ApplicationPayment->payment_proof_by_account==null)
+                                N/A
+                                @endif
+                                @if ($ApplicationPayment->status ==0 || $ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
+                                @if (!$ApplicationPayment->payment_proof_by_account)
+                                File not available!
+                                @endif
+                                <?php
+                                                substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                $data = substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                ?>
+                                @if ($data == 'pdf')
+                                <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
+                                    title="Document 3" id="docpdf3" download>
+                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                </a>
+                                @else
+                                @if (isset($ApplicationPayment->payment_proof_by_account))
+                                <a target="_blank" class="image-link"
+                                    href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}">
+                                    <img src="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}"
+                                        style="width:100px;height:70px;">
+                                </a>
+                                @endif
+                                @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ApplicationPayment->status == 0)
+                                    Remark not available!
+                                @else
+
+                                @if($ApplicationPayment->approve_remark)
+                                        {{$ApplicationPayment->approve_remark}}
+                                @else
+                                    @if($ApplicationPayment->remark_by_account)
+                                    {{$ApplicationPayment->remark_by_account}}
+                                    @endif
+                                @endif
+
+
+                                @endif
+                            </td>
+                            <td>
+                                
+                                @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->status!=2)
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
+                                title="You can update only once"
+                                ><i class="fa fa-pencil"></i></button>
+
+                                @else
+                                @if($ApplicationPayment->account_update_count==(int)env('ACCOUNT_PAYMENT_UPDATE_COUNT'))
+                                    <span class="text-danger payment_update_fn badge badge-danger">
+                                    Payment Update Limit Expired
+                                    </span>
+                                    @else
+                                    <span class="text-success payment_update_fn badge badge-success">
+                                    Payment Approved
+                                    </span>
+                                    @endif
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                    @else
+                    <p>Payment has not been completed yet.</p>
+                    @endif
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
 
         <!-- Edit Payment modal  -->
         <div class="modal fade" id="update_payment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

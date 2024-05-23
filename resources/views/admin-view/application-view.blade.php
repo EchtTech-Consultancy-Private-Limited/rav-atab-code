@@ -64,36 +64,45 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    @if($is_final_submit)
+              </div>
+              </div>
+              <div class="row align-items-center">
+              <div class="col-md-6 mb-3">
+                    <div class="previous_refid ref-num">
+                        @if(!empty($spocData->prev_refid))
+                        @php
+                            $text = $spocData->prev_refid;
+                            $parts = explode("/", $text);
+                            $app_id = explode('-',implode('-',$parts))[2];
+                            $lastDigit=0;
+                            if($app_id<10){
+                                $number = $app_id;
+                                $app_id = substr((string)$number, -1);
+                            } 
+                            
+                        @endphp
+
+                        <span><a href="{{url('admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+                        @endif
+                    </div>
+              </div>
+                    <div class="col-md-6 mb-3">
+                       <div class="float-right">
+                       @if($is_final_submit)
                         <a href="{{ url('admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
-                    <div class="float-right">
+                   
                         <a href="{{ url('admin/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
+                       </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="row form-margin-min">
-            <div class="previous_refid">
-                @if(!empty($spocData->prev_refid))
-                @php
-                    $text = $spocData->prev_refid;
-                    $parts = explode("/", $text);
-                    $app_id = explode('-',implode('-',$parts))[2];
-                    $lastDigit=0;
-                    if($app_id<10){
-                        $number = $app_id;
-                        $app_id = substr((string)$number, -1);
-                    } 
-                    
-                @endphp
-
-                <span><a href="{{url('admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
-                @endif
-            </div>
+          
             <div class="col-md-8 pr-2">
             <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
@@ -502,7 +511,7 @@
                         </div>
                     </div>
                     @else
-                        @if($spocData->level_id==2)
+                    @if($spocData->level_id==2)
                         
                     <div class="col-md-12 d-flex justify-content-end">
                                 <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"

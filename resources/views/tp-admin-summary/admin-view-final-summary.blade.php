@@ -16,16 +16,20 @@
 <!-- #END# Overlay For Sidebars -->
 @include('layout.topbar')
 <div>
-    @if (Auth::user()->role == '1')
-        @include('layout.sidebar')
-    @elseif(Auth::user()->role == '2')
-        @include('layout.siderTp')
-    @elseif(Auth::user()->role == '3')
-        @include('layout.sideAss')
-    @elseif(Auth::user()->role == '4')
-        @include('layout.sideprof')
-    @endif
-    @include('layout.rightbar')
+@if (Auth::user()->role == 1)
+            @include('layout.sidebar')
+        @elseif(Auth::user()->role == 2)
+            @include('layout.siderTp')
+        @elseif(Auth::user()->role == 3)
+            @include('layout.sideAss')
+        @elseif(Auth::user()->role == 4)
+            @include('layout.sideprof')
+        @elseif(Auth::user()->role == 5)
+            @include('layout.secretariat')
+        @elseif(Auth::user()->role == 6)
+            @include('layout.sidbarAccount')
+        @endif
+        @include('layout.rightbar')
 </div>
 
 

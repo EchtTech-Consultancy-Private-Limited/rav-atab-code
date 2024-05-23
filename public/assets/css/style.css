@@ -25583,4 +25583,10 @@ p.ref-number b{ font-weight: 600;}
     }
 }
 
+.previous_refid.ref-num a {
+    font-size: 16px;
+    font-weight: 700;
+    color: #d35400;
+}
+
 /* ******************************** */

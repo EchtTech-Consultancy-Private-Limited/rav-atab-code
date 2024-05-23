@@ -58,6 +58,8 @@
                   <div class="pr-2">
                      <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
+      
+
                   </div>
                </div>
             </div>

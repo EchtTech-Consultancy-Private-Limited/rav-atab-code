@@ -238,8 +238,8 @@
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
-            <div class="card-header bg-white text-dark">
+        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
+            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>
@@ -500,7 +500,7 @@
                      <!-- Tp Upload doc -->
                      <div class="col-md-9"></div>
         <div class="col-md-3 text-center">
-                        @if ($spocData->payment_status == 2 &&  $spocData->is_all_course_doc_verified==1 && $spocData->approve_status==1)
+                        @if ($spocData->payment_status == 2 && $spocData->approve_status==1)
                                 <a href="{{ url('/tp-upload-document-level-2' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="color: #fff ; line-height: 25px;">Upload

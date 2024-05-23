@@ -481,7 +481,7 @@ class AdminApplicationController extends Controller
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $id,'course_id'=>$course_id])
-                ->update(['approve_status'=>1]); 
+                ->update(['approve_status'=>1,'is_revert'=>1]); 
 
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$course_id])
@@ -507,7 +507,7 @@ class AdminApplicationController extends Controller
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $id,'course_id'=>$course_id])
-                ->update(['approve_status'=>2]); 
+                ->update(['approve_status'=>2,'is_revert'=>1]); 
 
                 DB::table('tbl_application_courses')
                 ->where(['id'=>$course_id])

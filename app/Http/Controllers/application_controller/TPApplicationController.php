@@ -102,7 +102,7 @@ class TPApplicationController extends Controller
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id' => $application->id,
             ])
-            ->whereIn('status',[0,2]) 
+            // ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
             foreach ($courses as $course) {
@@ -262,7 +262,7 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'secretariat'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','nc_show_status','status')->get();
         
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -279,7 +279,9 @@ class TPApplicationController extends Controller
                             'application_courses_id' => $course_id,
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
+                            
                         ])
+                        ->whereIn('tbl_nc_comments.nc_type',['NC1','NC2','not_recommended'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
@@ -1357,7 +1359,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 'application_id'=>$application->id,
                 
             ])
-            ->whereIn('status',[0,2]) 
+            // ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
             
@@ -2158,8 +2160,12 @@ public function upgradeGetApplicationViewLevel3($id){
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,
             ])->get();
+            $additional_payment = DB::table('tbl_additional_fee')->where([
+                'application_id' => $application->id,
+            ])->get();
             if($payment){
                 $obj->payment = $payment;
+                $obj->additional_payment = $additional_payment;
             }
             $final_data = $obj;
             $tp_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();

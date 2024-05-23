@@ -331,6 +331,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
 
     Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
+
+    Route::post('/secretariat-revert-doc-list-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocListAction']);
     
     Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
 
@@ -340,6 +342,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/secretariat/reject-course/{application_id}/{course_id}', [SecretariatDocumentVerifyController::class, 'secretariatRejectCourse']);
 
     Route::get('send-admin-approval/{application_id}', [SecretariatDocumentVerifyController::class, 'sendAdminApproval']);
+
+    Route::get('send-admin-approval-doc-list/{application_id}', [SecretariatDocumentVerifyController::class, 'sendAdminApprovalDocList']);
 
 
     Route::get('/tp-course-document-detail/{nc_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpCourseDocumentDetails']);
@@ -415,6 +419,10 @@ Route::get('secretariat/final-summary/{application_id}/{application_course_id}',
 
 Route::get('/admin/application-course-summaries',[SummaryController::class,"getCourseSummariesListSecretariat"]);
 Route::get('admin/view-final-summary',[SummaryController::class,"adminViewFinalSummarySecretariat"]);
+Route::get('super-admin/application-course-summaries',[SummaryController::class,"getCourseSummariesListSecretariatSuperAdmin"]);
+Route::get('super-admin/view-final-summary',[SummaryController::class,"ViewFinalSummarySecretariatsuperAdmin"]);
+
+Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}', [SecretariatDocumentVerifyController::class, 'secretariatUpdateNCFlagDocList']);
 /*end here*/ 
 
 

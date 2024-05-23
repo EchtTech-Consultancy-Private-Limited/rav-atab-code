@@ -50,19 +50,11 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    @if($is_final_submit)
-                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
-                        </a>
-                    @endif
-                    <div class="float-right">
-                        <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back
-                        </a>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row form-margin-min">
-        <div class="previous_refid">
+              </div>
+              <div class="row align-items-center">
+              <div class="col-md-6 mb-3">
+              <div class="previous_refid ref-num">
                 @if(!empty($spocData->prev_refid))
                 @php
                     $text = $spocData->prev_refid;
@@ -79,6 +71,25 @@
                 <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                 @endif
             </div>
+              </div>
+                    <div class="col-md-6 mb-3">
+                    <div class="float-right">
+                   
+                    @if($is_final_submit)
+                    <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
+                        </a>
+                    @endif
+                    
+                        <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back
+                        </a>
+                    </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+        <div class="row form-margin-min">
+       
             <div class="col-md-8 pr-2">
             <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
@@ -486,11 +497,21 @@
                         </div>
                        
                     </div>
+                    @if($spocData->level_id==2)
                     <div class="col-md-12 d-flex justify-content-end">
                                 <a href="{{ url('/super-admin/document-list-level-2' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
                         </div>
+                    @endif
+
+                    @if($spocData->level_id==3)
+                    <div class="col-md-12 d-flex justify-content-end">
+                                <a href="{{ url('/super-admin/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
+                                    class="btn text-white bg-primary mb-0"
+                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
+                        </div>
+                    @endif
 
 
                     </div>
@@ -503,8 +524,12 @@
         </div>  
         @endforeach
 
+          
+        
+        <div class="row">
+        
         @if($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected")
-                        <div class="col-md-12">
+                        <div class="col-md-12 text-right">
                             
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve Application</button>
 
@@ -523,14 +548,10 @@
                         </div>
                         
                     </div>
-        @endif   
-        
-        <div class="row">
-        
-        
+        @endif 
                         
 
-        <div class="card p-relative">
+        <div class="card p-relative mt-3">
             <div class="box-overlay">
                 <span class="spinner-border"></span>
             </div>
