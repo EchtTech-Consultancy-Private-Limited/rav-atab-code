@@ -65,6 +65,7 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
               </div>
+              
               </div>
               <div class="row align-items-center">
               <div class="col-md-6 mb-3">
