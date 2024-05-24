@@ -121,10 +121,12 @@ class AdminApplicationController extends Controller
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
         $obj = new \stdClass;
         $obj->application = $application;
+        
         $obj->show_submit_btn_to_secretariat = $this->checkApplicationIsReadyForNextLevel($application->id);
         $obj->enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application->id);
         $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
         $obj->is_action_taken_on_44_docs = $this->checkAllActionDoneOn44Docs($application->id);
+
         $is_final_summary =  DB::table('assessor_final_summary_reports')->where('application_id',$application->id)->first();
         if(!empty($is_final_summary)){
             $obj->is_final_summary_generated =true;

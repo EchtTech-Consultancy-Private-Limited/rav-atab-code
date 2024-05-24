@@ -140,7 +140,7 @@
                   <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
       
-      @if($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) 
+      @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
         
         <div class="row pt-2">
                         <div class="col-md-12">
@@ -150,17 +150,7 @@
                             </form>
                         </div>
                     </div>
-         @elseif($is_all_revert_action_done)
-        
-        <div class="row pt-2">
-                        <div class="col-md-12">
-                            <form action="{{url('secretariat/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post" return="confirm('Are you sure to reject this course')">
-                            @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
-                            </form>
-                        </div>
-                    </div>
-                     @endif
+      @endif
 
 
 

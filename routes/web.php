@@ -309,7 +309,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/account/application-view/{id}', [AccountApplicationController::class, 'getApplicationView']);
     Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
     Route::get('/onsite/application-view/{id}', [OnsiteApplicationController::class, 'getApplicationView']);
-
+    Route::post('/desktop-revert-doc-list-action', [DesktopApplicationController::class, 'revertCourseDocListActionDesktop']);
 
 
     Route::get('/account/application-payment-fee-list', [AccountApplicationController::class, 'getApplicationPaymentFeeList']);
@@ -396,6 +396,7 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     
     Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
 
+    Route::post('/desktop/update-nc-flag-doc-list/{application_id}/{course_id?}', [DesktopApplicationController::class, 'desktopUpdateNCFlagDocList']);
 
 
     // Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'secretariatVerfiyDocument']);
@@ -404,7 +405,7 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     Route::post('/desktop/document-verfiy', [DesktopApplicationController::class, 'desktopDocumentVerify']);
     Route::post('/onsite/document-verfiy', [OnsiteApplicationController::class, 'onsiteDocumentVerify']);
     Route::post('/onsite/upload-photograph', [OnsiteApplicationController::class, 'onsiteUploadPhotograph']);
-
+    Route::post('/onsite/update-nc-flag-doc-list/{application_id}/{course_id?}', [OnsiteApplicationController::class, 'onsiteUpdateNCFlagDocList']);
 
 /*Secretariat nc's 44 documents route*/ 
 Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);

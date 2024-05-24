@@ -619,9 +619,7 @@ class SecretariatDocumentVerifyController extends Controller
         }
     }
    
-    
-
-
+ 
     public function checkApplicationIsReadyForNextLevel($application_id)
     {
 

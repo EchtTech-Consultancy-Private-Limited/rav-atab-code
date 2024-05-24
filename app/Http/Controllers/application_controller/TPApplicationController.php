@@ -199,7 +199,7 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'desktop'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status','nc_show_status')->get();
 
         $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
@@ -225,6 +225,7 @@ class TPApplicationController extends Controller
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
                         ])
+                        ->whereIn('tbl_nc_comments.nc_type',['NC1','NC2','not_recommended'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
@@ -235,6 +236,7 @@ class TPApplicationController extends Controller
                             'doc_sr_code' => $question->code,
                             'assessor_type'=>'onsite'
                         ])
+                        ->whereIn('tbl_nc_comments.nc_type',['NC1','NC2','not_recommended'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
