@@ -269,14 +269,22 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     // Created by Brijesh sir and Suraj
 /*----------------- New Application Routes------------------------*/
     Route::get('create-new-applications/{id?}',[ApplicationCoursesController::class,"createNewApplication"]);
+    Route::get('create-level-2-new-applications/{id?}',[ApplicationCoursesController::class,"createLevel2NewApplication"]);
+    Route::get('create-level-3-new-applications/{id?}',[ApplicationCoursesController::class,"createLevel3NewApplication"]);
     Route::post('store-new-applications',[ApplicationCoursesController::class,"storeNewApplication"]);
+    Route::post('store-level-2-new-applications',[ApplicationCoursesController::class,"storeLevel2NewApplication"]);
+    Route::post('store-level-3-new-applications',[ApplicationCoursesController::class,"storeLevel3NewApplication"]);
     Route::get('get-application-courses',[ApplicationCoursesController::class,"getApplicationCourses"]);
     Route::get('get-application-fees',[ApplicationCoursesController::class,"getApplicationFees"]);
     Route::get('get-application-documents',[ApplicationCoursesController::class,"getApplicationDocuments"]);
     Route::get('get-application-list', [TPApplicationController::class, 'getApplicationList'])->name('application-list');
     // =========Courses Route=========//
     Route::get('create-new-course/{id?}', [ApplicationCoursesController::class, 'createNewCourse']);
+    Route::get('create-level-2-new-course/{id?}', [ApplicationCoursesController::class, 'createLevel2NewCourse']);
+    Route::get('create-level-3-new-course/{id?}', [ApplicationCoursesController::class, 'createLevel3NewCourse']);
     Route::post('/store-new-application-course', [ApplicationCoursesController::class, 'storeNewApplicationCourse']);
+    Route::post('/store-level-2-new-application-course', [ApplicationCoursesController::class, 'storeLevel2NewApplicationCourse']);
+    Route::post('/store-level-3-new-application-course', [ApplicationCoursesController::class, 'storeLevel3NewApplicationCourse']);
     Route::get('/get-course-list', [ApplicationCoursesController::class, 'getCourseList']);
     Route::get('/delete-course-by-id/{id}', [ApplicationCoursesController::class, 'deleteCourseById']);
     Route::get('/show-course-payment/{id?}', [ApplicationCoursesController::class, 'showcoursePayment']);
