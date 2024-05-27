@@ -909,6 +909,7 @@ public function checkAllActionDoneOnRevert($application_id)
             ->where('approve_status',1)
             ->first();
         if ($additionalField) {
+            $finalResults[$key] = (object)[];
             $finalResults[$key]->status = $additionalField->status;
             $finalResults[$key]->id = $additionalField->id;
             $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;

@@ -264,10 +264,11 @@
                                     @foreach($onsite_course_doc_uploaded->filter(function ($item) use ($question) {
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
+                                    
                                     @if($doc->nc_show_status==0)
                                        <a target="_blank"
-                                        title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        title="{{$doc->onsite_doc_file_name}}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                     @elseif($doc->nc_show_status==1)

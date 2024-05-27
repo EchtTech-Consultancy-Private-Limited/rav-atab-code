@@ -206,7 +206,7 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status')
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status','nc_show_status')
         ->get();
 
         $chapters = Chapter::all();
@@ -1664,22 +1664,21 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            // $data['refid'] = $request->reference_id;
-            $data['prev_refid'] = $request->prev_refid;
+            $data['prev_refid'] = $request->prev_refid?$request->prev_refid : $request->reference_id;
             $data['application_date'] = $application_date;
            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3]);
 
             
 
+            
             $application = new TblApplication($data);
             $application->save();
 
-            // $application->refid = $request->prev_refid;
             $application->prev_refid = $request->prev_refid;
             $application->save();
 
-            // $create_new_application = $request->application_id;
+
             $create_new_application = $application->id;
             $msg="Application Created Successfully";
             $first_application = TblApplication::where('refid',$request->reference_id)->first();

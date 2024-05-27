@@ -791,7 +791,7 @@ class SuperAdminApplicationController extends Controller
                         /*Certificate generation*/ 
                         $data = [];
                         $data['application_id'] = $app_id;
-                        $data['refid'] = '123';
+                        $data['refid'] = $get_application->refid;
                         $data['certificate_no'] = 1;
                         $data['certificate_file'] = 1;
                         $data['valid_from'] = $valid_from;
@@ -801,20 +801,26 @@ class SuperAdminApplicationController extends Controller
                         /*end here*/ 
 
                         /*To show docs to TP*/ 
-                        $all_docs = DB::table('tbl_application_course_doc')
-                        // ->where(['application_id' => $request->application_id,'approve_status'=>1])
-                        ->whereIn('assessor_type',['desktop','onsite'])
-                        ->where(['application_id' => $request->application_id])
+                        $all_docs_desktop = DB::table('tbl_application_course_doc')
+                        ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                        ->where('assessor_type','desktop')
                         ->whereNotIn('status',[2,3,4,6]) 
                         ->get(); 
 
+                        $all_docs_onsite = DB::table('tbl_application_course_doc')
+                        ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                        ->where('assessor_type','onsite')
+                        ->whereNotIn('onsite_status',[2,3,4,6]) 
+                        ->get(); 
+                        $all_docs = $all_docs_desktop->merge($all_docs_onsite);
 
+                        
                         foreach($all_docs as $doc){
                             if($doc->status==0){
-                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                                 
                             }else{
-                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'onsite_status'=>$doc->onsite_status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
 
                             }
                             // $data = [];
@@ -828,18 +834,40 @@ class SuperAdminApplicationController extends Controller
                             //     $data['comments'] = 'Document has been approved';
                             //     $data['nc_show_status'] = 1;
                             //     DB::table('tbl_nc_comments_secretariat')->insert($data);
+
+
+
+                            $all_docs = DB::table('tbl_course_wise_document')
+                            // ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                            ->where(['application_id' => $request->application_id])
+                            ->whereNotIn('status',[2,3,4,6]) 
+                            ->get(); 
+                         
+                            foreach($all_docs as $doc){
+                                if($doc->status==0){
+                                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                    
+                                }else{
+                                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+            
+                                }
+                              
+                            }
+
+                            
                         }
                     }else{
                            /*Certificate generation*/ 
-                    $data = [];
-                    $data['application_id'] = $app_id;
-                    $data['refid'] = '123';
-                    $data['certificate_no'] = 1;
-                    $data['certificate_file'] = 1;
-                    $data['valid_from'] = $valid_from;
-                    $data['valid_till'] = $valid_till;
-                    $data['level_id'] = $get_application->level_id;
-                    DB::table('tbl_certificate')->insert($data);
+                    // $data = [];
+                    // $data['application_id'] = $app_id;
+                    // $data['refid'] = '123';
+                    // $data['certificate_no'] = 1;
+                    // $data['certificate_file'] = 1;
+                    // $data['valid_from'] = $valid_from;
+                    // $data['valid_till'] = $valid_till;
+                    // $data['level_id'] = $get_application->level_id;
+                    // DB::table('tbl_certificate')->insert($data);
+
                     /*end here*/ 
 
                     /*To show docs to TP*/ 
@@ -857,17 +885,7 @@ class SuperAdminApplicationController extends Controller
                             DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
     
                         }
-                        // $data = [];
-                        //     $data['application_id'] = $doc->application_id;
-                        //     $data['application_courses_id'] = $doc->course_id;
-                        //     $data['secretariat_id'] = Auth::user()->id;
-                        //     $data['doc_sr_code'] = $doc->doc_sr_code;
-                        //     $data['doc_unique_id'] = $doc->doc_unique_id;
-                        //     $data['nc_type'] = 'Accept';
-                        //     $data['doc_file_name'] = $doc->doc_file_name;
-                        //     $data['comments'] = 'Document has been approved';
-                        //     $data['nc_show_status'] = 1;
-                        //     DB::table('tbl_nc_comments_secretariat')->insert($data);
+                      
                     }
                     }
                     /*end here*/ 
