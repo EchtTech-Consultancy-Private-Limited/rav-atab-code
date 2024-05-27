@@ -199,14 +199,14 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'desktop'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status','nc_show_status')->get();
 
         $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status')
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status','nc_show_status')
         ->get();
 
         $chapters = Chapter::all();
@@ -225,6 +225,7 @@ class TPApplicationController extends Controller
                             'doc_unique_id' => $question->id,
                             'doc_sr_code' => $question->code,
                         ])
+                        ->whereIn('tbl_nc_comments.nc_type',['NC1','NC2','not_recommended'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
@@ -235,6 +236,7 @@ class TPApplicationController extends Controller
                             'doc_sr_code' => $question->code,
                             'assessor_type'=>'onsite'
                         ])
+                        ->whereIn('tbl_nc_comments.nc_type',['NC1','NC2','not_recommended'])
                         ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
                         ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
                         ->get(),
@@ -1662,22 +1664,21 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
-            // $data['refid'] = $request->reference_id;
-            $data['prev_refid'] = $request->prev_refid;
+            $data['prev_refid'] = $request->prev_refid?$request->prev_refid : $request->reference_id;
             $data['application_date'] = $application_date;
            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>3]);
 
             
 
+            
             $application = new TblApplication($data);
             $application->save();
 
-            // $application->refid = $request->prev_refid;
             $application->prev_refid = $request->prev_refid;
             $application->save();
 
-            // $create_new_application = $request->application_id;
+
             $create_new_application = $application->id;
             $msg="Application Created Successfully";
             $first_application = TblApplication::where('refid',$request->reference_id)->first();

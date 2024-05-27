@@ -193,49 +193,28 @@ function desktopDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
         $('.full_screen_loading').show();
-        // let urlObject = new URL(window.location.href);
-        // let urlPath = urlObject.pathname.split("/");
-
+    
         let doc_sr_code = $('#desktop_application_doc_sr_code_nc').val();
         let doc_file_name = $('#desktop_application_doc_file_name_nc').val();
         let application_id = $('#desktop_application_id_nc').val();
         let doc_unique_id = $('#desktop_application_doc_unique_code_nc').val();
         let application_courses_id = $('#desktop_application_course_id_nc').val();
 
-    //     let doc_sr_code = "";
-    //     let doc_file_name = "";
-    //     let application_id = "";
-    //     let doc_unique_id = "";
-    //     let application_courses_id = "";
-       
-    //    if(urlPath[1]=="public"){
-    //     doc_sr_code = urlPath[4];
-    //     doc_file_name = urlPath[5];
-    //     application_id = urlPath[6];
-    //     doc_unique_id = urlPath[7];
-    //     application_courses_id = urlPath[8];
-    //    }
-    //    else{
-    //     doc_sr_code = urlPath[3];
-    //     doc_file_name = urlPath[4];
-    //     application_id = urlPath[5];
-    //     doc_unique_id = urlPath[6];
-    //     application_courses_id = urlPath[7];
-    //    }
-         
 
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-       if(doc_comment=="" || nc_type=="" ){
-        toastr.error("All fields are required", {
-            timeOut: 1,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-        $('.full_screen_loading').hide();
-        return false;
-       }
+        if(doc_comment=="" && nc_type=="Accept"){
+            
+        }else if(doc_comment=="" || nc_type==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -810,43 +789,22 @@ function onsiteDocumentVerfiy() {
         let doc_unique_id = $('#onsite_application_doc_unique_code_nc').val();
         let application_courses_id = $('#onsite_application_course_id_nc').val();
 
-        // let urlObject = new URL(window.location.href);
-        // let urlPath = urlObject.pathname.split("/");
-        // let doc_sr_code = "";
-        // let doc_file_name = "";
-        // let application_id = "";
-        // let doc_unique_id = "";
-        // let view_type = "";
-        
-        // if(urlPath[1]=='public'){
-        //      doc_sr_code = urlPath[4];
-        //      doc_file_name = urlPath[5];
-        //      application_id = urlPath[6];
-        //      doc_unique_id = urlPath[7];
-        //      application_courses_id = urlPath[8];
-        //      view_type = urlPath[9];
-        // }else{
-        //      doc_sr_code = urlPath[3];
-        //      doc_file_name = urlPath[4];
-        //      application_id = urlPath[5];
-        //      doc_unique_id = urlPath[6];
-        //      application_courses_id = urlPath[7];
-        //      view_type = urlPath[8];
-        // }
-       
+      
        
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-        if(doc_comment=="" || nc_type==""){
+        if(doc_comment=="" && nc_type=="Accept"){
+            
+        }else if(doc_comment=="" || nc_type==""){
             toastr.error("All fields are required", {
-                timeOut: 0,
+                timeOut: 1,
                 extendedTimeOut: 0,
                 closeButton: true,
                 closeDuration: 5000,
             });
             $('.full_screen_loading').hide();
             return false;
-           }
+        }
           
         var d = $(`#fileup_${doc_unique_id}`)[0].files[0];
         var fileInput = $(`#fileup_${doc_unique_id}`);
@@ -2877,6 +2835,63 @@ function handleRevertActionOnDocList(application_id,course_id,doc_file_name){
 }
 
 
+
+function handleRevertActionOnDocListDesktop(application_id,course_id,doc_file_name){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/desktop-revert-doc-list-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".box-overlay").show();
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
 
 
 $(document).on('keyup change', '.remove_err_input_error', function () {

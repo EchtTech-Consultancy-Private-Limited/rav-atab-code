@@ -505,22 +505,24 @@
                         </table>
                     </div>
                     <div class="">
-                    @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
                     <div class="row">
-                        <div class="col-md-12  d-flex justify-content-end">
+                        <div class="col-md-12  d-flex justify-content-end gap-2">
+                    @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
+                    
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
-                        </div>
-                    </div>
-                    @else
-                    @if($spocData->level_id==2)
                         
-                    <div class="col-md-12 d-flex justify-content-end">
+                            
+                   
+
+                    @endif
+                    @if($spocData->level_id==2)
                                 <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
-                        </div> 
-                        @endif
                      @endif 
+                </div>
+            </div>
+
 
                     </div>
                     @if($ApplicationCourses['course']->status == 1)
@@ -537,8 +539,6 @@
         </div>  
         @endforeach
 
-        
-                
         @if($application_details->show_submit_btn_to_secretariat && $application_details->application->approve_status==0) 
         
         <div class="row">
@@ -559,7 +559,8 @@
                             </form>
                         </div>
                     </div>
-        @elseif($application_details->application->approve_status==0)
+             
+                    @elseif($application_details->application->approve_status==0 &&$application_details->application->level_id==1) 
         
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
@@ -567,7 +568,29 @@
                             <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
                             </form>
                         </div>
+        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $application_details->is_final_summary_generated && $application_details->application->level_id==2) 
         
+                        <div class="col-md-12">
+                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            </form>
+                        </div>
+
+
+
+                        @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3) 
+        
+                            <div class="col-md-12">
+                                <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                                @csrf
+                                <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                                </form>
+                            </div>
+
+
+
+
         @endif
 
         
