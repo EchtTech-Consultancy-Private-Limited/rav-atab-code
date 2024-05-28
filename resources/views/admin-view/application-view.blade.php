@@ -515,7 +515,7 @@
                    
 
                     @endif
-                    @if($spocData->level_id==2)
+                    @if($spocData->level_id==2 || $spocData->level_id==3)
                                 <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
@@ -538,7 +538,7 @@
         </div>
         </div>  
         @endforeach
-
+        
         @if($application_details->show_submit_btn_to_secretariat && $application_details->application->approve_status==0) 
         
         <div class="row">
@@ -559,8 +559,8 @@
                             </form>
                         </div>
                     </div>
-             
-                    @elseif($application_details->application->approve_status==0 &&$application_details->application->level_id==1) 
+                            
+                    @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==1) 
         
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
@@ -580,7 +580,7 @@
 
 
                         @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3) 
-        
+                            
                             <div class="col-md-12">
                                 <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                                 @csrf
@@ -664,7 +664,7 @@
 
 
 
-        <div class="card p-relative">
+        <div class="card p-relative col-md-12">
             <div class="box-overlay">
                 <span class="spinner-border"></span>
             </div>

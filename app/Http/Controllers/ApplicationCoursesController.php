@@ -787,6 +787,7 @@ class ApplicationCoursesController extends Controller
         ]);
        try{
         DB::beginTransaction();
+        
         $total_amount = $this->getPaymentFee('level-1',"inr",$request->Application_id);
         
         $transactionNumber = trim($request->transaction_no);

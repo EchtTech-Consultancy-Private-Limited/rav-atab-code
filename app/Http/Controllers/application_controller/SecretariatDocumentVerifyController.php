@@ -781,6 +781,7 @@ class SecretariatDocumentVerifyController extends Controller
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id', $application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+        
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id' => $application_id,
             'application_courses_id' => $course_id,
@@ -801,9 +802,9 @@ class SecretariatDocumentVerifyController extends Controller
         }
         
         $show_submit_btn_to_secretariat = $this->isShowSubmitBtnToSecretariat($application_id);
-        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id);
+        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id,$course_id);
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application_id);
-
+        
         $chapters = Chapter::all();
         foreach ($chapters as $chapter) {
             $obj = new \stdClass;    
@@ -1213,13 +1214,13 @@ public function isShowSubmitBtnToSecretariat($application_id)
 
 }
 
-public function checkSubmitButtonEnableOrDisable($application_id)
+public function checkSubmitButtonEnableOrDisable($application_id,$application_courses_id)
 {
 
     $results = DB::table('tbl_application_course_doc')
         ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
-        // ->where('application_courses_id', $application_courses_id)
+        ->where('application_courses_id', $application_courses_id)
         ->where('application_id', $application_id)
         ->where('approve_status',1)
         ->get();
@@ -1253,6 +1254,7 @@ public function checkSubmitButtonEnableOrDisable($application_id)
         }
     }
 
+    // dd($results);
     
     $flag = 0;
 

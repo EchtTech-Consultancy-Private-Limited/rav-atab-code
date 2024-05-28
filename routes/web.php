@@ -318,6 +318,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/desktop/application-view/{id}', [DesktopApplicationController::class, 'getApplicationView']);
     Route::get('/onsite/application-view/{id}', [OnsiteApplicationController::class, 'getApplicationView']);
     Route::post('/desktop-revert-doc-list-action', [DesktopApplicationController::class, 'revertCourseDocListActionDesktop']);
+    Route::post('/onsite-revert-doc-list-action', [OnsiteApplicationController::class, 'revertCourseDocListActionOnsite']);
 
 
     Route::get('/account/application-payment-fee-list', [AccountApplicationController::class, 'getApplicationPaymentFeeList']);

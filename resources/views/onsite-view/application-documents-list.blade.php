@@ -136,6 +136,8 @@
                   <div class="pr-2">
                      <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
+                        
+
                         @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
         
                            <div class="row">
@@ -332,7 +334,7 @@
                                    @if($doc->onsite_status==0)
                                       <a 
                                        title="{{$doc->doc_file_name}}"
-                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                        class="btn btn-primary btn-sm docBtn m-1">
                                        View</a>
                                     @elseif($doc->onsite_status==1)
@@ -363,16 +365,16 @@
                                               <!-- admin accept/reject -->
                                               @if($doc->admin_nc_flag==1)
                                              <a 
-                                             title="{{$doc->doc_file_name}}"
-                                             href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             title="{{$doc->onsite_doc_file_name}}"
+                                             href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
                                              <a
-                                             title="{{$doc->doc_file_name}}"
-                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             title="{{$doc->onsite_doc_file_name}}"
+                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
@@ -466,9 +468,8 @@
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment
                                                 pending!</span>
                                                 @endif
-
-                                                @if($doc->status!=0 && $doc->is_revert!=1)
-                                                <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocListDesktop('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
+                                                @if($doc->onsite_status!=0 && $doc->is_revert!=1)
+                                                <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocListOnsite('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->onsite_doc_file_name }}')">Revert</button>
 
                                                 @endif
 
