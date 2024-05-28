@@ -264,6 +264,7 @@ class SuperAdminApplicationController extends Controller
     }
     public function applicationDocumentList($id, $course_id)
     {
+        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;

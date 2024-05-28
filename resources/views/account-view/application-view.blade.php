@@ -296,25 +296,25 @@
                                     <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                     <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
                             
-                            @if($doc->status==0)
+                            @if($doc->nc_show_status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('account-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
-                                        @elseif($doc->status==1)
+                                        @elseif($doc->nc_show_status==1)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('account-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-success btn-sm docBtn  m-1">
                                              Accept </span></a>
-                            @elseif($doc->status==2)
+                            @elseif($doc->nc_show_status==2)
                                     <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('account-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                         class="btn btn-danger btn-sm docBtn  m-1">
                                         NC1 </span></a>
-                            @elseif($doc->status==3)
+                            @elseif($doc->nc_show_status==3)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('account-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -327,13 +327,13 @@
 
 
 
-                                    @elseif($doc->status==5)
+                                    @elseif($doc->nc_show_status==5)
                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
-                                             Accepted <span>By Admin</span></a>
+                                             Accepted</a>
                                              @endif
 
                                              @if($doc->admin_nc_flag==2)
@@ -341,7 +341,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Rejected <span>By Admin</span></a>
+                                             Rejected</a>
                                              @endif
 
 

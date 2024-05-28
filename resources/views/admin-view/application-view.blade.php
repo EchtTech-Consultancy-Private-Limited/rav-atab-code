@@ -565,7 +565,7 @@
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                             </form>
                         </div>
         @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $application_details->is_final_summary_generated && $application_details->application->level_id==2) 
@@ -573,7 +573,7 @@
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                            <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                             </form>
                         </div>
 
@@ -584,7 +584,7 @@
                             <div class="col-md-12">
                                 <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                                 @csrf
-                                <input type="submit" class="btn btn-info float-right" value="Approval for Admin">
+                                <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                                 </form>
                             </div>
 
@@ -601,7 +601,7 @@
                         </div>
                         @elseif($application_details->application->approve_status==2) 
                         <div class="col-md-12">
-                        <div class="badge badge-main success float-right">Send Request for Approval</div>
+                        <div class="badge badge-main success float-right">Sent Request for Approval</div>
                         </div>
                         @elseif($application_details->application->approve_status==3) 
                         <div class="col-md-12">
