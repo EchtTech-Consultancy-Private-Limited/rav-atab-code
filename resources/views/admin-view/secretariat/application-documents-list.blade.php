@@ -140,6 +140,7 @@
                   <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
       
+   @if($application_details->level_id==2)
       @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
         
         <div class="row pt-2">
@@ -150,6 +151,7 @@
                             </form>
                         </div>
                     </div>
+   @endif
       @endif
 
 

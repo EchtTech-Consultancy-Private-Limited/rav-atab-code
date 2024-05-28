@@ -532,7 +532,6 @@ class AdminApplicationController extends Controller
             return "document_not_upload";
         }
         $flag = 0;
-        
         foreach ($results as $result) {
             if (($result->status!= 0 && $result->is_revert==1)) {
                 $flag = 0;

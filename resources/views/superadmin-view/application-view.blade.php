@@ -491,7 +491,7 @@
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
                             @elseif($ApplicationCourses['course']->status==2)
-                            <div class="badge badge-main success float-right">Approved by you</div>
+                            <div class="badge badge-main success float-right">Approved by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                             @endif
                         </div>
                        
@@ -539,11 +539,11 @@
                         </div>
                         @elseif($spocData->approve_status==1)
                         <div class="col-md-12">
-                            <div class="badge badge-main success float-right">Application Approved by you</div>
+                            <div class="badge badge-main success float-right">Application Approved by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                         </div>
                         @elseif($spocData->approve_status==3)
                         <div class="col-md-12">
-                            <div class="badge badge-main danger float-right">Application Rejected by you</div>
+                            <div class="badge badge-main danger float-right">Application Rejected by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                         </div>
                         
                     </div>
