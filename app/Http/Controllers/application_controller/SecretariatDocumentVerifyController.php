@@ -591,6 +591,9 @@ class SecretariatDocumentVerifyController extends Controller
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
                 ->update(['approve_status'=>2]);
+                
+                /*Make revert button hide according to course wise*/ 
+                DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
 
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
@@ -603,7 +606,7 @@ class SecretariatDocumentVerifyController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+            return back()->with('fail', 'Something went wrong');
         }
     }
 

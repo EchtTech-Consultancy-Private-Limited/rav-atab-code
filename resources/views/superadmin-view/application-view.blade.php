@@ -241,8 +241,8 @@
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
-            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
+        <div class="card <?php if($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) echo 'border-reject'; else echo ''; ?>">
+            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>
@@ -530,9 +530,9 @@
         @if($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected")
                         <div class="col-md-12 text-right">
                             
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
 
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button>
+                            <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button> -->
                             
                             
                             

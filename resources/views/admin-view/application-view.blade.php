@@ -512,7 +512,7 @@
                     
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
                     @endif
-                    @if($ApplicationCourses['course']->status!=0 && $ApplicationCourses['course']->is_revert==1)
+                    @if($ApplicationCourses['course']->status!=0 && $ApplicationCourses['course']->is_revert!=1)
                             <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button>
                     @endif
                     

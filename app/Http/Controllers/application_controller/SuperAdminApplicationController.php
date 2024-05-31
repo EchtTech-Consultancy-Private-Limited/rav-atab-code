@@ -891,18 +891,29 @@ class SuperAdminApplicationController extends Controller
                     ->get(); 
                  
                     foreach($all_docs as $doc){
-                        if($doc->status==0){
+                        // if($doc->status==0){
                             DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-                            
-                        }else{
-                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-    
-                        }
+                            // }else{
+                            //     DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+        
+                            // }
                       
                     }
-                    }
-                    /*end here*/ 
 
+
+                    /*change docs status only of reject course*/ 
+                    $all_docs = DB::table('tbl_course_wise_document')
+                    ->where(['application_id' => $request->application_id])
+                    ->whereIn('approve_status',[0,2])  //get only rejected courses
+                    ->whereNotIn('status',[2,3,4,6]) 
+                    ->get(); 
+                    foreach($all_docs as $doc){
+                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                    }
+
+                    DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+                    /*end here*/ 
+                  }
 
 
                     DB::commit();
@@ -1042,8 +1053,8 @@ class SuperAdminApplicationController extends Controller
                 ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
 
                 if($updateStatus){
+                    $is_all_course_rejected =  $this->checkAllCourseRejected($request->application_id);
                     DB::commit();
-                  $is_all_course_rejected =  $this->checkAllCourseRejected($request->application_id,$request->course_id);
                   if($is_all_course_rejected){
                     return response()->json(['success' => true, 'message' => 'Application rejected  successfully.'], 200);
                   }
@@ -1059,18 +1070,17 @@ class SuperAdminApplicationController extends Controller
         }
     }
 
-    public function checkAllCourseRejected($application_id,$course_id){
+    public function checkAllCourseRejected($application_id){
         
-        $all_courses = DB::table('tbl_application_courses')->where(['id'=>$course_id])->get();
+        $all_courses = DB::table('tbl_application_courses')->where(['application_id'=>$application_id])->get();
         $total_reject_course_count = 0;
         $total_course_count = count($all_courses);
 
-        foreach($all_courses as $key=>$course){
+        foreach($all_courses as $course){
             if($course->status==3){
                 $total_reject_course_count++;
             }
         }
-        dd($total_course_count,$total_reject_course_count);
         if($total_reject_course_count==$total_course_count){
             $this->rejectApplication($application_id);
             return true;

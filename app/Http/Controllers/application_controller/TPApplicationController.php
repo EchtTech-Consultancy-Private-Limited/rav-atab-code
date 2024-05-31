@@ -137,6 +137,7 @@ class TPApplicationController extends Controller
                             'nc_show_status'=>1,
                             
                         ])
+                            ->whereIn('nc_type',['NC1','NC2','not_recommend','Reject'])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get(),
@@ -148,6 +149,7 @@ class TPApplicationController extends Controller
                             'doc_unique_id' => config('constant.curiculum.doc_unique_id'),
                             'nc_show_status'=>1
                         ])
+                            ->whereIn('nc_type',['NC1','NC2','not_recommend','Reject'])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get(),
@@ -159,6 +161,7 @@ class TPApplicationController extends Controller
                             'doc_unique_id' => config('constant.details.doc_unique_id'),
                             'nc_show_status'=>1
                         ])
+                            ->whereIn('nc_type',['NC1','NC2','not_recommend','Reject'])
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get()
