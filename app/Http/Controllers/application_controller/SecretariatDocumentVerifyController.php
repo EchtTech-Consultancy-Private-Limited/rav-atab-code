@@ -393,6 +393,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
 
+                DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
                 
                 foreach($get_course_docs as $course_doc){
@@ -544,15 +545,16 @@ class SecretariatDocumentVerifyController extends Controller
     {
 
         try {
-            
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>0]);
-                DB::table('tbl_application_courses')
-                ->where(['id'=>$request->course_id])
-                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
 
+                
+                 DB::table('tbl_application_courses')
+                ->where(['id'=>$request->course_id])
+                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark,'is_revert'=>1]);
+                
                 if($get_course_docs){
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Course rejected by secretariat successfully.'], 200);
@@ -1063,6 +1065,30 @@ class SecretariatDocumentVerifyController extends Controller
         return response()->json(['success' => false,'message' =>'Failed to upload document'],200);
     }
   }
+
+
+  function revertCourseRejectAction(Request $request){
+    try{
+        
+        
+        DB::beginTransaction();
+        $revertAction = DB::table('tbl_application_courses')->where(['id'=>$request->course_id])->update(['status'=>0,'is_revert'=>0,'sec_reject_remark'=>null]);
+        
+        DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id])->update(['approve_status'=>1]);
+
+        if($revertAction){
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Action reverted successfully.'], 200);
+        }else{
+            DB::rollBack();
+            return response()->json(['success' =>false, 'message' => 'Failed to revert action.'], 200);
+        }
+    }catch(Exception $e){
+        dd($e);
+        DB::rollBack();
+        return response()->json(['success' =>false, 'message' => 'Something went wrong!'], 200);
+    }
+}
 
 
   public function checkApplicationIsReadyForNextLevelDocList($application_id)
