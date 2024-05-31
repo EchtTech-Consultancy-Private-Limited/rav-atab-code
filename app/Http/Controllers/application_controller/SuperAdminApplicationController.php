@@ -1035,22 +1035,18 @@ class SuperAdminApplicationController extends Controller
     public function adminRejectCourse(Request $request){
         try {
             DB::beginTransaction();
-
-                $all_courses = DB::table('tbl_application_courses')->where(['id',$request->course_id])->get();
-                $total_reject_course_count = 0;
-                $total_course_count = 0;
-
-                // foreach($all_courses as $key=>$course){
-                    
-                // }
+                
 
                 $updateStatus = DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
 
-
                 if($updateStatus){
                     DB::commit();
+                  $is_all_course_rejected =  $this->checkAllCourseRejected($request->application_id,$request->course_id);
+                  if($is_all_course_rejected){
+                    return response()->json(['success' => true, 'message' => 'Application rejected  successfully.'], 200);
+                  }
                     return response()->json(['success' => true, 'message' => 'Course rejected  successfully.'], 200);
                 }else{
                     DB::rollBack();
@@ -1060,6 +1056,26 @@ class SuperAdminApplicationController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+    public function checkAllCourseRejected($application_id,$course_id){
+        
+        $all_courses = DB::table('tbl_application_courses')->where(['id'=>$course_id])->get();
+        $total_reject_course_count = 0;
+        $total_course_count = count($all_courses);
+
+        foreach($all_courses as $key=>$course){
+            if($course->status==3){
+                $total_reject_course_count++;
+            }
+        }
+        dd($total_course_count,$total_reject_course_count);
+        if($total_reject_course_count==$total_course_count){
+            $this->rejectApplication($application_id);
+            return true;
+        }else{
+            return false;
         }
     }
 
