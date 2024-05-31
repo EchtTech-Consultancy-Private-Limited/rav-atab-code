@@ -730,7 +730,8 @@ class SummaryController extends Controller
         $onsite_no_of_mandays=0;
         $onsite_final_data=null;
         $onsite_assessement_way=null;
-        
+        $get_assessor_type = DB::table('assessor_summary_reports')->where('application_course_id',$application_course_id)->first();
+        $assessor_type = $get_assessor_type->assessor_type=="secretariat"?'secretariat':'desktop';
         $summeryReport = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
@@ -741,13 +742,12 @@ class SummaryController extends Controller
             'asr.application_course_id' => $application_course_id,
             'app_course.application_id' => $application_id,
             'app_course.id' => $application_course_id,
-            'asr.assessor_type' => 'desktop',
+            'asr.assessor_type' => $assessor_type,
         ])
         ->first();
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id])->get();
-        
         /*count the no of mandays*/
-        $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summeryReport->assessor_id,'application_id'=>$application_id])->count();
+    $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summeryReport->assessor_id,'application_id'=>$application_id])->count();
     $questions = DB::table('questions')->get();
     foreach($questions as $question){
         $obj = new \stdClass;
@@ -763,7 +763,7 @@ class SummaryController extends Controller
             ])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-            ->where('assessor_type','desktop')
+            ->where('assessor_type',$assessor_type)
             ->get();
 
             $value1 = TblNCComments::where([
@@ -772,7 +772,7 @@ class SummaryController extends Controller
                 'doc_unique_id' => $question->id,
                 'doc_sr_code' => $question->code,
                 'assessor_type'=>'admin',
-                'final_status'=>'desktop'
+                'final_status'=>$assessor_type
             ])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')

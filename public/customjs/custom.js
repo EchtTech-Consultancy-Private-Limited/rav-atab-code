@@ -2683,12 +2683,7 @@ function handleAdditionalPaymentApproved() {
         data: formData,
         contentType: false,
         processData: false,
-        beforeSend: function () {
-            $(".box-overlay").show();
-        },
-        complete: function () {
-            $("#loading").hide();
-        },
+      
         success: function (resdata) {
             if (resdata.success) {
                 toastr.success(resdata.message, {
@@ -2740,12 +2735,7 @@ function handleRevertAction(application_id,course_id,doc_file_name){
             data:formData,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                $(".box-overlay").show();
-            },
-            complete: function () {
-                $("#loading").hide();
-            },
+          
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
@@ -2798,12 +2788,7 @@ function handleRevertActionOnDocList(application_id,course_id,doc_file_name){
             data:formData,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                $(".box-overlay").show();
-            },
-            complete: function () {
-                $("#loading").hide();
-            },
+         
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
@@ -2857,12 +2842,7 @@ function handleRevertActionOnDocListDesktop(application_id,course_id,doc_file_na
             data:formData,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                $(".box-overlay").show();
-            },
-            complete: function () {
-                $("#loading").hide();
-            },
+           
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
@@ -2916,12 +2896,7 @@ function handleRevertActionOnDocListOnsite(application_id,course_id,doc_file_nam
             data:formData,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                $(".box-overlay").show();
-            },
-            complete: function () {
-                $("#loading").hide();
-            },
+          
             success: function (resdata) {
                 if (resdata.success) {
                     toastr.success(resdata.message, {
@@ -2952,6 +2927,55 @@ function handleRevertActionOnDocListOnsite(application_id,course_id,doc_file_nam
     
 }
 
+
+
+function handleRevertRejectAction(application_id,course_id){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat-revert-course-reject`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
 
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');

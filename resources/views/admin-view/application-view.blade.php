@@ -504,17 +504,19 @@
                             </thead>
                         </table>
                     </div>
+                    
                     <div class="">
                     <div class="row">
                         <div class="col-md-12  d-flex justify-content-end gap-2">
                     @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
                     
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
-                        
-                            
-                   
-
                     @endif
+                    @if($ApplicationCourses['course']->status!=0 && $ApplicationCourses['course']->is_revert==1)
+                            <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button>
+                    @endif
+                    
+
                     @if($spocData->level_id==2 || $spocData->level_id==3)
                                 <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"

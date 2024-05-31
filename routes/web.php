@@ -340,6 +340,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
 
     Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
+    Route::post('/secretariat-revert-course-reject', [SecretariatDocumentVerifyController::class, 'revertCourseRejectAction']);
 
     Route::post('/secretariat-revert-doc-list-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocListAction']);
     
