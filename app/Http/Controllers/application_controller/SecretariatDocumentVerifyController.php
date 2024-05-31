@@ -387,12 +387,13 @@ class SecretariatDocumentVerifyController extends Controller
             
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
-            
+            $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->get();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $application_id,'approve_status'=>1])
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
 
+                /*reject course and revert bakc before click on submit button*/
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
                 
@@ -423,6 +424,16 @@ class SecretariatDocumentVerifyController extends Controller
                 ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->course_id,'nc_show_status'=>0])
                 ->update(['nc_show_status' => $nc_comments]);
 
+                /*if any courses rejected then hide the revert button according to courses*/ 
+                
+
+            }
+
+
+            foreach($get_all_courses as $course){
+                if($course_doc->status==1){
+                    DB::table('tbl_course_wise_document')->where('course_id',$course->id)->update(['is_revert'=>1]);
+                }
             }
 
             // DB::table('tbl_course_wise_document')
@@ -462,7 +473,7 @@ class SecretariatDocumentVerifyController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+            return back()->with('fail', 'Something went wrong');
         }
     }
 
@@ -564,6 +575,7 @@ class SecretariatDocumentVerifyController extends Controller
                 }
 
         } catch (Exception $e) {
+            dd($e);
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }
