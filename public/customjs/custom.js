@@ -72,7 +72,7 @@ function handlePaymentApproved() {
     let encoded_application_id = urlObject.pathname.split("/").pop();
     let final_payment_remark = $("#final_payment_remark").val();
     final_payment_remark = final_payment_remark ?? "";
-    if (final_payment_remark === "") {
+    if (final_payment_remark == "") {
         $("#final_payment_remark_err").html(
             "Please enter the approve payment remark."
         );
@@ -133,7 +133,7 @@ function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");
     if (is_acknowledged) {
         $(".full_screen_loading").show();
-        if (id == "" || id === null || id === undefined) {
+        if (id == "" || id == null || id == undefined) {
             toastr.error("Application id not found", {
                 timeOut: 0,
                 extendedTimeOut: 0,
@@ -1039,7 +1039,7 @@ $(".assesorsid").on("click", function () {
             assessor_id,
         },
         success: function (data) {
-            if (data === "success") {
+            if (data == "success") {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -1114,7 +1114,7 @@ function handlePdfOrImageForPhotograph(path) {
     let MAIN_URL = BASE_URL + "/level/";
     const fileExtension = path.split(".").pop().toLowerCase();
     $("#view_photograph_onsite").html("");
-    if (fileExtension === "pdf") {
+    if (fileExtension == "pdf") {
         const html =
             '<object data="' +
             MAIN_URL +
@@ -1989,7 +1989,7 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     });
 
     $("select.remove_err_input_error option").each(function (index, elem) {
-        if (mode_of_course[index] === "") {
+        if (mode_of_course[index] == "") {
             $(elem).addClass('courses_error');
         }
   })
@@ -2662,7 +2662,7 @@ function handleAdditionalPaymentApproved() {
     let encoded_application_id = urlObject.pathname.split("/").pop();
     let final_payment_remark = $("#final_payment_remark").val();
     final_payment_remark = final_payment_remark ?? "";
-    if (final_payment_remark === "") {
+    if (final_payment_remark == "") {
         $("#final_payment_remark_err").html(
             "Please enter the approve payment remark."
         );
