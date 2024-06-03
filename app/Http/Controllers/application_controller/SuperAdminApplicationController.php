@@ -869,14 +869,14 @@ class SuperAdminApplicationController extends Controller
 
 
                             foreach($all_docs as $doc){
-                                if($doc->status==0){
+                                // if($doc->status==0){
+                                //     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                // }else{
                                     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-                                }else{
-                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
     
                                 
                                 
-                                }
+                                // }
                             }
     
     
@@ -891,12 +891,12 @@ class SuperAdminApplicationController extends Controller
                     ->get(); 
                  
                     foreach($all_docs as $doc){
-                        // if($doc->status==0){
+                        if($doc->status==0){
                             DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-                            // }else{
-                            //     DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                            }else{
+                                DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
         
-                            // }
+                            }
                       
                     }
 
@@ -908,13 +908,13 @@ class SuperAdminApplicationController extends Controller
                     ->whereNotIn('status',[2,3,4,6]) 
                     ->get(); 
                     foreach($all_docs as $doc){
-                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
                     }
 
                     DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
                     /*end here*/ 
                   }
-
+                  
 
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
