@@ -186,7 +186,7 @@ class TPApplicationController extends Controller
                 }else{
                  $is_final_submit = false;
                 }
-
+                
         return view('tp-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
     public function upload_document($id, $course_id)

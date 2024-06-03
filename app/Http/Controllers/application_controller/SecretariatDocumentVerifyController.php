@@ -410,6 +410,16 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_flag = 1;
                         $nc_comments=1;
                     } 
+                    else if ($course_doc->status == 4) {
+                        $nc_comment_status = 4;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
+                    else if ($course_doc->status == 6) {
+                        $nc_comment_status = 6;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
                     else {
                         $nc_comment_status = 0; //not recommended
                         $nc_flag = 0;
