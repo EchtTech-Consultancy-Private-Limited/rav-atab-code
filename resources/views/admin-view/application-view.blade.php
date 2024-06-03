@@ -271,11 +271,11 @@
                         <div class="col-md-12  d-flex justify-content-end">
                         
                             @if($ApplicationCourses['course']->status==1)
-                            <div class="badge badge-main danger float-right">Rejected by you</div>
+                            <div class="badge badge-main danger float-right">Course Rejected by you</div>
                             @elseif($ApplicationCourses['course']->status==2)
-                            <div class="badge badge-main success float-right">Approved by admin</div>
+                            <div class="badge badge-main success float-right">Course Approved by admin</div>
                             @elseif($ApplicationCourses['course']->status==3)
-                            <div class="badge badge-main success float-right">Rejected by Admin</div>
+                            <div class="badge badge-main danger float-right">Course Rejected by Admin</div>
                             @endif
                         </div>
                     </div>
@@ -409,7 +409,7 @@
                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
@@ -417,7 +417,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
@@ -512,6 +512,7 @@
                     
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
                     @endif
+                    
                     @if($ApplicationCourses['course']->status!=0 && $ApplicationCourses['course']->is_revert!=1)
                             <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button>
                     @endif
@@ -599,7 +600,7 @@
         <div class="row">
                         @if($application_details->application->approve_status==1) 
                         <div class="col-md-12">
-                          <div class="badge badge-main success float-right">Approved by admin</div>
+                          <div class="badge badge-main success float-right">Application Approved by admin</div>
                         </div>
                         @elseif($application_details->application->approve_status==2) 
                         <div class="col-md-12">
@@ -607,7 +608,7 @@
                         </div>
                         @elseif($application_details->application->approve_status==3) 
                         <div class="col-md-12">
-                        <div class="badge badge-main danger float-right">Rejected by admin</div>
+                        <div class="badge badge-main danger float-right">Application Rejected by admin</div>
                         </div>
                         @endif
                     </div>

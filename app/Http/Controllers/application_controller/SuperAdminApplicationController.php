@@ -914,7 +914,7 @@ class SuperAdminApplicationController extends Controller
                     DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
                     /*end here*/ 
                   }
-
+                  
 
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);

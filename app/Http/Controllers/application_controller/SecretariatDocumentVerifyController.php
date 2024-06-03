@@ -393,7 +393,7 @@ class SecretariatDocumentVerifyController extends Controller
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
 
-                /*reject course and revert bakc before click on submit button*/
+                /*reject course and revert back before click on submit button*/
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
                 
@@ -564,7 +564,7 @@ class SecretariatDocumentVerifyController extends Controller
                 
                  DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
-                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark,'is_revert'=>1]);
+                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
                 
                 if($get_course_docs){
                     DB::commit();
