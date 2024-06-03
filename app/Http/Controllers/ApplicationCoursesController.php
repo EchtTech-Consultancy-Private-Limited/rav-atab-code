@@ -16,7 +16,7 @@ use App\Models\LevelInformation;
 use Carbon\Carbon;
 use Session;
 use App\Jobs\SendEmailJob;
-
+use Str;
 class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
@@ -346,24 +346,30 @@ class ApplicationCoursesController extends Controller
             $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
             $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
 
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc1[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc1[$i]->move('documnet/', $filename);
             $file->declaration_pdf =  $filename;
             
             
 
             $doc2 = $request->file('doc2');
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc2[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc2[$i]->move('documnet/', $filename);
             $file->course_curriculum_pdf =  $filename;
             
             
 
             $img = $request->file('doc3');
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc3[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc3[$i]->move('documnet/', $filename);
             $file->course_details_xsl =  $filename;
             
