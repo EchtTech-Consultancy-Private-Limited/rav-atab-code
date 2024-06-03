@@ -98,23 +98,25 @@
                                         <th>Sr.No</th>
                                         <th>Level </th>
                                         <th>Application No. </th>
-                                        <th>Courses</th>
+                                        <th>Courses No.</th>
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
                                         <th>Status</th>
-                                        <th>Upgrade</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     @isset($list)
                                         @foreach ($list as $k => $item)
                                             <tr
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
-                                                <td>Level-{{ $item->application_list->level_id ?? '' }}</td>
+                                                <td>L-{{ $item->application_list->level_id ?? '' }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
-                                                <td>Course ({{ $item->course_count ?? '' }})</td>
+                                                <td>{{ $item->course_count ?? '' }}</td>
                                                 <td>
                                             @isset($item->payment)
                                                 ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
@@ -125,21 +127,41 @@
                                                 </td>
                                                 
                                                 <td>
-                                                @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
-                                                    <span class="badge badge-main danger">{{config('status_text.admin_status_pending')}}</span>
-                                                @elseif($item->application_list->payment_status==2)
-                                                    <span class="badge badge-main warning">{{config('status_text.admin_status_process')}}</span>
+                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
+                                                
+                                                </td>
+                                                <td>
+                                                @if($item->application_list->valid_from)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
                                                 @else
-                                                    <span class="badge badge-main success">{{config('status_text.admin_status_completed')}}</span>
+                                                <span>N/A</span>
                                                 @endif
                                                 </td>
                                                 <td>
-                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
+                                                @if($item->application_list->valid_till)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
                                                 </td>
                                                     <td>
                                                         <a href="{{ url('/admin/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
+                                                               
+                                                                @isset($item->payment)
+                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=($item->course_count * 4) && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2 && $item->application_list->level_id==3)
+                                                               
+                                                                <a class="btn btn-tbl-delete bg-primary font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
+                                                    </a>
+
+                                                    @endif
+                                                    @endisset  
+
 
                                                     @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)
@@ -147,26 +169,11 @@
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
-                                                    
-                                                    @isset($item->payment)
-                                                        @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=4 && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2)
-                                                    <a class="btn btn-tbl-delete bg-primary font-a"
-                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
-                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
-                                                                    id="view">
-                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
+
+                                                    <a class="btn btn-tbl-delete bg-history font-a"  data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
+                                                    History
                                                     </a>
 
-
-                                                    <a class="btn btn-tbl-delete bg-danger font-a"
-                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
-                                                                    data-bs-target="#view_secreate_popup_{{ $item->application_list->id }}"
-                                                                    id="view">
-                                                                    <i class="fa fa-scribd" aria-hidden="true"
-                                                                        title=""></i>
-                                                    </a>
-                                                    @endif
-                                                    @endisset  
                                                 </td>
                                             </tr>
 
@@ -331,7 +338,6 @@
 </div>
 
 
-
                                         @endforeach
                                     @endisset
                                 </tbody>
@@ -343,6 +349,56 @@
         </div>
         </div>
         </div>
+
+
+            
+        
+
+@foreach($list as $item)
+<!-- Modal reject -->
+<div class="modal fade" id="view_history_{{$item->application_list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Application History</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                       <table class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>User Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($item->appHistory as $key=>$hist)
+                        <tr>
+                            <td>{{$key+1}}</td>
+                            <td>{{$hist->firstname??''}} {{$hist->middlename??''}} {{$hist->lastname??''}}</td>
+                            <td>{{$hist->created_at}}</td>
+                            <td><span class="badge badge-main {{$hist->status_color}}">{{$hist->status_text}}</span></td>
+                            
+                        </tr>
+                        @endforeach
+                        </tbody>
+                       </table>
+            </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+@endforeach
+<!-- end here  -->
 
 <script>
  class TabsGroup extends HTMLElement {
@@ -410,6 +466,9 @@
 
   customElements.define('tabs-group', TabsGroup);
 </script>
+
+
+
    
     </section>
    

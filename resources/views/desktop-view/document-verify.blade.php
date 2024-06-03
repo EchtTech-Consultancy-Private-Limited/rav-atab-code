@@ -274,12 +274,12 @@
             var comment_text = document.getElementById("comment_text");
             var commentSection = document.getElementById("comment-section");
             if (this.value === "Accept") { // If "Close" is selected
-                comment_text.value = "Document has been approved";
-                commentSection.style.display = "none"; // Hide the textarea
+                comment_text.value = "";
+                // commentSection.style.display = "none"; // Hide the textarea
 
             } else {
                 commentSection.style.display = "block"; // Show the textarea for other options
-                comment_text.value = "Document Not approved!";
+                comment_text.value = "";
             }
         });
     </script>

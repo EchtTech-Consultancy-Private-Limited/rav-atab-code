@@ -693,3 +693,10 @@
         }
 
     }
+
+    
+.gender_err{
+    display: block;
+    position: relative;
+    bottom: 10px;
+}

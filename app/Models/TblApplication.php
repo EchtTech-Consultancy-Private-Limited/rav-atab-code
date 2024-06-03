@@ -13,7 +13,7 @@ class TblApplication extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $table = 'tbl_application';
-    protected $fillable = ['uhid','level_id','tp_id','person_name','email','contact_number','designation','tp_ip','user_type','application_date'];
+    protected $fillable = ['refid','prev_refid','uhid','level_id','tp_id','person_name','email','contact_number','designation','tp_ip','user_type','application_date','valid_from'];
 
     public static function boot()
     {
@@ -22,6 +22,7 @@ class TblApplication extends Model
         // Generate code before saving the model
         static::creating(function ($model) {
             $model->generateCode();
+            $model->generateReferenceCode();
         });
     }
 
@@ -42,6 +43,19 @@ class TblApplication extends Model
         $this->uhid = $newCode;
     }
 
+    public function generateReferenceCode()
+    {
+        $prefix = 'ATAB/REF-';
+        $suffix = date('Y');
+        $codeNumber = 1;
+        $lastCode = static::where('refid', 'like', "$prefix%$suffix")->latest()->value('uhid');
+        if ($lastCode) {
+            $lastCodeNumber = (int)substr($lastCode, -7, 3);
+            $codeNumber = $lastCodeNumber + 1;
+        }
+        $newCode = "$prefix" . str_pad($codeNumber, 3, '0', STR_PAD_LEFT) . "/$suffix";
+        $this->refid = $newCode;
+    }
     public function getCodeAttribute()
     {
         return strtoupper($this->attributes['uhid']);

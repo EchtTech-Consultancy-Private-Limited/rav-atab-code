@@ -47,6 +47,7 @@
                         <i class="fa fa-users"></i>
                         <span>User Management</span>
                     </a>
+
                     <ul class="ml-menu">
 
                         <li  class="{{ Request::is('admin-user')?'active':''}}" >
@@ -75,10 +76,19 @@
                         <i class="fa fa-file-alt"></i>
                         <span>Manage Application</span>
                     </a>
+                    @if(Auth::user()->role==1)
+                    <?php
+                        $url = "super-admin/application-list";
+                    ?>
+                    @else 
+                    <?php
+                            $url = "admin/application-list";
+                    ?>
+                    @endif
                     <ul class="ml-menu">
-
-                        <li class="{{ Request::is('/admin/application-list')?'active':''}}" >
-                            <a  href="{{ url('/admin/application-list') }}">National Application</a>
+                        
+                        <li class="{{ Request::is($url)?'active':''}}" >
+                            <a  href="{{ url($url) }}">National Application</a>
                         </li>
 
                         <li class="{{ Request::is('internationl-page')?'active':''}}">
@@ -88,6 +98,13 @@
                     </ul>
                 </li>
 
+                <li class="{{ Request::is('super-admin/payment-fee-list') ? 'active' : '' }}">
+            <a href="{{ url('super-admin/payment-fee-list') }}">
+                <!-- <i data-feather="clipboard"></i> -->
+                <i class="material-icons">payment</i>
+                <span>Payment Fee</span>
+            </a>
+        </li>
 
                     <li class="{{ Request::is('levels')?'active':''}}" >
                         <a href="{{ url('/levels') }}"   >

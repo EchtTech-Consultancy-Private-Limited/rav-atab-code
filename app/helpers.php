@@ -13,7 +13,7 @@ use App\Models\SummaryReport;
 use App\Models\SummaryReportChapter;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-
+// use Carbon\Carbon;
 function encode5t($str)
 {
     for ($i = 0; $i < 5; $i++) //increase the level
@@ -132,6 +132,22 @@ function secretariat_due_date($application_id, $secretariat_id)
     return $application_due_date;
 }
 
+function listOfApplicationAssignToSecretariat($application_id)
+{
+    $assessors = DB::table('tbl_secretariat_assign')->where('application_id', '=', $application_id)->get();
+    $assessorid = array();
+    if (!empty($assessors)) {
+
+        foreach ($assessors as $assessorids) {
+            $assessorid[] = $assessorids->secretariat_id;
+        }
+        return $assessorid;
+    } else {
+        $assessorid = array();
+        return $assessorid;
+    }
+}
+
 function listofapplicationsecretariat($application_id)
 {
     $assessors = DB::table('secretariat')->where('application_id', '=', $application_id)->get();
@@ -164,6 +180,7 @@ function listofapplicationassessor($application_id)
         return $assessorid;
     }
 }
+
 function getAssessorDesignation($application_id,$assessor_id)
 {
     $assessors = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id])->first();
@@ -1024,7 +1041,7 @@ function getSecondPaymentNotification()
     {
         $applicationsIds = TblApplication::where('tp_id', auth()->user()->id)->get(['id']);
         $final_assessor_summary =  DB::table('assessor_final_summary_reports')->whereIn('application_id', $applicationsIds)->where('assessor_type','desktop')
-        ->select('assessor_final_summary_reports.*','app.uhid')
+        ->select('assessor_final_summary_reports.*','app.uhid','app.level_id')
         ->leftJoin('tbl_application as app','app.id','=','assessor_final_summary_reports.application_id')
         ->where('second_payment_status',0)
         ->orderBy('id','desc')
@@ -1054,6 +1071,20 @@ function getSecondPaymentNotification()
     }
 
     function getNotificationForAdmin()
+    {
+        $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
+        ->where('admin_received_payment',0)
+        ->where('assign_secretariat',1)
+        ->orderBy('id','desc')
+        ->get();
+
+        if($payment_list){
+            return $payment_list;
+        }else{
+        return [];
+        }
+    }
+    function getNotificationForSuperAdmin()
     {
         $payment_list = TblApplication::whereIn('payment_status',[1,2,3])
         ->where('admin_received_payment',0)
@@ -1106,6 +1137,47 @@ function getSecondPaymentNotification()
         return [];
         }
     }
+
+
+    /*Update History*/ 
+    function createApplicationHistory($app_id,$course_id=null,$status,$color)
+    {
+        
+        if($app_id!=null || $app_id!=""){
+        $user_id = Auth::user()->id;
+        $arr = [];
+        $arr['user_id']=$user_id;
+        $arr['application_id']=$app_id;
+        $arr['course_id']=$course_id;
+        $arr['status_text']=$status;
+        $arr['status_color']=$color;
+        $createHistory = DB::table('tbl_application_status_history')->insert($arr);
+        if($createHistory){
+            DB::table('tbl_application')->where('id',$app_id)->update(['status_text'=>$status,'status_color'=>$color]);
+        }
+    }
+        
+    }
+
+     function checkApplicationValidityExpire($app_id,$date){
+            $get_app = DB::table('tbl_application')->where('id',$app_id)->first();
+            if(!empty($get_app)){
+                $valid_till_date = \Carbon\Carbon::parse($date);
+                $beforeTwoMonths = $valid_till_date->copy()->subMonths(2);
+                $currentDate = \Carbon\Carbon::now();;
+                // $currentDate = Carbon::parse('2025-03-13 15:37:27');
+                if ($currentDate->gte($beforeTwoMonths)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else{
+                return false;
+            }
+    }
+    
+    /*end here*/ 
+
 /*end here*/
 
 function getNotificationForSecondPayment()

@@ -263,7 +263,6 @@
 
                                                         @foreach ($pending_payment_list as $pending_pay_list)
                                                             <tr>
-
                                                                 <td>{{ $pending_pay_list->uhid }}</td>
 
 
@@ -271,9 +270,20 @@
 
                                                               
 
-                                                                <td> <a href="{{ url('/create-new-course' . '/' . dEncrypt($pending_pay_list->id)) }}"
+                                                                <td> 
+                                                                    
+                                                                @if($pending_pay_list->level_id==1)
+                                                                
+                                                                <a href="{{ url('/create-new-course' . '/' . dEncrypt($pending_pay_list->id)) }}"
                                                                         class="btn btn-tbl-edit bg-success"><i
                                                                             class="fa fa-edit"></i></a>
+                                                                @elseif($pending_pay_list->level_id==2)
+
+                                                                <a href="{{ url('/upgrade-create-new-course' . '/' . dEncrypt($pending_pay_list->id) . '/' . dEncrypt($pending_pay_list->refid)) }}"
+                                                                        class="btn btn-tbl-edit bg-success"><i
+                                                                            class="fa fa-edit"></i></a>
+
+                                                                @endif
                                                                 </td>
 
                                                             </tr>

@@ -1,13 +1,21 @@
 <div class="nav-tab">
     <ul class="nav p-3">
         <li class="custom-nav-item ">
-            <a class="custom-nav-link {{ request()->is('create-new-application*') || request()->is('create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-new-applications') }}">New Application</a>
+            @if(Request::is('level-first'))
+            <a class="custom-nav-link {{ request()->is('*create-new-application*') || request()->is('*create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-new-applications') }}">New Application</a>
+            @elseif(Request::is('level-second'))
+            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-level-2-new-applications') }}">New Application</a>
+            @elseif(Request::is('level-third'))
+            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-level-3-new-applications') }}">New Application</a>
+            
+            @endif
+            
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('tp/application-list*') ? 'nav-active' : '' }}" href="{{ url('/tp/application-list') }}">Applications</a>
+            <a class="custom-nav-link {{ request()->is('*tp/application-list*') ? 'nav-active' : '' }}" href="{{ url('/'.Request::segment(1).'/tp/application-list') }}">Applications</a>
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('tp-pending-payment-list*') || request()->is('create-new-course*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/tp-pending-payment-list') }}">Pending Payment List</a>
+            <a class="custom-nav-link {{ request()->is('*tp-pending-payment-list*') || request()->is('*create-new-course*') || request()->is('course-payment*') ? 'nav-active' : '' }}" href="{{ url('/'.Request::segment(1).'/tp-pending-payment-list') }}">Pending Payment List</a>
 
         </li>
         <li class="custom-nav-item">

@@ -134,7 +134,28 @@
                   <div class="pr-2">
                      <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
+                        
+                        @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
+        
+                           <div class="row">
+                                             <div class="col-md-12">
+                                                <form action="{{url('desktop/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post">
+                                                @csrf
+                                                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                                                </form>
+                                             </div>
+                                       </div>
+                        @endif
+
+
                   </div>
+                  <!-- <div class="d-flex justify-content-end gap-5">
+                  <form action="{{url('desktop/update-nc-flag/'.$application_id.'/'.$course_id)}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info me-3" value="Submit">
+                            </form>
+                  </div> -->
+
                </div>
             </div>
          </div>
@@ -299,10 +320,14 @@
                                              </td>
                                              <td>
                                              @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
-                                   
+                                                
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                             @if($doc->status!=0 && $doc->is_revert!=1)
+                                                <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocListDesktop('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
+
+                                                @endif
                                     @else
                                   
                                                 <span class="text-danger"

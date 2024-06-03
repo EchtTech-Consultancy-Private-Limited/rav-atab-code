@@ -59,16 +59,19 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="row form-margin-min">
+            <div class="col-md-8 pr-2">
+            <div class="card h-181">
             <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     Basic Information
                 </h5>
                 <div>
+                    <span style="font-weight: bold;" class="mr-3">Reference ID:</span> {{ $spocData->refid }} &nbsp;&nbsp;&nbsp;
                     <span style="font-weight: bold;">Application ID:</span> {{ $spocData->uhid }}
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body ">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
@@ -159,15 +162,17 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+            </div>
+            <div class="col-md-4 pl-0">
+            <div class="card">
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
                     Single Point of Contact Details (SPoC)
                 </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body fixed-label-w">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Person Name :</strong></label>
@@ -176,7 +181,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Contact Number :</strong></label>
@@ -184,15 +189,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Designation :</strong></label>
-                                {{ $spocData->designation ?? '' }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Email Id :</strong></label>
@@ -200,7 +197,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label><strong>Designation :</strong></label>
+                                {{ $spocData->designation ?? '' }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
@@ -216,7 +223,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Name</strong></label><br>
-                                <label>{{ $ApplicationCourses->course_name }}</label>
+                                <label>{{ $ApplicationCourses['course']->course_name }}</label>
                             </div>
                         </div>
                     </div>
@@ -224,10 +231,10 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Duration</strong></label><br>
-                                {{ $ApplicationCourses->course_duration_y ?? '' }} Years(s)
-                                {{ $ApplicationCourses->course_duration_m ?? '' }} Month(s)
-                                {{ $ApplicationCourses->course_duration_d ?? '' }} Day(s)
-                                {{ $ApplicationCourses->course_duration_h ?? '' }} Hour(s)
+                                {{ $ApplicationCourses['course']->course_duration_y ?? '' }} Years(s)
+                                {{ $ApplicationCourses['course']->course_duration_m ?? '' }} Month(s)
+                                {{ $ApplicationCourses['course']->course_duration_d ?? '' }} Day(s)
+                                {{ $ApplicationCourses['course']->course_duration_h ?? '' }} Hour(s)
                             </div>
                         </div>
                     </div>
@@ -235,7 +242,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Eligibility</strong></label><br>
-                                <label>{{ $ApplicationCourses->eligibility ?? '' }}</label>
+                                <label>{{ $ApplicationCourses['course']->eligibility ?? '' }}</label>
                             </div>
                         </div>
                     </div>
@@ -243,7 +250,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Mode of Course</strong></label>
-                                <label> {{$ApplicationCourses->mode_of_course}}</label>
+                                </br><label>{{$ApplicationCourses['course']->mode_of_course}}</label>
                             </div>
                         </div>
                     </div>
@@ -251,52 +258,190 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label><strong>Course Brief</strong></label><br>
-                                <label>{{ $ApplicationCourses->course_brief ?? '' }}</label>
+                                <label>{{ $ApplicationCourses['course']->course_brief ?? '' }}</label>
                             </div>
                         </div>
                     </div>
+
+                    
+                    <!--  -->
                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label for="Declaration">Declaration</label></br>
-                                    <span class="badge badge-success">
-                                        <a href="{{url('doc').'/'.$ApplicationCourses->declaration_pdf}}"
-                                            target="_blank" title="Download Document">
-                                            <i class="fa fa-eye mr-2">&nbsp;Document</i>
-                                        </a></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label for="Declaration">Course Curriculum / Material / Syllabus</label></br>
-                                    <span class="badge badge-success">
-                                        <a href="{{url('doc').'/'.$ApplicationCourses->course_curriculum_pdf}}"
-                                            target="_blank" title="Download Document">
-                                            <i class="fa fa-eye">&nbsp; Document</i>
-                                        </a></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label for="Declaration">Course Details (Excel format)
-                                    </label>
-                                    <span class="badge badge-success">
-                                        <a href="{{url('doc').'/'.$ApplicationCourses->course_details_xsl}}"
-                                            target="_blank" download title="Download Document">
-                                            <i class="fa fa-download mr-2"></i>&nbsp; Download
-                                            Document
-                                        </a></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-12 text-table-center">
+                        <table class="table table-bordered text-left">
+                            <thead>
+                            
+                                <tr>
+                                    <th class="width-100">S.No.</th>
+                                    <th>Declaration</th>                                   
+                                    <th>Verfiy Document</th>
+                                    <th>Comments</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($courses_doc->courses_doc as $k=>$course_doc)
+                                <tr class="document-row">
+                                    <td>{{$k+1}}</td>
+                                    <td>{{$course_doc->name}}</td>                             
+                                    <td> 
+                                    <span class="d-flex flex-wrap">
+                                    @foreach($ApplicationCourses[$course_doc->nc] as $doc)
+                                    <form
+                                                         name="submitform_doc_form_{{$doc->id}}"
+                                                         id="submitform_doc_form_{{$doc->id}}"
+                                                         class="submitform_doc_form"
+                                                         enctype="multipart/form-data">
+                                    
+                                    <input type="hidden" name="application_id" value="{{$spocData->id}}">
+                                    <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
+                                    <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
+                                    <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
+                            
+                            @if($doc->nc_show_status==0)
+                                       <a 
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('account-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                        class="btn btn-primary btn-sm docBtn m-1">
+                                        View</a>
+                                        @elseif($doc->nc_show_status==1)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('account-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn  m-1">
+                                             Accept </span></a>
+                            @elseif($doc->nc_show_status==2)
+                                    <a 
+                                        title="{{$doc->doc_file_name}}"
+                                        href="{{ url('account-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                        class="btn btn-danger btn-sm docBtn  m-1">
+                                        NC1 </span></a>
+                            @elseif($doc->nc_show_status==3)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('account-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn  m-1">
+                                             NC2 </span></a>
+
+
+
+
+
+
+
+                                    @elseif($doc->nc_show_status==5)
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted</a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected</a>
+                                             @endif
+
+
+
+
+
+
+
+
+                            @elseif($doc->status==6)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('account-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn  m-1">
+                                             Reject </span></a>
+                            @elseif($doc->status==4)
+                                          <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('account-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn  m-1">
+                                             Not Recommended </span></a>
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('account-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted <span>By Admin</span></a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('account-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected <span>By Admin</span></a>
+                                             @endif
+
+
+                                    @else
+                                      
+                                    @endif 
+
+                </form>
+                                                @endforeach
+</span>
+                                    
+                                    </td>
+                                        <td>
+                                                  <button
+                                                   class="expand-button btn btn-primary btn-sm mt-3"
+                                                   onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                    </td>
+                                </tr>
+                                <!-- accordion -->
+                            <tr class="document-details" style="display: none">
+                                             <td colspan="4">
+                                                <table>
+                                                   <thead>
+                                                      <tr>
+                                                         <th>Sr. No.</th>
+                                                         <th>Document Code</th>
+                                                         <th>Date</th>
+                                                         <th>Comments</th>
+                                                         <th>Status Code</th>
+                                                         <th>Approved/Rejected By</th>
+                                                      </tr>
+                                                   </thead>
+                                                   <tbody>
+                                                @foreach($ApplicationCourses[$course_doc->comments] as $k=>$nc)
+                                                   <tr class="text text-{{$nc->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+
+                                                         <td>{{$k+1}}</td>
+                                                         <td>{{$nc->doc_sr_code}}</td>
+                                                         <td>{{date('d-m-Y',strtotime($nc->created_at))}}</td>
+                                                         <td>{{$nc->comments}}</td>
+                                                         <td>
+                                                         @php
+                                                            $string = $nc->nc_type;
+                                                            $explodedArray = explode("_", $string);
+                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                            $resultString = implode(" ", $capitalizedArray);
+                                                         @endphp
+                                                         {{$resultString}} 
+                                                         </td>
+                                                         <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} ({{$nc->role==5?"Secretariat":"Super Admin"}})</td>
+                                                      </tr>
+                                                    @endforeach
+                                                   </tbody>
+                                                </table>
+                                             </td>
+                                          </tr>
+                            @endforeach
+
+                            </thead>
+                        </table>
                     </div>
+                    </div>
+
+                    <!--  -->
+                    
                 </div>
             </div>
         </div>
@@ -411,6 +556,7 @@
                                 @endif
                             </td>
                             <td>
+                                
                                 @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->status!=2)
                                 <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
                                 title="You can update only once"
@@ -509,6 +655,154 @@
         </div>
 
         </div>
+
+
+
+
+        <div class="card p-relative">
+            <div class="box-overlay">
+                <span class="spinner-border"></span>
+            </div>
+            <div class="card-header bg-white text-dark">
+                <h5 class="mt-2">
+                   Additional Payment Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    @if (count($application_details->additional_payment) > 0)
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                S.No.
+                            </th>
+                            <th>
+                                Payment Date
+                            </th>
+                            <th>
+                                Payment Transaction no
+                            </th>
+                            <th>
+                                Payment Reference no
+                            </th>
+                            <!-- <th>Total Courses</th> -->
+                            <th>Amount</th>
+                            <th>Slip by User</th>
+                            <th>Slip by Accountant Approver</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+
+                        </tr>
+                        @foreach ($application_details->additional_payment as $key=>$ApplicationPayment)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ \Carbon\Carbon::parse($ApplicationPayment->payment_date)->format('d-m-Y') }}
+                            </td>
+                            <td>{{ $ApplicationPayment->payment_transaction_no ?? '' }}</td>
+                            <td>{{ $ApplicationPayment->payment_reference_no ?? '' }}</td>
+                            <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
+                            <td>
+                                ₹ {{ $ApplicationPayment->amount }}</td>
+                            <td><?php
+                                        substr($ApplicationPayment->payment_proof, -3);
+                                        $data = substr($ApplicationPayment->payment_proof, -3);
+                                        ?>
+                                @if ($data == 'pdf')
+                                <a href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}" target="_blank"
+                                    title="Document 3" id="docpdf3" download>
+                                    <i class="fa fa-download mr-2"></i> Payment pdf
+                                </a>
+                                @else
+                                @if (isset($ApplicationPayment->payment_proof))
+                                <a target="_blank" class="image-link"
+                                    href="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}">
+                                    <img src="{{ asset('uploads/' . $ApplicationPayment->payment_proof) }}"
+                                        style="width:100px;height:70px;">
+                                </a>
+                                @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ApplicationPayment->status == 0 && $ApplicationPayment->payment_proof_by_account==null)
+                                N/A
+                                @endif
+                                @if ($ApplicationPayment->status ==0 || $ApplicationPayment->status == 1 || $ApplicationPayment->status ==2)
+                                @if (!$ApplicationPayment->payment_proof_by_account)
+                                File not available!
+                                @endif
+                                <?php
+                                                substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                $data = substr($ApplicationPayment->payment_proof_by_account, -3);
+                                                ?>
+                                @if ($data == 'pdf')
+                                <a href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}" target="_blank"
+                                    title="Document 3" id="docpdf3" download>
+                                    <i class="fa fa-download mr-2"></i>Payment pdf
+                                </a>
+                                @else
+                                @if (isset($ApplicationPayment->payment_proof_by_account))
+                                <a target="_blank" class="image-link"
+                                    href="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}">
+                                    <img src="{{ asset('documnet/' . $ApplicationPayment->payment_proof_by_account) }}"
+                                        style="width:100px;height:70px;">
+                                </a>
+                                @endif
+                                @endif
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ApplicationPayment->status == 0)
+                                    Remark not available!
+                                @else
+
+                                @if($ApplicationPayment->approve_remark)
+                                        {{$ApplicationPayment->approve_remark}}
+                                @else
+                                    @if($ApplicationPayment->remark_by_account)
+                                    {{$ApplicationPayment->remark_by_account}}
+                                    @endif
+                                @endif
+
+
+                                @endif
+                            </td>
+                            <td>
+                                
+                                @if($ApplicationPayment->account_update_count < (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT') && $ApplicationPayment->status!=2)
+                                <button class="btn btn-primary btn-xm" data-bs-toggle="modal" data-bs-target="#update_payment_modal" onclick="handleShowPaymentInformation('{{ $ApplicationPayment->payment_transaction_no}}','{{ $ApplicationPayment->payment_reference_no}}',{{$ApplicationPayment->id}})"
+                                title="You can update only once"
+                                ><i class="fa fa-pencil"></i></button>
+
+                                @else
+                                @if($ApplicationPayment->account_update_count==(int)env('ACCOUNT_PAYMENT_UPDATE_COUNT'))
+                                    <span class="text-danger payment_update_fn badge badge-danger">
+                                    Payment Update Limit Expired
+                                    </span>
+                                    @else
+                                    <span class="text-success payment_update_fn badge badge-success">
+                                    Payment Approved
+                                    </span>
+                                    @endif
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                    @else
+                    <p>Payment has not been completed yet.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
          <!-- Edit Payment modal  -->
          <div class="modal fade" id="update_payment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -551,6 +845,22 @@
         });
     });
     </script>
+    <script>
+      function toggleDocumentDetails(button) {
+          const documentRow = button.closest('.document-row');
+          console.log(documentRow,' button')
+          const documentDetails = documentRow.nextElementSibling;
+          if (documentDetails && (documentDetails.classList.contains('document-details'))) {
+              if (documentDetails.style.display == 'none' || documentDetails.style.display == '') {
+                  documentDetails.style.display = 'table-row';
+                  button.textContent = 'Hide Comments';
+              } else {
+                  documentDetails.style.display = 'none';
+                  button.textContent = 'Show Comments';
+              }
+          }
+      }
+   </script>
     <script>
     function confirm_option() {
         Swal.fire({

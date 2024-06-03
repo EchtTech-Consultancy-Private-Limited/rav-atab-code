@@ -110,6 +110,16 @@ class DashboardController extends Controller
             ->orderBy('id','desc')
             ->get();
         }
+
+        // secretaritat detail
+        if(Auth::user()->role == 5){
+            $application = DB::table('tbl_application as a')
+            ->whereIn('a.payment_status',[0,1,2,3])
+            ->where('secretariat_id',Auth::user()->id)
+            ->orderBy('id','desc')
+            ->get();
+        }
+
         $final_data=array();
         $dataCount = [
             'pending' => 0,
