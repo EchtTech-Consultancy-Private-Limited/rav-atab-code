@@ -660,9 +660,9 @@
 
 
         <div class="card p-relative">
-            <div class="box-overlay">
+            <!-- <div class="box-overlay">
                 <span class="spinner-border"></span>
-            </div>
+            </div> -->
             <div class="card-header bg-white text-dark">
                 <h5 class="mt-2">
                    Additional Payment Information
