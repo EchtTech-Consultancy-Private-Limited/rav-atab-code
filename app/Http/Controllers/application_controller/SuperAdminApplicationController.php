@@ -943,6 +943,7 @@ class SuperAdminApplicationController extends Controller
             ->where(['application_id' => $application_id])
             ->update(['approve_status'=>2,'is_revert'=>1]); 
 
+            DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
 
             $all_docs = DB::table('tbl_course_wise_document')
             ->where(['application_id' => $application_id,'approve_status'=>2])

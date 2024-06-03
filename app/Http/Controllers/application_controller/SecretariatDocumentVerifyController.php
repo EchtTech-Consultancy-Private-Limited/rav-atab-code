@@ -559,12 +559,13 @@ class SecretariatDocumentVerifyController extends Controller
             DB::beginTransaction();
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
-                ->update(['approve_status'=>0]);
+                ->update(['approve_status'=>0,'nc_flag'=>0]);
 
                 
                  DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
+
                 
                 if($get_course_docs){
                     DB::commit();
@@ -593,8 +594,9 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['approve_status'=>2]);
                 
                 /*Make revert button hide according to course wise*/ 
-                DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
-
+                DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);
+                DB::table('tbl_course_wise_document')->where('application_id',$app_id)->update(['is_revert'=>1]);
+                
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();
