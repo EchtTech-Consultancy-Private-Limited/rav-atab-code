@@ -908,7 +908,7 @@
               let uploadedFileName="";
               let fileExtension="";
 
-              if(doc_sr_code==="co03"){
+              if(doc_sr_code=="co03"){
               allowedExtensions = ['xlsx', 'xls', 'xlsb']; // Add more extensions if needed
               uploadedFileName = fileInput.val();
               fileExtension = uploadedFileName.split('.').pop().toLowerCase();
@@ -920,7 +920,7 @@
               
 
               if (allowedExtensions.indexOf(fileExtension) == -1) {
-                if(doc_sr_code==="co03"){
+                if(doc_sr_code=="co03"){
                     toastr.error("Please upload a xls file.", "Invalid File type",{
                         timeOut: 0,
                         extendedTimeOut: 0,
