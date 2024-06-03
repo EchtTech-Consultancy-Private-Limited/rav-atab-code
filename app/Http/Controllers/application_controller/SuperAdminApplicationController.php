@@ -888,7 +888,9 @@ class SuperAdminApplicationController extends Controller
                     ->where(['application_id' => $request->application_id,'approve_status'=>1])
                     // ->where(['application_id' => $request->application_id])
                     ->whereNotIn('status',[2,3,4,6]) 
-                    ->get(); 
+                    ->get();
+                    
+                    // dd($all_docs);
                  
                     foreach($all_docs as $doc){
                         if($doc->status==0){
@@ -997,10 +999,11 @@ class SuperAdminApplicationController extends Controller
         try {
             DB::beginTransaction();
             
-                // $all_docs = DB::table('tbl_course_wise_document')
-                // ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id,'approve_status'=>1])
-                // ->whereNotIn('status',[2,3,4,6]) 
-                // ->get(); 
+                DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
+                ->whereNotIn('status',[2,3,4,6]) 
+                ->update(['approve_status'=>1]);
+                
              
                 // foreach($all_docs as $doc){
                 //     if($doc->status==0){
@@ -1051,6 +1054,12 @@ class SuperAdminApplicationController extends Controller
                 $updateStatus = DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
+
+                DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
+                ->whereNotIn('status',[2,3,4,6]) 
+                ->update(['approve_status'=>2]);
+                
 
                 if($updateStatus){
                     $is_all_course_rejected =  $this->checkAllCourseRejected($request->application_id);
