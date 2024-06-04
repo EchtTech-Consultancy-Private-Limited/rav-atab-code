@@ -89,9 +89,9 @@
                                             <tr
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
                                                 <td>{{ $k + 1 }}</td>
-                                                <td>Level-{{ $item->application_list->level_id ?? '' }}</td>
+                                                <td>L-{{ $item->application_list->level_id ?? '' }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
-                                                <td>Course ({{ $item->course_count ?? '' }})</td>
+                                                <td>{{ $item->course_count ?? '' }}</td>
                                                 <td>
                                                 @isset($item->payment)
                                                     @if($item->payment)
@@ -121,13 +121,8 @@
                                                   
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->payment_status==0 || $item->application_list->payment_status==1)
-                                                    <span class="badge badge-main danger">{{config('status_text.accountant_status_pending')}}</span>
-                                                    @elseif($item->application_list->payment_status==2)
-                                                    <span class="badge badge-main warning">{{config('status_text.accountant_status_process')}}</span>
-                                                    @else
-                                                    <span class="badge badge-main success">{{config('status_text.accountant_status_completed')}}</span>
-                                                    @endif
+                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
+                                                
                                                 </td>
                                                 <td>
                                                 {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
@@ -136,6 +131,10 @@
                                                         <a href="{{ url('/account/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
+                                                                
+                                                    <a class="btn btn-tbl-delete bg-history font-a"  data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
+                                                    History
+                                                    </a>
                                                     </td>
                                             </tr>
                                         @endforeach
@@ -144,7 +143,57 @@
                             </table>
                         </div>
                     </div>
+
+           
+
+
+
                 </div>
+
+@foreach($list as $item)
+
+<!-- Modal history -->
+<div class="modal fade" id="view_history_{{$item->application_list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Application History</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                       <table class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($item->appHistory as $key=>$hist)
+                        <tr>
+                            <td>{{$key+1}}</td>
+                            <td>{{$hist->created_at??''}}</td>
+                            <td><span class="badge badge-main {{$hist->status_color??''}}">{{$hist->status_text??''}}</span></td>
+                            
+                        </tr>
+                        @endforeach
+                        </tbody>
+                       </table>
+            </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
+@endforeach
+<!-- end here  -->
+
             </div>
         </div>
         </div>

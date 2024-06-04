@@ -304,7 +304,7 @@
                                     {{-- <span title="Total forms"  id="formCount" style="margin-bottom: 0px !important; cursor: default; background-color:#f09525; padding:8px 10px; border-radius:10px; color:#fff;"></span> --}}
 
                                     <button  id="add-course-button" class="btn btn-primary btn-sm" style="margin-bottom: 0px !important;" data-toggle="tooltip"
-                                        data-placement="top" title="You can create a maximum of 10 courses at one time"
+                                        data-placement="top" title="You can create a maximum of 5 courses at one time"
                                         onclick="addNewCourse();">
                                         <i class="fa fa-plus"></i> Add More Course 
                                     </button>
@@ -350,10 +350,13 @@
 
                                     <input type="hidden" placeholder="level_id" name="level_id"
                                         value="@if (isset($applicationData)) {{ $applicationData->level_id ?? '' }} @endif">
+                                    <input type="hidden" placeholder="reference_id" name="reference_id"
+                                        value="@if (isset($applicationData)) {{ $applicationData->refid ?? '' }} @endif">
 
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
+                                    
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line"> 
@@ -439,7 +442,7 @@
                                             <div class="form-line">
                                                 <label>Course Brief <span class="text-danger">*</span></label>
 
-                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" name="course_brief[]" required></textarea>
+                                                <textarea rows="4" cols="50" class="form-control remove_err_input_error" name="course_brief[]" required maxlength="500"></textarea>
                                                 <span class="err error_name">Please enter the course brief</span>
                                             </div>
                                             @error('course_brief')
@@ -456,7 +459,6 @@
                                                 <input type="file" name="doc1[]"
                                                     class="form-control doc_1 file_size remove_err_input_error" required>
                                                     <span class="err error_name">Please select Declaration (PDF)</span>
-
                                             </div>
                                         </div>
                                     </div>
@@ -468,6 +470,7 @@
                                                 <input type="file" name="doc2[]"
                                                     class="form-control doc_2 file_size remove_err_input_error" required>
                                                     <span class="err error_name">Please select Course Curriculum</span>
+                                            
                                             </div>
 
                                         </div>
@@ -583,13 +586,14 @@
 
                                                     <td class="center btn-ved">
                                                         <a class="btn btn-tbl-delete bg-primary" data-bs-toggle="modal"
-                                                            data-id='{{ $courses->id }}' data-bs-target="#View_popup"
+                                                            data-id='{{ $courses->id }}' level-id='{{$applicationData->level_id}}' data-bs-target="#View_popup"
                                                             id="view">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
                                                         
                                                             <a href="#" data-bs-toggle="modal"
                                                                 data-id="{{ $courses->id }}"
+                                                                level-id='{{$applicationData->level_id}}'
                                                                 data-bs-target="#edit_popup" id="edit_course"
                                                                 class="btn btn-tbl-delete bg-primary">
                                                                 <i class="material-icons">edit</i>
@@ -996,10 +1000,10 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label>Course Brief <span
+                                                            <label>Course Brief  dddd<span
                                                                     class="text-danger">*</span></label>
                                                             <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
-                                                                name="course_brief" id="course_brief"></textarea>
+                                                                name="course_brief" id="course_brief" maxlength="500"></textarea>
                                                         </div>
                                                         @error('course_brief')
                                                             <div class="alert alert-danger">{{ $message }}
@@ -1077,8 +1081,8 @@
                     <script>
                         $(document).on("click", "#view", function() {
 
-                            var UserName = $(this).data('id');
-                            console.log(UserName);
+                            const UserName = $(this).data('id');
+                            const level_id = $(this).attr('level-id');
 
                             $.ajaxSetup({
                                 headers: {
@@ -1090,7 +1094,8 @@
                                 url: `${BASE_URL}/get-course-list`,
                                 type: "get",
                                 data: {
-                                    id: UserName
+                                    id: UserName,
+                                    level_id:level_id
                                 },
                                 success: function(data) {
 
@@ -1132,7 +1137,8 @@
                             var online_checkbox = $('#online_checkbox').val();
                             var hybrid_checkbox = $('#hybrid_checkbox').val();
 
-                            var UserName = $(this).data('id');
+                            const UserName = $(this).data('id');
+                            const level_id = $(this).attr('level-id');
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1143,7 +1149,8 @@
                                 url:`${BASE_URL}/course-edit`,
                                 type: "get",
                                 data: {
-                                    id: UserName
+                                    id: UserName,
+                                    level_id:level_id
                                 },
                                 success: function(data) {
 
@@ -1198,7 +1205,8 @@
                     </script>
                     <script>
                         var isAppending = false; // Flag to prevent multiple append requests
-                        var cloneCounter = {{count($course)>0?count($course)+1:1}};
+                        // var cloneCounter = {{count($course)>0?count($course)+1:1}};
+                        var cloneCounter = 1;
                         var maxClones = 5;
 
                         function updateCloneCount() {

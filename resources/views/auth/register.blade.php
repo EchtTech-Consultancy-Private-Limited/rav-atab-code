@@ -24,21 +24,21 @@
 
 
     <style>
-        .text-danger {
-            color: red !important;
-        }
+    .text-danger {
+        color: red !important;
+    }
 
-        .mob_code {
-            width: 66px;
-        }
+    .mob_code {
+        width: 66px;
+    }
 
-        div#ContactCaptcha_CaptchaIconsDiv {
-            display: flex;
-        }
+    div#ContactCaptcha_CaptchaIconsDiv {
+        display: flex;
+    }
 
-        a#ContactCaptcha_ReloadLink {
-            padding: 0px 39px 0 0;
-        }
+    a#ContactCaptcha_ReloadLink {
+        padding: 0px 39px 0 0;
+    }
     </style>
 
 
@@ -61,13 +61,13 @@
 
 
             @if (Session::has('success'))
-                <div class="alert alert-success" style="padding: 15px;" role="alert">
-                    {{ session::get('success') }}
-                </div>
+            <div class="alert alert-success" style="padding: 15px;" role="alert">
+                {{ session::get('success') }}
+            </div>
             @elseif(Session::has('falils'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session::get('falils') }}
-                </div>
+            <div class="alert alert-danger" role="alert">
+                {{ session::get('falils') }}
+            </div>
             @endif
 
             <div class="form-item">
@@ -84,7 +84,7 @@
 
                     <label for="organization" id="organization-error" class="error">
                         @error('organization')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
 
@@ -107,7 +107,7 @@
 
                     <label for="title" id="title-error" class="error">
                         @error('title')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -118,13 +118,13 @@
                     <label class="label_input"> First Name<span class="text-danger">*</span></label>
                     <div class="iconInput email">
                         <i class="fa fa-user" aria-hidden="true"></i>
-                        <input type="text" placeholder="First Name" name="firstname" class="special_no"
-                            name="firstname" value="{{ old('firstname') }}" id="firstname">
+                        <input type="text" placeholder="First Name" name="firstname" class="special_no" name="firstname"
+                            value="{{ old('firstname') }}" id="firstname">
                     </div>
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="firstname" id="firstname-error" class="error">
                         @error('firstname')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -140,7 +140,7 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="middlename" id="middlename-error" class="error">
                         @error('middlename')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -156,7 +156,7 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="lastname" id="lastname-error" class="error">
                         @error('lastname')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -177,7 +177,7 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="designation" id="designation-error" class="error">
                         @error('designation')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -189,8 +189,8 @@
 
                         <div class="name">
                             <label for="male" class="sex label">
-                                <input type="radio" id="male" name="gender"
-                                    @if (old('gender')) checked @endif value="Male" class="radio">
+                                <input type="radio" id="male" name="gender" @if (old('gender')) checked @endif
+                                    value="Male" class="radio">
                                 <span>Male</span>
                             </label>
                             <label for="Female" class="sex label">
@@ -203,24 +203,25 @@
                             </label>
                         </div>
                     </div>
-                    <label for="gender" id="gender-error" class="error">
+                    <label for="gender" id="gender-error" class="error gender_err">
                         @error('gender')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
                 <div class="iconInput_container">
-                        <label  class="label_input"> Landline No.<span class="text-danger">*</span></label>
-                    <div class="iconInput landline">
-                        <i class="fa fa-mobile" aria-hidden="true"></i>
-                        <input type="text" placeholder="Landline No." name="landline" value="{{ old('landline') }}"  id="dis_alphabet" maxlength="15">
-                    </div>
-                    {{-- <p class="error">This field is required</p> --}}
-                    <label for="landline"  id="landline-error" class="error">
-                    @error('landline')
-                    {{ $message }}
-                    @enderror</label>
+                <label class="label_input"> Landline No.<span class="text-danger">*</span></label>
+                        <div class="iconInput landline">
+                            <i class="fa fa-mobile" aria-hidden="true"></i>
+                            <input type="text" placeholder="Landline No." name="landline" value="{{ old('landline') }}"
+                                id="landline" maxlength="15">
+                        </div>
+                    <label for="landline" id="landline-error"  class="error">
+                        @error('landline')
+                        {{ $message }}
+                        @enderror</label>
                 </div>
+                
                 <!-- <div class="iconInput email">
 
                 </div> -->
@@ -235,14 +236,14 @@
                             <select name="assessment" id="assessment" class="select" required>
 
                                 <option value="">Select Assessment Type</option>
-                                <option value="1" >Desktop Assessment</option>
+                                <option value="1">Desktop Assessment</option>
                                 <option value="2">Onsite Assessment</option>
                             </select>
                         </div>
                         <label for="assessment" id="assessment-error" class="error"></label>
                     </div>
 
-                   @endif
+                    @endif
                 </div>
 
                 <div class="iconInput_container">
@@ -256,7 +257,7 @@
                     </div>
                     <label for="email" id="email-error" class="error">
                         @error('email')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -278,7 +279,7 @@
                     <label for="email_otp" id="email_otp-error" class="error">
 
                         @if (session()->has('fail'))
-                            {{ session()->get('fail') }}
+                        {{ session()->get('fail') }}
                         @endif
 
                     </label>
@@ -293,9 +294,9 @@
                             <select name="phonecode" id="phonecode" class="select">
                                 <option value="91">91</option>
                                 @foreach ($data as $item)
-                                    <option value="{{ $item->phonecode }}"
-                                        {{ old('phonecode') == 'phonecode' ? 'selected' : '' }}>{{ $item->phonecode }}
-                                    </option>
+                                <option value="{{ $item->phonecode }}"
+                                    {{ old('phonecode') == 'phonecode' ? 'selected' : '' }}>{{ $item->phonecode }}
+                                </option>
                                 @endforeach
 
                             </select>
@@ -303,16 +304,15 @@
                             {{-- <label for="phonecode"  id="phonecode-error" class="error">
                                 @error('phonecode')
                                 {{ $message }}
-                                @enderror
+                            @enderror
                             </label> --}}
                         </div>
                         <input type="text" class="input_otp" placeholder="Enter Mobile Number."
-                            value="{{ old('mobile_no') }}" id="mobile_no" name="mobile_no" minlength="2"
-                            maxlength="10">
+                            value="{{ old('mobile_no') }}" id="mobile_no" name="mobile_no" minlength="2" maxlength="10">
                     </div>
                     <label for="mobile_no" id="mobile_no-error" class="error">
                         @error('mobile_no')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -334,14 +334,9 @@
                         </button>
                     </div>
                     @error('email_otp')
-                        <p class="error">{{ $message }}</p>
+                    <p class="error">{{ $message }}</p>
                     @enderror
                 </div>
-
-
-
-
-
 
 
                 <div class="iconInput_container">
@@ -353,7 +348,7 @@
                             <option value="" SELECTED>Select Country</option>
 
                             @foreach ($data as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
 
                         </select>
@@ -362,7 +357,7 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="Country" id="Country-error" class="error">
                         @error('Country')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
 
@@ -379,24 +374,24 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="state" id="state-error" class="error">
                         @error('state')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
 
                 <div class="iconInput_container wid-flex-two">
 
-                <div class="iconInput_container">
-                    <label class="label_input"> City<span class="text-danger">*</span></label>
-                    <div class="iconInput email">
+                    <div class="iconInput_container">
+                        <label class="label_input"> City<span class="text-danger">*</span></label>
+                        <div class="iconInput email">
 
-                        <select name="city" id="city" class="select" style="margin-right: 10px;">
-                            <option value="">Select City</option>
-                        </select>
+                            <select name="city" id="city" class="select" style="margin-right: 10px;">
+                                <option value="">Select City</option>
+                            </select>
 
-                    </div>
-                    <label for="city" id="city-error" class="error">
-                        @error('city')
+                        </div>
+                        <label for="city" id="city-error" class="error">
+                            @error('city')
                             <p class="error">{{ $message }}</p>
                             @enderror
                     </div>
@@ -415,7 +410,7 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="address" id="address-error" class="error">
                         @error('address')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -450,7 +445,7 @@
                         <input type="password" value="{{ old('password') }}" onpaste="return false;"
                             ondrop="return false;" placeholder="password" id="password" name="password"
                             autocomplete="new-password">
-                        <i class="fa fa-eye " aria-hidden="true" id="togglePassword"></i>
+                        <i class="fa fa-eye" aria-hidden="true" id="togglePassword"></i>
 
                         <div class="tooltip ph">
 
@@ -473,7 +468,7 @@
                     {{-- <p class="error">This field is required</p> --}}
                     <label for="password" id="password-error" class="error">
                         @error('password')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -505,7 +500,7 @@
                         <i class="fa fa-lock" aria-hidden="true"></i>
                         <input type="password" placeholder="Confirm Password" name="cpassword" for="cpassword"
                             id="cpassword">
-                        <i class="fa fa-eye " aria-hidden="true" id="togglecpassword"></i>
+                        <i class="fa fa-eye" aria-hidden="true" id="togglecpassword"></i>
 
                         <div class="tooltip ph1">
                             <b>Your password must satisfy the following:</b><br>
@@ -526,7 +521,7 @@
 
                     <label for="cpassword" id="cpassword-error" class="error">
                         @error('cpassword')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -536,15 +531,15 @@
                 <input type="hidden" value="1" name="status">
 
                 @if (request()->path() == 'login/admin/register')
-                    <input type="hidden" placeholder="role" name="role" value="{{ 1 }}">
+                <input type="hidden" placeholder="role" name="role" value="{{ 1 }}">
                 @elseif(request()->path() == 'login/TP/register')
-                    <input type="hidden" placeholder="role" name="role" value="{{ 2 }}">
+                <input type="hidden" placeholder="role" name="role" value="{{ 2 }}">
                 @elseif(request()->path() == 'login/Accessor/register')
-                    <input type="hidden" placeholder="role" name="role" value="{{ 3 }}">
+                <input type="hidden" placeholder="role" name="role" value="{{ 3 }}">
                 @elseif(request()->path() == 'login/secretariat/register')
-                    <input type="hidden" placeholder="role" name="role" value="{{ 4 }}">
-                    @elseif(request()->path() == 'login/professional/register')
-                    <input type="hidden" placeholder="role" name="role" value="{{ 5 }}">
+                <input type="hidden" placeholder="role" name="role" value="{{ 4 }}">
+                @elseif(request()->path() == 'login/professional/register')
+                <input type="hidden" placeholder="role" name="role" value="{{ 5 }}">
                 @endif
 
 
@@ -559,7 +554,7 @@
                     </div>
                     <label for="captcha" id="captcha-error" class="error">
                         @error('captcha')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
@@ -567,17 +562,16 @@
                 <div class="iconInput_container">
                     <label for="Orgnisation" class="label_input">Enter Captcha code</label>
                     <div class="iconInput email">
-                        <input type="text" class="form-control" aria-label="Captcha Code"
-                            placeholder="Enter Captcha" id="CaptchaCode" name="CaptchaCode">
+                        <input type="text" class="form-control" aria-label="Captcha Code" placeholder="Enter Captcha"
+                            id="CaptchaCode" name="CaptchaCode">
                     </div>
-                    <br>
-                    <label  for="captcha" id="captcha-error" class="error">
-                            @error('captcha')
-                            {{ $message }}
+                    <label for="CaptchaCode" id="CaptchaCode-error" class="error">
+                        @error('CaptchaCode')
+                        {{ $message }}
                         @enderror
                     </label>
                 </div>
-                </div>
+            </div>
 
             <ul style="padding-left:0px;">
 
@@ -600,7 +594,7 @@
                         <br />
                         <label for="check" id="check-error" class="error">
                             @error('check')
-                                {{ $message }}
+                            {{ $message }}
                             @enderror
                         </label>
                 </li>
@@ -627,28 +621,35 @@
 
 
     <script>
-        let password = document.querySelector('#password');
-        let togglePassword = document.querySelector('#togglePassword');
+    let password = document.querySelector('#password');
+    let togglePassword = document.querySelector('#togglePassword');
 
-        togglePassword.addEventListener('click', (e) => {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    togglePassword.addEventListener('click', (e) => {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
 
-            password.setAttribute('type', type);
+        password.setAttribute('type', type);
+        
+        if(type==="text"){
+            togglePassword.setAttribute('class','fa fa-eye-slash');
+        }else{
+            togglePassword.setAttribute('class','fa fa-eye');
+        }
+    });
 
-            this.classlist.toggle('fa-eye-slash');
-        });
 
 
-        let cpassword = document.querySelector('#cpassword');
-        let togglecPassword = document.querySelector('#togglecpassword');
+    let cpassword = document.querySelector('#cpassword');
+    let togglecPassword = document.querySelector('#togglecpassword');
 
-        togglecpassword.addEventListener('click', (e) => {
-            const type = cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
-
-            cpassword.setAttribute('type', type);
-
-            this.classlist.toggle('fa-eye-slash');
-        })
+    togglecpassword.addEventListener('click', (e) => {
+        const type = cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        cpassword.setAttribute('type', type);
+        if(type==="text"){
+            togglecpassword.setAttribute('class','fa fa-eye-slash');
+        }else{
+            togglecpassword.setAttribute('class','fa fa-eye');
+        }
+    })
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -663,173 +664,210 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
 
-            $("a[title ~= 'BotDetect']").removeAttr("style");
-            $("a[title ~= 'BotDetect']").removeAttr("href");
-            $("a[title ~= 'BotDetect']").css('visibility', 'hidden');
-            $("#ContactCaptcha_CaptchaImageDiv").css('height', 32 + "px !important");
-            //$("#ContactCaptcha_CaptchaImageDiv").
+        $("a[title ~= 'BotDetect']").removeAttr("style");
+        $("a[title ~= 'BotDetect']").removeAttr("href");
+        $("a[title ~= 'BotDetect']").css('visibility', 'hidden');
+        $("#ContactCaptcha_CaptchaImageDiv").css('height', 32 + "px !important");
+        //$("#ContactCaptcha_CaptchaImageDiv").
 
 
-            $("#regForm").validate({
-                rules: {
-                    check: {
-                        required: true,
-                    },
-                    // phonecode:{
-                    //     required: true,
-                    // },
-                    captcha: {
-                        required: true,
-                    },
-                    organization: {
-                        required: true,
-                        maxlength: 30,
-                    },
-                    title: {
-                        required: true,
-                        maxlength: 20,
-                    },
-                    firstname: {
-                        required: true,
-                        maxlength: 30,
-                    },
-                    lastname: {
-                        required: true,
-                        maxlength: 30,
-                    },
-                    designation: {
-                        required: true,
-                        maxlength: 20,
-                    },
-                    email: {
-                        required: true,
-                        email: true,
+        $("#regForm").validate({
+            rules: {
+                check: {
+                    required: true,
+                },
+                // phonecode:{
+                //     required: true,
+                // },
+                CaptchaCode: {
+                    required: true,
+                },
+                organization: {
+                    required: true,
+                    maxlength: 30,
+                },
+                title: {
+                    required: true,
+                    maxlength: 20,
+                },
+                firstname: {
+                    required: true,
+                    maxlength: 30,
+                },
+                lastname: {
+                    required: true,
+                    maxlength: 30,
+                },
+                designation: {
+                    required: true,
+                    maxlength: 20,
+                },
+                email: {
+                    required: true,
+                    email: true,
 
-                        maxlength: 50
-                    },
-                    mobile_no: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 10,
-                        number: true
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8,
-                        maxlength: 15,
-                    },
-                    cpassword: {
-                        required: true,
-                        equalTo: "#password"
-                    },
-                    gender: {
-                        required: true,
-                    },
-                    Country: {
-                        required: true,
-                    },
-                    address: {
-                        required: true,
-                        maxlength: 50
-                    },
-                    state: {
-                        required: true,
-                        maxlength: 40
-                    },
-                    city: {
-                        required: true,
-                    },
-                    phonecode: {
-                        required: true,
-                    },
-                    email_otp: {
-                        required: true,
-                        maxlength: 6,
-                    },
+                    maxlength: 50
+                },
+                mobile_no: {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 10,
+                    number: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 15,
+                },
+                cpassword: {
+                    required: true,
+                    equalTo: "#password"
+                },
+                gender: {
+                    required: true,
+                },
+                Country: {
+                    required: true,
+                },
+                address: {
+                    required: true,
+                    maxlength: 50
+                },
+                state: {
+                    required: true,
+                    maxlength: 40
+                },
+                city: {
+                    required: true,
+                },
+                phonecode: {
+                    required: true,
+                },
+                email_otp: {
+                    required: true,
+                    maxlength: 6,
+                },
+                landline: {
+                    required: true,
+                    maxlength: 16,
+                },
+
+            },
+            messages: {
+
+                check: {
+                    required: "Terms and conditions is required",
+                },
+                CaptchaCode: {
+                    required: "Captcha is required",
+                    reCaptchaMethod: true
+                },
+                phonecode: {
+                    required: "phonecode is required",
+                },
+                organization: {
+                    required: "Organization is required",
+                    maxlength: "Organization cannot be more than 30 characters"
+                },
+                firstname: {
+                    required: "First name is required",
+                    maxlength: "First name cannot be more than 30 characters"
+                },
+                lastname: {
+                    required: "Last name is required",
+                    maxlength: "Last name cannot be more than 30 characters"
+                },
+                email: {
+                    required: "Email is required",
+                    email: "Email must be a valid email address",
+                    maxlength: "Email cannot be more than 50 characters",
+                },
+                mobile_no: {
+                    required: "Phone number is required",
+                    minlength: "Phone  number must be of 10 digits"
+                },
+                password: {
+                    required: "Password is required",
+                    minlength: "Password must be at least 8 characters",
+                    maxlength: "Password cannot be more than 15 characters"
+                },
+                cpassword: {
+                    required: "Confirm password is required",
+                    equalTo: "Password and confirm password should same"
+                },
+                gender: {
+                    required: "Please select the gender",
+                },
+
+                address: {
+                    required: "Address is required",
 
                 },
-                messages: {
+                state: {
+                    required: "State is required",
 
-                    check: {
-                        required: "Terms and conditions is required",
-                    },
-                    captcha: {
-                        required: "Captcha is required",
-                        reCaptchaMethod: true
-                    },
-                    phonecode: {
-                        required: "phonecode is required",
-                    },
-                    organization: {
-                        required: "Organization is required",
-                        maxlength: "Organization cannot be more than 30 characters"
-                    },
-                    firstname: {
-                        required: "First name is required",
-                        maxlength: "First name cannot be more than 30 characters"
-                    },
-                    lastname: {
-                        required: "Last name is required",
-                        maxlength: "Last name cannot be more than 30 characters"
-                    },
-                    email: {
-                        required: "Email is required",
-                        email: "Email must be a valid email address",
-                        maxlength: "Email cannot be more than 50 characters",
-                    },
-                    mobile_no: {
-                        required: "Phone number is required",
-                        minlength: "Phone  number must be of 10 digits"
-                    },
-                    password: {
-                        required: "Password is required",
-                        minlength: "Password must be at least 8 characters",
-                        maxlength: "Password cannot be more than 15 characters"
-                    },
-                    cpassword: {
-                        required: "Confirm password is required",
-                        equalTo: "Password and confirm password should same"
-                    },
-                    gender: {
-                        required: "Please select the gender",
-                    },
+                },
+                city: {
+                    required: "City is required",
 
-                    address: {
-                        required: "Address is required",
-
-                    },
-                    state: {
-                        required: "State is required",
-
-                    },
-                    city: {
-                        required: "City is required",
-
-                    },
-                    email_otp: {
-                        required: "Email verification is Must",
-                        maxlength: "Email otp be more than 6 numeric value",
-                    }
-
+                },
+                email_otp: {
+                    required: "Email verification is Must",
+                    maxlength: "Email otp be more than 6 numeric value",
+                },
+                landline: {
+                    required: "Please enter landline number",
+                    maxlength: "Landline be more than 6 numeric value",
                 }
-            });
+
+            }
         });
+    });
     </script>
 
     <script>
-        function sendotp() {
+    function sendotp() {
 
+        var frmdata = {
+            'phone': $("#mobile_no").val()
+        }
+
+        $('#btn_sendotp').hide();
+        $('#target').html('sending..');
+
+        $.ajax({
+            url: '{{ url(' / sendOtp ') }}',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+            },
+            success: function(data) {
+                $('#target').html(data.message);
+                $('#btn_sendotp').show();
+            },
+            data: JSON.stringify(frmdata)
+        });
+    }
+
+
+
+    function sendemailotp() {
+
+        var email = $("#email").val()
+        if (email != "") {
             var frmdata = {
-                'phone': $("#mobile_no").val()
+                'email': $("#email").val()
             }
 
-            $('#btn_sendotp').hide();
-            $('#target').html('sending..');
+            $('#btn_sendemailotp').hide();
+            $('#targetemail').html('sending..');
 
             $.ajax({
-                url: '{{ url('/sendOtp') }}',
+                url: '{{ url(' / sendEmailOtp ') }}',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -837,309 +875,280 @@
                     'X-CSRF-TOKEN': $('input[name="_token"]').val()
                 },
                 success: function(data) {
-                    $('#target').html(data.message);
-                    $('#btn_sendotp').show();
+
+                    // alert(data.err);
+
+                    if (data.status == 200) {
+                        Swal.fire(
+                            'OTP Sent Successfully!',
+                            'Please check your email box for OTP and verify here!',
+                            'success'
+                        )
+                        $('#btn_sendemailotp').show();
+                        $('#targetemail').html('');
+                    } else if (data.status == 129) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Email domain is not valid',
+                        })
+                        $('#btn_sendemailotp').show();
+                        $('#targetemail').html('');
+
+                    } else {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Email id is already exist',
+                        })
+                        $('#btn_sendemailotp').show();
+                        $('#targetemail').html('');
+
+                    }
+                },
+                error: function(error) {
+
+                    if (error.status == 409) {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Email id is already exist',
+                        })
+                        $('#btn_sendemailotp').show();
+                        $('#targetemail').html('');
+                    } else {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Email format invalid',
+                        })
+                        $('#btn_sendemailotp').show();
+                        $('#targetemail').html('');
+
+
+                    }
+
+                    // $('#targetemail').html(data.message);
+                    // $('#btn_sendemailotp').show();
                 },
                 data: JSON.stringify(frmdata)
             });
+
+        } else {
+            $("#email").focus();
         }
 
-
-
-        function sendemailotp() {
-
-            var email = $("#email").val()
-            if (email != "") {
-                var frmdata = {
-                    'email': $("#email").val()
-                }
-
-                $('#btn_sendemailotp').hide();
-                $('#targetemail').html('sending..');
-
-                $.ajax({
-                    url: '{{ url('/sendEmailOtp') }}',
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                    },
-                    success: function(data) {
-
-                        // alert(data.err);
-
-                        if (data.status == 200) {
-                            Swal.fire(
-                                'OTP Sent Successfully!',
-                                'Please check your email box for OTP and verify here!',
-                                'success'
-                            )
-                            $('#btn_sendemailotp').show();
-                            $('#targetemail').html('');
-                        } else if (data.status == 129) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Email domain is not valid',
-                            })
-                            $('#btn_sendemailotp').show();
-                            $('#targetemail').html('');
-
-                        } else {
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Email id is already exist',
-                            })
-                            $('#btn_sendemailotp').show();
-                            $('#targetemail').html('');
-
-                        }
-                    },
-                    error: function(error) {
-
-                        if (error.status == 409) {
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Email id is already exist',
-                            })
-                            $('#btn_sendemailotp').show();
-                            $('#targetemail').html('');
-                        } else {
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Email format invalid',
-                            })
-                            $('#btn_sendemailotp').show();
-                            $('#targetemail').html('');
-
-
-                        }
-
-                        // $('#targetemail').html(data.message);
-                        // $('#btn_sendemailotp').show();
-                    },
-                    data: JSON.stringify(frmdata)
-                });
-
-            } else {
-                $("#email").focus();
-            }
-
-        }
+    }
     </script>
 
     {{-- state dropdown --}}
 
     <script>
-        $(document).ready(function() {
-            $("#Country").on('change', function() {
+    $(document).ready(function() {
+        $("#Country").on('change', function() {
 
-                //alert('hello');
+            //alert('hello');
 
 
 
-                var myVar = $("#Country").val();
+            var myVar = $("#Country").val();
 
-                $.ajax({
-                    url: "{{ url('/state-list') }}",
-                    type: "get",
-                    data: {
-                        "myData": myVar
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                    },
-                    success: function(resdata) {
+            $.ajax({
+                url: "{{ url('/state-list') }}",
+                type: "get",
+                data: {
+                    "myData": myVar
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                },
+                success: function(resdata) {
 
-                        var formoption = "<option value=''>Please Select</option>";
-                        for (i = 0; i < resdata.length; i++) {
-                            formoption += "<option value='" + resdata[i].id + "' >" + resdata[i]
-                                .name + "</option>";
-                        }
-                        $('#state').html(formoption);
-
+                    var formoption = "<option value=''>Please Select</option>";
+                    for (i = 0; i < resdata.length; i++) {
+                        formoption += "<option value='" + resdata[i].id + "' >" + resdata[i]
+                            .name + "</option>";
                     }
+                    $('#state').html(formoption);
 
-                });
-
-
+                }
 
             });
+
+
+
         });
+    });
     </script>
 
 
     {{-- city dropdown --}}
 
     <script>
-        $(document).ready(function() {
-            $("#password").focus(function() {
-                $(".tooltip.ph").addClass("d-none");
-                $(".top-tip").removeClass("d-none");
-            });
-
-            $("#cpassword").focus(function() {
-                $(".tooltip.ph1").addClass("d-none");
-                $(".top-tip1").removeClass("d-none");
-            });
-
+    $(document).ready(function() {
+        $("#password").focus(function() {
+            $(".tooltip.ph").addClass("d-none");
+            $(".top-tip").removeClass("d-none");
         });
+
+        $("#cpassword").focus(function() {
+            $(".tooltip.ph1").addClass("d-none");
+            $(".top-tip1").removeClass("d-none");
+        });
+
+    });
     </script>
 
     <script>
-        $(document).ready(function() {
-            $("#state").on('change', function() {
+    $(document).ready(function() {
+        $("#state").on('change', function() {
 
-                //  alert('hello');
-
-
-                var myVars = $("#state").val();
+            //  alert('hello');
 
 
-                //  alert(myVars);
+            var myVars = $("#state").val();
 
-                $.ajax({
-                    url: "{{ url('/city-list') }}",
-                    type: "get",
-                    data: {
-                        "myData": myVars
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
-                    },
-                    success: function(resdata) {
 
-                        //   console.log(resdata);
+            //  alert(myVars);
 
-                        var formoption = "<option value=''>Please select</option>";
-                        for (i = 0; i < resdata.length; i++) {
-                            formoption += "<option value='" + resdata[i].id + "'>" + resdata[i]
-                                .name + "</option>";
-                        }
-                        $('#city').html(formoption);
+            $.ajax({
+                url: "{{ url('/city-list') }}",
+                type: "get",
+                data: {
+                    "myData": myVars
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                },
+                success: function(resdata) {
 
+                    //   console.log(resdata);
+
+                    var formoption = "<option value=''>Please select</option>";
+                    for (i = 0; i < resdata.length; i++) {
+                        formoption += "<option value='" + resdata[i].id + "'>" + resdata[i]
+                            .name + "</option>";
                     }
+                    $('#city').html(formoption);
 
-                });
+                }
 
             });
+
         });
+    });
     </script>
 
     <script type="text/javascript">
-        $(".btn-refresh").click(function() {
-            $('#captcha').val("")
+    $(".btn-refresh").click(function() {
+        $('#captcha').val("")
 
-            $.ajax({
-                type: 'GET',
-                url: "{{ url('/refresh_captcha') }}",
-                success: function(data) {
-                    $(".captcha span").html(data.captcha);
-                }
-            });
+        $.ajax({
+            type: 'GET',
+            url: "{{ url('/refresh_captcha') }}",
+            success: function(data) {
+                $(".captcha span").html(data.captcha);
+            }
         });
+    });
     </script>
 
 
     <script>
-        // disable alphate
-        $('#mobile_no').keypress(function(e) {
-            var regex = new RegExp("^[0-9_]");
-            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-            if (regex.test(str)) {
-                return true;
-            }
-            e.preventDefault();
-            return false;
-        });
+    // disable alphate
+    $('#mobile_no').keypress(function(e) {
+        var regex = new RegExp("^[0-9_]");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    });
     </script>
 
     <script>
-        // disable alphate
-        $('#email_otp').keypress(function(e) {
-            var regex = new RegExp("^[0-9_]");
-            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-            if (regex.test(str)) {
-                return true;
-            }
-            e.preventDefault();
-            return false;
-        });
+    // disable alphate
+    $('#email_otp').keypress(function(e) {
+        var regex = new RegExp("^[0-9_]");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    });
     </script>
 
     <script>
-        // disable alphate
-        $('#pincode').keypress(function(e) {
-            var regex = new RegExp("^[0-9_]");
-            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-            if (regex.test(str)) {
-                return true;
-            }
-            e.preventDefault();
-            return false;
-        });
+    // disable alphate
+    $('#pincode').keypress(function(e) {
+        var regex = new RegExp("^[0-9_]");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    });
     </script>
 
 
     {{-- back button  disable  --}}
 
     <script>
-        $(document).ready(function() {
-            function disableBack() {
-                window.history.forward()
-            }
-            window.onload = disableBack();
-            window.onpageshow = function(e) {
-                if (e.persisted)
-                    disableBack();
-            }
+    $(document).ready(function() {
+        function disableBack() {
+            window.history.forward()
+        }
+        window.onload = disableBack();
+        window.onpageshow = function(e) {
+            if (e.persisted)
+                disableBack();
+        }
 
-            $('#ContactCaptcha_CaptchaIconsDiv').css({
-                'display': 'flex'
-            });
-            $('#ContactCaptcha_ReloadLink').css({
-                'padding': '0px 39px 0 0'
-            });
+        $('#ContactCaptcha_CaptchaIconsDiv').css({
+            'display': 'flex'
         });
+        $('#ContactCaptcha_ReloadLink').css({
+            'padding': '0px 39px 0 0'
+        });
+    });
     </script>
 
 
     <script>
-        // disable special characters with space
-        $('.special_no').keypress(function(e) {
-            var regex = new RegExp("^[a-zA-Z ]*$");
-            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-            if (regex.test(str)) {
-                return true;
-            }
-            e.preventDefault();
-            return false;
-        });
+    // disable special characters with space
+    $('.special_no').keypress(function(e) {
+        var regex = new RegExp("^[a-zA-Z ]*$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    });
     </script>
 
     <script>
-        $(function() {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     </script>
     <script>
-         // disable alphate
-           $('#dis_alphabet').keypress(function (e) {
-            var regex = new RegExp("^[0-9_]");
-            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-            if (regex.test(str)) {
-                return true;
-            }
-            e.preventDefault();
-            return false;
-        });
+    // disable alphate
+    $('#landline').keypress(function(e) {
+        var regex = new RegExp("^[0-9_]");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    });
     </script>
 </body>
 

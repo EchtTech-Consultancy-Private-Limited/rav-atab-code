@@ -54,7 +54,7 @@
             </li>
 
             <li
-                class="{{ Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') ? 'active' : '' }}">
+                class="{{ Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') || Request::is('level-first/tp/application-list')  || Request::is('level-second/tp/application-list') || Request::is('level-third/tp/application-list') || Request::is('*tp/application-view*') ? 'active' : '' }}">
                 <a href="#" onClick="return false;" class="menu-toggle">
                     <!-- <i data-feather="settings"></i> -->
                     <i class="fa fa-cog"></i>
@@ -65,22 +65,30 @@
                                     <a href="{{ url('/level-list') }}">Level 1</a>
                                 </li> -->
 
-                    <li class="{{ Request::is('level-first') ? 'active' : '' }}">
+                    <li class="{{ Request::is('level-first') || Request::is('level-first/tp/application-list') || Request::is('tp/application-view*') ? 'active' : '' }}">
                         <a href="{{ url('/level-first') }}">Level 1 </a>
                     </li>
 
-                    <li class="{{ Request::is('level-second') ? 'active' : '' }}">
+                    <li class="{{ Request::is('level-second') || Request::is('level-second/tp/application-list') || Request::is('upgrade/tp/application-view*')? 'active' : '' }}">
                         <a href="{{ url('/level-second') }}">Level 2</a>
                     </li>
-                    <li class="{{ Request::is('level-third') ? 'active' : '' }}">
+                    <li class="{{ Request::is('level-third') || Request::is('level-third/tp/application-list') || Request::is('upgrade/level-3*')? 'active' : '' }}">
                         <a href="{{ url('/level-third') }}">Level 3</a>
                     </li>
-                    <li class="{{ Request::is('level-fourth') ? 'active' : '' }}">
+                    <li class="{{ Request::is('level-fourth') || Request::is('level-four/tp/application-list') ? 'active' : '' }}">
                         <a href="{{ url('/level-fourth') }}">Level 4</a>
                     </li>
             </li>
 
         </ul>
+        </li>
+
+        <li class="{{ Request::is('tp/application-payment-fee-list') ? 'active' : '' }}">
+            <a href="{{ url('tp/application-payment-fee-list') }}">
+                <!-- <i data-feather="clipboard"></i> -->
+                <i class="material-icons">payment</i>
+                <span>Payment Fee</span>
+            </a>
         </li>
 
         <li class="{{ Request::is('show-previous-level') ? 'active' : '' }}">

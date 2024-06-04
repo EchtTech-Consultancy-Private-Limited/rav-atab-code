@@ -255,12 +255,12 @@
                                 <div class="header">
                                     <h2 style="float:left; clear:none;">Payment</h2>
                                     <h6 style="float:right; clear:none;" id="counter">
-                                        Total Amount (with 18% GST): {{ $total_amount + $total_amount * 0.18 ?? 0 }}
+                                        Total Amount (with 18% GST): {{ $total_amount}}
                                     </h6>
                                 </div>
                                 <div class="body">
                                     <form action="{{ url('/create-application-payment') }}" method="post" class="form"
-                                        enctype="multipart/form-data">
+                                        enctype="multipart/form-data" onsubmit="return handleShowCoursePayment()">
                                         @csrf
                                         <div class="form-group">
                                             <div class="form-line select-box-hide-class" style="width:25%">
@@ -690,8 +690,22 @@ $('#payment_transaction_no').on('keyup focusout', function() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(function() {
         var paymentTransactionNo = $(this).val();
+        paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
+        $(this).val(paymentTransactionNo);
+        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+            $('#payment_transaction_no-error').text(
+                'Payment Transaction no. must not contain special characters.');
+            $('#submitBtn').attr('disabled', true);
+            return;
+        } else {
+            $('#submitBtn').attr('disabled', false);
+        }
 
-        $.ajax({
+        if (paymentTransactionNo.length < 9) {
+            $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
+            $('#submitBtn').attr('disabled', true);
+        }else{
+            $.ajax({
             type: 'POST',
             url: '{{ route('transaction_validation') }}',
             data: {
@@ -711,6 +725,10 @@ $('#payment_transaction_no').on('keyup focusout', function() {
                 $('#submitBtn').attr('disabled', false);
             }
         });
+        $('#payment_transaction_no-error').text('');
+        }
+
+     
     }.bind(this), 300);
 });
 

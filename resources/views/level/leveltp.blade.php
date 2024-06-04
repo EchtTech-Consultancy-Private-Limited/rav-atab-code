@@ -304,13 +304,14 @@
                                              <div class="row">
                                                  <div class="col-md-4 ">
                                                      <h5> <strong>Validity </strong></h5>
-                                                     <p class="text-muted">{{ $item[0]->validity }}</p>
+                                                     <p class="text-muted">{{ $item[0]->validity??"" }}</p>
                                                  </div>
                                                  <div class="col-md-4 ">
                                                      <h5> <strong>Fee Structure </strong></h5>
-                                                     <p class="text-muted">{{ $item[0]->fee_structure }}</p>
+                                                     <p class="text-muted">{{ $item[0]->fee_structure??"" }}</p>
                                                      <div class="d-flex align-item-center">
-                                                        @if ($item[0]->Fee_Structure_pdf != '')
+
+                                                        @if (isset($item[0]->Fee_Structure_pdf) && $item[0]->Fee_Structure_pdf != '')
                                                         <a target="_blank"
                                                             href="{{ url('show-pdf' . '/' . $item[0]->Fee_Structure_pdf) }}"
                                                             title="level Information pdf">PDF Fee Structure </a>
@@ -320,13 +321,13 @@
                                                  </div>
                                                  <div class="col-md-4 ">
                                                      <h5> <strong>Timelines </strong></h5>
-                                                     <p class="text-muted"> {{ $item[0]->timelines }}</p>
+                                                     <p class="text-muted"> {{ $item[0]->timelines??"" }}</p>
                                                  </div>
                                                  <div class="col-sm-4">
                                                      <h5>Level Information</h5>
-                                                     <p>{{ $item[0]->level_Information }}</p>
+                                                     <p>{{ $item[0]->level_Information??"" }}</p>
                                                      <br>
-                                                     @if ($item[0]->level_Information_pdf != '')
+                                                     @if (isset($item[0]->level_Information_pdf) && $item[0]->level_Information_pdf != '')
                                                          <a target="_blank"
                                                              href="{{ url('show-pdf' . '/' . $item[0]->level_Information_pdf) }}"
                                                              title="level Information pdf">
@@ -339,10 +340,10 @@
 
                                              <br><br>
                                              <h5>Prerequisites</h5>
-                                             <p>{{ $item[0]->Prerequisites }}</p>
+                                             <p>{{ $item[0]->Prerequisites??"" }}</p>
                                              <br>
                                              <br>
-                                             @if ($item[0]->Prerequisites_pdf != '')
+                                             @if (isset($item[0]->Prerequisites_pdf) && $item[0]->Prerequisites_pdf != '')
                                                  <a target="_blank" 
                                                      href="{{ url('show-pdf' . '/' . $item[0]->Prerequisites_pdf) }}"
                                                      title="level Information pdf">
@@ -351,10 +352,10 @@
                                              <br>
                                              <br>
                                              <h5>Documents Required</h5>
-                                             <p>{{ $item[0]->documents_required }}</p>
+                                             <p>{{ $item[0]->documents_required??"" }}</p>
                                              <br>
                                              <br>
-                                             @if ($item[0]->documents_required_pdf != '')
+                                             @if (isset($item[0]->documents_required_pdf) && $item[0]->documents_required_pdf != '')
                                                  <a target="_blank"
                                                      href="{{ url('show-pdf' . '/' . $item[0]->documents_required_pdf) }}"
                                                      title="level Information pdf"><i class="fa fa-download mr-2"></i>

@@ -245,6 +245,7 @@
 
                 <div role="tabpanel" class="tabs__panel" hidden>
                   <div class="tabs__panel__inner">
+                    @if($onsite_final_data)
                     <div class="row clearfix">
                         <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
                             <button class="btn btn-warning printTpBtn" onclick="printDiv('on-site-print')">
@@ -506,6 +507,9 @@
                             </form>
                         </div>
                     </div>
+                    @else
+                    <span>Onsite not perform any action or not Assigned yet</span>
+                    @endif
                   </div>
                 </div>               
               </tabs-group>

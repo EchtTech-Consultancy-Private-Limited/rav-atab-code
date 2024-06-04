@@ -4870,6 +4870,12 @@ table .checkbox [type="checkbox"]+label {
         margin-right: 0;
         margin-left: 0
     }
+
+    .card .info-box-5 {
+        min-height: 75px !important;
+    }
+
+
 }
 
 @media(max-width:600px) {
@@ -11690,7 +11696,7 @@ table .checkbox [type="checkbox"]+label {
 }
 
 .dropdown-menu ul.menu li a {
-    padding: 11px 11px;
+    padding: 0px 11px;
     text-decoration: none;
     -moz-transition: .5s;
     -o-transition: .5s;
@@ -20906,7 +20912,7 @@ span.badge {
 
 .card .header h2 {
     margin: 0;
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: normal;
     color: #12171d;
     font-weight: 600
@@ -24293,7 +24299,7 @@ div#QR > div {
 }
 
 .card .info-box-5 {
-    min-height: 120px !important;
+    min-height: 90px !important;
     /* display: flex; */
     align-items: center;
 }
@@ -25449,8 +25455,6 @@ background: white;
         padding: 33px !important;
         position: relative !important;
     }
-
-
   
  .text-success td{
     color:#198754 !important
@@ -25469,4 +25473,120 @@ background: white;
  position: absolute;
  top: -44px;
 }
+
+.notification{
+    padding: 0px !important;
+    max-height: 280px;
+    overflow-y: scroll;
+}
+
+.slimScrollDiv ul.text-dark.menu li a {
+    padding: 0px 15px;
+    line-height: 35px;
+}
+
+.slimScrollDiv, .slimScrollDiv ul.text-dark.menu {
+    height: auto !important;
+}
+
+
+@media screen and (max-width:1599px) {
+    g.highcharts-label.highcharts-data-label text {
+        font-size: 9px !important;
+    }
+
+    .font-20 {
+        font-size: 14px;
+    }   
+
+
+}
+
+@media (min-width: 1200px){
+    .col-xxl {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+
+    .fileup.h-w-input{
+        width: 60px;
+        height: 40px;
+        cursor: pointer;    
+    }
+
+}
+
+.form-margin-min .form-group {
+    margin-bottom: 8px !important;
+  }
+
+.pl-0{padding-left: 0px !important;}
+.pr-2{padding-right: 4px !important;}
+.h-181{height: 181px !important;}
+
+.form-margin-min .fixed-label-w .form-group label strong {
+    width: 110px;
+    display: block;
+  }
+
+  .width-100 {
+    width: 100px;
+  }
+
+  .text-table-center table tr td{
+    text-align: center;
+  }
+
+ .b-info .form-group {
+    margin-bottom: 5px;
+}
+.pl-10{padding-left: 10px !important;}
+
+p.ref-number {
+    margin-bottom: 0;
+    float: right;
+    text-align: right;
+    font-size: 14px;
+}
+
+p.ref-number b{ font-weight: 600;}
+
+.width-10{width: 10%;}
+
+.action-button-div {
+    margin-left: 5px;
+    border-left: 2px solid #aaa;
+    height: 100%;
+    min-height: 58px;
+    align-items: center;
+}
+.table td.p-0-lg1{padding: 0px !important;}
+.action-button-div a{margin-left: 5px;}
+
+.border-reject{
+    border:1px solid red;
+}
+
+.bg-history {
+    background: #064888;
+    line-height: 18px !important;
+}
+
+.blink-btn {
+    animation: blinker 1.5s linear infinite;
+    color: red;
+    font-family: sans-serif;
+}
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.previous_refid.ref-num a {
+    font-size: 16px;
+    font-weight: 700;
+    color: #d35400;
+}
+
 /* ******************************** */

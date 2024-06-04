@@ -64,9 +64,9 @@
             @endif
             
             @isset($nc_comments)
-            @if($nc_comments->comments=="Request for Final Approval")
+            @if($nc_comments->nc_type=="Request_For_Final_Approval")
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Ooh!</strong> Request sent already for final approval
+                <!-- <strong>Ooh!</strong> Request sent already for final approval -->
             </div>
             @endif
             @endisset
@@ -89,6 +89,17 @@
                                                     </div>
                                                     <div class="body">
                                                             <div class="row">
+<input type="hidden" value="{{$application_id}}" id="onsite_desktop_application_id_nc">
+
+<input type="hidden" value="{{$application_course_id}}" id="onsite_desktop_application_course_id_nc">
+
+
+<input type="hidden" value="{{$doc_id}}" id="onsite_desktop_application_doc_sr_code_nc">
+
+<input type="hidden" value="{{$doc_code}}" id="onsite_desktop_application_doc_unique_code_nc">
+
+<input type="hidden" value="{{$doc_file_name}}" id="onsite_desktop_application_doc_file_name_nc">
+
                                                                 <div class="col-sm-12 col-md-4">
                                                                     <label>Select Type</label>
 

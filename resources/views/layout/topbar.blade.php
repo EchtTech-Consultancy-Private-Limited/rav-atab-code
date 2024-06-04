@@ -4,6 +4,7 @@
          padding: 10px 30px;
          width: 100%;
      }
+   
  </style>
 
  <!-- Top Bar -->
@@ -73,9 +74,10 @@
 
                  @if (Auth::user()->role == 1)
                          @php
-                             $applications = getNotificationForAdmin();
+                             $applications = getNotificationForSuperAdmin();
                          @endphp
                      <li class="dropdown">
+                       
                          <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
                              role="button">
                              <i class="far fa-bell"></i>
@@ -86,7 +88,49 @@
                              @endif
                              @endisset
                          </a>
-                         <ul class="dropdown-menu pullDown placeholder_input">
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
+                             <li class="header">NOTIFICATIONS </li>
+                             <li class="body col-md-12">
+                                 <ul class="text-dark menu" style="padding: 0px !important;">
+                                     @if (count($applications)>0)
+                                         @foreach ($applications as $application)
+                                             <li onclick="handleSuperAdminNotification({{$application->id}})">
+                                                <a href="javascript:void(0)"
+                                                         style="color: #000;"
+                                                         >
+                                                         Application ID : {{ $application->uhid }}
+                                                </a>
+                                             </li>
+                                         @endforeach
+                                     @else
+                                         <li class="text-center">
+                                             No New Notifications!
+                                         </li>
+                                     @endif
+                                 </ul>
+                             </li>
+                         </ul>
+                 @endif
+
+
+
+                 @if (Auth::user()->role == 5)
+                         @php
+                             $applications = getNotificationForAdmin();
+                         @endphp
+                     <li class="dropdown">
+                       
+                         <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown"
+                             role="button">
+                             <i class="far fa-bell"></i>
+                             @isset($applications)
+                             @if(count($applications)>0)
+                                 <span class="notify" style="background-color: #ff5722 !important;"></span>
+                                 <span class="heartbeat" style="background-color: #ff5722 !important;"></span>
+                             @endif
+                             @endisset
+                         </a>
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
@@ -110,6 +154,8 @@
                          </ul>
                  @endif
 
+                 
+
 
                  @if (Auth::user()->role == 6)
                          @php
@@ -126,16 +172,14 @@
                              @endif
                              @endisset
                          </a>
-                         <ul class="dropdown-menu pullDown placeholder_input">
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
                                      @if (count($payment_list)>0)
                                          @foreach ($payment_list as $pay_list)
                                              <li onclick="handleNotification({{$pay_list->id}})">
-                                                <a href="javascript:void(0)"
-                                                         style="color: #000;"
-                                                         >
+                                                <a href="javascript:void(0)" style="color: #000;">
                                                          Application ID : {{ $pay_list->uhid }}
                                                 </a>
                                              </li>
@@ -165,18 +209,34 @@
                                  @endif
                              @endif
                          </a>
-                         <ul class="dropdown-menu pullDown placeholder_input">
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
                                      @if (count($applications)>0)
                                          @foreach ($applications as $application)
+                                         @if($application->level_id==1)
                                              <li>
                                                 <a href="{{ url('show-course-payment/' . dEncrypt($application->application_id)) }}"
                                                          style="color: #000;">
                                                          Application ID : {{ $application->uhid }}
                                                 </a>
                                              </li>
+                                             @elseif($application->level_id==2)
+                                             <li>
+                                                <a href="{{ url('upgrade-show-course-payment/' . dEncrypt($application->application_id)) }}"
+                                                         style="color: #000;">
+                                                         Application ID : {{ $application->uhid }}
+                                                </a>
+                                             </li>
+                                             @elseif($application->level_id==3)
+                                             <li>
+                                                <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($application->application_id)) }}"
+                                                         style="color: #000;">
+                                                         Application ID : {{ $application->uhid }}
+                                                </a>
+                                             </li>
+                                             @endif
                                          @endforeach
                                      @else
                                          <li class="text-center">
@@ -206,7 +266,7 @@
                                  @endif
                              @endif
                          </a>
-                         <ul class="dropdown-menu pullDown placeholder_input">
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">
@@ -246,7 +306,7 @@
                                  @endif
                              @endif
                          </a>
-                         <ul class="dropdown-menu pullDown placeholder_input">
+                         <ul class="dropdown-menu pullDown placeholder_input notification">
                              <li class="header">NOTIFICATIONS </li>
                              <li class="body col-md-12">
                                  <ul class="text-dark menu" style="padding: 0px !important;">

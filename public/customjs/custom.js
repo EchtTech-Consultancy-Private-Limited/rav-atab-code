@@ -72,7 +72,7 @@ function handlePaymentApproved() {
     let encoded_application_id = urlObject.pathname.split("/").pop();
     let final_payment_remark = $("#final_payment_remark").val();
     final_payment_remark = final_payment_remark ?? "";
-    if (final_payment_remark === "") {
+    if (final_payment_remark == "") {
         $("#final_payment_remark_err").html(
             "Please enter the approve payment remark."
         );
@@ -133,7 +133,7 @@ function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");
     if (is_acknowledged) {
         $(".full_screen_loading").show();
-        if (id == "" || id === null || id === undefined) {
+        if (id == "" || id == null || id == undefined) {
             toastr.error("Application id not found", {
                 timeOut: 0,
                 extendedTimeOut: 0,
@@ -193,42 +193,28 @@ function desktopDocumentVerfiy() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
         $('.full_screen_loading').show();
-        let urlObject = new URL(window.location.href);
-        let urlPath = urlObject.pathname.split("/");
+    
+        let doc_sr_code = $('#desktop_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#desktop_application_doc_file_name_nc').val();
+        let application_id = $('#desktop_application_id_nc').val();
+        let doc_unique_id = $('#desktop_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#desktop_application_course_id_nc').val();
 
-        let doc_sr_code = "";
-        let doc_file_name = "";
-        let application_id = "";
-        let doc_unique_id = "";
-        let application_courses_id = "";
-       
-       if(urlPath[1]=="public"){
-        doc_sr_code = urlPath[4];
-        doc_file_name = urlPath[5];
-        application_id = urlPath[6];
-        doc_unique_id = urlPath[7];
-        application_courses_id = urlPath[8];
-       }else{
-        doc_sr_code = urlPath[3];
-        doc_file_name = urlPath[4];
-        application_id = urlPath[5];
-        doc_unique_id = urlPath[6];
-        application_courses_id = urlPath[7];
-       }
-         
 
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-       if(doc_comment=="" || nc_type=="" ){
-        toastr.error("All fields are required", {
-            timeOut: 1,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-        $('.full_screen_loading').hide();
-        return false;
-       }
+        if(doc_comment=="" && nc_type=="Accept"){
+            
+        }else if(doc_comment=="" || nc_type==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -280,31 +266,219 @@ function desktopDocumentVerfiy() {
     }
 }
 
+function secretariatDocumentVerfiyLevel2() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+        $('.full_screen_loading').show();
+        // let urlObject = new URL(window.location.href);
+        // let urlPath = urlObject.pathname.split("/");
+
+        let doc_sr_code = $('#secretariat_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#secretariat_application_doc_file_name_nc').val();
+        let application_id = $('#secretariat_application_id_nc').val();
+        let doc_unique_id = $('#secretariat_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#secretariat_application_course_id_nc').val();
+
+    //     let doc_sr_code = "";
+    //     let doc_file_name = "";
+    //     let application_id = "";
+    //     let doc_unique_id = "";
+    //     let application_courses_id = "";
+       
+    //    if(urlPath[1]=="public"){
+    //     doc_sr_code = urlPath[4];
+    //     doc_file_name = urlPath[5];
+    //     application_id = urlPath[6];
+    //     doc_unique_id = urlPath[7];
+    //     application_courses_id = urlPath[8];
+    //    }
+    //    else{
+    //     doc_sr_code = urlPath[3];
+    //     doc_file_name = urlPath[4];
+    //     application_id = urlPath[5];
+    //     doc_unique_id = urlPath[6];
+    //     application_courses_id = urlPath[7];
+    //    }
+         
+
+    let doc_comment = $("#comment_text").val();
+        
+    let nc_type = $("#status").find(":selected").val();
+    if(doc_comment=="" && nc_type=="Accept"){
+        
+    }else if(doc_comment=="" || nc_type==""){
+        toastr.error("All fields are required", {
+            timeOut: 1,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        $('.full_screen_loading').hide();
+        return false;
+    }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("application_courses_id", application_courses_id);
+        formData.append("doc_sr_code", doc_sr_code);
+        formData.append("doc_unique_id", doc_unique_id);
+        formData.append("nc_type", nc_type);
+        formData.append("comments", doc_comment);
+        formData.append("doc_file_name", doc_file_name);
+
+        $.ajax({
+            url: `${BASE_URL}/secretariat/document-verfiy-level-2`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                    setTimeout(() => {
+                        window.location.href = resdata.redirect_to;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                }
+            },
+            error: (xhr, st) => {
+                $('.full_screen_loading').hide();
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
+
+function secretariatDocumentVerfiy() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+        $('.full_screen_loading').show();
+
+        let doc_sr_code = $('#secretariat_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#secretariat_application_doc_file_name_nc').val();
+        let application_id = $('#secretariat_application_id_nc').val();
+        let doc_unique_id = $('#secretariat_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#secretariat_application_course_id_nc').val();
+
+
+        let doc_comment = $("#comment_text").val();
+        
+        let nc_type = $("#status").find(":selected").val();
+        if(doc_comment=="" && nc_type=="Accept"){
+            
+        }else if(doc_comment=="" || nc_type==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
+       
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("application_courses_id", application_courses_id);
+        formData.append("doc_sr_code", doc_sr_code);
+        formData.append("doc_unique_id", doc_unique_id);
+        formData.append("nc_type", nc_type);
+        formData.append("comments", doc_comment);
+        formData.append("doc_file_name", doc_file_name);
+
+        $.ajax({
+            url: `${BASE_URL}/secretariat/document-verfiy`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                    setTimeout(() => {
+                        window.location.href = resdata.redirect_to;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                }
+            },
+            error: (xhr, st) => {
+                $('.full_screen_loading').hide();
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
 function adminDocumentVerfiy(assessor_type) {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
-        let urlObject = new URL(window.location.href);
-        let urlPath = urlObject.pathname.split("/");
+        // let urlObject = new URL(window.location.href);
+        // let urlPath = urlObject.pathname.split("/");
 
-        let doc_sr_code = "";
-        let doc_file_name = "";
-        let application_id = "";
-        let doc_unique_id = "";
-        let application_courses_id = "";
+        let doc_sr_code = $('#onsite_desktop_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#onsite_desktop_application_doc_file_name_nc').val();
+        let application_id = $('#onsite_desktop_application_id_nc').val();
+        let doc_unique_id = $('#onsite_desktop_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#onsite_desktop_application_course_id_nc').val();
+     
+        
+        // let doc_sr_code = "";
+        // let doc_file_name = "";
+        // let application_id = "";
+        // let doc_unique_id = "";
+        // let application_courses_id = "";
 
-        if(urlPath[1]=="public"){
-             doc_sr_code = urlPath[5];
-             doc_file_name = urlPath[6];
-             application_id = urlPath[7];
-             doc_unique_id = urlPath[8];
-             application_courses_id = urlPath[9];
-        }else{
-             doc_sr_code = urlPath[4];
-             doc_file_name = urlPath[5];
-             application_id = urlPath[6];
-             doc_unique_id = urlPath[7];
-             application_courses_id = urlPath[8];
-        }
+        // if(urlPath[1]=="public"){
+        //      doc_sr_code = urlPath[5];
+        //      doc_file_name = urlPath[6];
+        //      application_id = urlPath[7];
+        //      doc_unique_id = urlPath[8];
+        //      application_courses_id = urlPath[9];
+        // }else{
+        //      doc_sr_code = urlPath[4];
+        //      doc_file_name = urlPath[5];
+        //      application_id = urlPath[6];
+        //      doc_unique_id = urlPath[7];
+        //      application_courses_id = urlPath[8];
+        // }
         
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
@@ -367,39 +541,42 @@ function adminDocumentVerfiy(assessor_type) {
     }
 }
 
-function onsiteDocumentVerfiy() {
+function superAdminDocumentVerfiy(assessor_type) {
     let is_acknowledged = confirm("Are you sure you want to submit?");
-
     if (is_acknowledged) {
-        $('.full_screen_loading').show();
-        let urlObject = new URL(window.location.href);
-        let urlPath = urlObject.pathname.split("/");
-        let doc_sr_code = "";
-        let doc_file_name = "";
-        let application_id = "";
-        let doc_unique_id = "";
-        let view_type = "";
+        // let urlObject = new URL(window.location.href);
+        // let urlPath = urlObject.pathname.split("/");
+
+        let doc_sr_code = $('#onsite_desktop_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#onsite_desktop_application_doc_file_name_nc').val();
+        let application_id = $('#onsite_desktop_application_id_nc').val();
+        let doc_unique_id = $('#onsite_desktop_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#onsite_desktop_application_course_id_nc').val();
+     
         
-        if(urlPath[1]=='public'){
-             doc_sr_code = urlPath[4];
-             doc_file_name = urlPath[5];
-             application_id = urlPath[6];
-             doc_unique_id = urlPath[7];
-             application_courses_id = urlPath[8];
-             view_type = urlPath[9];
-        }else{
-             doc_sr_code = urlPath[3];
-             doc_file_name = urlPath[4];
-             application_id = urlPath[5];
-             doc_unique_id = urlPath[6];
-             application_courses_id = urlPath[7];
-             view_type = urlPath[8];
-        }
-       
-       
+        // let doc_sr_code = "";
+        // let doc_file_name = "";
+        // let application_id = "";
+        // let doc_unique_id = "";
+        // let application_courses_id = "";
+
+        // if(urlPath[1]=="public"){
+        //      doc_sr_code = urlPath[5];
+        //      doc_file_name = urlPath[6];
+        //      application_id = urlPath[7];
+        //      doc_unique_id = urlPath[8];
+        //      application_courses_id = urlPath[9];
+        // }else{
+        //      doc_sr_code = urlPath[4];
+        //      doc_file_name = urlPath[5];
+        //      application_id = urlPath[6];
+        //      doc_unique_id = urlPath[7];
+        //      application_courses_id = urlPath[8];
+        // }
+        
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
-        if(doc_comment=="" || nc_type==""){
+        if(doc_comment=="" || nc_type=="" ){
             toastr.error("All fields are required", {
                 timeOut: 0,
                 extendedTimeOut: 0,
@@ -409,6 +586,226 @@ function onsiteDocumentVerfiy() {
             $('.full_screen_loading').hide();
             return false;
            }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("application_courses_id", application_courses_id);
+        formData.append("doc_sr_code", doc_sr_code);
+        formData.append("doc_unique_id", doc_unique_id);
+        formData.append("nc_type", nc_type);
+        formData.append("comments", doc_comment);
+        formData.append("doc_file_name", doc_file_name);
+        formData.append("assessor_type", assessor_type);
+
+        $.ajax({
+            url: `${BASE_URL}/admin/document-verfiy`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(() => {
+                        window.location.href = resdata.redirect_to;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
+function adminCourseDocumentVerfiy(assessor_type) {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+
+        let doc_sr_code = $('#secretariat_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#secretariat_application_doc_file_name_nc').val();
+        let application_id = $('#secretariat_application_id_nc').val();
+        let doc_unique_id = $('#secretariat_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#secretariat_application_course_id_nc').val();
+     
+        let doc_comment = $("#comment_text").val();
+        let nc_type = $("#status").find(":selected").val();
+        if(doc_comment=="" || nc_type=="" ){
+            toastr.error("All fields are required", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+           }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("application_courses_id", application_courses_id);
+        formData.append("doc_sr_code", doc_sr_code);
+        formData.append("doc_unique_id", doc_unique_id);
+        formData.append("nc_type", nc_type);
+        formData.append("comments", doc_comment);
+        formData.append("doc_file_name", doc_file_name);
+        formData.append("assessor_type", assessor_type);
+
+        $.ajax({
+            url: `${BASE_URL}/super-admin/document-verfiy`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(() => {
+                        window.location.href = resdata.redirect_to;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
+function superadminCourseDocumentVerfiy(assessor_type) {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+
+        let doc_sr_code = $('#secretariat_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#secretariat_application_doc_file_name_nc').val();
+        let application_id = $('#secretariat_application_id_nc').val();
+        let doc_unique_id = $('#secretariat_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#secretariat_application_course_id_nc').val();
+     
+        let doc_comment = $("#comment_text").val();
+        let nc_type = $("#status").find(":selected").val();
+        if(doc_comment=="" || nc_type=="" ){
+            toastr.error("All fields are required", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+           }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("application_courses_id", application_courses_id);
+        formData.append("doc_sr_code", doc_sr_code);
+        formData.append("doc_unique_id", doc_unique_id);
+        formData.append("nc_type", nc_type);
+        formData.append("comments", doc_comment);
+        formData.append("doc_file_name", doc_file_name);
+        formData.append("assessor_type", assessor_type);
+
+        $.ajax({
+            url: `${BASE_URL}/super-admin/document-verfiy-level-2`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(() => {
+                        window.location.href = resdata.redirect_to;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
+function onsiteDocumentVerfiy() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+
+    if (is_acknowledged) {
+        $('.full_screen_loading').show();
+
+        let doc_sr_code = $('#onsite_application_doc_sr_code_nc').val();
+        let doc_file_name = $('#onsite_application_doc_file_name_nc').val();
+        let application_id = $('#onsite_application_id_nc').val();
+        let doc_unique_id = $('#onsite_application_doc_unique_code_nc').val();
+        let application_courses_id = $('#onsite_application_course_id_nc').val();
+
+      
+       
+        let doc_comment = $("#comment_text").val();
+        let nc_type = $("#status").find(":selected").val();
+        if(doc_comment=="" && nc_type=="Accept"){
+            
+        }else if(doc_comment=="" || nc_type==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
+          
         var d = $(`#fileup_${doc_unique_id}`)[0].files[0];
         var fileInput = $(`#fileup_${doc_unique_id}`);
         $.ajaxSetup({
@@ -425,7 +822,7 @@ function onsiteDocumentVerfiy() {
         formData.append("comments", doc_comment);
         formData.append("doc_file_name", doc_file_name);
         formData.append("fileup", d);
-        formData.append("view_type", view_type);
+        formData.append("view_type", 'view_type');
 
         var allowedExtensions = ["pdf", "doc", "docx","jpg","jpeg","png"]; // Add more extensions if needed
         var uploadedFileName = fileInput.val();
@@ -574,6 +971,8 @@ function onsitePhotographUpload(question_id) {
                 });
             },
         });
+    }else{
+        $(".full_screen_loading").hide();
     }
 }
 
@@ -640,8 +1039,7 @@ $(".assesorsid").on("click", function () {
             assessor_id,
         },
         success: function (data) {
-            //alert(data)
-            if (data === "success") {
+            if (data == "success") {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -709,13 +1107,14 @@ $("#upload_onstie_nc_file").change(function () {
     });
 });
 
+
 /*nc's end here*/
 
 function handlePdfOrImageForPhotograph(path) {
     let MAIN_URL = BASE_URL + "/level/";
     const fileExtension = path.split(".").pop().toLowerCase();
     $("#view_photograph_onsite").html("");
-    if (fileExtension === "pdf") {
+    if (fileExtension == "pdf") {
         const html =
             '<object data="' +
             MAIN_URL +
@@ -755,6 +1154,32 @@ function handleShowPaymentInformation(pay_txn_no, pay_ref_no, id) {
         });
     }
 }
+
+function handleShowAdditionalPaymentInformation(pay_txn_no, pay_ref_no, id) {
+    $("#payment_transaction_no_err").html("");
+    $("#payment_reference_no_err").html("");
+    
+    if (pay_txn_no != null && pay_ref_no != null && id != null) {
+        $("#payment_transaction_no").val("");
+        $("#payment_reference_no").val("");
+
+        // Convert the strings to BigInt
+        const pay_txn_no_bigint = pay_txn_no;
+        const pay_ref_no_bigint = pay_ref_no;
+        // Set the values of the elements with the BigInt values
+        $("#payment_transaction_no").val(pay_txn_no_bigint.toString());
+        $("#payment_reference_no").val(pay_ref_no_bigint.toString());
+        $("#payment_info_id").val(id);
+    } else {
+        toastr.success("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
 
 function handleUpdatePaymentInformation() {
     const payment_transaction_no = $("#payment_transaction_no").val();
@@ -874,6 +1299,81 @@ function handleUpdatePaymentInformationOfAccount() {
         });
         $.ajax({
             url: `${BASE_URL}/account-update-payment`, // Your server-side upload endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".full_screen_loading").hide();
+                    location.reload();
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                    $(".full_screen_loading").hide();
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $(".full_screen_loading").hide();
+            },
+        });
+    }else{
+        $(".full_screen_loading").hide();
+    }
+}
+
+function handleUpdateAdditionalPaymentInformationOfAccount() {
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_info_id = $("#payment_info_id").val();
+    var payment_proof_by_account = $(`#payment_proof_by_account`)[0].files[0];
+    var fileInput = $(`#payment_proof_by_account`);
+    const isValidated = validateForm();
+  
+    if (isValidated) {
+        $(".full_screen_loading").show();
+        const formData = new FormData();
+        formData.append("payment_transaction_no", payment_transaction_no);
+        formData.append("payment_reference_no", payment_reference_no);
+        formData.append("payment_proof_by_account", payment_proof_by_account);
+        formData.append("id", payment_info_id);
+
+        var allowedExtensions = ["pdf", "doc", "docx","jpeg","jpg","png"]; // Add more extensions if needed
+        var uploadedFileName = fileInput.val();
+       if(payment_proof_by_account){
+            var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
+            if (allowedExtensions.indexOf(fileExtension) == -1) {
+                toastr.error("Invalid file type", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                // Clear the file input
+                fileInput.val("");
+                $(".full_screen_loading").hide();
+                return;
+            }
+    }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/account-update-additional-payment`, // Your server-side upload endpoint
             type: "POST",
             data: formData,
             processData: false,
@@ -1128,6 +1628,57 @@ function handleAdminNotification(pay_id){
         });
     }
 }
+
+function handleSuperAdminNotification(pay_id){
+    if(pay_id!=null){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-update-notification-status/${pay_id}`, // Your server-side upload endpoint
+            type: "POST",
+            data:{id:pay_id},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
 
 function handleDesktopNotification(pay_id){
     if(pay_id!=null){
@@ -1438,7 +1989,7 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     });
 
     $("select.remove_err_input_error option").each(function (index, elem) {
-        if (mode_of_course[index] === "") {
+        if (mode_of_course[index] == "") {
             $(elem).addClass('courses_error');
         }
   })
@@ -1468,10 +2019,963 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     });
   }
 
+  $("#tp_remark").on('keyup',function(){
+        const value = $(this).val();
+        if(value.length>100){
+            $('#tp_remark_err').html('The max character of the length is 100');
+            $("#tp_remark_sb_btn").attr('disabled',true);
+        }else{
+            $("#tp_remark_sb_btn").attr('disabled',false);
+        }
+  });
+
 $(".remove_err").on("keyup", function () {
     let err_id = $(this).attr("id");
     $(`#${err_id}_err`).html("");
 });
+
+function handleShowCoursePayment(){
+    const payments = $("#payments option:selected").val();
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_details_file = $("#payment_details_file").val();
+    if(payments!="" && payment_transaction_no!="" && payment_reference_no!="" && payment_details_file!=""){
+        $("#submitBtn").attr('disabled',true);
+        return true;
+    }
+    return false;
+}
+
+function handleShowCoursePaymentFee(){
+    const payments = $("#payments option:selected").val();
+    const payment_transaction_no = $("#payment_transaction_no").val();
+    const payment_reference_no = $("#payment_reference_no").val();
+    const payment_details_file = $("#payment_details_file").val();
+    const amount = $("#fee_amount").val();
+    const payment_type = $("#payment_type option:selected").val();
+    
+    if(payments!="" && payment_transaction_no!="" && payment_reference_no!="" && payment_details_file!="" && amount!="" && payment_type!=""){
+        $("#submitBtn").attr('disabled',true);
+        return true;
+    }
+    return false;
+}
+$('.show_hide_amt').hide();
+function getAdditionalPaymentDetails(){
+    const payments = $("#payment_type option:selected").val();
+    const application_id = $('#application_id').val();
+    if(payments!=null){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        
+        if(payments=="OTHER"){
+            $('.show_hide_amt').show();
+            $('#fee_amount').attr('required',true)
+        }else{
+            $('.show_hide_amt').hide();
+        }
+        $.ajax({
+            url: `${BASE_URL}/tp/get-total-amount`,
+            type: "POST",
+            data:{level:payments,application_id:application_id},
+            success: function (response) {
+                if (response.success) {
+                    console.log(response);
+                    $('.full_screen_loading').hide();
+                    $('#total_add_fee').html(response.total);
+
+                }else{
+                    $('.full_screen_loading').hide();
+                    $('#total_add_fee').html("N/A");
+                    // toastr.error(response.message, {
+                    //     timeOut: 0,
+                    //     extendedTimeOut: 0,
+                    //     closeButton: true,
+                    //     closeDuration: 5000,
+                    // });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleOnChange(){
+    const total = $('#fee_amount').val();
+    $('#total_add_fee').html(total);
+}
+
+
+
+function removeCourseByTP(app_id,course_id){
+    const delete_course_flag = window.confirm("Are you sure to delete course");
+    if(app_id!=null && delete_course_flag){
+        $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-delete-course/${app_id}/${course_id}`, // Your server-side upload endpoint
+            type: "post",
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+                toastr.error("Something went wrong!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+            },
+        });
+    }
+}
+
+
+function setRejectionCourseId(application_id,course_id,course_name){
+   $("#reject_app_id").val(application_id);
+   $('#reject_course_id').val(course_id);
+   document.getElementById('rejectionCourseName').innerHTML = course_name
+}
+
+
+
+function handleRejectCourse(){
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+    
+
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const rejectCourseRemark = $("#rejectionCouurseReasonRemark").val();
+        if(rejectCourseRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat/reject-course/${application_id}/${course_id}`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,reject_remark:rejectCourseRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#rejectionCouurseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
+function setModelData(application_id,course_id,course_name,action){
+    $("#reject_app_id").val(application_id);
+    $('#reject_course_id').val(course_id);
+    document.getElementById('rejectionCourseName').innerHTML = course_name
+    document.getElementById('approveCourseName').innerHTML = course_name
+ }
+ 
+function handleRejectCourseByAdmin(){
+
+
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+    
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const courseRemark = $("#rejectionCourseReasonRemark").val();
+        if(courseRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-reject-course`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,remark:courseRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#rejectionCouurseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleAcceptCourseByAdmin(){
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+   
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const approveCourseRemark = $("#approveCourseReasonRemark").val();
+        if(approveCourseRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-approved-course`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,approve_remark:approveCourseRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#approveCourseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleRejectApplicationByAdmin(){
+
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+    
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const applicationRemark = $("#rejectionApplicationReasonRemark").val();
+        if(applicationRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-reject-application`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,remark:applicationRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#rejectionCouurseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+function handleAcceptApplicationByAdmin(){
+    const application_id = $('#reject_app_id').val();
+    const course_id = $('#reject_course_id').val();
+   
+    if(application_id!=null && course_id!=null ){
+        $('.full_screen_loading').show();
+        const approveApplicationRemark = $("#approveApplicationReasonRemark").val();
+        if(approveApplicationRemark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter the remarks first.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/super-admin-approved-application`,
+            type: "POST",
+            data:{application_id:application_id,course_id:course_id,approve_remark:approveApplicationRemark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#approveCourseReasonRemark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
+
+function handleRaiseQueryForAdditionalPayment(){
+    const application_id = $('#application_id').val();
+    const raise_query_remark = $('#raise_query_remark').val();
+    if(application_id!=null && raise_query_remark!=null){
+        $('.full_screen_loading').show();
+        if(raise_query_remark==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please enter query raise remark.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/admin/raise/payment/query`,
+            type: "POST",
+            data:{application_id:application_id,raise_query_remark:raise_query_remark},
+            success: function (response) {
+                if (response.success) {
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $("#raise_query_remark").val("");
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },1000);
+                    
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                $('.full_screen_loading').hide();
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }
+}
+
+
+function setPayModalData(application_id){
+    $("#application_id").val(application_id);
+ }
+
+
+ var handleAdditionalPaymentReceived = () => {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    const fileInput = document.getElementById("payment_proof");
+    let payment_remark = $("#payment_remark").val();
+    let payment_id = $("#payment_id").val();
+    if(payment_remark=="" || payment_remark==null){
+        toastr.error("Please enter the remark.", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }
+    payment_remark = payment_remark ?? "";
+    let formData = new FormData();
+    if (fileInput.files.length > 0) {
+        formData.append("payment_proof", fileInput.files[0]);
+    }
+        formData.append("payment_remark", payment_remark);
+        formData.append("payment_id", payment_id);
+        formData.append("application_id", encoded_application_id);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/account-additional-payment-received`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".box-overlay-2").show();
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+   
+};
+function handleAdditionalPaymentApproved() {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    let final_payment_remark = $("#final_payment_remark").val();
+    final_payment_remark = final_payment_remark ?? "";
+    if (final_payment_remark == "") {
+        $("#final_payment_remark_err").html(
+            "Please enter the approve payment remark."
+        );
+        return false;
+    }
+    let formData = new FormData();
+    formData.append("final_payment_remark", final_payment_remark);
+    formData.append("application_id", encoded_application_id);
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: `${BASE_URL}/account-additional-payment-approved`,
+        type: "post",
+        datatype: "json",
+        data: formData,
+        contentType: false,
+        processData: false,
+      
+        success: function (resdata) {
+            if (resdata.success) {
+                toastr.success(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+            }
+        },
+        error: (xhr, st) => {
+            console.log(st, "st");
+        },
+    });
+}
+
+
+
+function handleRevertAction(application_id,course_id,doc_file_name){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat-revert-course-doc-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+          
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
+
+function handleRevertActionOnDocList(application_id,course_id,doc_file_name){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat-revert-doc-list-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+         
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
+
+
+function handleRevertActionOnDocListDesktop(application_id,course_id,doc_file_name){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/desktop-revert-doc-list-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+           
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
+
+function handleRevertActionOnDocListOnsite(application_id,course_id,doc_file_name){
+    
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/onsite-revert-doc-list-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+          
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
+
+
+function handleRevertRejectAction(application_id,course_id){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/secretariat-revert-course-reject`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
 
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
@@ -1481,6 +2985,3 @@ $(document).on('keyup change', '.remove_err_input_error', function () {
 $(document).on('change', '.select2-selection select2-selection--multiple', function () {
     $(this).removeClass('courses_error');
 });
-
-
-
