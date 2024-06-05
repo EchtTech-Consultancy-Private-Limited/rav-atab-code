@@ -877,7 +877,7 @@ class SecretariatDocumentVerifyController extends Controller
     public function secretariatVerfiyDocumentLevel2($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
         try {
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat'])->latest('id')->first();
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat','application_courses_id'=>$application_course_id])->latest('id')->first();
             $is_nc_exists = false;
             if ($nc_type == "view") {
                 $is_nc_exists = true;
@@ -942,6 +942,7 @@ class SecretariatDocumentVerifyController extends Controller
                 'nc_comments' => $nc_comments,
             ]);
         } catch (Exception $e) {
+
             return back()->with('fail', 'Something went wrong');
         }
     }

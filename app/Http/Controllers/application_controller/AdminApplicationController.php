@@ -131,18 +131,20 @@ class AdminApplicationController extends Controller
         $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
         $obj->enable_disable_submit_btn44 = $this->checkSubmitButtonEnableOrDisable44($application->id);
         
-        $is_final_summary =  DB::table('assessor_final_summary_reports')->where('application_id',$application->id)->first();
-        if(!empty($is_final_summary)){
-            $obj->is_final_summary_generated =true;
-        }else{
-            $obj->is_final_summary_generated =false;
-        }
+       
 
         $courses = DB::table('tbl_application_courses')->where([
             'application_id' => $application->id,
         ])
             ->whereNull('deleted_at')
             ->get();
+
+            $is_final_summary_count =  DB::table('assessor_final_summary_reports')->where('application_id',$application->id)->count();
+        
+            $obj->is_final_summary_generated =false;
+            if(count($courses)==$is_final_summary_count){
+                $obj->is_final_summary_generated =true;
+            }
 
         foreach ($courses as $course) {
             if ($course) {
@@ -264,13 +266,13 @@ class AdminApplicationController extends Controller
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
-
+        
         foreach ($results as $key => $result) {
             $additionalField = $additionalFields->where('application_id', $result->application_id)
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -286,13 +288,15 @@ class AdminApplicationController extends Controller
         foreach ($results as $result) {
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
-
+            if(isset($result)){
+                
             if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
                 break;
             }
+        }
         }
         
         if ($flag == 0) {
@@ -394,7 +398,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -645,7 +649,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
