@@ -168,6 +168,7 @@
                                                                         title=""></i>
                                                     </a>
                                                     @else
+                                                    
                                                         @if($item->is_all_docs_uploaded)
                                                         <a class="btn btn-tbl-delete bg-danger font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
