@@ -266,13 +266,13 @@ class AdminApplicationController extends Controller
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
-
+        
         foreach ($results as $key => $result) {
             $additionalField = $additionalFields->where('application_id', $result->application_id)
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -288,13 +288,15 @@ class AdminApplicationController extends Controller
         foreach ($results as $result) {
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
-
+            if(isset($result)){
+                
             if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
                 break;
             }
+        }
         }
         
         if ($flag == 0) {
@@ -396,7 +398,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -647,7 +649,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
