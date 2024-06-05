@@ -162,7 +162,8 @@
                                                    @if($item->application_list->level_id==1)
                                                     <a class="btn btn-tbl-delete bg-danger font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
-                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    data-bs-target="#
+                                                                    _popup_{{ $item->application_list->id }}"
                                                                     id="view">
                                                                     <i class="fa fa-scribd" aria-hidden="true"
                                                                         title=""></i>

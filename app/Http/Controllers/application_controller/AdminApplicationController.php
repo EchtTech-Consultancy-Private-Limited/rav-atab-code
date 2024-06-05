@@ -131,18 +131,20 @@ class AdminApplicationController extends Controller
         $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
         $obj->enable_disable_submit_btn44 = $this->checkSubmitButtonEnableOrDisable44($application->id);
         
-        $is_final_summary =  DB::table('assessor_final_summary_reports')->where('application_id',$application->id)->first();
-        if(!empty($is_final_summary)){
-            $obj->is_final_summary_generated =true;
-        }else{
-            $obj->is_final_summary_generated =false;
-        }
+       
 
         $courses = DB::table('tbl_application_courses')->where([
             'application_id' => $application->id,
         ])
             ->whereNull('deleted_at')
             ->get();
+
+            $is_final_summary_count =  DB::table('assessor_final_summary_reports')->where('application_id',$application->id)->count();
+        
+            $obj->is_final_summary_generated =false;
+            if(count($courses)==$is_final_summary_count){
+                $obj->is_final_summary_generated =true;
+            }
 
         foreach ($courses as $course) {
             if ($course) {
