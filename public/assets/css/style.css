@@ -25589,4 +25589,35 @@ p.ref-number b{ font-weight: 600;}
     color: #d35400;
 }
 
+.notification-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.notification-card img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+.content-card {
+    padding: 4px 0 0;
+}
+
+.flex-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 10px;
+    font-size: 12px;
+    color: #d35400;
+    font-weight: 700;
+}
+
+.normal-text p {
+    line-height: 18px;
+    padding-top: 5px;
+}
+
 /* ******************************** */
