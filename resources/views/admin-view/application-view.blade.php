@@ -517,7 +517,6 @@
                             <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button>
                     @endif
                     
-
                     @if($spocData->level_id==2 || $spocData->level_id==3)
                                 <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
@@ -541,24 +540,25 @@
         </div>
         </div>  
         @endforeach
-        
-        @if($application_details->show_submit_btn_to_secretariat && $application_details->application->approve_status==0) 
+       
+        @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && $application_details->application->approve_status==0) 
         
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $application_details->enable_disable_submit_btn==true?'disabled':'';?> >
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($application_details->enable_disable_submit_btn==true || $application_details->enable_disable_submit_btn44==true)?'disabled':'';?> >
                             </form>
                         </div>
                     </div>
-        @elseif($application_details->is_all_revert_action_done)
+                    
+        @elseif($application_details->is_all_revert_action_done || $application_details->is_all_revert_action_done44)
         
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $application_details->enable_disable_submit_btn==true?'disabled':'';?> >
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($application_details->enable_disable_submit_btn==true || $application_details->enable_disable_submit_btn44==true)?'disabled':'';?> >
                             </form>
                         </div>
                     </div>
@@ -571,6 +571,7 @@
                             <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                             </form>
                         </div>
+                        
         @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $application_details->is_final_summary_generated && $application_details->application->level_id==2) 
         
                         <div class="col-md-12">

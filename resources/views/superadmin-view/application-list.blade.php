@@ -157,15 +157,28 @@
                                                 
                                                     @isset($item->payment)
                                                       
-                                                        @if($item->payment->aknowledgement_id!==null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2)
-                                                        
+                                                        @if(($item->payment->aknowledgement_id!==null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2))
+                                                    
+                                                   @if($item->application_list->level_id==1)
                                                     <a class="btn btn-tbl-delete bg-danger font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#
+                                                                    _popup_{{ $item->application_list->id }}"
+                                                                    id="view">
+                                                                    <i class="fa fa-scribd" aria-hidden="true"
+                                                                        title=""></i>
+                                                    </a>
+                                                    @else
+                                                        @if($item->is_all_docs_uploaded)
+                                                        <a class="btn btn-tbl-delete bg-danger font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                                                     data-bs-target="#View_popup_{{ $item->application_list->id }}"
                                                                     id="view">
                                                                     <i class="fa fa-scribd" aria-hidden="true"
                                                                         title=""></i>
                                                     </a>
+                                                        @endif
+                                                    @endif
                                                     @endif
                                                     @endisset  
 

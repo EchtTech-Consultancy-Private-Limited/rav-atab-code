@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\application_controller;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
@@ -27,6 +28,8 @@ class SuperAdminApplicationController extends Controller
         ->get();
         $final_data=array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
+        
+        
         
         $desktop_assessor_list = DB::table('users')->where(['assessment'=>1,'role'=>3,'status'=>0])->orderBy('id', 'DESC')->get();
         
@@ -85,7 +88,7 @@ class SuperAdminApplicationController extends Controller
                     $obj->payment->payment_amount = $payment_amount;
                     $obj->payment->last_payment = $last_payment;
                     $obj->appHistory= $app_history;
-
+                    $obj->is_all_docs_uploaded = $this->checkAllDocsUploaded($app->id);
                 }
                 $final_data[] = $obj;
         }
@@ -869,14 +872,23 @@ class SuperAdminApplicationController extends Controller
 
 
                             foreach($all_docs as $doc){
-                                // if($doc->status==0){
-                                //     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-                                // }else{
+                                if($doc->status==0){
                                     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-    
-                                
-                                
-                                // }
+                                }else{
+                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                }
+                            }
+
+                            // taking only the rejected course
+                            $all_docs = DB::table('tbl_application_course_doc')
+                            ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                            ->where('assessor_type','secretariat')
+                            ->whereNotIn('status',[0,2]) 
+                            ->get(); 
+
+
+                            foreach($all_docs as $doc){
+                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
                             }
     
     
@@ -1110,6 +1122,30 @@ class SuperAdminApplicationController extends Controller
         return $flag;
     }
 
+    public function checkAllDocsUploaded($application_id){
+        
+        try{
+            
+            if($application_id){
+                
+                $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
+                $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+                
+                $total_docs = $get_courses_count*4;
+                if($total_docs==$courses_doc_list){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }else{
+                return false;
+            }
+        }catch(Exception $e){
+            return false;
+        }
+
+    }
 
     /*additional payment fee list*/ 
     public function getApplicationPaymentFeeList(){
