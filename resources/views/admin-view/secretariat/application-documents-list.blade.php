@@ -396,7 +396,7 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    @if(!$is_final_submit && $is_doc_uploaded && $is_all_revert_action_done==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('secretariat/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>

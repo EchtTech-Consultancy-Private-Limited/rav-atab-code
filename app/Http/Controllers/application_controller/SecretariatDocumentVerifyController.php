@@ -567,9 +567,17 @@ class SecretariatDocumentVerifyController extends Controller
 
         try {
             DB::beginTransaction();
+            $get_application = DB::table('tbl_application')->where('id', $request->application_id)->first();
+            // this is for the level-2 and level-3
+            if(isset($get_application) && ($get_application->level_id==2 || $get_application->level_id==3)){
+                DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>0]);
+            }
+
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->update(['approve_status'=>0,'nc_flag'=>0]);
+
+
 
                 
                  DB::table('tbl_application_courses')
@@ -586,7 +594,6 @@ class SecretariatDocumentVerifyController extends Controller
                 }
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }
