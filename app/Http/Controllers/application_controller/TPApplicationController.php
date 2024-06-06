@@ -1049,24 +1049,30 @@ public function upgradeStoreNewApplicationCourse(Request $request)
             $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
             $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
     
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc1[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc1[$i]->move('documnet/', $filename);
             $file->declaration_pdf =  $filename;
             
             
-    
+
             $doc2 = $request->file('doc2');
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc2[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc2[$i]->move('documnet/', $filename);
             $file->course_curriculum_pdf =  $filename;
             
             
-    
+
             $img = $request->file('doc3');
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc3[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc3[$i]->move('documnet/', $filename);
             $file->course_details_xsl =  $filename;
             
@@ -1277,7 +1283,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             /**
              * Send Email to Accountant
              * */ 
-            foreach($get_all_account_users as $email){
+            foreach($get_all_account_users as $email){ 
                 $title="New Application Created - Welcome Aboard : RAVAP-".$application_id;
                 $subject="New Application Created - Welcome Aboard : RAVAP-".$application_id;
                 

@@ -142,15 +142,7 @@
       
    @if($application_details->level_id==2)
       @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
-        
-        <div class="row pt-2">
-                        <div class="col-md-12">
-                            <form action="{{url('secretariat/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post">
-                            @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
-                            </form>
-                        </div>
-                    </div>
+     
    @endif
       @endif
 
@@ -297,11 +289,11 @@
                                              @endif
                                              <!-- end here -->
 
-                                             @elseif($doc->nc_show_status==5)
+                                             @elseif($doc->status==5)
                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('tp-document-detail-level-2'. '/' . $doc->status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted</a>
                                              @endif
@@ -309,7 +301,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected</a>
                                              @endif
@@ -323,10 +315,7 @@
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Rejected</a>
                                     @else
-                                       <div class="upload-btn-wrapper">
-                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                             </div>
+                                      
                                     @endif 
                                     @endforeach
 
@@ -407,7 +396,7 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    @if(!$is_final_submit && $is_doc_uploaded && $is_all_revert_action_done==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('secretariat/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>

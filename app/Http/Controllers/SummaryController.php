@@ -1021,6 +1021,7 @@ class SummaryController extends Controller
         ->groupBy('asr.application_id','asr.assessor_id','asr.object_element_id')
         ->get()->pluck('object_element_id');
         /*end here*/
+        
     $questions = DB::table('questions')->whereIn('id',$assesor_distinct_report)->get();
     foreach($questions as $question){
         $obj = new \stdClass;
