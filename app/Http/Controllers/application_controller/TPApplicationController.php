@@ -2092,7 +2092,7 @@ public function upgradeGetApplicationViewLevel3($id){
         $courses = DB::table('tbl_application_courses')->where([
             'application_id'=>$application->id
         ])
-        ->whereIn('status',[0,2])
+        // ->whereIn('status',[0,2])
         ->whereNull('deleted_at') 
         ->get();
         

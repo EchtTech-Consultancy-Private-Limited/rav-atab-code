@@ -716,7 +716,7 @@ class SummaryController extends Controller
 
 
     public function getCourseSummariesList(Request $request){
-        $courses = TblApplicationCourses::where('application_id', $request->input('application'))->get();
+        $courses = TblApplicationCourses::where('application_id', $request->input('application'))->whereIn('status',[0,2])->get();
 
         $applicationDetails = TblApplication::find($request->input('application'));
         return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails'));
@@ -1245,7 +1245,7 @@ class SummaryController extends Controller
     public function getCourseSummariesListSecretariat(Request $request){
         
         $app_id = dDecrypt($request->input('application'));
-        $courses = TblApplicationCourses::where('application_id', $app_id)->get();
+        $courses = TblApplicationCourses::where('application_id', $app_id)->whereIn('status',[0,2])->get();
         $applicationDetails = TblApplication::find($app_id);
         return view('admin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails'));
     }
@@ -1253,7 +1253,7 @@ class SummaryController extends Controller
     public function getCourseSummariesListSecretariatSuperAdmin(Request $request){
         
         $app_id = dDecrypt($request->input('application'));
-        $courses = TblApplicationCourses::where('application_id', $app_id)->get();
+        $courses = TblApplicationCourses::where('application_id', $app_id)->whereIn('status',[0,2])->get();
         $applicationDetails = TblApplication::find($app_id);
         return view('superadmin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails'));
     }

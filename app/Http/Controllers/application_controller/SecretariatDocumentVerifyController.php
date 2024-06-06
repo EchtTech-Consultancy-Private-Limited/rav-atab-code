@@ -465,19 +465,35 @@ class SecretariatDocumentVerifyController extends Controller
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
             $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
-            
+            $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
             /*------end here------*/
             DB::commit();
-            if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
-                return back()->with('fail', 'First create NCs on courses doc');
-            }
-            if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
-                DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+
+            if($get_application->leve_id==1 || $get_application->level_id=3){
+                if (!$check_all_doc_verified ) {
+                    return back()->with('fail', 'First create NCs on courses doc');
+                }
+                if ($check_all_doc_verified == "all_verified") {
+                    DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                    
+                    return back()->with('success', 'All course docs Accepted successfully.');
+                }
+                if ($check_all_doc_verified == "action_not_taken") {
+                    return back()->with('fail', 'Please take any action on course doc.');
+                }
                 
-                return back()->with('success', 'All course docs Accepted successfully.');
-            }
-            if ($check_all_doc_verified == "action_not_taken" && $check_all_doc_verifiedDocList=="action_not_taken") {
-                return back()->with('fail', 'Please take any action on course doc.');
+            }else{
+                if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
+                    return back()->with('fail', 'First create NCs on courses doc');
+                }
+                if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
+                    DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                    
+                    return back()->with('success', 'All course docs Accepted successfully.');
+                }
+                if ($check_all_doc_verified == "action_not_taken" && $check_all_doc_verifiedDocList=="action_not_taken") {
+                    return back()->with('fail', 'Please take any action on course doc.');
+                }
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
@@ -1402,4 +1418,33 @@ public function checkAllActionDoneOnRevert($application_id)
 }
 
 
+public function uploadMoM(Request $request)
+{
+   try{
+    
+    DB::beginTransaction();
+    if ($request->hasfile('mom')) {
+        $file = $request->file('mom');
+        $name = $file->getClientOriginalName();
+        $filename = time() . $name;
+        $file->move('level/', $filename);
+    }
+    $data = [];
+    $data['application_id']=$request->application_id;
+    $data['doc_file_name']=$request->mom;
+    $data['user_id']=Auth::user()->id;
+    $uploaded=DB::table('tbl_mom')->insert($data);
+    
+    if($uploaded){
+    DB::commit();
+    return response()->json(['success' => true,'message' =>'MoM uploaded successfully'],200);
+    }else{
+        return response()->json(['success' => false,'message' =>'Failed to upload MoM'],200);
+    }
+   } 
+   catch(Exception $e){
+    dd($e);
+    return response()->json(['success' => false,'message' =>'Someting went wrong'],500);
+   }
+ }
 }

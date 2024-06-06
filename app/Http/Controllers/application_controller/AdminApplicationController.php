@@ -84,10 +84,12 @@ class AdminApplicationController extends Controller
                 ->get();
 
             $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
+            $approved_course = DB::table('tbl_application_courses')->where('application_id',$app->id)->whereIn('status',[0,2])->count();
             $obj->doc_uploaded_count = $doc_uploaded_count;
-
+            $obj->approved_course = $approved_course;
+                
             $assessment_way = DB::table('asessor_applications')->where('application_id', $app->id)->first()->assessment_way ?? '';
-
+            
             if ($payment) {
                 $obj->assessor_list = $payment_count > 1 ? $onsite_assessor_list : $desktop_assessor_list;
                 $obj->assessor_type = $payment_count > 1 ? "onsite" : "desktop";
@@ -97,10 +99,11 @@ class AdminApplicationController extends Controller
                 $obj->payment->payment_amount = $payment_amount;
                 $obj->payment->last_payment = $last_payment;
                 $obj->appHistory= $app_history;
+                
             }
             $final_data[] = $obj;
         }
-        
+        // dd($final_data);
         return view('admin-view.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
     }
     
@@ -235,8 +238,14 @@ class AdminApplicationController extends Controller
         } else {
             $is_final_submit = false;
         }
+        if($admin_final_summary_count>1){
+            $is_final_summary_generated = true;
+        }else{
+            $is_final_summary_generated = false;
+        }
+
         // dd($final_data);
-        return view('admin-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc]);
+        return view('admin-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc,'is_final_summary_generated'=>$is_final_summary_generated]);
     }
 
 
@@ -410,9 +419,8 @@ class AdminApplicationController extends Controller
 
         
         $flag = 0;
-
+        
         foreach ($results as $result) {
-
             if (($result->status!=0)) {
                 $flag = 0;
             } else {
@@ -872,6 +880,11 @@ class AdminApplicationController extends Controller
             DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
 
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => $assessor_types])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
+
+            // revert action done on course and courses docs
+            DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+            DB::table('tbl_application_course_doc')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+
 
             /**
              * Mail Sending

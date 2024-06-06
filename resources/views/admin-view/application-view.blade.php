@@ -541,7 +541,7 @@
         </div>  
         @endforeach
        
-        @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && $application_details->application->approve_status==0) 
+        @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && $application_details->application->approve_status==0 && $application_details->application->level_id==2) 
         
         <div class="row">
                         <div class="col-md-12">
@@ -551,8 +551,19 @@
                             </form>
                         </div>
                     </div>
+
+                    @elseif($application_details->show_submit_btn_to_secretariat  && $application_details->application->approve_status==0 && $application_details->application->level_id==3) 
+        
+                <div class="row">
+                        <div class="col-md-12">
+                            <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($application_details->enable_disable_submit_btn)?'disabled':'';?> >
+                            </form>
+                        </div>
+                    </div>
                     
-        @elseif($application_details->is_all_revert_action_done || $application_details->is_all_revert_action_done44)
+        @elseif(($application_details->is_all_revert_action_done || $application_details->is_all_revert_action_done44) && $application_details->application->level_id==2)
         
         <div class="row">
                         <div class="col-md-12">
@@ -584,13 +595,21 @@
 
 
                         @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3) 
-                            
-                            <div class="col-md-12">
-                                <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                            @if($is_final_summary_generated)
+                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get" onsubmit="return beforeSubmit();">
                                 @csrf
+                                <input type="hidden" id="application_id" value="{{$application_details->application->id}}">
                                 <input type="submit" class="btn btn-info float-right" value="Send for Approval">
+                                <label for="minute_of_meetings">MoM(Minutes of Meetings)</label>
+                                <input type="file" name="mom" id="mom" value>
                                 </form>
+                            @else
+                            <div class="col-md-12">
+                                <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
+                                
                             </div>
+
+                            @endif
 
 
 

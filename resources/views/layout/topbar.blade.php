@@ -377,7 +377,18 @@ ul.menu h5 {
                                 @foreach ($applications as $application)
                                 <li onclick="handleOnsiteNotification({{$application->id}})">
                                     <a href="javascript:void(0)" style="color: #000;">
-                                        Application ID : {{ $application->uhid }}
+                                        <div class="notification-card">
+                                            <div class="content-card">
+                                                <div class="flex-box">
+                                                    <span>App. ID : {{ $application->uhid }}</span>
+                                                    <span>10/06/2024</span>
+                                                </div>
+                                                <div class="normal-text">
+                                                    <p class="mb-0"> This is a reminder for Application No. <span class="fw-bold">{{ $application->uhid }}</span>, which you should
+                                                        have received on June 20, is due today.</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </a>
                                 </li>
                                 @endforeach
