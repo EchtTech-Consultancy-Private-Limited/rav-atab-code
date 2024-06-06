@@ -17,9 +17,16 @@ use Carbon\Carbon;
 use Session;
 use App\Jobs\SendEmailJob;
 use Str;
+use App\Services\NotificationService;
+
 class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
+    public $sendNotification;
+    function __construct()
+    {
+        $this->sendNotification = new NotificationService();
+    }
 
     public function createNewApplication(Request $request,$id=null){
         if ($id) {
@@ -110,6 +117,7 @@ class ApplicationCoursesController extends Controller
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
             }
+            // $this->sendNotification->SendNotification(1,2,3,'TP','testing');
         /*end here*/
         return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
@@ -165,7 +173,7 @@ class ApplicationCoursesController extends Controller
                 $create_new_application = $application->id;
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
-            }
+            }            
         /*end here*/
         return redirect(url('create-level-2-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
