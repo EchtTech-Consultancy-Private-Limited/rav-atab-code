@@ -9,6 +9,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Manuals;
+use App\Services\NotificationService;
 use DB;
 
 
@@ -16,6 +17,11 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public $sendNotification;
+    function __construct()
+    {
+        $this->sendNotification = new NotificationService();
+    }
     public function index()
     {
         if (Auth::check()) {
