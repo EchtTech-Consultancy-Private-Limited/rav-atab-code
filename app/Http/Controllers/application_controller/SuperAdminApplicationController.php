@@ -80,8 +80,8 @@ class SuperAdminApplicationController extends Controller
                 $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way??'';
 
                 if($payment){
-                  $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
-                   $obj->assessor_type = $payment_count>1?"onsite":"desktop";
+                    $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
+                    $obj->assessor_type = $payment_count>1?"onsite":"desktop";
                     $obj->payment = $payment;
                     $obj->assessment_way = $assessment_way;
                     $obj->payment->payment_count = $payment_count;
