@@ -17,14 +17,13 @@ use App\Models\TblNCComments;
 use App\Jobs\SendEmailJob;
 use URL;
 use File;
+
 use Str;
 
 class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
-    public function __construct()
-    {
-    }
+    
     public function getApplicationList($level_type='level-first'){
         
         $pay_list = DB::table('tbl_application_payment')
@@ -921,14 +920,12 @@ public function  storeNewApplication(Request $request)
             // $data['refid'] = $request->reference_id;
             $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
-            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
             $application = new TblApplication($data);
             $application->save();
             
             $application->prev_refid = $request->reference_id;
-            $application->save();
-
+            $application->save();            
             $create_new_application = $application->id;
             $msg="Application Created Successfully";
             $first_application = TblApplication::where('refid',$request->reference_id)->first();
@@ -2097,7 +2094,7 @@ public function upgradeGetApplicationViewLevel3($id){
         $courses = DB::table('tbl_application_courses')->where([
             'application_id'=>$application->id
         ])
-        ->whereIn('status',[0,2])
+        // ->whereIn('status',[0,2])
         ->whereNull('deleted_at') 
         ->get();
         

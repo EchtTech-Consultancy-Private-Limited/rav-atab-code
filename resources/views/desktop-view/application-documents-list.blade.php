@@ -379,13 +379,13 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    @if(!$is_final_submit && $is_doc_uploaded && $checkAllActionDoneOnDocList==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>
                                     @endif
                                  </div>
-                              </div>
+                                 </div>
                            </div>
                         </div>
                      </div>

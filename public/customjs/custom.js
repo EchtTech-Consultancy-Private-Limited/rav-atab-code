@@ -2977,6 +2977,98 @@ function handleRevertRejectAction(application_id,course_id){
     
 }
 
+
+function handleAssignBothAssessor(application_id){
+        window.localStorage.setItem('assessor',true);
+        window.localStorage.setItem('application_id',application_id);
+        window.location.href=BASE_URL+"/admin/application-list";
+}
+function handleAdminAssignAssessorValidation(){
+    window.localStorage.setItem('assessor',false);
+    window.localStorage.setItem('application_id',null);
+}
+function beforeSubmit(){
+    var fileInput = $(`#mom`);
+    if(fileInput==""){
+        toastr.error("Please first upload MoM", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }else{
+        return true
+    }
+    
+}
+
+
+$(document).ready(function() {
+    $('#mom').change(function() {
+      $('.full_screen_loading').show();
+       const mom = $(`#mom`)[0].files[0];
+       const application_id = $('#application_id').val();
+       const fileInput = $(`#mom`);
+
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("mom", mom);
+        
+        var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+        var uploadedFileName = fileInput.val();
+        var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+            toastr.error("Please upload a PDF or DOC file.", "Invalid file type",{
+                      timeOut: 0,
+                      extendedTimeOut: 0,
+                      closeButton: true,
+                      closeDuration: 5000,
+                  });
+            $('.full_screen_loading').hide();
+            fileInput.val('');
+            return;
+        }
+      //   $("#loader").removeClass('d-none');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: `${BASE_URL}/secretariat/upload-mom`, // Your server-side upload endpoint
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+               //  $("#loader").addClass('d-none');
+               $('.full_screen_loading').hide();
+                if (response.success) {
+                  toastr.success(response.message, {
+                      timeOut: 0,
+                      extendedTimeOut: 0,
+                      closeButton: true,
+                      closeDuration: 5000,
+                  });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                $('.full_screen_loading').hide();
+                toastr.error("Something went wrong!", {
+                      timeOut: 0,
+                      extendedTimeOut: 0,
+                      closeButton: true,
+                      closeDuration: 5000,
+                  });
+            }
+        });
+    });
+});
+
+
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
 });

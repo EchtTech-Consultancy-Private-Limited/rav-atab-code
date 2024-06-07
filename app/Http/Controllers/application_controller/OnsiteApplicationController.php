@@ -89,6 +89,7 @@ class OnsiteApplicationController extends Controller
                 $course = DB::table('tbl_application_courses')->where([
                     'application_id' => $application->id,
                 ])
+                ->whereIn('status',[0,2])
                 ->whereNull('deleted_at') 
                 ->get();
                 if($course){
