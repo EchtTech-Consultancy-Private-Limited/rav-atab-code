@@ -450,6 +450,7 @@
                                                                 <button
                                                                 class="expand-button btn btn-primary btn-sm mt-3"
                                                                 onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                                
                                                                 @if($doc->status!=0 && $doc->is_revert!=1)
                                                                 <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
 

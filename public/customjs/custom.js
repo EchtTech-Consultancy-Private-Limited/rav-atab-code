@@ -2988,7 +2988,7 @@ function handleAdminAssignAssessorValidation(){
     window.localStorage.setItem('application_id',null);
 }
 function beforeSubmit(){
-    var fileInput = $(`#mom`);
+    var fileInput = $(`#mom`).val();
     if(fileInput==""){
         toastr.error("Please first upload MoM", {
             timeOut: 0,
@@ -3003,6 +3003,72 @@ function beforeSubmit(){
     
 }
 
+function adminMomOrApproveApplication() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+        $('.full_screen_loading').show();
+
+        let doc_comment = $("#comment_text").val();
+        let action = $("#status").find(":selected").val();
+        const application_id = $('#application_id').val();
+        const mom_id = $('#mom_id').val();
+
+        if(doc_comment=="" || action==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('action',action);
+        formData.append('comment',doc_comment);
+        formData.append('mom_id',mom_id);
+        $.ajax({
+            url: `${BASE_URL}/admin/return/mom`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                    setTimeout(() => {
+                        window.location.href = resdata.redirectTo;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                }
+            },
+            error: (xhr, st) => {
+                $('.full_screen_loading').hide();
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
 
 $(document).ready(function() {
     $('#mom').change(function() {

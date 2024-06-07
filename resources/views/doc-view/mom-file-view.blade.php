@@ -73,12 +73,14 @@
 
             <div class="row ">
             <div class="row clearfix">
+
                         <div class="col-lg-12 col-md-12">
 
                             <div class="tab-content">
-
+                                
+                    @if($mom->return_remark==null && $app_approve_status!=1)
                                 <div>
-                                        <!-- <div class="row clearfix">
+                                        <div class="row clearfix">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <div class="card project_widget">
                                                     <div class="card-header">
@@ -95,7 +97,8 @@
                                                                         class="form-control required text-center"
                                                                         name="status" id="status">
                                                                         <option value="" selected disabled>--Select--</option>
-                                                                        
+                                                                        <option value="return">Return MoM</option>
+                                                                        <option value="approve">Approve Application</option>
                                                                     </select>
 
                                                                 </div>
@@ -113,15 +116,17 @@
 
                                                     <div class="card-footer">
                                                         <button id="submitBtn" type="button" value="Submit"
-                                                            class="btn btn-primary" onclick="desktopDocumentVerfiy()">Submit</button>
+                                                            class="btn btn-primary" onclick="adminMomOrApproveApplication()">Submit</button>
                                                     </div>
 
                                 </div>
 
 
                             </div>
-                        </div> -->
+                        </div>
                     </div>
+                    @endif
+                    
 
             <div class="row clearfix">
 
@@ -132,12 +137,13 @@
                             <div class="row clearfix">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="card project_widget">
-
+                                        
                                         <div class="body">
-                                            
-                                            <object data="{{ asset('documnet'.'/'.$data) }}" type="application/pdf" width="100%" height="500px">
+                                            <input type="hidden" name="application_id" id="application_id" value="{{dDecrypt($application_id)}}">
+                                            <input type="hidden" name="mom_id" id="mom_id" value="{{$mom->id}}">
+                                            <object data="{{ asset('level'.'/'.$data) }}" type="application/pdf" width="100%" height="500px">
                                                 <p>Unable to display PDF file.
-                                               <a href="{{ asset('documnet'.'/'.$data) }}">Download</a> instead.</p>
+                                               <a href="{{ asset('level'.'/'.$data) }}">Download</a> instead.</p>
                                             </object>
 
                                     </div>
@@ -152,6 +158,8 @@
             </div>
         </div>
         </div>
+
+        
 
 
 

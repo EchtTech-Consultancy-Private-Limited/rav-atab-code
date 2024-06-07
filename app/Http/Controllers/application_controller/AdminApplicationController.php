@@ -883,8 +883,7 @@ class AdminApplicationController extends Controller
 
             // revert action done on course and courses docs
             DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
-            DB::table('tbl_application_course_doc')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
-
+           DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
 
             /**
              * Mail Sending
@@ -1483,4 +1482,187 @@ class AdminApplicationController extends Controller
     }
 
 
+public function adminReturnMom(Request $request)
+{
+   try{
+    
+    DB::beginTransaction();
+
+    $application_id = $request->application_id;
+    $mom_id = $request->mom_id;
+    $action = $request->action;
+    $comment = $request->comment;
+    $redirect_to = URL::to("/super-admin/application-view") . '/' . dEncrypt($request->application_id);
+    $flag = 0;
+    
+    if($action=="return") $flag=1; else $flag=2;
+
+    if($flag==1){
+        DB::table('tbl_mom')->where('id',$mom_id)->update(['return_remark'=>$comment]);
+        DB::table('tbl_application')->where('id',$application_id)->update(['approve_status'=>0]);
+        DB::commit();
+        return response()->json(['success' => true,'message' =>'MoM returned successfully','redirectTo'=>$redirect_to],200);
+    }
+    
+    if($flag==2){
+        $res = $this->approvedApplication($application_id,$comment);
+        
+        if($res){
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Application approved successfully.','redirectTo'=>$redirect_to], 200);
+        }else{
+            return response()->json(['success' => false, 'message' => 'Failed to approved successfully.','redirectTo'=>$redirect_to], 200);
+        }
+    }
+ }
+   catch(Exception $e){
+    return response()->json(['success' => false,'message' =>'Someting went wrong','redirectTo'=>$redirect_to],500);
+   }
+ }
+
+
+
+
+ public function approvedApplication($application_id,$approve_remark)
+ {
+     $app_id = $application_id;
+     
+     try {
+         DB::beginTransaction();
+         $valid_from = Carbon::now();
+         $valid_till = Carbon::now()->addDays(364);
+         $approve_app = DB::table('tbl_application')
+             ->where(['id' => $app_id])
+             ->update(['approve_status'=>1,'accept_remark'=>$approve_remark,'valid_till'=>$valid_till,'valid_from'=>$valid_from,'is_all_course_doc_verified'=>1]);
+             $get_application= DB::table('tbl_application')->where('id',$app_id)->first();
+             
+             
+             if($approve_app){
+                 
+                 if($get_application->level_id==1){
+                     createApplicationHistory($app_id,null,config('history.admin.acceptApplication'),config('history.color.success'));
+                 }
+
+                 if($get_application->level_id==3){
+                     /*Certificate generation*/ 
+                     $data = [];
+                     $data['application_id'] = $app_id;
+                     $data['refid'] = $get_application->refid;
+                     $data['certificate_no'] = 1;
+                     $data['certificate_file'] = 1;
+                     $data['valid_from'] = $valid_from;
+                     $data['valid_till'] = $valid_till;
+                     $data['level_id'] = $get_application->level_id;
+                     DB::table('tbl_certificate')->insert($data);
+                     /*end here*/ 
+
+                     /*To show docs to TP*/ 
+                     $all_docs_desktop = DB::table('tbl_application_course_doc')
+                     ->where(['application_id' => $app_id,'approve_status'=>1])
+                     ->where('assessor_type','desktop')
+                     ->whereNotIn('status',[2,3,4,6]) 
+                     ->get(); 
+
+                     $all_docs_onsite = DB::table('tbl_application_course_doc')
+                     ->where(['application_id' => $app_id,'approve_status'=>1])
+                     ->where('assessor_type','onsite')
+                     ->whereNotIn('onsite_status',[2,3,4,6]) 
+                     ->get(); 
+                     $all_docs = $all_docs_desktop->merge($all_docs_onsite);
+
+                     
+                     foreach($all_docs as $doc){
+                         if($doc->status==0){
+                             DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                             
+                         }else{
+                             DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'onsite_status'=>$doc->onsite_status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+
+                         }
+                         // $data = [];
+                         //     $data['application_id'] = $doc->application_id;
+                         //     $data['application_courses_id'] = $doc->course_id;
+                         //     $data['secretariat_id'] = Auth::user()->id;
+                         //     $data['doc_sr_code'] = $doc->doc_sr_code;
+                         //     $data['doc_unique_id'] = $doc->doc_unique_id;
+                         //     $data['nc_type'] = 'Accept';
+                         //     $data['doc_file_name'] = $doc->doc_file_name;
+                         //     $data['comments'] = 'Document has been approved';
+                         //     $data['nc_show_status'] = 1;
+                         //     DB::table('tbl_nc_comments_secretariat')->insert($data);
+                     }
+
+                     // rejected courses list doc
+                     
+                      /*To show docs to TP*/ 
+                      $all_docs_desktop = DB::table('tbl_application_course_doc')
+                      ->where(['application_id' => $app_id])
+                      ->whereIn('approve_status',[0,2])
+                      ->where('assessor_type','desktop')
+                      ->whereNotIn('status',[2,3,4,6]) 
+                      ->get(); 
+
+                      $all_docs_onsite = DB::table('tbl_application_course_doc')
+                      ->where(['application_id' => $app_id])
+                      ->whereIn('approve_status',[0,2])
+                      ->where('assessor_type','onsite')
+                      ->whereNotIn('onsite_status',[2,3,4,6]) 
+                      ->get(); 
+                      $all_docs = $all_docs_desktop->merge($all_docs_onsite);
+
+                      
+                      foreach($all_docs as $doc){
+                         DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                      }
+
+                 }
+
+                 /*To show docs to TP*/ 
+                 $all_docs = DB::table('tbl_course_wise_document')
+                 ->where(['application_id' => $app_id,'approve_status'=>1])
+                 // ->where(['application_id' => $request->application_id])
+                 ->whereNotIn('status',[2,3,4,6]) 
+                 ->get();
+                 
+                 
+              
+                 foreach($all_docs as $doc){
+                     if($doc->status==0){
+                         DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                         }else{
+                             DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                         }
+                   
+                 }
+
+
+                 /*change docs status only of reject course*/ 
+                 $all_docs = DB::table('tbl_course_wise_document')
+                 ->where(['application_id' => $app_id])
+                 ->whereIn('approve_status',[0,2])  //get only rejected courses
+                 ->whereNotIn('status',[2,3,4,6]) 
+                 ->get(); 
+                 foreach($all_docs as $doc){
+                         DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                 }
+
+                 DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);
+                 $a = DB::table('tbl_application')->where('id',$app_id)->first();
+                //  dd($a);
+                 
+                 DB::commit();
+                 return true;
+             }else{
+                 DB::rollBack();
+                 return false;
+             }
+
+     } catch (Exception $e) {
+         DB::rollBack();
+         return false;
+     }
+ }
+
+
 }
+
