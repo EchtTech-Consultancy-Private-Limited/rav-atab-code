@@ -468,12 +468,13 @@ class SecretariatDocumentVerifyController extends Controller
             $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
             /*------end here------*/
             DB::commit();
-
-            if($get_application->leve_id==1 || $get_application->level_id=3){
+            
+            if($get_application->level_id==1 || $get_application->level_id==3){
                 if (!$check_all_doc_verified ) {
                     return back()->with('fail', 'First create NCs on courses doc');
                 }
                 if ($check_all_doc_verified == "all_verified") {
+                    dd($check_all_doc_verified);
                     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                     
                     return back()->with('success', 'All course docs Accepted successfully.');
@@ -499,6 +500,7 @@ class SecretariatDocumentVerifyController extends Controller
             // return redirect($redirect_to);
 
         } catch (Exception $e) {
+            dd($e);
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');
         }
