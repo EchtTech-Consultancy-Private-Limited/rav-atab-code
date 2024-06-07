@@ -18,6 +18,8 @@ use App\Jobs\SendEmailJob;
 use URL;
 use File;
 
+use Str;
+
 class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
