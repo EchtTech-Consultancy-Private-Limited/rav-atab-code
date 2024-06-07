@@ -337,6 +337,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     
     //new scope
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
+    Route::get('mom/doc/{doc_name}/{app_id}', [DocApplicationController::class, 'momPdf']);
 
 
     Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
@@ -419,6 +420,7 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
 
     
 Route::post('/secretariat/upload-mom', [SecretariatDocumentVerifyController::class, 'uploadMoM']);
+Route::post('/admin/return/mom', [AdminApplicationController::class, 'adminReturnMom']);
 /*Secretariat nc's 44 documents route*/ 
 Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);
 

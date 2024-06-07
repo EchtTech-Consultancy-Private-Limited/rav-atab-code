@@ -100,7 +100,8 @@ class SuperAdminApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
-
+        $mom = DB::table('tbl_mom')->where('application_id',dDecrypt($id))->latest('id')->first();
+        
         $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
         $decoded_json_courses_doc = json_decode($json_course_doc);
 
@@ -192,7 +193,7 @@ class SuperAdminApplicationController extends Controller
                  $is_final_submit = false;
                 }
             
-        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'']);
+        return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'mom'=>$mom]);
     }
     public function adminPaymentAcknowledge(Request $request)
     {

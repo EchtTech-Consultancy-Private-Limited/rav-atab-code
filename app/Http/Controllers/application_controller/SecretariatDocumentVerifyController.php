@@ -474,9 +474,7 @@ class SecretariatDocumentVerifyController extends Controller
                     return back()->with('fail', 'First create NCs on courses doc');
                 }
                 if ($check_all_doc_verified == "all_verified") {
-                    dd($check_all_doc_verified);
                     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
-                    
                     return back()->with('success', 'All course docs Accepted successfully.');
                 }
                 if ($check_all_doc_verified == "action_not_taken") {
@@ -1445,7 +1443,6 @@ public function uploadMoM(Request $request)
     }
    } 
    catch(Exception $e){
-    dd($e);
     return response()->json(['success' => false,'message' =>'Someting went wrong'],500);
    }
  }
