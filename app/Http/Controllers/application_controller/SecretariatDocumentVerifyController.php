@@ -1431,7 +1431,7 @@ public function uploadMoM(Request $request)
     }
     $data = [];
     $data['application_id']=$request->application_id;
-    $data['doc_file_name']=$request->mom;
+    $data['doc_file_name']=$filename;
     $data['user_id']=Auth::user()->id;
     $uploaded=DB::table('tbl_mom')->insert($data);
     
