@@ -893,6 +893,21 @@ class SuperAdminApplicationController extends Controller
 
                             
                             foreach($all_docs as $doc){
+
+                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                
+                            }
+
+                            // taking only the rejected course
+                            $all_docs = DB::table('tbl_application_course_doc')
+                            ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                            ->where('assessor_type','secretariat')
+                            ->whereNotIn('status',[0,2]) 
+                            ->get(); 
+
+
+                            foreach($all_docs as $doc){
+
                                     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
                             }
     
