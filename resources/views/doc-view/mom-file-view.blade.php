@@ -77,14 +77,14 @@
                         <div class="col-lg-12 col-md-12">
 
                             <div class="tab-content">
-                                
-                    @if($mom->return_remark==null && $app_approve_status!=1)
+                                @if($is_form_show==null && $application_details->approve_status!=1)
                                 <div>
                                         <div class="row clearfix">
+
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <div class="card project_widget">
                                                     <div class="card-header">
-                                                        <h4>Create NC</h4>
+                                                        <h4>Take Action on MoM</h4>
                                                     </div>
                                                     <div class="body">
                                                             <div class="row">
@@ -139,8 +139,7 @@
                                     <div class="card project_widget">
                                         
                                         <div class="body">
-                                            <input type="hidden" name="application_id" id="application_id" value="{{dDecrypt($application_id)}}">
-                                            <input type="hidden" name="mom_id" id="mom_id" value="{{$mom->id}}">
+                                            <input type="hidden" name="application_id" id="application_id" value="{{$application_details->id}}">
                                             <object data="{{ asset('level'.'/'.$data) }}" type="application/pdf" width="100%" height="500px">
                                                 <p>Unable to display PDF file.
                                                <a href="{{ asset('level'.'/'.$data) }}">Download</a> instead.</p>

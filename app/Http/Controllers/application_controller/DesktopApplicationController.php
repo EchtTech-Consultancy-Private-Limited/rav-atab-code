@@ -62,6 +62,10 @@ class DesktopApplicationController extends Controller
     /** Whole Application View for desktop */
     public function getApplicationView($id)
     {
+        $show_submit_btn_to_desktop = $this->isShowSubmitBtnToSecretariat(dDecrypt($id));
+        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id));
+        $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
+
         $application = DB::table('tbl_application')
             ->where('id', dDecrypt($id))
             ->first();
@@ -91,7 +95,7 @@ class DesktopApplicationController extends Controller
         } else {
             $is_final_submit = false;
         }
-        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit]);
+        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done]);
     }
     public function applicationDocumentList($id, $course_id)
     {

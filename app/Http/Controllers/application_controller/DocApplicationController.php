@@ -22,10 +22,17 @@ class DocApplicationController extends Controller
     public function momPdf($doc_name,$app_id)
     {
         
-        $mom = DB::table('tbl_mom')->where('application_id',dDecrypt($app_id))->latest('id')->first();
-        $app_approve_status = DB::table('tbl_application')->where('id',dDecrypt($app_id))->first()->approve_status;
+        $is_form_show = request()->query('secret');
+        
+        $application_details = DB::table('tbl_application')->where('id',dDecrypt($app_id))->first();
         $data = $doc_name;
-        return view('doc-view.mom-file-view', ['data' => $data,'application_id'=>$app_id,'mom'=>$mom,'app_approve_status'=>$app_approve_status]);
+        return view('doc-view.mom-file-view', ['data' => $data,'application_details'=>$application_details,'is_form_show'=>$is_form_show]);
+
+
+        // $mom = DB::table('tbl_mom')->where('application_id',dDecrypt($app_id))->latest('id')->first();
+        // $app_approve_status = DB::table('tbl_application')->where('id',dDecrypt($app_id))->first()->approve_status;
+        // $data = $doc_name;
+        // return view('doc-view.mom-file-view', ['data' => $data,'application_id'=>$app_id,'mom'=>$mom,'app_approve_status'=>$app_approve_status]);
     }
     public function secretariatVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {

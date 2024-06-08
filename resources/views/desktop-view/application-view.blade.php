@@ -49,6 +49,7 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     <div class="">
+
                     @if($is_final_submit)
                         <a href="{{ url('desktop-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
@@ -298,6 +299,7 @@
                         </div>
                         <div class="col-md-12 d-flex justify-content-end">
                        
+                
                                 <a href="{{ url('/desktop/document-list' . '/' . dEncrypt($ApplicationCourses->application_id) . '/' .dEncrypt($ApplicationCourses->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
@@ -310,6 +312,18 @@
         </div>
         </div>  
         @endforeach
+
+        @if(($show_submit_btn_to_desktop && $is_final_submit==false) || $is_all_revert_action_done) 
+        
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('desktop/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
+                @csrf
+                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                </form>
+                </div>
+        </div>
+@endif
 
         <div class="card p-relative">
             <div class="box-overlay">
