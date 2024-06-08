@@ -3003,6 +3003,22 @@ function beforeSubmit(){
     
 }
 
+function handleLevel(){
+    var value = $(`#level_proceed`).val();
+    if(value==""){
+        toastr.error("Please first accept terms and conditions", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }else{
+        return true
+    }
+    
+}
+
 function adminMomOrApproveApplication() {
     let is_acknowledged = confirm("Are you sure you want to submit?");
     if (is_acknowledged) {
