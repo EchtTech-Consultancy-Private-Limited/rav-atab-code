@@ -602,21 +602,29 @@
 
 
                         @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3) 
+                        <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get" onsubmit="return beforeSubmit();">
                             @if($is_final_summary_generated)
-                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get" onsubmit="return beforeSubmit();">
                                 @csrf
                                 <input type="hidden" id="application_id" value="{{$application_details->application->id}}">
                                 <input type="submit" class="btn btn-info float-right" value="Send for Approval">
-                                <label for="minute_of_meetings">MoM(Minutes of Meetings)</label>
-                                <input type="file" name="mom" id="mom" value>
-                                </form>
-                            @else
-                            <div class="col-md-12">
-                                <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
-                                
-                            </div>
-
-                            @endif
+                                @if($spocData->mom_file_name)
+                                    <div class="col-md-12">
+                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
+                                    </a>  
+                                    </div>
+                                    @else
+                                    <label for="minute_of_meetings">MoM(Minutes of Meetings)</label>
+                                                        <input type="file" name="mom" id="mom" value>
+                                    
+                                    @endif
+                            @else 
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
+                        
+                        </div>
+                    
+                        @endif
+                    </form>
 
 
 
@@ -625,6 +633,14 @@
 
         
         <div class="row">
+           
+        @if($spocData->mom_file_name && $application_details->application->approve_status!=0)
+                                    <div class="col-md-12">
+                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
+                                    </a>  
+                                    </div>
+                                    
+                                    @endif
                         @if($application_details->application->approve_status==1) 
                         <div class="col-md-12">
                           <div class="badge badge-main success float-right">Application Approved by admin</div>

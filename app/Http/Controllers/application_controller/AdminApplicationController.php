@@ -1498,8 +1498,8 @@ public function adminReturnMom(Request $request)
     if($action=="return") $flag=1; else $flag=2;
 
     if($flag==1){
-        DB::table('tbl_mom')->where('id',$mom_id)->update(['return_remark'=>$comment]);
-        DB::table('tbl_application')->where('id',$application_id)->update(['approve_status'=>0]);
+        // DB::table('tbl_mom')->where('id',$mom_id)->update(['return_remark'=>$comment]);
+        DB::table('tbl_application')->where('id',$application_id)->update(['approve_status'=>0,'return_remark'=>$comment]);
         DB::commit();
         return response()->json(['success' => true,'message' =>'MoM returned successfully','redirectTo'=>$redirect_to],200);
     }

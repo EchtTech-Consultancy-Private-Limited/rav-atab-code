@@ -498,7 +498,7 @@ class SecretariatDocumentVerifyController extends Controller
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
-
+         }
         } catch (Exception $e) {
             dd($e);
             DB::rollBack();
@@ -1431,11 +1431,12 @@ public function uploadMoM(Request $request)
         $filename = time() . $name;
         $file->move('level/', $filename);
     }
-    $data = [];
-    $data['application_id']=$request->application_id;
-    $data['doc_file_name']=$filename;
-    $data['user_id']=Auth::user()->id;
-    $uploaded=DB::table('tbl_mom')->insert($data);
+    $uploaded = DB::table('tbl_application')->where('id',$request->application_id)->update(['mom_file_name'=>$filename]);
+    // $data = [];
+    // $data['application_id']=$request->application_id;
+    // $data['doc_file_name']=$filename;
+    // $data['user_id']=Auth::user()->id;
+    // $uploaded=DB::table('tbl_mom')->insert($data);
     
     if($uploaded){
     DB::commit();

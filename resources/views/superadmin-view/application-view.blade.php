@@ -75,16 +75,14 @@
                     <div class="float-right">
                    
                 @if($is_final_submit)
-                @if($mom?->return_remark!=null)
-                    <a href="{{ url('mom/doc/'.$mom?->doc_file_name.'/'.dEncrypt($spocData->id))}}" class="float-left btn btn-primary btn-sm">Returned View MoM
+                
+                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id))}}" class="float-left btn btn-primary btn-sm"> View MoM
                     </a>    
-                @endif
+                
                     @if($spocData->approve_status==2 || $spocData->approve_status==1)
-                    <a href="{{ url('mom/doc/'.$mom?->doc_file_name.'/'.dEncrypt($spocData->id))}}" class="float-left btn btn-primary btn-sm">View MoM
-                    </a>  
-                    @endif
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
                         </a>
+                    @endif
                 @endif
                     
                         <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back
