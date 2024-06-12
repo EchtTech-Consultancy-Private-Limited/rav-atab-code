@@ -128,6 +128,135 @@ function handlePaymentApproved() {
 }
 
 
+var handleAdditionalPaymentReceived = () => {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    const fileInput = document.getElementById("payment_proof");
+    let payment_remark = $("#payment_remark").val();
+    let payment_id = $("#payment_id").val();
+    if(payment_remark=="" || payment_remark==null){
+        toastr.error("Please enter the remark.", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }
+    payment_remark = payment_remark ?? "";
+    let formData = new FormData();
+    if (fileInput.files.length > 0) {
+        formData.append("payment_proof", fileInput.files[0]);
+    }
+        formData.append("payment_remark", payment_remark);
+        formData.append("payment_id", payment_id);
+        formData.append("application_id", encoded_application_id);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/account-additional-payment-received`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".box-overlay-2").show();
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+   
+};
+function handleAdditionalPaymentApproved() {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    let final_payment_remark = $("#final_payment_remark").val();
+    final_payment_remark = final_payment_remark ?? "";
+    if (final_payment_remark == "") {
+        $("#final_payment_remark_err").html(
+            "Please enter the approve payment remark."
+        );
+        return false;
+    }
+    let formData = new FormData();
+    formData.append("final_payment_remark", final_payment_remark);
+    formData.append("application_id", encoded_application_id);
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: `${BASE_URL}/account-additional-payment-approved`,
+        type: "post",
+        datatype: "json",
+        data: formData,
+        contentType: false,
+        processData: false,
+        beforeSend: function () {
+            $(".box-overlay").show();
+        },
+        complete: function () {
+            $("#loading").hide();
+        },
+        success: function (resdata) {
+            if (resdata.success) {
+                toastr.success(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+            }
+        },
+        error: (xhr, st) => {
+            console.log(st, "st");
+        },
+    });
+}
+
 
 function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");

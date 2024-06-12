@@ -453,6 +453,9 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
 
 
+    Route::post('/account-additional-payment-received', [DocApplicationController::class, 'accountReceivedPaymentAdditional']);
+    Route::post('/account-additional-payment-approved', [DocApplicationController::class, 'accountApprovePaymentAdditional']);
+
     Route::post('/account-additional-payment-received', [DocApplicationController::class, 'accountReceivedAdditionalPayment']);
     Route::post('/account-additional-payment-approved', [DocApplicationController::class, 'accountApproveAdditionalPayment']);
 
