@@ -2084,13 +2084,14 @@ function getAdditionalPaymentDetails(){
             data:{level:payments,application_id:application_id},
             success: function (response) {
                 if (response.success) {
-                    console.log(response);
                     $('.full_screen_loading').hide();
                     $('#total_add_fee').html(response.total);
+                    $('#secretariat_amount').html(response.total);
 
                 }else{
                     $('.full_screen_loading').hide();
                     $('#total_add_fee').html("N/A");
+                    $('#secretariat_amount').html("N/A");
                     // toastr.error(response.message, {
                     //     timeOut: 0,
                     //     extendedTimeOut: 0,
@@ -2118,6 +2119,7 @@ function getAdditionalPaymentDetails(){
 function handleOnChange(){
     const total = $('#fee_amount').val();
     $('#total_add_fee').html(total);
+    $('#secretariat_amount').html(total);
 }
 
 
@@ -2521,12 +2523,28 @@ function handleAcceptApplicationByAdmin(){
 
 function handleRaiseQueryForAdditionalPayment(){
     const application_id = $('#application_id').val();
+    const payment_type = $('select#payment_type option:selected').val();
     const raise_query_remark = $('#raise_query_remark').val();
+    let fee_amount = $('#fee_amount').val();
+    if(!fee_amount){
+        fee_amount=0;
+    }
+
     if(application_id!=null && raise_query_remark!=null){
         $('.full_screen_loading').show();
         if(raise_query_remark==""){
             $('.full_screen_loading').hide();
             toastr.error("Please enter query raise remark.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        if(payment_type==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please select payment type.", {
                 timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
@@ -2542,7 +2560,7 @@ function handleRaiseQueryForAdditionalPayment(){
         $.ajax({
             url: `${BASE_URL}/admin/raise/payment/query`,
             type: "POST",
-            data:{application_id:application_id,raise_query_remark:raise_query_remark},
+            data:{application_id:application_id,raise_query_remark:raise_query_remark,level:payment_type,fee_amount:fee_amount},
             success: function (response) {
                 if (response.success) {
                     $('.full_screen_loading').hide();
@@ -2977,6 +2995,27 @@ function handleRevertRejectAction(application_id,course_id){
     
 }
 
+function handleSecretariatFinalSummary(){
+    const remark = $("#comment_text").val();
+    if(remark==""){
+        toastr.error("Please enter the remark", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }else{
+        const form = document.getElementById('secretariatForm');
+        var newInput1 = document.createElement('input');
+        newInput1.setAttribute('type', 'hidden');
+        newInput1.setAttribute('name', 'comment_text');
+        newInput1.setAttribute('value', remark);
+        form.appendChild(newInput1);
+        return true;
+
+    }
+    return false;
+}
 
 function handleAssignBothAssessor(application_id){
         window.localStorage.setItem('assessor',true);
@@ -3004,7 +3043,8 @@ function beforeSubmit(){
 }
 
 function handleLevel(){
-    var value = $(`#level_proceed`).val();
+    const value = $(`#level_proceed`).val();
+    alert(value)
     if(value==""){
         toastr.error("Please first accept terms and conditions", {
             timeOut: 0,

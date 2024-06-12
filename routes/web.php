@@ -256,7 +256,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('desktop/summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopIndex"]);
     Route::get('onsite/summary/{application_id}/{application_course_id}',[SummaryController::class,"onSiteIndex"]);
     Route::get('desktop/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
-    Route::get('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
+    Route::post('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
     Route::get('onsite/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
     Route::get('desktop-application-course-summaries',[DesktopApplicationController::class,"getCourseSummariesList"]);
@@ -430,7 +430,7 @@ Route::post('/secretariat/document-verfiy-level-2', [SecretariatDocumentVerifyCo
 
 Route::get('secretariat/summary/{application_id}/{application_course_id}',[SummaryController::class,"secretariatIndex"]);
 Route::get('secretariat/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"secretariatSubmitSummary"]);
-Route::get('secretariat/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"secretariatFinalSubmitSummaryReport"]);
+Route::post('secretariat/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"secretariatFinalSubmitSummaryReport"]);
 
 Route::get('/admin/application-course-summaries',[SummaryController::class,"getCourseSummariesListSecretariat"]);
 Route::get('admin/view-final-summary',[SummaryController::class,"adminViewFinalSummarySecretariat"]);

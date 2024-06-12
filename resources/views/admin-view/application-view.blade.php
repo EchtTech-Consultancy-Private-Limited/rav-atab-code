@@ -509,6 +509,18 @@
                     <div class="">
                     <div class="row">
                         <div class="col-md-12  d-flex justify-content-end gap-2">
+
+<!-- Enable reject and revert button when admin return mom -->
+                            @if($spocData->level_id==3 && $spocData->return_remark!=null)
+                                        <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
+                                
+                                        <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button> -->
+                                
+                            @endif
+<!-- end here -->
+
+
+
                     @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
                     
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
@@ -544,7 +556,7 @@
        
 
         @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && $application_details->application->approve_status==0 && $application_details->application->level_id==2) 
-
+        
         
         <div class="row">
                         <div class="col-md-12">
@@ -556,7 +568,8 @@
                         </div>
                     </div>
 
-                    @elseif($application_details->show_submit_btn_to_secretariat  && $application_details->application->approve_status==0 && $application_details->application->level_id==3) 
+        @elseif($application_details->show_submit_btn_to_secretariat  && $application_details->application->approve_status==0 && $application_details->application->level_id==3) 
+        
         
                 <div class="row">
                         <div class="col-md-12">
@@ -581,7 +594,7 @@
                         </div>
                     </div>
                             
-                    @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==1) 
+        @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==1) 
         
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
@@ -589,19 +602,26 @@
                             <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                             </form>
                         </div>
+        
+        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!=="document_not_upload" && $application_details->is_action_taken_on_44_docs==true && $application_details->is_final_summary_generated && $application_details->application->level_id==2) 
+        
+                        <div class="col-md-12">
+                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Send for Approval">
+                            </form>
+                        </div>
+
+
+
+       @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3)
+       
+                        @if(!$is_final_summary_generated) 
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
                         
-        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $application_details->is_final_summary_generated && $application_details->application->level_id==2) 
-        
-                        <div class="col-md-12">
-                            <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
-                            @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Send for Approval">
-                            </form>
                         </div>
-
-
-
-                        @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3) 
+                        @endif
                         <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get" onsubmit="return beforeSubmit();">
                             @if($is_final_summary_generated)
                                 @csrf
@@ -611,23 +631,24 @@
                                     <div class="col-md-12">
                                     <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
                                     </a>  
+                                    
                                     </div>
                                     @else
                                     <label for="minute_of_meetings">MoM(Minutes of Meetings)</label>
                                                         <input type="file" name="mom" id="mom" value>
                                     
                                     @endif
-                            @else 
-                        <div class="col-md-12">
-                            <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
-                        
-                        </div>
+                          
                     
                         @endif
                     </form>
-
-
-
+                    @if($spocData->return_remark)
+                    <div class="col-md-12">
+                        <b>Remark:</b><span class="text-success">{{$spocData->return_remark}}</span> 
+                    </div>
+                    @endif
+        @else 
+        <!--final else  -->
 
         @endif
 

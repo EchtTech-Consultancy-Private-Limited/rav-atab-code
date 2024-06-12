@@ -272,6 +272,7 @@ class SummaryController extends Controller
 
    
     public function desktopFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
+        
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
         $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
         if(!empty($check_report)){
@@ -283,6 +284,7 @@ class SummaryController extends Controller
         $data['assessor_id']=$assessor_id;
         $data['application_course_id']=dDecrypt($application_course_id);
         $data['assessor_type']='desktop';
+        $data['remark']=$request->comment_text??"";
         $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
         $application_id = dDecrypt($application_id);
         /*Mail to assessor*/
@@ -1148,6 +1150,7 @@ class SummaryController extends Controller
    
     public function secretariatFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
         
+        
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'secretariat'])->first();
         $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
         if(!empty($check_report)){
@@ -1159,6 +1162,7 @@ class SummaryController extends Controller
         $data['assessor_id']=$assessor_id;
         $data['application_course_id']=dDecrypt($application_course_id);
         $data['assessor_type']='secretariat';
+        $data['remark']=$request->comment_text;
         $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
         $application_id = dDecrypt($application_id);
         /*Mail to assessor*/
@@ -1279,6 +1283,7 @@ class SummaryController extends Controller
             ])
             ->first();
 
+        $summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id])->first()->remark;
             
             
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id' => $application_id, 'assessor_id' => $assessor_id, 'assessor_type' => 'secretariat'])->first();
@@ -1332,7 +1337,7 @@ class SummaryController extends Controller
         }
         
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
-        return view('admin-view.secretariat.secretariat-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign'));
+        return view('admin-view.secretariat.secretariat-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark'));
     }
 
 
@@ -1355,7 +1360,7 @@ class SummaryController extends Controller
                 'asr.assessor_type' => 'secretariat',
             ])
             ->first();
-
+            $summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id])->first()->remark;
             
             
             
@@ -1410,7 +1415,7 @@ class SummaryController extends Controller
         }
         
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
-        return view('superadmin-view.secretariat.admin-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign'));
+        return view('superadmin-view.secretariat.admin-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark'));
     }
 
 

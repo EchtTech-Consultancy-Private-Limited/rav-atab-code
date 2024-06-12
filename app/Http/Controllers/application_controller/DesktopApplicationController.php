@@ -419,9 +419,13 @@ class DesktopApplicationController extends Controller
             $obj->accept_reject = $accept_reject;
             $final_data[] = $obj;
         }
+
+        $summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id])->first()->remark;
+
+
         // dd($final_data);
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
-        return view('desktop-view.desktop-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign'));
+        return view('desktop-view.desktop-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark'));
     }
     public function updateAssessorDesktopNotificationStatus(Request $request, $id)
     {
@@ -995,9 +999,9 @@ public function checkAllActionDoneOnDocList($application_id,$application_courses
 
     
     $flag = 0;
-
+   
     foreach ($finalResults as $result) {
-        if (($result->status != 0)) {
+        if (($result->status != 0) && $result->is_revert==1) {
             $flag = 0;
         } else {
             $flag = 1;
