@@ -81,7 +81,10 @@ class OnsiteApplicationController extends Controller
         ->where('id', dDecrypt($id))
         ->first();
         $assessor_id = Auth::user()->id;
-
+        $show_submit_btn_to_onsite = $this->isShowSubmitBtnToSecretariat(dDecrypt($id));
+        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id));
+        $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
+        
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
@@ -89,6 +92,7 @@ class OnsiteApplicationController extends Controller
                 $course = DB::table('tbl_application_courses')->where([
                     'application_id' => $application->id,
                 ])
+                ->whereIn('status',[0,2])
                 ->whereNull('deleted_at') 
                 ->get();
                 if($course){
@@ -114,7 +118,7 @@ class OnsiteApplicationController extends Controller
                     $is_final_submit = false;
                 }
                 
-                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit]);
+                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done]);
     }
 
 
@@ -999,7 +1003,6 @@ public function onsiteUpdateNCFlagDocList($application_id)
             // return redirect($redirect_to);
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');
         }

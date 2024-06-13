@@ -268,7 +268,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('desktop/summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopIndex"]);
     Route::get('onsite/summary/{application_id}/{application_course_id}',[SummaryController::class,"onSiteIndex"]);
     Route::get('desktop/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"desktopSubmitSummary"]);
-    Route::get('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
+    Route::post('desktop/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopFinalSubmitSummaryReport"]);
     Route::post('onsite/final-summary',[SummaryController::class,"onsiteFinalSubmitSummaryReport"]);
     Route::get('onsite/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"onSiteSubmitSummary"]);
     Route::get('desktop-application-course-summaries',[DesktopApplicationController::class,"getCourseSummariesList"]);
@@ -349,6 +349,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     
     //new scope
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
+    Route::get('mom/doc/{doc_name}/{app_id}', [DocApplicationController::class, 'momPdf']);
 
 
     Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
@@ -429,6 +430,9 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     Route::post('/onsite/upload-photograph', [OnsiteApplicationController::class, 'onsiteUploadPhotograph']);
     Route::post('/onsite/update-nc-flag-doc-list/{application_id}/{course_id?}', [OnsiteApplicationController::class, 'onsiteUpdateNCFlagDocList']);
 
+    
+Route::post('/secretariat/upload-mom', [SecretariatDocumentVerifyController::class, 'uploadMoM']);
+Route::post('/admin/return/mom', [AdminApplicationController::class, 'adminReturnMom']);
 /*Secretariat nc's 44 documents route*/ 
 Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);
 
@@ -438,7 +442,7 @@ Route::post('/secretariat/document-verfiy-level-2', [SecretariatDocumentVerifyCo
 
 Route::get('secretariat/summary/{application_id}/{application_course_id}',[SummaryController::class,"secretariatIndex"]);
 Route::get('secretariat/summary/submit/{application_id}/{application_course_id}',[SummaryController::class,"secretariatSubmitSummary"]);
-Route::get('secretariat/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"secretariatFinalSubmitSummaryReport"]);
+Route::post('secretariat/final-summary/{application_id}/{application_course_id}',[SummaryController::class,"secretariatFinalSubmitSummaryReport"]);
 
 Route::get('/admin/application-course-summaries',[SummaryController::class,"getCourseSummariesListSecretariat"]);
 Route::get('admin/view-final-summary',[SummaryController::class,"adminViewFinalSummarySecretariat"]);
@@ -460,6 +464,9 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
 
+
+    Route::post('/account-additional-payment-received', [DocApplicationController::class, 'accountReceivedPaymentAdditional']);
+    Route::post('/account-additional-payment-approved', [DocApplicationController::class, 'accountApprovePaymentAdditional']);
 
     Route::post('/account-additional-payment-received', [DocApplicationController::class, 'accountReceivedAdditionalPayment']);
     Route::post('/account-additional-payment-approved', [DocApplicationController::class, 'accountApproveAdditionalPayment']);

@@ -94,6 +94,7 @@ class AccountApplicationController extends Controller
 
         
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        $additional_application_payment_status = DB::table('tbl_additional_fee')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
     
@@ -168,9 +169,10 @@ class AccountApplicationController extends Controller
                 if($payment){
                     $obj->payment = $payment;
                     $obj->additional_payment = $additional_payment;
+                    $obj->additional_application_payment_status = $additional_application_payment_status;
                 }
                 $final_data = $obj;
-                // dd($final_data);
+                
         return view('account-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'courses_doc'=>$decoded_json_courses_doc]);
     }
 

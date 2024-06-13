@@ -290,12 +290,14 @@
                                 </thead>
                                 <tbody>
                                 @foreach($courses_doc->courses_doc as $k=>$course_doc)
+                                
                                     <tr class="document-row">
                                     <td>{{$k+1}}</td>
                                     <td>{{$course_doc->name}}</td>      
                                     <td> 
                                         <span class="d-flex flex-wrap">
                                     @foreach($ApplicationCourses[$course_doc->nc] as $doc)
+                                    
                                     <form
                                                          name="submitform_doc_form_{{$doc->id}}"
                                                          id="submitform_doc_form_{{$doc->id}}"
@@ -354,7 +356,7 @@
                                                 href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                 class="btn btn-danger btn-sm docBtn  m-1">
                                                 Rejected</span></a>
-                                        @elseif($doc->nc_show_status==4)
+                                    @elseif($doc->nc_show_status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
@@ -908,7 +910,7 @@
               let uploadedFileName="";
               let fileExtension="";
 
-              if(doc_sr_code==="co03"){
+              if(doc_sr_code=="co03"){
               allowedExtensions = ['xlsx', 'xls', 'xlsb']; // Add more extensions if needed
               uploadedFileName = fileInput.val();
               fileExtension = uploadedFileName.split('.').pop().toLowerCase();
@@ -920,7 +922,7 @@
               
 
               if (allowedExtensions.indexOf(fileExtension) == -1) {
-                if(doc_sr_code==="co03"){
+                if(doc_sr_code=="co03"){
                     toastr.error("Please upload a xls file.", "Invalid File type",{
                         timeOut: 0,
                         extendedTimeOut: 0,

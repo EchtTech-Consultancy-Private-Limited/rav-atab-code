@@ -212,6 +212,16 @@
                                                 </td>
                                                 </tr>
                                                 @endforeach
+
+                                                <tr>
+                                                <td colspan="6">
+                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="" disabled="true">{{$summary_remark??""}}</textarea>
+                                                                    
+                                                                </div>
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         
                                         </table>

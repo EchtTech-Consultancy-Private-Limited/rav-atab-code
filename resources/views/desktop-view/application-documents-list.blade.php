@@ -132,22 +132,8 @@
                </div>
                <div class="col-sm-6">
                   <div class="pr-2">
-                     <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
+                     <a href="{{ url("/desktop/application-view".'/'.dEncrypt($application_id))}}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
-                        
-                        @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
-        
-                           <div class="row">
-                                             <div class="col-md-12">
-                                                <form action="{{url('desktop/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post">
-                                                @csrf
-                                                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
-                                                </form>
-                                             </div>
-                                       </div>
-                        @endif
-
-
                   </div>
                   <!-- <div class="d-flex justify-content-end gap-5">
                   <form action="{{url('desktop/update-nc-flag/'.$application_id.'/'.$course_id)}}" method="post">
@@ -379,13 +365,14 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    
+                                    @if(!$is_final_submit && $is_doc_uploaded && $checkAllActionDoneOnDocList==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>
                                     @endif
                                  </div>
-                              </div>
+                                 </div>
                            </div>
                         </div>
                      </div>

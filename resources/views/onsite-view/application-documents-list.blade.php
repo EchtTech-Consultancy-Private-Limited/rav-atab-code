@@ -138,17 +138,8 @@
                         style="float:right;">Back</a>
                         
 
-                        @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done) 
-        
-                           <div class="row">
-                                             <div class="col-md-12">
-                                                <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($application_id))}}" method="post">
-                                                @csrf
-                                                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
-                                                </form>
-                                             </div>
-                                       </div>
-                        @endif
+                        {{-- @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done)  --}}
+                        
 
                   </div>
                </div>
@@ -330,11 +321,11 @@
                                        return $item['doc_unique_id'] == $question['question']->id;
                                    }) as $doc)
                                    
-
+                                   
                                    @if($doc->onsite_status==0)
                                       <a 
                                        title="{{$doc->doc_file_name}}"
-                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                        class="btn btn-primary btn-sm docBtn m-1">
                                        View</a>
                                     @elseif($doc->onsite_status==1)
@@ -520,7 +511,7 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    @if(!$is_final_submit && $is_doc_uploaded && $is_all_revert_action_done==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('onsite/summary/submit').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>

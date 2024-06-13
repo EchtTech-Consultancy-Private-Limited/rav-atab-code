@@ -17,12 +17,13 @@ use App\Models\TblNCComments;
 use App\Jobs\SendEmailJob;
 use URL;
 use File;
+
+use Str;
+
 class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
-    public function __construct()
-    {
-    }
+    
     public function getApplicationList($level_type='level-first'){
         
         $pay_list = DB::table('tbl_application_payment')
@@ -186,7 +187,7 @@ class TPApplicationController extends Controller
                 }else{
                  $is_final_submit = false;
                 }
-
+                
         return view('tp-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc]);
     }
     public function upload_document($id, $course_id)
@@ -740,7 +741,9 @@ class TPApplicationController extends Controller
         if($nc_status_type!=0){
         // is remark form show to top
         $is_already_remark_exists = DB::table('tbl_nc_comments_secretariat')->where(['application_id' => $application_id,'application_courses_id' => $application_courses_id,'doc_sr_code' => $doc_sr_code,'doc_unique_id' => $doc_unique_code,'nc_type'=>$nc_type])->first();
+      
         $is_form_view=false;
+        if(isset($is_already_remark_exists)){
         if($is_already_remark_exists->nc_type!=="Accept" && $is_already_remark_exists->nc_type!=="Request_For_Final_Approval"){
             if($is_already_remark_exists->tp_remark!==null){
                 $is_form_view=false;
@@ -748,6 +751,7 @@ class TPApplicationController extends Controller
                 $is_form_view=true;
             }
         }
+      }
     }
         // end here for form
         
@@ -916,14 +920,12 @@ public function  storeNewApplication(Request $request)
             // $data['refid'] = $request->reference_id;
             $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
-            
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
             $application = new TblApplication($data);
             $application->save();
             
             $application->prev_refid = $request->reference_id;
-            $application->save();
-
+            $application->save();            
             $create_new_application = $application->id;
             $msg="Application Created Successfully";
             $first_application = TblApplication::where('refid',$request->reference_id)->first();
@@ -1049,24 +1051,30 @@ public function upgradeStoreNewApplicationCourse(Request $request)
             $doc_size_3 = $this->getFileSize($request->file('doc3')[$i]->getSize());
             $doc_extension_3 = $request->file('doc3')[$i]->getClientOriginalExtension();
     
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc1[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc1[$i]->move('documnet/', $filename);
             $file->declaration_pdf =  $filename;
             
             
-    
+
             $doc2 = $request->file('doc2');
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc2[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc2[$i]->move('documnet/', $filename);
             $file->course_curriculum_pdf =  $filename;
             
             
-    
+
             $img = $request->file('doc3');
+            $timestamp = now()->format('YmdHis'); 
+            $randomString = Str::random(8);
             $name = $doc3[$i]->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $doc3[$i]->move('documnet/', $filename);
             $file->course_details_xsl =  $filename;
             
@@ -1277,7 +1285,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             /**
              * Send Email to Accountant
              * */ 
-            foreach($get_all_account_users as $email){
+            foreach($get_all_account_users as $email){ 
                 $title="New Application Created - Welcome Aboard : RAVAP-".$application_id;
                 $subject="New Application Created - Welcome Aboard : RAVAP-".$application_id;
                 
@@ -1494,30 +1502,15 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         ]);
         $application_id = $request->Application_id;
 /*calculate amount according to level and courses*/ 
-
-                $course = DB::table('tbl_application_courses')->where(['application_id'=>$application_id])->get();
-                    
-                $level = $request->payment_type;
-                $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
-                $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$country_details->currency,'level'=>$level])->get();
                 
-                if (count($course) == '0') {
-                    $total_amount = '0';
-                } elseif (count($course) <= 5) {
-                    $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
-                } elseif (count($course)>=5 && count($course) <= 10) {
-                    $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
-                } elseif(count($course)>10) {
-                    $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
-                }
-/*end here to calculating the amount*/ 
-        if($request->payment_type=="OTHER"){
-            $total_amount=$request->fee_amount;
-        }
+                $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+                $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+                $total_amount = $get_app->raise_amount;
+                $payment_type = $get_app->payment_type_level;
         
         $data = [];
         $data['application_id'] = $request->Application_id;
-        $data['payment_type'] = $request->payment_type;
+        $data['payment_type'] = $payment_type;
         $data['payment_mode'] = $request->payment;
         $data['amount'] =$total_amount; 
         $data['currency'] = $country_details->currency;
@@ -2086,7 +2079,7 @@ public function upgradeGetApplicationViewLevel3($id){
         $courses = DB::table('tbl_application_courses')->where([
             'application_id'=>$application->id
         ])
-        ->whereIn('status',[0,2])
+        // ->whereIn('status',[0,2])
         ->whereNull('deleted_at') 
         ->get();
         

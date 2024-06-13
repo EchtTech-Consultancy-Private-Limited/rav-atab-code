@@ -466,7 +466,6 @@ function main_menu()
 function show_btn($date)
 {
 
-
     $application_due_date = date("Y-m-d", strtotime($date));
     $startdate = date("Y-m-d", strtotime("-7 days", strtotime($application_due_date)));
 
@@ -483,7 +482,6 @@ function show_btn($date)
         return "0";
     }
 }
-
 
 function Checknotification($id = 0)
 {

@@ -401,9 +401,6 @@ class LevelController extends Controller
 
         //return $form_step_type;
 
-        if ($id) {
-            $id = $id;
-        }
         //  return $id;
 
         if ($id) {

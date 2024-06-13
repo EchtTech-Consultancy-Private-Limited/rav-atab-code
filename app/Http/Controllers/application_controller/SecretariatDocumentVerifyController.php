@@ -410,6 +410,16 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_flag = 1;
                         $nc_comments=1;
                     } 
+                    else if ($course_doc->status == 4) {
+                        $nc_comment_status = 4;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
+                    else if ($course_doc->status == 6) {
+                        $nc_comment_status = 6;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
                     else {
                         $nc_comment_status = 0; //not recommended
                         $nc_flag = 0;
@@ -454,24 +464,43 @@ class SecretariatDocumentVerifyController extends Controller
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
-            
+            $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
+
+            $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
             /*------end here------*/
             DB::commit();
-            if (!$check_all_doc_verified) {
+            
+            if($get_application->level_id==1 || $get_application->level_id==3){
+                if (!$check_all_doc_verified ) {
+                    return back()->with('fail', 'First create NCs on courses doc');
+                }
+                if ($check_all_doc_verified == "all_verified") {
+                    DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                    return back()->with('success', 'All course docs Accepted successfully.');
+                }
+                if ($check_all_doc_verified == "action_not_taken") {
+                    return back()->with('fail', 'Please take any action on course doc.');
+                }
+                
+            }else{
+               
+            if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
                 return back()->with('fail', 'First create NCs on courses doc');
             }
-            if ($check_all_doc_verified == "all_verified") {
+            if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
-            if ($check_all_doc_verified == "action_not_taken") {
+            if ($check_all_doc_verified == "action_not_taken" && $check_all_doc_verifiedDocList=="action_not_taken") {
                 return back()->with('fail', 'Please take any action on course doc.');
+
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
-
+         }
         } catch (Exception $e) {
+            dd($e);
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');
         }
@@ -480,17 +509,16 @@ class SecretariatDocumentVerifyController extends Controller
 
     public function secretariatUpdateNCFlagDocList($application_id)
     {
-
+        
         try {
-            $application_id = dDecrypt($application_id);
             
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
             $get_course_docs = DB::table('tbl_application_course_doc')
-                ->where(['application_id' => $application_id,'approve_status'=>1])
-                // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
-                ->latest('id')->get();
-                foreach($get_course_docs as $course_doc){
+            ->where(['application_id' => $application_id,'approve_status'=>1])
+            // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
+            ->latest('id')->get();
+            foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
                     $nc_comments = 0;
@@ -526,26 +554,26 @@ class SecretariatDocumentVerifyController extends Controller
             }
 
             /*--------To Check All 44 Doc Approved----------*/
-
+            
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
             DB::commit();
-            if (!$check_all_doc_verified) {
-                return back()->with('fail', 'First create NCs on courses doc');
-            }
-            if ($check_all_doc_verified == "all_verified") {
-                DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+            return $check_all_doc_verified;
+            // if (!$check_all_doc_verified) {
+            //     return back()->with('fail', 'First create NCs on courses doc');
+            // }
+            // if ($check_all_doc_verified == "all_verified") {
+            //     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
-                return back()->with('success', 'All course docs Accepted successfully.');
-            }
-            if ($check_all_doc_verified == "action_not_taken") {
-                return back()->with('fail', 'Please take any action on course doc.');
-            }
-            return back()->with('success', 'Enabled Course Doc upload button to TP.');
+            //     return back()->with('success', 'All course docs Accepted successfully.');
+            // }
+            // if ($check_all_doc_verified == "action_not_taken") {
+            //     return back()->with('fail', 'Please take any action on course doc.');
+            // }
+            // return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');
         }
@@ -557,14 +585,23 @@ class SecretariatDocumentVerifyController extends Controller
 
         try {
             DB::beginTransaction();
+            $get_application = DB::table('tbl_application')->where('id', $request->application_id)->first();
+            // this is for the level-2 and level-3
+            if(isset($get_application) && ($get_application->level_id==2 || $get_application->level_id==3)){
+                DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>0]);
+            }
+
             $get_course_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
-                ->update(['approve_status'=>0]);
+                ->update(['approve_status'=>0,'nc_flag'=>0]);
+
+
 
                 
                  DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
+
                 
                 if($get_course_docs){
                     DB::commit();
@@ -575,7 +612,6 @@ class SecretariatDocumentVerifyController extends Controller
                 }
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }
@@ -593,8 +629,9 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['approve_status'=>2]);
                 
                 /*Make revert button hide according to course wise*/ 
-                DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
-
+                DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);
+                DB::table('tbl_course_wise_document')->where('application_id',$app_id)->update(['is_revert'=>1]);
+                
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();
@@ -819,8 +856,8 @@ class SecretariatDocumentVerifyController extends Controller
         }
         
         $show_submit_btn_to_secretariat = $this->isShowSubmitBtnToSecretariat($application_id);
-        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id,$course_id);
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application_id);
+        $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id,$course_id);
         
         $chapters = Chapter::all();
         foreach ($chapters as $chapter) {
@@ -865,7 +902,7 @@ class SecretariatDocumentVerifyController extends Controller
     public function secretariatVerfiyDocumentLevel2($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
         try {
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat'])->latest('id')->first();
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat','application_courses_id'=>$application_course_id])->latest('id')->first();
             $is_nc_exists = false;
             if ($nc_type == "view") {
                 $is_nc_exists = true;
@@ -930,6 +967,7 @@ class SecretariatDocumentVerifyController extends Controller
                 'nc_comments' => $nc_comments,
             ]);
         } catch (Exception $e) {
+
             return back()->with('fail', 'Something went wrong');
         }
     }
@@ -1109,7 +1147,7 @@ class SecretariatDocumentVerifyController extends Controller
   public function checkApplicationIsReadyForNextLevelDocList($application_id)
   {
 
-    
+
       $all_courses_id = DB::table('tbl_application_courses')->where('application_id', $application_id)->pluck('id');
 
     
@@ -1148,6 +1186,7 @@ class SecretariatDocumentVerifyController extends Controller
           }
       }
 
+
       $flag = 0;
       $nc_flag = 0;
       $not_any_action_flag = 0;
@@ -1173,6 +1212,7 @@ class SecretariatDocumentVerifyController extends Controller
           }
       }
 
+      
       if ($flag == 0) {
         //   DB::table('tbl_application')->where('id', $application_id)->update(['is_all_course_doc_verified' => 1]);
           return "all_verified";
@@ -1380,4 +1420,33 @@ public function checkAllActionDoneOnRevert($application_id)
 }
 
 
+public function uploadMoM(Request $request)
+{
+   try{
+    
+    DB::beginTransaction();
+    if ($request->hasfile('mom')) {
+        $file = $request->file('mom');
+        $name = $file->getClientOriginalName();
+        $filename = time() . $name;
+        $file->move('level/', $filename);
+    }
+    $uploaded = DB::table('tbl_application')->where('id',$request->application_id)->update(['mom_file_name'=>$filename]);
+    // $data = [];
+    // $data['application_id']=$request->application_id;
+    // $data['doc_file_name']=$filename;
+    // $data['user_id']=Auth::user()->id;
+    // $uploaded=DB::table('tbl_mom')->insert($data);
+    
+    if($uploaded){
+    DB::commit();
+    return response()->json(['success' => true,'message' =>'MoM uploaded successfully'],200);
+    }else{
+        return response()->json(['success' => false,'message' =>'Failed to upload MoM'],200);
+    }
+   } 
+   catch(Exception $e){
+    return response()->json(['success' => false,'message' =>'Someting went wrong'],500);
+   }
+ }
 }

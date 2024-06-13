@@ -17,9 +17,16 @@ use Carbon\Carbon;
 use Session;
 use App\Jobs\SendEmailJob;
 use Str;
+use App\Services\NotificationService;
+
 class ApplicationCoursesController extends Controller
 {
     use PdfImageSizeTrait;
+    public $sendNotification;
+    function __construct()
+    {
+        $this->sendNotification = new NotificationService();
+    }
 
     public function createNewApplication(Request $request,$id=null){
         if ($id) {
@@ -110,6 +117,7 @@ class ApplicationCoursesController extends Controller
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
             }
+            // $this->sendNotification->SendNotification(1,2,3,'TP','testing');
         /*end here*/
         return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
@@ -165,7 +173,7 @@ class ApplicationCoursesController extends Controller
                 $create_new_application = $application->id;
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
-            }
+            }            
         /*end here*/
         return redirect(url('create-level-2-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
@@ -388,17 +396,17 @@ class ApplicationCoursesController extends Controller
              
              for($j=0;$j<3;$j++){
              $data = [];
-             if($j===0){
+             if($j==0){
                 $data['doc_file_name'] = $file->declaration_pdf;
                 $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
              }
-             if($j===1){
+             if($j==1){
                 $data['doc_file_name'] = $file->course_curriculum_pdf;
                 $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
              }
-             if($j===2){
+             if($j==2){
                 $data['doc_file_name'] = $file->course_details_xsl;
                 $data['doc_sr_code'] = config('constant.details.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.details.doc_unique_id');
@@ -528,17 +536,17 @@ class ApplicationCoursesController extends Controller
              
              for($j=0;$j<3;$j++){
              $data = [];
-             if($j===0){
+             if($j==0){
                 $data['doc_file_name'] = $file->declaration_pdf;
                 $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
              }
-             if($j===1){
+             if($j==1){
                 $data['doc_file_name'] = $file->course_curriculum_pdf;
                 $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
              }
-             if($j===2){
+             if($j==2){
                 $data['doc_file_name'] = $file->course_details_xsl;
                 $data['doc_sr_code'] = config('constant.details.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.details.doc_unique_id');
@@ -663,17 +671,17 @@ class ApplicationCoursesController extends Controller
              
              for($j=0;$j<3;$j++){
              $data = [];
-             if($j===0){
+             if($j==0){
                 $data['doc_file_name'] = $file->declaration_pdf;
                 $data['doc_sr_code'] = config('constant.declaration.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.declaration.doc_unique_id');
              }
-             if($j===1){
+             if($j==1){
                 $data['doc_file_name'] = $file->course_curriculum_pdf;
                 $data['doc_sr_code'] = config('constant.curiculum.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.curiculum.doc_unique_id');
              }
-             if($j===2){
+             if($j==2){
                 $data['doc_file_name'] = $file->course_details_xsl;
                 $data['doc_sr_code'] = config('constant.details.doc_sr_code');
                 $data['doc_unique_id'] = config('constant.details.doc_unique_id');
@@ -1072,6 +1080,7 @@ class ApplicationCoursesController extends Controller
             
             $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
 
+            
            
             /*to get payment from db*/
                 $fee_structure = DB::table('tbl_fee_structure')->select('currency_type', 'level')

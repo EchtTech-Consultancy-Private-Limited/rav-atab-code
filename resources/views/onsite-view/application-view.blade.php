@@ -310,6 +310,18 @@
         </div>
         </div>  
         @endforeach
+        
+        @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
+        
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
+                @csrf
+                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                </form>
+                </div>
+        </div>
+@endif
 
         <div class="card p-relative">
             <div class="box-overlay">

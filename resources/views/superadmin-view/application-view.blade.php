@@ -65,7 +65,6 @@
                         $number = $app_id;
                         $app_id = substr((string)$number, -1);
                     } 
-                    
                 @endphp
 
                 <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
@@ -75,10 +74,18 @@
                     <div class="col-md-6 mb-3">
                     <div class="float-right">
                    
-                    @if($is_final_submit)
+                @if($is_final_submit && $spocData->level_id==3)
+                
+                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id))}}" class="float-left btn btn-primary btn-sm"> View MoM
+                    </a>    
+                
+                   
+                @endif
+
+                @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==2 || $spocData->level_id==3))
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
                         </a>
-                    @endif
+                @endif
                     
                         <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
@@ -488,8 +495,10 @@
                         <div class="col-md-6 d-flex justify-content-end gap-2">
                             <!-- <form action="{{url('admin/approve-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="get"> -->
                             @if(($ApplicationCourses['course']->status==0 || $ApplicationCourses['course']->status==1) && $spocData->approve_status==2)
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
+                               @if($spocData->level_id!=3)
+                               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
+                               <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
+                               @endif
                             @elseif($ApplicationCourses['course']->status==2)
                             <div class="badge badge-main success float-right">Approved by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                             @endif
@@ -522,8 +531,6 @@
         </div>
         </div>  
         @endforeach
-
-          
         
         <div class="row">
         

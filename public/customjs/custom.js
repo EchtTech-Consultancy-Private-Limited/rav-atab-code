@@ -72,7 +72,7 @@ function handlePaymentApproved() {
     let encoded_application_id = urlObject.pathname.split("/").pop();
     let final_payment_remark = $("#final_payment_remark").val();
     final_payment_remark = final_payment_remark ?? "";
-    if (final_payment_remark === "") {
+    if (final_payment_remark == "") {
         $("#final_payment_remark_err").html(
             "Please enter the approve payment remark."
         );
@@ -128,12 +128,141 @@ function handlePaymentApproved() {
 }
 
 
+var handleAdditionalPaymentReceived = () => {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    const fileInput = document.getElementById("payment_proof");
+    let payment_remark = $("#payment_remark").val();
+    let payment_id = $("#payment_id").val();
+    if(payment_remark=="" || payment_remark==null){
+        toastr.error("Please enter the remark.", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }
+    payment_remark = payment_remark ?? "";
+    let formData = new FormData();
+    if (fileInput.files.length > 0) {
+        formData.append("payment_proof", fileInput.files[0]);
+    }
+        formData.append("payment_remark", payment_remark);
+        formData.append("payment_id", payment_id);
+        formData.append("application_id", encoded_application_id);
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/account-additional-payment-received`,
+            type: "post",
+            datatype: "json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".box-overlay-2").show();
+            },
+            complete: function () {
+                $("#loading").hide();
+            },
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay-2").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(xhr, "st");
+            },
+        });
+   
+};
+function handleAdditionalPaymentApproved() {
+    let urlObject = new URL(window.location.href);
+    let encoded_application_id = urlObject.pathname.split("/").pop();
+    let final_payment_remark = $("#final_payment_remark").val();
+    final_payment_remark = final_payment_remark ?? "";
+    if (final_payment_remark == "") {
+        $("#final_payment_remark_err").html(
+            "Please enter the approve payment remark."
+        );
+        return false;
+    }
+    let formData = new FormData();
+    formData.append("final_payment_remark", final_payment_remark);
+    formData.append("application_id", encoded_application_id);
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: `${BASE_URL}/account-additional-payment-approved`,
+        type: "post",
+        datatype: "json",
+        data: formData,
+        contentType: false,
+        processData: false,
+        beforeSend: function () {
+            $(".box-overlay").show();
+        },
+        complete: function () {
+            $("#loading").hide();
+        },
+        success: function (resdata) {
+            if (resdata.success) {
+                toastr.success(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error(resdata.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $(".box-overlay").hide();
+            }
+        },
+        error: (xhr, st) => {
+            console.log(st, "st");
+        },
+    });
+}
+
 
 function handleAcknowledgementPayment(id) {
     let is_acknowledged = confirm("Are you sure you want to acknowledge?");
     if (is_acknowledged) {
         $(".full_screen_loading").show();
-        if (id == "" || id === null || id === undefined) {
+        if (id == "" || id == null || id == undefined) {
             toastr.error("Application id not found", {
                 timeOut: 0,
                 extendedTimeOut: 0,
@@ -1039,7 +1168,7 @@ $(".assesorsid").on("click", function () {
             assessor_id,
         },
         success: function (data) {
-            if (data === "success") {
+            if (data == "success") {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -1114,7 +1243,7 @@ function handlePdfOrImageForPhotograph(path) {
     let MAIN_URL = BASE_URL + "/level/";
     const fileExtension = path.split(".").pop().toLowerCase();
     $("#view_photograph_onsite").html("");
-    if (fileExtension === "pdf") {
+    if (fileExtension == "pdf") {
         const html =
             '<object data="' +
             MAIN_URL +
@@ -1989,7 +2118,7 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     });
 
     $("select.remove_err_input_error option").each(function (index, elem) {
-        if (mode_of_course[index] === "") {
+        if (mode_of_course[index] == "") {
             $(elem).addClass('courses_error');
         }
   })
@@ -2084,13 +2213,14 @@ function getAdditionalPaymentDetails(){
             data:{level:payments,application_id:application_id},
             success: function (response) {
                 if (response.success) {
-                    console.log(response);
                     $('.full_screen_loading').hide();
                     $('#total_add_fee').html(response.total);
+                    $('#secretariat_amount').html(response.total);
 
                 }else{
                     $('.full_screen_loading').hide();
                     $('#total_add_fee').html("N/A");
+                    $('#secretariat_amount').html("N/A");
                     // toastr.error(response.message, {
                     //     timeOut: 0,
                     //     extendedTimeOut: 0,
@@ -2118,6 +2248,7 @@ function getAdditionalPaymentDetails(){
 function handleOnChange(){
     const total = $('#fee_amount').val();
     $('#total_add_fee').html(total);
+    $('#secretariat_amount').html(total);
 }
 
 
@@ -2521,12 +2652,28 @@ function handleAcceptApplicationByAdmin(){
 
 function handleRaiseQueryForAdditionalPayment(){
     const application_id = $('#application_id').val();
+    const payment_type = $('select#payment_type option:selected').val();
     const raise_query_remark = $('#raise_query_remark').val();
+    let fee_amount = $('#fee_amount').val();
+    if(!fee_amount){
+        fee_amount=0;
+    }
+
     if(application_id!=null && raise_query_remark!=null){
         $('.full_screen_loading').show();
         if(raise_query_remark==""){
             $('.full_screen_loading').hide();
             toastr.error("Please enter query raise remark.", {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            return false;
+        }
+        if(payment_type==""){
+            $('.full_screen_loading').hide();
+            toastr.error("Please select payment type.", {
                 timeOut: 0,
                 extendedTimeOut: 0,
                 closeButton: true,
@@ -2542,7 +2689,7 @@ function handleRaiseQueryForAdditionalPayment(){
         $.ajax({
             url: `${BASE_URL}/admin/raise/payment/query`,
             type: "POST",
-            data:{application_id:application_id,raise_query_remark:raise_query_remark},
+            data:{application_id:application_id,raise_query_remark:raise_query_remark,level:payment_type,fee_amount:fee_amount},
             success: function (response) {
                 if (response.success) {
                     $('.full_screen_loading').hide();
@@ -2662,7 +2809,7 @@ function handleAdditionalPaymentApproved() {
     let encoded_application_id = urlObject.pathname.split("/").pop();
     let final_payment_remark = $("#final_payment_remark").val();
     final_payment_remark = final_payment_remark ?? "";
-    if (final_payment_remark === "") {
+    if (final_payment_remark == "") {
         $("#final_payment_remark_err").html(
             "Please enter the approve payment remark."
         );
@@ -2976,6 +3123,202 @@ function handleRevertRejectAction(application_id,course_id){
     }
     
 }
+
+function handleSecretariatFinalSummary(){
+    const remark = $("#comment_text").val();
+    if(remark==""){
+        toastr.error("Please enter the remark", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+    }else{
+        const form = document.getElementById('secretariatForm');
+        var newInput1 = document.createElement('input');
+        newInput1.setAttribute('type', 'hidden');
+        newInput1.setAttribute('name', 'comment_text');
+        newInput1.setAttribute('value', remark);
+        form.appendChild(newInput1);
+        return true;
+
+    }
+    return false;
+}
+
+function handleAssignBothAssessor(application_id){
+        window.localStorage.setItem('assessor',true);
+        window.localStorage.setItem('application_id',application_id);
+        window.location.href=BASE_URL+"/admin/application-list";
+}
+function handleAdminAssignAssessorValidation(){
+    window.localStorage.setItem('assessor',false);
+    window.localStorage.setItem('application_id',null);
+}
+function beforeSubmit(){
+    var fileInput = $(`#mom`).val();
+    if(fileInput==""){
+        toastr.error("Please first upload MoM", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }else{
+        return true
+    }
+    
+}
+
+function handleLevel(){
+    const value = $(`#level_proceed`).val();
+    alert(value)
+    if(value==""){
+        toastr.error("Please first accept terms and conditions", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }else{
+        return true
+    }
+    
+}
+
+function adminMomOrApproveApplication() {
+    let is_acknowledged = confirm("Are you sure you want to submit?");
+    if (is_acknowledged) {
+        $('.full_screen_loading').show();
+
+        let doc_comment = $("#comment_text").val();
+        let action = $("#status").find(":selected").val();
+        const application_id = $('#application_id').val();
+        const mom_id = $('#mom_id').val();
+
+        if(doc_comment=="" || action==""){
+            toastr.error("All fields are required", {
+                timeOut: 1,
+                extendedTimeOut: 0,
+                closeButton: true,
+                closeDuration: 5000,
+            });
+            $('.full_screen_loading').hide();
+            return false;
+        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        const formData = new FormData();
+        formData.append('application_id',application_id);
+        formData.append('action',action);
+        formData.append('comment',doc_comment);
+        formData.append('mom_id',mom_id);
+        $.ajax({
+            url: `${BASE_URL}/admin/return/mom`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                    setTimeout(() => {
+                        window.location.href = resdata.redirectTo;
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                }
+            },
+            error: (xhr, st) => {
+                $('.full_screen_loading').hide();
+                console.log(xhr, "st");
+            },
+        });
+    }
+}
+
+$(document).ready(function() {
+    $('#mom').change(function() {
+      $('.full_screen_loading').show();
+       const mom = $(`#mom`)[0].files[0];
+       const application_id = $('#application_id').val();
+       const fileInput = $(`#mom`);
+
+        const formData = new FormData();
+        formData.append("application_id", application_id);
+        formData.append("mom", mom);
+        
+        var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+        var uploadedFileName = fileInput.val();
+        var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) == -1) {
+            toastr.error("Please upload a PDF or DOC file.", "Invalid file type",{
+                      timeOut: 0,
+                      extendedTimeOut: 0,
+                      closeButton: true,
+                      closeDuration: 5000,
+                  });
+            $('.full_screen_loading').hide();
+            fileInput.val('');
+            return;
+        }
+      //   $("#loader").removeClass('d-none');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: `${BASE_URL}/secretariat/upload-mom`, // Your server-side upload endpoint
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+               //  $("#loader").addClass('d-none');
+               $('.full_screen_loading').hide();
+                if (response.success) {
+                  toastr.success(response.message, {
+                      timeOut: 0,
+                      extendedTimeOut: 0,
+                      closeButton: true,
+                      closeDuration: 5000,
+                  });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                $('.full_screen_loading').hide();
+                toastr.error("Something went wrong!", {
+                      timeOut: 0,
+                      extendedTimeOut: 0,
+                      closeButton: true,
+                      closeDuration: 5000,
+                  });
+            }
+        });
+    });
+});
+
 
 $(document).on('keyup change', '.remove_err_input_error', function () {
     $(this).removeClass('courses_error');
