@@ -2541,7 +2541,7 @@ function handleRejectApplicationByAdmin(){
             },
         });
         $.ajax({
-            url: `${BASE_URL}/super-admin-reject-application`,
+            url: `${BASE_URL}/super-admin-reject-application/${application_id}`,
             type: "POST",
             data:{application_id:application_id,course_id:course_id,remark:applicationRemark},
             success: function (response) {

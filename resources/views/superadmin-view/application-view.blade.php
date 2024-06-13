@@ -539,8 +539,9 @@
                             
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
 
-                            <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button> -->
-                            
+                            @if($spocData->level_id!=3)
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button>
+                            @endif
                             
                             
                         </div>
@@ -971,7 +972,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Reject Course : <span id="rejectionCourseName"></span></h5>
+        <h5 class="modal-title" id="exampleModalLabel">Reject Application  : <span id="rejectionCourseName"></span></h5>
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -1004,7 +1005,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="approve_modal_by_admin"><span class="course_btn_type">Approve</span> Course : <span id="approveCourseName"></span></h5>
+        <h5 class="modal-title" id="approve_modal_by_admin"><span class="course_btn_type">Approve</span> Application : <span id="approveCourseName"></span></h5>
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

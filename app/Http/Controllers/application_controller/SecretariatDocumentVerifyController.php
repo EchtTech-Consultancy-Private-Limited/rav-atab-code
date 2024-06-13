@@ -261,6 +261,16 @@ class SecretariatDocumentVerifyController extends Controller
             $nc_type="";
             $doc_comment = "";
             $redirect_to = URL::to("/admin/application-view") . '/' . dEncrypt($request->application_id);
+            /*custom_url*/ 
+            $get_application = DB::table('tbl_application')->where('id',$request->application_id)->first();
+            if($get_application->level_id==1){
+                $redirect_to = URL::to("/admin/application-view") . '/' . dEncrypt($request->application_id);
+            }else if($get_application->level_id==2){
+                $redirect_to = URL::to("/admin/application-view-level-2") . '/' . dEncrypt($request->application_id);
+            }else{
+                $redirect_to = URL::to("/admin/application-view-level-3") . '/' . dEncrypt($request->application_id);
+            }
+            /*end here*/ 
             if($request->nc_type=="Accept" && $request->comments==""){
                $nc_type="Accept";
                $doc_comment="Document has been approved";
@@ -500,7 +510,6 @@ class SecretariatDocumentVerifyController extends Controller
             // return redirect($redirect_to);
          }
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');
         }
@@ -515,8 +524,8 @@ class SecretariatDocumentVerifyController extends Controller
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
             $get_course_docs = DB::table('tbl_application_course_doc')
-            ->where(['application_id' => $application_id,'approve_status'=>1])
-            // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
+            // ->where(['application_id' => $application_id,'approve_status'=>1])
+            ->where(['application_id' => $application_id])
             ->latest('id')->get();
             foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
@@ -904,8 +913,15 @@ class SecretariatDocumentVerifyController extends Controller
         try {
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat','application_courses_id'=>$application_course_id])->latest('id')->first();
             $is_nc_exists = false;
+            $course_rejected=false;
             if ($nc_type == "view") {
                 $is_nc_exists = true;
+            }
+            $course = DB::table('tbl_application_courses')->where('id',$application_course_id)->whereIn('status',[1,3])->first();
+
+            if(!empty($course)){
+                $course_rejected=true;
+                $is_nc_exists=false;
             }
             // dd($tbl_nc_comments->nc_type,$nc_type);
             if (isset($tbl_nc_comments->nc_type)) {
@@ -965,6 +981,7 @@ class SecretariatDocumentVerifyController extends Controller
                 'dropdown_arr' => $dropdown_arr ?? [],
                 'is_nc_exists' => $is_nc_exists,
                 'nc_comments' => $nc_comments,
+                'is_course_rejected'=>$course_rejected
             ]);
         } catch (Exception $e) {
 

@@ -145,7 +145,18 @@
                                                 @endif
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/admin/application-view', dEncrypt($item->application_list->id)) }}"
+                                                        @php
+                                                        $view_url="";
+                                                        if($item->application_list->level_id==1){
+                                                            $view_url="/admin/application-view";
+                                                        }elseif($item->application_list->level_id==2){
+                                                            $view_url="/admin/application-view-level-2";
+                                                        }else{
+                                                            $view_url="/admin/application-view-level-3";
+                                                        }
+
+                                                        @endphp
+                                                        <a href="{{ url($view_url, dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                                
