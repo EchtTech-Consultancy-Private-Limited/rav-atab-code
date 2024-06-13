@@ -1502,30 +1502,15 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         ]);
         $application_id = $request->Application_id;
 /*calculate amount according to level and courses*/ 
-
-                $course = DB::table('tbl_application_courses')->where(['application_id'=>$application_id])->get();
-                    
-                $level = $request->payment_type;
-                $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
-                $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$country_details->currency,'level'=>$level])->get();
                 
-                if (count($course) == '0') {
-                    $total_amount = '0';
-                } elseif (count($course) <= 5) {
-                    $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
-                } elseif (count($course)>=5 && count($course) <= 10) {
-                    $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
-                } elseif(count($course)>10) {
-                    $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
-                }
-/*end here to calculating the amount*/ 
-        if($request->payment_type=="OTHER"){
-            $total_amount=$request->fee_amount;
-        }
+                $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+                $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+                $total_amount = $get_app->raise_amount;
+                $payment_type = $get_app->payment_type_level;
         
         $data = [];
         $data['application_id'] = $request->Application_id;
-        $data['payment_type'] = $request->payment_type;
+        $data['payment_type'] = $payment_type;
         $data['payment_mode'] = $request->payment;
         $data['amount'] =$total_amount; 
         $data['currency'] = $country_details->currency;

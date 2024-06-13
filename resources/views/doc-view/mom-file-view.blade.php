@@ -127,7 +127,11 @@
                     </div>
                     @endif
                     
-                
+            <div class="col-md-12">
+                @if($application_details->return_remark)
+                  <b>Remark : </b> <span class="text-success">{{$application_details->return_remark}}</span>
+                @endif
+            </div>
             <div class="row clearfix">
 
                 <div class="col-lg-12 col-md-12">

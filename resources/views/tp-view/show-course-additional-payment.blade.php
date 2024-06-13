@@ -256,7 +256,7 @@
                                 <div class="header">
                                     <h2 style="float:left; clear:none;">Payment</h2>
                                     <h6 style="float:right; clear:none;" id="counter">
-                                        Total Amount (with 18% GST): <span id="total_add_fee">N/A</span>
+                                        Total Amount (with 18% GST): <span id="total_add_fee">{{$applicationData->raise_amount??0}}</span>
                                  
                                 </div>
                                 <div class="body">
@@ -286,7 +286,7 @@
                                                 </label>
                                             </div>
 
-                                            <div class="select-box-hide-class col-md-4">
+                                            <!-- <div class="select-box-hide-class col-md-4">
                                                 <label>Payment Type<span class="text-danger">*</span></label>
                                                 <select  class="form-control payment_mode" 
                                                     required name="payment_type" id="payment_type" onchange="getAdditionalPaymentDetails()">
@@ -301,12 +301,12 @@
                                                         </option>
 
                                                 </select>                                              
-                                            </div>
+                                            </div> -->
 
-                                            <div class="select-box-hide-class col-md-4 show_hide_amt">
+                                            <!-- <div class="select-box-hide-class col-md-4 show_hide_amt">
                                                 <label>Amount<span class="text-danger">*</span></label>
                                                 <input type="number" class="form-control" min='0' maxLength='10' placeholder="Amount" name="fee_amount" id = "fee_amount" onkeydown="handleOnChange()"/>                                             
-                                            </div>
+                                            </div> -->
 
                                         </div>
                                         <!-- payment start -->

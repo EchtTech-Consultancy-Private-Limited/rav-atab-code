@@ -173,8 +173,8 @@
             <div>
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12">
-                        <form id="submitForm" action="{{url('desktop/final-summary')}}" method="post">
-                            @csrf
+                        <!-- <form id="submitForm" action="{{url('desktop/final-summary')}}" method="post">
+                            @csrf -->
                             <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
                             <input type="hidden" name="application_course_id" value="{{Request()->segment(4)}}">
                             <div class="p-3  bg-white">
@@ -290,14 +290,31 @@
                                             </td>
                                             </tr>
                                             @endforeach
+                                            
                                         </tbody>
                                     
                                     </table>
-                                    @endif
 
+                                    @endif
+<tr>
+                                                <td colspan="6">
+                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                </div>
+                                                </td>
+                                            </tr>
                                     @if(!$is_final_submit)
+                                    
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
-                                    <a href="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a>
+                                    <form id="secretariatForm" action="{{url('desktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" method="post" onsubmit="return handleSecretariatFinalSummary();">
+                                        @csrf
+                                        <input type="submit" value="Final Submit Summary" class="btn btn-primary btn-sm">
+                                    </form>
+                                    <!-- <a href="{{url('dsesktop/final-summary').'/'.dEncrypt($summertReport->application_id).'/'.dEncrypt($summertReport->application_course_id)}}" class="btn btn-primary">Final Submit Summary</a> -->
+                                    
+                                    
                                     @endif
                                 </div>
                                 </section>
@@ -306,7 +323,7 @@
                                
                             </div>
                            
-                        </form>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
@@ -325,4 +342,35 @@
             document.body.innerHTML = originalContents;
         }
 </script>
+<script>
+        // Get a reference to the comment text area
+        var commentTextArea = document.getElementById('comment_text');
+
+        // Get a reference to the character count info
+        var charCountInfo = document.getElementById('char-count-info');
+
+        // Get a reference to the submit button
+        var submitButton = document.getElementById('submitBtn');
+
+        // Add an input event listener to the text area
+        commentTextArea.addEventListener('input', function() {
+            var currentCharCount = commentTextArea.value.length;
+
+            // Update the character count info
+            charCountInfo.textContent = currentCharCount + '/250 characters';
+
+            // Check if the limit is reached
+            // Check if the limit is reached
+            if (currentCharCount > 250) {
+                // Truncate the text to 250 characters
+                commentTextArea.value = commentTextArea.value.substring(0, 250);
+                charCountInfo.textContent = '250/250 characters (maximum reached)';
+                charCountInfo.style.color = 'red'; // Set text color to red
+                submitButton.disabled = true; // Disable the submit button
+            } else {
+                charCountInfo.style.color = '#000'; // Reset text color to the default
+                submitButton.disabled = false; // Enable the submit button
+            }
+        });
+    </script>
 @include('layout.footer')

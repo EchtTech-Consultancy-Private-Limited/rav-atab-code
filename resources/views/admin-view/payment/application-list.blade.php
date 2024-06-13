@@ -147,12 +147,13 @@
                                                         <a href="{{ url('/admin/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-                                                    @if($item->application_list->is_query_raise===0)
+                                                    @if(($item->application_list->is_query_raise==0 && $item->application_list->status_text!="Application Approved") && $item->application_list->status_text!="Application Accepted" )
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#raise_query_payment"
                                                     onclick="setPayModalData({{$item->application_list->id}})"
                                                             class="btn btn-tbl-edit bg-warning"><i
                                                                 class="material-icons">forum</i></a>
-                                                    @else
+                                                    @endif
+                                                    @if($item->application_list->is_query_raise!=0)
                                                     <span class="badge badge-main success">Raised</span>
                                                     @endif
                                                 </td>
@@ -182,13 +183,35 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="raise_query_payment">Raise Payment Query</h5>
+        <h5>Payment : Rs. <span id="secretariat_amount">0</span></h5>
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <se class="modal-body">
+        <label for="raise_query_remark">Remark</label>
         <textarea row="3" id="raise_query_remark" class="form-control"></textarea>
-      </div>
+        <div class="select-box-hide-class col-md-12 mt-2">
+                                                <label>Payment Type<span class="text-danger">*</span></label>
+                                                <select  class="form-control payment_mode" 
+                                                    required name="payment_type" id="payment_type" onchange="getAdditionalPaymentDetails()">
+                                                    <option value="">Select Option</option>
+                                                    @foreach($fee_structure as $list)
+                                                        <option value="{{ $list->level }}">
+                                                            {{ strtoupper($list->level) }} Fee
+                                                        </option>
+                                                    @endforeach
+                                                    <option value="OTHER">
+                                                            Other Fee
+                                                        </option>
+
+                                                </select>                                              
+                                            </div>
+                                            <div class="select-box-hide-class col-md-12 mt-2 show_hide_amt">
+                                                <label>Amount<span class="text-danger">*</span></label>
+                                                <input type="number" class="form-control" min='0' maxLength='10' placeholder="Amount" name="fee_amount" id = "fee_amount" onkeyup="handleOnChange()"/>                                             
+                                            </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onClick="handleRaiseQueryForAdditionalPayment()">Raise Query</button>

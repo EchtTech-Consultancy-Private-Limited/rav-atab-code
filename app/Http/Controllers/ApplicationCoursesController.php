@@ -1080,6 +1080,7 @@ class ApplicationCoursesController extends Controller
             
             $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
 
+            
            
             /*to get payment from db*/
                 $fee_structure = DB::table('tbl_fee_structure')->select('currency_type', 'level')

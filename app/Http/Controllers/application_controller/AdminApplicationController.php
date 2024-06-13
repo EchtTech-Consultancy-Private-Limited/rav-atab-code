@@ -690,13 +690,12 @@ class AdminApplicationController extends Controller
 
     public function checkAllActionDoneOn44Docs($application_id)
     {
-
-        $results = DB::table('tbl_application_course_doc')
+         $results = DB::table('tbl_application_course_doc')
             ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('application_courses_id', $application_courses_id)
             ->where('application_id', $application_id)
-            ->where('approve_status',1)
+            // ->where('approve_status',1)
             ->get();
 
             
@@ -719,7 +718,7 @@ class AdminApplicationController extends Controller
                 ->where('application_courses_id', $result->application_courses_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                ->where('approve_status',1)
+                // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -731,12 +730,14 @@ class AdminApplicationController extends Controller
         }
 
         
-        $total_course = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
+        $total_course = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
         $total_docs = $total_course * 4;
+        // dd(count($results));
         if(count($results)<$total_docs){
             return "document_not_upload";
         }
         $flag = 0;
+        
         foreach ($results as $result) {
             if (($result->status!= 0 && ($result->is_revert==1 || $result->is_revert==2) )) {
                 $flag = 0;
@@ -1325,6 +1326,9 @@ class AdminApplicationController extends Controller
 
             $assessment_way = DB::table('asessor_applications')->where('application_id', $app->id)->first()->assessment_way ?? '';
 
+            
+           
+
             if ($payment) {
                 $obj->assessor_list = $payment_count > 1 ? $onsite_assessor_list : $desktop_assessor_list;
                 $obj->assessor_type = $payment_count > 1 ? "onsite" : "desktop";
@@ -1337,8 +1341,17 @@ class AdminApplicationController extends Controller
             }
             $final_data[] = $obj;
         }
+
+        $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+        /*to get payment from db*/
+            $fee_structure = DB::table('tbl_fee_structure')->select('currency_type', 'level')
+            ->where('currency_type',$country_details->currency)
+            ->groupBy('currency_type', 'level')
+            ->get();
+          
+        /*end here*/
         
-        return view('admin-view.payment.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
+        return view('admin-view.payment.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata,'fee_structure'=>$fee_structure]);
     }
     
     public function getApplicationPaymentFeeView($id)
@@ -1464,7 +1477,32 @@ class AdminApplicationController extends Controller
     function raisePaymentQuery(Request $request){
         try{
             DB::beginTransaction();
-            $raisedQuery = DB::table('tbl_application')->where('id',$request->application_id)->update(['is_query_raise'=>1,'query_raise_remark'=>$request->raise_query_remark]);
+            
+            /*get total amount by level */
+            $course = DB::table('tbl_application_courses')->where(['application_id'=>$request->application_id])->get();
+    
+            $level = $request->level;
+            $country_details = DB::table('countries')->where('id',Auth::user()->country)->first();
+            $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$country_details->currency,'level'=>$level])->get();
+            if(count($get_payment_list)>0){
+            if (count($course) == '0') {
+                $total_amount = '0';
+            } elseif (count($course) <= 5) {
+                $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            } elseif (count($course)>=5 && count($course) <= 10) {
+                $total_amount = (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+            } elseif(count($course)>10) {
+                $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+            }
+         }else{
+            $level = "OTHER";
+         }
+            if($request->fee_amount>0){
+                $total_amount=$request->fee_amount;
+            }
+            /*end here*/ 
+            
+            $raisedQuery = DB::table('tbl_application')->where('id',$request->application_id)->update(['is_query_raise'=>1,'query_raise_remark'=>$request->raise_query_remark,'raise_amount'=>$total_amount,'payment_type_level'=>$level]);
 
             if($raisedQuery){
                 DB::commit();

@@ -75,9 +75,7 @@
                     <li class="{{ Request::is('level-third') || Request::is('level-third/tp/application-list') || Request::is('upgrade/level-3*')? 'active' : '' }}">
                         <a href="{{ url('/level-third') }}">Level 3</a>
                     </li>
-                    <li class="{{ Request::is('level-fourth') || Request::is('level-four/tp/application-list') ? 'active' : '' }}">
-                        <a href="{{ url('/level-fourth') }}">Level 4</a>
-                    </li>
+                   
             </li>
 
         </ul>

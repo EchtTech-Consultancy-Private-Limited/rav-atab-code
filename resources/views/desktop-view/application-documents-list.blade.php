@@ -132,7 +132,7 @@
                </div>
                <div class="col-sm-6">
                   <div class="pr-2">
-                     <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
+                     <a href="{{ url("/desktop/application-view".'/'.dEncrypt($application_id))}}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
                   </div>
                   <!-- <div class="d-flex justify-content-end gap-5">
@@ -365,6 +365,7 @@
                                         @endforeach
                                        </tbody>
                                     </table>
+                                    
                                     @if(!$is_final_submit && $is_doc_uploaded && $checkAllActionDoneOnDocList==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>

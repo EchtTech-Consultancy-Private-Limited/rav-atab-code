@@ -74,15 +74,17 @@
                     <div class="col-md-6 mb-3">
                     <div class="float-right">
                    
-                @if($is_final_submit)
+                @if($is_final_submit && $spocData->level_id==3)
                 
                     <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id))}}" class="float-left btn btn-primary btn-sm"> View MoM
                     </a>    
                 
-                    @if($spocData->approve_status==2 || $spocData->approve_status==1)
+                   
+                @endif
+
+                @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==2 || $spocData->level_id==3))
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
                         </a>
-                    @endif
                 @endif
                     
                         <a href="{{ url('super-admin/application-list') }}" type="button" class="btn btn-primary">Back

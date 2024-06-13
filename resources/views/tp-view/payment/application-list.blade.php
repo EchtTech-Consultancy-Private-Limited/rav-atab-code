@@ -144,14 +144,15 @@
                                                 @endif
                                                 </td>
                                                     <td>
+                                                        
                                                         <a href="{{ url('/tp/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-                                                @if($item->application_list->is_query_raise===1)
+                                                @if($item->application_list->is_query_raise==1)
                                                     <a href="{{url('/tp/show-course-additional-payment'.'/'.dEncrypt($item->application_list->id))}}"
                                                             class="btn btn-tbl-edit bg-warning"><i
                                                                 class="material-icons">forum</i></a>
-                                                    @elseif($item->application_list->is_query_raise===2)
+                                                    @elseif($item->application_list->is_query_raise==2)
                                                     <span class="badge badge-main success">Paid</span>
                                                     @endif
 
