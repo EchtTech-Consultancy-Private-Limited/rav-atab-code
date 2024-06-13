@@ -25,6 +25,7 @@ use App\Http\Controllers\application_controller\DesktopApplicationController;
 use App\Http\Controllers\application_controller\OnsiteApplicationController;
 use App\Http\Controllers\application_controller\DocApplicationController;
 use App\Http\Controllers\application_controller\SecretariatDocumentVerifyController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -55,6 +56,13 @@ Route::get('list_show', [AuthController::class, 'list_show']);
 Route::get('state-list', [AuthController::class, 'state']);
 Route::get('city-list', [AuthController::class, 'city']);
 Route::get("/logout", [AuthController::class, 'logout']);
+
+/*--------------------Start Online Payment Process----------------------------*/
+Route::get('makepayment',[PaymentController::class,'makePayment'])->name('makepayment');
+Route::get('paymentresponse',[PaymentController::class,'paymentResponse'])->name('paymentresponse');
+/*--------------------End Online Payment Process----------------------------*/
+
+
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/', [AuthController::class, 'landing'])->name('/');
     Route::get('/login-page', [AuthController::class, 'landingLogin'])->name('login-page');
@@ -84,6 +92,10 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/assessor-user', [adminController::class, 'assessor_user']);
     Route::get('/professional-user', [adminController::class, 'professional_user']);
     Route::get('view-user/{id?}', [adminController::class, 'user_view']);
+
+     
+
+
     //level route type 4
     Route::post('/new-application', [LevelController::class, 'new_application']);
     Route::get('level-list', [LevelController::class, 'level_list']);
@@ -475,6 +487,8 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
 
     Route::post('tp-additional-payment-reference-validation', [TpApplicationController::class, 'paymentAdditionalReferenceValidation'])->name('additional_reference_validation');
 /*----------------- End Here------------------------*/
+ 
+    
 });
 Route::get('email-test', function(){
     $details['email'] = 'surajc414@gmail.com';
