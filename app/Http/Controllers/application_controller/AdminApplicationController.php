@@ -671,7 +671,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
-                // ->where('approve_status',1)
+                ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -685,13 +685,14 @@ class AdminApplicationController extends Controller
         $flag = 0;
         
         foreach ($results as $result) {
-            if (($result->status!=0)) {
+            if (isset($result->status) && ($result->status!=0)) {
                 $flag = 0;
             } else {
                 $flag = 1;
                 break;
             }
         }
+        
         
         if ($flag == 0) {
             return false;
@@ -756,6 +757,8 @@ class AdminApplicationController extends Controller
                 break;
             }
         }
+
+        
         
         if ($flag == 0) {
             return false;
@@ -834,7 +837,7 @@ class AdminApplicationController extends Controller
         ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
         ->where('application_id', $application_id)
-        // ->where('approve_status',1)
+        ->where('approve_status',1)
         ->get();
 
         
@@ -857,7 +860,7 @@ class AdminApplicationController extends Controller
             // ->where('application_courses_id', $result->application_courses_id)
             ->where('doc_sr_code', $result->doc_sr_code)
             ->where('doc_unique_id', $result->doc_unique_id)
-            // ->where('approve_status',1)
+            ->where('approve_status',1)
             ->first();
         if ($additionalField) {
             $results[$key]->status = $additionalField->status;
@@ -1516,11 +1519,18 @@ class AdminApplicationController extends Controller
                 'id' => 'required',
             ]);
             DB::beginTransaction();
-
+            $get_application = DB::table('tbl_application')->where('id',$id)->first();
             $update_admin_received_payment_status = DB::table('tbl_application')->where('id', $id)->update(['admin_received_payment' => 1]);
             if ($update_admin_received_payment_status) {
                 DB::commit();
-                $redirect_url = URL::to('/admin/application-view/' . dEncrypt($id));
+                if($get_application->level_id==1){
+                    $redirect_url = URL::to('/admin/application-view/' . dEncrypt($id));
+                }else if($get_application->level_id==2){
+                    $redirect_url = URL::to('/admin/application-view-level-2/' . dEncrypt($id));
+                }else{
+                    $redirect_url = URL::to('/admin/application-view-level-3/' . dEncrypt($id));
+                }
+                
                 return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $redirect_url], 200);
             } else {
                 DB::rollback();

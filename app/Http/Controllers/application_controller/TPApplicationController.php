@@ -953,7 +953,7 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     
     $last_application_id = TblApplication::where('id',$id)->first()->id;
     
-    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->get();
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
