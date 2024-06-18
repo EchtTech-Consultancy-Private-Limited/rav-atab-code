@@ -76,7 +76,7 @@
 
                         <div class="col-lg-12 col-md-12">
 
-                            <div class="tab-content">
+                            <!-- <div class="tab-content">
                                 @if($is_form_show==null && $application_details->approve_status!=1)
                                 <div>
                                         <div class="row clearfix">
@@ -125,7 +125,7 @@
                             </div>
                         </div>
                     </div>
-                    @endif
+                    @endif -->
                     
             <div class="col-md-12">
                 @if($application_details->return_remark)

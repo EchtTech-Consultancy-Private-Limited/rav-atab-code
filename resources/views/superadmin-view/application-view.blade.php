@@ -495,10 +495,16 @@
                         <div class="col-md-6 d-flex justify-content-end gap-2">
                             <!-- <form action="{{url('admin/approve-course/'.$spocData->id.'/'.$ApplicationCourses['course']->id)}}" method="get"> -->
                             @if(($ApplicationCourses['course']->status==0 || $ApplicationCourses['course']->status==1) && $spocData->approve_status==2)
-                               @if($spocData->level_id!=3)
+                            
+                                @if($ApplicationCourses['course']->status!=1 && $ApplicationCourses['course']->status!=3 && $spocData->level_id==3) 
                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
-                               @endif
+
+                               @elseif($ApplicationCourses['course']->status==0 && $ApplicationCourses['course']->status==1 && $spocData->level_id!=3)
+                               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
+                               <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
+                             @endif
+                               
                             @elseif($ApplicationCourses['course']->status==2)
                             <div class="badge badge-main success float-right">Approved by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                             @endif
@@ -534,7 +540,18 @@
         
         <div class="row">
         
-        @if($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected")
+                    @if($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected" && $spocData->level_id!=3)
+                        <div class="col-md-12 text-right">
+                            
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
+
+                            @if($spocData->level_id!=3)
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject Application</button>
+                            @endif
+                            
+                            
+                        </div>
+                        @elseif($spocData->approve_status==2 && $spocData->level_id==3)
                         <div class="col-md-12 text-right">
                             
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
