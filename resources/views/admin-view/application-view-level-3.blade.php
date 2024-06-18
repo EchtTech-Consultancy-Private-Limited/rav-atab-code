@@ -617,16 +617,21 @@
                             </form>
                         </div>
         
-        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!=="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $is_final_summary_generated && $application_details->application->level_id==2) 
-        
+        <!-- @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!=="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $is_final_summary_generated && $application_details->application->level_id==2)  -->
+
+        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!=="document_not_upload" && $application_details->is_action_taken_on_44_docs==false &&  $application_details->application->level_id==2) 
+                            
+                        @if($is_final_summary_generated)
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                             </form>
                         </div>
-
-
+                        @else
+                        <div class="badge badge-main warning float-right">Final Summary Not Created Yet!</div>
+                        @endif
+        
 
        @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3)
        

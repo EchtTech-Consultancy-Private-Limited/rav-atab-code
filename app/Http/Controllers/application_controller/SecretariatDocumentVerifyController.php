@@ -531,7 +531,7 @@ class SecretariatDocumentVerifyController extends Controller
                     $nc_comment_status = "";
                     $nc_flag=0;
                     $nc_comments = 0;
-                   if ($course_doc->status == 2) {
+                    if ($course_doc->status == 2) {
                         $nc_comment_status = 2;
                         $nc_flag = 1;
                         $nc_comments=1;
@@ -539,12 +539,17 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_comment_status = 3;
                         $nc_flag = 1;
                         $nc_comments=1;
-                    }
-                    // else if ($course_doc->status == 4) {
-                    //     $nc_comment_status = 4;
-                    //     $nc_flag = 1;
-                    //     $nc_comments=1;
-                    // } 
+                    } 
+                    else if ($course_doc->status == 4) {
+                        $nc_comment_status = 4;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
+                    else if ($course_doc->status == 6) {
+                        $nc_comment_status = 6;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
                     else {
                         $nc_comment_status = 0; //not recommended
                         $nc_flag = 0;
@@ -597,7 +602,7 @@ class SecretariatDocumentVerifyController extends Controller
             $get_application = DB::table('tbl_application')->where('id', $request->application_id)->first();
             // this is for the level-2 and level-3
             if(isset($get_application) && ($get_application->level_id==2 || $get_application->level_id==3)){
-                DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>0]);
+                DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>2]);
             }
 
             $get_course_docs = DB::table('tbl_course_wise_document')
@@ -609,7 +614,7 @@ class SecretariatDocumentVerifyController extends Controller
                 
                  DB::table('tbl_application_courses')
                 ->where(['id'=>$request->course_id])
-                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark]);
+                ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark,'is_revert'=>0]);
 
                 
                 if($get_course_docs){
@@ -1146,6 +1151,8 @@ class SecretariatDocumentVerifyController extends Controller
         
         DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id])->update(['approve_status'=>1]);
 
+        DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>0]);
+
         if($revertAction){
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Action reverted successfully.'], 200);
@@ -1382,7 +1389,7 @@ public function checkAllActionDoneOnRevert($application_id)
         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
         // ->where('application_courses_id', $application_courses_id)
         ->where('application_id', $application_id)
-        ->where('approve_status',1)
+        ->whereIn('approve_status',[0,1])
         ->get();
 
         
@@ -1405,7 +1412,7 @@ public function checkAllActionDoneOnRevert($application_id)
             ->where('application_courses_id', $result->application_courses_id)
             ->where('doc_sr_code', $result->doc_sr_code)
             ->where('doc_unique_id', $result->doc_unique_id)
-            ->where('approve_status',1)
+            ->whereIn('approve_status',[0,1])
             ->first();
         if ($additionalField) {
             $results[$key]->status = $additionalField->status;

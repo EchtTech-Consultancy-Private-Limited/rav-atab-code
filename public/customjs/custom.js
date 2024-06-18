@@ -3317,7 +3317,158 @@ $(document).ready(function() {
             }
         });
     });
+
 });
+
+
+
+$(document).ready(function() {
+// signed copy
+$('#sigend_copy').change(function() {
+    $('.full_screen_loading').show();
+    const course_id = $(this).attr('data-course-id');
+
+     const signed_copy = $(this)[0].files[0];
+     const fileInput = $(this);
+     console.log(fileInput,' file input');
+     
+      const formData = new FormData();
+      formData.append("course_id", course_id);
+      formData.append("signed_copy_desktop", signed_copy);
+      
+      var allowedExtensions = ['pdf', 'jpeg', 'jpg','png']; // Add more extensions if needed
+      var uploadedFileName = fileInput.val();
+      var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+      if (allowedExtensions.indexOf(fileExtension) == -1) {
+          toastr.error("Please upload a PDF or image.", "Invalid file type",{
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+          $('.full_screen_loading').hide();
+          fileInput.val('');
+          return;
+      }
+    //   $("#loader").removeClass('d-none');
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+      $.ajax({
+          url: `${BASE_URL}/desktop/upload/signed-copy`, // Your server-side upload endpoint
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+             //  $("#loader").addClass('d-none');
+             $('.full_screen_loading').hide();
+              if (response.success) {
+                toastr.success(response.message, {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                setTimeout(()=>{
+                    window.location.reload();
+                },500)
+              }
+          },
+          error: function(xhr, status, error) {
+              console.error(error);
+              $('.full_screen_loading').hide();
+              toastr.error("Something went wrong!", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+          }
+      });
+  });
+
+
+
+});
+
+
+$(document).ready(function() {
+    // signed copy
+    $('#sigend_copy').change(function() {
+        $('.full_screen_loading').show();
+        const course_id = $(this).attr('data-course-id');
+    
+         const signed_copy = $(this)[0].files[0];
+         const fileInput = $(this);
+         console.log(fileInput,' file input');
+         
+          const formData = new FormData();
+          formData.append("course_id", course_id);
+          formData.append("signed_copy_onsite", signed_copy);
+          
+          var allowedExtensions = ['pdf', 'jpeg', 'jpg','png']; // Add more extensions if needed
+          var uploadedFileName = fileInput.val();
+          var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
+          if (allowedExtensions.indexOf(fileExtension) == -1) {
+              toastr.error("Please upload a PDF or image.", "Invalid file type",{
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+              $('.full_screen_loading').hide();
+              fileInput.val('');
+              return;
+          }
+        //   $("#loader").removeClass('d-none');
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+    
+          $.ajax({
+              url: `${BASE_URL}/onsite/upload/signed-copy`, // Your server-side upload endpoint
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                 //  $("#loader").addClass('d-none');
+                 $('.full_screen_loading').hide();
+                  if (response.success) {
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.reload();
+                    },500)
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error(error);
+                  $('.full_screen_loading').hide();
+                  toastr.error("Something went wrong!", {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+              }
+          });
+      });
+    
+    
+    
+    });
+    
 
 
 $(document).on('keyup change', '.remove_err_input_error', function () {

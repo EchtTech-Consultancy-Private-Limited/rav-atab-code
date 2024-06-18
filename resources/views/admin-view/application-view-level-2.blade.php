@@ -520,7 +520,7 @@
 <!-- end here -->
 
 
-
+                        
                     @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
                     
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
@@ -554,7 +554,7 @@
         </div>  
         @endforeach
   
-    
+        
         @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
         
         <div class="row">
@@ -583,33 +583,31 @@
                     </div>
                             
         
-        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!=="document_not_upload" && $application_details->is_action_taken_on_44_docs==false && $is_final_summary_generated && $application_details->application->level_id==2) 
-        
+        @elseif($application_details->application->approve_status==0 && $application_details->is_action_taken_on_44_docs!=="document_not_upload" && $application_details->is_action_taken_on_44_docs==false &&  $application_details->application->level_id==2) 
+                            
+                        @if($is_final_summary_generated)
                         <div class="col-md-12">
                             <form action="{{url('send-admin-approval/'.dEncrypt($spocData->id))}}" method="get">
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                             </form>
                         </div>
+                        @else
+                        <div class="badge badge-main warning float-right">Final Summary Not Created Yet!</div>
+                        @endif
+                        
 
 
 
        
         @else 
         <!--final else  -->
-
+        
         @endif
 
         
         <div class="row">
-           
-        @if($spocData->mom_file_name && $application_details->application->approve_status!=0)
-                                    <div class="col-md-12">
-                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
-                                    </a>  
-                                    </div>
-                                    
-                                    @endif
+        
                         @if($application_details->application->approve_status==1) 
                         <div class="col-md-12">
                           <div class="badge badge-main success float-right">Application Approved by admin</div>

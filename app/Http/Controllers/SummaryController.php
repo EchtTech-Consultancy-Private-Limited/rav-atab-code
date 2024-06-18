@@ -1241,7 +1241,7 @@ class SummaryController extends Controller
              /*end here*/
 
 
-        return redirect('admin/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report'); 
+        return redirect('admin/application-view-level-2'.'/'.$request->application_id)->with('success','Successfully submitted final summary report'); 
         // return redirect('desktop/document-list'.'/'.$application_id.'/'.$application_course_id); 
 
     }

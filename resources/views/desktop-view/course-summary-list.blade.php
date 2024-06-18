@@ -87,7 +87,7 @@
                     <th>Eligibilty</th>
                     <th>Action</th>
                 </tr>
-                @foreach ($courses as $item)
+                @foreach ($courses as $key=>$item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->course_name }}</td>
@@ -100,10 +100,23 @@
                         <td>{{ $item->eligibility }}</td>
                         <th>
                             <a href="{{ url('desktop-view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="float-left btn btn-primary btn-sm">View Summary 
+                          
                         </a>
+                        @if($item->signed_copy_desktop!=null)
+                                    
+                                    <a href="{{ url('desktop/doc/'.$item->signed_copy_desktop.'/'.dEncrypt($item->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View Signed Copy
+                                    </a>  
+                                    
+                                    
+                                    @else
+                                    <label for="signed_copy">Signed Copy</label> 
+                                                        <input type="file" name="sigend_copy" id="sigend_copy"  data-course-id="{{$item->id}}">
+                                    
+                                    @endif
                         </th>
                     </tr>
                 @endforeach
+                
             </table>
         </div>
       </div>
