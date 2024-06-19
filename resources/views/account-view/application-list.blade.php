@@ -77,9 +77,10 @@
                                         <th>Application No. </th>
                                         <th>Courses</th>
                                         <th>Total Fee</th>
-                                        <th> Payment Date </th>
+                                        <th>Payment Date </th>
                                         <th>Status</th>
-                                        <th>Upgrade</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -125,8 +126,22 @@
                                                 
                                                 </td>
                                                 <td>
-                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
+                                                @if($item->application_list->valid_from)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
                                                 </td>
+                                                <td>
+                                                @if($item->application_list->valid_till)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
+                                                @else
+                                                <span>N/A</span>
+                                                @endif
+                                                </td>
+                                                <!-- <td>
+                                                {{\Carbon\Carbon::parse($item->application_list->application_date ?? '')->format('d-m-Y')}}
+                                                </td> -->
                                                     <td>
                                                         <a href="{{ url('/account/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i

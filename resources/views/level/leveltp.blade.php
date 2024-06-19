@@ -364,10 +364,28 @@
                                              <br>
                                          </div>
                                          <div class="col-md-12 ml-auto" style="text-align: right">
-                                            <form action="{{ url('/create-new-applications') }}" onsubmit="return handleLevel();" method="get">
-                                                 <label for="term_and_conditions">Terms And Condition</label>
+                                         @if (request()->path() == 'level-first')
+                                            @php
+                                                $url=url('/create-new-applications/');
+                                                
+                                            @endphp
+                                        @elseif(request()->path() == 'level-second')
+                                        @php
+                                                $url=url('/create-level-2-new-applications/');
+                                                
+                                            @endphp
+                                        @elseif(request()->path() == 'level-third')
+                                        @php
+                                                $url=url('/create-level-3-new-applications/');
+                                                
+                                            @endphp
+                                        @elseif(request()->path() == 'level-fourth')
+                                            Level Fourth
+                                        @endif
+                                            <form action="{{ $url??"" }}"  method="get">
                                                  <input type="checkbox" name="level_proceed" id="level_proceed">
-                                                 <input type="submit" value="Process" class="btn btn-primary btn-sm">
+                                                 <label for="term_and_conditions" class="ps-1">Terms And Condition</label>
+                                                 <input type="submit" value="Process" id="t_a_c" disabled class="btn btn-primary btn-sm ms-3">
                                           </form>
                                          </div>
                                      </div>

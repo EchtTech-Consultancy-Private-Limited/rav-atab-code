@@ -127,7 +127,7 @@
                                                 Application </a>
                                         </li>
                                         <li class="custom-nav-item">
-                                            <a class="custom-nav-link" href="{{ url('/tp/application-list') }}">Previous
+                                            <a class="custom-nav-link" href="{{ url('level-first/tp/application-list') }}">Previous
                                                 Applications</a>
                                         </li>
                                     </ul>

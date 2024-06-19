@@ -54,7 +54,7 @@
             </li>
 
             <li
-                class="{{ Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') || Request::is('level-first/tp/application-list')  || Request::is('level-second/tp/application-list') || Request::is('level-third/tp/application-list') || Request::is('*tp/application-view*') ? 'active' : '' }}">
+                class="{{ Request::is('level-one') || Request::is('level-first') || Request::is('level-second') || Request::is('level-third') || Request::is('level-fourth') || Request::is('level-first/tp/application-list')  || Request::is('level-second/tp/application-list') || Request::is('level-third/tp/application-list') || Request::is('*tp/application-view*') ? 'active' : '' }}">
                 <a href="#" onClick="return false;" class="menu-toggle">
                     <!-- <i data-feather="settings"></i> -->
                     <i class="fa fa-cog"></i>
@@ -65,7 +65,7 @@
                                     <a href="{{ url('/level-list') }}">Level 1</a>
                                 </li> -->
 
-                    <li class="{{ Request::is('level-first') || Request::is('level-first/tp/application-list') || Request::is('tp/application-view*') ? 'active' : '' }}">
+                    <li class="{{ Request::is('level-one') ||  Request::is('level-first') || Request::is('level-first/tp/application-list') || Request::is('tp/application-view*') ? 'active' : '' }}">
                         <a href="{{ url('/level-first') }}">Level 1 </a>
                     </li>
 

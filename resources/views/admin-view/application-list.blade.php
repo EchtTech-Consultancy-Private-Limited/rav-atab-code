@@ -285,6 +285,7 @@
                     />
 
                     <input type="hidden" value="" name="assessor_designation_{{ $item->application_list->id}}" id="assessor_designation_{{ $item->application_list->id}}">
+                    <input type="hidden" value="{{$item->assessor_type}}"  id="assessor_types_{{ $item->application_list->id}}">
                     <input type="hidden" value="" name="assessor_category_{{ $item->application_list->id}}" id="assessor_category_{{ $item->application_list->id}}">
                     
                     <span>

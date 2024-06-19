@@ -60,7 +60,9 @@ class AuthController extends Controller
     
         return response("Cookie value: $value");
     }
-
+    protected function authenticated(){
+        \Auth::logoutOtherDevices(request('password'));
+    }
     public function login_post(Request $request)
     {
 
