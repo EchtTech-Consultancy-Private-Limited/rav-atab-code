@@ -253,6 +253,11 @@
                 </div>
             @endif
 
+            @if($is_course_rejected)
+            <div class="alert alert-danger" role="alert">
+                    <span>Course is already rejected.</span>
+            </div>
+            @endif
 
 
         </div>

@@ -264,6 +264,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('application/summary-report/{course}/{application}',[applicationController::class,"getSummaryReportDataTP"]);
     Route::get('admin/application/courses-list/{applicationID}',[applicationController::class,"getAdminApplicationCoursesLIst"]);
     Route::get('admin/application/summary-report/{course}/{application}',[applicationController::class,"getAdminApplicationSummary"]);
+    Route::post('/desktop/upload/signed-copy', [DesktopApplicationController::class, 'uploadSignedCopy']);
+    Route::post('/onsite/upload/signed-copy', [OnsiteApplicationController::class, 'uploadSignedCopy']);
 // Summary Routes
     Route::get('desktop/summary/{application_id}/{application_course_id}',[SummaryController::class,"desktopIndex"]);
     Route::get('onsite/summary/{application_id}/{application_course_id}',[SummaryController::class,"onSiteIndex"]);
@@ -305,6 +307,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/course-update/{id?}', [ApplicationCoursesController::class, 'course_update']);
     Route::get('/admin/application-list', [AdminApplicationController::class, 'getApplicationList'])->name('admin-app-list');
     Route::get('/admin/application-view/{id}', [AdminApplicationController::class, 'getApplicationView']);
+    Route::get('/admin/application-view-level-2/{id}', [AdminApplicationController::class, 'getApplicationViewLevel2']);
+    Route::get('/admin/application-view-level-3/{id}', [AdminApplicationController::class, 'getApplicationViewLevel3']);
 
 
 
@@ -351,6 +355,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('doc/{id?}', [DocApplicationController::class, 'showCoursePdf']);
     Route::get('mom/doc/{doc_name}/{app_id}', [DocApplicationController::class, 'momPdf']);
 
+    Route::get('desktop/doc/{doc_name}/{app_id}', [DesktopApplicationController::class, 'sigendCopyDesktop']);
+    Route::get('onsite/doc/{doc_name}/{app_id}', [OnsiteApplicationController::class, 'sigendCopyOnsite']);
 
     Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
     Route::post('/secretariat-revert-course-reject', [SecretariatDocumentVerifyController::class, 'revertCourseRejectAction']);
@@ -544,7 +550,7 @@ Route::get('/super-admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc
     Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"]);
     Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
     Route::post('/super-admin-approved-application/', [SuperAdminApplicationController::class, 'approvedApplication']); 
-    Route::post('/super-admin-reject-application/', [SuperAdminApplicationController::class, 'rejectApplication']); 
+    Route::post('/super-admin-reject-application/{application_id}', [SuperAdminApplicationController::class, 'rejectApplication']); 
     Route::post('/super-admin-approved-course', [SuperAdminApplicationController::class, 'approveCourseRejectBySecretariat']); 
     Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 

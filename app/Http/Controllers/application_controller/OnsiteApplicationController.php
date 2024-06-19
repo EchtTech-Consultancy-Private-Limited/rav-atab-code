@@ -1009,5 +1009,45 @@ public function onsiteUpdateNCFlagDocList($application_id)
 }
 
 
+
+public function uploadSignedCopy(Request $request)
+{
+   try{
+    
+    DB::beginTransaction();
+    if ($request->hasfile('signed_copy_onsite')) {
+        $file = $request->file('signed_copy_onsite');
+        $name = $file->getClientOriginalName();
+        $filename = time() . $name;
+        $file->move('level/', $filename);
+    }
+    $uploaded = DB::table('tbl_application_courses')->where('id',$request->course_id)->update(['signed_copy_onsite'=>$filename]);
+    
+    // $data = [];
+    // $data['application_id']=$request->application_id;
+    // $data['doc_file_name']=$filename;
+    // $data['user_id']=Auth::user()->id;
+    // $uploaded=DB::table('tbl_mom')->insert($data);
+    
+    if($uploaded){
+    DB::commit();
+    return response()->json(['success' => true,'message' =>'Signed Copy uploaded successfully'],200);
+    }else{
+        return response()->json(['success' => false,'message' =>'Failed to upload Signed Copy'],200);
+    }
+   } 
+   catch(Exception $e){
+    return response()->json(['success' => false,'message' =>'Someting went wrong'],500);
+   }
+ }
+
+ public function sigendCopyOnsite($doc_name,$app_id)
+ {
+     $data = $doc_name;
+     return view('doc-view.signed', ['data' => $data]);
+    
+ }
+
+
 }
 

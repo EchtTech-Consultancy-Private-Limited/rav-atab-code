@@ -873,7 +873,8 @@ class SuperAdminApplicationController extends Controller
                             ->where('assessor_type','secretariat')
                             ->whereNotIn('status',[2,3,4,6]) 
                             ->get(); 
-
+                            
+                            
                             
                             foreach($all_docs as $doc){
                                 if($doc->status==0){
@@ -892,6 +893,7 @@ class SuperAdminApplicationController extends Controller
                             ->get(); 
 
                             
+                            
                             foreach($all_docs as $doc){
 
                                     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
@@ -899,17 +901,17 @@ class SuperAdminApplicationController extends Controller
                             }
 
                             // taking only the rejected course
-                            $all_docs = DB::table('tbl_application_course_doc')
-                            ->where(['application_id' => $request->application_id,'approve_status'=>1])
-                            ->where('assessor_type','secretariat')
-                            ->whereNotIn('status',[0,2]) 
-                            ->get(); 
+                            // $all_docs = DB::table('tbl_application_course_doc')
+                            // ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                            // ->where('assessor_type','secretariat')
+                            // ->whereNotIn('status',[0,2]) 
+                            // ->get(); 
 
 
-                            foreach($all_docs as $doc){
+                            // foreach($all_docs as $doc){
 
-                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
-                            }
+                            //         DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                            // }
     
     
                         }
@@ -922,7 +924,7 @@ class SuperAdminApplicationController extends Controller
                     ->whereNotIn('status',[2,3,4,6]) 
                     ->get();
                     
-                    // dd($all_docs);
+                    
                  
                     foreach($all_docs as $doc){
                         if($doc->status==0){
@@ -940,6 +942,7 @@ class SuperAdminApplicationController extends Controller
                     ->whereIn('approve_status',[0,2])  //get only rejected courses
                     ->whereNotIn('status',[2,3,4,6]) 
                     ->get(); 
+                    // dd($all_docs);
                     foreach($all_docs as $doc){
                             DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
                     }
@@ -974,6 +977,7 @@ class SuperAdminApplicationController extends Controller
             ->where(['application_id' => $application_id])
             ->update(['approve_status'=>2,'is_revert'=>1]); 
 
+            
             DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
 
             $all_docs = DB::table('tbl_course_wise_document')
@@ -981,7 +985,6 @@ class SuperAdminApplicationController extends Controller
             ->whereNotIn('status',[2,3,4,6])
             ->get(); 
 
-            
             foreach($all_docs as $doc){
                 if($doc->status==0){
                     DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5]);

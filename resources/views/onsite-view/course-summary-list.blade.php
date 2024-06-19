@@ -102,6 +102,17 @@
                             <!-- <a href="{{ url('onsite-view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="float-left btn btn-primary btn-sm">View Summary</a>  -->
                             <a href="{{ url('onsite/summary/'.dEncrypt($applicationDetails->id).'/'.dEncrypt($item->id)) }}" class="float-left btn btn-primary btn-sm">View Summary 
                         </a>
+                        @if($item->signed_copy_onsite!=null)
+                                    
+                                    <a href="{{ url('onsite/doc/'.$item->signed_copy_onsite.'/'.dEncrypt($item->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View Signed Copy
+                                    </a>  
+                                    
+                                    
+                                    @else
+                                    <label for="signed_copy">Signed Copy</label> 
+                                                        <input type="file" name="sigend_copy" id="sigend_copy"  data-course-id="{{$item->id}}">
+                                    
+                                    @endif
                         </th>
                     </tr>
                 @endforeach

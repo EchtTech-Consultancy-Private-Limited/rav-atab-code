@@ -768,9 +768,9 @@ public function isShowSubmitBtnToSecretariat($application_id)
         ->select('application_id', 'application_courses_id', 'assessor_type', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id', 'assessor_type')
         ->where('application_id', $application_id)
-        ->where('approve_status', 1)
+        ->whereIn('approve_status', [0,1])
         ->get();
-
+    
     $additionalFields = DB::table('tbl_application_course_doc')
         ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id, assessor_type) as sub'), function ($join) {
             $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
@@ -806,6 +806,7 @@ public function isShowSubmitBtnToSecretariat($application_id)
     }
 
     $flag = 0;
+    
     foreach ($finalResults as $result) {
         if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             $flag = 0;
@@ -1016,5 +1017,44 @@ public function checkAllActionDoneOnDocList($application_id,$application_courses
     }
 
 }
+
+
+public function uploadSignedCopy(Request $request)
+{
+   try{
+    
+    DB::beginTransaction();
+    if ($request->hasfile('signed_copy_desktop')) {
+        $file = $request->file('signed_copy_desktop');
+        $name = $file->getClientOriginalName();
+        $filename = time() . $name;
+        $file->move('level/', $filename);
+    }
+    $uploaded = DB::table('tbl_application_courses')->where('id',$request->course_id)->update(['signed_copy_desktop'=>$filename]);
+    
+    // $data = [];
+    // $data['application_id']=$request->application_id;
+    // $data['doc_file_name']=$filename;
+    // $data['user_id']=Auth::user()->id;
+    // $uploaded=DB::table('tbl_mom')->insert($data);
+    
+    if($uploaded){
+    DB::commit();
+    return response()->json(['success' => true,'message' =>'Signed Copy uploaded successfully'],200);
+    }else{
+        return response()->json(['success' => false,'message' =>'Failed to upload Signed Copy'],200);
+    }
+   } 
+   catch(Exception $e){
+    return response()->json(['success' => false,'message' =>'Someting went wrong'],500);
+   }
+ }
+
+ public function sigendCopyDesktop($doc_name,$app_id)
+ {
+     $data = $doc_name;
+     return view('doc-view.signed', ['data' => $data]);
+    
+ }
 
 }

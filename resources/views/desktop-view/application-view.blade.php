@@ -312,7 +312,7 @@
         </div>
         </div>  
         @endforeach
-
+            
         @if(($show_submit_btn_to_desktop && $is_final_submit==false) || $is_all_revert_action_done) 
         
         <div class="row">

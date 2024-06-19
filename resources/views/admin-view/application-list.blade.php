@@ -145,7 +145,18 @@
                                                 @endif
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/admin/application-view', dEncrypt($item->application_list->id)) }}"
+                                                        @php
+                                                        $view_url="";
+                                                        if($item->application_list->level_id==1){
+                                                            $view_url="/admin/application-view";
+                                                        }elseif($item->application_list->level_id==2){
+                                                            $view_url="/admin/application-view-level-2";
+                                                        }else{
+                                                            $view_url="/admin/application-view-level-3";
+                                                        }
+
+                                                        @endphp
+                                                        <a href="{{ url($view_url, dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                                
@@ -283,14 +294,17 @@
                     </span>
                     </label>
                     </div>
+                    @if($item->assessor_type=="onsite")
                     <div class="col-md-3">
                     <select name="assessor_type_{{ $item->application_list->id}}" id="assessor_type_{{ $assesorsData->id}}" class="d-block assessor_name_with_email" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
                       <option value="" disabled selected>Please select option</option>
                       <option value="Lead Assessor" @if($assessor_designation_first?->assessor_designation=='Lead Assessor') selected @endif>Lead Assessor</option>
                       <option value="Co-Assessor" @if($assessor_designation_first?->assessor_designation=='Co-Assessor') selected @endif>Co-Assessor</option>
                       <option value="Observer Assessor" @if($assessor_designation_first?->assessor_designation=='Observer Assessor') selected @endif>Observer Assessor</option>
+                      <option value="Observer Assessor" @if($assessor_designation_first?->assessor_designation=='Ayurveda Expert') selected @endif>Ayurveda Expert</option>
                     </select>   
                     </div>
+                    @endif
                   
                   </div>
                   
@@ -318,7 +332,7 @@
       
       <div role="tabpanel" class="tabs__panel">
           <div class="">
-             Demo
+             Test
             </div>
         </div>
         
