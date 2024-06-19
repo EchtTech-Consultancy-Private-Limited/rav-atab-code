@@ -365,9 +365,9 @@
                                          </div>
                                          <div class="col-md-12 ml-auto" style="text-align: right">
                                             <form action="{{ url('/create-new-applications') }}" onsubmit="return handleLevel();" method="get">
-                                                 <label for="term_and_conditions">Terms And Condition</label>
-                                                 <input type="checkbox" name="level_proceed" id="level_proceed">
-                                                 <input type="submit" value="Process" class="btn btn-primary btn-sm">
+                                                <input type="checkbox" name="level_proceed" id="level_proceed">
+                                                 <label for="term_and_conditions" class="ps-1">Terms And Condition</label>
+                                                 <input type="submit" value="Process" class="btn btn-primary btn-sm ms-3">
                                           </form>
                                          </div>
                                      </div>

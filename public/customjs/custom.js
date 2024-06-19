@@ -1142,13 +1142,20 @@ $(".dateID").click("on", function () {
         },
     });
 });
-
+$(document).ready(()=>{
+    $('#level_proceed').on('click',function(){
+        alert("hello")
+    })
+    
+})
 $(".assesorsid").on("click", function () {
     var application_id = $(this).attr("application-id");
     var assessor_id = $(this).val();
     $(`#assessor_id_`).val(assessor_id);
-
-    $(`.dateID_${application_id}`).addClass("disabled");
+    const assessor_type = $(`#assessor_types_${application_id}`).val();
+    if(assessor_type!="onsite"){
+        $(`.dateID_${application_id}`).addClass("disabled");
+    }
 
     $(`#assessor_assign_dates_${assessor_id} span.disabled`).removeClass("disabled");
     

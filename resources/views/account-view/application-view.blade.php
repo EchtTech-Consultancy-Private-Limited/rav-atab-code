@@ -210,6 +210,7 @@
         </div>
             </div>
         </div>
+        @if(isset($application_details->course))
         @foreach ($application_details->course as $k => $ApplicationCourses)
         <div class="card">
             <div class="card-header bg-white text-dark">
@@ -447,6 +448,7 @@
         </div>
         </div>  
         @endforeach
+        @endif
 
         <div class="card p-relative">
             <div class="box-overlay">

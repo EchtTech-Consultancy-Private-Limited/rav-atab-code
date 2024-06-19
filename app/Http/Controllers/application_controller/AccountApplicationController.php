@@ -89,7 +89,7 @@ class AccountApplicationController extends Controller
         ->first();
         $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
         $decoded_json_courses_doc = json_decode($json_course_doc);
-                
+        
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
         
@@ -100,9 +100,12 @@ class AccountApplicationController extends Controller
     
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id' => $application->id,
+                
             ])
+            ->whereNotIn('status',[1,3])
             ->whereNull('deleted_at') 
             ->get();
+
             
             foreach ($courses as $course) {
                 if ($course) {

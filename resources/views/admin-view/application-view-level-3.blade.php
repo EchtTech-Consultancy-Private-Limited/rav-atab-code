@@ -646,7 +646,7 @@
                                 @csrf
                                 <input type="hidden" id="application_id" value="{{$application_details->application->id}}">
                                 <input type="submit" class="btn btn-info float-right" value="Send for Approval">
-                                @if($spocData->mom_file_name)
+                                @if($spocData?->mom_file_name)
                                     <div class="col-md-12">
                                     <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
                                     </a>  
@@ -674,7 +674,7 @@
         
         <div class="row">
            
-        @if($spocData->mom_file_name && $application_details->application->approve_status!=0)
+        @if($spocData?->mom_file_name && $application_details->application->approve_status!=0)
                                     <div class="col-md-12">
                                     <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
                                     </a>  
