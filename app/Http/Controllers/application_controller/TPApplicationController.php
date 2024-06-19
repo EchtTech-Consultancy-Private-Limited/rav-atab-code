@@ -24,7 +24,7 @@ class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
     
-    public function getApplicationList($level_type='level-first'){
+    public function getApplicationList($level_type='level-one'){
         
         $pay_list = DB::table('tbl_application_payment')
           ->where('user_id',Auth::user()->id)
@@ -32,7 +32,7 @@ class TPApplicationController extends Controller
           ->pluck('application_id')
           ->toArray();
           
-        if($level_type=="level-first"){
+        if($level_type=="level-one"){
             $level_id = 1;
         }else if($level_type=="level-second"){
             $level_id = 2;
@@ -548,19 +548,19 @@ class TPApplicationController extends Controller
 
 
 
-    function secondPaymentView(Request $request)
-    {
+    // function secondPaymentView(Request $request)
+    // {
 
         
-        return view('tp-upload-documents.tp-show-document-details', [
-            'doc_latest_record' => $doc_latest_record,
-            'doc_id' => $doc_sr_code,
-            'doc_code' => $doc_unique_code,
-            'application_id' => $application_id,
-            'doc_path' => $doc_path,
-            'remarks' => $get_remarks
-        ]);
-    }
+    //     return view('tp-upload-documents.tp-show-document-details', [
+    //         'doc_latest_record' => $doc_latest_record,
+    //         'doc_id' => $doc_sr_code,
+    //         'doc_code' => $doc_unique_code,
+    //         'application_id' => $application_id,
+    //         'doc_path' => $doc_path,
+    //         'remarks' => $get_remarks
+    //     ]);
+    // }
 
 
     public function updatePaynentInfo(Request $request)
@@ -628,9 +628,9 @@ class TPApplicationController extends Controller
   }
 
 
-  public function pendingPaymentlist($level_type='level-first')
+  public function pendingPaymentlist($level_type)
   {
-
+        // dd("hello");
         if($level_type=="level-first"){
             $level_id = 1;
         }else if($level_type=="level-second"){
@@ -638,6 +638,7 @@ class TPApplicationController extends Controller
         }else{
             $level_id = 3;
         }
+        
 
       $pending_payment_list = DB::table('tbl_application_payment')
           ->where('user_id',Auth::user()->id)

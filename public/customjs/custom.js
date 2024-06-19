@@ -1144,7 +1144,13 @@ $(".dateID").click("on", function () {
 });
 $(document).ready(()=>{
     $('#level_proceed').on('click',function(){
-        alert("hello")
+        const isChecked = $('input[name="level_proceed"]:checked').val();
+        if(isChecked=='on'){
+            $("#t_a_c").attr('disabled',false);
+        }else{
+            $("#t_a_c").attr('disabled',true);
+        }
+
     })
     
 })
