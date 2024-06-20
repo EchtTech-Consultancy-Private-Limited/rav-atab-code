@@ -43,7 +43,7 @@ class AuthController extends Controller
     }
     public function landingLogin(Request $request)
     {   
-        setcookie('welcome_cookies','false');
+        //setcookie('welcome_cookies','false');
         return view('auth.landingpage');
         
     }

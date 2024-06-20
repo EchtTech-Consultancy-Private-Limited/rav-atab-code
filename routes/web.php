@@ -64,7 +64,8 @@ Route::get('paymentresponse',[PaymentController::class,'paymentResponse'])->name
 
 
 Route::group(['middleware' => ['guest']], function () {
-    Route::get('/', [AuthController::class, 'landing'])->name('/');
+    //Route::get('/', [AuthController::class, 'landing'])->name('/');
+    Route::get('/', [AuthController::class, 'landingLogin'])->name('/');
     Route::get('/login-page', [AuthController::class, 'landingLogin'])->name('login-page');
     Route::get('/login/{slug?}', [AuthController::class, 'login'])->name('login');
     Route::post('/login_post', [AuthController::class, 'login_post']);
