@@ -477,26 +477,30 @@ class SecretariatDocumentVerifyController extends Controller
             $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
 
             $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
+
+           
             /*------end here------*/
             DB::commit();
             
             if($get_application->level_id==1 || $get_application->level_id==3){
-                if (!$check_all_doc_verified ) {
-                    return back()->with('fail', 'First create NCs on courses doc');
-                }
+                // if (!$check_all_doc_verified ) {
+                //     return back()->with('fail', 'First create NCs on courses doc');
+                // }
                 if ($check_all_doc_verified == "all_verified") {
+                    
                     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                     return back()->with('success', 'All course docs Accepted successfully.');
                 }
                 if ($check_all_doc_verified == "action_not_taken") {
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
+                return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 
             }else{
                
-            if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
-                return back()->with('fail', 'First create NCs on courses doc');
-            }
+            // if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
+            //     return back()->with('fail', 'First create NCs on courses doc');
+            // }
             if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
@@ -764,9 +768,9 @@ class SecretariatDocumentVerifyController extends Controller
         }
 
         if ($nc_flag == 1) {
-            return true;
+            return "valid";
         } else {
-            return false;
+            return "notValid";
         }
 
     }
@@ -1246,9 +1250,9 @@ class SecretariatDocumentVerifyController extends Controller
       }
 
       if ($nc_flag == 1) {
-          return true;
+          return "valid";
       } else {
-          return false;
+          return "notValid";
       }
 
   }

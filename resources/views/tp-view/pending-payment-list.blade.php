@@ -256,6 +256,7 @@
                                                         <tr>
                                                             <th> Application ID </th>
                                                             <th> Level ID </th>
+                                                            <th> Status </th>
                                                             <th> Action </th>
                                                         </tr>
                                                     </thead>
@@ -268,7 +269,9 @@
 
                                                                 <td> {{ $pending_pay_list->level_id ?? '' }}</td>
 
-                                                              
+                                                              <td>
+                                                              <span class="badge badge-main <?php echo $pending_pay_list->status_color;?> ">{{$pending_pay_list->status_text}}</span>
+                                                              </td>
 
                                                                 <td> 
                                                                     
@@ -280,6 +283,11 @@
                                                                 @elseif($pending_pay_list->level_id==2)
 
                                                                 <a href="{{ url('/upgrade-create-new-course' . '/' . dEncrypt($pending_pay_list->id) . '/' . dEncrypt($pending_pay_list->refid)) }}"
+                                                                        class="btn btn-tbl-edit bg-success"><i
+                                                                            class="fa fa-edit"></i></a>
+                                                                            @elseif($pending_pay_list->level_id==3)
+
+                                                                <a href="{{ url('/upgrade-level-3-create-new-course' . '/' . dEncrypt($pending_pay_list->id) . '/' . dEncrypt($pending_pay_list->refid)) }}"
                                                                         class="btn btn-tbl-edit bg-success"><i
                                                                             class="fa fa-edit"></i></a>
 
