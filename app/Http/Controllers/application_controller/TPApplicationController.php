@@ -630,8 +630,7 @@ class TPApplicationController extends Controller
 
   public function pendingPaymentlist($level_type)
   {
-        // dd("hello");
-        if($level_type=="level-first"){
+        if($level_type=="level-one"){
             $level_id = 1;
         }else if($level_type=="level-second"){
             $level_id = 2;
@@ -647,12 +646,18 @@ class TPApplicationController extends Controller
           ->pluck('application_id')
           ->toArray();
 
+          
+        
          $pending_list = DB::table('tbl_application')
          ->where('tp_id',Auth::user()->id)
          ->where('level_id',$level_id)
          ->whereNotIn('id',$pending_payment_list)
          ->orderBy('id','desc')
          ->get();
+
+        //  dd($pending_list);
+
+
 
       return view('tp-view.pending-payment-list', ['pending_payment_list' => $pending_list]);
   }

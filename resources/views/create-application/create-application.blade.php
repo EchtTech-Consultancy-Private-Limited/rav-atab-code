@@ -332,8 +332,13 @@ active @endif"
                                                                                 maxlength="10" name="Contact_Number"
                                                                                 class="preventalpha"
                                                                                 placeholder="Contact Number"
-                                                                                id="Contact_Number"
                                                                                 value="{{ old('contact_number', $applicationData->contact_number ?? '') }}">
+                                                                            <!-- <input type="text" required="required"
+                                                                                maxlength="10" name="Contact_Number"
+                                                                                class="preventalpha"
+                                                                                placeholder="Contact Number"
+                                                                                id="Contact_Number"
+                                                                                value="{{ old('contact_number', $applicationData->contact_number ?? '') }}"> -->
                                                                         </div>
                                                                         @error('Contact_Number')
                                                                             <span class="text-danger">
@@ -348,10 +353,16 @@ active @endif"
                                                                         <div class="form-line">
                                                                             <label>Email-ID<span
                                                                                     class="text-danger">*</span></label>
-                                                                            <input id="emailId" type="text"
+                                                                            <input
+                                                                               type="text"
                                                                                 name="Email_ID"
                                                                                 placeholder="Email-ID"
+                                                                                required="true"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">
+                                                                            <!-- <input id="emailId" type="text"
+                                                                                name="Email_ID"
+                                                                                placeholder="Email-ID"
+                                                                                value="{{ old('email', $applicationData->email ?? '') }}"> -->
                                                                         </div>
                                                                         @error('Email_ID')
                                                                             <span id="backendError" class="text-danger">
@@ -370,6 +381,7 @@ active @endif"
                                                                             </label>
                                                                             <input type="text" name="designation"
                                                                                 placeholder="Designation"
+                                                                                required="true"
                                                                                 value="{{ old('designation', $applicationData->designation ?? '') }}">
                                                                         </div>
                                                                         @error('designation')
@@ -388,7 +400,7 @@ active @endif"
                                             <ul class="list-inline pull-right">
                                                 <li>
                                                     <button id="nextBtn" type="submit"
-                                                        class="btn btn-primary next-step" disabled>
+                                                        class="btn btn-primary next-step">
                                                         Next
                                                     </button>
                                                 </li>
