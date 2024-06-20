@@ -2038,6 +2038,7 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     const sr_no = $("#sr_no").val();
     const improvement_form = $("#improvement_form").val();
     const standard_reference = $("#standard_reference").val();
+    const comment_text = $("#comment_text").val();
 
     let flag = 0;
     if(assessee_org==""){
@@ -2070,6 +2071,10 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     }
     if(improve_assessee_org==""){
         $("#improve_assessee_org_err").html("Please enter imporve assessee org value");
+        flag=1;
+    }
+    if(comment_text==""){
+        $("#comment_text_err").html("Please enter remarks.");
         flag=1;
     }
     if(flag==1){

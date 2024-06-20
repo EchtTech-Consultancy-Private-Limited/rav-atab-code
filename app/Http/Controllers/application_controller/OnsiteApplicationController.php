@@ -171,10 +171,15 @@ class OnsiteApplicationController extends Controller
         $is_final_submit = false;
        }
 
+       $assessor_designation = DB::table('tbl_assessor_assign')
+        ->where('application_id',$application_id)
+        ->where('assessor_id',Auth::user()->id)
+        ->first();
+
         $desktopData = $this->onsiteApplicationDocumentList($application_id, $course_id);
         $application_details = DB::table('tbl_application')->where('id',$application_id)->first();
     //    dd($onsite_course_doc_uploaded);
-        return view('onsite-view.application-documents-list', compact('desktopData', 'course_doc_uploaded','onsite_course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done','application_details'));
+        return view('onsite-view.application-documents-list', compact('desktopData', 'course_doc_uploaded','onsite_course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done','application_details','assessor_designation'));
     }
 
    
@@ -239,7 +244,7 @@ class OnsiteApplicationController extends Controller
 
     public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
-
+        
         try{   
             if($nc_type == 'nr')
             {
@@ -542,8 +547,15 @@ class OnsiteApplicationController extends Controller
         ->whereIn("id",$get_all_final_course_id)
         ->get();
 
+        $assessor_designation = DB::table('tbl_assessor_assign')
+        ->where('application_id',$request->input('application'))
+        ->where('assessor_id',Auth::user()->id)
+        ->first();
+        
+        
+
         $applicationDetails = TblApplication::find($request->input('application'));
-        return view('onsite-view.course-summary-list', compact('courses', 'applicationDetails'));
+        return view('onsite-view.course-summary-list', compact('courses', 'applicationDetails','assessor_designation'));
     }
 
     public function onsiteViewFinalSummary(Request $request){
@@ -704,9 +716,9 @@ public function checkApplicationIsReadyForNextLevelDocList($application_id)
         }
   
         if ($nc_flag == 1) {
-            return true;
+            return "valid";
         } else {
-            return false;
+            return "notValid";
         }
   
 }
@@ -988,9 +1000,9 @@ public function onsiteUpdateNCFlagDocList($application_id)
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
             DB::commit();
-            if (!$check_all_doc_verified) {
-                return back()->with('fail', 'First create NCs on courses doc');
-            }
+            // if (!$check_all_doc_verified) {
+            //     return back()->with('fail', 'First create NCs on courses doc');
+            // }
             if ($check_all_doc_verified == "all_verified") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 

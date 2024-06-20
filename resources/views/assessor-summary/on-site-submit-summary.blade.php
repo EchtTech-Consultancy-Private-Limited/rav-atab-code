@@ -274,6 +274,16 @@
                                                 <td colspan="2"> Signature of the Team Leader</td>
                                     
                                             </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                    <span id="comment_text_err" class="err"></span>
+                                                                </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     </br>
@@ -290,4 +300,35 @@
     </div>
     </div>
 </section>
+<script>
+        // Get a reference to the comment text area
+        var commentTextArea = document.getElementById('comment_text');
+
+        // Get a reference to the character count info
+        var charCountInfo = document.getElementById('char-count-info');
+
+        // Get a reference to the submit button
+        var submitButton = document.getElementById('submitBtn');
+
+        // Add an input event listener to the text area
+        commentTextArea.addEventListener('input', function() {
+            var currentCharCount = commentTextArea.value.length;
+
+            // Update the character count info
+            charCountInfo.textContent = currentCharCount + '/250 characters';
+
+            // Check if the limit is reached
+            // Check if the limit is reached
+            if (currentCharCount > 250) {
+                // Truncate the text to 250 characters
+                commentTextArea.value = commentTextArea.value.substring(0, 250);
+                charCountInfo.textContent = '250/250 characters (maximum reached)';
+                charCountInfo.style.color = 'red'; // Set text color to red
+                submitButton.disabled = true; // Disable the submit button
+            } else {
+                charCountInfo.style.color = '#000'; // Reset text color to the default
+                submitButton.disabled = false; // Enable the submit button
+            }
+        });
+    </script>
 @include('layout.footer')

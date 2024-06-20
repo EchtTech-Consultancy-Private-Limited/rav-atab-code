@@ -370,6 +370,7 @@ class SummaryController extends Controller
        
     public function onSiteFinalSubmitSummaryReport(Request $request){
         try{
+            
             DB::beginTransaction();
             $application_id = dDecrypt($request->application_id);
             $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => $application_id,'application_course_id' => dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->first();
@@ -388,6 +389,9 @@ class SummaryController extends Controller
             $data['brief_closing_meeting']=$request->brief_closing_meeting??'N/A';
             $data['assessee_org']=$request->assessee_org??'N/A';
             $data['summary_date']=$request->summary_date??Carbon::now();
+            $data['remark']=$request->doc_comment??"";
+
+
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
             $dataImprovement= [];
             $dataImprovement['assessor_id']=$assessor_id;
