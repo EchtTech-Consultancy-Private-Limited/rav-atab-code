@@ -162,10 +162,17 @@
                                                                
                                                                 @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id!==null && $item->doc_uploaded_count>=($item->approved_course * 4) && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2 && $item->application_list->level_id==3)
-                                                               
+                                                        
+                                                        @php
+                                                        if($item->assessor_type=="desktop"){
+                                                            $type_ =  "View_popup_";
+                                                        }else{
+                                                            $type_ =  "View_popup_onsite_";
+                                                        }
+                                                        @endphp
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
-                                                                    data-bs-target="#View_popup_{{ $item->application_list->id }}"
+                                                                    data-bs-target="#{{$type_}}{{ $item->application_list->id }}"
                                                                     id="view_{{ $item->application_list->id }}">
                                                     <i class="fa fa-font" aria-hidden="true" title=""></i>
                                                     </a>
@@ -190,15 +197,16 @@
 
     @isset($item->assessor_type)
   <!-- Modal box assessor assign-->
-<div class="modal fade" id="View_popup_{{ $item->application_list->id }}"
+
+  <div class="modal fade" id="View_popup_{{ $item->application_list->id }}"
    tabindex="-1" role="dialog"
-   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   aria-labelledby="exampleModalCenterTitle1" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered modal-lg"
       role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalCenterTitle">
-               Assign an
+            <h5 class="modal-title" id="exampleModalCenterTitle1">
+               Assign an 
                Assessor to the application from the below list
             </h5>
             <button type="button" class="close"
@@ -340,7 +348,167 @@
     </tabs-group>
     
 </div>
+</div>
+</div>
+</div>
 <!-- modal end here -->
+
+
+
+<!-- onsite assessor assign model -->
+ <!-- Modal box assessor assign-->
+ <div class="modal fade" id="View_popup_onsite_{{ $item->application_list->id }}"
+   tabindex="-1" role="dialog"
+   aria-labelledby="exampleModalCenterTitle2" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered modal-lg"
+      role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle2">
+               Assign an 
+               Assessor to the application from the below list
+            </h5>
+            <button type="button" class="close"
+               data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+        
+         <div class="modal-body mod-css">
+
+         <tabs-group>
+                <div role="tablist" class="tabs__controls">
+                  <button role="tab" aria-selected="true">ATAB Assessor</button>
+                  <button role="tab">ACB</button>                 
+                </div>
+
+                <div role="tabpanel" class="tabs__panel">
+                    <div class="">
+                    <form action="{{ url('/admin-assign-assessor-onsite') }}"
+               method="post">
+               @csrf
+               <!-- <input type="hidden" name="assessor_id_" id="assessor_id_" value=""> -->
+                <input type="hidden" name="assessor_type" value="onsite">
+                <?php
+                $application_assessor_arr = listofapplicationassessor($item->application_list->id);
+                   
+
+                ?>
+               <br>
+               <label class="mb-3"><b>Assessment
+               Type</b></label><br>
+
+               <p>Onsite Assessment</p>
+               <!--   -->
+               <div class="form-check form-check-inline radio-ass">
+               <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked @if($item->assessment_way=='onsite') checked @endif>
+                    <span>
+                        Onsite                     
+                    </span>
+                    </label>  
+
+                    <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="hybrid" @if($item->assessment_way=='hybrid') checked @endif>
+                    <span>
+                        Hybrid                     
+                    </span>
+                    </label>  
+
+                    <label>
+                   <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="virtual" @if($item->assessment_way=='virtual') checked @endif>
+                    <span>
+                        Virtual                     
+                    </span>
+                    </label>  
+
+              </div>
+            
+   
+               <div class="destop-id">
+               @foreach ($item->assessor_list as $k => $assesorsData)
+               <?php
+                    $assessor_designation_first = getAssessorDesignation($item->application_list->id,$assesorsData->id);
+                    
+                ?>
+               <input type="hidden" name="application_id" value="{{ $item->application_list->id ?? '' }}">
+                  <br>
+                
+                  <div class="row">
+                    <div class="col-md-5">
+                    <label>
+                    
+                    <input type="checkbox"
+                    id="assesorsid"
+                    class="assesorsid opacity-1"
+                    name="assessor_id[]"
+                    application-id="{{$item->application_list->id}}"
+                    value="{{$assesorsData->id}}"
+                    
+                    @if (in_array($assesorsData->id, $application_assessor_arr)) checked="true" @endif 
+                   
+                    />
+                    
+
+                    <input type="hidden" value="" name="assessor_designation_{{ $item->application_list->id}}[]" id="assessor_designation_{{ $item->application_list->id}}">
+                    <input type="hidden" value="{{$item->assessor_type}}"  id="assessor_types_{{ $item->application_list->id}}">
+                    <input type="hidden" value="" name="assessor_category_{{ $item->application_list->id}}[]" id="assessor_category_{{ $item->application_list->id}}">
+                    
+                    <span>
+                    {{ ucfirst($assesorsData->firstname) }}
+                      {{ ucfirst($assesorsData->lastname) }}
+                      ({{ $assesorsData->email }})
+                    </span>
+                    </label>
+                    </div>
+                    <div class="col-md-3">
+                    <select name="assessor_type_{{ $item->application_list->id}}[]" id="assessor_type_{{ $assesorsData->id}}" class="d-block assessor_name_with_email" onchange="handleAssessorDesignation('assessor_type_{{ $item->application_list->id}}','{{ $item->application_list->id}}')">
+                      <option value="" disabled selected>Please select option</option>
+                      <option value="Lead Assessor" @if($assessor_designation_first?->assessor_designation=='Lead Assessor') selected @endif>Lead Assessor</option>
+                      <option value="Co-Assessor" @if($assessor_designation_first?->assessor_designation=='Co-Assessor') selected @endif>Co-Assessor</option>
+                      <option value="Observer Assessor" @if($assessor_designation_first?->assessor_designation=='Observer Assessor') selected @endif>Observer Assessor</option>
+                      <option value="Observer Assessor" @if($assessor_designation_first?->assessor_designation=='Ayurveda Expert') selected @endif>Ayurveda Expert</option>
+                    </select>   
+                    </div>
+                  
+                  </div>
+                  
+                  <div id="assessor_assign_dates_{{$assesorsData->id}}">
+                  <?php
+                    foreach(get_accessor_date_new($assesorsData->id,$item->application_list->id,$assesorsData->assessment) as $date){
+                    ?>
+                    {!! $date !!}
+                <?php }   ?>
+                  </div>
+              @endforeach  
+               </div>
+               <div class="modal-footer">
+         <button type="button" onclick="cancelAssign()"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">Close</button>
+         <button type="submit"
+            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
+         </div>
+      </div>
+         </div>
+        
+      </form>
+      
+      
+      <div role="tabpanel" class="tabs__panel">
+          <div class="">
+             Test
+            </div>
+        </div>
+        
+    </tabs-group>
+    
+</div>
+</div>
+</div>
+</div>
+<!-- modal end here -->
+<!-- end here -->
 
 @endisset
 

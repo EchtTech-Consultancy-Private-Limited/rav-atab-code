@@ -1970,7 +1970,7 @@ class AdminApplicationController extends Controller
     {
         try {
             DB::beginTransaction();
-
+            
             $get_assessor_type = DB::table('users')->where('id', $request->assessor_id)->first()->assessment;
             $assessor_types = $get_assessor_type == 1 ? 'desktop' : 'onsite';
 
@@ -2154,6 +2154,232 @@ class AdminApplicationController extends Controller
                 DB::commit();
                 return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
             }
+        } catch (Exception $e) {
+            DB::rolback();
+            return redirect()->back()->with('fail', $e->getMessage());
+        }
+    }
+
+    public function assignAssessorOnsite(Request $request)
+    {
+        try {
+            // dd($request->all());
+            DB::beginTransaction();
+            
+            $get_assessor_type = 'onsite';
+            
+            $a_id = "assessor_type_" . $request->application_id;
+            // $a_id = "assessor_type_".$request->assessor_id;
+            $assessor_designation = $a_id;
+            if (count($request->$assessor_designation)<1) {
+                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor designation');
+            }
+            if (count($request->assessor_id)<1) {
+                return redirect()->route('admin-app-list')->with('fail', 'Please select assessor');
+            }
+            /*check if multiple lead assessor*/
+            $flagCount=0;
+            
+            
+            foreach($request->$assessor_designation as $key=>$item){
+                if($item=="Lead Assessor"){
+                    $flagCount++;
+                }
+            }
+            if($flagCount>1){
+                return redirect()->route('admin-app-list')->with('fail', 'Please assign single lead assessor');
+            }
+
+            
+            /*end here*/ 
+         
+            
+            foreach($request->assessor_id as $key=>$item){
+            /*to check date is selected or not*/
+            $get_date_count = DB::table('assessor_assigne_date')
+            ->where('application_id', $request->application_id)
+            ->where('assessor_Id', $item)
+            ->count();
+            
+            
+            // $get_assessor_designation = DB::table('tbl_assessor_assign')->where(['application_id'=>$request->application_id,'assessor_Id'=>$request->assessor_id,'assessor_type'=>$assessor_types])->first();
+            
+            if ($get_date_count < 1) {
+                return redirect()->route('admin-app-list')->with('fail', 'Please select date');
+            }
+            /*end here*/
+            $assessorType ='onsite';
+            $assessment_type_ = 2;
+            // DB::table('assessor_assigne_date')->where('application_id', $request->application_id)->whereNotIn('assessor_id', [$item])->where('assesment_type', $assessment_type_)->delete();
+
+            
+
+            $assessor_details = DB::table('users')->where('id', $item)->first();
+            $data = [];
+            $data['application_id'] = $request->application_id;
+            $data['assessor_id'] = $item;
+            $data['course_id'] = $request->course_id ?? null;
+            $data['assessor_type'] = 'onsite';
+            $data['due_date'] = Carbon::now()->addDay(366);
+            $data['assessor_designation'] = $request->$assessor_designation[$key];
+            $data['assessor_category'] = "atab_assessor";
+            
+            $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $item, 'assessor_type' => $request->assessor_type])->first();
+            if ($is_assign_assessor_date != null) {
+                $update_assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $item, 'assessor_type' => $request->assessor_type])->update($data);
+            } else {
+                $create_assessor_assign = DB::table('tbl_assessor_assign')->insert($data);
+            }
+           
+            $assessment_type = 2;
+            
+
+
+            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item]);
+
+            DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => 'onsite'])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item]);
+
+            // revert action done on course and courses docs
+            DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+            DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+        }
+
+        
+
+            /**
+             * Mail Sending
+             * 
+             * */
+
+            //admin mail
+            $title = "Application Successfully Assigned | RAVAP-" . $request->application_id;
+            $subject = "Application Successfully Assigned | RAVAP-" . $request->application_id;
+            $body = "Dear Team," . PHP_EOL . "
+
+                I hope this message finds you well. We are thrilled to inform you that you have assigned the " . $request->application_id . " to the assessor.
+
+                Here are the transaction details: " . PHP_EOL . "
+                Position: Admin " . PHP_EOL . "
+                Reporting to: " . $assessor_details->firstname . " " . PHP_EOL . "
+                Start Date: " . $assessor_details->created_at . "
+                
+                Best regard," . PHP_EOL . "
+                RAV Team";
+
+            $details['email'] = Auth::user()->email;
+            $details['title'] = $title;
+            $details['subject'] = $subject;
+            $details['body'] = $body;
+            dispatch(new SendEmailJob($details));
+            /*end here*/
+
+            //assessor mail
+            $title = "Assignment Confirmation - Welcome Aboard! | RAVAP-" . $request->application_id;
+            $subject = "Assignment Confirmation - Welcome Aboard! | RAVAP-" . $request->application_id;
+            $body = "Dear Team," . PHP_EOL . "
+
+                I trust this message finds you well. I am delighted to inform you that you have assigned the application with RAVAP-" . $request->application_id . "." . PHP_EOL . "
+                
+                Best regard," . PHP_EOL . "
+                RAV Team";
+
+            $details['email'] = $assessor_details->email;
+            $details['title'] = $title;
+            $details['subject'] = $subject;
+            $details['body'] = $body;
+            dispatch(new SendEmailJob($details));
+            /*end here*/
+
+            //tp mail
+            $title = "Application Successfully Assigned | RAVAP-" . $request->application_id;
+            $subject = "Application Successfully Assigned | RAVAP-" . $request->application_id;
+            $body = "Dear Team," . PHP_EOL . "
+
+                I trust this message finds you well. I am delighted to inform you that application  with RAVAP-" . $request->application_id . " has been assigned to " . $assessor_details->firstname . "(Assessor) ." . PHP_EOL . "
+                
+                Best regard," . PHP_EOL . "
+                RAV Team";
+
+            $details['email'] = $assessor_details->email;
+            $details['title'] = $title;
+            $details['subject'] = $subject;
+            $details['body'] = $body;
+            dispatch(new SendEmailJob($details));
+            /*end here*/
+
+            if ($request->assessment_type == 2) {
+                
+                foreach($request->assessor_id as $key=>$ele){
+                $data = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=', $$ele)->count() > 0;
+                if ($data == false) {
+                    $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->count() > 0;
+                    if ($value == false) {
+                        $data = new asessor_application();
+                        $data->assessor_id = $ele;
+                        $data->application_id = $request->application_id;
+                        $data->status = 1;
+                        $data->assessment_type = $assessment_type;
+                        $data->due_date = $due_date = Carbon::now()->addDay(15);
+                        $data->notification_status = 0;
+                        $data->read_by = 0;
+                        $data->assessment_way = $request->on_site_type;
+                        $data->save();
+                        return back()->with('success', 'Application has been successfully assigned to assessor');
+                    } else {
+                        $item = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessment_type', '=', '2')->first();
+                        $data = asessor_application::find($item->id);
+                        $data->assessor_id = $ele;
+                        $data->application_id = $request->application_id;
+                        $data->status = 1;
+                        $data->assessment_type = $assessment_type;
+                        $data->due_date = $due_date = Carbon::now()->addDay(15);
+                        $data->notification_status = 0;
+                        $data->read_by = 0;
+                        $data->assessment_way = $request->on_site_type;
+                        $data->save();
+                        return back()->with('success', 'Application has been successfully assigned to assessor');
+                    }
+                } 
+                
+                
+                else {
+                    foreach($request->assessor_id as $key=>$item){
+                    $value = DB::table('asessor_applications')->where('application_id', '=', $request->application_id)->where('assessor_id', '=',  $item)->first();
+                    // dd($value);
+                    $data = asessor_application::find($value->id);
+                    $data->assessor_id =  $item;
+                    $data->application_id = $request->application_id;
+                    $data->status = 1;
+                    $data->assessment_type = $assessment_type;
+                    $data->due_date = $due_date = Carbon::now()->addDay(15);
+                    $data->notification_status = 0;
+                    $data->read_by = 0;
+                    $data->assessment_way = $request->on_site_type;
+                    $data->save();
+                    }
+                    DB::commit();
+                    return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
+                }
+
+             }
+            } else {
+                
+                foreach($request->assessor_id as $key=>$item){
+                // AssessorApplication::where('application_id', $request->application_id)->delete();
+                $assessor = $item;
+                $newApplicationAssign = new AssessorApplication;
+                $newApplicationAssign->application_id = $request->application_id;
+                $newApplicationAssign->assessment_type = $assessment_type;
+                $newApplicationAssign->assessor_id = $assessor;
+                $newApplicationAssign->status = 1;
+                $newApplicationAssign->notification_status = 0;
+                $newApplicationAssign->read_by = 0;
+                $newApplicationAssign->assessment_way = $request->on_site_type;
+                $newApplicationAssign->save();
+            }
+            }
+            DB::commit();
+            return redirect()->route('admin-app-list')->with('success', 'Application has been successfully assigned to assessor');
         } catch (Exception $e) {
             DB::rolback();
             return redirect()->back()->with('fail', $e->getMessage());

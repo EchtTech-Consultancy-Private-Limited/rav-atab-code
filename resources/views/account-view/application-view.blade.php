@@ -792,7 +792,7 @@
                         @endforeach
                     </table>
                     @else
-                    <p>Payment has not been completed yet.</p>
+                    <p>No additional payment received</p>
                     @endif
                 </div>
             </div>
