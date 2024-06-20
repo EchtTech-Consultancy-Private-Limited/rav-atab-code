@@ -4,9 +4,9 @@
             @if(Request::is('level-first') || Request::is('level-one'))
             <a class="custom-nav-link {{request()->is('*level-one*') || request()->is('*level-second*') ||  request()->is('*level-third*') || request()->is('*level-first*') || request()->is('*level-one*') ? 'nav-active' : '' }}" href="#">New Application</a>
             @elseif(Request::is('level-second'))
-            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*level-second*') ? 'nav-active' : '' }}" href="{{ url('/create-level-2-new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*level-second*') ? 'nav-active' : '' }}" href="#">New Application</a>
             @elseif(Request::is('level-third'))
-            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*level-third*') ? 'nav-active' : '' }}" href="{{ url('/create-level-3-new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*level-third*') ? 'nav-active' : '' }}" href="#">New Application</a>
             
             @endif
             
