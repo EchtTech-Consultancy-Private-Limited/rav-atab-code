@@ -1,23 +1,43 @@
 <div class="nav-tab">
     <ul class="nav p-3">
         <li class="custom-nav-item ">
-            <!-- @if(Request::is('level-first'))
-            <a class="custom-nav-link {{ request()->is('*create-new-application*') || request()->is('*create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-new-applications') }}">New Application</a>
+            @if(Request::is('level-first') || Request::is('level-one'))
+            <a class="custom-nav-link {{request()->is('*level-one*') || request()->is('*level-second*') ||  request()->is('*level-third*') || request()->is('*level-first*') || request()->is('*level-one*') ? 'nav-active' : '' }}" href="#">New Application</a>
             @elseif(Request::is('level-second'))
-            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-level-2-new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*level-second*') ? 'nav-active' : '' }}" href="{{ url('/create-level-2-new-applications') }}">New Application</a>
             @elseif(Request::is('level-third'))
-            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*create-course*') ? 'nav-active' : '' }}" href="{{ url('/create-level-3-new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*level-third*') ? 'nav-active' : '' }}" href="{{ url('/create-level-3-new-applications') }}">New Application</a>
             
-            @endif -->
+            @endif
             
         </li>
         <li class="custom-nav-item">
-            <a class="custom-nav-link {{ request()->is('*tp/application-list*') ? 'nav-active' : '' }}" href="{{ url('/'.Request::segment(1).'/tp/application-list') }}">Applications</a>
+            @php
+              if(request()->is('*create-new-course*') || request()->is('*level-first*')){
+                $slug = 'level-one';
+              }
+              else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
+                $slug = 'level-second';
+              }else{
+                $slug = 'level-third';
+              }
+            @endphp
+            <a class="custom-nav-link {{ request()->is('*tp/application-list*') ? 'nav-active' : '' }}" href="{{ url('/'.$slug.'/tp/application-list') }}">Applications</a>
         </li>
 
         <li class="custom-nav-item">
-                <a class="custom-nav-link {{ request()->is('*tp-pending-payment-list*') || request()->is('*create-new-course*') || request()->is('course-payment*') ? 'nav-active' : '' }}" 
-        href="{{ url('/' . (Request::segment(1) == 'level-first' ? 'level-one' : Request::segment(1)) . '/tp-pending-payment-list') }}">
+        @php
+              if(request()->is('*create-new-course*') || request()->is('*level-first*')){
+                $slug = 'level-one';
+              }
+              else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
+                $slug = 'level-second';
+              }else{
+                $slug = 'level-third';
+              }
+            @endphp
+                <a class="custom-nav-link {{ request()->is('*tp-pending-payment-list*')  || request()->is('course-payment*') ? 'nav-active' : '' }}" 
+        href="{{ url('/' . $slug . '/tp-pending-payment-list') }}">
             Pending Payment List
         </a>
 

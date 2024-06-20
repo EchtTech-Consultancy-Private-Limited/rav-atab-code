@@ -348,10 +348,16 @@ active @endif"
                                                                         <div class="form-line">
                                                                             <label>Email-ID<span
                                                                                     class="text-danger">*</span></label>
-                                                                            <input id="emailId" type="text"
+                                                                            <input 
+                                                                                type="text"
                                                                                 name="Email_ID"
                                                                                 placeholder="Email-ID"
+                                                                                required="true"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">
+                                                                            <!-- <input id="emailId" type="text"
+                                                                                name="Email_ID"
+                                                                                placeholder="Email-ID"
+                                                                                value="{{ old('email', $applicationData->email ?? '') }}"> -->
                                                                         </div>
                                                                         @error('Email_ID')
                                                                             <span id="backendError" class="text-danger">
@@ -368,9 +374,16 @@ active @endif"
                                                                                 Designation
                                                                                 <span class="text-danger">*</span>
                                                                             </label>
-                                                                            <input type="text" name="designation"
+                                                                            <input 
+                                                                               type="text"
+                                                                                name="designation"
                                                                                 placeholder="Designation"
+                                                                                required="true"
                                                                                 value="{{ old('designation', $applicationData->designation ?? '') }}">
+                                                                            <!-- <input type="text" 
+                                                                                 name="designation"
+                                                                                placeholder="Designation"
+                                                                                value="{{ old('designation', $applicationData->designation ?? '') }}"> -->
                                                                         </div>
                                                                         @error('designation')
                                                                             <span class="text-danger">
@@ -388,7 +401,7 @@ active @endif"
                                             <ul class="list-inline pull-right">
                                                 <li>
                                                     <button id="nextBtn" type="submit"
-                                                        class="btn btn-primary next-step" disabled>
+                                                        class="btn btn-primary next-step">
                                                         Next
                                                     </button>
                                                 </li>

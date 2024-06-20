@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (personName !== '' && (contactNumber !== '' && contactNumber.length>9 ) && email !== '' && designation !== '' && !duplicateContact && !duplicateEmail) {
       nextBtn.removeAttribute('disabled');
     } else {
-      nextBtn.setAttribute('disabled', true);
+      // nextBtn.setAttribute('disabled', true);
     }
   }
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (email.includes('@@')) {
         emailError.textContent = 'Invalid email format.';
         $('#backendError').text = '';
-        nextBtn.setAttribute('disabled', true);
+        // nextBtn.setAttribute('disabled', true);
       }else{
         const isApplicationEmailExist = window.location.pathname.split('/').length 
         let check_length = 3;
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       // Display an error message for an invalid contact number
       contactError.textContent = 'Contact number must be 10 digits and numeric';
-      $("#nextBtn").attr("disabled",true);
+      // $("#nextBtn").attr("disabled",true);
       checkForm();
     }
   }
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if(isValid){
         checkContactNumberDuplicacy(contactNumber);
       }else{
-        $('#nextBtn').attr('disabled',true);
+        // $('#nextBtn').attr('disabled',true);
       }
     }
   });
