@@ -500,7 +500,7 @@
                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
 
-                               @elseif($ApplicationCourses['course']->status==0 && $ApplicationCourses['course']->status==1 && $spocData->level_id!=3)
+                               @elseif(($ApplicationCourses['course']->status==0 || $ApplicationCourses['course']->status==1) && $spocData->level_id!=3)
                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","reject")'>Reject</button>
                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_modal_by_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Approve</button>
                              @endif
