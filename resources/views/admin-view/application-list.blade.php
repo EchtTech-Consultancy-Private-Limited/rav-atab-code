@@ -173,14 +173,26 @@
                                                         $is_all_revert = checkAllActionDoneOnRevert($item->application_list->id);
                                                         
                                                         @endphp
-                                                                @if($is_all_course_accepted==false && $is_all_revert==false)
+                                                                @if($is_all_course_accepted==false && $is_all_revert==false  &&$item->application_list->level_id==3)
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                                                     data-bs-target="#{{$type_}}{{ $item->application_list->id }}"
                                                                     id="view_{{ $item->application_list->id }}">
                                                     <i class="fa fa-font" aria-hidden="true" title=""></i>
                                                     </a>
+                                                            @else
+
+                                                            <span class="badge badge-main warning ">Action not completed on courses doc</span>
                                                             @endif
+                                                            
+                                                @if($item->application_list->level_id==2)
+                                                                <a class="btn btn-tbl-delete bg-primary font-a"
+                                                                    data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
+                                                                    data-bs-target="#{{$type_}}{{ $item->application_list->id }}"
+                                                                    id="view_{{ $item->application_list->id }}">
+                                                    <i class="fa fa-font" aria-hidden="true" title=""></i>
+                                                    </a>
+                                                 @endif
 
                                                     @endif
                                                     @endisset  
