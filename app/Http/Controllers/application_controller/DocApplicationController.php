@@ -184,6 +184,17 @@ class DocApplicationController extends Controller
             $last_pay=DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->latest('id')->first();
             DB::table('tbl_application_payment')->where(['application_id'=>$application_id,'id'=>$last_pay->id])->update(['status'=>2,'approve_remark'=>$request->final_payment_remark??'','accountant_id'=>Auth::user()->id]);
 
+            /*send notification*/ 
+                $notifiData = [];
+                $notifiData['user_type'] = "superadmin";
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $application_id;
+                $notifiData['uhid'] = getUhid( $application_id)[0];
+                $notifiData['level_id'] = getUhid( $application_id)[1];
+                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->Application_id);
+                $notifiData['data'] = config('notification.admin.paymentApprove');
+                sendNotification($notifiData);
+        /*end here*/ 
 
              /**
              * Send Email to Accountant

@@ -38,7 +38,7 @@ class AdminApplicationController extends Controller
             ->get();
         $final_data = array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
-
+        
         $desktop_assessor_list = DB::table('users')->where(['assessment' => 1, 'role' => 3, 'status' => 0])->orderBy('id', 'DESC')->get();
 
         $onsite_assessor_list = DB::table('users')->where(['assessment' => 2, 'role' => 3, 'status' => 0])->orderBy('id', 'DESC')->get();
@@ -1896,7 +1896,7 @@ class AdminApplicationController extends Controller
 
     }
 
-
+   
     public function approveCourseRejectBySecretariat($id,$course_id){
         try {
             
@@ -2008,6 +2008,17 @@ class AdminApplicationController extends Controller
             $data['assessor_designation'] = $request->$assessor_designation;
             $data['assessor_category'] = "atab_assessor";
 
+              /*send notification*/ 
+              $notifiData = [];
+              $notifiData['user_type'] = "superadmin";
+              $notifiData['sender_id'] = Auth::user()->id;
+              $notifiData['application_id'] = $request->application_id;
+              $notifiData['uhid'] = getUhid( $request->application_id)[0];
+              $notifiData['level_id'] = getUhid( $request->application_id)[1];
+              $notifiData['data'] = config('notification.secretariat.assigned');
+              sendNotification($notifiData);
+            /*end here*/ 
+            
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $request->assessor_id, 'assessor_type' => $request->assessor_type])->first();
             if ($is_assign_assessor_date != null) {
                 $update_assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $request->assessor_id, 'assessor_type' => $request->assessor_type])->update($data);

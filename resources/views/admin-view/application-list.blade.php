@@ -169,13 +169,18 @@
                                                         }else{
                                                             $type_ =  "View_popup_onsite_";
                                                         }
+                                                        $is_all_course_accepted=checkAllCoursesDocAccepted($item->application_list->id);
+                                                        $is_all_revert = checkAllActionDoneOnRevert($item->application_list->id);
+                                                        
                                                         @endphp
+                                                                @if($is_all_course_accepted==false && $is_all_revert==false)
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                                                     data-bs-target="#{{$type_}}{{ $item->application_list->id }}"
                                                                     id="view_{{ $item->application_list->id }}">
                                                     <i class="fa fa-font" aria-hidden="true" title=""></i>
                                                     </a>
+                                                            @endif
 
                                                     @endif
                                                     @endisset  
@@ -206,7 +211,7 @@
       <div class="modal-content">
          <div class="modal-header">
             <h5 class="modal-title" id="exampleModalCenterTitle1">
-               Assign an 
+               Assign desktop
                Assessor to the application from the below list
             </h5>
             <button type="button" class="close"
@@ -365,7 +370,7 @@
       <div class="modal-content">
          <div class="modal-header">
             <h5 class="modal-title" id="exampleModalCenterTitle2">
-               Assign an 
+               Assign Onsite
                Assessor to the application from the below list
             </h5>
             <button type="button" class="close"
