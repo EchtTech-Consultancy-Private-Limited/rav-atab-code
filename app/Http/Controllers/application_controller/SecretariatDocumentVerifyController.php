@@ -406,7 +406,7 @@ class SecretariatDocumentVerifyController extends Controller
                 /*reject course and revert back before click on submit button*/
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
-                
+                $t = 0;
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -436,7 +436,7 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_comments=0;
                     }
 
-                DB::table('tbl_course_wise_document')
+               $is_update = DB::table('tbl_course_wise_document')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
                 ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
 
@@ -445,10 +445,47 @@ class SecretariatDocumentVerifyController extends Controller
                 ->update(['nc_show_status' => $nc_comments]);
 
                 /*if any courses rejected then hide the revert button according to courses*/ 
+                if($t==0){
+                    if($is_update){
+                        $t=1;
+                    }
+                }
                 
-
+                
             }
 
+            
+                $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
+
+                $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $application_id;
+                $notifiData['uhid'] = getUhid( $application_id)[0];
+                $notifiData['level_id'] = getUhid( $application_id)[1];
+                $notifiData['data'] = config('notification.common.nc');
+                $notifiData['user_type'] = "superadmin";
+                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                
+                if($get_application->level_id==1){
+                if($t && !$is_all_accepted){
+                      /*send notification*/ 
+                      sendNotification($notifiData);
+                      $notifiData['user_type'] = "tp";
+                      $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+                      sendNotification($notifiData);
+                        /*end here*/ 
+                }
+               
+                if($is_all_accepted){
+                    $notifiData['data'] = config('notification.admin.acceptCourseDoc');
+                    $notifiData['user_type'] = "superadmin";
+                    $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                    sendNotification($notifiData);
+                }
+            }
+            
+            
 
             foreach($get_all_courses as $course){
                 if($course_doc->status==1){
@@ -456,27 +493,12 @@ class SecretariatDocumentVerifyController extends Controller
                 }
             }
 
-            // DB::table('tbl_course_wise_document')
-            //     ->where(['id' => $delaration->id, 'application_id' => $application_id, 'course_id' => $course_id])
-            //     ->whereNotIn('status', [0, 1, 4, 6])
-            //     ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
-
-            // DB::table('tbl_course_wise_document')
-            //     ->where(['id' => $curiculum->id, 'application_id' => $application_id, 'course_id' => $course_id])
-            //     ->whereNotIn('status', [0, 1, 4, 6])
-            //     ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
-
-            // DB::table('tbl_course_wise_document')
-            //     ->where(['id' => $details->id, 'application_id' => $application_id, 'course_id' => $course_id])
-            //     ->whereNotIn('status', [0, 1, 4, 6])
-            //     ->update(['nc_flag' => 1, 'secretariat_id' => $secretariat_id]);
-
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
             $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
 
-            $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
+           
 
            
             /*------end here------*/
@@ -1477,4 +1499,70 @@ public function uploadMoM(Request $request)
     return response()->json(['success' => false,'message' =>'Someting went wrong'],500);
    }
  }
+
+
+ public function isAllCourseDocAccepted($application_id)
+ {
+
+
+     $all_courses_id = DB::table('tbl_application_courses')->where('application_id', $application_id)->pluck('id');
+
+
+     $results = DB::table('tbl_course_wise_document')
+         ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+         ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
+         ->whereIn('course_id', $all_courses_id)
+         ->where('application_id', $application_id)
+         ->where('approve_status',1)
+         ->get();
+
+
+     $additionalFields = DB::table('tbl_course_wise_document')
+         ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+             $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
+                 ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
+                 ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
+                 ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
+                 ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
+         })
+         ->orderBy('tbl_course_wise_document.id', 'desc')
+         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+     foreach ($results as $key => $result) {
+         $additionalField = $additionalFields->where('application_id', $result->application_id)
+             ->where('course_id', $result->course_id)
+             ->where('doc_sr_code', $result->doc_sr_code)
+             ->where('doc_unique_id', $result->doc_unique_id)
+             ->where('approve_status',1)
+             ->first();
+         if ($additionalField) {
+             $results[$key]->status = $additionalField->status;
+             $results[$key]->id = $additionalField->id;
+             $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+         }
+     }
+
+     $flag = 0;
+     foreach ($results as $result) {
+         if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+             $flag = 1;
+         } else {
+             $flag = 0;
+             break;
+         }
+     }
+
+  
+     if ($flag == 1) {
+         return true;
+     } else {
+         return false;
+     }
+
+ }
+
+
+
+ 
 }

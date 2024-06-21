@@ -849,6 +849,19 @@ class ApplicationCoursesController extends Controller
             $item->payment_proof = $filename;
         }
         $item->save();
+
+         /*send notification*/ 
+         $notifiData = [];
+         $notifiData['user_type'] = "accountant";
+         $notifiData['sender_id'] = Auth::user()->id;
+         $notifiData['application_id'] =$request->Application_id;
+         $notifiData['uhid'] = getUhid($request->Application_id)[0];
+         $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
+         $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+         $notifiData['data'] = config('notification.accountant.appCreated');
+         sendNotification($notifiData);
+         /*end here*/ 
+        
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;
@@ -930,6 +943,8 @@ class ApplicationCoursesController extends Controller
                 $ApplicationCourse->update();
             }
             $ApplicationCourse->save();
+           
+
             DB::commit();
             return  redirect('/level-third')->with('success', ' Payment Done successfully');
         } else {

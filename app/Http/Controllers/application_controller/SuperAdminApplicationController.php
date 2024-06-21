@@ -240,6 +240,19 @@ class SuperAdminApplicationController extends Controller
             
             $is_assigned_secretariat = DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id])->first();
 
+              /*send notification*/ 
+              $notifiData = [];
+              $notifiData['user_type'] = "secretariat";
+              $notifiData['sender_id'] = Auth::user()->id;
+              $notifiData['application_id'] = $request->application_id;
+              $notifiData['uhid'] = getUhid( $request->application_id)[0];
+              $notifiData['level_id'] = getUhid( $request->application_id)[1];
+              $notifiData['url'] = "/admin/application-view/".dEncrypt($request->application_id);
+              $notifiData['data'] = config('notification.secretariat.assigned');
+              sendNotification($notifiData);
+            /*end here*/ 
+            
+
             if($is_assigned_secretariat!=null){
                 DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id,'secretariat_type'=>$request->secretariat_type])->update($data);
             }else{

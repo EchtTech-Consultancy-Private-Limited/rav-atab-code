@@ -13,7 +13,7 @@
         </li>
         <li class="custom-nav-item">
             @php
-              if(request()->is('*create-new-course*') || request()->is('*level-first*')){
+              if(request()->is('*create-new-course*') || request()->is('*level-first*') || request()->is('*level-one*')){
                 $slug = 'level-one';
               }
               else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
@@ -27,7 +27,7 @@
 
         <li class="custom-nav-item">
         @php
-              if(request()->is('*create-new-course*') || request()->is('*level-first*')){
+              if(request()->is('*create-new-course*') || request()->is('*level-first*') || request()->is('*level-one*')){
                 $slug = 'level-one';
               }
               else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
