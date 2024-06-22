@@ -24,6 +24,10 @@ class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
     
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function getApplicationList($level_type='level-one'){
         
         $pay_list = DB::table('tbl_application_payment')
