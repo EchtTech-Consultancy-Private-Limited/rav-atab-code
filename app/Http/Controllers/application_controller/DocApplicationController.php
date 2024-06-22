@@ -11,7 +11,7 @@ class DocApplicationController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware('auth');
     }
     public function showCoursePdf($name)
     {
@@ -59,7 +59,7 @@ class DocApplicationController extends Controller
                         );
              }else if($tbl_nc_comments->nc_type=="NC2"){
                 $dropdown_arr = array(
-                            "not_recommended"=>"Not Recommended",
+                            "not_recommended"=>"Needs Revision",
                             "Accept"=>"Accept",
                         );
              }else if($tbl_nc_comments->nc_type=="not_recommended"){

@@ -583,7 +583,7 @@ function getComments($id, $applicationID)
             if ($comment->status == 4) {
                 $statusCode = "Close";
             } elseif ($comment->status == 3) {
-                $statusCode = "Not Recommended";
+                $statusCode = "Needs Revision";
             } elseif ($comment->status == 2) {
                 $statusCode = "NC2";
             } elseif ($comment->status == 1) {
@@ -649,7 +649,7 @@ function getCommentsForAdmin($id, $applicationID)
             if ($comment->status == 4) {
                 $statusCode = "Close";
             } elseif ($comment->status == 3) {
-                $statusCode = "Not Recommended";
+                $statusCode = "Needs Revision";
             } elseif ($comment->status == 2) {
                 $statusCode = "NC2";
             } elseif ($comment->status == 1) {
@@ -891,7 +891,7 @@ function getButtonText($id)
         if ($commentData->status == 4) {
             return "Accepted";
         } elseif ($commentData->status == 3 || $commentData->status == 5) {
-            return "Not Recommended";
+            return "Needs Revision";
         } elseif ($commentData->status == 2) {
             return "NC2";
         } elseif ($commentData->status == 1) {
