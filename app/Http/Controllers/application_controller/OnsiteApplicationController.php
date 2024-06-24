@@ -612,14 +612,15 @@ class OnsiteApplicationController extends Controller
               'id' => 'required',
           ]);
           DB::beginTransaction();
-          $update_assessor_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['assessor_onsite_received_payment'=>1]);
-          if($update_assessor_received_payment_status){
+          $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+          $d = DB::table('tbl_notifications')->where('id',$id)->first();
+          
+          if ($is_read) {
               DB::commit();
-              $redirect_url = URL::to('/onsite/application-view/'.dEncrypt($id));
-              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
-          }else{
+              return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $d->url], 200);
+          } else {
               DB::rollback();
-              return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+              return response()->json(['success' => false, 'message' => 'Already read notification'], 200);
           }
     }
     catch(Exception $e){
@@ -954,6 +955,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
             $application_id = dDecrypt($application_id);
             
             DB::beginTransaction();
+            $t=0;
             $secretariat_id = Auth::user()->id;
             $get_course_docs = DB::table('tbl_application_course_doc')
                 ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>'onsite'])
@@ -985,7 +987,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
                         $nc_comments=0;
                     }
 
-                DB::table('tbl_application_course_doc')
+                $is_update= DB::table('tbl_application_course_doc')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0,'assessor_type'=>'onsite'])
                 ->update(['nc_flag' => $nc_flag, 'assessor_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
 
@@ -993,9 +995,55 @@ public function onsiteUpdateNCFlagDocList($application_id)
                 ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->application_courses_id,'nc_show_status'=>0,'assessor_type'=>'onsite'])
                 ->update(['nc_show_status' => $nc_comments]);
 
-                
+                if($t==0){
+                    if($is_update){
+                        $t=1;
+                    }
+                }
+            }
+            $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
+
+            if($get_application->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_application->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
             }
 
+            $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] = $application_id;
+            $notifiData['uhid'] = getUhid( $application_id)[0];
+            $notifiData['level_id'] = getUhid( $application_id)[1];
+            $notifiData['data'] = config('notification.common.nc');
+            $notifiData['user_type'] = "superadmin";
+            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+            if($get_application->level_id==3){
+            if($t && !$is_all_accepted){
+                
+                  /*send notification*/ 
+                  sendNotification($notifiData);
+                  $notifiData['user_type'] = "tp";
+                  $notifiData['url'] = $tpUrl;
+                  sendNotification($notifiData);
+                  $notifiData['user_type'] = "secretariat";
+                  $notifiData['url'] = $url;
+                  sendNotification($notifiData);
+                    /*end here*/ 
+            }
+           
+            if($is_all_accepted){
+                $notifiData['data'] = config('notification.admin.acceptCourseDoc');
+                $notifiData['user_type'] = "superadmin";
+                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                sendNotification($notifiData);
+            }
+        }
             /*--------To Check All 44 Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
@@ -1059,6 +1107,67 @@ public function uploadSignedCopy(Request $request)
      $data = $doc_name;
      return view('doc-view.signed', ['data' => $data]);
     
+ }
+
+ public function isAllCourseDocAccepted($application_id)
+ {
+
+
+     $all_courses_id = DB::table('tbl_application_courses')->where('application_id', $application_id)->pluck('id');
+
+
+     $results = DB::table('tbl_application_course_doc')
+         ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
+         ->whereIn('application_courses_id', $all_courses_id)
+         ->where('application_id', $application_id)
+         ->where('approve_status',1)
+         ->get();
+
+
+     $additionalFields = DB::table('tbl_application_course_doc')
+         ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+             $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                 ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                 ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+         })
+         ->orderBy('tbl_application_course_doc.id', 'desc')
+         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+     foreach ($results as $key => $result) {
+         $additionalField = $additionalFields->where('application_id', $result->application_id)
+             ->where('application_courses_id', $result->application_courses_id)
+             ->where('doc_sr_code', $result->doc_sr_code)
+             ->where('doc_unique_id', $result->doc_unique_id)
+             ->where('approve_status',1)
+             ->first();
+         if ($additionalField) {
+             $results[$key]->status = $additionalField->status;
+             $results[$key]->id = $additionalField->id;
+             $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+         }
+     }
+
+     $flag = 0;
+     foreach ($results as $result) {
+         if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+             $flag = 1;
+         } else {
+             $flag = 0;
+             break;
+         }
+     }
+
+  
+     if ($flag == 1) {
+         return true;
+     } else {
+         return false;
+     }
+
  }
 
 

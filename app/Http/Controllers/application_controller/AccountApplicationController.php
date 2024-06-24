@@ -316,16 +316,15 @@ class AccountApplicationController extends Controller
               'id' => 'required',
           ]);
           DB::beginTransaction();
-        //   $application_id = DB::table('tbl_application')->where('id',$request->id)->first()->application_id;
-          $update_account_received_payment_status = DB::table('tbl_application_payment')->where('application_id',$id)->update(['account_received_payment'=>1]);
-
-          if($update_account_received_payment_status){
+          $is_update = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+          $d = DB::table('tbl_notifications')->where('id',$id)->first();
+          if($is_update){
               DB::commit();
               $redirect_url = URL::to('/account/application-view/'.dEncrypt($id));
-              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
+              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
           }else{
               DB::rollback();
-              return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+              return response()->json(['success' => false,'message' =>'Already read notification'],200);
           }
     }
     catch(Exception $e){

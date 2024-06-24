@@ -12,6 +12,7 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationCourses;
 use App\Models\TblcoursesWiseDocument;
 use App\Models\TblApplicationPayment;
+
 use App\Models\LevelInformation;
 use Carbon\Carbon;
 use Session;
@@ -821,6 +822,7 @@ class ApplicationCoursesController extends Controller
             DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->update(['payment_status' => 1]);
           }
         /*end here*/
+
         $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
         ->whereNull('remark_by_account')
         ->count();

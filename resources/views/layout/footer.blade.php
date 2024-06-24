@@ -431,6 +431,8 @@
          } else {
              $('#GFG_DOWN').text(this.files[0].size + "bytes");
          }
+
+         
     });
 
      

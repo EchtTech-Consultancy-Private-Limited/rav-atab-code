@@ -480,7 +480,8 @@ class AdminApplicationController extends Controller
         }
         $admin_final_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])->count();
         $is_final_summary_generated=false;
-        if(count($courses)==$admin_final_summary_count){
+        
+        if((count($courses)*2)==$admin_final_summary_count){
             $is_final_summary_generated =true;
         }
         
@@ -2041,6 +2042,27 @@ class AdminApplicationController extends Controller
             DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
            DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
 
+
+
+        /*send notification*/ 
+         $notifiData = [];
+         $notifiData['sender_id'] = Auth::user()->id;
+         $notifiData['application_id'] =$request->application_id;
+         $notifiData['uhid'] = getUhid($request->application_id)[0];
+         $notifiData['level_id'] = getUhid($request->application_id)[1] ;
+         $notifiData['user_type'] = "desktop";
+         $notifiData['url'] = "/desktop/application-view/".dEncrypt($request->application_id);
+         $notifiData['data'] = config('notification.assessor_desktop.assigned');
+         sendNotification($notifiData);
+
+         $notifiData['user_type'] = "superadmin";
+         $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+         $notifiData['data'] = config('notification.admin.desktopAssigned');
+         sendNotification($notifiData);
+         /*end here*/ 
+
+
+
             /**
              * Mail Sending
              * 
@@ -2255,6 +2277,24 @@ class AdminApplicationController extends Controller
             DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
             DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
         }
+
+
+            /*send notification*/ 
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] =$request->application_id;
+            $notifiData['uhid'] = getUhid($request->application_id)[0];
+            $notifiData['level_id'] = getUhid($request->application_id)[1] ;
+            $notifiData['user_type'] = "onsite";
+            $notifiData['url'] = "/onsite/application-view/".dEncrypt($request->application_id);
+            $notifiData['data'] = config('notification.assessor_onsite.assigned');
+            sendNotification($notifiData);
+
+            $notifiData['user_type'] = "superadmin";
+            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+            $notifiData['data'] = config('notification.admin.onsiteAssigned');
+            sendNotification($notifiData);
+            /*end here*/ 
 
         
 
@@ -2627,23 +2667,18 @@ class AdminApplicationController extends Controller
                 'id' => 'required',
             ]);
             DB::beginTransaction();
-            $get_application = DB::table('tbl_application')->where('id',$id)->first();
-            $update_admin_received_payment_status = DB::table('tbl_application')->where('id', $id)->update(['admin_received_payment' => 1]);
-            if ($update_admin_received_payment_status) {
+            DB::table('tbl_application')->where('id', $id)->update(['admin_received_payment' => 1]);
+            $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+            $d=DB::table('tbl_notifications')->where('id',$id)->first();
+            
+            if($is_read){
                 DB::commit();
-                if($get_application->level_id==1){
-                    $redirect_url = URL::to('/admin/application-view/' . dEncrypt($id));
-                }else if($get_application->level_id==2){
-                    $redirect_url = URL::to('/admin/application-view-level-2/' . dEncrypt($id));
-                }else{
-                    $redirect_url = URL::to('/admin/application-view-level-3/' . dEncrypt($id));
-                }
-                
-                return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $redirect_url], 200);
-            } else {
+                return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
+            }else{
                 DB::rollback();
-                return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);
-            }
+                return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+            } 
+            
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);
@@ -3090,5 +3125,8 @@ public function adminReturnMom(Request $request)
  }
 
 
+ public function thankYou(Request $request){
+    return view('admin-view.thankyou');
+ }
 }
 
