@@ -27,14 +27,15 @@
 
         <li class="custom-nav-item">
         @php
-              if(request()->is('*create-new-course*') || request()->is('*level-first*') || request()->is('*level-one*')){
+              if(request()->is('create-new-course*') || request()->is('*level-first*') || request()->is('*level-one*')){
                 $slug = 'level-one';
               }
-              else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
+              else if(request()->is('create-level-2-new-course*') || request()->is('*level-second*') || request()->is('upgrade-create-new-course*') || request()->is('upgrade-show-course-payment*')){
                 $slug = 'level-second';
               }else{
                 $slug = 'level-third';
               }
+              
             @endphp
                 <a class="custom-nav-link {{ request()->is('*tp-pending-payment-list*')  || request()->is('course-payment*') ? 'nav-active' : '' }}" 
         href="{{ url('/' . $slug . '/tp-pending-payment-list') }}">
