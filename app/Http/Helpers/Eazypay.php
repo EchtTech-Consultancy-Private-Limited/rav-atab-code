@@ -10,7 +10,7 @@ class Eazypay
     public $paymode;
     public $return_url;
 
-    const DEFAULT_BASE_URL = 'https://eazypay.icicibank.com/EazyPG?';
+    const DEFAULT_BASE_URL = 'https://eazypayuat.icicibank.com/EazyPG?';
 
     public function __construct()
     {
@@ -18,34 +18,62 @@ class Eazypay
         $this->encryption_key           =    1300011197605020;
         $this->sub_merchant_id          =    45;
         $this->paymode                  =    9;
-        $this->return_url               =    'https://dev.accr.staggings.in/public/paymentresponse';
+        $this->return_url               =    env('APP_URL').'paymentresponse';
     }
 
-    public function getPaymentUrl($amount, $reference_no, $optionalField=null)
+    public function getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField='')
     {
-        $mandatoryField   =    $this->getMandatoryField($amount, $reference_no);
-        $optionalField    =    $this->getOptionalField($optionalField);
-        $amount           =    $this->getAmount($amount);
-        $reference_no     =    $this->getReferenceNo($reference_no);
+        // $mandatoryField   =    $this->aes128Encrypt($reference_no, $amount, $email, $mobile);
+        // $optionalField    =    $this->aes128Encrypt($optionalField,$this->encryption_key );
+        // $amount           =    $this->aes128Encrypt($amount,$this->encryption_key );
+        // $reference_no     =    $this->aes128Encrypt($reference_no,$this->encryption_key );
+            $opt_fields = "";
+            
+            $man_fields = $reference_no.'|'.$this->sub_merchant_id.'|'.$amount.'|'.'aaa'.'|'.$email.'|'.$mobile;
 
-        $paymentUrl = $this->generatePaymentUrl($mandatoryField, $optionalField, $amount, $reference_no);
+            $e_sub_mer_id = $this->aes128Encrypt($this->sub_merchant_id, $this->encryption_key);
+            $e_ref_no = $this->aes128Encrypt($reference_no, $this->encryption_key);
+            $e_amt = $this->aes128Encrypt($amount, $this->encryption_key);
+            $e_return_url = $this->aes128Encrypt($this->return_url, $this->encryption_key);
+            $e_paymode = $this->aes128Encrypt($this->paymode, $this->encryption_key);
+            $mandatoryField = $this->aes128Encrypt($man_fields, $this->encryption_key);
+            $e_opt_fields = $this->aes128Encrypt($opt_fields, $this->encryption_key);
+
+        $paymentUrl = $this->generatePaymentUrl($mandatoryField, $optionalField,$e_return_url,$e_ref_no,$e_sub_mer_id,$e_amt,$e_paymode);
+       // $paymentUrl = $this->generatePaymentUrl($mandatoryField, $optionalField, $amount, $reference_no);
+        //dd($paymentUrl);
         return $paymentUrl;
     }
 
-    protected function generatePaymentUrl($mandatoryField, $optionalField, $amount, $reference_no)
+    function aes128Encrypt($plaintext,$key){
+        $cipher = "aes-128-ecb";
+        in_array($cipher, openssl_get_cipher_methods(true));
+        {
+        $ivlen = openssl_cipher_iv_length($cipher);
+        $iv = openssl_random_pseudo_bytes(1);
+        $ciphertext = openssl_encrypt($plaintext, $cipher, $key, $options=0, "");
+        return $ciphertext;
+        }
+    }
+
+    protected function generatePaymentUrl($mandatoryField, $optionalField, $e_return_url, $e_ref_no, $e_sub_mer_id, $e_amt, $e_paymode)
     {
         $encryptedUrl = self::DEFAULT_BASE_URL."merchantid=".$this->merchant_id.
             "&mandatory fields=".$mandatoryField."&optional fields=".$optionalField.
-            "&returnurl=".$this->getReturnUrl()."&Reference No=".$reference_no.
-            "&submerchantid=".$this->getSubMerchantId()."&transaction amount=".
-            $amount."&paymode=".$this->getPaymode();
+            "&returnurl=".$e_return_url."&Reference No=".$e_ref_no.
+            "&submerchantid=".$e_sub_mer_id."&transaction amount=".
+            $e_amt."&paymode=".$e_paymode;
+
+        $encryptedUrlplain = self::DEFAULT_BASE_URL."merchantid=".$this->merchant_id.
+            "&mandatory fields=456789|45|10|aaa|brijesh.mca12@gmail.com|7982889567&optional fields=".$optionalField.
+            "&returnurl=".$this->return_url."&Reference No=456789&submerchantid=".$this->sub_merchant_id."&transaction amount=10&paymode=".$this->paymode;
 
         return $encryptedUrl;
     }
 
-    protected function getMandatoryField($amount, $reference_no)
+    protected function getMandatoryField($reference_no, $amount,$email,$mobile)
     {
-        return $this->getEncryptValue($reference_no.'|'.$this->sub_merchant_id.'|'.$amount);
+        return $this->getEncryptValue($reference_no.'|'.$this->sub_merchant_id.'|'.$amount.'|'.'aaa'.'|'.$email.'|'.$mobile);
     }
 
     // optional field must be seperated with | eg. (20|20|20|20)

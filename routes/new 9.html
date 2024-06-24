@@ -1,0 +1,87 @@
+<?php
+ 
+function aes128Encrypt($plaintext,$key){
+ 
+$cipher = "aes-128-ecb";
+ 
+in_array($cipher, openssl_get_cipher_methods(true));
+ 
+{
+ 
+$ivlen = openssl_cipher_iv_length($cipher);
+ 
+$iv = openssl_random_pseudo_bytes(1);
+ 
+$ciphertext = openssl_encrypt($plaintext, $cipher, $key, $options=0, "");
+ 
+return $ciphertext;
+ 
+}
+ 
+}
+ 
+$merchant_id = "139762";
+ 
+$key = "1300011197605020";
+ 
+$ref_no = 456789;
+ 
+$sub_mer_id = "45";
+ 
+$return_url = "http://localhost/atab/public/paymentresponse";
+ 
+$paymode = "9";
+ 
+$amt = "10";
+ 
+$man_fields = "456789|45|10|abc|9876543210";  
+ 
+$passAmount;
+ 
+$opt_fields = "";
+ 
+$e_sub_mer_id = aes128Encrypt($sub_mer_id, $key);
+ 
+$e_ref_no = aes128Encrypt($ref_no, $key);
+ 
+$e_amt = aes128Encrypt($amt, $key);
+ 
+$e_return_url = aes128Encrypt($return_url, $key);
+ 
+$e_paymode = aes128Encrypt($paymode, $key);
+ 
+$e_man_fields = aes128Encrypt($man_fields, $key);
+ 
+$e_opt_fields = aes128Encrypt($opt_fields, $key);
+
+?>
+ 
+<center>
+ 
+<h1>ICICI PG (Testing Page)</h1>
+ 
+<p>
+ 
+Hello Customer,
+ 
+<br><br>
+ 
+Please Transfer for Amount <b>? 1.00/-</b>
+ 
+</p>
+ 
+<p>
+ 
+<a href="https://eazypay.icicibank.com/EazyPG?merchantid=<?=$merchant_id?>&mandatory fields=<?=$e_man_fields?>&optional fields=<?=$e_opt_fields?>&returnurl=<?=$e_return_url?>&Reference No=<?=$e_ref_no?>&submerchantid=<?=$e_sub_mer_id?>&transaction amount=<?=$e_amt?>&paymode=<?=$e_paymode?>">Pay</a>
+ 
+</center>
+ 
+<p style="max-width: 100%;">
+ 
+<b><u>Pay Link (Before Encryption)</u>:</b><br>https://eazypay.icicibank.com/EazyPG?merchantid=<?=$merchant_id?>&mandatory fields=<?=$man_fields?>&optional fields=<?=$opt_fields?>&returnurl=<?=$return_url?>&Reference No=<?=$ref_no?>&submerchantid=<?=$sub_mer_id?>&transaction amount=<?=$amt?>&paymode=<?=$paymode?>
+ 
+</p>
+ 
+<p style="max-width: 100%;">
+ 
+<b><u>Pay Link (After Encryption)</u>:</b><br><span style="max-width: 100%">https://eazypay.icicibank.com/EazyPG?merchantid=<?=$merchant_id?>&mandatory fields=<?=$e_man_fields?>&optional fields=<?=$e_opt_fields?>&returnurl=<?=$e_return_url?>&Reference No=<?=$e_ref_no?>&submerchantid=<?=$e_sub_mer_id?>&transaction amount=<?=$e_amt?>&paymode=<?=$e_paymode?><br></span>

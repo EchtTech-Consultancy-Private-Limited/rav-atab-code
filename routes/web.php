@@ -26,6 +26,7 @@ use App\Http\Controllers\application_controller\OnsiteApplicationController;
 use App\Http\Controllers\application_controller\DocApplicationController;
 use App\Http\Controllers\application_controller\SecretariatDocumentVerifyController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\application_controller\DownLoadPDFFinalSummaryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,7 +60,8 @@ Route::get("/logout", [AuthController::class, 'logout']);
 
 /*--------------------Start Online Payment Process----------------------------*/
 Route::get('makepayment',[PaymentController::class,'makePayment'])->name('makepayment');
-Route::get('paymentresponse',[PaymentController::class,'paymentResponse'])->name('paymentresponse');
+Route::post('paymentresponse',[PaymentController::class,'paymentResponseSuccessFailer'])->name('paymentresponse');
+Route::get('pdf',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessor'])->name('pdfdownload');
 /*--------------------End Online Payment Process----------------------------*/
 
 

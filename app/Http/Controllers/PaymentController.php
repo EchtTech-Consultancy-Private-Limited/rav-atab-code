@@ -23,20 +23,22 @@ class PaymentController extends Controller
         $reference_no= rand();
         $mobile=7982889567;
         $email='brijesh.mca12@gmail.com';
-
+        
         $eazypay_integration=new Eazypay();
+        
         $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=null);
+      //dd($payment_url);
         header('Location: '.$payment_url);
         exit;
        // return $post_data;
     }
-    public function paymentResponse(){
-        dd('payment-response');
-        $status='success';
-        if($status =='success'){
-            return view('success-response');
+    public function paymentResponseSuccessFailer(Request $request){
+
+       // dd($request['Response_Code']);
+        if(isset($request['Response_Code']) && $request['Response_Code'] =='E000'){
+            return view('payment-response.success-response');
         }else{
-            return view('error-response');
+            return view('payment-response.error-response');
         }
         
 

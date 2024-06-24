@@ -16,6 +16,7 @@ class DesktopApplicationController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth')->except('logout');
     }
     /** Application List For Account */
     public function getApplicationList()
