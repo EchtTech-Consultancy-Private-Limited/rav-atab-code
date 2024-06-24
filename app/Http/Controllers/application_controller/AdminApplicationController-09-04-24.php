@@ -26,6 +26,7 @@ class AdminApplicationController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth');
     }
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')

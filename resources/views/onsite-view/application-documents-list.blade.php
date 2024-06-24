@@ -323,9 +323,12 @@
                                    
                                    
                                    @if($doc->onsite_status==0)
+                                   @php
+                                     $doc_=$doc->onsite_doc_file_name==null?$doc->doc_file_name:$doc->onsite_doc_file_name;
+                                   @endphp
                                       <a 
-                                       title="{{$doc->doc_file_name}}"
-                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                       title="{{$doc->onsite_doc_file_name}}"
+                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc_ . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                        class="btn btn-primary btn-sm docBtn m-1">
                                        View</a>
                                     @elseif($doc->onsite_status==1)
@@ -399,12 +402,14 @@
                                                   <input type="hidden" id="application_id" value="{{$application_id}}">
                                                   <input type="hidden" id="doc_unique_id_{{$question['question']->id}}" value="{{$question['question']->id}}">
                                                   <input type="hidden" id="application_courses_id" value="{{$course_id}}">
-                                                  
+                                                @if($assessor_designation->assessor_designation=="Lead Assessor")      
                                                   <div class="upload-btn-wrapper">
                                                      <button class="upld-btn upload-btn-fn-size"><i class="fas fa-cloud-upload-alt"></i> Upload Photograph</button>
 
                                                   <input type="file" class="from-control fileup_photograph" name="fileup_photograph" id="fileup_photograph_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" onchange="onsitePhotographUpload({{$question['question']->id}})"/>
                                             </div>
+                                            @endif
+
                                                </div>
                                             </div>
                                             @endif
@@ -412,14 +417,19 @@
 
                                    @else
                                       <!-- When doc not in courses doc tbl -->
+                                       
                                       <div style="padding: 8px;">
                                              <div class="d-flex justify-content-center"></div>
                                              <div class="d-flex justify-content-center">
+                                                @php
+                                                   $doc_paths=$doc->onsite_doc_file_name!=null?$doc->onsite_doc_file_name:"test11.pdf";
+                                                @endphp
+                                                
+                                                  @if($assessor_designation->assessor_designation=="Lead Assessor")   
                                                 <div>
-                                                   <a  href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}" class="btn btn-primary btn-sm">Upload
-                                                   Document</a>&nbsp;
+                                                   <a  href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc_paths . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}" class="btn btn-primary btn-sm">Upload Document</a>&nbsp;
                                                 </div>
-
+                                                @endif
                                                 <!-- upload photograph -->
                                                 <div>
                                                   <input type="hidden" id="doc_sr_code_{{$question['question']->id}}" value="{{$question['question']->code}}">
@@ -427,11 +437,12 @@
                                                   <input type="hidden" id="application_id" value="{{$application_id}}">
                                                   <input type="hidden" id="doc_unique_id_{{$question['question']->id}}" value="{{$question['question']->id}}">
                                                   <input type="hidden" id="application_courses_id" value="{{$course_id}}">
-                                                  
+                                                  @if($assessor_designation->assessor_designation=="Lead Assessor") 
                                                   <div class="upload-btn-wrapper">
                                                      <button class="upld-btn upload-btn-fn-size bg-color-btn"><i class="fas fa-cloud-upload-alt"></i> Upload Photograph</button>
 
                                                   <input type="file" disabled="true" class="from-control fileup_photograph" name="fileup_photograph" id="fileup_photograph_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" onchange="onsitePhotographUpload({{$question['question']->id}})"/>
+                                                  @endif
                                             </div>
                                                </div>
                                             </div>
@@ -454,12 +465,12 @@
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
                                     @else
-                                  
+                                    
                                                 <span class="text-danger"
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment
                                                 pending!</span>
                                                 @endif
-                                                @if($doc->onsite_status!=0 && $doc->is_revert!=1)
+                                                @if($doc->onsite_status!=0  && $doc->is_revert!=1 )
                                                 <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocListOnsite('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->onsite_doc_file_name }}')">Revert</button>
 
                                                 @endif

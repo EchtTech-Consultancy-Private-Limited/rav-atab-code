@@ -332,7 +332,7 @@ active @endif"
                                                                                 maxlength="10" name="Contact_Number"
                                                                                 class="preventalpha"
                                                                                 placeholder="Contact Number"
-                                                                                id="Contact_Number"
+                                                                                
                                                                                 value="{{ old('contact_number', $applicationData->contact_number ?? '') }}">
                                                                         </div>
                                                                         @error('Contact_Number')
@@ -348,7 +348,9 @@ active @endif"
                                                                         <div class="form-line">
                                                                             <label>Email-ID<span
                                                                                     class="text-danger">*</span></label>
-                                                                            <input id="emailId" type="text"
+                                                                            <input 
+                                                                            
+                                                                             type="text"
                                                                                 name="Email_ID"
                                                                                 placeholder="Email-ID"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">
@@ -368,7 +370,8 @@ active @endif"
                                                                                 Designation
                                                                                 <span class="text-danger">*</span>
                                                                             </label>
-                                                                            <input type="text" name="designation"
+                                                                            <input 
+                                                                            type="text" name="designation"
                                                                                 placeholder="Designation"
                                                                                 value="{{ old('designation', $applicationData->designation ?? '') }}">
                                                                         </div>
@@ -388,7 +391,7 @@ active @endif"
                                             <ul class="list-inline pull-right">
                                                 <li>
                                                     <button id="nextBtn" type="submit"
-                                                        class="btn btn-primary next-step" disabled>
+                                                        class="btn btn-primary next-step">
                                                         Next
                                                     </button>
                                                 </li>

@@ -24,6 +24,10 @@ class TPApplicationController extends Controller
 {
     use PdfImageSizeTrait;
     
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function getApplicationList($level_type='level-one'){
         
         $pay_list = DB::table('tbl_application_payment')
@@ -32,7 +36,7 @@ class TPApplicationController extends Controller
           ->pluck('application_id')
           ->toArray();
           
-        if($level_type=="level-one"){
+        if($level_type=="level-one" || $level_type=="level-first"){
             $level_id = 1;
         }else if($level_type=="level-second"){
             $level_id = 2;
@@ -1270,6 +1274,16 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         }
         $item->save();
 
+        /*send notification*/ 
+        $notifiData = [];
+        $notifiData['user_type'] = "accountant";
+        $notifiData['sender_id'] = Auth::user()->id;
+        $notifiData['application_id'] =$request->Application_id;
+        $notifiData['uhid'] = getUhid($request->Application_id)[0];
+        $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
+        $notifiData['data'] = config('notification.accountant.appCreated');
+        sendNotification($notifiData);
+        /*end here*/ 
 
         if(isset($first_app_id)){
 
@@ -1988,7 +2002,16 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
         $item->payment_proof = $filename;
     }
     $item->save();
-
+        /*send notification*/ 
+        $notifiData = [];
+        $notifiData['user_type'] = "accountant";
+        $notifiData['sender_id'] = Auth::user()->id;
+        $notifiData['application_id'] =$request->Application_id;
+        $notifiData['uhid'] = getUhid($request->Application_id)[0];
+        $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
+        $notifiData['data'] = config('notification.accountant.appCreated');
+        sendNotification($notifiData);
+        /*end here*/ 
 
     if(isset($first_app_id)){
         DB::table('tbl_application')->whereIn('id',[$first_app_id[0]->id??0,$first_app_id[1]->id??0])->update(['is_all_course_doc_verified'=>3]);

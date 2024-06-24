@@ -325,6 +325,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/admin/document-list/{id}/{course_id}', [AdminApplicationController::class, 'applicationDocumentList']);
     Route::post('/admin/document-verfiy', [AdminApplicationController::class, 'adminDocumentVerify']);
     Route::post('/admin-assign-assessor', [AdminApplicationController::class, 'assignAssessor']);
+    Route::post('/admin-assign-assessor-onsite', [AdminApplicationController::class, 'assignAssessorOnsite']);
     Route::get('/admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [AdminApplicationController::class, 'adminVerfiyDocument']);
     Route::post('/admin-payment-acknowledge',[AdminApplicationController::class,"adminPaymentAcknowledge"]);
     Route::post('/admin-update-notification-status/{id}', [AdminApplicationController::class, 'updateAdminNotificationStatus']);

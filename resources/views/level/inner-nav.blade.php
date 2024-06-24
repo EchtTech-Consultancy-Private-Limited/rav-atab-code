@@ -4,16 +4,16 @@
             @if(Request::is('level-first') || Request::is('level-one'))
             <a class="custom-nav-link {{request()->is('*level-one*') || request()->is('*level-second*') ||  request()->is('*level-third*') || request()->is('*level-first*') || request()->is('*level-one*') ? 'nav-active' : '' }}" href="#">New Application</a>
             @elseif(Request::is('level-second'))
-            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*level-second*') ? 'nav-active' : '' }}" href="{{ url('/create-level-2-new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('*create-level-2-new-application*') || request()->is('*level-second*') ? 'nav-active' : '' }}" href="#">New Application</a>
             @elseif(Request::is('level-third'))
-            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*level-third*') ? 'nav-active' : '' }}" href="{{ url('/create-level-3-new-applications') }}">New Application</a>
+            <a class="custom-nav-link {{ request()->is('*create-level-3-new-application*') || request()->is('*level-third*') ? 'nav-active' : '' }}" href="#">New Application</a>
             
             @endif
             
         </li>
         <li class="custom-nav-item">
             @php
-              if(request()->is('*create-new-course*') || request()->is('*level-first*')){
+              if(request()->is('*create-new-course*') || request()->is('*level-first*') || request()->is('*level-one*')){
                 $slug = 'level-one';
               }
               else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
@@ -27,14 +27,15 @@
 
         <li class="custom-nav-item">
         @php
-              if(request()->is('*create-new-course*') || request()->is('*level-first*')){
+              if(request()->is('create-new-course*') || request()->is('*level-first*') || request()->is('*level-one*')){
                 $slug = 'level-one';
               }
-              else if(request()->is('*create-level-2-new-course*') || request()->is('*level-second*')){
+              else if(request()->is('create-level-2-new-course*') || request()->is('*level-second*') || request()->is('upgrade-create-new-course*') || request()->is('upgrade-show-course-payment*')){
                 $slug = 'level-second';
               }else{
                 $slug = 'level-third';
               }
+              
             @endphp
                 <a class="custom-nav-link {{ request()->is('*tp-pending-payment-list*')  || request()->is('course-payment*') ? 'nav-active' : '' }}" 
         href="{{ url('/' . $slug . '/tp-pending-payment-list') }}">

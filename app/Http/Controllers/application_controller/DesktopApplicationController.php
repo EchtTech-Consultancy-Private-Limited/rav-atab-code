@@ -16,7 +16,7 @@ class DesktopApplicationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('logout');
+        $this->middleware('auth');
     }
     /** Application List For Account */
     public function getApplicationList()
@@ -187,7 +187,7 @@ class DesktopApplicationController extends Controller
                     );
                 } else if ($tbl_nc_comments->nc_type == "NC2") {
                     $dropdown_arr = array(
-                        "not_recommended" => "Not Recommended",
+                        "not_recommended" => "Needs Revision",
                         "Accept" => "Accept",
                     );
                 } else if ($tbl_nc_comments->nc_type == "not_recommended") {
@@ -627,9 +627,9 @@ public function desktopUpdateNCFlagDocList($application_id)
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
             DB::commit();
-            if (!$check_all_doc_verified) {
-                return back()->with('fail', 'First create NCs on courses doc');
-            }
+            // if (!$check_all_doc_verified) {
+            //     return back()->with('fail', 'First create NCs on courses doc');
+            // }
             if ($check_all_doc_verified == "all_verified") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
@@ -724,9 +724,9 @@ public function checkApplicationIsReadyForNextLevelDocList($application_id)
         }
   
         if ($nc_flag == 1) {
-            return true;
+            return "valid";
         } else {
-            return false;
+            return "notValid";
         }
   
 }
