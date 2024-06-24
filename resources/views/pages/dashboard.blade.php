@@ -122,6 +122,7 @@
                 @endif
             </div>
 
+            
 @if(Auth::user()->role == 3)
 
 <div class="row acc-dash">
@@ -130,7 +131,7 @@
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
                 <div class="mb-4">
-                    <a href="{{ url('/assessor-desktop-assessment') }}">
+                    <a href="{{ Auth::user()->assessment==1?url('/desktop/application-list'):url('/onsite/application-list') }}">
                     <h5 class="font-20 mb-0">Desktop Applications</h5>
                     </a>
                 </div>
@@ -142,9 +143,9 @@
             <div class="info-box-5 p-4">
                 <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
                 <div class="mb-4">
-                    <a href="{{ url('/assessor-onsite-assessment-page') }}">
                     <h5 class="font-20 mb-0">Onsite Applications</h5>
-                    </a>
+                    <!-- <a href="{{ url('/assessor-onsite-assessment-page') }}"> </a>-->
+                    
                 </div>
 
             </div>
@@ -194,7 +195,8 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa fa-india"></i></div>
                             <div class="mb-4">
-                               <a href="{{ url('nationl-page') }}"><h5 class="font-20 mb-0">National Application</h5></a>
+                               <a href="{{ url('super-admin/application-list') }}"><h5 class="font-20 mb-0">National Application</h5></a>
+                               <!-- <a href="#"><h5 class="font-20 mb-0">National Application</h5></a> -->
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
@@ -223,7 +225,8 @@
                         <div class="info-box-5 p-4">
                             <div class="card-icon card-icon-large"><i class="fas fa-globe"></i></div>
                             <div class="mb-4">
-                                <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">International Application</h5></a>
+                                <!-- <a href="{{ url('internationl-page') }}" ><h5 class="font-20 mb-0">International Application</h5></a> -->
+                                <h5 class="font-20 mb-0">International Application</h5>
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
