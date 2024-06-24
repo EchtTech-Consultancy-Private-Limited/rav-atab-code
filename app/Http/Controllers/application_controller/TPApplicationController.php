@@ -301,6 +301,7 @@ class TPApplicationController extends Controller
                 $final_data[] = $obj;
         }
 
+
         
         $applicationData = TblApplication::find($application_id);
         return view('level2-tp-upload-documents.tp-upload-documents', compact('final_data','course_doc_uploaded','application_id','course_id','application_uhid'));
@@ -353,6 +354,8 @@ class TPApplicationController extends Controller
   public function addDocumentLevel2(Request $request)
   {
     
+    
+    
      try{
       DB::beginTransaction();
       $tp_id = Auth::user()->id;
@@ -372,6 +375,21 @@ class TPApplicationController extends Controller
       }
       $course_doc->save();
       TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'secretariat'])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
+
+       /*send notification*/ 
+       $notifiData = [];
+       $notifiData['data'] = config('notification.common.upload');
+       $notifiData['sender_id'] = Auth::user()->id;
+       $notifiData['application_id'] =$request->application_id;
+       $notifiData['uhid'] = getUhid($request->application_id)[0];
+       $notifiData['level_id'] = getUhid($request->application_id)[1] ;
+       $notifiData['user_type'] = "superadmin";
+       $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+       sendNotification($notifiData);
+       $notifiData['user_type'] = "secretariat";
+       $notifiData['url'] = "/secretariat/application-view/".dEncrypt($request->application_id);
+       sendNotification($notifiData);
+       /*end here*/ 
 
       if($course_doc){
       DB::commit();
@@ -824,6 +842,7 @@ class TPApplicationController extends Controller
   public function addCourseDocument(Request $request)
   {
      try{
+        
       DB::beginTransaction();
       $tp_id = Auth::user()->id;
       $courseData = [];
@@ -879,6 +898,24 @@ class TPApplicationController extends Controller
     //       TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->whereIn('onsite_status',[2,3,4])->update(['onsite_nc_status'=>0]);
     //   }
       /*end here*/ 
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] = $request->application_id;
+            $notifiData['uhid'] = getUhid( $request->application_id)[0];
+            $notifiData['level_id'] = getUhid( $request->application_id)[1];
+            $notifiData['data'] = config('notification.common.upload');
+            $notifiData['user_type'] = "superadmin";
+            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+      
+            /*send notification*/ 
+            sendNotification($notifiData);
+            $notifiData['user_type'] = "secretariat";
+            $notifiData['url'] = "/secretariat/application-view/".dEncrypt($request->application_id);
+            sendNotification($notifiData);
+            /*end here*/ 
+      
+   
+  
 
       if($course_doc){
       DB::commit();
@@ -1274,16 +1311,17 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         }
         $item->save();
 
-        /*send notification*/ 
-        $notifiData = [];
-        $notifiData['user_type'] = "accountant";
-        $notifiData['sender_id'] = Auth::user()->id;
-        $notifiData['application_id'] =$request->Application_id;
-        $notifiData['uhid'] = getUhid($request->Application_id)[0];
-        $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
-        $notifiData['data'] = config('notification.accountant.appCreated');
-        sendNotification($notifiData);
-        /*end here*/ 
+         /*send notification*/ 
+         $notifiData = [];
+         $notifiData['user_type'] = "accountant";
+         $notifiData['sender_id'] = Auth::user()->id;
+         $notifiData['application_id'] =$request->Application_id;
+         $notifiData['uhid'] = getUhid($request->Application_id)[0];
+         $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
+         $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+         $notifiData['data'] = config('notification.accountant.appCreated');
+         sendNotification($notifiData);
+         /*end here*/ 
 
         if(isset($first_app_id)){
 
@@ -2002,16 +2040,17 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
         $item->payment_proof = $filename;
     }
     $item->save();
-        /*send notification*/ 
-        $notifiData = [];
-        $notifiData['user_type'] = "accountant";
-        $notifiData['sender_id'] = Auth::user()->id;
-        $notifiData['application_id'] =$request->Application_id;
-        $notifiData['uhid'] = getUhid($request->Application_id)[0];
-        $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
-        $notifiData['data'] = config('notification.accountant.appCreated');
-        sendNotification($notifiData);
-        /*end here*/ 
+          /*send notification*/ 
+          $notifiData = [];
+          $notifiData['user_type'] = "accountant";
+          $notifiData['sender_id'] = Auth::user()->id;
+          $notifiData['application_id'] =$request->Application_id;
+          $notifiData['uhid'] = getUhid($request->Application_id)[0];
+          $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
+          $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+          $notifiData['data'] = config('notification.accountant.appCreated');
+          sendNotification($notifiData);
+          /*end here*/ 
 
     if(isset($first_app_id)){
         DB::table('tbl_application')->whereIn('id',[$first_app_id[0]->id??0,$first_app_id[1]->id??0])->update(['is_all_course_doc_verified'=>3]);

@@ -25603,6 +25603,7 @@ p.ref-number b{ font-weight: 600;}
 }
 .content-card {
     padding: 4px 0 0;
+    width:100%;
 }
 
 .flex-box {

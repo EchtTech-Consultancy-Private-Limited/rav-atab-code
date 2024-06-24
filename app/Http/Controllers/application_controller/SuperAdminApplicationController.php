@@ -89,7 +89,7 @@ class SuperAdminApplicationController extends Controller
                     $obj->payment->payment_amount = $payment_amount;
                     $obj->payment->last_payment = $last_payment;
                     $obj->appHistory= $app_history;
-                    $obj->is_all_docs_uploaded = $this->checkAllDocsUploaded($app->id);
+                    $obj->is_all_docs_uploaded = $this->checkAllDocsUploaded($app->id,$payment_count);
                 }
                 $final_data[] = $obj;
         }
@@ -965,7 +965,22 @@ class SuperAdminApplicationController extends Controller
                     /*end here*/ 
                   }
                   
-
+                  $notifiData = [];
+                  $notifiData['sender_id'] = Auth::user()->id;
+                  $notifiData['application_id'] = $app_id;
+                  $notifiData['uhid'] = getUhid( $app_id)[0];
+                  $notifiData['level_id'] = getUhid( $app_id)[1];
+                  $notifiData['data'] = config('notification.common.appApproved');
+                  $notifiData['user_type'] = "secretariat";
+                  $notifiData['url'] = "/secretariat/application-view/".dEncrypt($app_id);
+            
+                  /*send notification*/ 
+                  sendNotification($notifiData);
+                  $notifiData['user_type'] = "tp";
+                  $notifiData['url'] = "/tp/application-view/".dEncrypt($app_id);
+                  sendNotification($notifiData);
+                  /*end here*/ 
+                  
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
                 }else{
@@ -1028,7 +1043,22 @@ class SuperAdminApplicationController extends Controller
                 ->update(['approve_status'=>3,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
 
                 // ->update(['approve_status'=>3,'reject_remark'=>$request->remark,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
-
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $app_id;
+                $notifiData['uhid'] = getUhid( $app_id)[0];
+                $notifiData['level_id'] = getUhid( $app_id)[1];
+                $notifiData['data'] = config('notification.common.appRejected');
+                $notifiData['user_type'] = "secretariat";
+                $notifiData['url'] = "/secretariat/application-view/".dEncrypt($app_id);
+          
+                /*send notification*/ 
+                sendNotification($notifiData);
+                $notifiData['user_type'] = "tp";
+                $notifiData['url'] = "/tp/application-view/".dEncrypt($app_id);
+                sendNotification($notifiData);
+                /*end here*/ 
+                
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
                     DB::commit();
@@ -1165,17 +1195,19 @@ class SuperAdminApplicationController extends Controller
         return $flag;
     }
 
-    public function checkAllDocsUploaded($application_id){
+    public function checkAllDocsUploaded($application_id,$paymentCount){
         
         try{
             
             if($application_id){
-                
+                $assessor_type = $paymentCount>1?'onsite':'desktop';
                 $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
-                $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
-                
+                $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)
+                ->where('assessor_type',$assessor_type)
+                ->count();
                 $total_docs = $get_courses_count*4;
-                if($total_docs==$courses_doc_list){
+                
+                if($courses_doc_list==$total_docs){
                     return true;
                 }else{
                     return false;

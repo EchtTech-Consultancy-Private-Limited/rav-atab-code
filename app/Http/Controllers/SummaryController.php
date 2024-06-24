@@ -273,6 +273,8 @@ class SummaryController extends Controller
    
     public function desktopFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
         
+       
+
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
         $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
         if(!empty($check_report)){
@@ -287,6 +289,57 @@ class SummaryController extends Controller
         $data['remark']=$request->comment_text??"";
         $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
         $application_id = dDecrypt($application_id);
+
+
+   
+
+        $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
+
+        // if($get_course_count==1){
+            /*send notification*/ 
+          
+            $get_course = DB::table('tbl_application_courses')->where(['application_id'=>dDecrypt($application_id),'id'=>dDecrypt($application_course_id)])->whereIn('status',[0,2])->first();
+            $notiData = config('notification.assessor_desktop.summary');
+            $notiData =$notiData.' ['.$get_course->course_name.']';
+
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] =$application_id;
+            $notifiData['uhid'] = getUhid($application_id)[0];
+            $notifiData['level_id'] = getUhid($application_id)[1] ;
+            $notifiData['user_type'] = "tp";
+            $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            $notifiData['data'] =$notiData ;
+            sendNotification($notifiData);
+            $notifiData['user_type'] = "superadmin";
+            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+            sendNotification($notifiData);
+            $notifiData['user_type'] = "secretariat";
+            $notifiData['url'] = "/secretariat/application-view/".dEncrypt($application_id);
+            sendNotification($notifiData);
+            /*end here*/ 
+        // }
+
+
+        /*to send second time payment to tp*/ 
+        $final_summary_count = DB::table('assessor_final_summary_reports')
+        ->where('application_id',dDecrypt($application_id))
+        ->where('assessor_type','desktop')
+        ->count();
+        /*end here*/ 
+        if($final_summary_count==$get_course_count){
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] =$application_id;
+            $notifiData['uhid'] = getUhid($application_id)[0];
+            $notifiData['level_id'] = getUhid($application_id)[1] ;
+            $notifiData['user_type'] = "tp";
+            $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            $notifiData['data'] =config('notification.tp.secondPay');
+            sendNotification($notifiData);
+        }
+         
+		 
+
         /*Mail to assessor*/
             $title=" Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
             $subject="Assignment Confirmation - Welcome Aboard! | RAVAP-".$application_id;
@@ -408,7 +461,51 @@ class SummaryController extends Controller
             /*Completed the application and make the app payment_status =3 for completed*/
                 DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>3]);
             /*end here*/
+            
 
+          
+
+              
+                $get_course = DB::table('tbl_application_courses')->where(['application_id'=>$application_id,'id'=>dDecrypt($request->application_course_id)])->whereIn('status',[0,2])->first();
+                $notiData = config('notification.assessor_onsite.summary');
+                $notiData =$notiData.' ['.$get_course->course_name.']';
+                
+    
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] =$application_id;
+                $notifiData['uhid'] = getUhid($application_id)[0];
+                $notifiData['level_id'] = getUhid($application_id)[1] ;
+                $notifiData['user_type'] = "tp";
+                $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+                $notifiData['data'] =$notiData ;
+                sendNotification($notifiData);
+                $notifiData['user_type'] = "superadmin";
+                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                sendNotification($notifiData);
+                $notifiData['user_type'] = "secretariat";
+                $notifiData['url'] = "/secretariat/application-view/".dEncrypt($application_id);
+                sendNotification($notifiData);
+                /*end here*/ 
+    
+    
+            /*to send second time payment to tp*/ 
+            // $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
+            // $final_summary_count = DB::table('assessor_final_summary_reports')
+            // ->where('application_id',dDecrypt($application_id))
+            // ->where('assessor_type','onsite')
+            // ->count();
+            // /*end here*/ 
+            // if($final_summary_count==$get_course_count){
+            //     $notifiData['sender_id'] = Auth::user()->id;
+            //     $notifiData['application_id'] =$application_id;
+            //     $notifiData['uhid'] = getUhid($application_id)[0];
+            //     $notifiData['level_id'] = getUhid($application_id)[1] ;
+            //     $notifiData['user_type'] = "tp";
+            //     $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            //     $notifiData['data'] =config('notification.tp.secondPay');
+            //     sendNotification($notifiData);
+            // }
 
 
             /*Mail to assessor*/

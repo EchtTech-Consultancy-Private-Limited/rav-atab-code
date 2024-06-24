@@ -1561,11 +1561,11 @@ function sendNotification($data)
     
 }
 
-function getNotificationByUser($userType,$level_id)
+function getNotificationByUser($userType)
 {
     try{
 
-        $getNotification = DB::table('tbl_notifications')->where('user_type',$userType)->where('level_id',$level_id)->get();
+        $getNotification = DB::table('tbl_notifications')->where('user_type',$userType)->orderBy('created_at','desc')->get();
         if(isset($getNotification)){
             return $getNotification;
         }else{

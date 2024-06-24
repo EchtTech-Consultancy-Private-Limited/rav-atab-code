@@ -533,6 +533,24 @@ class SecretariatDocumentVerifyController extends Controller
                 return back()->with('fail', 'Please take any action on course doc.');
 
             }
+
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] = $application_id;
+            $notifiData['uhid'] = getUhid( $application_id)[0];
+            $notifiData['level_id'] = getUhid( $application_id)[1];
+            $notifiData['data'] = config('notification.common.nc');
+            $notifiData['user_type'] = "superadmin";
+            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+            
+            /*send notification*/ 
+            sendNotification($notifiData);
+            $notifiData['user_type'] = "tp";
+            $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            sendNotification($notifiData);
+            /*end here*/ 
+     
+
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
          }
@@ -672,7 +690,18 @@ class SecretariatDocumentVerifyController extends Controller
                 /*Make revert button hide according to course wise*/ 
                 DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);
                 DB::table('tbl_course_wise_document')->where('application_id',$app_id)->update(['is_revert'=>1]);
-                
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $app_id;
+                $notifiData['uhid'] = getUhid( $app_id)[0];
+                $notifiData['level_id'] = getUhid( $app_id)[1];
+                $notifiData['data'] = config('notification.secretariat.sendApproval');
+                $notifiData['user_type'] = "superadmin";
+                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($app_id);
+          
+                /*send notification*/ 
+                sendNotification($notifiData);
+                /*end here*/ 
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();

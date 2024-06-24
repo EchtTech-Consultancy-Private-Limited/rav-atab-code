@@ -190,16 +190,32 @@ class DocApplicationController extends Controller
                 $notifiData['sender_id'] = Auth::user()->id;
                 $notifiData['application_id'] = $application_id;
                 $notifiData['uhid'] = getUhid( $application_id)[0];
-                $notifiData['level_id'] = getUhid( $application_id)[1];
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->Application_id);
+                $notifiData['level_id'] = getUhid($application_id)[1];
+                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
                 $notifiData['data'] = config('notification.admin.paymentApprove');
                 sendNotification($notifiData);
         /*end here*/ 
 
+
+
              /**
              * Send Email to Accountant
              * */ 
-            $tp_id = DB::table('tbl_application')->where('id',$application_id)->first()->tp_id;
+            $app_ = DB::table('tbl_application')->where('id',$application_id)->first();
+            if($app_->level_id==3){
+             /*send notification*/ 
+             $notifiData = [];
+             $notifiData['user_type'] = "tp";
+             $notifiData['sender_id'] = Auth::user()->id;
+             $notifiData['application_id'] = $application_id;
+             $notifiData['uhid'] = getUhid( $application_id)[0];
+             $notifiData['level_id'] = getUhid( $application_id)[1];
+             $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+             $notifiData['data'] = config('notification.tp.uploadDocs');
+             sendNotification($notifiData);
+             /*end here*/  
+            }
+            $tp_id = $app_->tp_id;
             $tp_email = DB::table('users')->where('id',$tp_id)->first()->email;
             $account_email = DB::table('users')->where('id',Auth::user()->id)->first()->email;
             $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
