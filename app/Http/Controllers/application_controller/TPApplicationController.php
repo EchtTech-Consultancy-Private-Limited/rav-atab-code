@@ -376,6 +376,14 @@ class TPApplicationController extends Controller
       $course_doc->save();
       TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'secretariat'])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
 
+      $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+      if($get_app->leve_id==1){
+          $url="/admin/application-view/".dEncrypt($request->application_id);
+      }else if($get_app->leve_id==2){
+          $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+      }else{
+          $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+      }
        /*send notification*/ 
        $notifiData = [];
        $notifiData['data'] = config('notification.common.upload');
@@ -387,7 +395,7 @@ class TPApplicationController extends Controller
        $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
        sendNotification($notifiData);
        $notifiData['user_type'] = "secretariat";
-       $notifiData['url'] = "/secretariat/application-view/".dEncrypt($request->application_id);
+       $notifiData['url'] = $url;
        sendNotification($notifiData);
        /*end here*/ 
 
@@ -898,6 +906,14 @@ class TPApplicationController extends Controller
     //       TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->whereIn('onsite_status',[2,3,4])->update(['onsite_nc_status'=>0]);
     //   }
       /*end here*/ 
+      $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+      if($get_app->leve_id==1){
+          $url="/admin/application-view/".dEncrypt($request->application_id);
+      }else if($get_app->leve_id==2){
+          $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+      }else{
+          $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+      }
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
             $notifiData['application_id'] = $request->application_id;
@@ -910,7 +926,7 @@ class TPApplicationController extends Controller
             /*send notification*/ 
             sendNotification($notifiData);
             $notifiData['user_type'] = "secretariat";
-            $notifiData['url'] = "/secretariat/application-view/".dEncrypt($request->application_id);
+            $notifiData['url'] = $url;
             sendNotification($notifiData);
             /*end here*/ 
       

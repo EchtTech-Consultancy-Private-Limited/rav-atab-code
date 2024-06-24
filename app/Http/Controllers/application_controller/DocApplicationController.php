@@ -210,7 +210,7 @@ class DocApplicationController extends Controller
              $notifiData['application_id'] = $application_id;
              $notifiData['uhid'] = getUhid( $application_id)[0];
              $notifiData['level_id'] = getUhid( $application_id)[1];
-             $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+             $notifiData['url'] = "/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
              $notifiData['data'] = config('notification.tp.uploadDocs');
              sendNotification($notifiData);
              /*end here*/  

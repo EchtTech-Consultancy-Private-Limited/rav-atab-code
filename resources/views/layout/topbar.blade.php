@@ -138,7 +138,7 @@ ul.menu h5 {
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
-                                <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
+                                <li onclick="handleAdminNotification({{$notification->id}})">                                  
                                     <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
@@ -185,7 +185,7 @@ ul.menu h5 {
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
-                                <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
+                                <li onclick="handleNotification({{$notification->id}})">                                  
                                 <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
@@ -282,7 +282,7 @@ ul.menu h5 {
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
-                                <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
+                                <li onclick="handleDesktopNotification({{$notification->id}})">                                  
                                 <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
@@ -328,7 +328,7 @@ ul.menu h5 {
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
-                                <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
+                                <li onclick="handleOnsiteNotification({{$notification->id}})">                                  
                                     <div class="notification-card">
                                     <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                             <div class="flex-box">

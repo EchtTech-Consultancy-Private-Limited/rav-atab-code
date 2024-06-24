@@ -465,11 +465,6 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
 
 
 
-
-
-
-
-
     // Payment Routes
     Route::post('/account-payment-received', [DocApplicationController::class, 'accountReceivedPayment']);
     Route::post('/account-payment-approved', [DocApplicationController::class, 'accountApprovePayment']);
@@ -505,7 +500,7 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
     Route::post('tp-additional-payment-reference-validation', [TpApplicationController::class, 'paymentAdditionalReferenceValidation'])->name('additional_reference_validation');
 /*----------------- End Here------------------------*/
  
-    Route::post('thank-you', [AdminApplicationController::class, 'thankYou']);
+    Route::get('thank-you', [AdminApplicationController::class, 'thankYou']);
 
     
 });

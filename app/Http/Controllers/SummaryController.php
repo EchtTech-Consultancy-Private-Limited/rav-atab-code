@@ -298,6 +298,18 @@ class SummaryController extends Controller
         // if($get_course_count==1){
             /*send notification*/ 
           
+            $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+            if($get_app->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_app->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+            }
+
             $get_course = DB::table('tbl_application_courses')->where(['application_id'=>dDecrypt($application_id),'id'=>dDecrypt($application_course_id)])->whereIn('status',[0,2])->first();
             $notiData = config('notification.assessor_desktop.summary');
             $notiData =$notiData.' ['.$get_course->course_name.']';
@@ -308,14 +320,14 @@ class SummaryController extends Controller
             $notifiData['uhid'] = getUhid($application_id)[0];
             $notifiData['level_id'] = getUhid($application_id)[1] ;
             $notifiData['user_type'] = "tp";
-            $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            $notifiData['url'] = $tpUrl;
             $notifiData['data'] =$notiData ;
             sendNotification($notifiData);
             $notifiData['user_type'] = "superadmin";
             $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
             sendNotification($notifiData);
             $notifiData['user_type'] = "secretariat";
-            $notifiData['url'] = "/secretariat/application-view/".dEncrypt($application_id);
+            $notifiData['url'] = $url;
             sendNotification($notifiData);
             /*end here*/ 
         // }
@@ -472,7 +484,17 @@ class SummaryController extends Controller
             
 
           
-
+            $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+            if($get_app->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_app->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+            }
               
                 $get_course = DB::table('tbl_application_courses')->where(['application_id'=>$application_id,'id'=>dDecrypt($request->application_course_id)])->whereIn('status',[0,2])->first();
                 $notiData = config('notification.assessor_onsite.summary');
@@ -485,14 +507,14 @@ class SummaryController extends Controller
                 $notifiData['uhid'] = getUhid($application_id)[0];
                 $notifiData['level_id'] = getUhid($application_id)[1] ;
                 $notifiData['user_type'] = "tp";
-                $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+                $notifiData['url'] =$tpUrl;
                 $notifiData['data'] =$notiData ;
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "superadmin";
                 $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "secretariat";
-                $notifiData['url'] = "/secretariat/application-view/".dEncrypt($application_id);
+                $notifiData['url'] = $url;
                 sendNotification($notifiData);
                 /*end here*/ 
     

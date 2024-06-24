@@ -458,6 +458,16 @@ class SecretariatDocumentVerifyController extends Controller
             
                 $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
 
+                if($get_application->leve_id==1){
+                    $url="/admin/application-view/".dEncrypt($application_id);
+                    $tpUrl="/tp/application-view/".dEncrypt($application_id);
+                }else if($get_application->leve_id==2){
+                    $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                    $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+                }else{
+                    $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                    $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+                }
                 $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
                 $notifiData = [];
                 $notifiData['sender_id'] = Auth::user()->id;
@@ -473,7 +483,7 @@ class SecretariatDocumentVerifyController extends Controller
                       /*send notification*/ 
                       sendNotification($notifiData);
                       $notifiData['user_type'] = "tp";
-                      $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+                      $notifiData['url'] = $tpUrl;
                       sendNotification($notifiData);
                         /*end here*/ 
                 }
@@ -534,6 +544,16 @@ class SecretariatDocumentVerifyController extends Controller
 
             }
 
+            if($get_application->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_application->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+            }
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
             $notifiData['application_id'] = $application_id;
@@ -546,7 +566,7 @@ class SecretariatDocumentVerifyController extends Controller
             /*send notification*/ 
             sendNotification($notifiData);
             $notifiData['user_type'] = "tp";
-            $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            $notifiData['url'] = $tpUrl;
             sendNotification($notifiData);
             /*end here*/ 
      

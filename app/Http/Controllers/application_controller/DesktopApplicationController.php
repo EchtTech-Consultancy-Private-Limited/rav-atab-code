@@ -436,11 +436,11 @@ class DesktopApplicationController extends Controller
                 'id' => 'required',
             ]);
             DB::beginTransaction();
-            $update_assessor_received_payment_status = DB::table('tbl_application')->where('id', $id)->update(['assessor_desktop_received_payment' => 1]);
-            if ($update_assessor_received_payment_status) {
+            $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+            $d = DB::table('tbl_notifications')->where('id',$id)->first();
+            if ($is_read) {
                 DB::commit();
-                $redirect_url = URL::to('/desktop/application-view/' . dEncrypt($id));
-                return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $redirect_url], 200);
+                return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $d->url], 200);
             } else {
                 DB::rollback();
                 return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);
@@ -635,7 +635,16 @@ public function desktopUpdateNCFlagDocList($application_id)
 
 
             $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
-
+            if($get_application->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_application->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+            }
             $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
@@ -651,10 +660,10 @@ public function desktopUpdateNCFlagDocList($application_id)
                   /*send notification*/ 
                   sendNotification($notifiData);
                   $notifiData['user_type'] = "tp";
-                  $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+                  $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
                   $notifiData['user_type'] = "secretariat";
-                  $notifiData['url'] = "/secretariat/tp/application-view/".dEncrypt($application_id);
+                  $notifiData['url'] = $url;
                   sendNotification($notifiData);
                     /*end here*/ 
             }
