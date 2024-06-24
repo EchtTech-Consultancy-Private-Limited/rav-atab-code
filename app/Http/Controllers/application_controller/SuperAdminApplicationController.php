@@ -89,7 +89,7 @@ class SuperAdminApplicationController extends Controller
                     $obj->payment->payment_amount = $payment_amount;
                     $obj->payment->last_payment = $last_payment;
                     $obj->appHistory= $app_history;
-                    $obj->is_all_docs_uploaded = $this->checkAllDocsUploaded($app->id);
+                    $obj->is_all_docs_uploaded = $this->checkAllDocsUploaded($app->id,$payment_count);
                 }
                 $final_data[] = $obj;
         }
@@ -240,6 +240,14 @@ class SuperAdminApplicationController extends Controller
             
             $is_assigned_secretariat = DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id])->first();
 
+            $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+            if($get_app->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($request->application_id);
+            }else if($get_app->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+            }
               /*send notification*/ 
               $notifiData = [];
               $notifiData['user_type'] = "secretariat";
@@ -247,7 +255,7 @@ class SuperAdminApplicationController extends Controller
               $notifiData['application_id'] = $request->application_id;
               $notifiData['uhid'] = getUhid( $request->application_id)[0];
               $notifiData['level_id'] = getUhid( $request->application_id)[1];
-              $notifiData['url'] = "/admin/application-view/".dEncrypt($request->application_id);
+              $notifiData['url'] = $url;
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
             /*end here*/ 
@@ -705,17 +713,21 @@ class SuperAdminApplicationController extends Controller
 
     public function updateAdminNotificationStatus(Request $request,$id)
     {
+        
         try{
           $request->validate([
               'id' => 'required',
           ]);
           DB::beginTransaction();
           
-          $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
-          if($update_admin_received_payment_status){
+          DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
+          
+          $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+          $d=DB::table('tbl_notifications')->where('id',$id)->first();
+          
+          if($is_read){
               DB::commit();
-              $redirect_url = URL::to('/super-admin/application-view/'.dEncrypt($id));
-              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
+              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
           }else{
               DB::rollback();
               return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
@@ -964,8 +976,35 @@ class SuperAdminApplicationController extends Controller
                     DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
                     /*end here*/ 
                   }
-                  
 
+                  $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+                  if($get_app->leve_id==1){
+                      $url="/admin/application-view/".dEncrypt($request->application_id);
+                      $tpUrl="/tp/application-view/".dEncrypt($request->application_id);
+                  }else if($get_app->leve_id==2){
+                      $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+                      $tpUrl="/upgrade/tp/application-view/".dEncrypt($request->application_id);
+                  }else{
+                      $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+                      $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($request->application_id);
+                  }
+                  
+                  $notifiData = [];
+                  $notifiData['sender_id'] = Auth::user()->id;
+                  $notifiData['application_id'] = $app_id;
+                  $notifiData['uhid'] = getUhid( $app_id)[0];
+                  $notifiData['level_id'] = getUhid( $app_id)[1];
+                  $notifiData['data'] = config('notification.common.appApproved');
+                  $notifiData['user_type'] = "secretariat";
+                  $notifiData['url'] = $url;
+            
+                  /*send notification*/ 
+                  sendNotification($notifiData);
+                  $notifiData['user_type'] = "tp";
+                  $notifiData['url'] = $tpUrl;
+                  sendNotification($notifiData);
+                  /*end here*/ 
+                  
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
                 }else{
@@ -1021,14 +1060,39 @@ class SuperAdminApplicationController extends Controller
             /*end here*/
 
 
-
+            $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+            if($get_app->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_app->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+            }
 
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
                 ->update(['approve_status'=>3,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
 
                 // ->update(['approve_status'=>3,'reject_remark'=>$request->remark,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
-
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $app_id;
+                $notifiData['uhid'] = getUhid( $app_id)[0];
+                $notifiData['level_id'] = getUhid( $app_id)[1];
+                $notifiData['data'] = config('notification.common.appRejected');
+                $notifiData['user_type'] = "secretariat";
+                $notifiData['url'] = $url;
+          
+                /*send notification*/ 
+                sendNotification($notifiData);
+                $notifiData['user_type'] = "tp";
+                $notifiData['url'] = $tpUrl;
+                sendNotification($notifiData);
+                /*end here*/ 
+                
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
                     DB::commit();
@@ -1165,17 +1229,19 @@ class SuperAdminApplicationController extends Controller
         return $flag;
     }
 
-    public function checkAllDocsUploaded($application_id){
+    public function checkAllDocsUploaded($application_id,$paymentCount){
         
         try{
             
             if($application_id){
-                
+                $assessor_type = $paymentCount>1?'onsite':'desktop';
                 $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
-                $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
-                
+                $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)
+                ->where('assessor_type',$assessor_type)
+                ->count();
                 $total_docs = $get_courses_count*4;
-                if($total_docs==$courses_doc_list){
+                
+                if($courses_doc_list==$total_docs){
                     return true;
                 }else{
                     return false;
