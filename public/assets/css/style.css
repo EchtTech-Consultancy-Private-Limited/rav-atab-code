@@ -25595,6 +25595,9 @@ p.ref-number b{ font-weight: 600;}
     padding: 10px;
     cursor: pointer;
 }
+.notification-card.active {
+    background:#e2e7fd;
+}
 
 .notification-card img {
     width: 50px;

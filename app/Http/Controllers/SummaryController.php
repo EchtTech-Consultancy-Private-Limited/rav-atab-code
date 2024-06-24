@@ -328,12 +328,20 @@ class SummaryController extends Controller
         ->count();
         /*end here*/ 
         if($final_summary_count==$get_course_count){
+            $level_id =$tbl_application->level_id;
+            if($level_id==1){
+                $url="/show-course-payment/".dEncrypt($application_id);
+            }else if($level_id==2){
+                $url="/upgrade-show-course-payment/".dEncrypt($application_id);
+            }else{
+                $url="/upgrade-level-3-show-course-payment/".dEncrypt($application_id);
+            }
             $notifiData['sender_id'] = Auth::user()->id;
             $notifiData['application_id'] =$application_id;
             $notifiData['uhid'] = getUhid($application_id)[0];
             $notifiData['level_id'] = getUhid($application_id)[1] ;
             $notifiData['user_type'] = "tp";
-            $notifiData['url'] = "/tp/application-view/".dEncrypt($application_id);
+            $notifiData['url'] = $url;
             $notifiData['data'] =config('notification.tp.secondPay');
             sendNotification($notifiData);
         }

@@ -705,17 +705,19 @@ class SuperAdminApplicationController extends Controller
 
     public function updateAdminNotificationStatus(Request $request,$id)
     {
+        
         try{
           $request->validate([
               'id' => 'required',
           ]);
           DB::beginTransaction();
           
-          $update_admin_received_payment_status = DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
-          if($update_admin_received_payment_status){
+          DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
+          $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>1]);
+          
+          if($is_read){
               DB::commit();
-              $redirect_url = URL::to('/super-admin/application-view/'.dEncrypt($id));
-              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$redirect_url],200);
+              return response()->json(['success' => true,'message' =>'Read notification successfully.'],200);
           }else{
               DB::rollback();
               return response()->json(['success' => false,'message' =>'Failed to read notification'],200);

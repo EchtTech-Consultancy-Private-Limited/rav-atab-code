@@ -1781,7 +1781,7 @@ function handleSuperAdminNotification(pay_id){
         });
         $.ajax({
             url: `${BASE_URL}/super-admin-update-notification-status/${pay_id}`, // Your server-side upload endpoint
-            type: "POST",
+            type: "POST", 
             data:{id:pay_id},
             success: function (response) {
                 if (response.success) {

@@ -91,8 +91,8 @@ ul.menu h5 {
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
-                                <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
-                                    <div class="notification-card">
+                                <li onclick="handleSuperAdminNotification({{$notification->id}})">                                  
+                                <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
@@ -139,7 +139,7 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
-                                    <div class="notification-card">
+                                    <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
@@ -167,7 +167,7 @@ ul.menu h5 {
 
                     @if (Auth::user()->role == 6)
                     @php
-                    $payment_list = getNotificationByUser('accountant');
+                    $notifications = getNotificationByUser('accountant');
                     @endphp
                 <li class="dropdown">
                 <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
@@ -186,11 +186,11 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
-                                    <div class="notification-card">
+                                <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                <span>{{$notification->created_at}}</span>
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
@@ -211,13 +211,13 @@ ul.menu h5 {
 
                     @if (Auth::user()->role == 2)
                     @php
-                    $applications = getSecondPaymentNotification();
+                    $notifications = getNotificationByUser('tp');
                     @endphp
                 <li class="dropdown">
                     <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
                         <i class="far fa-bell"></i>
-                        @if (getNotificationForSecondPayment())
-                        @if(count($applications)>0)
+                        @if (getNotificationByUser('tp'))
+                        @if(count($notifications)>0)
                         <span class="notify" style="background-color: #ff5722 !important;"></span>
                         <span class="heartbeat" style="background-color: #ff5722 !important;"></span>
                         @endif
@@ -227,64 +227,27 @@ ul.menu h5 {
                         <li class="header">NOTIFICATIONS </li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
-                                @if (count($applications)>0)
-                                @foreach ($applications as $application)
-                                @if($application->level_id==1)
+                                @if (count($notifications)>0)
+                                @foreach ($notifications as $notification)
+                                
                                 <li>
-                                    <a href="{{ url('show-course-payment/' . dEncrypt($application->application_id)) }}"
+                                    <a href="{{ url($notification->url) }}"
                                         style="color: #000;" class="p-0">                                      
-                                        <div class="notification-card">
+                                        <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                             <div class="content-card">
                                                 <div class="flex-box">
-                                                    <span>App. ID : {{ $application->uhid }}</span>
-                                                    <span>10/06/2024</span>
+                                                    <span>App. ID : {{ $notification->uhid }}</span>
+                                                    {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
                                                 </div>
                                                 <div class="normal-text">
-                                                    <p class="mb-0"> This is a reminder for Application No. <span class="fw-bold">{{ $application->uhid }}</span>, which you should
-                                                        have received on June 20, is due today.</p>
+                                                    <p class="mb-0">{{$notification->data}}</p>
                                                 </div>
                                             </div>
                                         </div>
 
                                     </a>
                                 </li>
-                                @elseif($application->level_id==2)
-                                <li>
-                                    <a href="{{ url('upgrade-show-course-payment/' . dEncrypt($application->application_id)) }}"
-                                        style="color: #000;" class="p-0">
-                                        <div class="notification-card">
-                                            <div class="content-card">
-                                                <div class="flex-box">
-                                                    <span>App. ID : {{ $application->uhid }}</span>
-                                                    <span>10/06/2024</span>
-                                                </div>
-                                                <div class="normal-text">
-                                                    <p class="mb-0"> This is a reminder for Application No. <span class="fw-bold">{{ $application->uhid }}</span>, which you should
-                                                        have received on June 20, is due today.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                @elseif($application->level_id==3)
-                                <li>
-                                    <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($application->application_id)) }}"
-                                        style="color: #000;" class="p-0">
-                                        <div class="notification-card">
-                                            <div class="content-card">
-                                                <div class="flex-box">
-                                                    <span>App. ID : {{ $application->uhid }}</span>
-                                                    <span>10/06/2024</span>
-                                                </div>
-                                                <div class="normal-text">
-                                                    <p class="mb-0"> This is a reminder for Application No. <span class="fw-bold">{{ $application->uhid }}</span>, which you should
-                                                        have received on June 20, is due today.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                @endif
+                            
                                 @endforeach
                                 @else
                                 <li class="text-center">
@@ -301,7 +264,7 @@ ul.menu h5 {
                     <!-- assessor desktop -->
                     @if (Auth::user()->role == 3 && Auth::user()->assessment == 1)
                     @php
-                    $applications = getNotificationByUser('desktop');
+                    $notifications = getNotificationByUser('desktop');
                     @endphp
                 <li class="dropdown">
                 <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
@@ -320,7 +283,7 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
-                                    <div class="notification-card">
+                                <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
@@ -347,7 +310,7 @@ ul.menu h5 {
                     <!-- assessor onsite notification -->
                     @if (Auth::user()->role == 3 && Auth::user()->assessment == 2)
                     @php
-                    $applications = getNotificationByUser('onsite');
+                    $notifications = getNotificationByUser('onsite');
                     @endphp
                 <li class="dropdown">
                 <a href="#" onClick="return false;" class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
@@ -367,7 +330,7 @@ ul.menu h5 {
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleSuperAdminNotification({{$notification->application_id}})">                                  
                                     <div class="notification-card">
-                                        <div class="content-card">
+                                    <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
                                                 {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}

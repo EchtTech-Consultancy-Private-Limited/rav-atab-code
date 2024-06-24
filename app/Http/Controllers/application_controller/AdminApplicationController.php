@@ -3130,5 +3130,8 @@ public function adminReturnMom(Request $request)
  }
 
 
+ public function thankYou(Request $request){
+    return view('admin-view.thanyou');
+ }
 }
 
