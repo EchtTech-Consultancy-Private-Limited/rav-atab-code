@@ -15,6 +15,7 @@ use App\Models\TblNCComments;
 use Carbon\Carbon;
 use URL;
 use App\Jobs\SendEmailJob;
+
 use File;
 class SuperAdminApplicationController extends Controller
 {
@@ -241,13 +242,21 @@ class SuperAdminApplicationController extends Controller
             $is_assigned_secretariat = DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id])->first();
 
             $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
-            if($get_app->leve_id==1){
-                $url="/admin/application-view/".dEncrypt($request->application_id);
-            }else if($get_app->leve_id==2){
-                $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+            
+            if($get_app->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($request->application_id);
+                
+            }else if($get_app->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($request->application_id);
+                
             }else{
-                $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($request->application_id);
+                
             }
+
               /*send notification*/ 
               $notifiData = [];
               $notifiData['user_type'] = "secretariat";
@@ -259,7 +268,6 @@ class SuperAdminApplicationController extends Controller
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
             /*end here*/ 
-            
 
             if($is_assigned_secretariat!=null){
                 DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id,'secretariat_type'=>$request->secretariat_type])->update($data);
@@ -730,7 +738,7 @@ class SuperAdminApplicationController extends Controller
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
           }else{
               DB::rollback();
-              return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+              return response()->json(['success' => false,'message' =>'Notification Already read','redirect_url'=>$d->url],200);
           }
     }
     catch(Exception $e){
@@ -978,16 +986,23 @@ class SuperAdminApplicationController extends Controller
                   }
 
                   $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
-                  if($get_app->leve_id==1){
-                      $url="/admin/application-view/".dEncrypt($request->application_id);
-                      $tpUrl="/tp/application-view/".dEncrypt($request->application_id);
-                  }else if($get_app->leve_id==2){
-                      $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
-                      $tpUrl="/upgrade/tp/application-view/".dEncrypt($request->application_id);
-                  }else{
-                      $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
-                      $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($request->application_id);
-                  }
+                 
+                  if( $get_app->leve_id==1){
+                    $url= config('notification.secretariatUrl.level1');
+                    $url=$url.dEncrypt($request->application_id);
+                    $tpUrl = config('notification.tpUrl.level1');
+                    $tpUrl=$tpUrl.dEncrypt($request->application_id);
+                }else if( $get_app->leve_id==2){
+                    $url= config('notification.secretariatUrl.level2');
+                    $url=$url.dEncrypt($request->application_id);
+                    $tpUrl = config('notification.tpUrl.level2');
+                    $tpUrl=$tpUrl.dEncrypt($request->application_id);
+                }else{
+                    $url= config('notification.secretariatUrl.level3');
+                    $url=$url.dEncrypt($request->application_id);
+                    $tpUrl = config('notification.tpUrl.level3');
+                    $tpUrl=$tpUrl.dEncrypt($request->application_id);
+                }
                   
                   $notifiData = [];
                   $notifiData['sender_id'] = Auth::user()->id;
@@ -1061,15 +1076,21 @@ class SuperAdminApplicationController extends Controller
 
 
             $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
-            if($get_app->leve_id==1){
-                $url="/admin/application-view/".dEncrypt($application_id);
-                $tpUrl="/tp/application-view/".dEncrypt($application_id);
-            }else if($get_app->leve_id==2){
-                $url="/admin/application-view-level-2/".dEncrypt($application_id);
-                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            if($get_app->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level1');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }else if($get_app->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level2');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }else{
-                $url="/admin/application-view-level-3/".dEncrypt($application_id);
-                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level3');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }
 
             $approve_app = DB::table('tbl_application')
@@ -1103,6 +1124,7 @@ class SuperAdminApplicationController extends Controller
                 }
 
         } catch (Exception $e) {
+            dd($e);
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }

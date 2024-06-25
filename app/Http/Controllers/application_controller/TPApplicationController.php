@@ -377,13 +377,19 @@ class TPApplicationController extends Controller
       TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'secretariat'])->whereIn('status',[2,3,4])->update(['nc_flag'=>0]);
 
       $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
-      if($get_app->leve_id==1){
-          $url="/admin/application-view/".dEncrypt($request->application_id);
-      }else if($get_app->leve_id==2){
-          $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
-      }else{
-          $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
-      }
+      if($get_app->level_id==1){
+        $url= config('notification.secretariatUrl.level1');
+        $url=$url.dEncrypt($request->application_id);
+        
+    }else if($get_app->level_id==2){
+        $url= config('notification.secretariatUrl.level2');
+        $url=$url.dEncrypt($request->application_id);
+        
+    }else{
+        $url= config('notification.secretariatUrl.level3');
+        $url=$url.dEncrypt($request->application_id);
+        
+    }
        /*send notification*/ 
        $notifiData = [];
        $notifiData['data'] = config('notification.common.upload');
@@ -392,7 +398,8 @@ class TPApplicationController extends Controller
        $notifiData['uhid'] = getUhid($request->application_id)[0];
        $notifiData['level_id'] = getUhid($request->application_id)[1] ;
        $notifiData['user_type'] = "superadmin";
-       $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+       $sUrl = config('notification.adminUrl.level1');
+       $notifiData['url'] = $sUrl.dEncrypt($request->application_id);
        sendNotification($notifiData);
        $notifiData['user_type'] = "secretariat";
        $notifiData['url'] = $url;
@@ -907,13 +914,20 @@ class TPApplicationController extends Controller
     //   }
       /*end here*/ 
       $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
-      if($get_app->leve_id==1){
-          $url="/admin/application-view/".dEncrypt($request->application_id);
-      }else if($get_app->leve_id==2){
-          $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
-      }else{
-          $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
-      }
+            if($get_app->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($request->application_id);
+                
+            }else if($get_app->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($request->application_id);
+                
+            }else{
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($request->application_id);
+                
+            }
+
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
             $notifiData['application_id'] = $request->application_id;
@@ -921,7 +935,8 @@ class TPApplicationController extends Controller
             $notifiData['level_id'] = getUhid( $request->application_id)[1];
             $notifiData['data'] = config('notification.common.upload');
             $notifiData['user_type'] = "superadmin";
-            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+            $sUrl = config('notification.adminUrl.level1');
+            $notifiData['url'] = $sUrl.dEncrypt($request->application_id);
       
             /*send notification*/ 
             sendNotification($notifiData);
@@ -1321,7 +1336,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
             $name = $img->getClientOriginalName();
-            $filename = time() . $name;
+            $filename = rand().'-'.time().'-'.rand() . $name;
             $img->move('uploads/', $filename);
             $item->payment_proof = $filename;
         }
@@ -1334,7 +1349,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
          $notifiData['application_id'] =$request->Application_id;
          $notifiData['uhid'] = getUhid($request->Application_id)[0];
          $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
-         $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+         $acUrl = config('notification.accountantUrl.level1');
+         $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
          $notifiData['data'] = config('notification.accountant.appCreated');
          sendNotification($notifiData);
          /*end here*/ 
@@ -1596,7 +1612,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
             $name = $img->getClientOriginalName();
-            $filename = time() . $name;
+            $filename = rand().'-'.time().'-'.rand() . $name;
             $img->move('uploads/', $filename);
             $data['payment_proof'] = $filename;
         }
@@ -2051,7 +2067,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     if ($request->hasfile('payment_details_file')) {
         $img = $request->file('payment_details_file');
         $name = $img->getClientOriginalName();
-        $filename = time() . $name;
+        $filename = rand().'-'.time().'-'.rand() . $name;
         $img->move('uploads/', $filename);
         $item->payment_proof = $filename;
     }
@@ -2063,7 +2079,8 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
           $notifiData['application_id'] =$request->Application_id;
           $notifiData['uhid'] = getUhid($request->Application_id)[0];
           $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
-          $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+          $acUrl = config('notification.accountantUrl.level1');
+          $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
           $notifiData['data'] = config('notification.accountant.appCreated');
           sendNotification($notifiData);
           /*end here*/ 

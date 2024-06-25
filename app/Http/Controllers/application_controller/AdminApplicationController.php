@@ -2017,6 +2017,8 @@ class AdminApplicationController extends Controller
               $notifiData['application_id'] = $request->application_id;
               $notifiData['uhid'] = getUhid( $request->application_id)[0];
               $notifiData['level_id'] = getUhid( $request->application_id)[1];
+              $url= config('notification.adminUrl.level1');
+              $notifiData['url'] = $url.dEncrypt($request->application_id);
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
             /*end here*/ 
@@ -2051,12 +2053,14 @@ class AdminApplicationController extends Controller
          $notifiData['uhid'] = getUhid($request->application_id)[0];
          $notifiData['level_id'] = getUhid($request->application_id)[1] ;
          $notifiData['user_type'] = "desktop";
-         $notifiData['url'] = "/desktop/application-view/".dEncrypt($request->application_id);
+         $url = config('notification.desktopUrl.level1');
+         $notifiData['url'] = $url.dEncrypt($request->application_id);
          $notifiData['data'] = config('notification.assessor_desktop.assigned');
          sendNotification($notifiData);
 
          $notifiData['user_type'] = "superadmin";
-         $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+         $url = config('notification.adminUrl.level1');
+         $notifiData['url'] = $url.dEncrypt($request->application_id);
          $notifiData['data'] = config('notification.admin.desktopAssigned');
          sendNotification($notifiData);
          /*end here*/ 
@@ -2286,12 +2290,14 @@ class AdminApplicationController extends Controller
             $notifiData['uhid'] = getUhid($request->application_id)[0];
             $notifiData['level_id'] = getUhid($request->application_id)[1] ;
             $notifiData['user_type'] = "onsite";
-            $notifiData['url'] = "/onsite/application-view/".dEncrypt($request->application_id);
+            $url = config('notification.onsiteUrl.level1');
+            $notifiData['url'] = $url.dEncrypt($request->application_id);
             $notifiData['data'] = config('notification.assessor_onsite.assigned');
             sendNotification($notifiData);
 
             $notifiData['user_type'] = "superadmin";
-            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($request->application_id);
+            $url = config('notification.adminUrl.level1');
+            $notifiData['url'] = $url.dEncrypt($request->application_id);
             $notifiData['data'] = config('notification.admin.onsiteAssigned');
             sendNotification($notifiData);
             /*end here*/ 
@@ -2676,7 +2682,7 @@ class AdminApplicationController extends Controller
                 return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
             }else{
                 DB::rollback();
-                return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+                return response()->json(['success' => false,'message' =>'Notification Already read','redirect_url'=>$d->url],200);
             } 
             
         } catch (Exception $e) {

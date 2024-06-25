@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tp' =>['status'=>'Payment Pending','uploadDocs'=>"Please upload the all application documents",'secondPay'=>"Please pay second payment for onsite assessor"],
+    'tp' =>['status'=>'Payment Pending','uploadDocs'=>"Please upload  all the documents of the application",'secondPay'=>"Please pay second payment for onsite assessor"],
     
     'accountant' =>['appCreated'=>'New Application Created'],
     
@@ -15,5 +15,32 @@ return [
     
     'common'=>['nc'=>'There are nc on application documents','upload'=>'Documents uploaded against nc','appApproved'=>'Application Completed successfully.','appRejected'=>'Application rejected.'],
     
-
+    'tpUrl'=>[
+        'level1'=>"/tp/application-view/",
+        'level2'=>'/upgrade/tp/application-view/',
+        'level3'=>'/upgrade/level-3/tp/application-view/'
+    ],
+    'tpPaymentUrl'=>[
+        'level1'=>"/show-course-payment/",
+        'level2'=>'/upgrade-show-course-payment/',
+        'level3'=>'/upgrade-level-3-show-course-payment/'
+    ],
+    'secretariatUrl'=>[
+        'level1'=>"/admin/application-view/",
+        'level2'=>'/admin/application-view-level-2/',
+        'level3'=>'/admin/application-view-level-3/'
+    ],
+    'adminUrl'=>[
+        'level1'=>"/super-admin/application-view/",
+    ],
+    'accountantUrl'=>[
+        'level1'=>"/account/application-view/",
+    ],
+    'desktopUrl'=>[
+        'level1'=>"/desktop/application-view/",
+    ],
+    'onsiteUrl'=>[
+        'level1'=>"/onsite/application-view/",
+    ],
+    
 ];

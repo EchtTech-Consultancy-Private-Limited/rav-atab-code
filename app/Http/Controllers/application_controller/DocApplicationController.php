@@ -191,7 +191,8 @@ class DocApplicationController extends Controller
                 $notifiData['application_id'] = $application_id;
                 $notifiData['uhid'] = getUhid( $application_id)[0];
                 $notifiData['level_id'] = getUhid($application_id)[1];
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                $sUrl = config('notification.adminUrl.level1');
+                $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 $notifiData['data'] = config('notification.admin.paymentApprove');
                 sendNotification($notifiData);
         /*end here*/ 
@@ -210,7 +211,8 @@ class DocApplicationController extends Controller
              $notifiData['application_id'] = $application_id;
              $notifiData['uhid'] = getUhid( $application_id)[0];
              $notifiData['level_id'] = getUhid( $application_id)[1];
-             $notifiData['url'] = "/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+             $tpUrl = config('notification.tpUrl.level3');
+             $notifiData['url'] = $tpUrl.dEncrypt($application_id);
              $notifiData['data'] = config('notification.tp.uploadDocs');
              sendNotification($notifiData);
              /*end here*/  
