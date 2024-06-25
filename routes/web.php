@@ -506,6 +506,7 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
 /*----------------- End Here------------------------*/
  
     Route::get('thank-you', [AdminApplicationController::class, 'thankYou']);
+    Route::get('payment-error', [AdminApplicationController::class, 'paymenterror']);
 
     
 });
