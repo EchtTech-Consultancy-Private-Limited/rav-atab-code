@@ -2667,23 +2667,18 @@ class AdminApplicationController extends Controller
                 'id' => 'required',
             ]);
             DB::beginTransaction();
-            $get_application = DB::table('tbl_application')->where('id',$id)->first();
-            $update_admin_received_payment_status = DB::table('tbl_application')->where('id', $id)->update(['admin_received_payment' => 1]);
-            if ($update_admin_received_payment_status) {
+            DB::table('tbl_application')->where('id', $id)->update(['admin_received_payment' => 1]);
+            $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+            $d=DB::table('tbl_notifications')->where('id',$id)->first();
+            
+            if($is_read){
                 DB::commit();
-                if($get_application->level_id==1){
-                    $redirect_url = URL::to('/admin/application-view/' . dEncrypt($id));
-                }else if($get_application->level_id==2){
-                    $redirect_url = URL::to('/admin/application-view-level-2/' . dEncrypt($id));
-                }else{
-                    $redirect_url = URL::to('/admin/application-view-level-3/' . dEncrypt($id));
-                }
-                
-                return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $redirect_url], 200);
-            } else {
+                return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
+            }else{
                 DB::rollback();
-                return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);
-            }
+                return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+            } 
+            
         } catch (Exception $e) {
             DB::rollback();
             return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);

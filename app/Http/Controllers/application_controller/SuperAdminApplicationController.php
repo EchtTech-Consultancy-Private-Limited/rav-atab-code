@@ -240,6 +240,14 @@ class SuperAdminApplicationController extends Controller
             
             $is_assigned_secretariat = DB::table('tbl_secretariat_assign')->where(['application_id'=>$request->application_id,'secretariat_id'=>$request->secretariat_id])->first();
 
+            $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+            if($get_app->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($request->application_id);
+            }else if($get_app->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+            }
               /*send notification*/ 
               $notifiData = [];
               $notifiData['user_type'] = "secretariat";
@@ -247,7 +255,7 @@ class SuperAdminApplicationController extends Controller
               $notifiData['application_id'] = $request->application_id;
               $notifiData['uhid'] = getUhid( $request->application_id)[0];
               $notifiData['level_id'] = getUhid( $request->application_id)[1];
-              $notifiData['url'] = "/admin/application-view/".dEncrypt($request->application_id);
+              $notifiData['url'] = $url;
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
             /*end here*/ 
@@ -713,11 +721,13 @@ class SuperAdminApplicationController extends Controller
           DB::beginTransaction();
           
           DB::table('tbl_application')->where('id',$id)->update(['admin_received_payment'=>1]);
-          $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>1]);
+          
+          $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+          $d=DB::table('tbl_notifications')->where('id',$id)->first();
           
           if($is_read){
               DB::commit();
-              return response()->json(['success' => true,'message' =>'Read notification successfully.'],200);
+              return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
           }else{
               DB::rollback();
               return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
@@ -966,6 +976,18 @@ class SuperAdminApplicationController extends Controller
                     DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
                     /*end here*/ 
                   }
+
+                  $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+                  if($get_app->leve_id==1){
+                      $url="/admin/application-view/".dEncrypt($request->application_id);
+                      $tpUrl="/tp/application-view/".dEncrypt($request->application_id);
+                  }else if($get_app->leve_id==2){
+                      $url="/admin/application-view-level-2/".dEncrypt($request->application_id);
+                      $tpUrl="/upgrade/tp/application-view/".dEncrypt($request->application_id);
+                  }else{
+                      $url="/admin/application-view-level-3/".dEncrypt($request->application_id);
+                      $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($request->application_id);
+                  }
                   
                   $notifiData = [];
                   $notifiData['sender_id'] = Auth::user()->id;
@@ -974,12 +996,12 @@ class SuperAdminApplicationController extends Controller
                   $notifiData['level_id'] = getUhid( $app_id)[1];
                   $notifiData['data'] = config('notification.common.appApproved');
                   $notifiData['user_type'] = "secretariat";
-                  $notifiData['url'] = "/secretariat/application-view/".dEncrypt($app_id);
+                  $notifiData['url'] = $url;
             
                   /*send notification*/ 
                   sendNotification($notifiData);
                   $notifiData['user_type'] = "tp";
-                  $notifiData['url'] = "/tp/application-view/".dEncrypt($app_id);
+                  $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
                   /*end here*/ 
                   
@@ -1038,7 +1060,17 @@ class SuperAdminApplicationController extends Controller
             /*end here*/
 
 
-
+            $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+            if($get_app->leve_id==1){
+                $url="/admin/application-view/".dEncrypt($application_id);
+                $tpUrl="/tp/application-view/".dEncrypt($application_id);
+            }else if($get_app->leve_id==2){
+                $url="/admin/application-view-level-2/".dEncrypt($application_id);
+                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            }else{
+                $url="/admin/application-view-level-3/".dEncrypt($application_id);
+                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+            }
 
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
@@ -1052,12 +1084,12 @@ class SuperAdminApplicationController extends Controller
                 $notifiData['level_id'] = getUhid( $app_id)[1];
                 $notifiData['data'] = config('notification.common.appRejected');
                 $notifiData['user_type'] = "secretariat";
-                $notifiData['url'] = "/secretariat/application-view/".dEncrypt($app_id);
+                $notifiData['url'] = $url;
           
                 /*send notification*/ 
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "tp";
-                $notifiData['url'] = "/tp/application-view/".dEncrypt($app_id);
+                $notifiData['url'] = $tpUrl;
                 sendNotification($notifiData);
                 /*end here*/ 
                 
