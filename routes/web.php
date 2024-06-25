@@ -59,7 +59,7 @@ Route::get('city-list', [AuthController::class, 'city']);
 Route::get("/logout", [AuthController::class, 'logout']);
 
 /*--------------------Start Online Payment Process----------------------------*/
-Route::get('makepayment',[PaymentController::class,'makePayment'])->name('makepayment');
+Route::get('makepayment/{id?}',[PaymentController::class,'makePayment'])->name('makepayment');
 Route::post('paymentresponse',[PaymentController::class,'paymentResponseSuccessFailer'])->name('paymentresponse');
 Route::get('pdf',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessor'])->name('pdfdownload');
 /*--------------------End Online Payment Process----------------------------*/
@@ -501,6 +501,7 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
 /*----------------- End Here------------------------*/
  
     Route::get('thank-you', [AdminApplicationController::class, 'thankYou']);
+    Route::get('error-response', [AdminApplicationController::class, 'errorResponse']);
 
     
 });

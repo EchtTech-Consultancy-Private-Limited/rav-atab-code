@@ -91,7 +91,6 @@
                <h2 class="text-main"> AYURVEDA TRAINING ACCEREDITATION BOARD </h2>
             </div>
          </div>
-         <a href="{{ route('makepayment') }}" class="btn btn-success text-center">Payment</a>
          <div class="row pt-lg-60">
             <div class="col-md-5">
                <div class="gif-box">

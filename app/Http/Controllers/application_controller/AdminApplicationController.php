@@ -3134,5 +3134,11 @@ public function adminReturnMom(Request $request)
  public function thankYou(Request $request){
     return view('admin-view.thankyou');
  }
+
+ public function errorResponse(Request $request){
+    return view('payment-response.error-response');
+ }
+
+
 }
 
