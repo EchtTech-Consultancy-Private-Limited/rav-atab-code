@@ -79,7 +79,7 @@
                                 </div>
                                 <p class="transaction-id">Transaction Id : <span>2515426452</span></p>
                                 <div class="text-center mt-4">
-                                    <a href="#" class="btn btn-danger waves-effect">Back</a>
+                                    <a href="#" class="btn btn-danger waves-effect pt-2">Back</a>
                                 </div>
                                </div>
                             </div>
