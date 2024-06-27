@@ -111,7 +111,7 @@ class DesktopApplicationController extends Controller
             'application_courses_id' => $course_id,
             'assessor_type' => 'desktop'
         ])
-            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert')
+            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")
@@ -443,7 +443,7 @@ class DesktopApplicationController extends Controller
                 return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $d->url], 200);
             } else {
                 DB::rollback();
-                return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);
+                return response()->json(['success' => false,'message' =>'Notification Already read','redirect_url'=>$d->url],200);
             }
         } catch (Exception $e) {
             DB::rollback();
@@ -635,15 +635,21 @@ public function desktopUpdateNCFlagDocList($application_id)
 
 
             $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
-            if($get_application->leve_id==1){
-                $url="/admin/application-view/".dEncrypt($application_id);
-                $tpUrl="/tp/application-view/".dEncrypt($application_id);
-            }else if($get_application->leve_id==2){
-                $url="/admin/application-view-level-2/".dEncrypt($application_id);
-                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            if($get_application->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level1');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }else if($get_application->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level2');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }else{
-                $url="/admin/application-view-level-3/".dEncrypt($application_id);
-                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level3');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }
             $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
             $notifiData = [];
@@ -653,7 +659,9 @@ public function desktopUpdateNCFlagDocList($application_id)
             $notifiData['level_id'] = getUhid( $application_id)[1];
             $notifiData['data'] = config('notification.common.nc');
             $notifiData['user_type'] = "superadmin";
-            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+            $sUrl = config('notification.adminUrl.level1');
+
+            $notifiData['url'] = $sUrl.dEncrypt($application_id);
             if($get_application->level_id==3){
             if($t && !$is_all_accepted){
                 
@@ -666,12 +674,13 @@ public function desktopUpdateNCFlagDocList($application_id)
                   $notifiData['url'] = $url;
                   sendNotification($notifiData);
                     /*end here*/ 
+                createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
             }
            
             if($is_all_accepted){
                 $notifiData['data'] = config('notification.admin.acceptCourseDoc');
                 $notifiData['user_type'] = "superadmin";
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
             }
         }

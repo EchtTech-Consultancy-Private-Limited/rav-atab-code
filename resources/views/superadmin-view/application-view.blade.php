@@ -82,7 +82,7 @@
                    
                 @endif
 
-                @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==2 || $spocData->level_id==3))
+                @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==3))
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
                         </a>
                 @endif
@@ -248,8 +248,10 @@
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card <?php if($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) echo 'border-reject'; else echo ''; ?>">
-            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
+        
+    <div class="card <?php if(($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) echo 'border-reject'; else echo ''; ?>">
+
+            <div class="card-header <?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>

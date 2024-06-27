@@ -846,12 +846,12 @@ class ApplicationCoursesController extends Controller
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
             $name = $img->getClientOriginalName();
-            $filename = time() . $name;
+            $filename = rand().'-'.time().'-'.rand() . $name;
             $img->move('uploads/', $filename);
             $item->payment_proof = $filename;
         }
         $item->save();
-
+        $acUrl = config('notification.accountantUrl.level1');
          /*send notification*/ 
          $notifiData = [];
          $notifiData['user_type'] = "accountant";
@@ -859,7 +859,7 @@ class ApplicationCoursesController extends Controller
          $notifiData['application_id'] =$request->Application_id;
          $notifiData['uhid'] = getUhid($request->Application_id)[0];
          $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
-         $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+         $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
          $notifiData['data'] = config('notification.accountant.appCreated');
          sendNotification($notifiData);
          /*end here*/ 

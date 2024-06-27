@@ -430,6 +430,7 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'desktopVerfiyDocument']);
 
     Route::post('/desktop/update-nc-flag-doc-list/{application_id}/{course_id?}', [DesktopApplicationController::class, 'desktopUpdateNCFlagDocList']);
+    Route::post('/tp/update-nc-flag/{application_id}/{course_id?}', [TPApplicationController::class, 'tpUpdateNCFlagDocList']);
 
 
     // Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'secretariatVerfiyDocument']);
@@ -501,6 +502,7 @@ Route::post('/secretariat/update-nc-flag-doc-list/{application_id}/{course_id?}'
 /*----------------- End Here------------------------*/
  
     Route::get('thank-you', [AdminApplicationController::class, 'thankYou']);
+    Route::get('error-response', [AdminApplicationController::class, 'errorResponse']);
 
     
 });

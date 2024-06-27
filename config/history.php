@@ -8,5 +8,6 @@ return [
     'assessor_desktop' =>['status'=>'co03'],
     'assessor_onsite' =>['status'=>'co03'],
     'color' =>['warning'=>'warning','danger'=>'danger','success'=>'success'],
+    'common'=>['nc'=>"Nc's on course doc"]
 
 ];

@@ -1702,6 +1702,9 @@ function handleNotification(pay_id){
                         closeButton: true,
                         closeDuration: 5000,
                     });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                     $('.full_screen_loading').hide();
                 }
             },
@@ -1754,6 +1757,9 @@ function handleAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -1804,6 +1810,9 @@ function handleSuperAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -1855,6 +1864,9 @@ function handleDesktopNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -1905,6 +1917,9 @@ function handleOnsiteNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {

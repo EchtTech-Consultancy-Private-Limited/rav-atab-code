@@ -191,18 +191,29 @@ class DocApplicationController extends Controller
                 $notifiData['application_id'] = $application_id;
                 $notifiData['uhid'] = getUhid( $application_id)[0];
                 $notifiData['level_id'] = getUhid($application_id)[1];
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                $sUrl = config('notification.adminUrl.level1');
+                $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 $notifiData['data'] = config('notification.admin.paymentApprove');
                 sendNotification($notifiData);
+               
         /*end here*/ 
 
 
 
-             /**
-             * Send Email to Accountant
-             * */ 
-            $app_ = DB::table('tbl_application')->where('id',$application_id)->first();
-            if($app_->level_id==3){
+          
+          
+             $app_ = DB::table('tbl_application')->where('id',$application_id)->first();
+             $get_all_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
+             $get_all_uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+             
+             if($app_->level_id==1){
+                $tpUrl=config('notification.tpUrl.level1').dEncrypt($application_id);
+            }else if($app_->level_id==2){
+                $tpUrl=config('notification.tpUrl.level2').dEncrypt($application_id);
+            }else{
+                $tpUrl=config('notification.tpUrl.level3').dEncrypt($application_id);
+            }               
+
              /*send notification*/ 
              $notifiData = [];
              $notifiData['user_type'] = "tp";
@@ -210,11 +221,24 @@ class DocApplicationController extends Controller
              $notifiData['application_id'] = $application_id;
              $notifiData['uhid'] = getUhid( $application_id)[0];
              $notifiData['level_id'] = getUhid( $application_id)[1];
-             $notifiData['url'] = "/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+             $notifiData['url'] = $tpUrl;
              $notifiData['data'] = config('notification.tp.uploadDocs');
-             sendNotification($notifiData);
-             /*end here*/  
-            }
+                /*send notification only when tp did not upload the docs*/ 
+               
+                if($app_->level_id!=1){
+                    if($get_all_uploaded_docs<($get_all_course_count*4)){
+                        sendNotification($notifiData);
+                    }
+                }
+
+        /*end here*/  
+
+
+
+           /**
+             * Send Email to Accountant
+             * */ 
+          
             $tp_id = $app_->tp_id;
             $tp_email = DB::table('users')->where('id',$tp_id)->first()->email;
             $account_email = DB::table('users')->where('id',Auth::user()->id)->first()->email;

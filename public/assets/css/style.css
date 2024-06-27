@@ -25598,6 +25598,9 @@ p.ref-number b{ font-weight: 600;}
 .notification-card.active {
     background:#e2e7fd;
 }
+.notification-card.inactive {
+    background:#f8f9ff;;
+}
 
 .notification-card img {
     width: 50px;
@@ -25650,8 +25653,8 @@ p.ref-number b{ font-weight: 600;}
     border-radius: 10px;
 }
   .thank-you-container h1 {
-    font-size: 42px;
-    margin-bottom: 10px;
+    font-size: 40px;
+    margin-bottom: 5px;
     color: #000;
 }
   .thank-you-container p {

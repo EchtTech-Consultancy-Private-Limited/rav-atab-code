@@ -238,8 +238,10 @@
             </div>
         </div>
         @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card <?php if($ApplicationCourses['course']->status == 1) echo 'border-reject'; else echo ''; ?>">
-            <div class="card-header <?php echo $ApplicationCourses['course']->status == 1? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
+        
+        <div class="card <?php if(($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) echo 'border-reject'; else echo ''; ?>">
+
+            <div class="card-header <?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
                 <h5 class="mt-2">
                     View Course Information Record No: {{ $k+1 }}
                 </h5>
@@ -526,6 +528,29 @@
         </div>
         </div>  
         @endforeach
+
+
+        @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==3)) 
+        
+        <div class="row">
+                        <div class="col-md-12">
+                            <form action="{{url('tp/update-nc-flag/'.$spocData->id)}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit
+                            
+                            "<?php echo ($enable_disable_submit_btn)?'disabled':'';?> >
+
+                            </form>
+                        </div>
+                    </div>
+        @endif
+
+
+
+
+
+
+
         @if($spocData->is_all_course_doc_verified==1)
         <!-- <div class="row">
             <div class="col-md-12 d-flex justify-content-end">
