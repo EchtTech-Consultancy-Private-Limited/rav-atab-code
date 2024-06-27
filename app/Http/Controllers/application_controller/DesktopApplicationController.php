@@ -635,12 +635,12 @@ public function desktopUpdateNCFlagDocList($application_id)
 
 
             $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
-            if($get_application->leve_id==1){
+            if($get_application->level_id==1){
                 $url= config('notification.secretariatUrl.level1');
                 $url=$url.dEncrypt($application_id);
                 $tpUrl = config('notification.tpUrl.level1');
                 $tpUrl=$tpUrl.dEncrypt($application_id);
-            }else if($get_application->leve_id==2){
+            }else if($get_application->level_id==2){
                 $url= config('notification.secretariatUrl.level2');
                 $url=$url.dEncrypt($application_id);
                 $tpUrl = config('notification.tpUrl.level2');
@@ -674,6 +674,7 @@ public function desktopUpdateNCFlagDocList($application_id)
                   $notifiData['url'] = $url;
                   sendNotification($notifiData);
                     /*end here*/ 
+                createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
             }
            
             if($is_all_accepted){

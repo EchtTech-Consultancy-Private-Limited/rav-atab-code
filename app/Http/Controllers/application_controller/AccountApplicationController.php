@@ -109,6 +109,7 @@ class AccountApplicationController extends Controller
             
             foreach ($courses as $course) {
                 if ($course) {
+                    
                     $obj->course[] = [
                         "course" => $course,
                         'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([

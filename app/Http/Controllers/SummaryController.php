@@ -295,6 +295,7 @@ class SummaryController extends Controller
 
         $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
 
+
         // if($get_course_count==1){
             /*send notification*/ 
           
@@ -330,7 +331,7 @@ class SummaryController extends Controller
             $notifiData['data'] =$notiData ;
             sendNotification($notifiData);
             $notifiData['user_type'] = "superadmin";
-            $sUrl = config('notification.superadminUrl.level1');
+            $sUrl = config('notification.adminUrl.level1');
             $notifiData['url'] = $sUrl.dEncrypt($application_id);
             sendNotification($notifiData);
             $notifiData['user_type'] = "secretariat";
@@ -342,7 +343,7 @@ class SummaryController extends Controller
 
         /*to send second time payment to tp*/ 
         $final_summary_count = DB::table('assessor_final_summary_reports')
-        ->where('application_id',dDecrypt($application_id))
+        ->where('application_id',$application_id)
         ->where('assessor_type','desktop')
         ->count();
         /*end here*/ 
@@ -527,7 +528,7 @@ class SummaryController extends Controller
                 $notifiData['data'] =$notiData ;
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "superadmin";
-                $sUrl = config('notification.superadminUrl.level1');
+                $sUrl = config('notification.adminUrl.level1');
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "secretariat";

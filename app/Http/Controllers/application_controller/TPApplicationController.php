@@ -112,6 +112,10 @@ class TPApplicationController extends Controller
             ->get();
             foreach ($courses as $course) {
                 if ($course) {
+                    $course_docs=$this->isNcOnCourseDocs($application->id, $course->id);
+                    if($application->level_id!=1){
+                        $course_docs_lists=$this->isNcOnCourseDocsList($application->id, $course->id);
+                    }
                     $obj->course[] = [
                         "course" => $course,
                         'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
@@ -120,6 +124,8 @@ class TPApplicationController extends Controller
                             'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                             'doc_unique_id' => config('constant.declaration.doc_unique_id'),
                         ])->get(),
+                        'isAnyNcOnCourse'=>$course_docs,
+                        'isAnyNcOnCourseDocList'=>$course_docs_lists??false,
 
                             'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
                                 'application_id' => $application->id,
@@ -170,6 +176,7 @@ class TPApplicationController extends Controller
                             ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                             ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                             ->get()
+                            
                     ]; // Added semicolon here
                 }
             }
@@ -683,6 +690,7 @@ class TPApplicationController extends Controller
           ->pluck('application_id')
           ->toArray();
 
+          
           
         
          $pending_list = DB::table('tbl_application')
@@ -1464,6 +1472,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             
             foreach ($courses as $course) {
                 if ($course) {
+                    $course_docs=$this->isNcOnCourseDocs($application->id, $course->id);
+                if($application->level_id!=1){
+                    $course_docs_lists=$this->isNcOnCourseDocsList($application->id, $course->id);
+                }
                     $obj->course[] = [
                         "course" => $course,
                         'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
@@ -1472,6 +1484,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                             'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                             'doc_unique_id' => config('constant.declaration.doc_unique_id'),
                         ])->get(),
+                        'isAnyNcOnCourse'=>$course_docs,
+                        'isAnyNcOnCourseDocList'=>$course_docs_lists??false,
 
                             'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
                                 'application_id' => $application->id,
@@ -2186,6 +2200,10 @@ public function upgradeGetApplicationViewLevel3($id){
         
         foreach ($courses as $course) {
             if ($course) {
+                $course_docs=$this->isNcOnCourseDocs($application->id, $course->id);
+                if($application->level_id!=1){
+                    $course_docs_lists=$this->isNcOnCourseDocsList($application->id, $course->id);
+                }
                 $obj->course[] = [
                     "course" => $course,
                     'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
@@ -2194,6 +2212,8 @@ public function upgradeGetApplicationViewLevel3($id){
                         'doc_sr_code' => config('constant.declaration.doc_sr_code'),
                         'doc_unique_id' => config('constant.declaration.doc_unique_id'),
                     ])->get(),
+                    'isAnyNcOnCourse'=>$course_docs,
+                    'isAnyNcOnCourseDocList'=>$course_docs_lists??false,
 
                         'course_wise_document_curiculum' => DB::table('tbl_course_wise_document')->where([
                             'application_id' => $application->id,
@@ -2493,7 +2513,136 @@ public function getApplicationPaymentFeeView($id){
 }
 
 
+public function isNcOnCourseDocs($application_id,$course_id)
+{
 
+    $results = DB::table('tbl_course_wise_document')
+        ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+        ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
+        ->where('course_id', $course_id)
+        ->where('application_id', $application_id)
+        ->where('approve_status',1)
+        ->get();
+
+        
+        
+
+    $additionalFields = DB::table('tbl_course_wise_document')
+        ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+            $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
+                ->on('tbl_course_wise_document.course_id', '=', 'sub.course_id')
+                ->on('tbl_course_wise_document.doc_sr_code', '=', 'sub.doc_sr_code')
+                ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
+                ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
+        })
+        ->orderBy('tbl_course_wise_document.id', 'desc')
+        ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
+
+
+    foreach ($results as $key => $result) {
+        $additionalField = $additionalFields->where('application_id', $result->application_id)
+            ->where('course_id', $result->course_id)
+            ->where('doc_sr_code', $result->doc_sr_code)
+            ->where('doc_unique_id', $result->doc_unique_id)
+            // ->where('approve_status',1)
+            ->first();
+        if ($additionalField) {
+            $results[$key]->status = $additionalField->status;
+            $results[$key]->id = $additionalField->id;
+            $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+            $results[$key]->approve_status = $additionalField->approve_status;
+            $results[$key]->is_revert = $additionalField->is_revert;
+        }
+    }
+
+    
+    $flag = 0;
+
+    foreach ($results as $result) {
+        if ($result->status == 2 || $result->status == 3 || $result->status == 4) {
+            $flag = 1;
+            break;
+        } else {
+            $flag = 0;
+            
+        }
+    }
+
+    
+    if ($flag == 1) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+public function isNcOnCourseDocsList($application_id,$application_courses_id)
+{
+
+    $results = DB::table('tbl_application_course_doc')
+        ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+        ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
+        ->where('application_courses_id', $application_courses_id)
+        ->where('application_id', $application_id)
+        ->where('approve_status',1)
+        ->get();
+
+        
+        
+
+    $additionalFields = DB::table('tbl_application_course_doc')
+        ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+            $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+        })
+        ->orderBy('tbl_application_course_doc.id', 'desc')
+        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
+
+
+    foreach ($results as $key => $result) {
+        $additionalField = $additionalFields->where('application_id', $result->application_id)
+            ->where('application_courses_id', $result->application_courses_id)
+            ->where('doc_sr_code', $result->doc_sr_code)
+            ->where('doc_unique_id', $result->doc_unique_id)
+            ->where('approve_status',1)
+            ->first();
+        if ($additionalField) {
+            $results[$key]->status = $additionalField->status;
+            $results[$key]->id = $additionalField->id;
+            $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+            $results[$key]->approve_status = $additionalField->approve_status;
+        }
+    }
+
+    
+    $flag = 0;
+
+    foreach ($results as $result) {
+        
+        // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+
+        if ($result->status == 2 || $result->status == 3 || $result->status == 4) {
+            $flag = 1;
+            break;
+        } else {
+            $flag = 0;
+            
+        }
+    }
+
+    
+    
+    if ($flag == 1) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
 
 
 
