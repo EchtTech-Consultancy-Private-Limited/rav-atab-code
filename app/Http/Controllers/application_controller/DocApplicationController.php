@@ -231,7 +231,10 @@ class DocApplicationController extends Controller
                     }
                 }
 
-        /*end here*/  
+        /*end here*/
+        $notifiData['url'] = $tpUrl;
+        $notifiData['data'] = config('notification.admin.paymentApprove');
+        sendNotification($notifiData);
 
 
 
