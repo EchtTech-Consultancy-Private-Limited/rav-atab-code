@@ -1016,7 +1016,6 @@ class AdminApplicationController extends Controller
             }
         }
         
-        
         if ($flag == 0) {
             return false;
         } else {

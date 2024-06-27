@@ -82,7 +82,7 @@
                    
                 @endif
 
-                @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==2 || $spocData->level_id==3))
+                @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==3))
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
                         </a>
                 @endif

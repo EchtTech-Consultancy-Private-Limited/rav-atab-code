@@ -135,7 +135,7 @@ class OnsiteApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'desktop'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','admin_nc_flag','status','is_revert')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','admin_nc_flag','status','is_revert','is_doc_show')
         ->get();
 
         $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
@@ -143,7 +143,7 @@ class OnsiteApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status','onsite_photograph','admin_nc_flag','is_revert')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status','onsite_photograph','admin_nc_flag','is_revert','is_doc_show')
         ->get();
 
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')

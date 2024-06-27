@@ -273,8 +273,9 @@ class SummaryController extends Controller
    
     public function desktopFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
         
-       
-
+        
+        try{
+        DB::beginTransaction();
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
         $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
         if(!empty($check_report)){
@@ -289,16 +290,16 @@ class SummaryController extends Controller
         $data['remark']=$request->comment_text??"";
         $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
         $application_id = dDecrypt($application_id);
-
-
+   
+      
    
 
         $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
-
+     
 
         // if($get_course_count==1){
             /*send notification*/ 
-          
+            
             $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
             if($get_app->level_id==1){
                 $url= config('notification.secretariatUrl.level1');
@@ -316,11 +317,12 @@ class SummaryController extends Controller
                 $tpUrl = config('notification.tpUrl.level3');
                 $tpUrl=$tpUrl.dEncrypt($application_id);
             }
-
-            $get_course = DB::table('tbl_application_courses')->where(['application_id'=>dDecrypt($application_id),'id'=>dDecrypt($application_course_id)])->whereIn('status',[0,2])->first();
+         
+            
+            $get_course = DB::table('tbl_application_courses')->where(['application_id'=>$application_id,'id'=>dDecrypt($application_course_id)])->whereIn('status',[0,2])->first();
             $notiData = config('notification.assessor_desktop.summary');
             $notiData =$notiData.' ['.$get_course->course_name.']';
-
+      
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
             $notifiData['application_id'] =$application_id;
@@ -339,7 +341,7 @@ class SummaryController extends Controller
             sendNotification($notifiData);
             /*end here*/ 
         // }
-
+    
 
         /*to send second time payment to tp*/ 
         $final_summary_count = DB::table('assessor_final_summary_reports')
@@ -347,6 +349,7 @@ class SummaryController extends Controller
         ->where('assessor_type','desktop')
         ->count();
         /*end here*/ 
+        
         if($final_summary_count==$get_course_count){
             $level_id =$tbl_application->level_id;
             if($level_id==1){
@@ -356,7 +359,7 @@ class SummaryController extends Controller
                 $url=config('notification.tpPaymentUrl.level2');
                 $url=$url.dEncrypt($application_id);
             }else{
-                $url=config('notification.tpPaymentUrl.level2');
+                $url=config('notification.tpPaymentUrl.level3');
                 $url=$url.dEncrypt($application_id);    
             }
             $notifiData['sender_id'] = Auth::user()->id;
@@ -446,8 +449,15 @@ class SummaryController extends Controller
  
              /*end here*/
 
-
-        return redirect('desktop/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report'); 
+             DB::commit();
+        return redirect('desktop/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report');
+    }
+    catch(Exception $e){
+        
+        DB::rollBack();
+        return redirect('desktop/application-view'.'/'.$request->application_id)->with('fail','Something went wrong!');
+    }
+ 
         // return redirect('desktop/document-list'.'/'.$application_id.'/'.$application_course_id); 
 
     }

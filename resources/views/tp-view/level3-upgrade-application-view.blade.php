@@ -528,6 +528,29 @@
         </div>
         </div>  
         @endforeach
+
+
+        @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==3)) 
+        
+        <div class="row">
+                        <div class="col-md-12">
+                            <form action="{{url('tp/update-nc-flag/'.$spocData->id)}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit
+                            
+                            "<?php echo ($enable_disable_submit_btn)?'disabled':'';?> >
+
+                            </form>
+                        </div>
+                    </div>
+        @endif
+
+
+
+
+
+
+
         @if($spocData->is_all_course_doc_verified==1)
         <!-- <div class="row">
             <div class="col-md-12 d-flex justify-content-end">

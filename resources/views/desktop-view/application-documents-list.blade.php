@@ -225,9 +225,8 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
                                     
-                                   
                                     
-                                    @if($doc->status==0)
+                                    @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('desktop-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -281,10 +280,7 @@
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Rejected</a>
                                     @else
-                                       <div class="upload-btn-wrapper">
-                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                             </div>
+                                     
                                     @endif 
                                     @endforeach
 

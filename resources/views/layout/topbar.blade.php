@@ -96,7 +96,7 @@ ul.menu h5 {
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y h:m:s A') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
@@ -144,7 +144,7 @@ ul.menu h5 {
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y h:m:s A') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
@@ -192,7 +192,7 @@ ul.menu h5 {
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y h:m:s A') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
@@ -240,7 +240,7 @@ ul.menu h5 {
                                             <div class="content-card">
                                                 <div class="flex-box">
                                                     <span>App. ID : {{ $notification->uhid }}</span>
-                                                    {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y h:m:s A') }}
+                                                    {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                                 </div>
                                                 <div class="normal-text">
                                                     <p class="mb-0">{{$notification->data}}</p>
@@ -291,7 +291,7 @@ ul.menu h5 {
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y h:m:s A') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
@@ -338,7 +338,7 @@ ul.menu h5 {
                                     <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y h:m:s A') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>

@@ -224,13 +224,12 @@ class DocApplicationController extends Controller
              $notifiData['url'] = $tpUrl;
              $notifiData['data'] = config('notification.tp.uploadDocs');
                 /*send notification only when tp did not upload the docs*/ 
+               
                 if($app_->level_id!=1){
                     if($get_all_uploaded_docs<($get_all_course_count*4)){
                         sendNotification($notifiData);
                     }
                 }
-                
-
 
         /*end here*/  
 

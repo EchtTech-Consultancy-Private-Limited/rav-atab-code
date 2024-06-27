@@ -322,7 +322,7 @@
                                    }) as $doc)
                                    
                                    
-                                   @if($doc->onsite_status==0)
+                                   @if($doc->is_doc_show==0 && $doc->onsite_status==0)
                                    @php
                                      $doc_=$doc->onsite_doc_file_name==null?$doc->doc_file_name:$doc->onsite_doc_file_name;
                                    @endphp
