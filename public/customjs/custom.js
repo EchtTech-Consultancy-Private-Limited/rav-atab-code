@@ -1693,7 +1693,7 @@ function handleNotification(pay_id){
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }else{
                     toastr.error(response.message, {
@@ -1746,7 +1746,7 @@ function handleAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=`${BASE_URL}${response.redirect_url}`;
                     },1000);
                     
                 }else{
@@ -1799,7 +1799,7 @@ function handleSuperAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000);
                     
                 }else{
@@ -1811,7 +1811,7 @@ function handleSuperAdminNotification(pay_id){
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }
             },
@@ -1853,7 +1853,7 @@ function handleDesktopNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000);
 
                 }else{
@@ -1865,7 +1865,7 @@ function handleDesktopNotification(pay_id){
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }
             },
@@ -1907,7 +1907,7 @@ function handleOnsiteNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }else{
                     toastr.error(response.message, {
@@ -1918,7 +1918,7 @@ function handleOnsiteNotification(pay_id){
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }
             },
@@ -2019,7 +2019,7 @@ function isValidInput(value) {
 }
 
 function handleAssessorDesignation(id, application_id) {
-    console.log(id,' first id ')
+    
     const assessor_designation = $('#' + id + ' option:selected').val();
     $("#assessor_category_" + application_id).val(assessor_designation);
     $("#assessor_designation_" + application_id).val("atab_assessor");

@@ -1262,14 +1262,20 @@ class SuperAdminApplicationController extends Controller
         try{
             
             if($application_id){
-                $assessor_type = $paymentCount>1?'onsite':'desktop';
+                $app_details = DB::table('tbl_application')->where('id',$application_id)->first();
+                if($app_details->level_id==2){
+                    $assessor_type="secretariat";
+                }else{
+                    $assessor_type = $paymentCount>1?'onsite':'desktop';
+                }
+                
                 $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
                 $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)
                 ->where('assessor_type',$assessor_type)
                 ->count();
                 $total_docs = $get_courses_count*4;
                 
-                if($courses_doc_list==$total_docs){
+                if($courses_doc_list>=$total_docs){
                     return true;
                 }else{
                     return false;
