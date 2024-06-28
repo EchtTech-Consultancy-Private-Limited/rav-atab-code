@@ -144,7 +144,7 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
                                     
-                                   
+                                   @dd($doc)
                                     
                                     @if($doc->status==0)
                                        <a 

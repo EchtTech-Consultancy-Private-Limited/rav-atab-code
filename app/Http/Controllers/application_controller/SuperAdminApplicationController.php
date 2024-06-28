@@ -322,7 +322,7 @@ class SuperAdminApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status')
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status','is_doc_show')
         ->get();
         $chapters = Chapter::all();
         foreach($chapters as $chapter){ 
@@ -357,6 +357,7 @@ class SuperAdminApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
+        // dd($final_data);
         $applicationData = TblApplication::find($application_id);
         return view('superadmin-view.application-documents-list', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
     }
@@ -526,7 +527,7 @@ class SuperAdminApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'secretariat'
         ])
-        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status')
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status','is_doc_show')
         ->get();
         
         $chapters = Chapter::all();
@@ -552,6 +553,7 @@ class SuperAdminApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
+        
         $applicationData = TblApplication::find($application_id);
         return view('superadmin-view.secretariat.application-documents-list', compact('final_data','course_doc_uploaded','application_id','course_id','applicationData'));
     }

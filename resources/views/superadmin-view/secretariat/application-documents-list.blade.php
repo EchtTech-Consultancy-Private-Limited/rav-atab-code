@@ -157,9 +157,8 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
                                     
-                                   
                                     
-                                    @if($doc->status==0)
+                                    @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('super-admin-view/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -252,10 +251,11 @@
                                              </td>
                                              <td>
                                              @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
-                                   
+                                             
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+
                                     @else
                                   
                                                 <span class="text-danger"
