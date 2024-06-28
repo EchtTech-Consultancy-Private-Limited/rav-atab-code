@@ -273,7 +273,6 @@ class SummaryController extends Controller
    
     public function desktopFinalSubmitSummaryReport(Request $request,$application_id,$application_course_id){
         
-        
         try{
         DB::beginTransaction();
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();

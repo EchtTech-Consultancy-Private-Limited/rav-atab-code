@@ -90,8 +90,9 @@ class DesktopApplicationController extends Controller
             $obj->payment = $payment;
         }
         $final_data = $obj;
-        $is_exists = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])->first();
-        if (!empty($is_exists)) {
+        $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->count();
+        $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
+        if ($total_summary_count==$total_courses_count) {
             $is_final_submit = true;
         } else {
             $is_final_submit = false;
@@ -176,6 +177,7 @@ class DesktopApplicationController extends Controller
         try {
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'desktop'])->latest('id')->first();
             $is_nc_exists = false;
+            // dd($tbl_nc_comments);
             if ($nc_type == "view") {
                 $is_nc_exists = true;
             }
