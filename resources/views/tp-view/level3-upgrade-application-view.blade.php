@@ -24,6 +24,7 @@
         @endif
         @include('layout.rightbar')
     </div>
+
     @if ($message = Session::get('success'))
     <script>
     toastr.success({{ $message }}, {
@@ -32,6 +33,16 @@
                         closeButton: true,
                         closeDuration: 5000,
                     });
+    </script>
+    @endif
+    @if ($message = Session::get('fail'))
+    <script>
+    toastr.error('{{$message}}', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
     </script>
     @endif
     <div class="loading-img d-none" id="loader">
