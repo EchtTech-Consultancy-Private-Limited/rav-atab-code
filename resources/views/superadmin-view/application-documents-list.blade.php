@@ -38,6 +38,7 @@
       @endif
       @include('layout.rightbar')
    </div>
+   
    <section class="content">
       <div class="container-fluid">
          <div class="block-header">
@@ -144,9 +145,8 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
                                     
-                                   
                                     
-                                    @if($doc->status==0)
+                                    @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('super-admin-view/desktop/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -222,10 +222,7 @@
 
 
                                     @else
-                                       <div class="upload-btn-wrapper">
-                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                             </div>
+                                     
                                     @endif 
                                     @endforeach
 
@@ -236,7 +233,7 @@
                                     }) as $doc)
                                     
                                     
-                                    @if($doc->onsite_status==0)
+                                    @if($doc->is_doc_show==0 && $doc->onsite_status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('super-admin-view/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -308,18 +305,18 @@
 
 
                                     @else
-                                       <div class="upload-btn-wrapper">
-                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                             </div>
+                                      
                                     @endif 
                                     @endforeach
-
+                                    
                                    @endif
 
                                     <!-- Onsite nc's list end here -->
 
                                  <!--this else for first time upload doc  -->
+                                      @if($doc->is_doc_show==-1)
+                                       N/A
+                                      @endif
                                     @else
                                        N/A
                                     @endif
@@ -337,10 +334,16 @@
                                              </td>
                                              <td>
                                              @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
-                                   
+                                                @if($doc->is_doc_show==-1)
+                                                <span class="text-danger"
+                                                   style="font-size: 12px; padding:5px; border-radius:5px;">Comment
+                                                pending!</span>
+                                                @else
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                @endif
+                                                
                                     @else
                                   
                                                 <span class="text-danger"

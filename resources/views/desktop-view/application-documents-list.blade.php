@@ -359,12 +359,22 @@
                                           </tr>
                                           @endforeach
                                         @endforeach
+                                        
                                        </tbody>
+                                       
                                     </table>
-                                    
                                     @if(!$is_final_submit && $is_doc_uploaded && $checkAllActionDoneOnDocList==false)
+                                                <div class="col-md-12 p-2" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <textarea rows="30" cols="80" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                </div>
+                                
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
-                                       <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
+                                    <form id="secretariatForm" action="{{url('desktop/final-summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" method="post" onsubmit="return handleSecretariatFinalSummary();">
+                                       @csrf
+                                        <input type="submit" value="Submit Summary" class="btn btn-primary btn-sm">
+                                    </form>
                                     </div>
                                     @endif
                                  </div>
