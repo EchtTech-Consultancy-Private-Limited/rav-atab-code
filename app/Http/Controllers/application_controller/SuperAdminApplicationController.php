@@ -194,11 +194,15 @@ class SuperAdminApplicationController extends Controller
                 }
                 $final_data = $obj;
 
-                $admin_final_summary_count =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id])->count();
-                if($admin_final_summary_count>0){
-                 $is_final_submit = true;
-                }else{
-                 $is_final_submit = false;
+                $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])
+                ->where('is_summary_show',1)
+                ->count();
+                $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
+        
+                if ($total_summary_count>=$total_courses_count) {
+                    $is_final_submit = true;
+                } else {
+                    $is_final_submit = false;
                 }
             
         return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'mom'=>$mom]);
@@ -563,7 +567,7 @@ class SuperAdminApplicationController extends Controller
         
         try {
             $accept_nc_type_status = $nc_type;
-            $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type])
+            $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type,'application_courses_id'=> $application_course_id])
                 ->where('nc_type', "Request_For_Final_Approval")
                 ->latest('id')->first();
 
@@ -608,7 +612,7 @@ class SuperAdminApplicationController extends Controller
 
             // dd($nc_comments);
 
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
                 ->where('final_status', $ass_type)
                 ->latest('id')
                 ->first();
@@ -616,7 +620,7 @@ class SuperAdminApplicationController extends Controller
 
 
             /*Don't show form if doc is accepted*/
-            $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])
+            $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
                 ->whereIn('nc_type', ["Accept", "Reject"])
                 ->where('final_status', $assessor_type)
                 ->latest('id')

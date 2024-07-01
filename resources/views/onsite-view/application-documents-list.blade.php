@@ -522,11 +522,24 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded && $is_all_revert_action_done==false)
-                                    <div class="col-md-12 p-2 d-flex justify-content-end">
-                                       <a href="{{url('onsite/summary/submit').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
+                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    
+                                 <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
+                                     @csrf
+                                       <input type="hidden" name="application_id" value="{{$encrypted_app_id}}">
+                                       <input type="hidden" name="application_course_id" value="{{$encrypted_course_id}}">
+                                       <div class="col-md-12 p-2" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <textarea rows="30" cols="80" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                </div>
+                                    
+                                       <div class="col-md-12 p-2 d-flex justify-content-end">
+                                       <input type="submit" value="Submit Summary" class="btn btn-primary btn-sm">
                                     </div>
+                                 </form>
                                     @endif
+                                    
                                  </div>
                               </div>
                            </div>

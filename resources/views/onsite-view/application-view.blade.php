@@ -312,7 +312,6 @@
         @endforeach
         
         @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
-        
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
@@ -321,7 +320,41 @@
                 </form>
                 </div>
         </div>
+        @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('/onsite/generate/final-summary')}}" method="post">
+                @csrf
+                <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
+                <input type="submit" class="btn btn-info float-right" value="Final Submit">
+                <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
+                </form>
+                </div>
+        </div>
 @endif
+
+<!-- OFI model form -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFI model form end here -->
 
         <div class="card p-relative">
             <div class="box-overlay">

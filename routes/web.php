@@ -408,6 +408,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
 /*Deskotop*/
 Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopApplicationController::class, 'desktopUpdateNCFlag']);
+Route::post('/desktop/generate/final-summary', [DesktopApplicationController::class, 'generateFinalSummary']);
 
    //end here
    
