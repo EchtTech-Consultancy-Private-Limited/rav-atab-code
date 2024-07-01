@@ -25679,3 +25679,22 @@ p.ref-number b{ font-weight: 600;}
   .transaction-id span{
     font-weight: 800;
   }
+
+  /* Accordian Css */
+
+  .accordian-card button:focus{
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .accordian-card .accordion-button {
+    font-size: 1.3rem;
+    color: #000 !important;
+    font-weight: 500;
+    padding: 8px 18px;
+    background: #e7f1ff !important;
+}
+
+  .accordian-card .accordion-button.collapsed {      
+    background: transparent !important;
+}
