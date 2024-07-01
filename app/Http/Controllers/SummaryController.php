@@ -98,6 +98,7 @@ class SummaryController extends Controller
      public function onSiteIndex(Request $request,$application_id,$application_course_id){
         $assessor_id = Auth::user()->id;
         $assessor_name = Auth::user()->firstname.' '.Auth::user()->middlename.' '.Auth::user()->lastname;
+        
         $summertReport = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','final_summary_repo.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','ass_impr_form.assessee_org as onsite_assessee_org')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
@@ -120,6 +121,9 @@ class SummaryController extends Controller
             'final_summary_repo.application_course_id'=>dDecrypt($application_course_id),
         ])
         ->first();
+
+        
+
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>dDecrypt($application_id),'assessor_id'=>$assessor_id,'assessor_type'=>'onsite'])->first();
         
         /*count the no of mandays*/
@@ -188,6 +192,7 @@ class SummaryController extends Controller
 
 
        $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way;
+
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id)])->first();
        if(!empty($is_exists)){
         $is_final_submit = true;
@@ -289,6 +294,11 @@ class SummaryController extends Controller
         $data['remark']=$request->comment_text??"";
         $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
         $application_id = dDecrypt($application_id);
+
+
+        /*Update revert action 1*/ 
+        DB::table('tbl_application_course_doc')->where(['application_id'=>$application_id,'application_courses_id'=>dDecrypt($application_course_id),'assessor_type'=>'desktop'])->update(['is_revert'=>1]);
+        /*end here*/ 
    
       
    
@@ -486,21 +496,26 @@ class SummaryController extends Controller
 
 
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
-            $dataImprovement= [];
-            $dataImprovement['assessor_id']=$assessor_id;
-            $dataImprovement['application_id']=$application_id;
-            $dataImprovement['application_course_id']=dDecrypt($request->application_course_id);
-            $dataImprovement['sr_no']=$request->sr_no??'N/A';
-            $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
-            $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
-            $dataImprovement['signatures']=$request->signatures??'N/A';
-            $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
-            $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
-            $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
+
+            // $dataImprovement= [];
+            // $dataImprovement['assessor_id']=$assessor_id;
+            // $dataImprovement['application_id']=$application_id;
+            // $dataImprovement['application_course_id']=dDecrypt($request->application_course_id);
+            // $dataImprovement['sr_no']=$request->sr_no??'N/A';
+            // $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
+            // $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
+            // $dataImprovement['signatures']=$request->signatures??'N/A';
+            // $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
+            // $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
+            // $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
         
             /*Completed the application and make the app payment_status =3 for completed*/
                 DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>3]);
             /*end here*/
+
+                /*Update revert action 1*/ 
+                    DB::table('tbl_application_course_doc')->where(['application_id'=>$application_id,'application_courses_id'=>$application_id,'assessor_type'=>'onsite'])->update(['is_revert'=>1]);
+                /*end here*/ 
             
 
           
@@ -652,6 +667,38 @@ class SummaryController extends Controller
         }
 
         // return redirect(url('accr-view-document/' . $request->application_id . '/' . $request->application_course_id))->with('success', "Data saved successfully");
+    }
+
+    public function createOFI(Request $request){
+        try{
+            DB::beginTransaction();
+            $application_id = dDecrypt($request->app_Id);
+            $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->get();
+            
+            foreach($get_all_courses as $key=>$course){
+                $dataImprovement= [];
+                $dataImprovement['assessor_id']=Auth::user()->id;
+                $dataImprovement['application_id']=$application_id;
+                $dataImprovement['application_course_id']=$course->id;
+                $dataImprovement['sr_no']=$request->serial_number??'N/A';
+                $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
+                $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
+                $dataImprovement['signatures']=$request->signatures??'N/A';
+                $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
+                $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
+                $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
+            }
+            if($create_onsite_final_summary_report){
+                DB::commit();
+                return redirect('onsite/application-view'.'/'.$request->app_Id)->with('success','Created improvement form'); 
+            }else{
+                DB::rollBack();
+                return redirect('onsite/application-view'.'/'.$request->app_Id)->with('fail','Failed to create improvement form'); 
+            }
+        }catch(Exception $e){
+            DB::rollBack();
+            return redirect('onsite/application-view'.'/'.$request->app_Id)->with('fail','Something went wrong!'); 
+        }
     }
 
     // view summary report

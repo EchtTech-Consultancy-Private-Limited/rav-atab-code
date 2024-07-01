@@ -90,14 +90,28 @@ class DesktopApplicationController extends Controller
             $obj->payment = $payment;
         }
         $final_data = $obj;
+       
         $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->count();
+        
+        $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->latest('id')->first()?->is_summary_show;
+        if(!isset($is_submitted_final_summary)){
+            $is_submitted_final_summary=0;
+        }
+
         $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
         if ($total_summary_count==$total_courses_count) {
             $is_final_submit = true;
+            $is_all_course_summary_completed=true;
         } else {
             $is_final_submit = false;
+            $is_all_course_summary_completed=false;
         }
-        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done]);
+
+        
+        /*  All course summary generated*/
+            
+        /*end here*/
+        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary]);
     }
     public function applicationDocumentList($id, $course_id)
     {
@@ -175,7 +189,7 @@ class DesktopApplicationController extends Controller
     public function desktopVerfiyDocument($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
         try {
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'desktop'])->latest('id')->first();
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'desktop','application_courses_id'=> $application_course_id])->latest('id')->first();
             $is_nc_exists = false;
             // dd($tbl_nc_comments);
             if ($nc_type == "view") {
@@ -218,7 +232,7 @@ class DesktopApplicationController extends Controller
             if ($nc_type == "nr") {
                 $nc_type = "not_recommended";
             }
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type,'application_courses_id'=> $application_course_id])
                 ->whereIn('assessor_type', ['admin', 'desktop'])
                 ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
@@ -502,6 +516,27 @@ class DesktopApplicationController extends Controller
             // }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+    public function generateFinalSummary(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $app_id = dDecrypt($request->app_id);
+            $isUpdate = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->update(['is_summary_show'=>1]);
+            if($isUpdate){
+                DB::commit();
+                return back()->with('success', 'Final summary generated successfully.');
+            }else{
+                DB::rollBack();
+                return back()->with('fail', 'Failed to generate final summary.');
+            }
+
+            
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);

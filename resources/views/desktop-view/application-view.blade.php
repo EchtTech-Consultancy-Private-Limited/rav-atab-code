@@ -313,13 +313,24 @@
         </div>  
         @endforeach
             
-        @if(($show_submit_btn_to_desktop && $is_final_submit==false) || $is_all_revert_action_done) 
+        @if((($show_submit_btn_to_desktop && $is_final_submit==false) || $is_all_revert_action_done) && !$is_all_course_summary_completed) 
         
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('desktop/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
                 @csrf
                 <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                </form>
+                </div>
+        </div>
+        @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('/desktop/generate/final-summary')}}" method="post">
+                @csrf
+                <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
+                <input type="submit" class="btn btn-info float-right" value="Final Submit">
                 </form>
                 </div>
         </div>

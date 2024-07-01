@@ -312,7 +312,6 @@
         @endforeach
         
         @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
-        
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
@@ -321,7 +320,68 @@
                 </form>
                 </div>
         </div>
+        @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('/onsite/generate/final-summary')}}" method="post">
+                @csrf
+                <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
+                <input type="submit" class="btn btn-info float-right" value="Final Submit">
+                <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
+                </form>
+                </div>
+        </div>
 @endif
+
+<!-- OFI model form -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">OFI</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                <form action="{{url('create/ofi')}}" method="post" onsubmit="reuturn handleImporveMentForm();">
+                    @csrf
+                    <div class="form-group">
+                        <label for="serial_number">S.No.<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="serial_number" placeholder="Enter Serial number" required="true">
+                        <input type="hidden" id="app_Id" value="{{dEncrypt($spocData->id)}}" name="app_Id">
+                        <span id="sr_no_err" class="err"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="standard_reference">Standard Reference<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="standard_reference" name="standard_reference" placeholder="Enter Standard Reference" required="true">
+                        <span id="improvement_form_err" class="err"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="improvement_form">Improvement Form<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="improvement_form" name="improvement_form" placeholder="Enter Improvement form" required="true">
+                        <span id="standard_reference_err" class="err"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="improve_assessee_org">Improvement Form<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="improve_assessee_org" name="improve_assessee_org" placeholder="Enter improve assessee org" required="true">
+                        <span id="improve_assessee_org_err" class="err"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFI model form end here -->
 
         <div class="card p-relative">
             <div class="box-overlay">

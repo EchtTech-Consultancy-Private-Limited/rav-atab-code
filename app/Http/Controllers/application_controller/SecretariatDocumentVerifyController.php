@@ -1058,7 +1058,7 @@ class SecretariatDocumentVerifyController extends Controller
             if ($nc_type == "nr") {
                 $nc_type = "not_recommended";
             }
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type,'application_courses_id'=> $application_course_id])
                 ->whereIn('assessor_type', ['admin', 'secretariat'])
                 ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')

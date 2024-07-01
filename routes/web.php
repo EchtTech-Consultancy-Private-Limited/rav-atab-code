@@ -283,6 +283,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('application-course-summaries',[SummaryController::class,"getCourseSummariesList"]);
     Route::get('view-final_summaries',[SummaryController::class,"tpViewFinalSummary"]);
     Route::get('admin-view-final_summaries',[SummaryController::class,"adminViewFinalSummary"]);
+    Route::post('/create/ofi',[SummaryController::class,"createOFI"]);
     // Created by Brijesh sir and Suraj
 /*----------------- New Application Routes------------------------*/
     Route::get('create-new-applications/{id?}',[ApplicationCoursesController::class,"createNewApplication"]);
@@ -408,9 +409,11 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
 /*Deskotop*/
 Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopApplicationController::class, 'desktopUpdateNCFlag']);
+Route::post('/desktop/generate/final-summary', [DesktopApplicationController::class, 'generateFinalSummary']);
 
    //end here
    
+
    
     Route::post('/tp-delete-course/{id}/{course_id}', [TPApplicationController::class, 'deleteCourse']);
 
@@ -441,6 +444,7 @@ Route::post('/desktop/update-nc-flag/{application_id}/{course_id}', [DesktopAppl
     Route::post('/onsite/upload-photograph', [OnsiteApplicationController::class, 'onsiteUploadPhotograph']);
     Route::post('/onsite/update-nc-flag-doc-list/{application_id}/{course_id?}', [OnsiteApplicationController::class, 'onsiteUpdateNCFlagDocList']);
 
+    Route::post('/onsite/generate/final-summary', [OnsiteApplicationController::class, 'onsiteGenerateFinalSummary']);
     
 Route::post('/secretariat/upload-mom', [SecretariatDocumentVerifyController::class, 'uploadMoM']);
 Route::post('/admin/return/mom', [AdminApplicationController::class, 'adminReturnMom']);
