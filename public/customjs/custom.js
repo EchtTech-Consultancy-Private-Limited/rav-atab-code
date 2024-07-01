@@ -2046,13 +2046,13 @@ $(document).on('change focus','.select2-selection--multiple',function(){
 
   function handleOnsiteSummerySubmitReport(){
     const assessee_org = $("#assessee_org").val();
-    const improve_assessee_org = $("#improve_assessee_org").val();
     const brief_open_meeting = $("#brief_open_meeting").val();
     const brief_summary = $("#brief_summary").val();
     const brief_closing_meeting = $("#brief_closing_meeting").val();
     const sr_no = $("#sr_no").val();
     const improvement_form = $("#improvement_form").val();
     const standard_reference = $("#standard_reference").val();
+    const improve_assessee_org = $("#improve_assessee_org").val();
     const comment_text = $("#comment_text").val();
 
     let flag = 0;
@@ -2180,6 +2180,43 @@ $(document).on('change focus','.select2-selection--multiple',function(){
         }
     });
   }
+
+
+
+  function handleImporveMentForm(){
+    const sr_no = $("#serial_number").val();
+    const improvement_form = $("#improvement_form").val();
+    const standard_reference = $("#standard_reference").val();
+    const improve_assessee_org = $("#improve_assessee_org").val();
+
+    
+    if(sr_no==""){
+        $("#sr_no_err").html("Please enter serial number");
+        flag=1;
+    }
+    if(improvement_form==""){
+        $("#improvement_form_err").html("Please enter improvement form value");
+        flag=1;
+    }
+    if(standard_reference==""){
+        $("#standard_reference_err").html("Please enter standard reference value");
+        flag=1;
+    }
+    if(improve_assessee_org==""){
+        $("#improve_assessee_org_err").html("Please enter imporve assessee org value");
+        flag=1;
+    }
+    if(comment_text==""){
+        $("#comment_text_err").html("Please enter remarks.");
+        flag=1;
+    }
+    if(flag==1){
+        return false;
+    }else{
+        return true;
+    }
+  }
+
 
   $("#tp_remark").on('keyup',function(){
         const value = $(this).val();

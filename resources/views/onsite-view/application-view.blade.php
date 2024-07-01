@@ -338,17 +338,44 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalLabel">OFI</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                <form action="{{url('create/ofi')}}" method="post" onsubmit="reuturn handleImporveMentForm();">
+                    @csrf
+                    <div class="form-group">
+                        <label for="serial_number">S.No.<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="serial_number" placeholder="Enter Serial number" required="true">
+                        <input type="hidden" id="app_Id" value="{{dEncrypt($spocData->id)}}" name="app_Id">
+                        <span id="sr_no_err" class="err"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="standard_reference">Standard Reference<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="standard_reference" name="standard_reference" placeholder="Enter Standard Reference" required="true">
+                        <span id="improvement_form_err" class="err"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="improvement_form">Improvement Form<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="improvement_form" name="improvement_form" placeholder="Enter Improvement form" required="true">
+                        <span id="standard_reference_err" class="err"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="improve_assessee_org">Improvement Form<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="improve_assessee_org" name="improve_assessee_org" placeholder="Enter improve assessee org" required="true">
+                        <span id="improve_assessee_org_err" class="err"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
   </div>
