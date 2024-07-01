@@ -368,8 +368,17 @@ class DesktopApplicationController extends Controller
             ->whereIn("id", $get_all_final_course_id)
             ->get();
         $applicationDetails = TblApplication::find($request->input('application'));
-        return view('desktop-view.course-summary-list', compact('courses', 'applicationDetails'));
+        $app_id = $request->input('application');
+        $course_count = DB::table('tbl_application_courses')->where('application_id',$app_id)->whereIn('status',[0,2])->count();
+        $is_all_course_summary_generated = false;
+        
+        if(count($get_all_final_course_id)==$course_count){
+            $is_all_course_summary_generated=true;
+        }
+
+        return view('desktop-view.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated'));
     }
+
     public function desktopViewFinalSummary(Request $request)
     {
         $assessor_id = Auth::user()->id;
@@ -445,6 +454,7 @@ class DesktopApplicationController extends Controller
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
         return view('desktop-view.desktop-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark'));
     }
+
     public function updateAssessorDesktopNotificationStatus(Request $request, $id)
     {
         try {

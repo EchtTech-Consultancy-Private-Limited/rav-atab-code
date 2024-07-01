@@ -200,7 +200,7 @@ class SummaryController extends Controller
         $is_final_submit = false;
        }
 
-       
+           
         return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign'));
     }
 
@@ -1464,7 +1464,15 @@ class SummaryController extends Controller
         $app_id = dDecrypt($request->input('application'));
         $courses = TblApplicationCourses::where('application_id', $app_id)->whereIn('status',[0,2])->get();
         $applicationDetails = TblApplication::find($app_id);
-        return view('superadmin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails'));
+
+        	
+			 $course_count = DB::table('tbl_application_courses')->where('application_id',$app_id)->whereIn('status',[0,2])->count();
+             $is_all_course_summary_generated = true;
+             
+            //  if(count($get_all_final_course_id)==$course_count){
+            //      $is_all_course_summary_generated=true;
+            //  }
+        return view('superadmin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated'));
     }
 
 

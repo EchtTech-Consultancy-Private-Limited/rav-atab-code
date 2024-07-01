@@ -606,11 +606,17 @@ class OnsiteApplicationController extends Controller
         ->where('application_id',$request->input('application'))
         ->where('assessor_id',Auth::user()->id)
         ->first();
+        $app_id = $request->input('application');
         
+        $course_count = DB::table('tbl_application_courses')->where('application_id',$app_id)->whereIn('status',[0,2])->count();
+        $is_all_course_summary_generated = false;
+        if(count($get_all_final_course_id)==$course_count){
+            $is_all_course_summary_generated=true;
+        }
         
 
         $applicationDetails = TblApplication::find($request->input('application'));
-        return view('onsite-view.course-summary-list', compact('courses', 'applicationDetails','assessor_designation'));
+        return view('onsite-view.course-summary-list', compact('courses', 'applicationDetails','assessor_designation','is_all_course_summary_generated'));
     }
 
     public function onsiteViewFinalSummary(Request $request){
