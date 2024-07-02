@@ -94,10 +94,15 @@ class DesktopApplicationController extends Controller
         $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->count();
         
         $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->latest('id')->first()?->is_summary_show;
+
+        $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->latest('id')->first()?->is_summary_show;
+
+
         if(!isset($is_submitted_final_summary)){
             $is_submitted_final_summary=0;
         }
 
+        
         $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
         if ($total_summary_count==$total_courses_count) {
             $is_final_submit = true;

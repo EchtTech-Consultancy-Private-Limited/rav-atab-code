@@ -266,8 +266,8 @@
                         <h5 class="mt-2">
                             View Course Information Record No: {{ $k + 1 }}
                         </h5>
-                        <div class="pe-4">
-                    
+                        <div class="pe-4">      
+                
                             <div class="row">
                                 <div class="col-md-12  d-flex justify-content-end">
                                 
