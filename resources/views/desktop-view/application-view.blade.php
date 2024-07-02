@@ -50,7 +50,7 @@
                     </ul>
                     <div class="">
 
-                    @if($is_final_submit)
+                    @if($is_submitted_final_summary==1)
                         <a href="{{ url('desktop-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif

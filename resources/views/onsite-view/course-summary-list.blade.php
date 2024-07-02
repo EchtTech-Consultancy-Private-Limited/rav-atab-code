@@ -119,6 +119,13 @@
                     </tr>
                 @endforeach
             </table>
+            @if($is_all_course_summary_generated)
+            <div class="row">
+                <div class="col-md-12 mt-3 d-flex justify-content-end">
+                    <a href="{{url('/onsite/download/pdf',dEncrypt($applicationDetails->id))}}" class="btn btn-primary">Download Summary</a>
+                </div>
+            </div>
+            @endif
         </div>
       </div>
     </section>

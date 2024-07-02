@@ -61,7 +61,7 @@ Route::get("/logout", [AuthController::class, 'logout']);
 /*--------------------Start Online Payment Process----------------------------*/
 Route::get('makepayment/{id?}',[PaymentController::class,'makePayment'])->name('makepayment');
 Route::post('paymentresponse',[PaymentController::class,'paymentResponseSuccessFailer'])->name('paymentresponse');
-Route::get('pdf',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessor'])->name('pdfdownload');
+
 /*--------------------End Online Payment Process----------------------------*/
 
 
@@ -96,6 +96,14 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/professional-user', [adminController::class, 'professional_user']);
     Route::get('view-user/{id?}', [adminController::class, 'user_view']);
 
+
+    /*final summary report download*/ 
+    Route::get('/onsite/download/pdf/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessor'])->name('onsitepdfdownload');
+    Route::get('/desktop/download/pdf/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryDesktopAssessor'])->name('desktoppdfdownload');
+  
+    Route::get('/admin/desktop/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfDesktop'])->name('admindesktoppdfdownload');
+    Route::get('/admin/onsite/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfOnsite'])->name('adminonsitepdfdownload');
+    /*end here*/ 
      
 
 
