@@ -95,8 +95,6 @@ class DesktopApplicationController extends Controller
         
         $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->latest('id')->first()?->is_summary_show;
 
-        $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->latest('id')->first()?->is_summary_show;
-
 
         if(!isset($is_submitted_final_summary)){
             $is_submitted_final_summary=0;
