@@ -49,7 +49,11 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     <div class="">
-                    @if($is_final_submit)
+                    @if($spocData->signed_copy_onsite!=null)
+                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                    </a>
+                    @endif
+                    @if($is_submitted_final_summary)
                         <a href="{{ url('onsite-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
@@ -346,6 +350,22 @@
                 </div>
         </div>
 @endif
+
+
+
+
+<!-- signed copy -->
+                    @if($is_submitted_final_summary==1 && $spocData->signed_copy_onsite==null)
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
+                            <input type="file" name="signed_copy" id="signed_copy" class="form-control" data-app-id="{{$spocData->id}}">
+                        </div>
+                    </div>
+                   
+                    @endif
+<!-- end here -->
+
 
 <!-- OFI model form -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

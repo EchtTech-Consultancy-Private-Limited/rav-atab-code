@@ -81,7 +81,15 @@
                 
                    
                 @endif
-                    
+              <!-- signed copy -->
+              @if($spocData->signed_copy_onsite!=null)
+                           
+                           <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                           </a>
+                           
+                            
+                            @endif
+                    <!-- end here -->
                 {{--  @if(($spocData->approve_status==2 || $spocData->approve_status==1) && ($spocData->level_id==3)) --}}
                 @if($is_final_submit && ($spocData->level_id==3))
                     <a href="{{ url('super-admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary
@@ -552,7 +560,9 @@
                         </div>
                         
                     </div>
-        @endif 
+                    @endif 
+
+                    
                         
 
         <div class="card p-relative mt-3">

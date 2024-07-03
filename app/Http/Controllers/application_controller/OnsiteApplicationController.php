@@ -140,6 +140,13 @@ class OnsiteApplicationController extends Controller
                         $is_submitted_final_summary=0;
                     }
                     $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
+
+                    $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'onsite'])->latest('id')->first()?->is_summary_show;
+
+
+                    if(!isset($is_submitted_final_summary)){
+                        $is_submitted_final_summary=0;
+                    }
                     
                     if ($total_summary_count==$total_courses_count) {
                         $is_all_course_summary_completed=true;
@@ -1144,19 +1151,14 @@ public function uploadSignedCopy(Request $request)
    try{
     
     DB::beginTransaction();
+    
     if ($request->hasfile('signed_copy_onsite')) {
         $file = $request->file('signed_copy_onsite');
         $name = $file->getClientOriginalName();
-        $filename = time() . $name;
+        $filename = rand().'-'.time().rand().'-'. $name;
         $file->move('level/', $filename);
     }
-    $uploaded = DB::table('tbl_application_courses')->where('id',$request->course_id)->update(['signed_copy_onsite'=>$filename]);
-    
-    // $data = [];
-    // $data['application_id']=$request->application_id;
-    // $data['doc_file_name']=$filename;
-    // $data['user_id']=Auth::user()->id;
-    // $uploaded=DB::table('tbl_mom')->insert($data);
+    $uploaded = DB::table('tbl_application')->where('id',$request->application_id)->update(['signed_copy_onsite'=>$filename]);
     
     if($uploaded){
     DB::commit();

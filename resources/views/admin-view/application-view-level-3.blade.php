@@ -89,6 +89,14 @@
               </div>
                     <div class="col-md-6 mb-3">
                        <div class="float-right">
+                          <!-- signed copy -->
+                       @if($spocData->signed_copy_onsite!=null)
+
+                           <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                           </a>
+                            
+                            @endif
+                    <!-- end here -->
                        @if($is_final_submit)
                         <a href="{{ url('admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
@@ -664,10 +672,12 @@
                         <div class="badge badge-main danger float-right">Application Rejected by admin</div>
                         </div>
                         @endif
+                      
                     </div>
         
 
 
+                       
 
 <!-- Modal box for rejection course remarks -->
 
