@@ -57,8 +57,14 @@ class DownLoadPDFFinalSummaryController extends Controller
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$assessor_id,'application_id'=>$application_id])->count();
     
 
-        $get_all_courses = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereIn('status', [0, 2])->get();
-
+        // $get_all_courses = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereIn('status', [0, 2])->get();
+        $get_all_courses = DB::table('tbl_application_courses as course')
+        ->select('course.*','final.remark')
+        ->leftJoin('assessor_final_summary_reports as final','final.application_course_id','=','course.id')
+       ->where('course.application_id', $application_id)
+       ->where('final.assessor_type', 'onsite')
+       ->whereIn('course.status', [0, 2])
+       ->get();
         $original_data = [];
         
         foreach($get_all_courses as $key => $course) {
@@ -136,7 +142,7 @@ class DownLoadPDFFinalSummaryController extends Controller
         
         $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$application_id])->first()?->assessment_way;
         
-        $pdf = PDF::loadView('assessor-summary.download-onsite-final-summary', compact('summertReport', 'no_of_mandays','original_data','assessor_name','assessement_way','assessor_assign','all_assessor_assign'));
+        $pdf = PDF::loadView('assessor-summary.download-onsite-final-summary', compact('summertReport', 'no_of_mandays','original_data','assessor_name','assessement_way','assessor_assign','all_assessor_assign','get_all_courses'));
         $file_name = 'onsite-'.$summertReport->uhid.'.pdf';
         return $pdf->download($file_name);
     }
@@ -279,7 +285,14 @@ class DownLoadPDFFinalSummaryController extends Controller
         /*count the no of mandays*/
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summeryReport->assessor_id,'application_id'=>$application_id])->count();
 
-        $get_all_courses = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereIn('status', [0, 2])->get();
+        // $get_all_courses = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereIn('status', [0, 2])->get();
+        $get_all_courses = DB::table('tbl_application_courses as course')
+        ->select('course.*','final.remark')
+        ->leftJoin('assessor_final_summary_reports as final','final.application_course_id','=','course.id')
+       ->where('course.application_id', $application_id)
+       ->where('final.assessor_type', 'onsite')
+       ->whereIn('course.status', [0, 2])
+       ->get();
         $original_data = [];
         
         foreach($get_all_courses as $key => $course) {
@@ -341,7 +354,7 @@ class DownLoadPDFFinalSummaryController extends Controller
         $summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->first()->remark;
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
         
-        $pdf = PDF::loadView('assessor-summary.desktop-download-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark','original_data'));
+        $pdf = PDF::loadView('assessor-summary.desktop-download-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark','original_data','get_all_courses'));
 
         $file_name = 'desktop-'.$summeryReport->uhid.'.pdf';
         return $pdf->download($file_name);
@@ -393,8 +406,14 @@ class DownLoadPDFFinalSummaryController extends Controller
         $no_of_mandays = DB::table('assessor_assigne_date')->where(['assessor_Id'=>$summertReport->assessor_id,'application_id'=>$application_id])->count();
     
 
-        $get_all_courses = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereIn('status', [0, 2])->get();
-
+        // $get_all_courses = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereIn('status', [0, 2])->get();
+        $get_all_courses = DB::table('tbl_application_courses as course')
+        ->select('course.*','final.remark')
+        ->leftJoin('assessor_final_summary_reports as final','final.application_course_id','=','course.id')
+       ->where('course.application_id', $application_id)
+       ->where('final.assessor_type', 'onsite')
+       ->whereIn('course.status', [0, 2])
+       ->get();
         $original_data = [];
         
         foreach($get_all_courses as $key => $course) {
@@ -472,7 +491,7 @@ class DownLoadPDFFinalSummaryController extends Controller
         
         $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$summertReport->assessor_id,'application_id'=>$application_id])->first()?->assessment_way;
         
-        $pdf = PDF::loadView('assessor-summary.download-onsite-final-summary', compact('summertReport', 'no_of_mandays','original_data','assessor_name','assessement_way','assessor_assign','all_assessor_assign'));
+        $pdf = PDF::loadView('assessor-summary.download-onsite-final-summary', compact('summertReport', 'no_of_mandays','original_data','assessor_name','assessement_way','assessor_assign','all_assessor_assign','get_all_courses'));
         $file_name = 'onsite-'.$summertReport->uhid.'.pdf';
         return $pdf->download($file_name);
     }

@@ -993,6 +993,13 @@ public function  storeNewApplication(Request $request)
     
     
     $application_date = Carbon::now()->addDays(364);
+
+    $exist = TblApplication::where('id',$request->application_id)->where('upgraded_level_id',2)->first();
+    if(!empty($exist)){
+        return redirect(url('upgrade-create-new-course/' . dEncrypt($request->application_id).'/'.dEncrypt($request->reference_id)))->with('success', "Application updated successfully.");
+        
+    }
+
     /*check if application already created*/
             $data = [];
             $data['level_id'] = 2;

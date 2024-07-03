@@ -160,7 +160,7 @@
                                                 </td>
                                                     <td class="p-0-lg1">
                                                     
-                                                    <div class="d-flex align-items-center justify-content-center">
+                                                    <div class="d-flex align-items-center justify-content-center gap-2">
 
                                                     @if($item->application_list->level_id==1)
 
@@ -197,7 +197,7 @@
                                                         @else
 
                                                         <!-- If previouse application upgraded then need not to show l-1 and l-2 -->
-                                                               @if($item->application_list->upgraded_level_id==1)
+                                                        @if($item->application_list->upgraded_level_id==1)
                                                                <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-2</a>
                                                                 <a href="{{ url('/upgrade-level-3-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-3</a>
                                                                 @endif
@@ -251,7 +251,20 @@
                                                                 @endif
                                                                 @endif
                                                                 <!-- End here level - 2  -->
-    </div>
+                                                    
+
+                                                                <!-- level-3 -->
+                                                                 @php
+                                                                    $is_second_payment = isSecondPayment($item->application_list->id);
+                                                                 @endphp
+
+                                                                 @if($is_second_payment)
+                                                                 <a href="{{url('upgrade-level-3-show-course-payment/'.dEncrypt($item->application_list->id))}}" class="btn btn-primary btn-tbl-delete">S-Pay</a>
+                                                                 @endif
+                                                                    
+                                                                <!-- end here -->
+                                                    
+                                                        </div>
                                                             </td>
 
                                                     
