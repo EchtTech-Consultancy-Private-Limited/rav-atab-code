@@ -323,9 +323,12 @@
                                     @endforeach
 
                                  <!--this else for first time upload doc  -->
-                                    @else
+                                       @if($doc->is_doc_show==-1)
+                                          N/A
+                                       @endif
+                                 @else
                                        N/A
-                                    @endif
+                                 @endif
 
                                 </form>
                                                    </div>
@@ -341,9 +344,15 @@
                                              <td>
                                              @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                                
+                                             @if($doc->is_doc_show==-1)
+                                                <span class="text-danger"
+                                                   style="font-size: 12px; padding:5px; border-radius:5px;">Comment
+                                                pending!</span>
+                                                @else
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                @endif
                                                
                                     @else
                                   
@@ -397,11 +406,11 @@
                                        </tbody>
                                     </table>
                                     
-                                    @if(!$is_final_submit && $is_doc_uploaded && $is_all_revert_action_done==false)
+                                    {{-- @if(!$is_final_submit && $is_doc_uploaded && $is_all_revert_action_done==false)
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
                                        <a href="{{url('secretariat/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
                                     </div>
-                                    @endif
+                                    @endif --}}
                                  </div>
                               </div>
                            </div>
