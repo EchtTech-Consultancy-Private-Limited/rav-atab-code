@@ -1282,7 +1282,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         
         
         $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
-        $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->first();
+        $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->first();
         
 
         $get_assessor_user = DB::table('assessor_final_summary_reports')->where('application_id',$request->Application_id)->count();
@@ -1371,11 +1371,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
          /*end here*/ 
 
         if(isset($first_app_id)){
-
             DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
         }
 
-        
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;
@@ -2046,10 +2044,19 @@ public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
     
 public function upgradeNewApplicationPaymentLevel3(Request $request)
 {
-
+    
     $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
-    $first_app_id = TblApplication::where('refid',$first_app_refid->refid)->get();
+    
+    $ref_count = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->count();
+    if($ref_count>1){
+        $first_app_id = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->get();
+    }else{
+        $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->get();
+    }
+    
+    // dd($first_app_id);
 
+    
     $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
     $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
