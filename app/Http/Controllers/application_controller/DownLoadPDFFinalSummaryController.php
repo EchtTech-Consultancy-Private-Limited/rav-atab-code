@@ -66,7 +66,7 @@ class DownLoadPDFFinalSummaryController extends Controller
        ->whereIn('course.status', [0, 2])
        ->get();
         $original_data = [];
-        
+        $final_data = [];
         foreach($get_all_courses as $key => $course) {
             $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
                 ->select('asr.application_id', 'asr.assessor_id', 'asr.object_element_id')
@@ -149,6 +149,7 @@ class DownLoadPDFFinalSummaryController extends Controller
 
     public function downloadFinalSummaryDesktopAssessor($application_id)
     {
+
         $assessor_id = Auth::user()->id;
         $application_id = dDecrypt($application_id);
         $summeryReport = DB::table('assessor_summary_reports as asr')
@@ -177,7 +178,7 @@ class DownLoadPDFFinalSummaryController extends Controller
                           ->whereIn('course.status', [0, 2])
                           ->get();
         $original_data = [];
-        
+        $final_data=[];
         foreach($get_all_courses as $key => $course) {
         $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.assessor_id', 'asr.object_element_id')
@@ -192,6 +193,7 @@ class DownLoadPDFFinalSummaryController extends Controller
         ->get()
         ->pluck('object_element_id');
             
+        
         $questions = DB::table('questions')->whereIn('id', $assesor_distinct_report)->get();
         
         $final_data=[];
@@ -294,7 +296,7 @@ class DownLoadPDFFinalSummaryController extends Controller
        ->whereIn('course.status', [0, 2])
        ->get();
         $original_data = [];
-        
+        $final_data = [];
         foreach($get_all_courses as $key => $course) {
         $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
         ->select('asr.application_id', 'asr.assessor_id', 'asr.object_element_id')
@@ -415,7 +417,7 @@ class DownLoadPDFFinalSummaryController extends Controller
        ->whereIn('course.status', [0, 2])
        ->get();
         $original_data = [];
-        
+        $final_data = [];
         foreach($get_all_courses as $key => $course) {
             $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
                 ->select('asr.application_id', 'asr.assessor_id', 'asr.object_element_id')

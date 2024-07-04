@@ -1020,9 +1020,10 @@ class SecretariatDocumentVerifyController extends Controller
     {
         try {
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat','application_courses_id'=>$application_course_id])->latest('id')->first();
+            $application_details = TblApplication::find($application_id);
             $is_nc_exists = false;
             $course_rejected=false;
-            if ($nc_type == "view") {
+            if ($nc_type == "view" && $application_details->level_id!=3) {
                 $is_nc_exists = true;
             }
             $course = DB::table('tbl_application_courses')->where('id',$application_course_id)->whereIn('status',[1,3])->first();

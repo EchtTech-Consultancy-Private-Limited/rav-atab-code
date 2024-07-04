@@ -142,9 +142,9 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->person_name}}</span>
+                                            <td colspan="2" class="fw-bold">Name and Location of the Training Provider: </br><span class="fw-normal"> {{$summertReport->person_name}}</span>
                                             </td>
-                                            <td colspan="3" class="fw-bold">Name of the course  to be assessed:
+                                            <td colspan="4" class="fw-bold">Name of the course  to be assessed:
                                             </br>
                                                 <span class="fw-normal">
                                                         @foreach($get_all_courses as $course)
@@ -154,24 +154,21 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal"> {{$assessement_way??'N/A'}}</span>
+                                            <td colspan="3" class="fw-bold">Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal"> {{$assessement_way??'N/A'}}</span>
                                             </td>
-                                            <td colspan="2" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
+                                            <td colspan="3" class="fw-bold">No of Mandays: </br><span class="fw-normal"> {{$no_of_mandays}}</span>
                                             </td>
                                         </tr>
                                 
                                         @foreach($all_assessor_assign as $assessor)
                                         <tr>
-                                            <td class="fw-bold">Signature:</td>
-                                            <td>.................</td>
-                                            <td></td>
-                                            <td colspan="3"></td>
+                                            <td class="fw-bold" colspan="2">Signature:</td>                                           
+                                            <td colspan="4">..............</td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">Assessor Name</td>
-                                            <td> {{$assessor->firstname??''}} {{$assessor->middlename??''}} {{$assessor->lastname??''}}({{$assessor->assessor_designation}}) </td>
-                                            <td> </td>
-                                            <td colspan="3"> </td>
+                                            <td class="fw-bold" colspan="2">Assessor Name</td>
+                                            <td colspan="4"> {{$assessor->firstname??''}} {{$assessor->middlename??''}} {{$assessor->lastname??''}}({{$assessor->assessor_designation}}) </td>
+                                            
                                         </tr>
                                         @endforeach
                                         <tr>
@@ -291,7 +288,7 @@
 
 
 
-                                        </tbody>
+                                        <!-- </tbody> -->
                                         <tr>
                                             <td colspan="6" class=""><span class="fw-bold">Brief Summary:</span> <span class="">{{$summertReport->brief_summary}}</span></td>
                                         </tr>
@@ -299,10 +296,10 @@
                                             <td colspan="6" class=""><span class="fw-bold">Brief about the closing meeting:</span> <span class="">{{$summertReport->brief_closing_meeting}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">
+                                            <td class="fw-bold" colspan="2">
                                                 Date : <span class="fw-normal">{{date('d-m-Y',strtotime($summertReport->summary_date))}}</span>
                                             </td>
-                                            <td class="fw-bold">
+                                            <td class="fw-bold" colspan="4">
                                                 Signature : ..........
                                             </td>
                                         </tr>
@@ -314,52 +311,53 @@
 
                                         <tbody>
                                             <tr>
-                                                <td colspan="4" class="fw-bold">
+                                                <td colspan="6" class="fw-bold">
                                                     OPPORTUNITY FOR IMPROVEMENT FORM
-                                                </td>
+                                                </td> 
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal">{{$summertReport->person_name}}</span></td>
-                                                <td colspan="2" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$summertReport->course_name}}</span></td>
+                                                <td colspan="4" class="fw-bold">Name of the course  to be assessed: <span class="fw-normal">{{$summertReport->course_name}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="fw-bold"> Way of assessment (onsite/ hybrid/ virtual):</br> <span class="fw-normal">{{$assessement_way??'N/A'}}</span></td>
-                                                <td colspan="2" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$no_of_mandays}}</span></td>
+                                                <td colspan="4" class="fw-bold"> No of Mandays: <span class="fw-normal">{{$no_of_mandays}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">S.No.</td>
                                                 <td class="fw-bold"> Opportunity for improvement Form</td>
-                                                <td class="fw-bold" colspan="2"> Standard reference</td>
+                                                <td class="fw-bold" colspan="4"> Standard reference</td>
                                             </tr>
                                             <tr>
                                                 <td>{{$summertReport->sr_no}}</td>
                                                 <td>{{$summertReport->improvement_form}}</td>
-                                                <td>{{$summertReport->standard_reference}}</td>
+                                                <td colspan="4">{{$summertReport->standard_reference}}</td>
                                             </tr>
                                     
                                             <tr>
                                                 <td class="fw-bold"> Signatures</td>
-                                                <td class="fw-bold">.......... </td>
-                                                <td> </td>
+                                                <td class="fw-bold" colspan="5">.......... </td>
+                                                
                                             </tr>
                                     
                                             <tr>
                                                 <td class="fw-bold">Assessor Name </td>
                                                 
-                                                <td>{{$assessor_name??''}} ({{$assessor_assign->assessor_designation}})</td>
-                                                <td> </td>
+                                                <td colspan="5">{{$assessor_name??''}} ({{$assessor_assign->assessor_designation}})</td>
+                                               
                                                 
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">Team Leader </td>
                                                 <td>{{$assessor_name??''}} ({{$assessor_assign->assessor_designation}})</td>
 
-                                                 <td class="fw-bold"> Rep. Assessee Orgn : <span class="fw-normal">{{$summertReport->onsite_assessee_org}}</span></td>
+                                                 <td class="fw-bold" colspan="4"> Rep. Assessee Orgn : <span class="fw-normal">{{$summertReport->onsite_assessee_org}}</span></td>
                                                 
                                             </tr>
                                             <tr>
-                                                <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
+                                                <td class="fw-bold"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
                                                 <td colspan="2" class="fw-bold"> Signature of the Team Leader</td>
+                                                <td colspan="3" class="fw-bold"> ....</td>
                                     
                                             </tr>
                                             <tr>
@@ -372,7 +370,7 @@
                                                                     @endforeach
                                                                     
                                                                     
-                                                                </div>
+                                                     </div>
                                                 </td>
                                             </tr>
                                         </tbody>
