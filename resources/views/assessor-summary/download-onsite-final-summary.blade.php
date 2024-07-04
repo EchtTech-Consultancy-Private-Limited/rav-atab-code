@@ -146,7 +146,11 @@
                                             </td>
                                             <td colspan="3" class="fw-bold">Name of the course  to be assessed:
                                             </br>
-                                                 <span class="fw-normal"> {{$summertReport->course_name}}</span>
+                                                <span class="fw-normal">
+                                                        @foreach($get_all_courses as $course)
+                                                            <b>{{$course->course_name}}</b>,
+                                                        @endforeach
+                                                    </span> 
                                             </td>
                                         </tr>
                                         <tr>
@@ -218,15 +222,7 @@
                                                 </td>
                                                 <td>
                                                 @foreach($rows->nc as $key=>$row)
-                                                        <?php 
-                                                                $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
-                                                                if (array_key_exists($row->nc_type, $color_code)) {
-                                                                    $final_color_value = $color_code[$row->nc_type];
-                                                                } else {
-                                                                    $final_color_value = "danger";
-                                                                }
-                                                        ?>
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                        
                                                             @if($row->nc_type=="not_recommended")
                                                             {{ucfirst($row->nc_type)}}
                                                             @else
@@ -236,8 +232,6 @@
                                                                 {{$row->nc_type}}
                                                                 @endif
                                                             @endif
-                                                        
-                                                    </a>  
                                                 @endforeach
 
                                                          <!-- Admin -->
@@ -367,6 +361,19 @@
                                                 <td colspan="2" class="fw-bold"> Date: {{date('d-m-Y',strtotime($summertReport->app_created_at))}}</td>
                                                 <td colspan="2" class="fw-bold"> Signature of the Team Leader</td>
                                     
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    
+                                                                    @foreach($get_all_courses as $key=>$course)
+                                                                        {{$key+1}} : [{{$course->course_name}}] : <b>{{$course->remark}}</b>
+                                                                    @endforeach
+                                                                    
+                                                                    
+                                                                </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

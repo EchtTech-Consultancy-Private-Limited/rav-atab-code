@@ -938,21 +938,31 @@ class SecretariatDocumentVerifyController extends Controller
         
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
-        $application_uhid = TblApplication::where('id', $application_id)->first()->uhid ?? '';
+        $app_detail = TblApplication::where('id', $application_id)->first();
+        $application_uhid = $app_detail->uhid ?? '';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id', $application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
-        
+        if($app_detail->level_id==3){
+            if(count($data)>1){
+                $assessor_type = 'onsite';
+            }else{
+                $assessor_type = 'desktop';
+            }
+            
+        }else{
+            $assessor_type = 'secretariat';
+        }
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id' => $application_id,
             'application_courses_id' => $course_id,
-            'assessor_type' => 'secretariat'
+            'assessor_type' => $assessor_type
         ])
             ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")
-            ->where('asr.assessor_type', 'secretariat')
+            ->where('asr.assessor_type', $assessor_type)
             ->where(['application_id' => $application_id, 'application_courses_id' => $course_id])
             ->groupBy('asr.application_id', 'asr.application_courses_id')
             ->count();
@@ -984,11 +994,11 @@ class SecretariatDocumentVerifyController extends Controller
                     ])
                         ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
                         ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
-                        ->whereIn('assessor_type', ['secretariat', 'admin'])
-                        ->where(function ($query) {
-                            $query->where('assessor_type', 'secretariat')
-                                ->orWhere('assessor_type', 'admin')
-                                ->where('final_status', 'secretariat');
+                        ->whereIn('assessor_type', [$assessor_type, 'admin'])
+                        ->where(function ($query) use ($assessor_type) {
+                            $query->where('assessor_type', $assessor_type)
+                                  ->orWhere('assessor_type', 'admin')
+                                  ->where('final_status', $assessor_type);
                         })
                         ->get(),
                 ];

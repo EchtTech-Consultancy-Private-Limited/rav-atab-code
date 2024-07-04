@@ -1720,3 +1720,20 @@ function getUhid($appId)
     }
 
 }
+
+
+function isSecondPayment($application_id){
+    $payment_count = DB::table('tbl_application_payment')->where('application_id',$application_id)->count();
+    $total_course=DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
+    $total_final_summary = DB::table('assessor_final_summary_reports')
+                          ->where('application_id',$application_id)
+                          ->where('assessor_type','desktop')
+                          ->count();
+    if($payment_count==1 && $total_course==$total_final_summary){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+

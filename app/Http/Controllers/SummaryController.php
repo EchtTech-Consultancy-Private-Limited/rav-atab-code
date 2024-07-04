@@ -924,9 +924,25 @@ class SummaryController extends Controller
 
     public function getCourseSummariesList(Request $request){
         $courses = TblApplicationCourses::where('application_id', $request->input('application'))->whereIn('status',[0,2])->get();
+        $app_id = $request->input('application');
+
+
+        $desktop_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->count();
+        $onsite_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'onsite'])->count();
+
+        $is_all_course_summary_generated_desktop= false;
+        $is_all_course_summary_generated_onsite = false;
+        if(count($courses)==$desktop_count){
+           $is_all_course_summary_generated_desktop=true;
+        }
+        if(count($courses)==$onsite_count){
+           $is_all_course_summary_generated_onsite=true;
+        }
+
+
 
         $applicationDetails = TblApplication::find($request->input('application'));
-        return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails'));
+        return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated_desktop','is_all_course_summary_generated_onsite'));
     }
 
 
@@ -1456,7 +1472,20 @@ class SummaryController extends Controller
         $app_id = dDecrypt($request->input('application'));
         $courses = TblApplicationCourses::where('application_id', $app_id)->whereIn('status',[0,2])->get();
         $applicationDetails = TblApplication::find($app_id);
-        return view('admin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails'));
+
+        $desktop_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->count();
+        $onsite_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'onsite'])->count();
+
+        $is_all_course_summary_generated_desktop = false;
+        $is_all_course_summary_generated_onsite = false;
+        if(count($courses)==$desktop_count){
+           $is_all_course_summary_generated_desktop=true;
+        }
+        if(count($courses)==$onsite_count){
+           $is_all_course_summary_generated_onsite=true;
+        }
+        
+        return view('admin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated_desktop','is_all_course_summary_generated_onsite'));
     }
 
     public function getCourseSummariesListSecretariatSuperAdmin(Request $request){
@@ -1466,13 +1495,19 @@ class SummaryController extends Controller
         $applicationDetails = TblApplication::find($app_id);
 
         	
-			 $course_count = DB::table('tbl_application_courses')->where('application_id',$app_id)->whereIn('status',[0,2])->count();
-             $is_all_course_summary_generated = true;
+			 $desktop_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->count();
+             $onsite_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'onsite'])->count();
+
+             $is_all_course_summary_generated_desktop = false;
+             $is_all_course_summary_generated_onsite = false;
+             if(count($courses)==$desktop_count){
+                $is_all_course_summary_generated_desktop=true;
+             }
+             if(count($courses)==$onsite_count){
+                $is_all_course_summary_generated_onsite=true;
+             }
              
-            //  if(count($get_all_final_course_id)==$course_count){
-            //      $is_all_course_summary_generated=true;
-            //  }
-        return view('superadmin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated'));
+        return view('superadmin-view.secretariat.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated_desktop','is_all_course_summary_generated_onsite'));
     }
 
 

@@ -135,17 +135,22 @@
                                                 <td class="fw-bold">Date of application: </br><span class="fw-normal">{{date('d-m-Y',strtotime($summeryReport->app_created_at))}}</span> </td>
                                             </tr>
                                             <tr>
-                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->person_name}}"></span> </td>
+                                                <td class="fw-bold">Name and Location of the Training Provider: <span class="fw-normal"> {{$summeryReport->person_name}}</span> </td>
                                                 <td class="fw-bold">Name of the course to be assessed:
                                     
-                                                    <span class="fw-normal"> <input type="text" disabled value="{{$summeryReport->course_name}}"></span> </td>
+                                                    <span class="fw-normal">
+                                                        @foreach($get_all_courses as $course)
+                                                            <b>{{$course->course_name}}</b>,
+                                                        @endforeach
+                                                    </span> 
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="fw-bold">Way of assessment (Desktop): </br><span class="fw-normal">
                                                    DDA
                                                 </span> 
                                                     </td>
-                                                <td class="fw-bold">No of Mandays:  <span class="fw-normal"> <input type="text" disabled value="{{$no_of_mandays}}"></span> </td>
+                                                <td class="fw-bold">No of Mandays:  <span class="fw-normal">{{$no_of_mandays}}</span> </td>
                                             </tr>
                                     
                                             <tr>
@@ -196,15 +201,7 @@
                                                     </td>
                                                     <td>
                                                     @foreach($rows->nc as $key=>$row)
-                                                        <?php 
-                                                                $color_code = ["NC1"=>"danger", "NC2"=>"danger", "Accept"=>"success","not_recommended"=>"danger"];
-                                                                if (array_key_exists($row->nc_type, $color_code)) {
-                                                                    $final_color_value = $color_code[$row->nc_type];
-                                                                } else {
-                                                                    $final_color_value = "danger";
-                                                                }
-                                                        ?>
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                       
                                                             @if($row->nc_type=="not_recommended")
                                                             {{ucfirst($row->nc_type)}}
                                                             @else
@@ -216,7 +213,6 @@
                                                             
                                                             @endif
                                                         
-                                                    </a>  
                                                         @endforeach
                                                         <!-- Admin -->
                                                         @foreach($rows->nc_admin as $key=>$row)
@@ -229,7 +225,7 @@
                                                                 }
                                                         ?>
                                                         @if($row->nc_type!=="Request_For_Final_Approval")
-                                                        <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
+                                                    <a target="_blank" href="{{ asset('level/'.$row->doc_file_name) }}" class="btn btn-{{$final_color_value}} m-1" href="">
                                                                 {{ucfirst($row->nc_type)}} By Admin
                                                     </a>  
                                                     @endif
@@ -273,7 +269,11 @@
                                                 <td colspan="6">
                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
-                                                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="">{{$summary_remark}}</textarea>
+                                                                    
+                                                                    @foreach($get_all_courses as $key=>$course)
+                                                                        {{$key+1}} : [{{$course->course_name}}] : <b>{{$course->remark}}</b>
+                                                                    @endforeach
+                                                                    
                                                                     
                                                                 </div>
                                                 </td>

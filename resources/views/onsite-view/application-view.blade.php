@@ -49,7 +49,11 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     <div class="">
-                    @if($is_final_submit)
+                    @if($spocData->signed_copy_onsite!=null)
+                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                    </a>
+                    @endif
+                    @if($is_submitted_final_summary)
                         <a href="{{ url('onsite-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
@@ -203,15 +207,26 @@
                 </div>
             </div>
         </div>
-        @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
-            <div class="card-header bg-white text-dark">
-                <h5 class="mt-2">
-                    View Course Information Record No: {{ $k+1 }}
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
+
+        <div class="card p-3 accordian-card">
+            <div class="accordion" id="accordionExample">
+                    @foreach ($application_details->course as $k => $ApplicationCourses)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ $k + 1 }}">
+                                <button class="accordion-button {{$k==0?'':'collapsed'}}"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true"
+                                    aria-controls="collapse{{ $k + 1 }}">
+
+                                    <h5 class="mt-2">
+                                        View Course Information Record No: {{ $k + 1 }}
+                                    </h5>
+
+                                </button>
+                            </h2>
+                            <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}"
+                                aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
@@ -306,10 +321,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+            </div> 
         </div>
-        </div>  
-        @endforeach
+
         
         @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
         <div class="row">
@@ -332,6 +350,22 @@
                 </div>
         </div>
 @endif
+
+
+
+
+<!-- signed copy -->
+                    @if($is_submitted_final_summary==1 && $spocData->signed_copy_onsite==null)
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
+                            <input type="file" name="signed_copy" id="signed_copy" class="form-control" data-app-id="{{$spocData->id}}">
+                        </div>
+                    </div>
+                   
+                    @endif
+<!-- end here -->
+
 
 <!-- OFI model form -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

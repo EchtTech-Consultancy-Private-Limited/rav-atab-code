@@ -89,6 +89,14 @@
               </div>
                     <div class="col-md-6 mb-3">
                        <div class="float-right">
+                          <!-- signed copy -->
+                       @if($spocData->signed_copy_onsite!=null)
+
+                           <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                           </a>
+                            
+                            @endif
+                    <!-- end here -->
                        @if($is_final_submit)
                         <a href="{{ url('admin/application-course-summaries') . '?application=' . dEncrypt($spocData->id)}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
@@ -260,14 +268,14 @@
                 @foreach ($application_details->course as $k => $ApplicationCourses)
                 <div class="accordion-item <?php if(($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) echo 'border-reject'; else echo ''; ?>">
                     <h2 class="accordion-header" id="heading{{ $k + 1 }}">
-                        <button class="accordion-button {{$k==0?'':'collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true" aria-controls="collapse{{ $k + 1 }}">
-                        <div class="<?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-transparent w-100' ;?>  d-flex justify-content-between align-items-center">
+                        <button class="accordion-button {{$k==0?'':'collapsed'}}<?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-transparent w-100' ;?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true" aria-controls="collapse{{ $k + 1 }}">
+                        <div class="d-flex justify-content-between align-items-center">
                                     
                         <h5 class="mt-2">
                             View Course Information Record No: {{ $k + 1 }}
                         </h5>
-                        <div class="pe-4">
-                    
+                        <div class="pe-4">      
+                
                             <div class="row">
                                 <div class="col-md-12  d-flex justify-content-end">
                                 
@@ -285,7 +293,7 @@
                      </button>
                     </h2>
                     <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}" aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">                           
+                        <div class="accordion-body">
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
@@ -515,8 +523,7 @@
                                     @endif
                                 
                                 </div>
-                            </div>                              
-                        </div>
+                            </div>
                     </div>
                 </div>
                  @endforeach
@@ -665,10 +672,12 @@
                         <div class="badge badge-main danger float-right">Application Rejected by admin</div>
                         </div>
                         @endif
+                      
                     </div>
         
 
 
+                       
 
 <!-- Modal box for rejection course remarks -->
 

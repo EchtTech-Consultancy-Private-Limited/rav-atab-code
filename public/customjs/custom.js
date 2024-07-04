@@ -3394,7 +3394,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 // signed copy
-$('#sigend_copy').change(function() {
+$('#sigend_copy_').change(function() {
     $('.full_screen_loading').show();
     const course_id = $(this).attr('data-course-id');
 
@@ -3468,16 +3468,17 @@ $('#sigend_copy').change(function() {
 
 $(document).ready(function() {
     // signed copy
-    $('#sigend_copy').change(function() {
+    $('#signed_copy').change(function() {
+        
         $('.full_screen_loading').show();
-        const course_id = $(this).attr('data-course-id');
+        const application_id = $(this).attr('data-app-id');
     
          const signed_copy = $(this)[0].files[0];
          const fileInput = $(this);
          console.log(fileInput,' file input');
          
           const formData = new FormData();
-          formData.append("course_id", course_id);
+          formData.append("application_id", application_id);
           formData.append("signed_copy_onsite", signed_copy);
           
           var allowedExtensions = ['pdf', 'jpeg', 'jpg','png']; // Add more extensions if needed
@@ -3520,10 +3521,17 @@ $(document).ready(function() {
                     setTimeout(()=>{
                         window.location.reload();
                     },500)
+                  }else{
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
                   }
               },
               error: function(xhr, status, error) {
-                  console.error(error);
                   $('.full_screen_loading').hide();
                   toastr.error("Something went wrong!", {
                         timeOut: 0,

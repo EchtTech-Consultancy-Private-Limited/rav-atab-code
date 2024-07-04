@@ -25682,7 +25682,7 @@ p.ref-number b{ font-weight: 600;}
 
   /* Accordian Css */
 
-  .accordian-card button:focus{
+  .accordian-card button.accordion-button:focus{
     background: transparent;
     box-shadow: none;
   }
@@ -25695,6 +25695,18 @@ p.ref-number b{ font-weight: 600;}
     background: #e7f1ff !important;
 }
 
-  .accordian-card .accordion-button.collapsed {      
+
+.accordian-card .accordion-button.collapsed {      
     background: transparent !important;
+}
+.accordian-card .docBtn.docBtn_nc{
+    padding: 6px 10px !important;
+}
+.accordian-card .accordion-button.bg-danger {
+    background: #dc3545 !important;
+    color: #fff !important;
+}
+
+.accordian-card .accordion-button.bg-danger::after{
+    filter: brightness(100);
 }

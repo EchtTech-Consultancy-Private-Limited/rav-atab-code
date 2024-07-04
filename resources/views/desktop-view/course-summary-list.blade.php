@@ -106,12 +106,12 @@
                                     
                                     <a href="{{ url('desktop/doc/'.$item->signed_copy_desktop.'/'.dEncrypt($item->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View Signed Copy
                                     </a>  
-                                    
-                                    
+                                     
+                                    {{-- 
                                     @else
                                     <label for="signed_copy">Signed Copy</label> 
                                                         <input type="file" name="sigend_copy" id="sigend_copy"  data-course-id="{{$item->id}}">
-                                    
+                                    --}}
                                     @endif
                         </th>
                     </tr>

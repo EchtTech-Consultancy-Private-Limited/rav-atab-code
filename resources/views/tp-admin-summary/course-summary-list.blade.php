@@ -106,6 +106,21 @@
                     </tr>
                 @endforeach
             </table>
+            			 
+            <div class="row">
+                <div class="col-md-12 mt-3 d-flex justify-content-end gap-3">
+                    @if($is_all_course_summary_generated_desktop)
+                    <a href="{{url('/admin/desktop/download/pdf',dEncrypt($applicationDetails->id))}}" class="btn btn-primary">Download Desktop Summary</a>
+                    @endif
+
+                    @if($is_all_course_summary_generated_onsite)
+                    <a href="{{url('/admin/onsite/download/pdf',dEncrypt($applicationDetails->id))}}" class="btn btn-primary">Download Onsite Summary</a>
+                    @endif
+                
+                </div>
+
+            </div>
+
         </div>
       </div>
     </section>
