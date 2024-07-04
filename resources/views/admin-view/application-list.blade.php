@@ -174,7 +174,7 @@
                                                         
                                                         @endphp
                                                         
-                                                                @if($is_all_course_accepted==false   &&$item->application_list->level_id==3)
+                                                                @if($is_all_course_accepted==false   && $item->application_list->level_id==3)
                                                                 <a class="btn btn-tbl-delete bg-primary font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                                                     data-bs-target="#{{$type_}}{{ $item->application_list->id }}"
