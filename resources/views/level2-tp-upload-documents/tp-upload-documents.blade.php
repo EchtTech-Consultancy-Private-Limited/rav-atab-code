@@ -248,9 +248,6 @@
                                              </div>
                                              @endif
 
-
-                                                                                
-
                                     @else
                                        <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
