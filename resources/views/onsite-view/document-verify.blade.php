@@ -243,7 +243,7 @@
             @endif
         </div>
 
-        <div class="container">
+        <!-- <div class="container">
             <div class="card project-widget">
                 <div class="card-body">
                         <object data="{{$doc_path}}" type="application/pdf" width="100%" height="500px">
@@ -252,7 +252,7 @@
                         </object>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
 

@@ -280,7 +280,6 @@ class DownLoadPDFFinalSummaryController extends Controller
         ->orderBy('asr.id','desc')
         ->first();
             
-        
 
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id])->first();
         
@@ -292,9 +291,12 @@ class DownLoadPDFFinalSummaryController extends Controller
         ->select('course.*','final.remark')
         ->leftJoin('assessor_final_summary_reports as final','final.application_course_id','=','course.id')
        ->where('course.application_id', $application_id)
-       ->where('final.assessor_type', 'onsite')
+       ->where('final.assessor_type', 'desktop')
        ->whereIn('course.status', [0, 2])
        ->get();
+        
+
+
         $original_data = [];
         $final_data = [];
         foreach($get_all_courses as $key => $course) {

@@ -256,304 +256,309 @@
         </div>
 
       
-       
-        @foreach ($application_details->course as $k => $ApplicationCourses)
-                    
-            <div class="card <?php if(($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) echo 'border-reject'; else echo ''; ?>">
 
-            <div class="card-header <?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-white text-dark' ;?>  d-flex justify-content-between align-items-center">
-                
-                <h5 class="mt-2">
-                    View Course Information Record No: {{ $k + 1 }}
-                </h5>
-                <div class="pe-4">
-              
-                     <div class="row">
-                        <div class="col-md-12  d-flex justify-content-end">
-                        
-                            @if($ApplicationCourses['course']->status==1)
-                            <div class="badge badge-main danger float-right">Course Rejected by you</div>
-                            @elseif($ApplicationCourses['course']->status==2)
-                            <div class="badge badge-main success float-right">Course Approved by admin</div>
-                            @elseif($ApplicationCourses['course']->status==3)
-                            <div class="badge badge-main danger float-right">Course Rejected by Admin</div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Course Name</strong></label><br>
-                                <label>{{ $ApplicationCourses['course']->course_name }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Course Duration</strong></label><br>
-                                {{ $ApplicationCourses['course']->course_duration_y ?? '' }} Years(s)
-                                {{ $ApplicationCourses['course']->course_duration_m ?? '' }} Month(s)
-                                {{ $ApplicationCourses['course']->course_duration_d ?? '' }} Day(s)
-                                {{ $ApplicationCourses['course']->course_duration_h ?? '' }} Hour(s)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Eligibility</strong></label><br>
-                                <label>{{ $ApplicationCourses['course']->eligibility ?? '' }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Mode of Course</strong></label>
-                                <label> {{$ApplicationCourses['course']->mode_of_course}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label><strong>Course Brief</strong></label><br>
-                                <label>{{ $ApplicationCourses['course']->course_brief ?? '' }}</label>
-                            </div>
-                        </div>
-                    </div>
+        <div class="card p-3 accordian-card">
+            <div class="accordion" id="accordionExample">
+            @foreach ($application_details->course as $k => $ApplicationCourses)
+                        <div class="accordion-item <?php if(($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) echo 'border-reject'; else echo ''; ?>">
+                            <h2 class="accordion-header" id="heading{{ $k + 1 }}">
+                                <button class="accordion-button {{$k==0?'':'collapsed'}} <?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-transparent text-dark' ;?> d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true"
+                                    aria-controls="collapse{{ $k + 1 }}">
 
+                                    <h5 class="mt-2">
+                                        View Course Information Record No: {{ $k + 1 }}
+                                    </h5>
+                                    <div class="pe-4 ms-5">              
+                                    <div class="row">
+                                        <div class="col-md-12  d-flex justify-content-end">
+                                        
+                                            @if($ApplicationCourses['course']->status==1)
+                                            <div class="badge badge-main danger float-right">Course Rejected by you</div>
+                                            @elseif($ApplicationCourses['course']->status==2)
+                                            <div class="badge badge-main success float-right">Course Approved by admin</div>
+                                            @elseif($ApplicationCourses['course']->status==3)
+                                            <div class="badge badge-main danger float-right">Course Rejected by Admin</div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}"
+                                aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Course Name</strong></label><br>
+                                                <label>{{ $ApplicationCourses['course']->course_name }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Course Duration</strong></label><br>
+                                                {{ $ApplicationCourses['course']->course_duration_y ?? '' }} Years(s)
+                                                {{ $ApplicationCourses['course']->course_duration_m ?? '' }} Month(s)
+                                                {{ $ApplicationCourses['course']->course_duration_d ?? '' }} Day(s)
+                                                {{ $ApplicationCourses['course']->course_duration_h ?? '' }} Hour(s)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Eligibility</strong></label><br>
+                                                <label>{{ $ApplicationCourses['course']->eligibility ?? '' }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Mode of Course</strong></label>
+                                                <label> {{$ApplicationCourses['course']->mode_of_course}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <label><strong>Course Brief</strong></label><br>
+                                                <label>{{ $ApplicationCourses['course']->course_brief ?? '' }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="row">
+                                        <div class="col-md-12 text-table-center">
+                                            <table class="table table-bordered text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="width-100">S.No.</th>
+                                                        <th>Declaration</th>                                   
+                                                        <th>Verfiy Document</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
 
-                
-                <div class="row">
-                    <div class="col-md-12 text-table-center">
-                        <table class="table table-bordered text-center">
-                            <thead>
-                                <tr>
-                                    <th class="width-100">S.No.</th>
-                                    <th>Declaration</th>                                   
-                                    <th>Verfiy Document</th>
-                                    <th>Comments</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                                    <!-- decoded json -->
+                                                        @foreach($courses_doc->courses_doc as $k=>$course_doc)
+                                                        <tr class="document-row">
+                                                                <td>{{$k+1}}</td>
+                                                                <td>{{$course_doc->name}}</td>                             
+                                                                <td>
+                                                                @foreach($ApplicationCourses[$course_doc->nc] as $doc)
 
-                                <!-- decoded json -->
-                                    @foreach($courses_doc->courses_doc as $k=>$course_doc)
-                                    <tr class="document-row">
-                                            <td>{{$k+1}}</td>
-                                            <td>{{$course_doc->name}}</td>                             
-                                            <td>
-                                            @foreach($ApplicationCourses[$course_doc->nc] as $doc)
+                                                                    @if($doc->status==0)
+                                                                        <a 
+                                                                            title="{{$doc->doc_file_name}}"
+                                                                            href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                            class="btn btn-primary btn-sm docBtn m-1">
+                                                                            View</a>
+                                                                            @elseif($doc->status==1)
+                                                                            <a 
+                                                                                title="{{$doc->doc_file_name}}"
+                                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                class="btn btn-success btn-sm docBtn m-1">
+                                                                                Accepted</a>
+                                                                        @elseif($doc->status==2)
+                                                                        <a 
+                                                                            title="{{$doc->doc_file_name}}"
+                                                                            href="{{ url('secretariat-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                            class="btn btn-danger btn-sm docBtn m-1">
+                                                                            NC1</a>
+                                                                            @elseif($doc->status==3)
+                                                                            <a 
+                                                                                title="{{$doc->doc_file_name}}"
+                                                                                href="{{ url('secretariat-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                class="btn btn-danger btn-sm docBtn m-1">
+                                                                                NC2</a>
+                                                                            @elseif($doc->status==4)
+                                                                            <a 
+                                                                                title="{{$doc->doc_file_name}}"
+                                                                                href="{{ url('secretariat-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                class="btn btn-danger btn-sm docBtn m-1">
+                                                                                Not Recommended</a>
+                                                                                <!-- admin accept/reject -->
+                                                                                @if($doc->admin_nc_flag==1)
+                                                                                <a 
+                                                                                title="{{$doc->doc_file_name}}"
+                                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                class="btn btn-success btn-sm docBtn docBtn_nc m-1">
+                                                                                Accepted <span>By Admin</span></a>
+                                                                                @endif
 
-                                                @if($doc->status==0)
-                                                    <a 
-                                                        title="{{$doc->doc_file_name}}"
-                                                        href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                        class="btn btn-primary btn-sm docBtn m-1">
-                                                        View</a>
-                                                        @elseif($doc->status==1)
-                                                        <a 
-                                                            title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                            class="btn btn-success btn-sm docBtn m-1">
-                                                            Accepted</a>
-                                                    @elseif($doc->status==2)
-                                                    <a 
-                                                        title="{{$doc->doc_file_name}}"
-                                                        href="{{ url('secretariat-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                        class="btn btn-danger btn-sm docBtn m-1">
-                                                        NC1</a>
-                                                        @elseif($doc->status==3)
-                                                        <a 
-                                                            title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('secretariat-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                            class="btn btn-danger btn-sm docBtn m-1">
-                                                            NC2</a>
-                                                        @elseif($doc->status==4)
-                                                        <a 
-                                                            title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('secretariat-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                            class="btn btn-danger btn-sm docBtn m-1">
-                                                            Not Recommended</a>
-                                                            <!-- admin accept/reject -->
-                                                            @if($doc->admin_nc_flag==1)
-                                                            <a 
-                                                            title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                            class="btn btn-success btn-sm docBtn docBtn_nc m-1">
-                                                            Accepted <span>By Admin</span></a>
-                                                            @endif
-
-                                                            @if($doc->admin_nc_flag==2)
-                                                            <a 
-                                                            title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                            class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                                            Rejected <span>By Admin</span></a>
-                                                            @endif
-                                                            <!-- end here -->
-
-
-
-
-
-
-
-
-                                        @elseif($doc->status==5)
-                                             @if($doc->admin_nc_flag==1)
-                                             <a 
-                                             title="{{$doc->doc_file_name}}"
-                                             href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
-                                             Accepted <span>By Admin</span></a>
-                                             @endif
-
-                                             @if($doc->admin_nc_flag==2)
-                                             <a 
-                                             title="{{$doc->doc_file_name}}"
-                                             href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Rejected <span>By Admin</span></a>
-                                             @endif
+                                                                                @if($doc->admin_nc_flag==2)
+                                                                                <a 
+                                                                                title="{{$doc->doc_file_name}}"
+                                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                                                                Rejected <span>By Admin</span></a>
+                                                                                @endif
+                                                                                <!-- end here -->
 
 
 
 
 
 
-                                                            @elseif($doc->status==6)
-                                                        <a 
-                                                            title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
-                                                            class="btn btn-danger btn-sm docBtn m-1">
-                                                            Rejected</a>
-                                                    @else
-                                                    <div class="upload-btn-wrapper">
-                                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                                            </div>
-                                                    @endif 
+
+
+                                                            @elseif($doc->status==5)
+                                                                @if($doc->admin_nc_flag==1)
+                                                                <a 
+                                                                title="{{$doc->doc_file_name}}"
+                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                                                Accepted <span>By Admin</span></a>
+                                                                @endif
+
+                                                                @if($doc->admin_nc_flag==2)
+                                                                <a 
+                                                                title="{{$doc->doc_file_name}}"
+                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                                                Rejected <span>By Admin</span></a>
+                                                                @endif
+
+
+
+
+
+
+                                                                                @elseif($doc->status==6)
+                                                                            <a 
+                                                                                title="{{$doc->doc_file_name}}"
+                                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                class="btn btn-danger btn-sm docBtn m-1">
+                                                                                Rejected</a>
+                                                                        @else
+                                                                        <div class="upload-btn-wrapper">
+                                                                                    <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                                                                </div>
+                                                                        @endif 
+
+                                                                            @endforeach
+                                                                            
+                                                                            
+                                                                            
+                                                                        
+                                                                        </td>
+                                                                            <td>
+                                                                                    <button
+                                                                                    class="expand-button btn btn-primary btn-sm mt-3"
+                                                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                                                    
+                                                                                    @if($doc->status!=0 && $doc->is_revert!=1)
+                                                                                    <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
+
+                                                                                    @endif
+                                                                        </td>
+                                                            </td>                             
+                                                        </tr>
+                                                
+                                                        <tr class="document-details" style="display: none">
+                                                                <td colspan="4">
+                                                                    <table>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="width-100">Sr. No.</th>
+                                                                            <th>Document Code</th>
+                                                                            <th>Date</th>
+                                                                            <th>Comments</th>
+                                                                            <th>Status Code</th>
+                                                                            <th>Approved/Rejected By</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        
+                                                                        @foreach($ApplicationCourses[$course_doc->comments] as $k=>$nc)
+                                                                    <tr class="text text-{{$nc->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
+
+                                                                            <td>{{$k+1}}</td>
+                                                                            <td>{{$nc->doc_sr_code}}</td>
+                                                                            <td>{{date('d-m-Y',strtotime($nc->created_at))}}</td>
+                                                                            <td>{{$nc->comments}}</td>
+                                                                            <td>
+                                                                            @php
+                                                                                $string = $nc->nc_type;
+                                                                                $explodedArray = explode("_", $string);
+                                                                                $capitalizedArray = array_map('ucfirst', $explodedArray);
+                                                                                $resultString = implode(" ", $capitalizedArray);
+                                                                            @endphp
+                                                                            {{$resultString}} 
+                                                                            </td>
+                                                                            <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} ({{$nc->role==5?"Secretariat":"Super Admin"}})</td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+
 
                                                         @endforeach
-                                                        
-                                                        
-                                                        
+                                                    <!-- end here -->
+
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        
+                                        <div class="">
+                                        <div class="row">
+                                            <div class="col-md-12  d-flex justify-content-end gap-2">
+
+                                                    <!-- Enable reject and revert button when admin return mom -->
+                                                    @if($spocData->level_id==3 && $spocData->return_remark!=null)
+                                                            <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
                                                     
-                                                    </td>
-                                                        <td>
-                                                                <button
-                                                                class="expand-button btn btn-primary btn-sm mt-3"
-                                                                onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                                                
-                                                                @if($doc->status!=0 && $doc->is_revert!=1)
-                                                                <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
-
-                                                                @endif
-                                                    </td>
-                                        </td>                             
-                                    </tr>
-                               
-                                    <tr class="document-details" style="display: none">
-                                             <td colspan="4">
-                                                <table>
-                                                   <thead>
-                                                      <tr>
-                                                         <th class="width-100">Sr. No.</th>
-                                                         <th>Document Code</th>
-                                                         <th>Date</th>
-                                                         <th>Comments</th>
-                                                         <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
-                                                      </tr>
-                                                   </thead>
-                                                   <tbody>
+                                                            <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button> -->
                                                     
-                                                    @foreach($ApplicationCourses[$course_doc->comments] as $k=>$nc)
-                                                   <tr class="text text-{{$nc->nc_type=='Accept'?'success':'danger'}}" style="border-left:3px solid red">
-
-                                                         <td>{{$k+1}}</td>
-                                                         <td>{{$nc->doc_sr_code}}</td>
-                                                         <td>{{date('d-m-Y',strtotime($nc->created_at))}}</td>
-                                                         <td>{{$nc->comments}}</td>
-                                                         <td>
-                                                         @php
-                                                            $string = $nc->nc_type;
-                                                            $explodedArray = explode("_", $string);
-                                                            $capitalizedArray = array_map('ucfirst', $explodedArray);
-                                                            $resultString = implode(" ", $capitalizedArray);
-                                                         @endphp
-                                                         {{$resultString}} 
-                                                         </td>
-                                                         <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} ({{$nc->role==5?"Secretariat":"Super Admin"}})</td>
-                                                      </tr>
-                                                    @endforeach
-                                                   </tbody>
-                                                </table>
-                                             </td>
-                                          </tr>
+                                                        @endif
+                                                    <!-- end here -->
 
 
-                                    @endforeach
-                                <!-- end here -->
+                                                    
+                                                @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
+                                                
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
+                                                @endif
+                                                
+                                                @if(($ApplicationCourses['course']->status!=0 && $ApplicationCourses['course']->is_revert!=1) && $ApplicationCourses['course']->is_revert!=2)
+                                                        <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button>
+                                                @endif
+                                                
+                                                @if($spocData->level_id==2)
+                                                            <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
+                                                                class="btn text-white bg-primary mb-0"
+                                                                style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
+                                                @endif 
+                                            </div>
+                                        </div>
 
-                            </thead>
-                        </table>
-                    </div>
-                    
-                    <div class="">
-                    <div class="row">
-                        <div class="col-md-12  d-flex justify-content-end gap-2">
-
-<!-- Enable reject and revert button when admin return mom -->
-                            @if($spocData->level_id==3 && $spocData->return_remark!=null)
-                                        <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
-                                
-                                        <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button> -->
-                                
-                            @endif
-<!-- end here -->
-
-
-                        
-                    @if($ApplicationCourses['show_reject_button_to_secretariat'] && $ApplicationCourses['course']->status==0) 
-                    
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='setRejectionCourseId({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}")'>Reject</button>
-                    @endif
-                    
-                    @if(($ApplicationCourses['course']->status!=0 && $ApplicationCourses['course']->is_revert!=1) && $ApplicationCourses['course']->is_revert!=2)
-                            <button type="button" class="btn btn-primary" onclick="handleRevertRejectAction('{{ $doc->application_id }}','{{$doc->course_id}}')">Revert</button>
-                    @endif
-                    
-                    @if($spocData->level_id==2)
-                                <a href="{{ url('/secretariat/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
-                                    class="btn text-white bg-primary mb-0"
-                                    style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
-                     @endif 
-                </div>
-            </div>
-
-
-                    </div>
-                    @if($ApplicationCourses['course']->status == 1)
-                    <p class="text-danger"> <b>Note : </b> {{$ApplicationCourses['course']->sec_reject_remark}}</p>
-                    @endif
-                 
-                    </div>
+                                        </div>
+                                        @if($ApplicationCourses['course']->status == 1)
+                                        <p class="text-danger"> <b>Note : </b> {{$ApplicationCourses['course']->sec_reject_remark}}</p>
+                                        @endif
+                                    
+                                        </div>
 
 
 
-                </div>
-            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+            </div> 
         </div>
-        </div>  
-        @endforeach
+
+
   
         
         @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 

@@ -339,13 +339,16 @@
                 </div>
         </div>
         @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('/onsite/generate/final-summary')}}" method="post">
                 @csrf
                 <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
-                <input type="submit" class="btn btn-info float-right" value="Final Submit">
+                <input type="submit" class="btn btn-info float-right" value="Final Submit" {{ $isOFIExists ? '' : 'disabled' }}>
+                @if(!$isOFIExists)
                 <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
+                @endif
                 </form>
                 </div>
         </div>

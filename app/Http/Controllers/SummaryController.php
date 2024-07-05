@@ -926,7 +926,8 @@ class SummaryController extends Controller
         $courses = TblApplicationCourses::where('application_id', $request->input('application'))->whereIn('status',[0,2])->get();
         $app_id = $request->input('application');
 
-
+ 
+        
         $desktop_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->count();
         $onsite_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'onsite'])->count();
 
@@ -949,7 +950,6 @@ class SummaryController extends Controller
     public function tpViewFinalSummary(Request $request){
         $application_id = dDecrypt($request->input('application'));
         $application_course_id = dDecrypt($request->input('course'));
-        
         $onsite_no_of_mandays=0;
         $onsite_final_data=null;
         $onsite_assessement_way=null;
@@ -1069,11 +1069,16 @@ class SummaryController extends Controller
                 $onsite_final_data[] = $obj;
     }
 
-       
+    
         $onsite_assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$onsiteSummaryReport->assessor_id,'application_id'=>$application_id])->first()->assessment_way;
         }
+        $d_summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id,'assessor_type'=>'desktop'])->first()->remark;
+    
+        $o_summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id,'assessor_type'=>'onsite'])->first()?->remark;
+        
+    
       /*End here*/    
-        return view('tp-admin-summary.tp-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way','assessor_assign'));
+        return view('tp-admin-summary.tp-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way','assessor_assign','d_summary_remark','o_summary_remark'));
     }
 
 
@@ -1206,9 +1211,13 @@ class SummaryController extends Controller
         
     }
 
+    $d_summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id,'assessor_type'=>'desktop'])->first()->remark;
+
+    $o_summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id,'assessor_type'=>'onsite'])->first()?->remark;
+
       /*End here*/    
       
-        return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way','assessor_assign'));
+        return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way','assessor_assign','d_summary_remark','o_summary_remark'));
     }
 
 
