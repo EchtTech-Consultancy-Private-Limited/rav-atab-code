@@ -233,7 +233,7 @@
                                     @endforeach
 
                                    
-                                    @if($doc->is_doc_show==-1)
+                                    @if($doc->is_doc_show==-1 && $doc->status!=0)
                                        N/A
                                       @endif
                                  <!--this else for first time upload doc  -->
@@ -255,7 +255,7 @@
                                              <td>
                                              @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                              
-                                             @if($doc->is_doc_show==-1)
+                                             @if($doc->is_doc_show==-1 && $doc->status!=0)
                                                 <span class="text-danger"
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment
                                                 pending!</span>

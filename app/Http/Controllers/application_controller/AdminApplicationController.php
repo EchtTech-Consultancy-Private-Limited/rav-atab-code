@@ -1208,7 +1208,7 @@ class AdminApplicationController extends Controller
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
     
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1 || $result->status == 5) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -2204,7 +2204,7 @@ class AdminApplicationController extends Controller
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => $assessor_types])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
 
             // revert action done on course and courses docs
-            DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+            // DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
            DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
 
 
@@ -2663,6 +2663,7 @@ class AdminApplicationController extends Controller
         $applicationData = TblApplication::find($application_id);
         return view('admin-view.application-documents-list', compact('final_data', 'onsite_course_doc_uploaded', 'course_doc_uploaded', 'application_id', 'course_id', 'applicationData'));
     }
+
     public function adminVerfiyDocument($nc_type, $assessor_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
         
@@ -2770,6 +2771,7 @@ class AdminApplicationController extends Controller
             return back()->with('fail', 'Something went wrong');
         }
     }
+
     public function adminDocumentVerify(Request $request)
     {
         try {
@@ -2855,8 +2857,6 @@ class AdminApplicationController extends Controller
     }
 
 
-    
-   
 
     /*Additional Payment fees*/ 
     public function getApplicationPaymentFeeList()

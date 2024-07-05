@@ -350,7 +350,7 @@
                                         <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                         <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
                                 
-                                        @if($doc->status==0)
+                                        @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a title="{{$doc->doc_file_name}}"
                                         href="{{ url('super-admin-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
@@ -409,10 +409,7 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                             @else
-                                            <div class="upload-btn-wrapper">
-                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                                    </div>
+                                           
                                             @endif 
 
                                      </form>

@@ -359,7 +359,7 @@
                                                         <td>
                                                                 @foreach($ApplicationCourses[$course_doc->nc] as $doc)
 
-                                                                @if($doc->status==0)
+                                                                @if($doc->is_doc_show==0 && $doc->status==0)
                                                                     <a title="{{$doc->doc_file_name}}"
                                                                         href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                                         class="btn btn-primary btn-sm docBtn m-1">
@@ -420,11 +420,8 @@
                                                                                     href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                                                     class="btn btn-danger btn-sm docBtn m-1">
                                                                                     Rejected</a>
-                                                                            @else
-                                                                            <div class="upload-btn-wrapper">
-                                                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                                                            </div>
+                                                                           
+                                                                           
                                                                     @endif 
 
                                                                 @endforeach
@@ -533,7 +530,7 @@
         
   
         
-        @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
+        @if(($application_details->show_submit_btn_to_secretariat && $application_details->show_submit_btn_to_secretariat44) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
         
 
         <div class="row mt-4">

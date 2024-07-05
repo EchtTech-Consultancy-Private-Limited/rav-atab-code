@@ -810,10 +810,8 @@ function revertCourseDocListActionOnsite(Request $request){
                     $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'onsite_doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['onsite_status'=>0,'admin_nc_flag'=>0]);
  
                 }else{
-                    
                     $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'onsite_doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['onsite_status'=>0]);
 
-                    
                 }
                     /*Delete nc on course doc*/ 
                     $delete_= DB::table('tbl_nc_comments')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$get_course_doc->doc_file_name])->delete();
