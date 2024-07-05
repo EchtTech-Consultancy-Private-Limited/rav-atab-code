@@ -274,7 +274,7 @@
                         <h5 class="mt-2">
                             View Course Information Record No: {{ $k + 1 }}
                         </h5>
-                        <div class="pe-4">      
+                        <div class="pe-4 ms-5">      
                 
                             <div class="row">
                                 <div class="col-md-12  d-flex justify-content-end">
@@ -536,7 +536,7 @@
         @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
         
 
-        <div class="row">
+        <div class="row mt-4">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
@@ -550,7 +550,7 @@
 
         @elseif($application_details->show_submit_btn_to_secretariat  && $application_details->application->approve_status==0 && $application_details->application->level_id==1) 
         
-                <div class="row">
+                <div class="row mt-4">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
@@ -563,7 +563,7 @@
         @elseif($application_details->show_submit_btn_to_secretariat  && $application_details->application->approve_status==0 && $application_details->application->level_id==3) 
         
         
-                <div class="row">
+                <div class="row mt-4">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
@@ -577,7 +577,7 @@
         @elseif(($application_details->is_all_revert_action_done || $application_details->is_all_revert_action_done44) && $application_details->application->level_id==2)
 
         
-        <div class="row">
+        <div class="row mt-4">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
