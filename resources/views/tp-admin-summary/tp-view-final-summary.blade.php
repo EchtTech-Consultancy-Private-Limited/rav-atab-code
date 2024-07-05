@@ -229,12 +229,17 @@
                                                 </tr>
                                                 @endforeach
                                             </tbody>
+                                            
                                         
                                         </table>
                                     
                                 </button>
                                     </div>
-                                   
+                                    <div class="col-sm-12" id="comment-section">
+                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="">{{$d_summary_remark}}</textarea>
+                                                                    
+                                  </div>
                                 </div>
                                
                             </form>
@@ -439,6 +444,7 @@
                                                 </td>
                                             </tr> -->
                                         </tbody>
+                                        
                                     
                                     </table>
                                     <!-- <div class="table-responsive">
@@ -501,8 +507,14 @@
                                         </table>
                                         </br>
                                     </div> -->
+                                  
                                 </section>
                                 </div>
+                                <div class="col-sm-12" id="comment-section">
+                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="">{{$o_summary_remark}}</textarea>
+                                                                    
+                                  </div>
                                 
                             </form>
                         </div>
