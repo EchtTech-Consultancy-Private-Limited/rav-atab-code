@@ -328,9 +328,19 @@ class OnsiteApplicationController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();           
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'application_courses_id'=>$application_course_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
-        
+            
+            $all_assessor = DB::table('tbl_assessor_assign')->where('application_id',$application_id)->get();
+            $view_form = false;
+            foreach($all_assessor as $ass){
+                if(($ass->assessor_id==Auth::user()->id) && $ass->assessor_designation=="Lead Assessor"){
+                    $view_form = true;
+                    break;
+                }
+            }
+
+
             $is_nc_exists=false;
-            if($nc_type=="view"){
+            if($nc_type=="view" && $view_form){
                 $is_nc_exists=true;
             }
 
@@ -810,10 +820,8 @@ function revertCourseDocListActionOnsite(Request $request){
                     $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'onsite_doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['onsite_status'=>0,'admin_nc_flag'=>0]);
  
                 }else{
-                    
                     $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'onsite_doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['onsite_status'=>0]);
 
-                    
                 }
                     /*Delete nc on course doc*/ 
                     $delete_= DB::table('tbl_nc_comments')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$get_course_doc->doc_file_name])->delete();
@@ -936,7 +944,6 @@ $additionalFields = DB::table('tbl_application_course_doc')
 
     
     $flag = 0;
-
     foreach ($finalResults as $result) {
 
         if (($result->onsite_status!=0)) {

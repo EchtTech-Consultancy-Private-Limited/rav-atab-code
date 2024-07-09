@@ -243,16 +243,16 @@
             @endif
         </div>
 
-        <!-- <div class="container">
+        <div class="container">
             <div class="card project-widget">
                 <div class="card-body">
                         <object data="{{$doc_path}}" type="application/pdf" width="100%" height="500px">
-                            <p>Unable to display PDF. <a href="" target="_blank">Download
-                                    Document</a> </p>
+                            <!-- <p>Unable to display PDF. <a href="" target="_blank">Download
+                                    Document</a> </p> -->
                         </object>
                 </div>
             </div>
-        </div> -->
+        </div>
 
 
 

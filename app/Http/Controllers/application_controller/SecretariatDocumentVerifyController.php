@@ -408,6 +408,7 @@ class SecretariatDocumentVerifyController extends Controller
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
                 $t = 0;
+                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -438,7 +439,7 @@ class SecretariatDocumentVerifyController extends Controller
                     }
 
                $is_update = DB::table('tbl_course_wise_document')
-                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0,'nc_flag'=>0])
                 ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
 
                 DB::table('tbl_nc_comments_secretariat')
@@ -958,7 +959,7 @@ class SecretariatDocumentVerifyController extends Controller
             'application_courses_id' => $course_id,
             'assessor_type' => $assessor_type
         ])
-            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
+            ->select('id', 'doc_unique_id', 'doc_file_name','onsite_doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")

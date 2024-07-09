@@ -27,7 +27,7 @@
 
     @if ($message = Session::get('success'))
     <script>
-    toastr.success({{ $message }}, {
+    toastr.success("{{ $message }}", {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
@@ -554,8 +554,14 @@
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
-                            "<?php echo ($enable_disable_submit_btn)?'disabled':'';?> >
-
+                            "<?php 
+                            if($enable_disable_submit_btn || $showSubmitBtnToTP){
+                                echo 'disabled';
+                            }else{
+                                echo '';
+                            }
+                            
+                            ?> >
                             </form>
                         </div>
                     </div>

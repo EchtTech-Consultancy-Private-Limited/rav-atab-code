@@ -791,6 +791,9 @@
                                                         <a onclick="confirmDelete('{{ url('/delete-course-by-id' . '/' . dEncrypt($courses->id)) }}')"
                                                             class="btn btn-tbl-delete bg-danger">
                                                             <i class="material-icons">delete</i>
+                                                        </a><a href="{{ url('/tp-upload-document-level-2' . '/' . dEncrypt($applicationData->id).'/'.dEncrypt($courses->id)) }}"
+                                                            class="btn btn-tbl-delete bg-success">
+                                                            <span class="material-symbols-outlined">Upload</span>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -980,12 +983,15 @@
                                         class="btn btn-danger prev-step">Previous</a>
                                 </div>
                                 <div>
-                                    @isset($course)
-                                    @if (count($course) > 0)
-                                        <a href="{{ url('upgrade-show-course-payment/' . dEncrypt($applicationData->id)) }}"
-                                            class="btn btn-primary next-step1 mr-2">Next</a>
-                                    @endif
-                                @endisset
+                                @php
+                                    $u_url = $is_show_next_btn ? 'upgrade-show-course-payment/' . dEncrypt($applicationData->id) : "#";
+                                    @endphp
+                                            @isset($course)
+                                            @if (count($course) > 0)
+                                                <a href="{{ url($u_url)}}"
+                                                    class="btn btn-primary next-step1 mr-2" <?php echo $is_show_next_btn?'':'disabled' ?> >Next</a>
+                                            @endif
+                                        @endisset
                                 </div>
                             </div>
                         @endif

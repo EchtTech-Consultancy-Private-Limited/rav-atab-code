@@ -350,7 +350,7 @@
                                         <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                         <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
                                 
-                                        @if($doc->status==0)
+                                        @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a title="{{$doc->doc_file_name}}"
                                         href="{{ url('super-admin-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
@@ -409,10 +409,7 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                             @else
-                                            <div class="upload-btn-wrapper">
-                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                                    </div>
+                                           
                                             @endif 
 
                                      </form>
@@ -539,7 +536,7 @@
                             
                             
                         </div>
-                        @elseif($spocData->approve_status==2 && $spocData->level_id==3)
+                        @elseif($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected" && $spocData->level_id==3)
                         <div class="col-md-12 text-right">
                             
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
