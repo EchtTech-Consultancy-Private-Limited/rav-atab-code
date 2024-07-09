@@ -244,7 +244,7 @@
                                     @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('secretariat-view/verify-doc-level-2' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('secretariat-view/verify-doc-level-2' . '/' . $doc->doc_sr_code .'/' . ($doc->doc_file_name != null ? $doc->doc_file_name : $doc->onsite_doc_file_name) . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                         @elseif($doc->status==1)

@@ -101,6 +101,10 @@ class TPApplicationController extends Controller
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+
+            // $show_submit_btn_to_tp = $this->isShowSubmitBtnToSecretariat(dDecrypt($id),"secretariat");
+            // $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id),"secretariat");
+            // $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
         
             $obj = new \stdClass;
             $obj->application= $application;
@@ -458,6 +462,7 @@ class TPApplicationController extends Controller
         // is remark form show to top
         $is_already_remark_exists = TblNCComments::where(['application_id' => $application_id,'application_courses_id' => $application_courses_id,'doc_sr_code' => $doc_sr_code,'doc_unique_id' => $doc_unique_code,'assessor_type' => $assessor_type,'nc_type'=>$nc_type])->first();
         
+        if(isset($is_already_remark_exists)){
         if($is_already_remark_exists->nc_type!=="Accept" && $is_already_remark_exists->nc_type!=="Request_For_Final_Approval"){
             if($is_already_remark_exists->tp_remark!==null){
                 $is_form_view=false;
@@ -465,6 +470,7 @@ class TPApplicationController extends Controller
                 $is_form_view=true;
             }
         }
+      }
     }
         // end here for form
 

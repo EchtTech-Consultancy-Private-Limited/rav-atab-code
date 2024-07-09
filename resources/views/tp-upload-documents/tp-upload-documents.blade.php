@@ -152,7 +152,7 @@
                                     @elseif($doc->nc_show_status==1)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . ($doc->doc_file_name != null ? $doc->doc_file_name : $doc->onsite_doc_file_name) . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                         Accepted <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                     @elseif($doc->nc_show_status==2)
@@ -198,7 +198,7 @@
                                              @if($doc->admin_nc_flag==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail'. '/5'. '/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/5'. '/' . 'admin/' . $doc->doc_sr_code .'/' . ($doc->doc_file_name != null ? $doc->doc_file_name : $doc->onsite_doc_file_name)  . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
@@ -223,7 +223,7 @@
                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/desktop/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . ($doc->doc_file_name != null ? $doc->doc_file_name : $doc->onsite_doc_file_name)  . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted</a>
                                              @endif
@@ -231,7 +231,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/desktop/' . $doc->doc_sr_code .'/' . ($doc->doc_file_name != null ? $doc->doc_file_name : $doc->onsite_doc_file_name)  . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected</a>
                                              @endif
@@ -266,11 +266,15 @@
                                     }) as $doc)
                                     
                                     @if($doc->nc_show_status==0)
-                                       <a target="_blank"
-                                        title="{{$doc->onsite_doc_file_name}}"
-                                        href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
-                                        class="btn btn-primary btn-sm docBtn m-1">
-                                        View</a>
+                                       
+                                    <a target="_blank"
+                                          title="{{$doc->onsite_doc_file_name}}"
+                                          href="{{ url('tp-document-detail/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code . '/' . ($doc->onsite_doc_file_name != null ? $doc->onsite_doc_file_name : $doc->doc_file_name) . '/' . $application_id . '/' . $doc->doc_unique_id . '/' . $course_id) }}"
+                                          class="btn btn-primary btn-sm docBtn m-1">
+                                          View
+                                       </a>
+
+                                        
                                     @elseif($doc->nc_show_status==1)
                                     <a target="_blank"
                                         title="{{$doc->onsite_doc_file_name}}"
@@ -342,7 +346,7 @@
                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('tp-document-detail'. '/onsite/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted</a>
                                              @endif
@@ -350,7 +354,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('super-admin-reject/verify-doc' . '/onsite/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected</a>
                                              @endif
