@@ -536,7 +536,7 @@
                             
                             
                         </div>
-                        @elseif($spocData->approve_status==2 && $spocData->level_id==3)
+                        @elseif($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected" && $spocData->level_id==3)
                         <div class="col-md-12 text-right">
                             
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approve_application_admin" onclick='setModelData({{$spocData->id}},{{$ApplicationCourses["course"]->id}},"{{$ApplicationCourses["course"]->course_name}}","approve")'>Task Complete</button>
