@@ -934,7 +934,6 @@ $additionalFields = DB::table('tbl_application_course_doc')
 
     
     $flag = 0;
-
     foreach ($finalResults as $result) {
 
         if (($result->onsite_status!=0)) {

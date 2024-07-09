@@ -1202,7 +1202,6 @@ $("#upload_onstie_nc_file").change(function () {
     var formData = new FormData(form);
     var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
     var uploadedFileName = fileInput.val();
-    
 
     var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
@@ -2189,7 +2188,6 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     const standard_reference = $("#standard_reference").val();
     const improve_assessee_org = $("#improve_assessee_org").val();
 
-    
     if(sr_no==""){
         $("#sr_no_err").html("Please enter serial number");
         flag=1;

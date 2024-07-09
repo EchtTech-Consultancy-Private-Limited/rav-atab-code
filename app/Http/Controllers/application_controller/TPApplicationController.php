@@ -320,6 +320,7 @@ class TPApplicationController extends Controller
        try{
         DB::beginTransaction();
         $tp_id = Auth::user()->id;
+        $is_doc_show = $request->total_uploaded_doc==0?0 : -1;
         $course_doc = new TblApplicationCourseDoc;
         $course_doc->application_id = $request->application_id;
         $course_doc->application_courses_id = $request->application_courses_id;
@@ -327,6 +328,8 @@ class TPApplicationController extends Controller
         $course_doc->doc_unique_id = $request->doc_unique_id;
         $course_doc->tp_id = $tp_id;
         $course_doc->assessor_type =$request->assessor_type;
+        $course_doc->is_doc_show =$is_doc_show;
+        
         if ($request->hasfile('fileup')) {
             $file = $request->file('fileup');
             $name = $file->getClientOriginalName();
@@ -366,6 +369,8 @@ class TPApplicationController extends Controller
      try{
       DB::beginTransaction();
       $tp_id = Auth::user()->id;
+      $is_doc_show = $request->total_uploaded_doc==0?0 : -1;
+      
       $course_doc = new TblApplicationCourseDoc;
       $course_doc->application_id = $request->application_id;
       $course_doc->application_courses_id = $request->application_courses_id;
@@ -373,6 +378,7 @@ class TPApplicationController extends Controller
       $course_doc->doc_unique_id = $request->doc_unique_id;
       $course_doc->tp_id = $tp_id;
       $course_doc->assessor_type =$request->assessor_type;
+      $course_doc->is_doc_show = $is_doc_show;
       if ($request->hasfile('fileup')) {
           $file = $request->file('fileup');
           $name = $file->getClientOriginalName();
@@ -1053,10 +1059,16 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
     // dd($course);
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+    $total_docs = count($course) * 4;
     
+    $is_show_next_btn = false;
+    if($uploaded_docs==$total_docs){
+        $is_show_next_btn=true;
+    }
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
     
-    return view('tp-view.create-course', compact('applicationData', 'course','original_course_count','old_courses'));
+    return view('tp-view.create-course', compact('applicationData', 'course','original_course_count','old_courses','is_show_next_btn'));
 }
 
 
@@ -1484,9 +1496,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             }
         
         $show_submit_btn_to_tp = $this->isShowSubmitBtnToSecretariat(dDecrypt($id),$assessor_type);
+        
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id),$assessor_type);
         $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
-        
+        // dd($showSubmitBtnToTP);
             $obj = new \stdClass;
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
@@ -1830,8 +1843,16 @@ public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
     // dd($course);
     
     $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+    $total_docs = $original_course_count * 4;
+    
+    $is_show_next_btn = false;
+    if($uploaded_docs==$total_docs){
+        $is_show_next_btn=true;
+    }
+    
 
-    return view('tp-view.level3-create-course', compact('applicationData', 'course','original_course_count','old_courses'));
+    return view('tp-view.level3-create-course', compact('applicationData', 'course','original_course_count','old_courses','is_show_next_btn'));
 }
 
 
@@ -2239,7 +2260,7 @@ public function upgradeGetApplicationViewLevel3($id){
                 $assessor_type="desktop";
             }
         }
-
+        
         $show_submit_btn_to_tp = $this->isShowSubmitBtnToSecretariat(dDecrypt($id),$assessor_type);
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id),$assessor_type);
         $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
@@ -2854,7 +2875,7 @@ public function isShowSubmitBtnToSecretariat($application_id,$assessor_type)
         })
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->where('tbl_application_course_doc.assessor_type',$assessor_type)
-        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type']);
+        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status','nc_show_status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type']);
 
     
     $finalResults = [];
@@ -2870,6 +2891,7 @@ public function isShowSubmitBtnToSecretariat($application_id,$assessor_type)
             if ($additionalField) {
                 $finalResults[$key] = (object)[];
                 $finalResults[$key]->status = $additionalField->status;
+                $finalResults[$key]->nc_show_status = $additionalField->nc_show_status;
                 $finalResults[$key]->id = $additionalField->id;
                 $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
                 $finalResults[$key]->approve_status = $additionalField->approve_status;
@@ -2881,14 +2903,13 @@ public function isShowSubmitBtnToSecretariat($application_id,$assessor_type)
     $flag = 0;
     
     foreach ($finalResults as $result) {
-        if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+        if (($result->nc_show_status == 1) || ($result->nc_show_status == 4 && $result->admin_nc_flag == 1)) {
             $flag = 0;
         } else {
             $flag = 1;
             break;
         }
     }
-
     return $flag != 0;
 }
 
@@ -2951,10 +2972,11 @@ $additionalFields = DB::table('tbl_application_course_doc')
     $get_docs_count = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
     $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->where('deleted_at',null)->count();
  
- 
     $total_docs = $get_course_count*4;
+    
+    
 
-    if($get_docs_count<$total_docs || $flag == 1){
+    if(($get_docs_count<$total_docs) || $flag == 1){
      return true;
     }else{
      return false;
@@ -2997,8 +3019,6 @@ public function checkReuploadBtn($application_id)
         ->where('approve_status',1)
         ->get();
 
-        
-        
 
     $additionalFields = DB::table('tbl_course_wise_document')
         ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
@@ -3031,7 +3051,7 @@ public function checkReuploadBtn($application_id)
 
     
     $flag = 0;
-
+    // dd($results);
     foreach ($results as $result) {
         if (($result->status == 2 || $result->status == 3 || $result->status == 4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
             $flag = 1;

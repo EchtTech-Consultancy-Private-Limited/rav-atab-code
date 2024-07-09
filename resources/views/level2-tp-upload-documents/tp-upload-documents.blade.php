@@ -371,8 +371,8 @@
               let assessor_type_by_tp = 'secretariat'
               var form = $('#submitform_doc_form_' + questionId)[0];
               var formData = new FormData(form);
-              
-
+              let total_doc = $(`#submitform_doc_form_${questionId}`).find('a').length;
+              formData.append('total_uploaded_doc',total_doc);
               formData.append('assessor_type',assessor_type_by_tp);
               var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
               var uploadedFileName = fileInput.val();

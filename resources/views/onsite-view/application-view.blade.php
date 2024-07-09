@@ -347,13 +347,14 @@
                 <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
                 <input type="submit" class="btn btn-info float-right" value="Final Submit" {{ $isOFIExists ? '' : 'disabled' }}>
                 @if(!$isOFIExists)
-                <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
+                <!-- <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div> -->
                 @endif
                 </form>
                 </div>
         </div>
 @endif
 
+<div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
 
 
 
@@ -384,11 +385,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <form action="{{url('create/ofi')}}" method="post" onsubmit="reuturn handleImporveMentForm();">
+                <form action="{{url('create/ofi')}}" method="post" onsubmit="return handleImporveMentForm();">
                     @csrf
                     <div class="form-group">
                         <label for="serial_number">S.No.<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="serial_number" placeholder="Enter Serial number" required="true">
+                        <input type="text" class="form-control" id="serial_number" name ="serial_number" placeholder="Enter Serial number" required="true">
                         <input type="hidden" id="app_Id" value="{{dEncrypt($spocData->id)}}" name="app_Id">
                         <span id="sr_no_err" class="err"></span>
 
@@ -404,7 +405,7 @@
                         <span id="standard_reference_err" class="err"></span>
                     </div>
                     <div class="form-group">
-                        <label for="improve_assessee_org">Improvement Form<span class="text-danger">*</span></label>
+                        <label for="improve_assessee_org">Improvement Form Assessee Org.<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="improve_assessee_org" name="improve_assessee_org" placeholder="Enter improve assessee org" required="true">
                         <span id="improve_assessee_org_err" class="err"></span>
                     </div>

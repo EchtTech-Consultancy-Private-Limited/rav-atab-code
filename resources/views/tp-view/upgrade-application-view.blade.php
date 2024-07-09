@@ -329,7 +329,7 @@
                                                             <input type="hidden" name="application_courses_id" value="{{$ApplicationCourses['course']->id}}">
                                                             <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                                             <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
-
+                                                            
                                                             @if($doc->nc_show_status==0)
                                                             <a target="_blank"
                                                                 title="{{$doc->doc_file_name}}"
@@ -351,11 +351,12 @@
                                                                 NC1</span>
                                                             <!-- <img src="{{url('assets/images/nc1.png')}}" alt=""> -->
                                                             </a>
-                                                                @if($doc->nc_show_status==1)
-                                                                <div class="upload-btn-wrapper">
-                                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
-                                                                    </div>
+                                                                @if($doc->nc_flag==1)
+                                                               
+                                                                    <div class="upload-btn-wrapper">
+                                                                                    <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
+                                                                                </div>
                                                             @endif
 
                                                             @elseif($doc->nc_show_status==3)
@@ -364,11 +365,12 @@
                                                                     href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                                     class="btn btn-danger btn-sm docBtn  m-1">
                                                                     NC2</span></a>
-                                                                    @if($doc->nc_show_status==1)
-                                                                <div class="upload-btn-wrapper">
-                                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" doc-primary-id="{{$question['question']->id}}" assessor_type_by_tp="onsite"/>
-                                                                    </div>
+                                                                    @if($doc->nc_flag==1)
+                                                               
+                                                                    <div class="upload-btn-wrapper">
+                                                                                    <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
+                                                                                </div>
                                                                     @endif
                                                                     
                                                                     @elseif($doc->nc_show_status==6)
@@ -429,16 +431,18 @@
 
                                                                         @else
                                                                         <div class="upload-btn-wrapper">
+                                                                            
                                                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                                                     <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
                                                                                 </div>
                                                                         @endif 
-                                                                        @if($doc->nc_flag==1)
+                                                                        {{-- @if($doc->nc_flag==1)
+                                                                        
                                                                         <div class="upload-btn-wrapper">
                                                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                                                     <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                                                                 </div>
-                                                                        @endif
+                                                                        @endif --}}
 
                                                                         </form>
                                                                         @endforeach
