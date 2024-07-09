@@ -322,6 +322,7 @@
                                    }) as $doc)
                                    
                                    
+                                   
                                    @if($doc->is_doc_show==0 && $doc->onsite_status==0)
                                    @php
                                      $doc_=$doc->onsite_doc_file_name==null?$doc->doc_file_name:$doc->onsite_doc_file_name;
@@ -373,6 +374,24 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                              <!-- end here -->
+
+                                    @elseif($doc->onsite_status==5)
+                                             @if($doc->admin_nc_flag==1)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-accept/admin/verify-doc'. '/' . $doc->onsite_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
+                                             Accepted</a>
+                                             @endif
+
+                                             @if($doc->admin_nc_flag==2)
+                                             <a 
+                                             title="{{$doc->doc_file_name}}"
+                                             href="{{ url('admin-reject/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
+                                             Rejected</a>
+                                             @endif
+                                             
                                             
                                        @elseif($doc->onsite_status==6)
                                              <a 
