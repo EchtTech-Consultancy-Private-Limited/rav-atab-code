@@ -1202,7 +1202,6 @@ $("#upload_onstie_nc_file").change(function () {
     var formData = new FormData(form);
     var allowedExtensions = ["pdf", "doc", "docx"]; // Add more extensions if needed
     var uploadedFileName = fileInput.val();
-    
 
     var fileExtension = uploadedFileName.split(".").pop().toLowerCase();
     if (allowedExtensions.indexOf(fileExtension) == -1) {
@@ -1693,7 +1692,7 @@ function handleNotification(pay_id){
                     });
                     $('.full_screen_loading').hide();
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }else{
                     toastr.error(response.message, {
@@ -1702,6 +1701,9 @@ function handleNotification(pay_id){
                         closeButton: true,
                         closeDuration: 5000,
                     });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                     $('.full_screen_loading').hide();
                 }
             },
@@ -1743,7 +1745,7 @@ function handleAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=`${BASE_URL}${response.redirect_url}`;
                     },1000);
                     
                 }else{
@@ -1754,6 +1756,9 @@ function handleAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -1793,7 +1798,7 @@ function handleSuperAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000);
                     
                 }else{
@@ -1804,6 +1809,9 @@ function handleSuperAdminNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=BASE_URL+response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -1844,7 +1852,7 @@ function handleDesktopNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000);
 
                 }else{
@@ -1855,6 +1863,9 @@ function handleDesktopNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=BASE_URL+response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -1895,7 +1906,7 @@ function handleOnsiteNotification(pay_id){
                         closeDuration: 5000,
                     });
                     setTimeout(()=>{
-                        window.location.href=response.redirect_url;
+                        window.location.href=BASE_URL+response.redirect_url;
                     },1000)
                 }else{
                     toastr.error(response.message, {
@@ -1905,6 +1916,9 @@ function handleOnsiteNotification(pay_id){
                         closeDuration: 5000,
                     });
                     $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=BASE_URL+response.redirect_url;
+                    },1000)
                 }
             },
             error: function (xhr, status, error) {
@@ -2004,7 +2018,7 @@ function isValidInput(value) {
 }
 
 function handleAssessorDesignation(id, application_id) {
-    console.log(id,' first id ')
+    
     const assessor_designation = $('#' + id + ' option:selected').val();
     $("#assessor_category_" + application_id).val(assessor_designation);
     $("#assessor_designation_" + application_id).val("atab_assessor");
@@ -2031,13 +2045,13 @@ $(document).on('change focus','.select2-selection--multiple',function(){
 
   function handleOnsiteSummerySubmitReport(){
     const assessee_org = $("#assessee_org").val();
-    const improve_assessee_org = $("#improve_assessee_org").val();
     const brief_open_meeting = $("#brief_open_meeting").val();
     const brief_summary = $("#brief_summary").val();
     const brief_closing_meeting = $("#brief_closing_meeting").val();
     const sr_no = $("#sr_no").val();
     const improvement_form = $("#improvement_form").val();
     const standard_reference = $("#standard_reference").val();
+    const improve_assessee_org = $("#improve_assessee_org").val();
     const comment_text = $("#comment_text").val();
 
     let flag = 0;
@@ -2165,6 +2179,42 @@ $(document).on('change focus','.select2-selection--multiple',function(){
         }
     });
   }
+
+
+
+  function handleImporveMentForm(){
+    const sr_no = $("#serial_number").val();
+    const improvement_form = $("#improvement_form").val();
+    const standard_reference = $("#standard_reference").val();
+    const improve_assessee_org = $("#improve_assessee_org").val();
+
+    if(sr_no==""){
+        $("#sr_no_err").html("Please enter serial number");
+        flag=1;
+    }
+    if(improvement_form==""){
+        $("#improvement_form_err").html("Please enter improvement form value");
+        flag=1;
+    }
+    if(standard_reference==""){
+        $("#standard_reference_err").html("Please enter standard reference value");
+        flag=1;
+    }
+    if(improve_assessee_org==""){
+        $("#improve_assessee_org_err").html("Please enter imporve assessee org value");
+        flag=1;
+    }
+    if(comment_text==""){
+        $("#comment_text_err").html("Please enter remarks.");
+        flag=1;
+    }
+    if(flag==1){
+        return false;
+    }else{
+        return true;
+    }
+  }
+
 
   $("#tp_remark").on('keyup',function(){
         const value = $(this).val();
@@ -3342,7 +3392,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 // signed copy
-$('#sigend_copy').change(function() {
+$('#sigend_copy_').change(function() {
     $('.full_screen_loading').show();
     const course_id = $(this).attr('data-course-id');
 
@@ -3416,16 +3466,17 @@ $('#sigend_copy').change(function() {
 
 $(document).ready(function() {
     // signed copy
-    $('#sigend_copy').change(function() {
+    $('#signed_copy').change(function() {
+        
         $('.full_screen_loading').show();
-        const course_id = $(this).attr('data-course-id');
+        const application_id = $(this).attr('data-app-id');
     
          const signed_copy = $(this)[0].files[0];
          const fileInput = $(this);
          console.log(fileInput,' file input');
          
           const formData = new FormData();
-          formData.append("course_id", course_id);
+          formData.append("application_id", application_id);
           formData.append("signed_copy_onsite", signed_copy);
           
           var allowedExtensions = ['pdf', 'jpeg', 'jpg','png']; // Add more extensions if needed
@@ -3468,10 +3519,17 @@ $(document).ready(function() {
                     setTimeout(()=>{
                         window.location.reload();
                     },500)
+                  }else{
+                    $('.full_screen_loading').hide();
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
                   }
               },
               error: function(xhr, status, error) {
-                  console.error(error);
                   $('.full_screen_loading').hide();
                   toastr.error("Something went wrong!", {
                         timeOut: 0,

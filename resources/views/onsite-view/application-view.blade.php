@@ -49,7 +49,11 @@
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
                     <div class="">
-                    @if($is_final_submit)
+                    @if($spocData->signed_copy_onsite!=null)
+                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                    </a>
+                    @endif
+                    @if($is_submitted_final_summary)
                         <a href="{{ url('onsite-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
@@ -203,15 +207,26 @@
                 </div>
             </div>
         </div>
-        @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
-            <div class="card-header bg-white text-dark">
-                <h5 class="mt-2">
-                    View Course Information Record No: {{ $k+1 }}
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
+
+        <div class="card p-3 accordian-card">
+            <div class="accordion" id="accordionExample">
+                    @foreach ($application_details->course as $k => $ApplicationCourses)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ $k + 1 }}">
+                                <button class="accordion-button {{$k==0?'':'collapsed'}}"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true"
+                                    aria-controls="collapse{{ $k + 1 }}">
+
+                                    <h5 class="mt-2">
+                                        View Course Information Record No: {{ $k + 1 }}
+                                    </h5>
+
+                                </button>
+                            </h2>
+                            <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}"
+                                aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
@@ -306,13 +321,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+            </div> 
         </div>
-        </div>  
-        @endforeach
+
         
         @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
-        
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
@@ -321,7 +338,87 @@
                 </form>
                 </div>
         </div>
+        @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('/onsite/generate/final-summary')}}" method="post">
+                @csrf
+                <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
+                <input type="submit" class="btn btn-info float-right" value="Final Submit" {{ $isOFIExists ? '' : 'disabled' }}>
+                @if(!$isOFIExists)
+                <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
+                @endif
+                </form>
+                </div>
+        </div>
 @endif
+
+
+
+
+<!-- signed copy -->
+                    @if($is_submitted_final_summary==1 && $spocData->signed_copy_onsite==null)
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
+                            <input type="file" name="signed_copy" id="signed_copy" class="form-control" data-app-id="{{$spocData->id}}">
+                        </div>
+                    </div>
+                   
+                    @endif
+<!-- end here -->
+
+
+<!-- OFI model form -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">OFI</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                <form action="{{url('create/ofi')}}" method="post" onsubmit="return handleImporveMentForm();">
+                    @csrf
+                    <div class="form-group">
+                        <label for="serial_number">S.No.<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="serial_number" name ="serial_number" placeholder="Enter Serial number" required="true">
+                        <input type="hidden" id="app_Id" value="{{dEncrypt($spocData->id)}}" name="app_Id">
+                        <span id="sr_no_err" class="err"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="standard_reference">Standard Reference<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="standard_reference" name="standard_reference" placeholder="Enter Standard Reference" required="true">
+                        <span id="improvement_form_err" class="err"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="improvement_form">Improvement Form<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="improvement_form" name="improvement_form" placeholder="Enter Improvement form" required="true">
+                        <span id="standard_reference_err" class="err"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="improve_assessee_org">Improvement Form Assessee Org.<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="improve_assessee_org" name="improve_assessee_org" placeholder="Enter improve assessee org" required="true">
+                        <span id="improve_assessee_org_err" class="err"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFI model form end here -->
 
         <div class="card p-relative">
             <div class="box-overlay">

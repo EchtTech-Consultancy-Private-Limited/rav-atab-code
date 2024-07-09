@@ -87,9 +87,9 @@ class AuthController extends Controller
     //    }
         //dd($data->is_loggedin);
         if ($data != null) {
-            if ($data->is_loggedin == 1) {
-                return redirect()->back()->with('warning', 'User is already logged in. Multiple logins are not allowed.');
-            }else{ 
+            // if ($data->is_loggedin == 1) {
+            //     return redirect()->back()->with('warning', 'User is already logged in. Multiple logins are not allowed.');
+            // }else{ 
             if ($data->role == $request->role) {
                 //dd($data->status);
                 if ($data->status == 0) {
@@ -112,7 +112,10 @@ class AuthController extends Controller
             } else {
                 return back()->with('fail', 'Unauthorised User!!');
             }
-        } } else {
+        // }  //multiple login
+    
+    
+    } else {
             return back()->with('fail', 'Record not exist!!');
         }
     }

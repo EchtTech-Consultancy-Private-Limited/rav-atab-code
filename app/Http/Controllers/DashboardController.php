@@ -76,6 +76,7 @@ class DashboardController extends Controller
         //     'world'=>$this->get_application_world(1)
         // ];
         // dd(Auth::user()->role);
+
         // for admin
         if(Auth::user()->role == 1){
             $application = DB::table('tbl_application as a')

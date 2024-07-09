@@ -501,8 +501,9 @@
               }else{
                assessor_type_by_tp="desktop";
               }
-
+              let total_doc = $(`#submitform_doc_form_${questionId}`).find('a').length;
               formData.append('assessor_type',assessor_type_by_tp);
+              formData.append('total_uploaded_doc',total_doc);
               var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
               var uploadedFileName = fileInput.val();
               var fileExtension = uploadedFileName.split('.').pop().toLowerCase();

@@ -793,12 +793,10 @@
                                 <div>
                                     @isset($course)
                                     @if (count($course) > 0)
-                                        <a href="{{ url('makepayment/'.dEncrypt($applicationData?->id)) }}"
-                                            class="btn btn-primary next-step1 mr-2"
-                                            target="_blank">Pay Now</a>
-                                            <!-- <form id="paymentForm">
-                                            <button type="submit">Pay Now</button>
-                                            </form> -->
+                                    <a href="{{ url('show-course-payment/' . dEncrypt($applicationData->id)) }}"
+                                    class="btn btn-primary next-step1 mr-2">Next</a>
+                                        <!-- <a href="{{ url('makepayment/'.dEncrypt($applicationData?->id)) }}"
+                                            class="btn btn-primary next-step1 mr-2">NextA</a> -->
                                     @endif
                                 @endisset
                                 </div>

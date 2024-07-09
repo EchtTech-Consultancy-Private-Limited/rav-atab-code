@@ -159,99 +159,82 @@
                                                 @endif
                                                 </td>
                                                     <td class="p-0-lg1">
-                                                    
-                                                    <div class="d-flex align-items-center justify-content-center">
 
-                                                    @if($item->application_list->level_id==1)
+                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                            @if($item->application_list->level_id == 1)
+                                                                <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
+                                                                    <i class="material-icons">visibility</i>
+                                                                </a>
+                                                            @elseif($item->application_list->level_id == 2)
+                                                                <a href="{{ url('/upgrade/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
+                                                                    <i class="material-icons">visibility</i>
+                                                                </a>
+                                                            @elseif($item->application_list->level_id == 3)
+                                                                <a href="{{ url('/upgrade/level-3/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
+                                                                    <i class="material-icons">visibility</i>
+                                                                </a>
+                                                            @endif
 
-                                                    <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}"
-                                                            class="btn btn-tbl-edit"><i
-                                                                class="material-icons">visibility</i></a>
-                                                    @elseif($item->application_list->level_id==2)
-                                                    <a href="{{ url('/upgrade/tp/application-view', dEncrypt($item->application_list->id)) }}"
-                                                            class="btn btn-tbl-edit"><i
-                                                                class="material-icons">visibility</i></a>
-                                                    @elseif($item->application_list->level_id==3)
-                                                    <a href="{{ url('/upgrade/level-3/tp/application-view', dEncrypt($item->application_list->id)) }}"
-                                                            class="btn btn-tbl-edit"><i
-                                                                class="material-icons">visibility</i></a>
-                                                    @endif
-                                                    
-                                                    <a class="btn btn-tbl-delete bg-history font-a"  data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
-                                                    History
-                                                    </a>
-        
-        
-                                                                                   
-                                                    <!-- If level - 1 -->
-                                                    
-                                                @if($item->application_list->level_id==1)
-                                                        @if($item->application_list->approve_status==1)
-                                                            
-                                                <div class="d-flex action-button-div">
-                                                        <?php
-                                                        $isApplicationBeingExpired = checkApplicationValidityExpire($item->application_list->id,$item->application_list->valid_till)
-                                                        ?>
-                                                        @if($isApplicationBeingExpired)
-                                                            <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
-                                                        @else
-
-                                                        <!-- If previouse application upgraded then need not to show l-1 and l-2 -->
-                                                               @if($item->application_list->upgraded_level_id==1)
-                                                               <a href="{{ url('/upgrade-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-2</a>
-                                                                <a href="{{ url('/upgrade-level-3-new-application'.'/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid) ) }}" class="btn btn-warning">L-3</a>
-                                                                @endif
-                                                        
-                                                        @endif
-                                                        
-                                                        @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
-                                                        
-                                                                        @if($item->application_list->upgraded_level_id==2)
-                                                                            <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
-                                                                            class="btn btn-success">Upgraded</a>
-                                                                        
-                                                                        @elseif($item->application_list->upgraded_level_id==3)
-                                                                            <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
-                                                                            class="btn btn-success">Upgraded</a>
-                                                                            @endif
-                                                        @elseif($item->application_list->is_all_course_doc_verified==3 && $item->application_list->approve_status==1)
-                                                                <span class="badge badge-main success">Upgraded</span>
-                                                       
-                                                        @endif
-                                                 @endif
-                                                    <!-- End here level - 1  -->
-
-
-                                                     <!-- If level - 2 -->
-                                                     @if($item->application_list->level_id==2)
-
-                                                     @php
-
-                                                        $reference_id = $item->application_list->prev_refid==null?$item->application_list->refid:$item->application_list->prev_refid;
-                                                        
-                                                     @endphp
-                                                        
-                                                     
-                                                     
-                                                                {{--  @if($item->application_list->is_all_course_doc_verified==1 && $item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1) -->
-                                                                --}}
-                                                                @if($item->application_list->upgraded_level_id==1 && $item->application_list->approve_status==1)
-                                                                <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id) ) }}" class="btn btn-warning">L-3</a>
-
-                                                                @elseif($item->application_list->is_all_course_doc_verified==2 && $item->application_list->approve_status==1)
-                                                                
-                                                                        @if($item->application_list->upgraded_level_id==3)
-                                                                            <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}"
-                                                                            class="btn btn-success">Upgraded</a>
-                                                                @endif
-                                                        @elseif($item->application_list->is_all_course_doc_verified==3 && $item->application_list->approve_status==1)
-                                                                <span class="badge badge-main success">Upgraded</span>
-                                                                    
+                                                            <a class="btn btn-tbl-delete bg-history font-a" data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
+                                                                History
+                                                            </a>
+                                                            <!-- If level - 1 -->
+                                                        @if($item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 1 && $item->application_list->level_id==1)
+                                                                <div class="d-flex action-button-div">
+                                                                    <?php
+                                                                        $isApplicationBeingExpired = checkApplicationValidityExpire($item->application_list->id, $item->application_list->valid_till);
+                                                                    ?>
+                                                                    @if($isApplicationBeingExpired)
+                                                                        <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
+                                                                    @else
+                                                                        <!-- If previous application upgraded then need not to show l-1 and l-2 -->
+                                                                        @if($item->application_list->upgraded_level_id == 1)
+                                                                            <a href="{{ url('/upgrade-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-warning">L-2</a>
+                                                                            <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-warning">L-3</a>
+                                                                        @endif
+                                                                    @endif
                                                                 </div>
+                                                            @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
+                                                                     @if($item->application_list->upgraded_level_id == 2)
+                                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                     @elseif($item->application_list->upgraded_level_id == 3)
+                                                                    <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded3</a>
                                                                 @endif
+                                                            @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
+                                                                <span class="badge badge-main success">Upgraded</span>
+                                                            @endif
+                                                            <!-- End here level - 1  -->
+
+                                                            <!-- If level - 2 -->
+                                                            @if($item->application_list->level_id == 2)
+                                                                @php
+                                                                    $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
+                                                                    
+                                                                @endphp
+                                                                
+                                                                @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1)
+                                                                    <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
+                                                                @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1)
+                                                                    @if($item->application_list->upgraded_level_id == 3)
+                                                                        <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                    @endif
+                                                                @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 3)
+                                                                    <span class="badge badge-main success">Upgraded</span>
                                                                 @endif
-                                                                <!-- End here level - 2  -->
-    </div>
+                                                            @endif
+                                                            <!-- End here level - 2  -->
+
+                                                            <!-- level-3 -->
+                                                            @php
+                                                                $is_second_payment = isSecondPayment($item->application_list->id);
+                                                            @endphp
+
+                                                            @if($is_second_payment)
+                                                                <a href="{{ url('upgrade-level-3-show-course-payment/'.dEncrypt($item->application_list->id)) }}" class="btn btn-primary btn-tbl-delete">S-Pay</a>
+                                                            @endif
+                                                            <!-- end here -->
+                                                        </div>
+
                                                             </td>
 
                                                     

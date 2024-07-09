@@ -408,6 +408,7 @@ class SecretariatDocumentVerifyController extends Controller
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
                 $t = 0;
+                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -438,7 +439,7 @@ class SecretariatDocumentVerifyController extends Controller
                     }
 
                $is_update = DB::table('tbl_course_wise_document')
-                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0])
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0,'nc_flag'=>0])
                 ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
 
                 DB::table('tbl_nc_comments_secretariat')
@@ -458,15 +459,21 @@ class SecretariatDocumentVerifyController extends Controller
             
                 $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
 
-                if($get_application->leve_id==1){
-                    $url="/admin/application-view/".dEncrypt($application_id);
-                    $tpUrl="/tp/application-view/".dEncrypt($application_id);
-                }else if($get_application->leve_id==2){
-                    $url="/admin/application-view-level-2/".dEncrypt($application_id);
-                    $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+                if($get_application->level_id==1){
+                    $url= config('notification.secretariatUrl.level1');
+                    $url=$url.dEncrypt($application_id);
+                    $tpUrl = config('notification.tpUrl.level1');
+                    $tpUrl=$tpUrl.dEncrypt($application_id);
+                }else if($get_application->level_id==2){
+                    $url= config('notification.secretariatUrl.level2');
+                    $url=$url.dEncrypt($application_id);
+                    $tpUrl = config('notification.tpUrl.level2');
+                    $tpUrl=$tpUrl.dEncrypt($application_id);
                 }else{
-                    $url="/admin/application-view-level-3/".dEncrypt($application_id);
-                    $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+                    $url= config('notification.secretariatUrl.level3');
+                    $url=$url.dEncrypt($application_id);
+                    $tpUrl = config('notification.tpUrl.level3');
+                    $tpUrl=$tpUrl.dEncrypt($application_id);
                 }
                 $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
                 $notifiData = [];
@@ -476,7 +483,8 @@ class SecretariatDocumentVerifyController extends Controller
                 $notifiData['level_id'] = getUhid( $application_id)[1];
                 $notifiData['data'] = config('notification.common.nc');
                 $notifiData['user_type'] = "superadmin";
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                $sUrl = config('notification.adminUrl.level1');
+                $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 
                 if($get_application->level_id==1){
                 if($t && !$is_all_accepted){
@@ -486,12 +494,13 @@ class SecretariatDocumentVerifyController extends Controller
                       $notifiData['url'] = $tpUrl;
                       sendNotification($notifiData);
                         /*end here*/ 
+                    createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
                 }
                
                 if($is_all_accepted){
                     $notifiData['data'] = config('notification.admin.acceptCourseDoc');
                     $notifiData['user_type'] = "superadmin";
-                    $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                    $notifiData['url'] = $sUrl.dEncrypt($application_id);
                     sendNotification($notifiData);
                 }
             }
@@ -504,13 +513,14 @@ class SecretariatDocumentVerifyController extends Controller
                 }
             }
 
+
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
             $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
 
            
-
+            
            
             /*------end here------*/
             DB::commit();
@@ -544,15 +554,21 @@ class SecretariatDocumentVerifyController extends Controller
 
             }
 
-            if($get_application->leve_id==1){
-                $url="/admin/application-view/".dEncrypt($application_id);
-                $tpUrl="/tp/application-view/".dEncrypt($application_id);
-            }else if($get_application->leve_id==2){
-                $url="/admin/application-view-level-2/".dEncrypt($application_id);
-                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            if($get_application->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level1');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }else if($get_application->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level2');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }else{
-                $url="/admin/application-view-level-3/".dEncrypt($application_id);
-                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level3');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
@@ -561,7 +577,8 @@ class SecretariatDocumentVerifyController extends Controller
             $notifiData['level_id'] = getUhid( $application_id)[1];
             $notifiData['data'] = config('notification.common.nc');
             $notifiData['user_type'] = "superadmin";
-            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+            $sUrl = config('notification.adminUrl.level1');
+            $notifiData['url'] = $sUrl.dEncrypt($application_id);
             
             /*send notification*/ 
             sendNotification($notifiData);
@@ -717,7 +734,8 @@ class SecretariatDocumentVerifyController extends Controller
                 $notifiData['level_id'] = getUhid( $app_id)[1];
                 $notifiData['data'] = config('notification.secretariat.sendApproval');
                 $notifiData['user_type'] = "superadmin";
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($app_id);
+                $sUrl = config('notification.adminUrl.level1');
+                $notifiData['url'] = $sUrl.dEncrypt($app_id);
           
                 /*send notification*/ 
                 sendNotification($notifiData);
@@ -921,21 +939,31 @@ class SecretariatDocumentVerifyController extends Controller
         
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
-        $application_uhid = TblApplication::where('id', $application_id)->first()->uhid ?? '';
+        $app_detail = TblApplication::where('id', $application_id)->first();
+        $application_uhid = $app_detail->uhid ?? '';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id', $application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
-        
+        if($app_detail->level_id==3){
+            if(count($data)>1){
+                $assessor_type = 'onsite';
+            }else{
+                $assessor_type = 'desktop';
+            }
+            
+        }else{
+            $assessor_type = 'secretariat';
+        }
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id' => $application_id,
             'application_courses_id' => $course_id,
-            'assessor_type' => 'secretariat'
+            'assessor_type' => $assessor_type
         ])
-            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert')
+            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")
-            ->where('asr.assessor_type', 'secretariat')
+            ->where('asr.assessor_type', $assessor_type)
             ->where(['application_id' => $application_id, 'application_courses_id' => $course_id])
             ->groupBy('asr.application_id', 'asr.application_courses_id')
             ->count();
@@ -967,11 +995,11 @@ class SecretariatDocumentVerifyController extends Controller
                     ])
                         ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
                         ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
-                        ->whereIn('assessor_type', ['secretariat', 'admin'])
-                        ->where(function ($query) {
-                            $query->where('assessor_type', 'secretariat')
-                                ->orWhere('assessor_type', 'admin')
-                                ->where('final_status', 'secretariat');
+                        ->whereIn('assessor_type', [$assessor_type, 'admin'])
+                        ->where(function ($query) use ($assessor_type) {
+                            $query->where('assessor_type', $assessor_type)
+                                  ->orWhere('assessor_type', 'admin')
+                                  ->where('final_status', $assessor_type);
                         })
                         ->get(),
                 ];
@@ -993,9 +1021,10 @@ class SecretariatDocumentVerifyController extends Controller
     {
         try {
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat','application_courses_id'=>$application_course_id])->latest('id')->first();
+            $application_details = TblApplication::find($application_id);
             $is_nc_exists = false;
             $course_rejected=false;
-            if ($nc_type == "view") {
+            if ($nc_type == "view" && $application_details->level_id!=3) {
                 $is_nc_exists = true;
             }
             $course = DB::table('tbl_application_courses')->where('id',$application_course_id)->whereIn('status',[1,3])->first();
@@ -1041,7 +1070,7 @@ class SecretariatDocumentVerifyController extends Controller
             if ($nc_type == "nr") {
                 $nc_type = "not_recommended";
             }
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type,'application_courses_id'=> $application_course_id])
                 ->whereIn('assessor_type', ['admin', 'secretariat'])
                 ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')

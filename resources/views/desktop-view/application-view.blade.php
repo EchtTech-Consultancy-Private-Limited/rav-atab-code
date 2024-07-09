@@ -50,7 +50,7 @@
                     </ul>
                     <div class="">
 
-                    @if($is_final_submit)
+                    @if($is_submitted_final_summary==1)
                         <a href="{{ url('desktop-application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary btn-sm">View Final Summary 
                         </a>
                     @endif
@@ -204,15 +204,26 @@
                 </div>
             </div>
         </div>
-        @foreach ($application_details->course as $k => $ApplicationCourses)
-        <div class="card">
-            <div class="card-header bg-white text-dark">
-                <h5 class="mt-2">
-                    View Course Information Record No: {{ $k+1 }}
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
+
+
+        <div class="card p-3 accordian-card">
+            <div class="accordion" id="accordionExample">
+                  @foreach ($application_details->course as $k => $ApplicationCourses)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ $k + 1 }}">
+                                <button class="accordion-button {{$k==0?'':'collapsed'}}"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true" aria-controls="collapse{{ $k + 1 }}">
+
+                                    <h5 class="mt-2">
+                                        View Course Information Record No: {{ $k + 1 }}
+                                    </h5>
+
+                                </button>
+                            </h2>
+                            <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}"
+                                aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
@@ -308,12 +319,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+            </div> 
         </div>
-        </div>  
-        @endforeach
-            
-        @if(($show_submit_btn_to_desktop && $is_final_submit==false) || $is_all_revert_action_done) 
+
+        @if((($show_submit_btn_to_desktop && $is_final_submit==false) || $is_all_revert_action_done) && !$is_all_course_summary_completed) 
         
         <div class="row">
                 <div class="col-md-12 mr-2">
@@ -323,7 +336,20 @@
                 </form>
                 </div>
         </div>
+        @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        
+        <div class="row">
+                <div class="col-md-12 mr-2">
+                <form action="{{url('/desktop/generate/final-summary')}}" method="post">
+                @csrf
+                <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
+                <input type="submit" class="btn btn-info float-right" value="Final Submit">
+                </form>
+                </div>
+        </div>
 @endif
+
+     
 
         <div class="card p-relative">
             <div class="box-overlay">

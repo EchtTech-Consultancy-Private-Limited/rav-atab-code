@@ -90,13 +90,31 @@ class DesktopApplicationController extends Controller
             $obj->payment = $payment;
         }
         $final_data = $obj;
-        $is_exists = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])->first();
-        if (!empty($is_exists)) {
+       
+        $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->count();
+        
+        $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'desktop'])->latest('id')->first()?->is_summary_show;
+
+
+        if(!isset($is_submitted_final_summary)){
+            $is_submitted_final_summary=0;
+        }
+
+        
+        $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
+        if ($total_summary_count==$total_courses_count) {
             $is_final_submit = true;
+            $is_all_course_summary_completed=true;
         } else {
             $is_final_submit = false;
+            $is_all_course_summary_completed=false;
         }
-        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done]);
+
+        
+        /*  All course summary generated*/
+            
+        /*end here*/
+        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary]);
     }
     public function applicationDocumentList($id, $course_id)
     {
@@ -111,7 +129,7 @@ class DesktopApplicationController extends Controller
             'application_courses_id' => $course_id,
             'assessor_type' => 'desktop'
         ])
-            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert')
+            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")
@@ -174,8 +192,9 @@ class DesktopApplicationController extends Controller
     public function desktopVerfiyDocument($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
         try {
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'desktop'])->latest('id')->first();
+            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'desktop','application_courses_id'=> $application_course_id])->latest('id')->first();
             $is_nc_exists = false;
+            // dd($tbl_nc_comments);
             if ($nc_type == "view") {
                 $is_nc_exists = true;
             }
@@ -216,7 +235,7 @@ class DesktopApplicationController extends Controller
             if ($nc_type == "nr") {
                 $nc_type = "not_recommended";
             }
-            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type])
+            $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'nc_type' => $nc_type,'application_courses_id'=> $application_course_id])
                 ->whereIn('assessor_type', ['admin', 'desktop'])
                 ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
@@ -352,8 +371,17 @@ class DesktopApplicationController extends Controller
             ->whereIn("id", $get_all_final_course_id)
             ->get();
         $applicationDetails = TblApplication::find($request->input('application'));
-        return view('desktop-view.course-summary-list', compact('courses', 'applicationDetails'));
+        $app_id = $request->input('application');
+        $course_count = DB::table('tbl_application_courses')->where('application_id',$app_id)->whereIn('status',[0,2])->count();
+        $is_all_course_summary_generated = false;
+        
+        if(count($get_all_final_course_id)==$course_count){
+            $is_all_course_summary_generated=true;
+        }
+
+        return view('desktop-view.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated'));
     }
+
     public function desktopViewFinalSummary(Request $request)
     {
         $assessor_id = Auth::user()->id;
@@ -429,6 +457,7 @@ class DesktopApplicationController extends Controller
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
         return view('desktop-view.desktop-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark'));
     }
+
     public function updateAssessorDesktopNotificationStatus(Request $request, $id)
     {
         try {
@@ -443,7 +472,7 @@ class DesktopApplicationController extends Controller
                 return response()->json(['success' => true, 'message' => 'Read notification successfully.', 'redirect_url' => $d->url], 200);
             } else {
                 DB::rollback();
-                return response()->json(['success' => false, 'message' => 'Failed to read notification'], 200);
+                return response()->json(['success' => false,'message' =>'Notification Already read','redirect_url'=>$d->url],200);
             }
         } catch (Exception $e) {
             DB::rollback();
@@ -500,6 +529,27 @@ class DesktopApplicationController extends Controller
             // }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
+
+    public function generateFinalSummary(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $app_id = dDecrypt($request->app_id);
+            $isUpdate = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->update(['is_summary_show'=>1]);
+            if($isUpdate){
+                DB::commit();
+                return back()->with('success', 'Final summary generated successfully.');
+            }else{
+                DB::rollBack();
+                return back()->with('fail', 'Failed to generate final summary.');
+            }
+
+            
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
@@ -635,15 +685,21 @@ public function desktopUpdateNCFlagDocList($application_id)
 
 
             $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
-            if($get_application->leve_id==1){
-                $url="/admin/application-view/".dEncrypt($application_id);
-                $tpUrl="/tp/application-view/".dEncrypt($application_id);
-            }else if($get_application->leve_id==2){
-                $url="/admin/application-view-level-2/".dEncrypt($application_id);
-                $tpUrl="/upgrade/tp/application-view/".dEncrypt($application_id);
+            if($get_application->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level1');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }else if($get_application->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level2');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }else{
-                $url="/admin/application-view-level-3/".dEncrypt($application_id);
-                $tpUrl="/upgrade/level-3/tp/application-view/".dEncrypt($application_id);
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level3');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
             }
             $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
             $notifiData = [];
@@ -653,7 +709,9 @@ public function desktopUpdateNCFlagDocList($application_id)
             $notifiData['level_id'] = getUhid( $application_id)[1];
             $notifiData['data'] = config('notification.common.nc');
             $notifiData['user_type'] = "superadmin";
-            $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+            $sUrl = config('notification.adminUrl.level1');
+
+            $notifiData['url'] = $sUrl.dEncrypt($application_id);
             if($get_application->level_id==3){
             if($t && !$is_all_accepted){
                 
@@ -666,12 +724,13 @@ public function desktopUpdateNCFlagDocList($application_id)
                   $notifiData['url'] = $url;
                   sendNotification($notifiData);
                     /*end here*/ 
+                createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
             }
            
             if($is_all_accepted){
                 $notifiData['data'] = config('notification.admin.acceptCourseDoc');
                 $notifiData['user_type'] = "superadmin";
-                $notifiData['url'] = "/super-admin/application-view/".dEncrypt($application_id);
+                $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
             }
         }

@@ -92,14 +92,15 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleSuperAdminNotification({{$notification->id}})">                                  
-                                <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
+                                <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                <span>{{$notification->created_at}}</span>
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
+                                                <p>Level-<b>{{$notification->level_id}}</b></p>
                                              </div>
                                         </div>
                                     </div>
@@ -139,14 +140,15 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleAdminNotification({{$notification->id}})">                                  
-                                    <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
+                                    <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
+                                                <p>Level-<b>{{$notification->level_id}}</b></p>
                                              </div>
                                         </div>
                                     </div>
@@ -186,14 +188,15 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleNotification({{$notification->id}})">                                  
-                                <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
+                                <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
+                                                <p>Level-<b>{{$notification->level_id}}</b></p>
                                              </div>
                                         </div>
                                     </div>
@@ -233,14 +236,15 @@ ul.menu h5 {
                                 <li>
                                     <a href="{{ url($notification->url) }}"
                                         style="color: #000;" class="p-0">                                      
-                                        <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
+                                        <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                             <div class="content-card">
                                                 <div class="flex-box">
                                                     <span>App. ID : {{ $notification->uhid }}</span>
-                                                    {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
+                                                    {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                                 </div>
                                                 <div class="normal-text">
                                                     <p class="mb-0">{{$notification->data}}</p>
+                                                    <p>Level-<b>{{$notification->level_id}}</b></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,14 +287,15 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleDesktopNotification({{$notification->id}})">                                  
-                                <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
+                                <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                         <div class="content-card">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
+                                                <p>Level-<b>{{$notification->level_id}}</b></p>
                                              </div>
                                         </div>
                                     </div>
@@ -330,13 +335,14 @@ ul.menu h5 {
                                 @foreach ($notifications as $notification)
                                 <li onclick="handleOnsiteNotification({{$notification->id}})">                                  
                                     <div class="notification-card">
-                                    <div class="notification-card <?php echo $notification->is_read==0?'active':'';?>">
+                                    <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">
                                             <div class="flex-box">
                                                 <span>App. ID : {{ $notification->uhid }}</span>
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y') }}
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('d-m-y') }}
                                             </div>
                                             <div class="normal-text">
                                                 <p class="mb-0">{{$notification->data}}</p>
+                                                <p>Level-<b>{{$notification->level_id}}</b></p>
                                              </div>
                                         </div>
                                     </div>

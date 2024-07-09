@@ -109,6 +109,7 @@ class AccountApplicationController extends Controller
             
             foreach ($courses as $course) {
                 if ($course) {
+                    
                     $obj->course[] = [
                         "course" => $course,
                         'course_wise_document_declaration' => DB::table('tbl_course_wise_document')->where([
@@ -320,11 +321,10 @@ class AccountApplicationController extends Controller
           $d = DB::table('tbl_notifications')->where('id',$id)->first();
           if($is_update){
               DB::commit();
-              $redirect_url = URL::to('/account/application-view/'.dEncrypt($id));
               return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
           }else{
               DB::rollback();
-              return response()->json(['success' => false,'message' =>'Already read notification'],200);
+              return response()->json(['success' => false,'message' =>'Notification Already read','redirect_url'=>$d->url],200);
           }
     }
     catch(Exception $e){

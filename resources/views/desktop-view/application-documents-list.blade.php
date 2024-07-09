@@ -225,9 +225,8 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
                                     
-                                   
                                     
-                                    @if($doc->status==0)
+                                    @if($doc->is_doc_show==0 && $doc->status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('desktop-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -281,10 +280,7 @@
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Rejected</a>
                                     @else
-                                       <div class="upload-btn-wrapper">
-                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
-                                             </div>
+                                     
                                     @endif 
                                     @endforeach
 
@@ -310,6 +306,7 @@
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                   
                                              @if($doc->status!=0 && $doc->is_revert!=1)
                                                 <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocListDesktop('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
 
@@ -363,12 +360,22 @@
                                           </tr>
                                           @endforeach
                                         @endforeach
+                                        
                                        </tbody>
+                                       
                                     </table>
-                                    
-                                    @if(!$is_final_submit && $is_doc_uploaded && $checkAllActionDoneOnDocList==false)
+                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                                <div class="col-md-12 p-2" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <textarea rows="30" cols="80" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                </div>
+                                
                                     <div class="col-md-12 p-2 d-flex justify-content-end">
-                                       <a href="{{url('desktop/summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" class="btn btn-primary">Create Summary</a>
+                                    <form id="secretariatForm" action="{{url('desktop/final-summary').'/'.dEncrypt($application_id).'/'.dEncrypt($course_id)}}" method="post" onsubmit="return handleSecretariatFinalSummary();">
+                                       @csrf
+                                        <input type="submit" value="Submit Summary" class="btn btn-primary btn-sm">
+                                    </form>
                                     </div>
                                     @endif
                                  </div>

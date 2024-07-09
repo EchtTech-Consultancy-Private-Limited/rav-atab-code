@@ -60,7 +60,7 @@ class ApplicationCoursesController extends Controller
             $applicationData = null;
         }
         $id = Auth::user()->id;
-        $item = LevelInformation::whereid('2')->get();
+        $item = LevelInformation::whereid('3')->get();
         $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         return view('create-application.create-application-level-3', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
     }
@@ -270,10 +270,16 @@ class ApplicationCoursesController extends Controller
             $applicationData=null;
         }
         $course = TblApplicationCourses::where('application_id', $id)->get();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+        $total_docs = count($course) * 4;
         
+        $is_show_next_btn = false;
+        if($uploaded_docs==$total_docs){
+            $is_show_next_btn=true;
+        }
         
 
-        return view('create-application.course.level-2-create-course', compact('applicationData', 'course'));
+        return view('create-application.course.level-2-create-course', compact('applicationData', 'course','is_show_next_btn'));
     }
     public function createLevel3NewCourse($id = null)
     {
@@ -284,11 +290,18 @@ class ApplicationCoursesController extends Controller
         }else{
             $applicationData=null;
         }
+        
         $course = TblApplicationCourses::where('application_id', $id)->get();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
         
+        $total_docs = count($course) * 4;
         
+        $is_show_next_btn = false;
+        if($uploaded_docs==$total_docs){
+            $is_show_next_btn=true;
+        }
 
-        return view('create-application.course.level-3-create-course', compact('applicationData', 'course'));
+        return view('create-application.course.level-3-create-course', compact('applicationData', 'course','is_show_next_btn'));
     }
     public function storeNewApplicationCourse(Request $request)
     {
@@ -557,7 +570,7 @@ class ApplicationCoursesController extends Controller
              $data['tp_id'] = Auth::user()->id;
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
-             
+             $data['is_doc_show'] = 0;
              DB::table('tbl_course_wise_document')->insert($data);
             }
         }
@@ -692,6 +705,7 @@ class ApplicationCoursesController extends Controller
              $data['tp_id'] = Auth::user()->id;
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
+             $data['is_doc_show'] = 0;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }
@@ -846,12 +860,12 @@ class ApplicationCoursesController extends Controller
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
             $name = $img->getClientOriginalName();
-            $filename = time() . $name;
+            $filename = rand().'-'.time().'-'.rand() . $name;
             $img->move('uploads/', $filename);
             $item->payment_proof = $filename;
         }
         $item->save();
-
+        $acUrl = config('notification.accountantUrl.level1');
          /*send notification*/ 
          $notifiData = [];
          $notifiData['user_type'] = "accountant";
@@ -859,7 +873,7 @@ class ApplicationCoursesController extends Controller
          $notifiData['application_id'] =$request->Application_id;
          $notifiData['uhid'] = getUhid($request->Application_id)[0];
          $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
-         $notifiData['url'] = "/account/application-view/".dEncrypt($request->Application_id);
+         $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
          $notifiData['data'] = config('notification.accountant.appCreated');
          sendNotification($notifiData);
          /*end here*/ 

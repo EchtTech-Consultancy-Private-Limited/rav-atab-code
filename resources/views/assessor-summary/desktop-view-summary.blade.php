@@ -296,7 +296,7 @@
                                     </table>
 
                                     @endif
-<tr>
+                                    <tr>
                                                 <td colspan="6">
                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
