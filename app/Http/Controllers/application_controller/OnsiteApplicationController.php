@@ -328,9 +328,19 @@ class OnsiteApplicationController extends Controller
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             ->first();           
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'application_courses_id'=>$application_course_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
-        
+            
+            $all_assessor = DB::table('tbl_assessor_assign')->where('application_id',$application_id)->get();
+            $view_form = false;
+            foreach($all_assessor as $ass){
+                if(($ass->assessor_id==Auth::user()->id) && $ass->assessor_designation=="Lead Assessor"){
+                    $view_form = true;
+                    break;
+                }
+            }
+
+
             $is_nc_exists=false;
-            if($nc_type=="view"){
+            if($nc_type=="view" && $view_form){
                 $is_nc_exists=true;
             }
 
