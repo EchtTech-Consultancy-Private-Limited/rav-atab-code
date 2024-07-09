@@ -347,14 +347,13 @@
                 <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
                 <input type="submit" class="btn btn-info float-right" value="Final Submit" {{ $isOFIExists ? '' : 'disabled' }}>
                 @if(!$isOFIExists)
-                <!-- <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div> -->
+                <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
                 @endif
                 </form>
                 </div>
         </div>
 @endif
 
-<div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">OFI</div>
 
 
 

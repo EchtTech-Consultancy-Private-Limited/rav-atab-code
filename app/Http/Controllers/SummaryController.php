@@ -674,7 +674,6 @@ class SummaryController extends Controller
             DB::beginTransaction();
             $application_id = dDecrypt($request->app_Id);
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->get();
-            dd($request->all());
             foreach($get_all_courses as $key=>$course){
                 $dataImprovement= [];
                 $dataImprovement['assessor_id']=Auth::user()->id;
