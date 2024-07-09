@@ -29,4 +29,5 @@ class DownLoadPDFFinalSummaryController extends Controller
      
         return $pdf->download();
     }
+    
 }

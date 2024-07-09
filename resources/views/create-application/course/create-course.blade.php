@@ -794,7 +794,11 @@
                                     @isset($course)
                                     @if (count($course) > 0)
                                         <a href="{{ url('makepayment/'.dEncrypt($applicationData?->id)) }}"
-                                            class="btn btn-primary next-step1 mr-2">NextA</a>
+                                            class="btn btn-primary next-step1 mr-2"
+                                            target="_blank">Pay Now</a>
+                                            <!-- <form id="paymentForm">
+                                            <button type="submit">Pay Now</button>
+                                            </form> -->
                                     @endif
                                 @endisset
                                 </div>
