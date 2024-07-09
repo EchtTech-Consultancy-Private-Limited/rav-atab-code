@@ -959,7 +959,7 @@ class SecretariatDocumentVerifyController extends Controller
             'application_courses_id' => $course_id,
             'assessor_type' => $assessor_type
         ])
-            ->select('id', 'doc_unique_id', 'doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
+            ->select('id', 'doc_unique_id', 'doc_file_name','onsite_doc_file_name', 'doc_sr_code', 'assessor_type', 'admin_nc_flag', 'status','is_revert','is_doc_show')
             ->get();
         $doc_uploaded_count = DB::table('tbl_nc_comments as asr')
             ->select("asr.application_id", "asr.application_courses_id")

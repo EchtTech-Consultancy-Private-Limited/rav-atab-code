@@ -335,7 +335,7 @@
                                     @elseif($doc->onsite_status==1)
                                          <a 
                                             title="{{$doc->onsite_doc_file_name}}"
-                                            href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                            href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name. '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                             class="btn btn-success btn-sm docBtn m-1">
                                             Accepted</a>
                                           @elseif($doc->onsite_status==2)
@@ -361,7 +361,7 @@
                                               @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->onsite_doc_file_name}}"
-                                             href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name. '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
@@ -377,9 +377,10 @@
 
                                     @elseif($doc->onsite_status==5)
                                              @if($doc->admin_nc_flag==1)
+                                             
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('admin-accept/admin/verify-doc'. '/' . $doc->onsite_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-accept/verify-doc'. '/'. $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted</a>
                                              @endif
@@ -387,7 +388,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('admin-reject/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected</a>
                                              @endif
