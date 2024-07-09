@@ -499,4 +499,5 @@ class DownLoadPDFFinalSummaryController extends Controller
         $file_name = 'onsite-'.$summertReport->uhid.'.pdf';
         return $pdf->download($file_name);
     }
+    
 }
