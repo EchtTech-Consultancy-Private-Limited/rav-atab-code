@@ -430,6 +430,7 @@ class ApplicationCoursesController extends Controller
              $data['tp_id'] = Auth::user()->id;
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
+             $data['is_doc_show'] = 0;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }

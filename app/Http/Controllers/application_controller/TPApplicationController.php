@@ -1394,6 +1394,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
         }
 
+        // this is for the applicaion status
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5,'status'=>0]);
+
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;
@@ -2763,6 +2766,7 @@ public function tpUpdateNCFlagDocList($application_id)
 
             // $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
             DB::commit();
             // if ($check_all_doc_verified == "all_verified") {
             //     return back()->with('success', 'All course docs Accepted successfully.');
@@ -2889,6 +2893,9 @@ public function tpUpdateNCFlagCourseDoc($application_id)
 
             // $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
+
+            // this is for the applicaion status
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
             DB::commit();
             // if ($check_all_doc_verified == "all_verified") {
             //     return back()->with('success', 'All course docs Accepted successfully.');

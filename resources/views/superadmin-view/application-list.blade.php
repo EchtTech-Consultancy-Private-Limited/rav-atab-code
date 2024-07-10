@@ -126,8 +126,10 @@
                                                 </td>
                                                 
                                                 <td>
-                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
-                                                
+                                                @php
+                                                        $status = getApplicationStatus($item->application_list->status,"Admin");
+                                                    @endphp
+                                                <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
                                                 </td>
                                                 <td>
                                                 @if($item->application_list->valid_from)

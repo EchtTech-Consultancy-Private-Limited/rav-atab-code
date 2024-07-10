@@ -556,7 +556,6 @@
         </div>
         
         @if(($application_details->show_submit_btn_to_secretariat || $application_details->show_submit_btn_to_secretariat44) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
-        
         <div class="row">
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">

@@ -1737,3 +1737,15 @@ function isSecondPayment($application_id){
 }
 
 
+function getApplicationStatus($status_value,$user_type){
+    $app_status = DB::table('tbl_application_status')->where(['status_value'=>$status_value,'user_type'=>$user_type])->first();
+    if(!empty($app_status)){
+        return $app_status;
+    }else{
+        return null;
+    }
+
+    
+}
+
+
