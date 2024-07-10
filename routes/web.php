@@ -443,6 +443,7 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
 
     Route::post('/desktop/update-nc-flag-doc-list/{application_id}/{course_id?}', [DesktopApplicationController::class, 'desktopUpdateNCFlagDocList']);
     Route::post('/tp/update-nc-flag/{application_id}/{course_id?}', [TPApplicationController::class, 'tpUpdateNCFlagDocList']);
+    Route::post('/tp/update-flag/course-doc/{application_id}', [TPApplicationController::class, 'tpUpdateNCFlagCourseDoc']);
 
 
     // Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'secretariatVerfiyDocument']);
