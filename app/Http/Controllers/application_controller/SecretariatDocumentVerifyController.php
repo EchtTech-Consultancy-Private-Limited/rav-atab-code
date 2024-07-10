@@ -519,6 +519,8 @@ class SecretariatDocumentVerifyController extends Controller
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
             $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
 
+            // this is for the applicaion status
+            
            
             
            
@@ -537,6 +539,7 @@ class SecretariatDocumentVerifyController extends Controller
                 if ($check_all_doc_verified == "action_not_taken") {
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 
             }else{
@@ -587,7 +590,7 @@ class SecretariatDocumentVerifyController extends Controller
             sendNotification($notifiData);
             /*end here*/ 
      
-
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
          }
@@ -740,6 +743,9 @@ class SecretariatDocumentVerifyController extends Controller
                 /*send notification*/ 
                 sendNotification($notifiData);
                 /*end here*/ 
+                
+                // this is for the applicaion status
+                DB::table('tbl_application')->where('id',$app_id)->update(['status'=>6]);
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();
@@ -942,10 +948,13 @@ class SecretariatDocumentVerifyController extends Controller
         $app_detail = TblApplication::where('id', $application_id)->first();
         $application_uhid = $app_detail->uhid ?? '';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
+
         $data = TblApplicationPayment::where('application_id', $application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+        $is_onsite_assessor_assigned = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_type'=>'onsite'])->first();
         if($app_detail->level_id==3){
-            if(count($data)>1){
+            
+            if(count($data)>1 && !empty($is_onsite_assessor_assigned)){
                 $assessor_type = 'onsite';
             }else{
                 $assessor_type = 'desktop';
@@ -954,6 +963,7 @@ class SecretariatDocumentVerifyController extends Controller
         }else{
             $assessor_type = 'secretariat';
         }
+        
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id' => $application_id,
             'application_courses_id' => $course_id,

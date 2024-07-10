@@ -296,6 +296,9 @@ class SuperAdminApplicationController extends Controller
                //admin mail
                 
             /*end here*/
+
+            // this is for the applicaion status
+            DB::table('tbl_application')->where('id',$request->application_id)->update(['status'=>3]);
             createApplicationHistory($request->application_id,null,config('history.admin.assign'),config('history.color.warning'));
             DB::commit();
             return redirect()->route('superadmin-app-list')->with('success', 'Application has been successfully assigned to Secretariat');
@@ -1031,6 +1034,9 @@ class SuperAdminApplicationController extends Controller
                   $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
                   /*end here*/ 
+
+                  // this is for the applicaion status
+                 DB::table('tbl_application')->where('id',$app_id)->update(['status'=>7]);
                   
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
@@ -1125,7 +1131,8 @@ class SuperAdminApplicationController extends Controller
                 $notifiData['url'] = $tpUrl;
                 sendNotification($notifiData);
                 /*end here*/ 
-                
+                // this is for the applicaion status
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>8]);
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
                     DB::commit();

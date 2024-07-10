@@ -430,6 +430,7 @@ class ApplicationCoursesController extends Controller
              $data['tp_id'] = Auth::user()->id;
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
+             $data['is_doc_show'] = 0;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }
@@ -878,6 +879,7 @@ class ApplicationCoursesController extends Controller
          sendNotification($notifiData);
          /*end here*/ 
         
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;

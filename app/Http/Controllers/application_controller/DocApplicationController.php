@@ -161,6 +161,8 @@ class DocApplicationController extends Controller
                     DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->update(['status'=>1,'remark_by_account'=>$request->payment_remark??'','accountant_id'=>Auth::user()->id]);
                 }
             }
+            // this is for the applicaion status
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>1]);
             createApplicationHistory($application_id,null,config('history.accountant.status'),config('history.color.warning'));
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment received successfully.'], 200);
@@ -309,6 +311,8 @@ class DocApplicationController extends Controller
 
         }
            
+        // this is for the applicaion status
+        DB::table('tbl_application')->where('id',$application_id)->update(['status'=>2]);
         createApplicationHistory($application_id,null,config('history.accountant.status2'),config('history.color.warning'));
             /*send email end here*/ 
             DB::commit();

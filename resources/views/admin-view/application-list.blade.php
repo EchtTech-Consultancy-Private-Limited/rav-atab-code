@@ -127,7 +127,11 @@
                                                 </td>
                                                 
                                                 <td>
-                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
+                                                    @php
+                                                        $status = getApplicationStatus($item->application_list->status,"Secretariat");
+                                                        
+                                                    @endphp
+                                                <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
                                                 
                                                 </td>
                                                 <td>
@@ -183,7 +187,7 @@
                                                     </a>
                                                             @else
 
-                                                            <span class="badge badge-main warning ">Action not completed on courses doc</span>
+                                                            <!-- <span class="badge badge-main warning ">Action not completed on courses doc</span> -->
                                                             @endif
                                                             
                                                 @if($item->application_list->level_id==2)
