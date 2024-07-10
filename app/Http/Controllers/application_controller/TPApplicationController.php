@@ -1398,7 +1398,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
         $application_id = $request->Application_id;
         $userid = Auth::user()->firstname;
-        
+
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //payment_status 5 is for done payment by TP.
+
+
         if ($request->level_id == '2') {
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
@@ -2165,6 +2168,8 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     if(isset($first_app_id)){
         DB::table('tbl_application')->whereIn('id',[$first_app_id[0]->id??0,$first_app_id[1]->id??0])->update(['is_all_course_doc_verified'=>3]);
     }
+
+    DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //payment_status 5 is for done payment by TP.
 
 
     DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);

@@ -878,6 +878,7 @@ class ApplicationCoursesController extends Controller
          sendNotification($notifiData);
          /*end here*/ 
         
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;
