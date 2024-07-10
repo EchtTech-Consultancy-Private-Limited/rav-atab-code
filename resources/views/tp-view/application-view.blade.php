@@ -26,7 +26,7 @@
     </div>
     @if ($message = Session::get('success'))
     <script>
-    toastr.success({{ $message }}, {
+    toastr.success("{{ $message }}", {
                         timeOut: 0,
                         extendedTimeOut: 0,
                         closeButton: true,
@@ -487,16 +487,27 @@
         </div>
 
         
-        {{-- @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
+        
+      
+        @if($spocData->is_all_course_doc_verified==1)
+        <!-- <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+            <a href="{{ url('/upgrade-new-application', dEncrypt($spocData->id)) }}"
+                                                            class="btn btn-warning">Upgrade</a>
+            </div>
+        </div> -->
+        @endif
+
+        @if(($application_details->application->approve_status==0 && $application_details->application->level_id==1)) 
         
         <div class="row">
                         <div class="col-md-12">
-                            <form action="{{url('tp/update-nc-flag/'.$spocData->id)}}" method="post">
+                            <form action="{{url('tp/update-flag/course-doc/'.dEncrypt($spocData->id))}}" method="post">
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
                             "<?php 
-                            if($enable_disable_submit_btn || $showSubmitBtnToTP){
+                            if($enable_disable_submit_btn){
                                 echo 'disabled';
                             }else{
                                 echo '';
@@ -508,16 +519,7 @@
                             </form>
                         </div>
                     </div>
-        @endif --}}
-      
-        @if($spocData->is_all_course_doc_verified==1)
-        <!-- <div class="row">
-            <div class="col-md-12 d-flex justify-content-end">
-            <a href="{{ url('/upgrade-new-application', dEncrypt($spocData->id)) }}"
-                                                            class="btn btn-warning">Upgrade</a>
-            </div>
-        </div> -->
-        @endif
+        @endif 
 
         <div class="card p-relative">
             <div class="box-overlay">
