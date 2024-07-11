@@ -2032,7 +2032,7 @@ public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
         
     
         $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
-    
+        
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
@@ -2081,7 +2081,7 @@ public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
     
 public function upgradeNewApplicationPaymentLevel3(Request $request)
 {
-    
+
     $first_app_refid = TblApplication::where('id',$request->Application_id)->first();
     
     $ref_count = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->count();
@@ -2132,6 +2132,8 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
     ->whereNull('remark_by_account')
     ->count();
+    
+    // dd($checkPaymentAlready);
         if ($checkPaymentAlready>2) {
             return redirect(url('level-second/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
@@ -2165,7 +2167,12 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
           $notifiData['level_id'] = getUhid($request->Application_id)[1] ;
           $acUrl = config('notification.accountantUrl.level1');
           $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
-          $notifiData['data'] = config('notification.accountant.appCreated');
+          if($checkPaymentAlready>1){
+            $notifiData['data'] = config('notification.accountant.doneSecPay');
+          }else{
+              $notifiData['data'] = config('notification.accountant.appCreated');
+          }
+
           sendNotification($notifiData);
           /*end here*/ 
 
