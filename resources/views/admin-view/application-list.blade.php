@@ -674,7 +674,7 @@
   $(document).ready(function(){
     const _application_id =localStorage.getItem('application_id');
         if(_application_id){
-            document.getElementById('view_'+_application_id).click();
+            // document.getElementById('view_'+_application_id).click();
         }
   })
   

@@ -1027,6 +1027,75 @@ class SecretariatDocumentVerifyController extends Controller
         $application_details = TblApplication::find($application_id);
         return view('admin-view.secretariat.application-documents-list', compact('final_data', 'course_doc_uploaded', 'application_id', 'course_id', 'is_final_submit', 'is_doc_uploaded', 'application_uhid','application_details','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done'));
     }
+
+    public function applicationDocumentListDAOA($id, $course_id)
+    {
+        
+
+        $level_id = DB::table('tbl_application')->where('id',dDecrypt($id))->first()->level_id;
+        
+        if($level_id!=3){
+            return $this->applicationDocumentList($id,$course_id);
+        }else{
+
+        
+        $tp_id = Auth::user()->id;
+        $application_id = $id ? dDecrypt($id) : $id;
+        $course_id = $course_id ? dDecrypt($course_id) : $course_id;
+        $data = TblApplicationPayment::where('application_id',$application_id)->get();
+        $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+        $course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'desktop'
+        ])
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status','is_doc_show')
+        ->get();
+        $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'onsite'
+        ])
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status','is_doc_show')
+        ->get();
+        $chapters = Chapter::all();
+        foreach($chapters as $chapter){ 
+            $obj = new \stdClass;
+            $obj->chapters= $chapter;
+            $questions = DB::table('questions')->where([
+                    'chapter_id' => $chapter->id,
+                ])->get();
+                foreach ($questions as $k => $question) {
+                    $obj->questions[] = [
+                        'question' => $question,
+                        'nc_comments' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get(),
+                        'onsite_nc_comments' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code,
+                            'assessor_type'=>'onsite'
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get(),
+                    ];
+                }
+                $final_data[] = $obj;
+        }
+        // dd($final_data);
+        $applicationData = TblApplication::find($application_id);
+        return view('admin-view.secretariat.application-document-list-l3', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
+      }
+    }
     public function secretariatVerfiyDocumentLevel2($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
         try {

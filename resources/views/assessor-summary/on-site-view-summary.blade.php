@@ -409,6 +409,17 @@
                                                 <td colspan="2" class="fw-bold"> Signature of the Team Leader</td>
                                     
                                             </tr>
+
+                                            <tr>
+                                                <td colspan="6">
+                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class=""><b>Remark:</b> </label>
+                                                                    
+                                                                    {{$summertReport->remark}}                   
+                                                                    
+                                                     </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     </br>

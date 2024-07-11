@@ -68,6 +68,7 @@ class DownLoadPDFFinalSummaryController extends Controller
         $original_data = [];
         $final_data = [];
         foreach($get_all_courses as $key => $course) {
+            
             $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
                 ->select('asr.application_id', 'asr.assessor_id', 'asr.object_element_id')
                 ->where('asr.assessor_type', 'onsite')

@@ -3,7 +3,7 @@
 return [
     'tp' =>['status'=>'Payment Pending','uploadDocs'=>"Please upload  all the documents of the application",'secondPay'=>"Please pay second payment for onsite assessor"],
     
-    'accountant' =>['appCreated'=>'New Application Created'],
+    'accountant' =>['appCreated'=>'New Application Created',"doneSecPay"=>"Second Payment Done successfully."],
     
     'secretariat' =>['assigned'=>'A new application assigned to you.','sendApproval'=>'Application sent for approval'],
     

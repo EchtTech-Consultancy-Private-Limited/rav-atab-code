@@ -459,7 +459,8 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
 Route::post('/secretariat/upload-mom', [SecretariatDocumentVerifyController::class, 'uploadMoM']);
 Route::post('/admin/return/mom', [AdminApplicationController::class, 'adminReturnMom']);
 /*Secretariat nc's 44 documents route*/ 
-Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);
+// Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);
+Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentListDAOA']);
 
 Route::get('/secretariat-{nc_type}/verify-doc-level-2/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SecretariatDocumentVerifyController::class, 'secretariatVerfiyDocumentLevel2']);
 

@@ -326,8 +326,10 @@ class OnsiteApplicationController extends Controller
             ->whereIn('assessor_type',['onsite','admin'])
             ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
-            ->first();           
+            ->first();     
+
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'application_courses_id'=>$application_course_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'onsite'])->latest('id')->first();
+            
             
             $all_assessor = DB::table('tbl_assessor_assign')->where('application_id',$application_id)->get();
             $view_form = false;
@@ -491,6 +493,7 @@ class OnsiteApplicationController extends Controller
          $onsite_data['onsite_nc_status'] = $nc_flag;
          $onsite_data['onsite_nc_type'] = $nc_raise;
          $onsite_data['tp_id'] = $last_course_doc_desktop->tp_id;
+         $onsite_data['is_doc_show'] = 0;
          
          $get_last_doc_of_onsite = TblApplicationCourseDoc::where(['application_id'=>$request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite','onsite_nc_type'=>0])->latest('id')->first();
 
@@ -824,7 +827,7 @@ function revertCourseDocListActionOnsite(Request $request){
 
                 }
                     /*Delete nc on course doc*/ 
-                    $delete_= DB::table('tbl_nc_comments')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$get_course_doc->doc_file_name])->delete();
+                    $delete_= DB::table('tbl_nc_comments')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->delete();
                     
                      /*end here*/            
             if($revertAction){
