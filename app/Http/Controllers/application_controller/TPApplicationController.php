@@ -2010,6 +2010,7 @@ public function upgradeStoreNewApplicationCourseLevel3(Request $request)
              $data['tp_id'] = Auth::user()->id;
              $data['level_id'] = 3;
              $data['course_name'] = $course_name[$i];
+             $data['is_doc_show'] = 0;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }
@@ -3057,6 +3058,7 @@ public function isShowSubmitBtnToSecretariat($application_id,$assessor_type)
 public function checkSubmitButtonEnableOrDisable($application_id,$assessor_type)
 {
 
+    
     $results = DB::table('tbl_application_course_doc')
     ->select('application_id', 'application_courses_id', 'assessor_type', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
     ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id', 'assessor_type')
@@ -3074,7 +3076,7 @@ $additionalFields = DB::table('tbl_application_course_doc')
     })
     ->orderBy('tbl_application_course_doc.id', 'desc')
     ->where('tbl_application_course_doc.assessor_type',$assessor_type)
-    ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type']);
+    ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type','onsite_status']);
 
 
         $finalResults = [];
@@ -3090,6 +3092,7 @@ $additionalFields = DB::table('tbl_application_course_doc')
                 if ($additionalField) {
                     $finalResults[$key] = (object)[];
                     $finalResults[$key]->status = $additionalField->status;
+                    $finalResults[$key]->onsite_status = $additionalField->onsite_status;
                     $finalResults[$key]->id = $additionalField->id;
                     $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
                     $finalResults[$key]->approve_status = $additionalField->approve_status;
@@ -3101,12 +3104,21 @@ $additionalFields = DB::table('tbl_application_course_doc')
     
     $flag = 0;
 
+    
+  
     foreach ($finalResults as $result) {
-
-        if (($result->status==2 || $result->status==3 || $result->status==4)) {
-            $flag = 1;
-            break;
+        if($assessor_type=="desktop"){
+            if (($result->status==2 || $result->status==3 || $result->status==4)) {
+                $flag = 1;
+                break;
+            }
+        }else{
+            if (($result->onsite_status==2 || $result->onsite_status==3 || $result->onsite_status==4)) {
+                $flag = 1;
+                break;
+            }
         }
+        
     }
     
 
@@ -3116,7 +3128,7 @@ $additionalFields = DB::table('tbl_application_course_doc')
     $total_docs = $get_course_count*4;
     
     
-
+    
     if(($get_docs_count<$total_docs) || $flag == 1){
      return true;
     }else{
