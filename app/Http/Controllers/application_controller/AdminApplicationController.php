@@ -2204,7 +2204,7 @@ class AdminApplicationController extends Controller
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => $assessor_types])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
 
             // revert action done on course and courses docs
-            // DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+           DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
            DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
 
 

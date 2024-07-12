@@ -379,7 +379,7 @@ class SecretariatDocumentVerifyController extends Controller
 
             if ($create_nc_comments) {
                 DB::commit();
-                return response()->json(['success' => true, 'message' => '' . $request->nc_type . ' comments created successfully', 'redirect_to' => $redirect_to], 200);
+                return response()->json(['success' => true, 'message' => $request->nc_type . ' comments created successfully', 'redirect_to' => $redirect_to], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'Failed to create ' . $request->nc_type . '  and documents'], 200);
             }
@@ -525,7 +525,7 @@ class SecretariatDocumentVerifyController extends Controller
             
            
             /*------end here------*/
-            DB::commit();
+            // DB::commit();
             
             if($get_application->level_id==1 || $get_application->level_id==3){
                 // if (!$check_all_doc_verified ) {
@@ -540,6 +540,7 @@ class SecretariatDocumentVerifyController extends Controller
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
+                DB::commit();
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 
             }else{
@@ -548,6 +549,7 @@ class SecretariatDocumentVerifyController extends Controller
             //     return back()->with('fail', 'First create NCs on courses doc');
             // }
             if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
+                DB::commit();
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');
@@ -589,7 +591,7 @@ class SecretariatDocumentVerifyController extends Controller
             $notifiData['url'] = $tpUrl;
             sendNotification($notifiData);
             /*end here*/ 
-     
+            DB::commit();
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);

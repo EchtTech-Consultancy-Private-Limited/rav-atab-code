@@ -114,6 +114,7 @@ class TPApplicationController extends Controller
             // ->whereIn('status',[0,2]) 
             ->whereNull('deleted_at') 
             ->get();
+            
             foreach ($courses as $course) {
                 if ($course) {
                     $course_docs=$this->isNcOnCourseDocs($application->id, $course->id);
@@ -3397,9 +3398,9 @@ public function isNcOnCourseDocs($application_id,$course_id)
 
     
     $flag = 0;
-
+    
     foreach ($results as $result) {
-        if ($result->status == 2 || $result->status == 3 || $result->status == 4) {
+        if (($result->status == 2 || $result->status == 3 || $result->status == 4)  && $result->is_revert==1) {
             $flag = 1;
             break;
         } else {
@@ -3418,7 +3419,7 @@ public function isNcOnCourseDocs($application_id,$course_id)
 }
 public function isNcOnCourseDocsList($application_id,$application_courses_id)
 {
-
+    
     $results = DB::table('tbl_application_course_doc')
         ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
@@ -3439,7 +3440,7 @@ public function isNcOnCourseDocsList($application_id,$application_courses_id)
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
         ->orderBy('tbl_application_course_doc.id', 'desc')
-        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
+        ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
 
     foreach ($results as $key => $result) {
@@ -3454,11 +3455,13 @@ public function isNcOnCourseDocsList($application_id,$application_courses_id)
             $results[$key]->id = $additionalField->id;
             $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
             $results[$key]->approve_status = $additionalField->approve_status;
+            $results[$key]->is_revert = $additionalField->is_revert;
         }
     }
 
     
     $flag = 0;
+    
 
     foreach ($results as $result) {
         
