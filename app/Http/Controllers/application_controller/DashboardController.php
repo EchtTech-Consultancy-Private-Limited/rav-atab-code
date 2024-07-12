@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\application_controller;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
@@ -60,27 +61,11 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        // $data['pending']=[
-        //     'india'=>$this->get_application_india(0),
-        //     'saarc'=>$this->get_application_saarc(0),
-        //     'world'=>$this->get_application_world(0)
-        // ];
-        // $data['processing']=[
-        //     'india'=>$this->get_application_india(2),
-        //     'saarc'=>$this->get_application_saarc(2),
-        //     'world'=>$this->get_application_world(2)
-        // ];
-        // $data['approved']=[
-        //     'india'=>$this->get_application_india(1),
-        //     'saarc'=>$this->get_application_saarc(1),
-        //     'world'=>$this->get_application_world(1)
-        // ];
-        // dd(Auth::user()->role);
-
+      
         // for admin
         if(Auth::user()->role == 1){
             $application = DB::table('tbl_application as a')
-            ->whereIn('a.payment_status',[0,1,2,3])
+            // ->whereIn('a.payment_status',[0,1,2,3])
             ->orderBy('id','desc')
             ->get();
         }
@@ -88,7 +73,7 @@ class DashboardController extends Controller
             // tp dashboard
             $application = DB::table('tbl_application as a')
             ->where('tp_id',Auth::user()->id)
-            ->whereIn('a.payment_status',[0,1,2,3])
+            // ->whereIn('a.payment_status',[0,1,2,3])
             ->orderBy('id','desc')
             ->get();
         }        
@@ -99,7 +84,7 @@ class DashboardController extends Controller
                 ->where('assessor_id',$assessor_id)
                 ->pluck('application_id')->toArray();
             $application = DB::table('tbl_application')
-            ->whereIn('payment_status',[1,2,3])
+            // ->whereIn('payment_status',[1,2,3])
             ->whereIn('id',$assessor_application)
             ->orderBy('id','desc')
             ->get();
@@ -107,7 +92,7 @@ class DashboardController extends Controller
         // account detail
         if(Auth::user()->role == 6){
             $application = DB::table('tbl_application as a')
-            ->whereIn('payment_status',[0,1,2,3])
+            // ->whereIn('payment_status',[0,1,2,3])
             ->orderBy('id','desc')
             ->get();
         }
@@ -115,56 +100,25 @@ class DashboardController extends Controller
         // secretaritat detail
         if(Auth::user()->role == 5){
             $application = DB::table('tbl_application as a')
-            ->whereIn('a.payment_status',[0,1,2,3])
+            // ->whereIn('a.payment_status',[0,1,2,3])
             ->where('secretariat_id',Auth::user()->id)
             ->orderBy('id','desc')
             ->get();
         }
 
-        $final_data=array();
         $dataCount = [
             'pending' => 0,
             'processing' => 0,
             'complete' => 0,
         ];
-        foreach($application as $app){
-            $obj = new \stdClass;
-            $obj->application_list= $app;
-                $course = DB::table('tbl_application_courses')->where([
-                    'application_id' => $app->id,
-                ])
-                ->whereNull('deleted_at') 
-                ->count();
-                if($course){
-                    $obj->course_count = $course;
-                }
-                $payment = DB::table('tbl_application_payment')->where([
-                    'application_id' => $app->id,
-                    
-                ])
-                ->first();
-                $payment_amount = DB::table('tbl_application_payment')->where([
-                    'application_id' => $app->id,
-                ])
-                ->where('status',2)
-                ->sum('amount');
-                $payment_count = DB::table('tbl_application_payment')->where([
-                    'application_id' => $app->id,
-                ])
-                ->where('status',2)
-                ->count();
-                $final_data[] = $obj;
-            }
-            foreach($final_data as $key => $data)
+       
+            foreach($application as $key => $data)
             {
-                if ($data->application_list->payment_status == 0 || $data->application_list->payment_status == 1) {
-                    // pending
+                if ($data->payment_status == 0 || $data->payment_status == 1) {
                     $dataCount['pending']++;
-                } elseif ($data->application_list->payment_status == 2) {
-                    // process
+                } elseif ($data->payment_status == 2) {
                     $dataCount['processing']++;
                 } else {
-                    // complete
                     $dataCount['complete']++;
                 }
             }

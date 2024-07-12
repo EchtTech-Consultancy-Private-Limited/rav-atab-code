@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\application_controller\DashboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\applicationController;
 use App\Http\Controllers\SummaryController;

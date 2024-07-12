@@ -408,7 +408,8 @@
 <script src="{{asset('assets/js/charts/export-data.js')}}"></script>
 <script src="{{asset('assets/js/charts/accessibility.js')}}"></script>
 
-<script>
+        <script>
+            // Data retrieved from https://olympics.com/en/olympic-games/beijing-2022/medals
 Highcharts.chart('container', {
     chart: {
         type: 'pie',
@@ -521,7 +522,7 @@ Highcharts.chart('container3', {
         ]
     }]
 });
-</script>
+        </script>
 
 <script>
 function showHtmlMessageActive() {
