@@ -517,7 +517,12 @@ class SecretariatDocumentVerifyController extends Controller
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
-            $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
+
+            if($get_application->level_id==2){
+                $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
+            }else{
+                $check_all_doc_verifiedDocList=null;
+            }
 
             // this is for the applicaion status
             
