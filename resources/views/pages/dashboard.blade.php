@@ -383,7 +383,6 @@
 
 <script>
 @for($i = 0; $i < count($chartData); $i++)
-    <script>
         document.addEventListener('DOMContentLoaded', function () {
             Highcharts.chart('container_{{ $i }}', {
                 chart: {
@@ -413,10 +412,10 @@
                 }]
             });
         });
+        @endfor
     </script>
-@endfor
 
-</script>
+
 
 <script>
 function showHtmlMessageActive() {
