@@ -209,7 +209,7 @@
                                 <div class="col-4 text-left">
                                     <span class="span-width">Pending</span>
                                     <h2 class="d-flex align-items-right mb-0 mergin-left">
-                                    {{(@$dataCount['pending']+@$dataCount['processing'])}}
+
                                     </h2>
                                 </div>
 
@@ -228,7 +228,7 @@
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
-                                    <div class="col-4 text-left"   style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-active-model">
+                                    <div class="col-4 text-left"   style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-active-model-remove">
                                         <span class="span-width">Active</span>
                                         <h2 class="d-flex align-items-left mb-0">
                                         {{(@$dataCount['complete'])}}
@@ -236,10 +236,10 @@
                                     </div>
 
                                 </div>
-                                <div class="col-4 text-left"  style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-pending-model">
+                                <div class="col-4 text-left"  style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-pending-model-remove">
                                     <span class="span-width">Pending</span>
                                     <h2 class="d-flex align-items-right mb-0 mergin-left">
-                                    {{(@$dataCount['pending']+@$dataCount['processing'])}}
+                                     10
                                     </h2>
                                 </div>
 
