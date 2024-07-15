@@ -372,7 +372,7 @@ class SuperAdminApplicationController extends Controller
     {
         try{
             $accept_nc_type_status = $nc_type;
-            $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin'])
+            $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','application_courses_id'=>$application_course_id])
             ->where('nc_type',"Request_For_Final_Approval")
             ->latest('id')->first();
             
@@ -395,6 +395,7 @@ class SuperAdminApplicationController extends Controller
             $query = DB::table('tbl_nc_comments_secretariat')->where([
                 'doc_sr_code' => $doc_sr_code,
                 'application_id' => $application_id,
+                'application_courses_id'=>$application_course_id,
                 'doc_unique_id' => $doc_unique_code
             ])
             ->where('nc_type', $nc_type);
@@ -410,7 +411,7 @@ class SuperAdminApplicationController extends Controller
             
             // dd($nc_comments);
 
-            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])
             // ->where('final_status',$ass_type)
             ->latest('id')
             ->first();
@@ -418,7 +419,7 @@ class SuperAdminApplicationController extends Controller
             
             
             /*Don't show form if doc is accepted*/ 
-            $accepted_doc = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            $accepted_doc = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])
             ->whereIn('nc_type',["Accept","Reject"])
             // ->where('final_status',$assessor_type)
             ->latest('id')

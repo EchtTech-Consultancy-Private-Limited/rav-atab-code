@@ -82,6 +82,16 @@ class ApplicationCoursesController extends Controller
                 'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
+        $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
         
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
@@ -111,6 +121,7 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
+                $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
 
@@ -139,7 +150,16 @@ class ApplicationCoursesController extends Controller
                 'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
-        
+        $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
 
@@ -168,6 +188,7 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
+                $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
 
@@ -198,7 +219,16 @@ class ApplicationCoursesController extends Controller
         
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
-
+        $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
             if($request->application_id && $request->previous_data==1){
                 $data = [];
                 $data['level_id'] = 3;
@@ -224,6 +254,7 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
+                $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
 

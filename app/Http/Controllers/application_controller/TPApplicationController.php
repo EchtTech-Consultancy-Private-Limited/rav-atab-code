@@ -1014,6 +1014,17 @@ public function  storeNewApplication(Request $request)
         return redirect(url('upgrade-create-new-course/' . dEncrypt($request->application_id).'/'.dEncrypt($request->reference_id)))->with('success', "Application updated successfully.");
         
     }
+    
+    $saarc_country = [1,19,26,133,154,167,208];
+    $india = [101];
+    $region="";
+    if(in_array(Auth::user()->country,$india)){
+        $region ="ind";
+    }else if(in_array(Auth::user()->country,$saarc_country)){
+        $region ="saarc";
+    }else{
+        $region ="other";
+    }
 
     /*check if application already created*/
             $data = [];
@@ -1028,6 +1039,8 @@ public function  storeNewApplication(Request $request)
             // $data['refid'] = $request->reference_id;
             $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
+            $data['region'] = $region;
+            dd($data);
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
             $application = new TblApplication($data);
             $application->save();
@@ -1803,7 +1816,16 @@ public function  storeNewApplicationLevel3(Request $request)
         return redirect(url('upgrade-level-3-create-new-course/' . dEncrypt($request->application_id).'/'.dEncrypt($request->reference_id)))->with('success', "Application updated successfully.");
     }
     /*check if application already created*/
-    
+    $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
             $data = [];
             $data['level_id'] = 3;
             $data['tp_id'] = $request->user_id;
@@ -1813,6 +1835,7 @@ public function  storeNewApplicationLevel3(Request $request)
             $data['designation'] = $request->designation;
             $data['tp_ip'] = getHostByName(getHostName());
             $data['user_type'] = 'tp';
+            $data['region'] = $region;
             $data['prev_refid'] = $request->prev_refid?$request->prev_refid : $request->reference_id;
             $data['application_date'] = $application_date;
     
