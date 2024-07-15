@@ -238,30 +238,277 @@ class DashboardController extends Controller
 
         // onsite-assessor
         if(Auth::user()->role == 3){
-            $assessor_id = Auth::user()->id;
-            $assessor_application = DB::table('tbl_assessor_assign')
-                ->where('assessor_id',$assessor_id)
-                ->pluck('application_id')->toArray();
-            $application = DB::table('tbl_application')
-            // ->whereIn('payment_status',[1,2,3])
-            ->whereIn('id',$assessor_application)
-            ->orderBy('id','desc')
-            ->get();
+            $arr = [
+                'type' => 'tp',
+                'graph_count' => 6,
+                'data' => [
+                    "Level-1" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ],
+                    "Level-2" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ],
+                    "Level-3" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ]
+                ]
+            ];
+        
+            // Map regions from the database to the predefined array keys
+            $regionMapping = [
+                'ind' => 'India',
+                'saarc' => 'SAARC',
+                'other' => 'Rest of the World'
+            ];
+        
+            $pendingCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as pending_count'))
+                ->where('payment_status', 0)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            $processingCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as processing_count'))
+                ->where('payment_status', 5)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            $approvedCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as approved_count'))
+                ->where('approve_status', 1)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            foreach ($pendingCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['pending'] = $row->pending_count;
+                }
+            }
+            foreach ($processingCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['processing'] = $row->processing_count;
+                }
+            }
+            foreach ($approvedCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['approved'] = $row->approved_count;
+                }
+            }
+        
+            // Prepare the data in the Highcharts format
+            $chartData = [];
+            foreach (['pending', 'processing', 'approved'] as $type) {
+                foreach ($arr['data'] as $level => $regions) {
+                    $data = [];
+                    foreach ($regions as $region => $counts) {
+                        if (isset($counts[$type])) {
+                            $data[] = [$region, $counts[$type]];
+                        }
+                    }
+                    $chartData[] = [
+                        'name' => ucfirst($type) . ' Applications - ' . $level,
+                        'data' => $data
+                    ];
+                }
+            }
         }
         // account detail
         if(Auth::user()->role == 6){
-            $application = DB::table('tbl_application as a')
-            // ->whereIn('payment_status',[0,1,2,3])
-            ->orderBy('id','desc')
-            ->get();
+            $arr = [
+                'type' => 'tp',
+                'graph_count' => 6,
+                'data' => [
+                    "Level-1" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ],
+                    "Level-2" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ],
+                    "Level-3" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ]
+                ]
+            ];
+        
+            // Map regions from the database to the predefined array keys
+            $regionMapping = [
+                'ind' => 'India',
+                'saarc' => 'SAARC',
+                'other' => 'Rest of the World'
+            ];
+        
+            $pendingCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as pending_count'))
+                ->where('payment_status', 0)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            $processingCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as processing_count'))
+                ->where('payment_status', 5)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            $approvedCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as approved_count'))
+                ->where('approve_status', 1)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            foreach ($pendingCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['pending'] = $row->pending_count;
+                }
+            }
+            foreach ($processingCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['processing'] = $row->processing_count;
+                }
+            }
+            foreach ($approvedCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['approved'] = $row->approved_count;
+                }
+            }
+        
+            // Prepare the data in the Highcharts format
+            $chartData = [];
+            foreach (['pending', 'processing', 'approved'] as $type) {
+                foreach ($arr['data'] as $level => $regions) {
+                    $data = [];
+                    foreach ($regions as $region => $counts) {
+                        if (isset($counts[$type])) {
+                            $data[] = [$region, $counts[$type]];
+                        }
+                    }
+                    $chartData[] = [
+                        'name' => ucfirst($type) . ' Applications - ' . $level,
+                        'data' => $data
+                    ];
+                }
+            }
         }
 
         // secretaritat detail
         if(Auth::user()->role == 5){
-            $application = DB::table('tbl_application as a')
-            ->where('secretariat_id',Auth::user()->id)
-            ->orderBy('id','desc')
-            ->get();
+            $arr = [
+                'type' => 'tp',
+                'graph_count' => 6,
+                'data' => [
+                    "Level-1" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ],
+                    "Level-2" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ],
+                    "Level-3" => [
+                        'India' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'SAARC' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                        'Rest of the World' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                    ]
+                ]
+            ];
+        
+            // Map regions from the database to the predefined array keys
+            $regionMapping = [
+                'ind' => 'India',
+                'saarc' => 'SAARC',
+                'other' => 'Rest of the World'
+            ];
+        
+            $pendingCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as pending_count'))
+                ->where('payment_status', 0)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            $processingCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as processing_count'))
+                ->where('payment_status', 5)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            $approvedCounts = DB::table('tbl_application')
+                ->select('level_id', 'region', DB::raw('COUNT(*) as approved_count'))
+                ->where('approve_status', 1)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id', 'region')
+                ->orderBy('level_id')
+                ->get();
+        
+            foreach ($pendingCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['pending'] = $row->pending_count;
+                }
+            }
+            foreach ($processingCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['processing'] = $row->processing_count;
+                }
+            }
+            foreach ($approvedCounts as $row) {
+                $region = $regionMapping[strtolower($row->region)] ?? $row->region;
+                if (isset($arr['data']['Level-' . $row->level_id][$region])) {
+                    $arr['data']['Level-' . $row->level_id][$region]['approved'] = $row->approved_count;
+                }
+            }
+        
+            // Prepare the data in the Highcharts format
+            $chartData = [];
+            foreach (['pending', 'processing', 'approved'] as $type) {
+                foreach ($arr['data'] as $level => $regions) {
+                    $data = [];
+                    foreach ($regions as $region => $counts) {
+                        if (isset($counts[$type])) {
+                            $data[] = [$region, $counts[$type]];
+                        }
+                    }
+                    $chartData[] = [
+                        'name' => ucfirst($type) . ' Applications - ' . $level,
+                        'data' => $data
+                    ];
+                }
+            }
         }
         return view("pages.dashboard",['chartData'=>$chartData]);
     }
