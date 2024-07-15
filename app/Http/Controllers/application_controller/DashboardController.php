@@ -69,14 +69,90 @@ class DashboardController extends Controller
             ->orderBy('id','desc')
             ->get();
         }
-        if(Auth::user()->role == 2){
+        
+ 
+
+        if (Auth::user()->role == 2) {
             // tp dashboard
-            $application = DB::table('tbl_application as a')
-            ->where('tp_id',Auth::user()->id)
-            // ->whereIn('a.payment_status',[0,1,2,3])
-            ->orderBy('id','desc')
-            ->get();
-        }        
+            $user_id = Auth::user()->id;
+            $arr = [
+                'type' => 'tp',
+                'graph_count' => 3,
+                'data' => [
+                    'Level-1' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                    'Level-2' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                    'Level-3' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                ]
+            ];
+        
+            $pendingCounts = DB::table('tbl_application')
+                ->select('level_id', DB::raw('COUNT(*) as pending_count'))
+                ->where('payment_status', 0)
+                ->where('tp_id', $user_id)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id')
+                ->orderBy('level_id')
+                ->get();
+        
+            $processingCounts = DB::table('tbl_application')
+                ->select('level_id', DB::raw('COUNT(*) as processing_count'))
+                ->where('payment_status', 5)
+                ->where('tp_id', $user_id)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id')
+                ->orderBy('level_id')
+                ->get();
+        
+            $approvedCounts = DB::table('tbl_application')
+                ->select('level_id', DB::raw('COUNT(*) as approved_count'))
+                ->where('approve_status', 1)
+                ->where('tp_id', $user_id)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id')
+                ->orderBy('level_id')
+                ->get();
+        
+            foreach($pendingCounts as $row){
+                $arr['data']['Level-'.$row->level_id]['pending'] = $row->pending_count;
+            }
+            foreach($processingCounts as $row){
+                $arr['data']['Level-'.$row->level_id]['processing'] = $row->processing_count;
+            }
+            foreach($approvedCounts as $row){
+                $arr['data']['Level-'.$row->level_id]['approved'] = $row->approved_count;
+            }
+        
+            // Prepare the data in the Highcharts format
+            $chartData = [
+                [
+                    'name' => 'Pending Applications',
+                    'data' => [
+                        ['Level-1', $arr['data']['Level-1']['pending']],
+                        ['Level-2', $arr['data']['Level-2']['pending']],
+                        ['Level-3', $arr['data']['Level-3']['pending']]
+                    ]
+                ],
+                [
+                    'name' => 'Processing Applications',
+                    'data' => [
+                        ['Level-1', $arr['data']['Level-1']['processing']],
+                        ['Level-2', $arr['data']['Level-2']['processing']],
+                        ['Level-3', $arr['data']['Level-3']['processing']]
+                    ]
+                ],
+                [
+                    'name' => 'Approved Applications',
+                    'data' => [
+                        ['Level-1', $arr['data']['Level-1']['approved']],
+                        ['Level-2', $arr['data']['Level-2']['approved']],
+                        ['Level-3', $arr['data']['Level-3']['approved']]
+                    ]
+                ]
+            ];
+        
+        
+        }
+
         // onsite-assessor
         if(Auth::user()->role == 3){
             $assessor_id = Auth::user()->id;
@@ -112,18 +188,7 @@ class DashboardController extends Controller
             'complete' => 0,
         ];
        
-            foreach($application as $key => $data)
-            {
-                if ($data->payment_status == 0 || $data->payment_status == 1) {
-                    $dataCount['pending']++;
-                } elseif ($data->payment_status == 2) {
-                    $dataCount['processing']++;
-                } else {
-                    $dataCount['complete']++;
-                }
-            }
-        
-        return view("pages.dashboard",['dataCount'=>$dataCount]);
+        return view("pages.dashboard",['dataCount'=>$dataCount,'chartData'=>$chartData]);
     }
 
     function get_india_id(){
