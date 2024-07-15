@@ -77,6 +77,8 @@
 
     </div>
 
+
+
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -295,22 +297,47 @@
             </div>
 @endif
             <div class="row">
-                
-            @for($i=0;$i<count($chartData);$i++)
-            <div class="col-lg-4">
-              <div class="card">
-                <div class="body">
+                <div class="col-lg-4">
+                    <div class="card">
+
+                        <div class="body">
+
                     <figure class="highcharts-figure">
-                        <div id="container_{{$i}}"></div>
+                        <div id="container"></div>
                         <!--<p class="highcharts-description">
                              3D pie chart with an inner radius
                         </p>-->
                     </figure>
-                  </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-                @endfor
-              
+                <div class="col-lg-4">
+                    <div class="card">
+
+                        <div class="body">
+
+                            <figure class="highcharts-figure">
+                                <div id="container2"></div>
+                                <!--<p class="highcharts-description">
+                                3D pie chart with an inner radius
+                                </p>-->
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+
+                        <div class="body">
+                            <figure class="highcharts-figure">
+                                <div id="container3"></div>
+                                <!--<p class="highcharts-description">
+                                3D pie chart with an inner radius
+                                </p>-->
+                            </figure>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -381,42 +408,121 @@
 <script src="{{asset('assets/js/charts/export-data.js')}}"></script>
 <script src="{{asset('assets/js/charts/accessibility.js')}}"></script>
 
-<script>
-@for($i = 0; $i < count($chartData); $i++)
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            Highcharts.chart('container_{{ $i }}', {
-                chart: {
-                    type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45
-                    }
-                },
-                title: {
-                    text: '{{ $chartData[$i]['name'] }}',
-                    align: 'left'
-                },
-                subtitle: {
-                    text: 'Total {{ $chartData[$i]['name'] }}: {{ array_sum(array_column($chartData[$i]['data'], 1)) }}',
-                    align: 'left'
-                },
-                plotOptions: {
-                    pie: {
-                        innerSize: 100,
-                        depth: 45
-                    }
-                },
-                series: [{
-                    name: '{{ $chartData[$i]['name'] }}',
-                    data: {!! json_encode($chartData[$i]['data']) !!}
-                }]
-            });
-        });
-    </script>
-@endfor
+        <script>
+            // Data retrieved from https://olympics.com/en/olympic-games/beijing-2022/medals
+Highcharts.chart('container', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Pending Applications',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Total Pending Applications: {{(@$dataCount['pending'])}}',
+        align: 'left'
+    },
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+    series: [{
+        name: 'No of Pending Application',
+        data: [
+            ['India', {{@$dataCount['pending']}}],
+            ['SAARC',  {{@$dataCount['pending']}}],
+            ['Rest of the World',  {{@$dataCount['pending']}}],
 
-</script>
+        ]
+    }]
+});
+Highcharts.chart('container2', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Processing Applications',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Total Processing Applications: {{(@$dataCount['pending'])}}',
+        align: 'left'
+    },
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+
+    series: [{
+        name: 'No of Processing Application',
+        data: [
+            ['India', {{@$dataCount['processing']}}],
+            ['SAARC',  {{@$dataCount['processing']}}],
+            ['Rest of the World',  {{@$dataCount['processing']}}],
+
+        ]
+    }]
+});
+Highcharts.chart('container3', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Approved Applications',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Total Approved Applications: {{(@$dataCount['complete']+@$dataCount['complete']+@$dataCount['complete'])}}',
+        align: 'left'
+    },
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+   /* series: [{
+        name: 'Medals',
+        data: [
+            ['Norway', 16],
+            ['Germany', 12],
+            ['USA', 8],
+            ['Sweden', 8],
+            ['Netherlands', 8],
+            ['ROC', 6],
+            ['Austria', 7],
+            ['Canada', 4],
+            ['Japan', 3]
+
+        ]
+    }]*/
+    series: [{
+        name: 'No of Approved Application',
+        data: [
+            ['India', {{@$dataCount['complete']}}],
+            ['SAARC',  {{@$dataCount['complete']}}],
+            ['Rest of the World',  {{@$dataCount['complete']}}],
+
+        ]
+    }]
+});
+        </script>
 
 <script>
 function showHtmlMessageActive() {

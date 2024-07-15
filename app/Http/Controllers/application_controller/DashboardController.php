@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\application_controller;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
@@ -60,38 +61,98 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        // $data['pending']=[
-        //     'india'=>$this->get_application_india(0),
-        //     'saarc'=>$this->get_application_saarc(0),
-        //     'world'=>$this->get_application_world(0)
-        // ];
-        // $data['processing']=[
-        //     'india'=>$this->get_application_india(2),
-        //     'saarc'=>$this->get_application_saarc(2),
-        //     'world'=>$this->get_application_world(2)
-        // ];
-        // $data['approved']=[
-        //     'india'=>$this->get_application_india(1),
-        //     'saarc'=>$this->get_application_saarc(1),
-        //     'world'=>$this->get_application_world(1)
-        // ];
-        // dd(Auth::user()->role);
-
+      
         // for admin
         if(Auth::user()->role == 1){
             $application = DB::table('tbl_application as a')
-            ->whereIn('a.payment_status',[0,1,2,3])
+            // ->whereIn('a.payment_status',[0,1,2,3])
             ->orderBy('id','desc')
             ->get();
         }
-        if(Auth::user()->role == 2){
+        
+ 
+
+        if (Auth::user()->role == 2) {
             // tp dashboard
-            $application = DB::table('tbl_application as a')
-            ->where('tp_id',Auth::user()->id)
-            ->whereIn('a.payment_status',[0,1,2,3])
-            ->orderBy('id','desc')
-            ->get();
-        }        
+            $user_id = Auth::user()->id;
+            $arr = [
+                'type' => 'tp',
+                'graph_count' => 3,
+                'data' => [
+                    'Level-1' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                    'Level-2' => ["pending" => 0, "processing" => 0, "approved" => 0],
+                    'Level-3' => ["pending" => 0, "processing" => 0, "approved" => 0]
+                ]
+            ];
+        
+            $pendingCounts = DB::table('tbl_application')
+                ->select('level_id', DB::raw('COUNT(*) as pending_count'))
+                ->where('payment_status', 0)
+                ->where('tp_id', $user_id)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id')
+                ->orderBy('level_id')
+                ->get();
+        
+            $processingCounts = DB::table('tbl_application')
+                ->select('level_id', DB::raw('COUNT(*) as processing_count'))
+                ->where('payment_status', 5)
+                ->where('tp_id', $user_id)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id')
+                ->orderBy('level_id')
+                ->get();
+        
+            $approvedCounts = DB::table('tbl_application')
+                ->select('level_id', DB::raw('COUNT(*) as approved_count'))
+                ->where('approve_status', 1)
+                ->where('tp_id', $user_id)
+                ->whereIn('level_id', [1, 2, 3])
+                ->groupBy('level_id')
+                ->orderBy('level_id')
+                ->get();
+        
+            foreach($pendingCounts as $row){
+                $arr['data']['Level-'.$row->level_id]['pending'] = $row->pending_count;
+            }
+            foreach($processingCounts as $row){
+                $arr['data']['Level-'.$row->level_id]['processing'] = $row->processing_count;
+            }
+            foreach($approvedCounts as $row){
+                $arr['data']['Level-'.$row->level_id]['approved'] = $row->approved_count;
+            }
+        
+            // Prepare the data in the Highcharts format
+            $chartData = [
+                [
+                    'name' => 'Pending Applications',
+                    'data' => [
+                        ['Level-1', $arr['data']['Level-1']['pending']],
+                        ['Level-2', $arr['data']['Level-2']['pending']],
+                        ['Level-3', $arr['data']['Level-3']['pending']]
+                    ]
+                ],
+                [
+                    'name' => 'Processing Applications',
+                    'data' => [
+                        ['Level-1', $arr['data']['Level-1']['processing']],
+                        ['Level-2', $arr['data']['Level-2']['processing']],
+                        ['Level-3', $arr['data']['Level-3']['processing']]
+                    ]
+                ],
+                [
+                    'name' => 'Approved Applications',
+                    'data' => [
+                        ['Level-1', $arr['data']['Level-1']['approved']],
+                        ['Level-2', $arr['data']['Level-2']['approved']],
+                        ['Level-3', $arr['data']['Level-3']['approved']]
+                    ]
+                ]
+            ];
+        
+        
+        }
+
         // onsite-assessor
         if(Auth::user()->role == 3){
             $assessor_id = Auth::user()->id;
@@ -99,7 +160,7 @@ class DashboardController extends Controller
                 ->where('assessor_id',$assessor_id)
                 ->pluck('application_id')->toArray();
             $application = DB::table('tbl_application')
-            ->whereIn('payment_status',[1,2,3])
+            // ->whereIn('payment_status',[1,2,3])
             ->whereIn('id',$assessor_application)
             ->orderBy('id','desc')
             ->get();
@@ -107,7 +168,7 @@ class DashboardController extends Controller
         // account detail
         if(Auth::user()->role == 6){
             $application = DB::table('tbl_application as a')
-            ->whereIn('payment_status',[0,1,2,3])
+            // ->whereIn('payment_status',[0,1,2,3])
             ->orderBy('id','desc')
             ->get();
         }
@@ -115,61 +176,19 @@ class DashboardController extends Controller
         // secretaritat detail
         if(Auth::user()->role == 5){
             $application = DB::table('tbl_application as a')
-            ->whereIn('a.payment_status',[0,1,2,3])
+            // ->whereIn('a.payment_status',[0,1,2,3])
             ->where('secretariat_id',Auth::user()->id)
             ->orderBy('id','desc')
             ->get();
         }
 
-        $final_data=array();
         $dataCount = [
             'pending' => 0,
             'processing' => 0,
             'complete' => 0,
         ];
-        foreach($application as $app){
-            $obj = new \stdClass;
-            $obj->application_list= $app;
-                $course = DB::table('tbl_application_courses')->where([
-                    'application_id' => $app->id,
-                ])
-                ->whereNull('deleted_at') 
-                ->count();
-                if($course){
-                    $obj->course_count = $course;
-                }
-                $payment = DB::table('tbl_application_payment')->where([
-                    'application_id' => $app->id,
-                    
-                ])
-                ->first();
-                $payment_amount = DB::table('tbl_application_payment')->where([
-                    'application_id' => $app->id,
-                ])
-                ->where('status',2)
-                ->sum('amount');
-                $payment_count = DB::table('tbl_application_payment')->where([
-                    'application_id' => $app->id,
-                ])
-                ->where('status',2)
-                ->count();
-                $final_data[] = $obj;
-            }
-            foreach($final_data as $key => $data)
-            {
-                if ($data->application_list->payment_status == 0 || $data->application_list->payment_status == 1) {
-                    // pending
-                    $dataCount['pending']++;
-                } elseif ($data->application_list->payment_status == 2) {
-                    // process
-                    $dataCount['processing']++;
-                } else {
-                    // complete
-                    $dataCount['complete']++;
-                }
-            }
-        
-        return view("pages.dashboard",['dataCount'=>$dataCount]);
+       
+        return view("pages.dashboard",['dataCount'=>$dataCount,'chartData'=>$chartData]);
     }
 
     function get_india_id(){

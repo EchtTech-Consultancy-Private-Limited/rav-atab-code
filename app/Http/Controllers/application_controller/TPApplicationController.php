@@ -3467,7 +3467,7 @@ public function isNcOnCourseDocsList($application_id,$application_courses_id)
         
         // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
 
-        if ($result->status == 2 || $result->status == 3 || $result->status == 4) {
+        if (($result->status == 2 || $result->status == 3 || $result->status == 4) && $result->is_revert==1) {
             $flag = 1;
             break;
         } else {
