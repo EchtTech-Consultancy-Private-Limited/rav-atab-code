@@ -201,7 +201,7 @@
                                     <div class="col-4 text-left">
                                         <span class="span-width">Active</span>
                                         <h2 class="d-flex align-items-left mb-0">
-                                        {{@$dataCount['complete']}}
+                                        {{$total_active_national}}
                                     </h2>
                                     </div>
 
@@ -209,7 +209,7 @@
                                 <div class="col-4 text-left">
                                     <span class="span-width">Pending</span>
                                     <h2 class="d-flex align-items-right mb-0 mergin-left">
-
+                                    {{$total_pending_national}}
                                     </h2>
                                 </div>
 
@@ -228,18 +228,18 @@
                             </div>
                             <div class="row align-items-center mb-2 d-flex">
                                 <div class="col-8">
-                                    <div class="col-4 text-left"   style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-active-model-remove">
+                                    <div class="col-4 text-left">
                                         <span class="span-width">Active</span>
                                         <h2 class="d-flex align-items-left mb-0">
-                                        {{(@$dataCount['complete'])}}
+                                        {{$total_active_international}}
                                     </h2>
                                     </div>
 
                                 </div>
-                                <div class="col-4 text-left"  style="cursor:pointer; z-index:1000!important;"  data-bs-toggle="modal" data-bs-target="#international-pending-model-remove">
+                                <div class="col-4 text-left">
                                     <span class="span-width">Pending</span>
                                     <h2 class="d-flex align-items-right mb-0 mergin-left">
-                                     10
+                                    {{$total_pending_international}}
                                     </h2>
                                 </div>
 
