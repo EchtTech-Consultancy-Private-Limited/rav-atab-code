@@ -603,11 +603,10 @@
                                                             class="btn btn-tbl-delete bg-danger">
                                                             <i class="material-icons">delete</i>
                                                         </a>
-                                                        <a href="{{ url('/tp-upload-document-level-2' . '/' . dEncrypt($applicationData->id).'/'.dEncrypt($courses->id)) }}"
+                                                        <!-- <a href="{{ url('/tp-upload-document-level-2' . '/' . dEncrypt($applicationData->id).'/'.dEncrypt($courses->id)) }}"
                                                             class="btn btn-tbl-delete bg-success">
                                                             <span class="material-symbols-outlined">Upload</span>
-                                                            <!-- <i class="material-icons">Upload Docs</i> -->
-                                                        </a>
+                                                        </a> -->
                                                     </td>
                                                 </tr>
                                             @endforeach

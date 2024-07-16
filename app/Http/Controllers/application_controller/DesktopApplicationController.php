@@ -1194,13 +1194,13 @@ class DesktopApplicationController extends Controller
                 
             }
         }
-        
+        // dd($flag);
         if ($flag == 0) {
             return "hide";
         } else if($flag==2) {
             return "show";
         }else{
-            return "hide";
+            return "abc";
         }
 
     }
