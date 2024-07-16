@@ -286,10 +286,10 @@ class SummaryController extends Controller
         if(!empty($check_report)){
             return back()->with('fail', 'This application record already submitted');
         }
-        // $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList(dDecrypt($application_id),dDecrypt($application_course_id));
-        // if($checkAllActionDoneOnDocList==false){
-        //     return back()->with('fail', 'Waiting for tp to reupload doc.');
-        // }
+        $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList(dDecrypt($application_id),dDecrypt($application_course_id));
+        if($checkAllActionDoneOnDocList=="hide"){
+            return back()->with('fail', 'Please wait for tp to reupload doc.');
+        }
         $assessor_id = Auth::user()->id;
         $data = [];
         $data['application_id']=dDecrypt($application_id);
@@ -489,6 +489,13 @@ class SummaryController extends Controller
             if(!empty($check_report)){
                 return back()->with('fail', 'This application record already submitted');
             }
+            $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList($application_id,dDecrypt($request->application_course_id));
+            
+                if($checkAllActionDoneOnDocList=="hide"){
+                    return back()->with('fail', 'Please wait for tp to reupload doc.');
+                }
+
+
             $assessor_id = Auth::user()->id;
             $data = [];
             $data['application_id']=$application_id;
