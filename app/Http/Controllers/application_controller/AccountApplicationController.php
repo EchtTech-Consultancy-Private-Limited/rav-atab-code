@@ -434,7 +434,7 @@ class AccountApplicationController extends Controller
 
     public function getApplicationPaymentFeeList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('payment_status',[0,1,2,3])
+        ->whereIn('payment_status',[0,1,2,3,5])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();

@@ -30,7 +30,7 @@ class AdminApplicationController extends Controller
     }
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3])
+        ->whereIn('a.payment_status',[2,3,5])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();

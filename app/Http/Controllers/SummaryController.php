@@ -288,7 +288,7 @@ class SummaryController extends Controller
         }
         $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList(dDecrypt($application_id),dDecrypt($application_course_id));
         if($checkAllActionDoneOnDocList=="hide"){
-            return back()->with('fail', 'Please wait for tp to reupload doc.');
+            // return back()->with('fail', 'Please wait for tp to reupload doc.');
         }
         $assessor_id = Auth::user()->id;
         $data = [];
@@ -491,9 +491,9 @@ class SummaryController extends Controller
             }
             $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList($application_id,dDecrypt($request->application_course_id));
             
-                if($checkAllActionDoneOnDocList=="hide"){
-                    return back()->with('fail', 'Please wait for tp to reupload doc.');
-                }
+                // if($checkAllActionDoneOnDocList=="hide"){
+                //     return back()->with('fail', 'Please wait for tp to reupload doc.');
+                // }
 
 
             $assessor_id = Auth::user()->id;
