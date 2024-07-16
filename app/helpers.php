@@ -1565,7 +1565,14 @@ function getNotificationByUser($userType)
 {
     try{
 
-        $getNotification = DB::table('tbl_notifications')->where('user_type',$userType)->where('sender_id',Auth::user()->id)->where('is_read','0')->orderBy('id','desc')->get();
+        $query = DB::table('tbl_notifications');
+        if(!in_array($userType,["superadmin","accountant"])){
+            $query->where('receiver_id',Auth::user()->id);
+        }
+        $query->where('user_type',$userType);
+        $query->where('is_read','0');
+        $query->orderBy('id','desc');
+        $getNotification =$query->get();
         
         if(isset($getNotification)){
             return $getNotification;
