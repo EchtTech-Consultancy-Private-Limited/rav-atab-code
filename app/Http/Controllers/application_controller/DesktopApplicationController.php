@@ -27,7 +27,7 @@ class DesktopApplicationController extends Controller
             ->pluck('application_id')->toArray();
         $final_data = array();
         $application = DB::table('tbl_application')
-            ->whereIn('payment_status', [1, 2, 3])
+            ->whereIn('payment_status', [1, 2, 3,5])
             ->whereIn('id', $assessor_application)
             ->orderBy('id', 'desc')
             ->get();
