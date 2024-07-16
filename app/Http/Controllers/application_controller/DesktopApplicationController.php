@@ -27,7 +27,7 @@ class DesktopApplicationController extends Controller
             ->pluck('application_id')->toArray();
         $final_data = array();
         $application = DB::table('tbl_application')
-            ->whereIn('payment_status', [1, 2, 3,5])
+            ->whereIn('payment_status', [1, 2, 3, 5])
             ->whereIn('id', $assessor_application)
             ->orderBy('id', 'desc')
             ->get();
@@ -149,7 +149,7 @@ class DesktopApplicationController extends Controller
         $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList($application_id,$course_id);
         $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow($application_id,$course_id);
         
-        // dd($isCreateSummaryBtnShow);
+        
         
         $chapters = Chapter::all();
         foreach ($chapters as $chapter) {
