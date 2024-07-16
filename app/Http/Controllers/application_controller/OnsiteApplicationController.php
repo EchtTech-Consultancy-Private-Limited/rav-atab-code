@@ -1124,9 +1124,11 @@ public function onsiteUpdateNCFlagDocList($application_id)
                   sendNotification($notifiData);
                   $notifiData['user_type'] = "tp";
                   $notifiData['url'] = $tpUrl;
+                  $notifiData['receiver_id'] = $get_application->tp_id;
                   sendNotification($notifiData);
                   $notifiData['user_type'] = "secretariat";
                   $notifiData['url'] = $url;
+                  $notifiData['receiver_id'] = $get_application->secretariat_id;
                   sendNotification($notifiData);
                     /*end here*/ 
                   createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));

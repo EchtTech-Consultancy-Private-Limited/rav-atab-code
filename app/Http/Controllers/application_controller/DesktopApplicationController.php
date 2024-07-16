@@ -718,9 +718,11 @@ class DesktopApplicationController extends Controller
                     /*send notification*/ 
                     sendNotification($notifiData);
                     $notifiData['user_type'] = "tp";
+                    $notifiData['receiver_id'] = $get_application->tp_id;
                     $notifiData['url'] = $tpUrl;
                     sendNotification($notifiData);
                     $notifiData['user_type'] = "secretariat";
+                    $notifiData['receiver_id'] = $get_application->secretariat_id;
                     $notifiData['url'] = $url;
                     sendNotification($notifiData);
                         /*end here*/ 

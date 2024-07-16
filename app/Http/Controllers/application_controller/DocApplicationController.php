@@ -220,6 +220,7 @@ class DocApplicationController extends Controller
              $notifiData = [];
              $notifiData['user_type'] = "tp";
              $notifiData['sender_id'] = Auth::user()->id;
+             $notifiData['receiver_id'] = $app_->tp_id;
              $notifiData['application_id'] = $application_id;
              $notifiData['uhid'] = getUhid( $application_id)[0];
              $notifiData['level_id'] = getUhid( $application_id)[1];

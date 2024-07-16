@@ -334,6 +334,7 @@ class SummaryController extends Controller
       
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['receiver_id'] = $get_app->tp_id;
             $notifiData['application_id'] =$application_id;
             $notifiData['uhid'] = getUhid($application_id)[0];
             $notifiData['level_id'] = getUhid($application_id)[1] ;
@@ -346,6 +347,7 @@ class SummaryController extends Controller
             $notifiData['url'] = $sUrl.dEncrypt($application_id);
             sendNotification($notifiData);
             $notifiData['user_type'] = "secretariat";
+            $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
             /*end here*/ 
@@ -372,6 +374,7 @@ class SummaryController extends Controller
                 $url=$url.dEncrypt($application_id);    
             }
             $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['receiver_id'] = $get_app->tp_id;
             $notifiData['application_id'] =$application_id;
             $notifiData['uhid'] = getUhid($application_id)[0];
             $notifiData['level_id'] = getUhid($application_id)[1] ;
@@ -544,6 +547,7 @@ class SummaryController extends Controller
     
                 $notifiData = [];
                 $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['receiver_id'] = $get_app->tp_id;
                 $notifiData['application_id'] =$application_id;
                 $notifiData['uhid'] = getUhid($application_id)[0];
                 $notifiData['level_id'] = getUhid($application_id)[1] ;
@@ -556,6 +560,7 @@ class SummaryController extends Controller
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "secretariat";
+                $notifiData['receiver_id'] = $get_app->secretariat_id;
                 $notifiData['url'] = $url;
                 sendNotification($notifiData);
                 /*end here*/ 

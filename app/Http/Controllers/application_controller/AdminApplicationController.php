@@ -2212,6 +2212,7 @@ class AdminApplicationController extends Controller
         /*send notification*/ 
          $notifiData = [];
          $notifiData['sender_id'] = Auth::user()->id;
+         $notifiData['receiver_id'] = $request->assessor_id;
          $notifiData['application_id'] =$request->application_id;
          $notifiData['uhid'] = getUhid($request->application_id)[0];
          $notifiData['level_id'] = getUhid($request->application_id)[1] ;
@@ -2449,6 +2450,7 @@ class AdminApplicationController extends Controller
             /*send notification*/ 
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['receiver_id'] = $request->assessor_id;
             $notifiData['application_id'] =$request->application_id;
             $notifiData['uhid'] = getUhid($request->application_id)[0];
             $notifiData['level_id'] = getUhid($request->application_id)[1] ;

@@ -420,6 +420,7 @@ class TPApplicationController extends Controller
        $notifiData['url'] = $sUrl.dEncrypt($request->application_id);
     //    sendNotification($notifiData);
        $notifiData['user_type'] = "secretariat";
+       $notifiData['receiver_id'] = $get_app->secretariat_id;
        $notifiData['url'] = $url;
     //    sendNotification($notifiData);
        /*end here*/ 
@@ -964,6 +965,7 @@ class TPApplicationController extends Controller
             /*send notification*/ 
             sendNotification($notifiData);
             $notifiData['user_type'] = "secretariat";
+            $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
             /*end here*/ 
