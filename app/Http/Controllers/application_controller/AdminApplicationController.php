@@ -2449,17 +2449,19 @@ class AdminApplicationController extends Controller
 
             /*send notification*/ 
             $notifiData = [];
-            $notifiData['sender_id'] = Auth::user()->id;
-            $notifiData['receiver_id'] = $request->assessor_id;
-            $notifiData['application_id'] =$request->application_id;
-            $notifiData['uhid'] = getUhid($request->application_id)[0];
-            $notifiData['level_id'] = getUhid($request->application_id)[1] ;
-            $notifiData['user_type'] = "onsite";
-            $url = config('notification.onsiteUrl.level1');
-            $notifiData['url'] = $url.dEncrypt($request->application_id);
-            $notifiData['data'] = config('notification.assessor_onsite.assigned');
-            sendNotification($notifiData);
-
+            foreach($request->assessor_id as $asse)
+            {
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['receiver_id'] = $asse;
+                $notifiData['application_id'] =$request->application_id;
+                $notifiData['uhid'] = getUhid($request->application_id)[0];
+                $notifiData['level_id'] = getUhid($request->application_id)[1] ;
+                $notifiData['user_type'] = "onsite";
+                $url = config('notification.onsiteUrl.level1');
+                $notifiData['url'] = $url.dEncrypt($request->application_id);
+                $notifiData['data'] = config('notification.assessor_onsite.assigned');
+                sendNotification($notifiData);
+            }
             $notifiData['user_type'] = "superadmin";
             $url = config('notification.adminUrl.level1');
             $notifiData['url'] = $url.dEncrypt($request->application_id);

@@ -1,5 +1,3 @@
-level-3 secretariat
-
 @include('layout.header')
 <title>RAV Accreditation</title>
 
