@@ -364,7 +364,7 @@
                                        </tbody>
                                        
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
+                                    @if(!$is_final_submit && $is_doc_uploaded )
                                                 <div class="col-md-12 p-2" id="comment-section">
                                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
                                                                     <textarea rows="30" cols="80" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
