@@ -278,16 +278,12 @@ class ApplicationCoursesController extends Controller
     public function createNewCourse($id = null)
     {
         $id = dDecrypt($id);
-        
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
         }else{
             $applicationData=null;
         }
         $course = TblApplicationCourses::where('application_id', $id)->get();
-        
-        
-
         return view('create-application.course.create-course', compact('applicationData', 'course'));
     }
 
