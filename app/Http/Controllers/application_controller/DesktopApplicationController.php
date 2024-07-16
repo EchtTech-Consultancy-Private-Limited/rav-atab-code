@@ -148,7 +148,8 @@ class DesktopApplicationController extends Controller
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application_id);
         $checkAllActionDoneOnDocList = $this->checkAllActionDoneOnDocList($application_id,$course_id);
         $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow($application_id,$course_id);
-
+        
+        // dd($isCreateSummaryBtnShow);
         
         $chapters = Chapter::all();
         foreach ($chapters as $chapter) {
@@ -1184,15 +1185,22 @@ class DesktopApplicationController extends Controller
             if (((($result->status==2 || $result->status==3 || $result->status==0) || ($result->status==4 && $result->admin_nc_flag!=1)) && $result->is_revert==1)) {
                 $flag = 0;
             } else {
-                $flag = 1;
-                break;
+                if($result->status==1){
+                    $flag=2;
+                }else{
+                    $flag = 1;
+                    break;
+                }
+                
             }
         }
-
+        
         if ($flag == 0) {
-            return false;
-        } else {
-            return true;
+            return "hide";
+        } else if($flag==2) {
+            return "show";
+        }else{
+            return "hide";
         }
 
     }
