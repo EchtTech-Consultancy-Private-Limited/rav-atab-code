@@ -1287,7 +1287,8 @@ class SuperAdminApplicationController extends Controller
                     $assessor_type = $paymentCount>1?'onsite':'desktop';
                 }
                 
-                $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->count();
+                $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('
+                ')->count();
                 $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)
                 ->where('assessor_type',$assessor_type)
                 ->count();
