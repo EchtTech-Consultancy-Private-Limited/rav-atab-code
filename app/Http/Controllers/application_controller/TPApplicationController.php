@@ -1042,7 +1042,6 @@ public function  storeNewApplication(Request $request)
             $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
             $data['region'] = $region;
-            dd($data);
             TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
             $application = new TblApplication($data);
             $application->save();

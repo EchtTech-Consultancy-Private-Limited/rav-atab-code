@@ -271,12 +271,13 @@ class SuperAdminApplicationController extends Controller
               $notifiData = [];
               $notifiData['user_type'] = "secretariat";
               $notifiData['sender_id'] = Auth::user()->id;
-              $notifiData['receiver_id'] = $get_app->secretariat_id;
+              $notifiData['receiver_id'] = $request->secretariat_id;
               $notifiData['application_id'] = $request->application_id;
               $notifiData['uhid'] = getUhid( $request->application_id)[0];
               $notifiData['level_id'] = getUhid( $request->application_id)[1];
               $notifiData['url'] = $url;
               $notifiData['data'] = config('notification.secretariat.assigned');
+              
               sendNotification($notifiData);
             /*end here*/ 
 
