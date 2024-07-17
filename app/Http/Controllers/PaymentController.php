@@ -112,6 +112,21 @@ class PaymentController extends Controller
                     $ApplicationCourse->update(['payment_status' =>1]);
                 }
 
+
+                     /*send notification*/ 
+                    $acUrl = config('notification.accountantUrl.level1');
+                    $notifiData = [];
+                    $notifiData['user_type'] = "accountant";
+                    $notifiData['sender_id'] = Auth::user()->id;
+                    $notifiData['application_id'] =$application_id;
+                    $notifiData['uhid'] = getUhid($application_id)[0];
+                    $notifiData['level_id'] = getUhid($application_id)[1] ;
+                    $notifiData['url'] = $acUrl.dEncrypt($application_id);
+                    $notifiData['data'] = config('notification.accountant.appCreated');
+                    sendNotification($notifiData);
+                    /*end here*/ 
+        
+
             DB::commit();
             $data = [
                 'ReferenceNo' =>$request['ReferenceNo'], 
