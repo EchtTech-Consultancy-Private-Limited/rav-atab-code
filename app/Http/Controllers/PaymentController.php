@@ -146,13 +146,12 @@ class PaymentController extends Controller
                     }
 
                 }
-                
-
-                     /*send notification*/ 
+               // dd(Auth::user());
+            /*send notification*/ 
                     $acUrl = config('notification.accountantUrl.level1');
                     $notifiData = [];
                     $notifiData['user_type'] = "accountant";
-                    $notifiData['sender_id'] = $appdetails->tp_id;
+                    $notifiData['sender_id'] =$appdetails->tp_id;
                     $notifiData['application_id'] =$application_id;
                     $notifiData['uhid'] = getUhid($application_id)[0];
                     $notifiData['level_id'] = getUhid($application_id)[1];
