@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\application_controller\DashboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\applicationController;
 use App\Http\Controllers\SummaryController;
@@ -443,6 +443,7 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
 
     Route::post('/desktop/update-nc-flag-doc-list/{application_id}/{course_id?}', [DesktopApplicationController::class, 'desktopUpdateNCFlagDocList']);
     Route::post('/tp/update-nc-flag/{application_id}/{course_id?}', [TPApplicationController::class, 'tpUpdateNCFlagDocList']);
+    Route::post('/tp/update-flag/course-doc/{application_id}', [TPApplicationController::class, 'tpUpdateNCFlagCourseDoc']);
 
 
     // Route::get('/desktop-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DesktopApplicationController::class, 'secretariatVerfiyDocument']);
@@ -458,7 +459,8 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
 Route::post('/secretariat/upload-mom', [SecretariatDocumentVerifyController::class, 'uploadMoM']);
 Route::post('/admin/return/mom', [AdminApplicationController::class, 'adminReturnMom']);
 /*Secretariat nc's 44 documents route*/ 
-Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);
+// Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentList']);
+Route::get('/secretariat/document-list/{id}/{course_id}', [SecretariatDocumentVerifyController::class, 'applicationDocumentListDAOA']);
 
 Route::get('/secretariat-{nc_type}/verify-doc-level-2/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SecretariatDocumentVerifyController::class, 'secretariatVerfiyDocumentLevel2']);
 

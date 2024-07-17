@@ -33,7 +33,7 @@ class AdminApplicationController extends Controller
     public function getApplicationList()
     {
         $application = DB::table('tbl_application as a')
-            ->whereIn('a.payment_status', [2, 3])
+            ->whereIn('a.payment_status', [2, 3,5])
             ->where('secretariat_id', Auth::user()->id)
             ->orderBy('id', 'desc')
             ->get();
@@ -795,6 +795,7 @@ class AdminApplicationController extends Controller
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('course_id', $course_id)
             ->where('application_id', $application_id)
+            ->whereNull('deleted_at')
             ->where('approve_status',1)
             ->get();
 
@@ -818,6 +819,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
+                ->whereNull('deleted_at')
                 // ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
@@ -862,6 +864,7 @@ class AdminApplicationController extends Controller
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             ->where('course_id', $course_id)
             ->where('application_id', $application_id)
+            ->whereNull('deleted_at')
             // ->where('approve_status',1)
             ->get();
 
@@ -882,6 +885,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -921,6 +925,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('course_id', $course_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -944,6 +949,7 @@ class AdminApplicationController extends Controller
                 ->where('course_id', $result->course_id)
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
+                ->whereNull('deleted_at')
                 ->where('approve_status',1)
                 ->first();
             if ($additionalField) {
@@ -982,6 +988,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('course_id', $course_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -1006,6 +1013,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1041,6 +1049,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'course_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'course_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('course_id', $course_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -1065,6 +1074,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1102,6 +1112,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('application_courses_id', $application_courses_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -1127,6 +1138,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1169,6 +1181,7 @@ class AdminApplicationController extends Controller
             // ->where('application_courses_id', $application_courses_id)
             ->where('application_id', $application_id)
             ->where('approve_status',1)
+            ->whereNull('deleted_at')
             ->get();
     
             
@@ -1192,6 +1205,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1232,6 +1246,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('application_courses_id', $application_courses_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -1257,6 +1272,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1298,6 +1314,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('application_courses_id', $application_courses_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -1323,6 +1340,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1359,6 +1377,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('application_courses_id', $application_courses_id)
+            ->whereNull('deleted_at')
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
@@ -1384,6 +1403,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1421,6 +1441,7 @@ class AdminApplicationController extends Controller
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             // ->where('application_courses_id', $application_courses_id)
             ->where('application_id', $application_id)
+            ->whereNull('deleted_at')
             ->where('approve_status',1)
             ->get();
     
@@ -1445,6 +1466,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->where('approve_status',1)
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1483,6 +1505,7 @@ class AdminApplicationController extends Controller
         ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
         ->where('application_id', $application_id)
         ->where('approve_status',1)
+        ->whereNull('deleted_at')
         ->get();
 
         
@@ -1506,6 +1529,7 @@ class AdminApplicationController extends Controller
             ->where('doc_sr_code', $result->doc_sr_code)
             ->where('doc_unique_id', $result->doc_unique_id)
             ->where('approve_status',1)
+            ->whereNull('deleted_at')
             ->first();
         if ($additionalField) {
             $results[$key]->status = $additionalField->status;
@@ -1543,6 +1567,7 @@ class AdminApplicationController extends Controller
             ->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
             ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id')
             ->where('application_id', $application_id)
+            ->whereNull('deleted_at')
             ->whereIn('approve_status',[0,1])
             ->get();
 
@@ -1567,6 +1592,7 @@ class AdminApplicationController extends Controller
                 ->where('doc_sr_code', $result->doc_sr_code)
                 ->where('doc_unique_id', $result->doc_unique_id)
                 ->whereIn('approve_status',[0,1])
+                ->whereNull('deleted_at')
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
@@ -1995,6 +2021,7 @@ class AdminApplicationController extends Controller
          $results->select('application_id', 'application_courses_id', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'));
          $results->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id');
             $results->where('application_id', $application_id);
+            $results->whereNull('deleted_at');
             if($level_id==2){
                 // $results->where('approve_status',1);
             }
@@ -2021,6 +2048,8 @@ class AdminApplicationController extends Controller
             $additionalFields->where('application_courses_id', $result->application_courses_id);
             $additionalFields->where('doc_sr_code', $result->doc_sr_code);
             $additionalFields->where('doc_unique_id', $result->doc_unique_id);
+            $additionalFields->whereNull('deleted_at');
+            
             if($level_id==2){
                 // $results->where('approve_status',1);
             }
@@ -2204,7 +2233,7 @@ class AdminApplicationController extends Controller
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => $assessor_types])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
 
             // revert action done on course and courses docs
-            // DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+           DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
            DB::table('tbl_course_wise_document')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
 
 
@@ -2212,6 +2241,7 @@ class AdminApplicationController extends Controller
         /*send notification*/ 
          $notifiData = [];
          $notifiData['sender_id'] = Auth::user()->id;
+         $notifiData['receiver_id'] = $request->assessor_id;
          $notifiData['application_id'] =$request->application_id;
          $notifiData['uhid'] = getUhid($request->application_id)[0];
          $notifiData['level_id'] = getUhid($request->application_id)[1] ;
@@ -2448,16 +2478,19 @@ class AdminApplicationController extends Controller
 
             /*send notification*/ 
             $notifiData = [];
-            $notifiData['sender_id'] = Auth::user()->id;
-            $notifiData['application_id'] =$request->application_id;
-            $notifiData['uhid'] = getUhid($request->application_id)[0];
-            $notifiData['level_id'] = getUhid($request->application_id)[1] ;
-            $notifiData['user_type'] = "onsite";
-            $url = config('notification.onsiteUrl.level1');
-            $notifiData['url'] = $url.dEncrypt($request->application_id);
-            $notifiData['data'] = config('notification.assessor_onsite.assigned');
-            sendNotification($notifiData);
-
+            foreach($request->assessor_id as $asse)
+            {
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['receiver_id'] = $asse;
+                $notifiData['application_id'] =$request->application_id;
+                $notifiData['uhid'] = getUhid($request->application_id)[0];
+                $notifiData['level_id'] = getUhid($request->application_id)[1] ;
+                $notifiData['user_type'] = "onsite";
+                $url = config('notification.onsiteUrl.level1');
+                $notifiData['url'] = $url.dEncrypt($request->application_id);
+                $notifiData['data'] = config('notification.assessor_onsite.assigned');
+                sendNotification($notifiData);
+            }
             $notifiData['user_type'] = "superadmin";
             $url = config('notification.adminUrl.level1');
             $notifiData['url'] = $url.dEncrypt($request->application_id);
@@ -2862,7 +2895,7 @@ class AdminApplicationController extends Controller
     public function getApplicationPaymentFeeList()
     {
         $application = DB::table('tbl_application as a')
-            ->whereIn('a.payment_status', [2, 3])
+            ->whereIn('a.payment_status', [2, 3,5])
             ->where('secretariat_id', Auth::user()->id)
             ->orderBy('id', 'desc')
             ->get();

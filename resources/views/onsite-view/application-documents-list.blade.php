@@ -542,8 +542,7 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    @if(!$is_final_submit && $is_doc_uploaded)
-                                    
+                              @if(!$is_final_submit && $is_doc_uploaded && $isCreateSummaryBtnShow=="show")
                                  <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
                                      @csrf
                                        <input type="hidden" name="application_id" value="{{$encrypted_app_id}}">

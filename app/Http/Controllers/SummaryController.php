@@ -100,7 +100,7 @@ class SummaryController extends Controller
         $assessor_name = Auth::user()->firstname.' '.Auth::user()->middlename.' '.Auth::user()->lastname;
         
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','final_summary_repo.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','ass_impr_form.assessee_org as onsite_assessee_org')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','final_summary_repo.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.remark','ass_impr_form.assessee_org as onsite_assessee_org')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
@@ -191,7 +191,7 @@ class SummaryController extends Controller
     }   
 
 
-       $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way;
+       $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$summertReport->application_id])->first()->assessment_way??'N/A';
 
        $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id)])->first();
        if(!empty($is_exists)){
@@ -280,10 +280,15 @@ class SummaryController extends Controller
         
         try{
         DB::beginTransaction();
+
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
         $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
         if(!empty($check_report)){
             return back()->with('fail', 'This application record already submitted');
+        }
+        $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow(dDecrypt($application_id),dDecrypt($application_course_id),'desktop');
+        if($isCreateSummaryBtnShow=="hide"){
+            return back()->with('fail', 'Please wait for tp to reupload doc.');
         }
         $assessor_id = Auth::user()->id;
         $data = [];
@@ -334,6 +339,7 @@ class SummaryController extends Controller
       
             $notifiData = [];
             $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['receiver_id'] = $get_app->tp_id;
             $notifiData['application_id'] =$application_id;
             $notifiData['uhid'] = getUhid($application_id)[0];
             $notifiData['level_id'] = getUhid($application_id)[1] ;
@@ -346,6 +352,7 @@ class SummaryController extends Controller
             $notifiData['url'] = $sUrl.dEncrypt($application_id);
             sendNotification($notifiData);
             $notifiData['user_type'] = "secretariat";
+            $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
             /*end here*/ 
@@ -372,6 +379,7 @@ class SummaryController extends Controller
                 $url=$url.dEncrypt($application_id);    
             }
             $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['receiver_id'] = $get_app->tp_id;
             $notifiData['application_id'] =$application_id;
             $notifiData['uhid'] = getUhid($application_id)[0];
             $notifiData['level_id'] = getUhid($application_id)[1] ;
@@ -481,6 +489,12 @@ class SummaryController extends Controller
             if(!empty($check_report)){
                 return back()->with('fail', 'This application record already submitted');
             }
+            $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow($application_id,dDecrypt($request->application_course_id),'onsite');
+                if($isCreateSummaryBtnShow=="hide"){
+                    return back()->with('fail', 'Please wait for tp to reupload doc.');
+                }
+
+
             $assessor_id = Auth::user()->id;
             $data = [];
             $data['application_id']=$application_id;
@@ -544,6 +558,7 @@ class SummaryController extends Controller
     
                 $notifiData = [];
                 $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['receiver_id'] = $get_app->tp_id;
                 $notifiData['application_id'] =$application_id;
                 $notifiData['uhid'] = getUhid($application_id)[0];
                 $notifiData['level_id'] = getUhid($application_id)[1] ;
@@ -556,6 +571,7 @@ class SummaryController extends Controller
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "secretariat";
+                $notifiData['receiver_id'] = $get_app->secretariat_id;
                 $notifiData['url'] = $url;
                 sendNotification($notifiData);
                 /*end here*/ 
@@ -1672,6 +1688,144 @@ class SummaryController extends Controller
         
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
         return view('superadmin-view.secretariat.admin-view-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','summary_remark'));
+    }
+
+
+    public function checkAllActionDoneOnDocList($application_id,$application_courses_id)
+    {
+
+        $results = DB::table('tbl_application_course_doc')
+            ->select('application_id', 'application_courses_id','assessor_type', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+            ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id','assessor_type')
+            ->where('application_courses_id', $application_courses_id)
+            ->where('application_id', $application_id)
+            ->where('approve_status',1)
+            ->get();
+
+            
+            
+
+        $additionalFields = DB::table('tbl_application_course_doc')
+            ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+                $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                    ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                    ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                    ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                    ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+            })
+            ->where('tbl_application_course_doc.assessor_type','desktop')
+            ->orderBy('tbl_application_course_doc.id', 'desc')
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
+
+        $finalResults = [];
+        foreach ($results as $key => $result) {
+            if ($result->assessor_type == 'desktop') {
+            $additionalField = $additionalFields->where('application_id', $result->application_id)
+                ->where('application_courses_id', $result->application_courses_id)
+                ->where('doc_sr_code', $result->doc_sr_code)
+                ->where('doc_unique_id', $result->doc_unique_id)
+                ->where('approve_status',1)
+                ->first();
+            if ($additionalField) {
+                $finalResults[$key] = (object)[];
+                $finalResults[$key]->status = $additionalField->status;
+                $finalResults[$key]->id = $additionalField->id;
+                $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $finalResults[$key]->approve_status = $additionalField->approve_status;
+                $finalResults[$key]->is_revert = $additionalField->is_revert;
+            }
+        }
+        }
+
+        
+        $flag = 0;
+    
+        foreach ($finalResults as $result) {
+            if (($result->status != 0) && $result->is_revert==1) {
+                $flag = 0;
+            } else {
+                $flag = 1;
+                break;
+            }
+        }
+        
+        if ($flag == 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    public function isCreateSummaryBtnShow($application_id,$application_courses_id,$assessor_type)
+    {
+
+        $results = DB::table('tbl_application_course_doc')
+            ->select('application_id', 'application_courses_id','assessor_type', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+            ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id','assessor_type')
+            ->where('application_courses_id', $application_courses_id)
+            ->where('application_id', $application_id)
+            ->where('approve_status',1)
+            ->get();
+
+            
+            
+
+        $additionalFields = DB::table('tbl_application_course_doc')
+            ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+                $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                    ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                    ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                    ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                    ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+            })
+            ->where('tbl_application_course_doc.assessor_type',$assessor_type)
+            ->orderBy('tbl_application_course_doc.id', 'desc')
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
+
+        $finalResults = [];
+        foreach ($results as $key => $result) {
+            if ($result->assessor_type == $assessor_type) {
+            $additionalField = $additionalFields->where('application_id', $result->application_id)
+                ->where('application_courses_id', $result->application_courses_id)
+                ->where('doc_sr_code', $result->doc_sr_code)
+                ->where('doc_unique_id', $result->doc_unique_id)
+                ->where('approve_status',1)
+                ->first();
+            if ($additionalField) {
+                $finalResults[$key] = (object)[];
+                $finalResults[$key]->status = $additionalField->status;
+                $finalResults[$key]->id = $additionalField->id;
+                $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $finalResults[$key]->approve_status = $additionalField->approve_status;
+                $finalResults[$key]->is_revert = $additionalField->is_revert;
+            }
+        }
+        }
+
+        
+        $flag = 0;
+        // dd($finalResults);
+        foreach ($finalResults as $result) {
+            if (((($result->status==2 || $result->status==3)) && $result->is_revert==1)) {
+                $flag = 0;
+                break;
+            } else {
+               $flag=1;
+            }
+            if($result->status==0){
+                $flag=0;
+                break;
+            }
+        }
+        
+        if ($flag == 0) {
+            return "hide";
+        }else{
+            return "show";
+        }
+        
     }
 
 

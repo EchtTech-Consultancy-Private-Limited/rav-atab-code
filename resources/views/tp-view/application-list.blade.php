@@ -140,8 +140,16 @@
                                                     @endisset
                                                 </td>
                                                 <td>
-                                                    
+                                                @if($item->application_list->level_id==3)
                                                 <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
+                                                @else
+                                                    @php
+                                                        $status = getApplicationStatus($item->application_list->status,"TP");
+                                                    @endphp
+                                                <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
+                                                
+                                                @endif
+                                                
                                                 
                                                 </td>
                                                 <td>
@@ -229,7 +237,7 @@
                                                                 $is_second_payment = isSecondPayment($item->application_list->id);
                                                             @endphp
 
-                                                            @if($is_second_payment)
+                                                            @if($is_second_payment && $item->application_list->level_id==3)
                                                                 <a href="{{ url('upgrade-level-3-show-course-payment/'.dEncrypt($item->application_list->id)) }}" class="btn btn-primary btn-tbl-delete">S-Pay</a>
                                                             @endif
                                                             <!-- end here -->

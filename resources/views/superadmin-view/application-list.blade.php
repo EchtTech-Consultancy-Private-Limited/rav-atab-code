@@ -126,8 +126,10 @@
                                                 </td>
                                                 
                                                 <td>
-                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
-                                                
+                                                @php
+                                                        $status = getApplicationStatus($item->application_list->status,"Admin");
+                                                    @endphp
+                                                <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
                                                 </td>
                                                 <td>
                                                 @if($item->application_list->valid_from)
@@ -156,7 +158,7 @@
                                                     @endisset   
                                                 
                                              @isset($item->payment)
-                                                @if(($item->payment->aknowledgement_id!==null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2))
+                                                @if(($item->payment->aknowledgement_id!=null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2))
                                                     
                                                    @if($item->is_all_docs_uploaded && $item->application_list->level_id!=1)
                                                    

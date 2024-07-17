@@ -209,6 +209,7 @@
         @endif
         @include('layout.rightbar')
     </div>
+   
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -271,7 +272,7 @@
                         </script>
                     @elseif(Session::has('fail'))
                         <script>
-                            toastr.error({{ session::get('fail') }}, {
+                            toastr.error("{{ session::get('fail') }}", {
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,
@@ -603,6 +604,10 @@
                                                             class="btn btn-tbl-delete bg-danger">
                                                             <i class="material-icons">delete</i>
                                                         </a>
+                                                        <!-- <a href="{{ url('/tp-upload-document-level-2' . '/' . dEncrypt($applicationData->id).'/'.dEncrypt($courses->id)) }}"
+                                                            class="btn btn-tbl-delete bg-success">
+                                                            <span class="material-symbols-outlined">Upload</span>
+                                                        </a> -->
                                                     </td>
                                                 </tr>
                                             @endforeach

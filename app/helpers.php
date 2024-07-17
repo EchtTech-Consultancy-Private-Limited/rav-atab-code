@@ -1565,7 +1565,15 @@ function getNotificationByUser($userType)
 {
     try{
 
-        $getNotification = DB::table('tbl_notifications')->where('user_type',$userType)->orderBy('id','desc')->get();
+        $query = DB::table('tbl_notifications');
+        if(!in_array($userType,["superadmin","accountant"])){
+            $query->where('receiver_id',Auth::user()->id);
+        }
+        $query->where('user_type',$userType);
+        $query->where('is_read','0');
+        $query->orderBy('id','desc');
+        $getNotification =$query->get();
+        
         if(isset($getNotification)){
             return $getNotification;
         }else{
@@ -1723,8 +1731,8 @@ function getUhid($appId)
 
 
 function isSecondPayment($application_id){
-    $payment_count = DB::table('tbl_application_payment')->where('application_id',$application_id)->count();
-    $total_course=DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
+    $payment_count = DB::table('tbl_application_payment')->where('application_id',$application_id)->where('level_id',3)->count();
+    $total_course=DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->where('level_id',3)->count();
     $total_final_summary = DB::table('assessor_final_summary_reports')
                           ->where('application_id',$application_id)
                           ->where('assessor_type','desktop')
@@ -1734,6 +1742,18 @@ function isSecondPayment($application_id){
     }else{
         return false;
     }
+}
+
+
+function getApplicationStatus($status_value,$user_type){
+    $app_status = DB::table('tbl_application_status')->where(['status_value'=>$status_value,'user_type'=>$user_type])->first();
+    if(!empty($app_status)){
+        return $app_status;
+    }else{
+        return null;
+    }
+
+    
 }
 
 

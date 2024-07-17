@@ -8,6 +8,8 @@ use App\Http\Helpers\Eazypay;
 use App\Models\TblApplicationPayment;
 use DB, Auth;
 use App\Models\Country;
+use App\Models\TblApplicationCourses;
+
 use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
@@ -25,7 +27,7 @@ class PaymentController extends Controller
 
         $getcountryCode = DB::table('countries')->where([['id',Auth::user()->country]])->first();
         $appdetails = DB::table('tbl_application')->where('id',$app_id)->first();
-        $reference_no= rand();
+        $reference_no= rand().'-'.$app_id ;
         //$reference_no= $app_id;
         $mobile=Auth::user()->mobile_no;
         $email=Auth::user()->email;
@@ -47,6 +49,8 @@ class PaymentController extends Controller
                 $item->currency = $getcountryCode->currency??'inr';
                 $item->application_id = $app_id;
                 $item->save();
+
+
             DB::commit();
             $eazypay_integration=new Eazypay();
             $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=null);
@@ -98,6 +102,16 @@ class PaymentController extends Controller
                 'payment_transaction_no' =>$request['Unique_Ref_Number'],
                 'pay_status' =>$request['TPS']??'N',
             ]);
+            $application_id = explode('-', $request['ReferenceNo'])[1];
+            DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
+            DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->update(['second_payment_status' => 1]);
+           $courses= DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->get(); //status 5 is for done payment by TP.
+       
+                foreach ($courses as $items) {
+                    $ApplicationCourse = TblApplicationCourses::where('id',$items);
+                    $ApplicationCourse->update(['payment_status' =>1]);
+                }
+
             DB::commit();
             $data = [
                 'ReferenceNo' =>$request['ReferenceNo'], 

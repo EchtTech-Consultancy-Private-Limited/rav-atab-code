@@ -209,6 +209,7 @@
         @endif
         @include('layout.rightbar')
     </div>
+   
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -271,7 +272,7 @@
                         </script>
                     @elseif(Session::has('fail'))
                         <script>
-                            toastr.error({{ session::get('fail') }}, {
+                            toastr.error("{{ session::get('fail') }}", {
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,

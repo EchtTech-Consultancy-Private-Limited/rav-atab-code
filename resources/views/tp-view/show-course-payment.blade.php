@@ -834,11 +834,11 @@ $('#payment_reference_no').on('keyup', function() {
                     reference_no: paymentReferenceNo
                 },
                 success: function(response) {
-                    if (response.status === 'error') {
+                    if (response.status == 'error') {
                         $('#payment_reference_no-error').html('<p class="text-danger">' + response.message +
                             '</p>');
                         $('#submitBtn').attr('disabled', true);
-                    } else if (response.status === 'success') {
+                    } else if (response.status == 'success') {
                         $('#payment_reference_no-error').html('<p class="text-success">' + response.message +
                             '</p>');
                         $('#submitBtn').attr('disabled', false);

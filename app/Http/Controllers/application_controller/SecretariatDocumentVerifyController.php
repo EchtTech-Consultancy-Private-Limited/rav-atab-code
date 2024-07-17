@@ -379,7 +379,7 @@ class SecretariatDocumentVerifyController extends Controller
 
             if ($create_nc_comments) {
                 DB::commit();
-                return response()->json(['success' => true, 'message' => '' . $request->nc_type . ' comments created successfully', 'redirect_to' => $redirect_to], 200);
+                return response()->json(['success' => true, 'message' => $request->nc_type . ' comments created successfully', 'redirect_to' => $redirect_to], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'Failed to create ' . $request->nc_type . '  and documents'], 200);
             }
@@ -491,6 +491,7 @@ class SecretariatDocumentVerifyController extends Controller
                       /*send notification*/ 
                       sendNotification($notifiData);
                       $notifiData['user_type'] = "tp";
+                      $notifiData['receiver_id'] = $get_application->tp_id;
                       $notifiData['url'] = $tpUrl;
                       sendNotification($notifiData);
                         /*end here*/ 
@@ -517,13 +518,20 @@ class SecretariatDocumentVerifyController extends Controller
             /*--------To Check All Course Doc Approved----------*/
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
-            $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
 
+            if($get_application->level_id==2){
+                $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
+            }else{
+                $check_all_doc_verifiedDocList=null;
+            }
+
+            // this is for the applicaion status
+            
            
             
            
             /*------end here------*/
-            DB::commit();
+            // DB::commit();
             
             if($get_application->level_id==1 || $get_application->level_id==3){
                 // if (!$check_all_doc_verified ) {
@@ -537,6 +545,8 @@ class SecretariatDocumentVerifyController extends Controller
                 if ($check_all_doc_verified == "action_not_taken") {
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
+                DB::commit();
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 
             }else{
@@ -545,6 +555,7 @@ class SecretariatDocumentVerifyController extends Controller
             //     return back()->with('fail', 'First create NCs on courses doc');
             // }
             if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
+                DB::commit();
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');
@@ -586,8 +597,8 @@ class SecretariatDocumentVerifyController extends Controller
             $notifiData['url'] = $tpUrl;
             sendNotification($notifiData);
             /*end here*/ 
-     
-
+            DB::commit();
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
          }
@@ -740,6 +751,9 @@ class SecretariatDocumentVerifyController extends Controller
                 /*send notification*/ 
                 sendNotification($notifiData);
                 /*end here*/ 
+                
+                // this is for the applicaion status
+                DB::table('tbl_application')->where('id',$app_id)->update(['status'=>6]);
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.secretariat.status'),config('history.color.warning'));
                     DB::commit();
@@ -942,10 +956,13 @@ class SecretariatDocumentVerifyController extends Controller
         $app_detail = TblApplication::where('id', $application_id)->first();
         $application_uhid = $app_detail->uhid ?? '';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
+
         $data = TblApplicationPayment::where('application_id', $application_id)->get();
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+        $is_onsite_assessor_assigned = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_type'=>'onsite'])->first();
         if($app_detail->level_id==3){
-            if(count($data)>1){
+            
+            if(count($data)>1 && !empty($is_onsite_assessor_assigned)){
                 $assessor_type = 'onsite';
             }else{
                 $assessor_type = 'desktop';
@@ -954,6 +971,7 @@ class SecretariatDocumentVerifyController extends Controller
         }else{
             $assessor_type = 'secretariat';
         }
+        
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id' => $application_id,
             'application_courses_id' => $course_id,
@@ -1016,6 +1034,75 @@ class SecretariatDocumentVerifyController extends Controller
         
         $application_details = TblApplication::find($application_id);
         return view('admin-view.secretariat.application-documents-list', compact('final_data', 'course_doc_uploaded', 'application_id', 'course_id', 'is_final_submit', 'is_doc_uploaded', 'application_uhid','application_details','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done'));
+    }
+
+    public function applicationDocumentListDAOA($id, $course_id)
+    {
+        
+
+        $level_id = DB::table('tbl_application')->where('id',dDecrypt($id))->first()->level_id;
+        
+        if($level_id!=3){
+            return $this->applicationDocumentList($id,$course_id);
+        }else{
+
+        
+        $tp_id = Auth::user()->id;
+        $application_id = $id ? dDecrypt($id) : $id;
+        $course_id = $course_id ? dDecrypt($course_id) : $course_id;
+        $data = TblApplicationPayment::where('application_id',$application_id)->get();
+        $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
+        $course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'desktop'
+        ])
+        ->select('id','doc_unique_id','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','status','is_doc_show')
+        ->get();
+        $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
+            'application_id'=>$application_id,
+            'application_courses_id'=>$course_id,
+            'assessor_type'=>'onsite'
+        ])
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_nc_status','admin_nc_flag','status','is_doc_show')
+        ->get();
+        $chapters = Chapter::all();
+        foreach($chapters as $chapter){ 
+            $obj = new \stdClass;
+            $obj->chapters= $chapter;
+            $questions = DB::table('questions')->where([
+                    'chapter_id' => $chapter->id,
+                ])->get();
+                foreach ($questions as $k => $question) {
+                    $obj->questions[] = [
+                        'question' => $question,
+                        'nc_comments' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get(),
+                        'onsite_nc_comments' => TblNCComments::where([
+                            'application_id' => $application_id,
+                            'application_courses_id' => $course_id,
+                            'doc_unique_id' => $question->id,
+                            'doc_sr_code' => $question->code,
+                            'assessor_type'=>'onsite'
+                        ])
+                        ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
+                        ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
+                        ->get(),
+                    ];
+                }
+                $final_data[] = $obj;
+        }
+        // dd($final_data);
+        $applicationData = TblApplication::find($application_id);
+        return view('admin-view.secretariat.application-document-list-l3', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
+      }
     }
     public function secretariatVerfiyDocumentLevel2($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {

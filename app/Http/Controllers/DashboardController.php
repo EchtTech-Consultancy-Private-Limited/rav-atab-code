@@ -168,7 +168,7 @@ class DashboardController extends Controller
                     $dataCount['complete']++;
                 }
             }
-        // dd($dataCount);
+        
         return view("pages.dashboard",['dataCount'=>$dataCount]);
     }
 

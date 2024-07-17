@@ -25,7 +25,7 @@ class SuperAdminApplicationController extends Controller
     }
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3])
+        ->whereIn('a.payment_status',[2,3,5])
         ->orderBy('id','desc')
         ->get();
         $final_data=array();
@@ -271,11 +271,13 @@ class SuperAdminApplicationController extends Controller
               $notifiData = [];
               $notifiData['user_type'] = "secretariat";
               $notifiData['sender_id'] = Auth::user()->id;
+              $notifiData['receiver_id'] = $request->secretariat_id;
               $notifiData['application_id'] = $request->application_id;
               $notifiData['uhid'] = getUhid( $request->application_id)[0];
               $notifiData['level_id'] = getUhid( $request->application_id)[1];
               $notifiData['url'] = $url;
               $notifiData['data'] = config('notification.secretariat.assigned');
+              
               sendNotification($notifiData);
             /*end here*/ 
 
@@ -296,6 +298,9 @@ class SuperAdminApplicationController extends Controller
                //admin mail
                 
             /*end here*/
+
+            // this is for the applicaion status
+            DB::table('tbl_application')->where('id',$request->application_id)->update(['status'=>3]);
             createApplicationHistory($request->application_id,null,config('history.admin.assign'),config('history.color.warning'));
             DB::commit();
             return redirect()->route('superadmin-app-list')->with('success', 'Application has been successfully assigned to Secretariat');
@@ -369,7 +374,7 @@ class SuperAdminApplicationController extends Controller
     {
         try{
             $accept_nc_type_status = $nc_type;
-            $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin'])
+            $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','application_courses_id'=>$application_course_id])
             ->where('nc_type',"Request_For_Final_Approval")
             ->latest('id')->first();
             
@@ -392,6 +397,7 @@ class SuperAdminApplicationController extends Controller
             $query = DB::table('tbl_nc_comments_secretariat')->where([
                 'doc_sr_code' => $doc_sr_code,
                 'application_id' => $application_id,
+                'application_courses_id'=>$application_course_id,
                 'doc_unique_id' => $doc_unique_code
             ])
             ->where('nc_type', $nc_type);
@@ -407,7 +413,7 @@ class SuperAdminApplicationController extends Controller
             
             // dd($nc_comments);
 
-            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            $tbl_nc_comments = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])
             // ->where('final_status',$ass_type)
             ->latest('id')
             ->first();
@@ -415,7 +421,7 @@ class SuperAdminApplicationController extends Controller
             
             
             /*Don't show form if doc is accepted*/ 
-            $accepted_doc = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
+            $accepted_doc = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'application_courses_id'=>$application_course_id])
             ->whereIn('nc_type',["Accept","Reject"])
             // ->where('final_status',$assessor_type)
             ->latest('id')
@@ -1018,6 +1024,7 @@ class SuperAdminApplicationController extends Controller
                   
                   $notifiData = [];
                   $notifiData['sender_id'] = Auth::user()->id;
+                  $notifiData['receiver_id'] = $get_app->secretariat_id;
                   $notifiData['application_id'] = $app_id;
                   $notifiData['uhid'] = getUhid( $app_id)[0];
                   $notifiData['level_id'] = getUhid( $app_id)[1];
@@ -1031,6 +1038,9 @@ class SuperAdminApplicationController extends Controller
                   $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
                   /*end here*/ 
+
+                  // this is for the applicaion status
+                 DB::table('tbl_application')->where('id',$app_id)->update(['status'=>7]);
                   
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
@@ -1112,6 +1122,7 @@ class SuperAdminApplicationController extends Controller
                 // ->update(['approve_status'=>3,'reject_remark'=>$request->remark,'is_all_course_doc_verified'=>0]); //3 for rejected application by admin
                 $notifiData = [];
                 $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['receiver_id'] = $get_app->secretariat_id;
                 $notifiData['application_id'] = $app_id;
                 $notifiData['uhid'] = getUhid( $app_id)[0];
                 $notifiData['level_id'] = getUhid( $app_id)[1];
@@ -1125,7 +1136,8 @@ class SuperAdminApplicationController extends Controller
                 $notifiData['url'] = $tpUrl;
                 sendNotification($notifiData);
                 /*end here*/ 
-                
+                // this is for the applicaion status
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>8]);
                 if($approve_app){
                     createApplicationHistory($app_id,null,config('history.admin.rejectApplication'),config('history.color.danger'));
                     DB::commit();
@@ -1275,7 +1287,7 @@ class SuperAdminApplicationController extends Controller
                     $assessor_type = $paymentCount>1?'onsite':'desktop';
                 }
                 
-                $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
+                $get_courses_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->count();
                 $courses_doc_list = DB::table('tbl_application_course_doc')->where('application_id',$application_id)
                 ->where('assessor_type',$assessor_type)
                 ->count();
@@ -1299,7 +1311,7 @@ class SuperAdminApplicationController extends Controller
     /*additional payment fee list*/ 
     public function getApplicationPaymentFeeList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3])
+        ->whereIn('a.payment_status',[2,3,5])
         ->whereIn('a.is_query_raise',[1,2])
         ->orderBy('id','desc')
         ->get();

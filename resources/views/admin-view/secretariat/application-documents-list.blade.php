@@ -306,8 +306,6 @@
                                              Rejected</a>
                                              @endif
 
-
-
                                              @elseif($doc->status==6)
                                           <a 
                                              title="{{$doc->doc_file_name}}"

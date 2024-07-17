@@ -363,7 +363,7 @@
                                             <tr>
                                                 <td colspan="6">
                                                 <div class="col-sm-12" id="comment-section">
-                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <label for="comment_text" class="">Remark</label>
                                                                     
                                                                     @foreach($get_all_courses as $key=>$course)
                                                                         {{$key+1}} : [{{$course->course_name}}] : <b>{{$course->remark}}</b>

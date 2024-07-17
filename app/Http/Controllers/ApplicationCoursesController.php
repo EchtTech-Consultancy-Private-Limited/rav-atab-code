@@ -82,6 +82,16 @@ class ApplicationCoursesController extends Controller
                 'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
+        $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
         
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
@@ -111,6 +121,7 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
+                $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
 
@@ -139,7 +150,16 @@ class ApplicationCoursesController extends Controller
                 'Email_ID.required' => "Please Enter an Email Id.",
             ]
         );
-        
+        $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
 
@@ -168,6 +188,7 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
+                $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
 
@@ -198,7 +219,16 @@ class ApplicationCoursesController extends Controller
         
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
-
+        $saarc_country = [1,19,26,133,154,167,208];
+        $india = [101];
+        $region="";
+        if(in_array(Auth::user()->country,$india)){
+            $region ="ind";
+        }else if(in_array(Auth::user()->country,$saarc_country)){
+            $region ="saarc";
+        }else{
+            $region ="other";
+        }
             if($request->application_id && $request->previous_data==1){
                 $data = [];
                 $data['level_id'] = 3;
@@ -224,6 +254,7 @@ class ApplicationCoursesController extends Controller
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
+                $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
 
@@ -247,21 +278,18 @@ class ApplicationCoursesController extends Controller
     public function createNewCourse($id = null)
     {
         $id = dDecrypt($id);
-        
         if ($id) {
             $applicationData = DB::table('tbl_application')->where('id', $id)->first();
         }else{
             $applicationData=null;
         }
-        $course = TblApplicationCourses::where('application_id', $id)->get();
-        
-        
-
+        $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
         return view('create-application.course.create-course', compact('applicationData', 'course'));
     }
 
     public function createLevel2NewCourse($id = null)
     {
+        
         $id = dDecrypt($id);
         
         if ($id) {
@@ -269,8 +297,8 @@ class ApplicationCoursesController extends Controller
         }else{
             $applicationData=null;
         }
-        $course = TblApplicationCourses::where('application_id', $id)->get();
-        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+        $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
         $total_docs = count($course) * 4;
         
         $is_show_next_btn = false;
@@ -291,9 +319,8 @@ class ApplicationCoursesController extends Controller
             $applicationData=null;
         }
         
-        $course = TblApplicationCourses::where('application_id', $id)->get();
-        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
-        
+        $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
         $total_docs = count($course) * 4;
         
         $is_show_next_btn = false;
@@ -430,6 +457,7 @@ class ApplicationCoursesController extends Controller
              $data['tp_id'] = Auth::user()->id;
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
+             $data['is_doc_show'] = 0;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }
@@ -452,12 +480,13 @@ class ApplicationCoursesController extends Controller
 
     public function storeLevel2NewApplicationCourse(Request $request)
     {
+        
         $get_application_refid = TblApplication::where('id',$request->application_id)->first()->refid;
         $course_name = $request->course_name;
         $lowercase_course_name = array_map('strtolower', $course_name);
         $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>'2'])->whereIn('course_name', $lowercase_course_name)->get();
         if(count($is_course_name_already_exists)>0){
-            return  redirect('create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
+            return  redirect('create-level-2-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
         }
         $value_counts = array_count_values($lowercase_course_name);
             foreach ($value_counts as $value => $count) {
@@ -592,12 +621,12 @@ class ApplicationCoursesController extends Controller
         $lowercase_course_name = array_map('strtolower', $course_name);
         $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>'3'])->whereIn('course_name', $lowercase_course_name)->get();
         if(count($is_course_name_already_exists)>0){
-            return  redirect('create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
+            return  redirect('create-level-3-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
         }
         $value_counts = array_count_values($lowercase_course_name);
             foreach ($value_counts as $value => $count) {
                 if ($count > 1) {
-                    return  redirect('create-level-2-new-course/' . dEncrypt($request->application_id))->with('fail', 'Failed to create course with same course name');
+                    return  redirect('create-level-3-new-course/' . dEncrypt($request->application_id))->with('fail', 'Failed to create course with same course name');
                 }
             }
         $course_duration = $request->course_duration;
@@ -787,7 +816,11 @@ class ApplicationCoursesController extends Controller
     }
     public function deleteCourseById($id)
     {
-        $res = TblApplicationCourses::find(dDecrypt($id))->delete();
+        $course_id = dDecrypt($id);
+        $res = TblApplicationCourses::find($course_id)->delete();
+
+        DB::table('tbl_application_course_doc')->where('application_courses_id', $course_id)->update(['deleted_at' => now()]);
+        DB::table('tbl_course_wise_document')->where('course_id', $course_id)->update(['deleted_at' => now()]);
         if($res){
             return back()->with('success', 'Course Delete successfull');
         }else{
@@ -878,6 +911,7 @@ class ApplicationCoursesController extends Controller
          sendNotification($notifiData);
          /*end here*/ 
         
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
         DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id])->update(['second_payment_status' => 1]);
 
         $application_id = $request->Application_id;

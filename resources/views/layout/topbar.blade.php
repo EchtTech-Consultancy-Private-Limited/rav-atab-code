@@ -86,7 +86,7 @@ ul.menu h5 {
                         @endisset
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS </li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
@@ -121,6 +121,7 @@ ul.menu h5 {
                     @if (Auth::user()->role == 5)
                     @php
                     $notifications = getNotificationByUser('secretariat');
+                    
                     @endphp
                 <li class="dropdown">
 
@@ -134,7 +135,7 @@ ul.menu h5 {
                         @endisset
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS</li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
@@ -182,7 +183,7 @@ ul.menu h5 {
                         @endisset
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS </li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
@@ -227,7 +228,7 @@ ul.menu h5 {
                         @endif
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS </li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
@@ -281,7 +282,7 @@ ul.menu h5 {
                         @endisset
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS </li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
@@ -328,7 +329,7 @@ ul.menu h5 {
                         @endisset
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS </li>
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
