@@ -47,7 +47,7 @@ class PaymentController extends Controller
                 }
                 $item = new TblApplicationPayment;
                 $item->level_id = $appdetails->level_id;
-                $item->user_id = Auth::user()->id;
+                $item->user_id = $appdetails->tp_id;
                 $item->amount = $amount;
                 $item->payment_date = date("d-m-Y");
                 $item->payment_mode = 'mode';
@@ -77,7 +77,7 @@ class PaymentController extends Controller
             
             $result= TblApplicationPayment::where('application_id',$app_id)->update([
                 'level_id' => $appdetails->level_id,
-                'user_id' => Auth::user()->id,
+                'user_id' => $appdetails->tp_id,
                 'amount' =>$amount,
                 'payment_date' =>date("d-m-Y"),
                 'payment_mode' =>'mode',
@@ -152,7 +152,7 @@ class PaymentController extends Controller
                     $acUrl = config('notification.accountantUrl.level1');
                     $notifiData = [];
                     $notifiData['user_type'] = "accountant";
-                    $notifiData['sender_id'] = Auth::user()->id;
+                    $notifiData['sender_id'] = $appdetails->tp_id;
                     $notifiData['application_id'] =$application_id;
                     $notifiData['uhid'] = getUhid($application_id)[0];
                     $notifiData['level_id'] = getUhid($application_id)[1];
