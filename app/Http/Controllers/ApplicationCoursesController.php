@@ -283,12 +283,13 @@ class ApplicationCoursesController extends Controller
         }else{
             $applicationData=null;
         }
-        $course = TblApplicationCourses::where('application_id', $id)->get();
+        $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
         return view('create-application.course.create-course', compact('applicationData', 'course'));
     }
 
     public function createLevel2NewCourse($id = null)
     {
+        
         $id = dDecrypt($id);
         
         if ($id) {
@@ -296,8 +297,8 @@ class ApplicationCoursesController extends Controller
         }else{
             $applicationData=null;
         }
-        $course = TblApplicationCourses::where('application_id', $id)->get();
-        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+        $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
         $total_docs = count($course) * 4;
         
         $is_show_next_btn = false;
@@ -318,9 +319,8 @@ class ApplicationCoursesController extends Controller
             $applicationData=null;
         }
         
-        $course = TblApplicationCourses::where('application_id', $id)->get();
-        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
-        
+        $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
         $total_docs = count($course) * 4;
         
         $is_show_next_btn = false;
@@ -815,7 +815,11 @@ class ApplicationCoursesController extends Controller
     }
     public function deleteCourseById($id)
     {
-        $res = TblApplicationCourses::find(dDecrypt($id))->delete();
+        $course_id = dDecrypt($id);
+        $res = TblApplicationCourses::find($course_id)->delete();
+
+        DB::table('tbl_application_course_doc')->where('application_courses_id', $course_id)->update(['deleted_at' => now()]);
+        DB::table('tbl_course_wise_document')->where('course_id', $course_id)->update(['deleted_at' => now()]);
         if($res){
             return back()->with('success', 'Course Delete successfull');
         }else{

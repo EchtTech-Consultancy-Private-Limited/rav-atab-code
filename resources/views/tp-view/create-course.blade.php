@@ -209,26 +209,6 @@
         @endif
         @include('layout.rightbar')
     </div>
-    @if ($message = Session::get('success'))
-    <script>
-    toastr.success('{{$message}}', {
-            timeOut: 0,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-    </script>
-    @endif
-    @if ($message = Session::get('fail'))
-    <script>
-    toastr.error('{{$message}}', {
-            timeOut: 0,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-    </script>
-    @endif
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -291,7 +271,7 @@
                         </script>
                     @elseif(Session::has('fail'))
                         <script>
-                            toastr.error({{ session::get('fail') }}, {
+                            toastr.error("{{ session::get('fail') }}", {
                                 timeOut: 0,
                                 extendedTimeOut: 0,
                                 closeButton: true,
