@@ -35,15 +35,16 @@ class PaymentController extends Controller
         $email=Auth::user()->email;
        // dd(count($paymentCheck));       
        
-
-
-       
+        $level_id= $appdetails->level_id;
 
         if(isset($checkpayment) && count($checkpayment)==0){
             DB::beginTransaction();
                 $app_id = dDecrypt($id);
-               
-                $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+                if($level_id==3){
+                    $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
+                }else{
+                    $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+                }
                 $item = new TblApplicationPayment;
                 $item->level_id = $appdetails->level_id;
                 $item->user_id = Auth::user()->id;
@@ -68,7 +69,12 @@ class PaymentController extends Controller
             DB::beginTransaction();
             $app_id = dDecrypt($id);
           
-            $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+            if($level_id==3){
+                $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
+            }else{
+                $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+            }
+            
             $result= TblApplicationPayment::where('application_id',$app_id)->update([
                 'level_id' => $appdetails->level_id,
                 'user_id' => Auth::user()->id,
