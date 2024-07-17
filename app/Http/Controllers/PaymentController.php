@@ -129,6 +129,16 @@ class PaymentController extends Controller
                         DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
                     }
                   
+                }else if(isset($appdetails->level_id) && $appdetails->level_id==3){
+                    $first_app_refid = TblApplication::where('id',$appdetails->id)->first();
+    
+                    $ref_count = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->count();
+                    if($ref_count>1){
+                        $first_app_id = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->get();
+                    }else{
+                        $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->get();
+                    }
+
                 }
                 
 
