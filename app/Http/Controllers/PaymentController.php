@@ -108,7 +108,7 @@ class PaymentController extends Controller
            $courses= DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->get(); //status 5 is for done payment by TP.
        
                 foreach ($courses as $items) {
-                    $ApplicationCourse = TblApplicationCourses::where('id',$items);
+                    $ApplicationCourse = TblApplicationCourses::where('id',$items->id);
                     $ApplicationCourse->update(['payment_status' =>1]);
                 }
 
