@@ -1078,9 +1078,9 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
-    $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
+    $course = TblApplicationCourses::where('application_id', $last_application_id)->whereNull('deleted_at')->get();
     // dd($course);
-    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
     $total_docs = count($course) * 4;
     
     $is_show_next_btn = false;
@@ -1880,8 +1880,8 @@ public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
     $course = TblApplicationCourses::where('application_id', $last_application_id)->get();
     // dd($course);
     
-    $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
-    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->count();
+    $original_course_count = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->whereNull('deleted_at')->where('application_id',$id)->count();
     $total_docs = $original_course_count * 4;
     
     $is_show_next_btn = false;

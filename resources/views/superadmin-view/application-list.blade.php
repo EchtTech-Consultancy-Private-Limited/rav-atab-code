@@ -158,7 +158,7 @@
                                                     @endisset   
                                                 
                                              @isset($item->payment)
-                                                @if(($item->payment->aknowledgement_id!==null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2))
+                                                @if(($item->payment->aknowledgement_id!=null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2))
                                                     
                                                    @if($item->is_all_docs_uploaded && $item->application_list->level_id!=1)
                                                    
