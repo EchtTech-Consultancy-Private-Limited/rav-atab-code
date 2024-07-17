@@ -9,6 +9,7 @@ use App\Models\TblApplicationPayment;
 use DB, Auth;
 use App\Models\Country;
 use App\Models\TblApplicationCourses;
+use App\Models\TblApplication; 
 
 use Illuminate\Support\Facades\Http;
 
@@ -17,6 +18,7 @@ class PaymentController extends Controller
     public function makePayment($id=null){
 
         $app_id = dDecrypt($id);
+
         $checkpayment = DB::table('tbl_application_payment')->where([
                                 ['payment_mode','mode'],
                                 ['payment_transaction_no',1234567],
@@ -31,12 +33,17 @@ class PaymentController extends Controller
         //$reference_no= $app_id;
         $mobile=Auth::user()->mobile_no;
         $email=Auth::user()->email;
-       // dd(count($paymentCheck));                        
+       // dd(count($paymentCheck));       
+       
+
+
+       
+
         if(isset($checkpayment) && count($checkpayment)==0){
             DB::beginTransaction();
                 $app_id = dDecrypt($id);
-                $appdetails = DB::table('tbl_application')->where('id',$app_id)->first();
-                $amount = $this->getPaymentFee('level-1', $getcountryCode->currency, $app_id);
+               
+                $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
                 $item = new TblApplicationPayment;
                 $item->level_id = $appdetails->level_id;
                 $item->user_id = Auth::user()->id;
@@ -60,8 +67,8 @@ class PaymentController extends Controller
             //dd(count($checkpayment));  
             DB::beginTransaction();
             $app_id = dDecrypt($id);
-            $appdetails = DB::table('tbl_application')->where('id',$app_id)->first();
-            $amount = $this->getPaymentFee('level-1',$getcountryCode->currency,$app_id);
+          
+            $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
             $result= TblApplicationPayment::where('application_id',$app_id)->update([
                 'level_id' => $appdetails->level_id,
                 'user_id' => Auth::user()->id,
@@ -97,7 +104,7 @@ class PaymentController extends Controller
         if(isset($request['Response_Code']) && $request['Response_Code'] =='E000' && $request['TPS'] == 'Y'){
             
             DB::beginTransaction();
-            $result= TblApplicationPayment::where('payment_reference_no',$request['ReferenceNo'])->update([
+            $result = TblApplicationPayment::where('payment_reference_no',$request['ReferenceNo'])->update([
                 'payment_mode' => $request['Payment_Mode'],
                 'payment_transaction_no' =>$request['Unique_Ref_Number'],
                 'pay_status' =>$request['TPS']??'N',
@@ -111,6 +118,43 @@ class PaymentController extends Controller
                     $ApplicationCourse = TblApplicationCourses::where('id',$items->id);
                     $ApplicationCourse->update(['payment_status' =>1]);
                 }
+
+                $appdetails = DB::table('tbl_application')->where('id',$application_id)->first();
+                if(isset($appdetails->level_id) && $appdetails->level_id==2){
+                    
+                    $first_app_refid = TblApplication::where('id',$appdetails->id)->first();
+                    $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->first();
+                    
+                    if(isset($first_app_id)){
+                        DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
+                    }
+                  
+                }else if(isset($appdetails->level_id) && $appdetails->level_id==3){
+                    $first_app_refid = TblApplication::where('id',$appdetails->id)->first();
+    
+                    $ref_count = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->count();
+                    if($ref_count>1){
+                        $first_app_id = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->get();
+                    }else{
+                        $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->get();
+                    }
+
+                }
+                
+
+                     /*send notification*/ 
+                    $acUrl = config('notification.accountantUrl.level1');
+                    $notifiData = [];
+                    $notifiData['user_type'] = "accountant";
+                    $notifiData['sender_id'] = Auth::user()->id;
+                    $notifiData['application_id'] =$application_id;
+                    $notifiData['uhid'] = getUhid($application_id)[0];
+                    $notifiData['level_id'] = getUhid($application_id)[1];
+                    $notifiData['url'] = $acUrl.dEncrypt($application_id);
+                    $notifiData['data'] = config('notification.accountant.appCreated');
+                    sendNotification($notifiData);
+                    /*end here*/ 
+        
 
             DB::commit();
             $data = [
