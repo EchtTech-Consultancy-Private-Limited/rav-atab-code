@@ -3150,7 +3150,32 @@ class AdminApplicationController extends Controller
                 $total_amount=$request->fee_amount;
             }
             /*end here*/ 
-            
+        
+            /*sending notification*/ 
+            $get_app = DB::table('tbl_application')->where('id',$request->application_id)->first();
+           
+            $url= config('notification.amdinUrl.level');
+            $tpUrl = config('notification.tpUrl.level');
+        
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['receiver_id'] = $get_app->tp_id;
+            $notifiData['application_id'] = $request->application_id;
+            $notifiData['uhid'] = getUhid( $request->application_id)[0];
+            $notifiData['level_id'] = getUhid( $request->application_id)[1];
+            $notifiData['data'] = config('notification.common.additionalPay');
+            $notifiData['user_type'] = "tp";
+            $notifiData['url'] = $tpUrl;
+            sendNotification($notifiData);
+            $notifiData['user_type'] = "superadmin";
+            $notifiData['receiver_id'] = null;
+            $notifiData['url'] = $url;
+            sendNotification($notifiData);
+            /*end here for send notification*/ 
+
+
+
+
             $raisedQuery = DB::table('tbl_application')->where('id',$request->application_id)->update(['is_query_raise'=>1,'query_raise_remark'=>$request->raise_query_remark,'raise_amount'=>$total_amount,'payment_type_level'=>$level]);
 
             if($raisedQuery){
