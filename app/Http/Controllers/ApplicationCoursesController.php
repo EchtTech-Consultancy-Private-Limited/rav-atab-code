@@ -976,10 +976,8 @@ class ApplicationCoursesController extends Controller
                 $details['title'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
-                if(env('MAIL_SEND')){
                      if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
-                }
                 }
                 
                 createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
