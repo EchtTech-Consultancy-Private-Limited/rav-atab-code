@@ -526,7 +526,9 @@ Route::get('email-test', function(){
     $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
     $details['subject'] = 'New Application | Application ID'; 
     $details['content'] = 'New Application has been created with Application ID'; 
-    dispatch(new SendEmailJob($details));
+     if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
     dd('done');
 });
 //notification status change

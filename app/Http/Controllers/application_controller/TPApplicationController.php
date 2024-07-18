@@ -1447,7 +1447,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             foreach($get_all_admin_users as $email){
@@ -1463,7 +1465,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
             
             //tp email
@@ -1476,7 +1480,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['title'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
                 createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
@@ -1717,7 +1723,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             foreach($get_all_admin_users as $email){
@@ -1733,7 +1741,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
             
             //tp email
@@ -1746,7 +1756,9 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $details['title'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
                 // createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             
@@ -2236,7 +2248,9 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
             $details['title'] = $title; 
             $details['subject'] = $subject; 
             $details['body'] = $body; 
-            dispatch(new SendEmailJob($details));
+             if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
         }
 
         foreach($get_all_admin_users as $email){
@@ -2252,7 +2266,9 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
             $details['title'] = $title; 
             $details['subject'] = $subject; 
             $details['body'] = $body; 
-            dispatch(new SendEmailJob($details));
+             if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
         }
 
         //tp email
@@ -2265,7 +2281,9 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
             $details['title'] = "Payment Approval | RAVAP-".$application_id; 
             $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
             $details['body'] = $body; 
-            dispatch(new SendEmailJob($details));
+             if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
         
         /*send email end here*/ 
         DB::commit();

@@ -195,7 +195,9 @@ class SecretariatDocumentVerifyController extends Controller
                     $details['title'] = $title;
                     $details['subject'] = $subject;
                     $details['body'] = $body;
+                     if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
+                }
                 }
 
                 // tp mail
@@ -218,7 +220,9 @@ class SecretariatDocumentVerifyController extends Controller
                 $details['title'] = $title;
                 $details['subject'] = $subject;
                 $details['body'] = $body;
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
                 // accountant mail
                 $title = "Application Payment Approved  | RAVAP-" . $application_id;
@@ -238,7 +242,9 @@ class SecretariatDocumentVerifyController extends Controller
                 $details['title'] = $title;
                 $details['subject'] = $subject;
                 $details['body'] = $body;
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
             }
 
@@ -373,7 +379,9 @@ class SecretariatDocumentVerifyController extends Controller
             //  $details['title'] = $title; 
             //  $details['subject'] = $subject; 
             //  $details['body'] = $body; 
-            //  dispatch(new SendEmailJob($details));
+            //   if(env('MAIL_SEND')){
+            //         dispatch(new SendEmailJob($details));
+            //     }
 
             /*end here*/
 
@@ -1381,7 +1389,9 @@ class SecretariatDocumentVerifyController extends Controller
             $details['title'] = $title;
             $details['subject'] = $subject;
             $details['body'] = $body;
-            dispatch(new SendEmailJob($details));
+             if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             /*end here*/
             if ($create_nc_comments) {
                 DB::commit();
