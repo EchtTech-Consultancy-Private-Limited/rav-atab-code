@@ -516,6 +516,10 @@
                         <div class="col-md-12">
                             <div class="badge badge-main danger float-right">Application Rejected by you</div>
                         </div>
+                        @elseif($spocData->approve_status==4)
+                        <div class="col-md-12">
+                            <div class="badge badge-main danger float-right">Application Rejected by Secretariat</div>
+                        </div>
                         
                     </div>
         @endif   

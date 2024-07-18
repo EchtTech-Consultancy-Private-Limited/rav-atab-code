@@ -261,7 +261,9 @@
                   </div>
               @endforeach  
                </div>
-               <div class="modal-footer">
+     
+    @if($item->application_list->approve_status==0)
+     <div class="modal-footer">
          <button type="button" onclick="cancelAssign()"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
@@ -269,7 +271,7 @@
             class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
          </div>
       </div>
-        
+    @endif
       </form>
   
         
