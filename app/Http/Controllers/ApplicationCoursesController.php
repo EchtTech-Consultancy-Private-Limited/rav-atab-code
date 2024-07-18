@@ -976,7 +976,8 @@ class ApplicationCoursesController extends Controller
                 createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
-            return  redirect()->route('application-list')->with('success', 'Payment Done successfully');
+            // return  redirect()->route('application-list')->with('success', 'Payment Done successfully');
+            return  redirect(url('/level-one/tp/application-list'))->with('success', 'Payment Done successfully');
         } elseif ($request->level_id == '2') {
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
@@ -998,12 +999,14 @@ class ApplicationCoursesController extends Controller
             DB::commit();
             return  redirect('/level-third')->with('success', ' Payment Done successfully');
         } else {
-            return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+            DB::commit();
+            return  redirect(url('/level-one/tp/application-list'))->with('success', 'Payment Done successfully');
+            // return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
         }
        }
        catch(Exception $e){
         DB::rollback();
-        return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+        return  redirect(url('/level-one/tp/application-list'))->with('fail', 'Something went wrong!');
        }
     }
     public function getApplicationList()
