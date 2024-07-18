@@ -1483,6 +1483,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
         }else{
+            foreach ($request->course_id as $items) {
+                $ApplicationCourse = TblApplicationCourses::where('id',$items);
+                $ApplicationCourse->update(['payment_status' =>1]);
+            }
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
         }  
