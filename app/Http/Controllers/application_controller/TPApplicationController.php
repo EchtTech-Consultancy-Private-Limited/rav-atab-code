@@ -1420,9 +1420,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
         DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //payment_status 5 is for done payment by TP.
 
-        
-        if ($request->level_id == '2') {
-            foreach ($request->course_id as $items) {
+
+        foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
                 $ApplicationCourse->update(['payment_status' =>1]);
             }
@@ -1482,10 +1481,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             /*send email end here*/ 
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
-        }else{
-            DB::commit();
-            return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
-        }  
+         
        }
        catch(Exception $e){
         DB::rollback();
