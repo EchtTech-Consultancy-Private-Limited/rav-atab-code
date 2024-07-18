@@ -1420,7 +1420,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
         DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //payment_status 5 is for done payment by TP.
 
-
+        
         if ($request->level_id == '2') {
             foreach ($request->course_id as $items) {
                 $ApplicationCourse = TblApplicationCourses::where('id',$items);
@@ -1483,13 +1483,13 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
         }else{
-            DB::rollBack();
-            return  redirect(url('/level-second/tp/application-list/'))->with('failed', 'Failed to make payment');
+            DB::commit();
+            return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
         }  
        }
        catch(Exception $e){
         DB::rollback();
-        return  redirect('/level-fourth')->with('success', 'Payment Done successfully');
+        return  redirect('/level-fourth')->with('fail', 'Failed to make payment');
        }
     }
 
@@ -2800,7 +2800,9 @@ public function tpUpdateNCFlagDocList($application_id)
 
             // $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
-            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
+            if($t==1){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
+            }
             DB::commit();
             // if ($check_all_doc_verified == "all_verified") {
             //     return back()->with('success', 'All course docs Accepted successfully.');
@@ -2929,7 +2931,9 @@ public function tpUpdateNCFlagCourseDoc($application_id)
             /*------end here------*/
 
             // this is for the applicaion status
-            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
+            if($t==1){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
+            }
             DB::commit();
             // if ($check_all_doc_verified == "all_verified") {
             //     return back()->with('success', 'All course docs Accepted successfully.');
