@@ -13,12 +13,13 @@ return [
 
     'assessor_onsite' =>['assigned'=>'A new application assigned to you.','summary'=>'Onsite Assessor created final summary'],
     
-    'common'=>['nc'=>'There are nc on application documents','upload'=>'Documents uploaded against nc','appApproved'=>'Application Completed successfully.','appRejected'=>'Application rejected.'],
+    'common'=>['nc'=>'There are nc on application documents','upload'=>'Documents uploaded against nc','appApproved'=>'Application Completed successfully.','appRejected'=>'Application rejected.','additionalPay'=>'Additional Payment Query Raised'],
     
     'tpUrl'=>[
         'level1'=>"/tp/application-view/",
         'level2'=>'/upgrade/tp/application-view/',
-        'level3'=>'/upgrade/level-3/tp/application-view/'
+        'level3'=>'/upgrade/level-3/tp/application-view/',
+        'level'=>'/tp/application-payment-fee-list'
     ],
     'tpPaymentUrl'=>[
         'level1'=>"/show-course-payment/",
@@ -32,6 +33,7 @@ return [
     ],
     'adminUrl'=>[
         'level1'=>"/super-admin/application-view/",
+        'level'=>"/super-admin/payment-fee-list"
     ],
     'accountantUrl'=>[
         'level1'=>"/account/application-view/",

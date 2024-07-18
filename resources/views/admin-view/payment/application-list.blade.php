@@ -147,7 +147,7 @@
                                                         <a href="{{ url('/admin/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-                                                    @if(($item->application_list->is_query_raise==0 && $item->application_list->status_text!="Application Approved") && $item->application_list->status_text!="Application Accepted" )
+                                                    @if(($item->application_list->is_query_raise==0 && $item->application_list->status_text!="Application Approved") && $item->application_list->status_text!="Application Accepted" && ($item->application_list->approve_status!=3 && $item->application_list->approve_status!=4))
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#raise_query_payment"
                                                     onclick="setPayModalData({{$item->application_list->id}})"
                                                             class="btn btn-tbl-edit bg-warning"><i
