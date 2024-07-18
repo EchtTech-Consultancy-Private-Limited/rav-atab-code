@@ -394,7 +394,7 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                     
-                                              @elseif($doc->status==5)
+                                            @elseif($doc->status==5)
                                              @if($doc->admin_nc_flag==1)
                                              <a title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
@@ -406,7 +406,11 @@
                                              <a title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Rejected <span>By Admin</span></a>
+                                             Rejected 
+                                                @if($doc->is_secretariat_reject==0)
+                                                <span>By Admin</span>
+                                                @endif
+                                            </a>
                                              @endif
                                             @else
                                            
@@ -554,6 +558,10 @@
                         @elseif($spocData->approve_status==3)
                         <div class="col-md-12">
                             <div class="badge badge-main danger float-right">Application Rejected by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
+                        </div>
+                        @elseif($spocData->approve_status==4)
+                        <div class="col-md-12">
+                            <div class="badge badge-main danger float-right">Application Rejected by Secretariat</div>
                         </div>
                         
                     </div>

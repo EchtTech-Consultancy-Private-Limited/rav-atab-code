@@ -1737,7 +1737,8 @@ function isSecondPayment($application_id){
                           ->where('application_id',$application_id)
                           ->where('assessor_type','desktop')
                           ->count();
-    if($payment_count==1 && $total_course==$total_final_summary){
+                          
+    if($payment_count==1 && ($total_course==$total_final_summary) && $total_course!=0){
         return true;
     }else{
         return false;

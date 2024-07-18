@@ -193,18 +193,17 @@ class SuperAdminApplicationController extends Controller
                     $obj->additional_payment = $additional_payment;
                 }
                 $final_data = $obj;
-
                 $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])
                 ->where('is_summary_show',1)
                 ->count();
-                $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
-        
-                if ($total_summary_count>=$total_courses_count) {
+                
+                $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->whereNull('deleted_at')->count();
+                
+                if (($total_summary_count>=$total_courses_count) && $total_courses_count!=0) {
                     $is_final_submit = true;
                 } else {
                     $is_final_submit = false;
                 }
-            
         return view('superadmin-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'mom'=>$mom]);
     }
     public function adminPaymentAcknowledge(Request $request)
@@ -1034,6 +1033,7 @@ class SuperAdminApplicationController extends Controller
             
                   /*send notification*/ 
                   sendNotification($notifiData);
+                  $notifiData['sender_id'] = $get_app->tp_id;
                   $notifiData['user_type'] = "tp";
                   $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
@@ -1066,7 +1066,6 @@ class SuperAdminApplicationController extends Controller
             DB::table('tbl_course_wise_document')
             ->where(['application_id' => $application_id])
             ->update(['approve_status'=>2,'is_revert'=>1]); 
-
             
             DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
 
@@ -1133,6 +1132,7 @@ class SuperAdminApplicationController extends Controller
                 /*send notification*/ 
                 sendNotification($notifiData);
                 $notifiData['user_type'] = "tp";
+                $notifiData['receiver_id'] = $get_app->tp_id;
                 $notifiData['url'] = $tpUrl;
                 sendNotification($notifiData);
                 /*end here*/ 
@@ -1148,7 +1148,6 @@ class SuperAdminApplicationController extends Controller
                 }
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }

@@ -687,6 +687,95 @@ class SecretariatDocumentVerifyController extends Controller
     }
 
 
+    public function rejectApplication($application_id)
+    {
+        
+        $app_id = $application_id;
+        try {
+            DB::beginTransaction();
+
+            /*TP show ncs*/
+            DB::table('tbl_course_wise_document')
+            ->where(['application_id' => $application_id])
+            ->update(['approve_status'=>2,'is_revert'=>1]); 
+            
+            DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>1]);
+
+            $all_docs = DB::table('tbl_course_wise_document')
+            ->where(['application_id' => $application_id,'approve_status'=>2])
+            ->whereNotIn('status',[2,3,4,6])
+            ->get(); 
+            
+
+            foreach($all_docs as $doc){
+                if($doc->status==0){
+                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_secretariat_reject'=>1]);
+                }else{
+                    DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_secretariat_reject'=>1]);
+
+                }
+                // $data = [];
+                //     $data['application_id'] = $doc->application_id;
+                //     $data['application_courses_id'] = $doc->course_id;
+                //     $data['secretariat_id'] = Auth::user()->id;
+                //     $data['doc_sr_code'] = $doc->doc_sr_code;
+                //     $data['doc_unique_id'] = $doc->doc_unique_id;
+                //     $data['nc_type'] = 'Accept';
+                //     $data['doc_file_name'] = $doc->doc_file_name;
+                //     $data['comments'] = 'Document has been approved';
+                //     $data['nc_show_status'] = 1;
+                //     DB::table('tbl_nc_comments_secretariat')->insert($data);
+            }
+            /*end here*/
+
+
+                $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+           
+                $url= config('notification.amdinUrl.level1');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level3');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            
+
+            $approve_app = DB::table('tbl_application')
+                ->where(['id' => $app_id])
+                ->update(['approve_status'=>4,'is_all_course_doc_verified'=>0]); //4 for rejected application by secretariat
+
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $app_id;
+                $notifiData['uhid'] = getUhid( $app_id)[0];
+                $notifiData['level_id'] = getUhid( $app_id)[1];
+                $notifiData['data'] = config('notification.common.appRejected');
+                $notifiData['user_type'] = "superadmin";
+                $notifiData['url'] = $url;
+          
+                /*send notification*/ 
+                sendNotification($notifiData);
+                $notifiData['user_type'] = "tp";
+                $notifiData['receiver_id'] = $get_app->tp_id;
+                $notifiData['url'] = $tpUrl;
+                sendNotification($notifiData);
+                /*end here*/ 
+
+                // this is for the applicaion status
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>8]);
+                if($approve_app){
+                    createApplicationHistory($app_id,null,config('history.secretariat.rejectApplication'),config('history.color.danger'));
+                    DB::commit();
+                    return true;
+                }else{
+                    DB::rollBack();
+                    return false;
+                }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+    }
+
+
     public function secretariatRejectCourse(Request $request)
     {
 
@@ -709,6 +798,22 @@ class SecretariatDocumentVerifyController extends Controller
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>1,'sec_reject_remark'=>$request->reject_remark,'is_revert'=>0]);
 
+                /*while rejecting course in level-3 we need to identify for rejection of the application in l-3*/ 
+                    if($get_application->level_id==3){
+                    $total_courses =  DB::table('tbl_application_courses')->where('application_id',$request->application_id)->count();
+                    $total_rejected_courses =  DB::table('tbl_application_courses')->where('application_id',$request->application_id)->whereIn('status',[1,3])->count();
+                    if($total_courses==$total_rejected_courses){
+                        $is_app_rejected = $this->rejectApplication($request->application_id);
+                        
+                        if($is_app_rejected){
+                            DB::commit();
+                            return response()->json(['success' => true, 'message' => 'Application rejected successfully.'], 200);
+                        }
+
+                    }
+                }
+                /*end here*/ 
+
                 
                 if($get_course_docs){
                     DB::commit();
@@ -723,6 +828,7 @@ class SecretariatDocumentVerifyController extends Controller
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }
     }
+
 
 
     public function sendAdminApproval($application_id)

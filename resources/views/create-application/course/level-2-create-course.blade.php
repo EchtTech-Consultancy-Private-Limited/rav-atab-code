@@ -805,7 +805,7 @@
                                         <a href="{{ url($u_url)}}"
                                             class="btn btn-primary next-step1 mr-2" <?php echo $is_show_next_btn?'':'disabled' ?> >Next</a>
                                             <a href="{{ url('makepayment/'.dEncrypt($applicationData?->id)) }}"
-                                            class="btn btn-primary next-step1 mr-2">Online Pay</a>
+                                            class="btn btn-primary next-step1 mr-2"<?php echo $is_show_next_btn?'':'disabled' ?>>Online Pay</a>
                                     @endif
                                 @endisset
                                 </div>

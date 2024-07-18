@@ -413,7 +413,11 @@
                                                                             <a title="{{$doc->doc_file_name}}"
                                                                             href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                                                            Rejected <span>By Admin</span></a>
+                                                                            Rejected 
+                                                                                @if($doc->is_secretariat_reject==0)
+                                                                                <span>By Admin</span>
+                                                                                @endif
+                                                                        </a>
                                                                             @endif
                                                                             @elseif($doc->status==6)
                                                                                 <a  title="{{$doc->doc_file_name}}"
@@ -610,7 +614,7 @@
 
        @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3)
                             
-                        @if(!$is_final_summary_generated) 
+                        @if(!$is_final_summary_generated && $application_details->is_all_courses_rejected==false) 
                         <div class="col-md-12">
                             <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
                         

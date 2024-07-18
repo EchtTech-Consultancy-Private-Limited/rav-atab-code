@@ -397,7 +397,7 @@ class AdminApplicationController extends Controller
         $obj->show_submit_btn_to_secretariat44 = $this->isShowSubmitBtnToSecretariat44L3($application->id);
         $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44L3($application->id);
         $obj->enable_disable_submit_btn44 = $this->checkSubmitButtonEnableOrDisable44L3($application->id);
-        
+        $obj->is_all_courses_rejected = $this->isAllCoursesRejected($application->id);
         
        
 
@@ -503,7 +503,7 @@ class AdminApplicationController extends Controller
         ->count();
         $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
 
-        if ($total_summary_count>=$total_courses_count) {
+        if (($total_summary_count>=$total_courses_count)  && $total_courses_count!=0) {
             $is_final_submit = true;
         } else {
             $is_final_submit = false;
@@ -2117,6 +2117,30 @@ class AdminApplicationController extends Controller
         }
     }
 
+    public function isAllCoursesRejected($application_id)
+    {
+
+        $total_courses = DB::table('tbl_application_courses')
+            ->where('application_id',$application_id)
+            ->count();
+            
+        $total_rejected_course_count = DB::table('tbl_application_courses')
+            ->where('application_id',$application_id)
+            ->whereIn('status',[1,3])
+            ->count();
+        if($total_courses==$total_rejected_course_count){
+            return true;
+        }else{
+            return false;
+        }
+
+        
+            
+
+            
+            
+
+    }
     public function adminRejectCourse($id,$course_id){
         try {
             

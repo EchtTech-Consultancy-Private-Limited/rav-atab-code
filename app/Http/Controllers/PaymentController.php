@@ -8,6 +8,9 @@ use App\Http\Helpers\Eazypay;
 use App\Models\TblApplicationPayment;
 use DB, Auth;
 use App\Models\Country;
+use App\Models\TblApplicationCourses;
+use App\Models\TblApplication; 
+
 use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
@@ -15,6 +18,7 @@ class PaymentController extends Controller
     public function makePayment($id=null){
 
         $app_id = dDecrypt($id);
+
         $checkpayment = DB::table('tbl_application_payment')->where([
                                 ['payment_mode','mode'],
                                 ['payment_transaction_no',1234567],
@@ -25,19 +29,25 @@ class PaymentController extends Controller
 
         $getcountryCode = DB::table('countries')->where([['id',Auth::user()->country]])->first();
         $appdetails = DB::table('tbl_application')->where('id',$app_id)->first();
-        $reference_no= rand();
+        $reference_no= rand().'-'.$app_id ;
         //$reference_no= $app_id;
         $mobile=Auth::user()->mobile_no;
         $email=Auth::user()->email;
-       // dd(count($paymentCheck));                        
+       // dd(count($paymentCheck));       
+       
+        $level_id= $appdetails->level_id;
+
         if(isset($checkpayment) && count($checkpayment)==0){
             DB::beginTransaction();
                 $app_id = dDecrypt($id);
-                $appdetails = DB::table('tbl_application')->where('id',$app_id)->first();
-                $amount = $this->getPaymentFee('level-1', $getcountryCode->currency, $app_id);
+                if($level_id==3){
+                    $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
+                }else{
+                    $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+                }
                 $item = new TblApplicationPayment;
                 $item->level_id = $appdetails->level_id;
-                $item->user_id = Auth::user()->id;
+                $item->user_id = $appdetails->tp_id;
                 $item->amount = $amount;
                 $item->payment_date = date("d-m-Y");
                 $item->payment_mode = 'mode';
@@ -47,6 +57,8 @@ class PaymentController extends Controller
                 $item->currency = $getcountryCode->currency??'inr';
                 $item->application_id = $app_id;
                 $item->save();
+
+
             DB::commit();
             $eazypay_integration=new Eazypay();
             $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=null);
@@ -56,11 +68,16 @@ class PaymentController extends Controller
             //dd(count($checkpayment));  
             DB::beginTransaction();
             $app_id = dDecrypt($id);
-            $appdetails = DB::table('tbl_application')->where('id',$app_id)->first();
-            $amount = $this->getPaymentFee('level-1',$getcountryCode->currency,$app_id);
+          
+            if($level_id==3){
+                $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
+            }else{
+                $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+            }
+            
             $result= TblApplicationPayment::where('application_id',$app_id)->update([
                 'level_id' => $appdetails->level_id,
-                'user_id' => Auth::user()->id,
+                'user_id' => $appdetails->tp_id,
                 'amount' =>$amount,
                 'payment_date' =>date("d-m-Y"),
                 'payment_mode' =>'mode',
@@ -93,11 +110,57 @@ class PaymentController extends Controller
         if(isset($request['Response_Code']) && $request['Response_Code'] =='E000' && $request['TPS'] == 'Y'){
             
             DB::beginTransaction();
-            $result= TblApplicationPayment::where('payment_reference_no',$request['ReferenceNo'])->update([
+            $result = TblApplicationPayment::where('payment_reference_no',$request['ReferenceNo'])->update([
                 'payment_mode' => $request['Payment_Mode'],
                 'payment_transaction_no' =>$request['Unique_Ref_Number'],
                 'pay_status' =>$request['TPS']??'N',
             ]);
+            $application_id = explode('-', $request['ReferenceNo'])[1];
+            DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
+            DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->update(['second_payment_status' => 1]);
+           $courses= DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->get(); //status 5 is for done payment by TP.
+       
+                foreach ($courses as $items) {
+                    $ApplicationCourse = TblApplicationCourses::where('id',$items->id);
+                    $ApplicationCourse->update(['payment_status' =>1]);
+                }
+
+                $appdetails = DB::table('tbl_application')->where('id',$application_id)->first();
+                if(isset($appdetails->level_id) && $appdetails->level_id==2){
+                    
+                    $first_app_refid = TblApplication::where('id',$appdetails->id)->first();
+                    $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->first();
+                    
+                    if(isset($first_app_id)){
+                        DB::table('tbl_application')->where('id',$first_app_id->id)->update(['is_all_course_doc_verified'=>3]);
+                    }
+                  
+                }else if(isset($appdetails->level_id) && $appdetails->level_id==3){
+                    $first_app_refid = TblApplication::where('id',$appdetails->id)->first();
+    
+                    $ref_count = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->count();
+                    if($ref_count>1){
+                        $first_app_id = TblApplication::where('prev_refid',$first_app_refid->prev_refid)->get();
+                    }else{
+                        $first_app_id = TblApplication::where('refid',$first_app_refid->prev_refid)->get();
+                    }
+
+                }
+               // dd(Auth::user());
+            /*send notification*/ 
+                    $acUrl = config('notification.accountantUrl.level1');
+                    $notifiData = [];
+                    $notifiData['user_type'] = "accountant";
+                    $notifiData['sender_id'] =$appdetails->tp_id;
+                    $notifiData['application_id'] =$application_id;
+                    $notifiData['uhid'] = getUhid($application_id)[0];
+                    $notifiData['level_id'] = getUhid($application_id)[1];
+                    $notifiData['url'] = $acUrl.dEncrypt($application_id);
+                    $notifiData['data'] = config('notification.accountant.appCreated');
+                    sendNotification($notifiData);
+                    /*end here*/ 
+        
+
             DB::commit();
             $data = [
                 'ReferenceNo' =>$request['ReferenceNo'], 
@@ -132,11 +195,15 @@ class PaymentController extends Controller
         }
     }
     function getPaymentFee($level,$currency,$application_id){
+
+        if($currency!="INR" && $currency!="USD"){
+            $currency="OTHER";
+        }
         $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
         
         $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
         
-        if (Auth::user()->country == $this->get_india_id()) {
+        // if (Auth::user()->country == $this->get_india_id()) {
             if (count($course) == '0') {
               
                 $total_amount = '0';
@@ -151,7 +218,7 @@ class PaymentController extends Controller
                 
                 $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
             }    
-        } 
+        // } 
 
         return $total_amount;
     }

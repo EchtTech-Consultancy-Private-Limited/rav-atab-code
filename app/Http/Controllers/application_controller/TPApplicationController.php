@@ -1923,12 +1923,12 @@ public function upgradeStoreNewApplicationCourseLevel3(Request $request)
         $lowercase_course_name = array_map('strtolower', $course_name);
         $is_course_name_already_exists =TblApplicationCourses::where(['application_id' => $request->application_id,'deleted_at'=>null,'level_id'=>3])->whereIn('course_name', $lowercase_course_name)->get();
         if(count($is_course_name_already_exists)>0){
-            return  redirect('upgrade-create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
+            return  redirect('upgrade-level-3-create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Course name already exists on this application');
         }
         $value_counts = array_count_values($lowercase_course_name);
             foreach ($value_counts as $value => $count) {
                 if ($count > 1) {
-                    return  redirect('upgrade-create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Failed to create course with same course name');
+                    return  redirect('upgrade-level-3-create-new-course/' . dEncrypt($request->application_id))->with('fail', 'Failed to create course with same course name');
                 }
             }
         $course_duration = $request->course_duration;

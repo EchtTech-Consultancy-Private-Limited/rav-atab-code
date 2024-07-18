@@ -3,7 +3,7 @@
 return [
     'tp' =>['status'=>'Payment Pending'],
     'accountant' =>['status'=>'Payment Received','status2'=>'Payment Approved'],
-    'secretariat' =>['status'=>'Approval For Admin'],
+    'secretariat' =>['status'=>'Approval For Admin','rejectApplication'=>'Application Rejected by secretariat'],
     'admin' =>['status'=>'Acknowledge Payment','assign'=>'Assigned Secretariat','acceptApplication'=>'Application Accepted','rejectApplication'=>'Application Rejected','approvedApplication'=>'Application Approved'],
     'assessor_desktop' =>['status'=>'co03'],
     'assessor_onsite' =>['status'=>'co03'],

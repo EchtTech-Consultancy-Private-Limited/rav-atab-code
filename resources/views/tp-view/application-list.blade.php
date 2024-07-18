@@ -206,7 +206,7 @@
                                                                      @if($item->application_list->upgraded_level_id == 2)
                                                                     <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                      @elseif($item->application_list->upgraded_level_id == 3)
-                                                                    <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded3</a>
+                                                                    <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                 @endif
                                                             @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
                                                                 <span class="badge badge-main success">Upgraded</span>
@@ -235,6 +235,7 @@
                                                             <!-- level-3 -->
                                                             @php
                                                                 $is_second_payment = isSecondPayment($item->application_list->id);
+                                                                
                                                             @endphp
 
                                                             @if($is_second_payment && $item->application_list->level_id==3)

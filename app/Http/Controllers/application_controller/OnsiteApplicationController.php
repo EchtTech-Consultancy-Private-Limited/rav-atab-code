@@ -127,7 +127,7 @@ class OnsiteApplicationController extends Controller
 
                     $is_in_improvement = DB::table('assessor_improvement_form')->where('application_id',$application->id)->first();
 
-                    if ($total_summary_count>=$total_courses_count && !empty($is_in_improvement)) {
+                    if (($total_summary_count>=$total_courses_count) && !empty($is_in_improvement) && $total_courses_count!=0) {
                         $is_final_submit = true;
                     } else {
                         $is_final_submit = false;
