@@ -1524,12 +1524,12 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                     $assessor_type="desktop";
                 }
             }
-        
+
         $show_submit_btn_to_tp = $this->isShowSubmitBtnToSecretariat(dDecrypt($id),$assessor_type);
         
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id),$assessor_type);
         $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
-        // dd($showSubmitBtnToTP);
+        
             $obj = new \stdClass;
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
@@ -2166,6 +2166,10 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
     ->whereNull('remark_by_account')
     ->count();
+   
+    if($checkPaymentAlready>1){
+        DB::table('tbl_application')->where('id',$request->Application_id)->upadte(['payment_status'=>6]);
+    }
     
     // dd($checkPaymentAlready);
         if ($checkPaymentAlready>2) {
@@ -2192,6 +2196,17 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
         $item->payment_proof = $filename;
     }
     $item->save();
+
+
+    /*If tp pay second time then show the application admin as well*/ 
+    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->count();
+    if($pay_count>1){
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['second_payment'=>6]);
+    }
+    /*end here*/ 
+
+
+
           /*send notification*/ 
           $notifiData = [];
           $notifiData['user_type'] = "accountant";
@@ -3127,7 +3142,7 @@ $additionalFields = DB::table('tbl_application_course_doc')
     })
     ->orderBy('tbl_application_course_doc.id', 'desc')
     ->where('tbl_application_course_doc.assessor_type',$assessor_type)
-    ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type','onsite_status']);
+    ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'nc_flag','approve_status', 'assessor_type','onsite_status']);
 
 
         $finalResults = [];
@@ -3146,6 +3161,7 @@ $additionalFields = DB::table('tbl_application_course_doc')
                     $finalResults[$key]->onsite_status = $additionalField->onsite_status;
                     $finalResults[$key]->id = $additionalField->id;
                     $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                    $finalResults[$key]->nc_flag = $additionalField->nc_flag;
                     $finalResults[$key]->approve_status = $additionalField->approve_status;
                     $finalResults[$key]->assessor_type = $additionalField->assessor_type;
                 }
@@ -3158,8 +3174,8 @@ $additionalFields = DB::table('tbl_application_course_doc')
     
   
     foreach ($finalResults as $result) {
-        if($assessor_type=="desktop"){
-            if (($result->status==2 || $result->status==3 || $result->status==4)) {
+        if($assessor_type=="desktop" || $assessor_type=="secretariat"){
+            if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
                 $flag = 1;
                 break;
             }
@@ -3177,7 +3193,6 @@ $additionalFields = DB::table('tbl_application_course_doc')
     $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->where('deleted_at',null)->count();
  
     $total_docs = $get_course_count*4;
-    
     
     
     if(($get_docs_count<$total_docs) || $flag == 1){
@@ -3316,7 +3331,6 @@ public function checkReuploadBtn($application_id)
 
     
     $flag = 0;
-    // dd($results);
     foreach ($results as $result) {
         if (($result->status == 2 || $result->status == 3 || $result->status == 4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
             $flag = 1;
@@ -3327,6 +3341,7 @@ public function checkReuploadBtn($application_id)
         }
     }
 
+    
     
     if ($flag == 1) {
         return true;
