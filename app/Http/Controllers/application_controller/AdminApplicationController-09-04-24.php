@@ -230,7 +230,9 @@ class AdminApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
     /*end here*/ 
                 
                 //assessor mail
@@ -247,7 +249,9 @@ class AdminApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             /*end here*/
 
             //tp mail
@@ -264,7 +268,9 @@ class AdminApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             /*end here*/
 
             if ($request->assessment_type == 2) {

@@ -265,7 +265,9 @@ class DocApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             // tp mail
@@ -288,7 +290,9 @@ class DocApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
                  // accountant mail
                  $title="Application Payment Approved  | RAVAP-".$application_id;
@@ -308,7 +312,9 @@ class DocApplicationController extends Controller
                  $details['title'] = $title; 
                  $details['subject'] = $subject; 
                  $details['body'] = $body; 
-                 dispatch(new SendEmailJob($details));
+                  if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
         }
            
@@ -411,7 +417,9 @@ class DocApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             // tp mail
@@ -434,7 +442,9 @@ class DocApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
                  // accountant mail
                  $title="Application Payment Approved  | RAVAP-".$application_id;
@@ -454,7 +464,9 @@ class DocApplicationController extends Controller
                  $details['title'] = $title; 
                  $details['subject'] = $subject; 
                  $details['body'] = $body; 
-                 dispatch(new SendEmailJob($details));
+                  if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
         }
            
@@ -562,7 +574,9 @@ class DocApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             // tp mail
@@ -585,7 +599,9 @@ class DocApplicationController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
                  // accountant mail
                  $title="Application Payment Approved  | RAVAP-".$application_id;
@@ -605,7 +621,9 @@ class DocApplicationController extends Controller
                  $details['title'] = $title; 
                  $details['subject'] = $subject; 
                  $details['body'] = $body; 
-                 dispatch(new SendEmailJob($details));
+                  if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
 
         }
            

@@ -943,7 +943,9 @@ class ApplicationCoursesController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             foreach($get_all_admin_users as $email){
@@ -959,7 +961,9 @@ class ApplicationCoursesController extends Controller
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                 if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             }
 
             //tp email
@@ -972,7 +976,10 @@ class ApplicationCoursesController extends Controller
                 $details['title'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['body'] = $body; 
-                dispatch(new SendEmailJob($details));
+                     if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
+                
                 createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();

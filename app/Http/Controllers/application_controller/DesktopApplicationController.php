@@ -353,7 +353,9 @@ class DesktopApplicationController extends Controller
             $details['title'] = $title;
             $details['subject'] = $subject;
             $details['body'] = $body;
-            dispatch(new SendEmailJob($details));
+             if(env('MAIL_SEND')){
+                    dispatch(new SendEmailJob($details));
+                }
             /*end here*/
             if ($create_nc_comments) {
                 DB::commit();
