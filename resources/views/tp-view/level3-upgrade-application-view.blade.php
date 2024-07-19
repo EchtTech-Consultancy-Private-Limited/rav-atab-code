@@ -95,7 +95,7 @@
                     
                 @endphp
 
-                <span><a href="{{url('tp/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+                <span><a href="{{url('upgrade/tp/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                 @endif
             </div>
             <div class="col-md-8 pr-2">
