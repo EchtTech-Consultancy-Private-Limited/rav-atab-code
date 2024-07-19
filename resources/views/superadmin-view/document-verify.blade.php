@@ -32,6 +32,8 @@
             @include('layout.sideAss')
         @elseif(Auth::user()->role == '4')
             @include('layout.sideprof')
+        @elseif(Auth::user()->role == '6')
+            @include('layout.sidbarAccount')
         @endif
         @include('layout.rightbar')
     </div>

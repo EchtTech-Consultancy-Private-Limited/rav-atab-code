@@ -149,18 +149,17 @@
                                                         <a href="{{ url('/super-admin/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-                                                                
                                                     @isset($item->payment)
                                                         @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)
                                                         <button id="acknowledgement_{{$item->application_list->id}}"
                                                             class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
                                                         @endif
                                                     @endisset   
-                                                
+                                            
                                              @isset($item->payment)
-                                                @if(($item->payment->aknowledgement_id!=null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2))
-                                                    
-                                                   @if($item->is_all_docs_uploaded && $item->application_list->level_id!=1)
+                                             @if(($item->payment->aknowledgement_id!=null && $item->payment->approve_remark!=null && $item->payment->last_payment->status==2) || $item->application_list->second_payment==6)
+                                             
+                                                   @if($item->application_list->level_id!=1)
                                                    
                                                     <a class="btn btn-tbl-delete bg-danger font-a"
                                                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
