@@ -832,7 +832,7 @@ class DesktopApplicationController extends Controller
                     break;
                 }
             }
-    
+            
             if ($flag == 0) {
             //   DB::table('tbl_application')->where('id', $application_id)->update(['is_all_course_doc_verified' => 1]);
                 return "all_verified";
