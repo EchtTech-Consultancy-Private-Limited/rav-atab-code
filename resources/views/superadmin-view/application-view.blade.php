@@ -493,7 +493,7 @@
                              @endif
                                
                             @elseif($ApplicationCourses['course']->status==2)
-                            <div class="badge badge-main success float-right">Approved by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
+                            <div class="badge badge-main success float-right">Approved by {{Auth::user()->firstname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                             @endif
                         </div>
                        
@@ -553,11 +553,11 @@
                         </div>
                         @elseif($spocData->approve_status==1)
                         <div class="col-md-12">
-                            <div class="badge badge-main success float-right">Application Approved by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
+                            <div class="badge badge-main success float-right">Application Approved by {{Auth::user()->firstname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                         </div>
                         @elseif($spocData->approve_status==3)
                         <div class="col-md-12">
-                            <div class="badge badge-main danger float-right">Application Rejected by {{Auth::user()->firsname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
+                            <div class="badge badge-main danger float-right">Application Rejected by {{Auth::user()->firstname??""}} {{Auth::user()->middlename??''}} {{Auth::user()->lastname??''}}</div>
                         </div>
                         @elseif($spocData->approve_status==4)
                         <div class="col-md-12">

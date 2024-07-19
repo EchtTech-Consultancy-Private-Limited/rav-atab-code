@@ -625,6 +625,7 @@ class SuperAdminApplicationController extends Controller
                 ->latest('id')
                 ->first();
 
+                
 
 
             /*Don't show form if doc is accepted*/

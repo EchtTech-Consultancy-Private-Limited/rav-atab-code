@@ -287,10 +287,14 @@
 
 
                                              @elseif($doc->onsite_status==5)
+                                             @php
+                                                $doc_ = $doc->doc_file_name==null?$doc->onsite_doc_file_name:$doc->doc_file_name;
+                                                $user_t = $doc->doc_file_name==null?"onsite":"admin";
+                                             @endphp
                                              @if($doc->admin_nc_flag==1)
                                              <a 
-                                             title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-accept/admin/verify-doc'. '/' .  $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             title="{{$doc_}}"
+                                             href="{{ url('super-admin-accept/'.$user_t.'/verify-doc'. '/' .  $doc->doc_sr_code .'/' . $doc_ . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted<span>By Admin</span></a>
                                              @endif
@@ -298,7 +302,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-reject/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('super-admin-reject/'.$user_t.'/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected<span>By Admin</span></a>
                                              @endif
