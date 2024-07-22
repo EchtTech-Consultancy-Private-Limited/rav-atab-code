@@ -132,7 +132,7 @@ class OnsiteApplicationController extends Controller
                     } else {
                         $is_final_submit = false;
                     }
-
+                    
 
                     $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'onsite'])->count();
 
@@ -1041,7 +1041,7 @@ public function checkAllActionDoneOnRevert($application_id)
 
     
     $flag = 0;
-
+  
     foreach ($finalResults as $result) {
         if (($result->is_revert == 1)) {
             $flag = 0;
@@ -1077,11 +1077,11 @@ public function onsiteUpdateNCFlagDocList($application_id)
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
             
-            if ($check_all_doc_verified == "all_verified_f") {
-                DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
-                DB::commit();
-                return back()->with('success', 'All course docs Accepted successfully.');
-            }
+            // if ($check_all_doc_verified == "all_verified_f") {
+            //     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+            //     DB::commit();
+            //     return back()->with('success', 'All course docs Accepted successfully.');
+            // }
 
             $get_course_docs = DB::table('tbl_application_course_doc')
                 ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>'onsite'])
@@ -1188,7 +1188,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
             // if (!$check_all_doc_verified) {
             //     return back()->with('fail', 'First create NCs on courses doc');
             // }
-            if ($check_all_doc_verified == "all_verified") {
+            if ($check_all_doc_verified == "all_verified" || $check_all_doc_verified == "all_verified_f") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');
