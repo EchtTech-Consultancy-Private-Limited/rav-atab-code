@@ -230,6 +230,7 @@ class OnsiteApplicationController extends Controller
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id);
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application_id);
         $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow($application_id,$course_id);
+        
        
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id,'assessor_type'=>'onsite'])->first();
        if(!empty($is_exists)){
