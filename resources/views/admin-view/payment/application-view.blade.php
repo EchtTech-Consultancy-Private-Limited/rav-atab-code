@@ -558,7 +558,7 @@
                             </th>
                             <!-- <th>Total Courses</th> -->
                             <th>Amount</th>
-                            <th>Slip by User</th>
+                            <!-- <th>Slip by User</th> -->
                             <th>Slip by Approver</th>
                             <th>Remarks</th>
                             <th>Action</th>
@@ -573,7 +573,7 @@
                             <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
                             <td>
                                 ₹ {{ $ApplicationPayment->amount }}</td>
-                            <td><?php
+                            <!-- <td><?php
                                         substr($ApplicationPayment->payment_proof, -3);
                                         $data = substr($ApplicationPayment->payment_proof, -3);
                                         ?>
@@ -591,7 +591,7 @@
                                 </a>
                                 @endif
                                 @endif
-                            </td>
+                            </td> -->
                             <td>
                                 
                             @if ($ApplicationPayment->status == 0)
@@ -683,7 +683,7 @@
                             </th>
                             <!-- <th>Total Courses</th> -->
                             <th>Amount</th>
-                            <th>Slip by User</th>
+                            <!-- <th>Slip by User</th> -->
                             <th>Slip by Accountant Approver</th>
                             <th>Remarks</th>
                             <th>Action</th>
@@ -699,7 +699,7 @@
                             <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
                             <td>
                                 ₹ {{ $ApplicationPayment->amount }}</td>
-                            <td><?php
+                            <!-- <td><?php
                                         substr($ApplicationPayment->payment_proof, -3);
                                         $data = substr($ApplicationPayment->payment_proof, -3);
                                         ?>
@@ -717,7 +717,7 @@
                                 </a>
                                 @endif
                                 @endif
-                            </td>
+                            </td> -->
                             <td>
                                 @if ($ApplicationPayment->status == 0 && $ApplicationPayment->payment_proof_by_account==null)
                                 N/A
