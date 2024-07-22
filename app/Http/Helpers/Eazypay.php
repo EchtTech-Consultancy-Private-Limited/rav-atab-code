@@ -21,13 +21,13 @@ class Eazypay
         $this->return_url               =    env('APP_URL').'paymentresponse';
     }
 
-    public function getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField='')
+    public function getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField)
     {
         // $mandatoryField   =    $this->aes128Encrypt($reference_no, $amount, $email, $mobile);
         // $optionalField    =    $this->aes128Encrypt($optionalField,$this->encryption_key );
         // $amount           =    $this->aes128Encrypt($amount,$this->encryption_key );
         // $reference_no     =    $this->aes128Encrypt($reference_no,$this->encryption_key );
-            $opt_fields = "";
+            $opt_fields = $optionalField??"";
             
             $man_fields = $reference_no.'|'.$this->sub_merchant_id.'|'.$amount.'|'.'aaa'.'|'.$email.'|'.$mobile;
 
