@@ -18,7 +18,12 @@ class PaymentController extends Controller
     public function makePayment($id=null, Request $request){
 
         $app_id = dDecrypt($id);
-
+        if($request->get('p') == 'addtional'){
+            $payment_ext = 'add';
+        }else{
+            $payment_ext = '';
+        }
+        //dd($request->get('p'));
         $checkpayment = DB::table('tbl_application_payment')->where([
                                 ['payment_mode','mode'],
                                 ['payment_transaction_no',1234567],
@@ -35,11 +40,11 @@ class PaymentController extends Controller
         $email=Auth::user()->email;
         $token = csrf_token()??'';
          
-        //dd($token);       
+        //dd("HI");       
        
         $level_id= $appdetails->level_id;
 
-        if(isset($checkpayment) && count($checkpayment)==0){
+        //if(isset($checkpayment) && count($checkpayment)==0){
             DB::beginTransaction();
                 $app_id = dDecrypt($id);
                 if($level_id==3){
@@ -58,6 +63,7 @@ class PaymentController extends Controller
                 $item->payment_proof ='image.png';
                 $item->currency = $getcountryCode->currency??'inr';
                 $item->application_id = $app_id;
+                $item->payment_ext = $payment_ext;
                 $item->save();
 
 
@@ -66,50 +72,51 @@ class PaymentController extends Controller
             $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=null);
             header('Location: '.$payment_url);
             exit;
-        }elseif(isset($checkpayment) && count($checkpayment)>0){
-            //dd(count($checkpayment));  
-            DB::beginTransaction();
-            $app_id = dDecrypt($id);
+        // }elseif(isset($checkpayment) && count($checkpayment)>0){
+        //     //dd(count($checkpayment));  
+        //     DB::beginTransaction();
+        //     $app_id = dDecrypt($id);
           
-            if($level_id==3){
-                $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
-            }else{
-                $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
-            }
+        //     if($level_id==3){
+        //         $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
+        //     }else{
+        //         $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+        //     }
             
-            $result= TblApplicationPayment::where('application_id',$app_id)->update([
-                'level_id' => $appdetails->level_id,
-                'user_id' => $appdetails->tp_id,
-                'amount' =>$amount,
-                'payment_date' =>date("d-m-Y"),
-                'payment_mode' =>'mode',
-                'payment_transaction_no' =>1234567,
-                'payment_reference_no' => $reference_no,
-                'payment_proof' =>'image.png',
-                'currency' =>$getcountryCode->currency??'inr',
-            ]);
-            DB::commit();
-            $eazypay_integration=new Eazypay();
-            $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=$token);
-            header('Location: '.$payment_url);
-            exit;
-        }
-        else{
-            $checkpayment = DB::table('tbl_application_payment')->where([
-                ['application_id',$app_id]])->first();
-            $data = [
-                'ReferenceNo' =>$checkpayment->payment_reference_no, 
-                'tran_id' =>$checkpayment->payment_transaction_no, 
-                'amount' => $checkpayment->amount
-            ];
-            return view('payment-response.success-response',['data'=>$data]);
-        }
+        //     $result= TblApplicationPayment::where('application_id',$app_id)->update([
+        //         'level_id' => $appdetails->level_id,
+        //         'user_id' => $appdetails->tp_id,
+        //         'amount' =>$amount,
+        //         'payment_date' =>date("d-m-Y"),
+        //         'payment_mode' =>'mode',
+        //         'payment_transaction_no' =>1234567,
+        //         'payment_reference_no' => $reference_no,
+        //         'payment_proof' =>'image.png',
+        //         'currency' =>$getcountryCode->currency??'inr',
+        //         'payment_ext' => $payment_ext
+        //     ]);
+        //     DB::commit();
+        //     $eazypay_integration=new Eazypay();
+        //     $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=$token);
+        //     header('Location: '.$payment_url);
+        //     exit;
+        // }
+        // else{
+            // $checkpayment = DB::table('tbl_application_payment')->where([
+            //     ['application_id',$app_id]])->first();
+            // $data = [
+            //     'ReferenceNo' =>$checkpayment->payment_reference_no, 
+            //     'tran_id' =>$checkpayment->payment_transaction_no, 
+            //     'amount' => $checkpayment->amount
+            // ];
+            // return view('payment-response.success-response',['data'=>$data]);
+        //}
         
        // return $post_data;
     }
     public function paymentResponseSuccessFailer(Request $request){
 
-       // dd('f');
+        
         if(isset($request['Response_Code']) && $request['Response_Code'] =='E000' && $request['TPS'] == 'Y'){
             
             DB::beginTransaction();
@@ -119,6 +126,11 @@ class PaymentController extends Controller
                 'pay_status' =>$request['TPS']??'N',
             ]);
             $application_id = explode('-', $request['ReferenceNo'])[1];
+           $rrsult =  DB::table('tbl_application_payment')->where([['application_id',$application_id]])->first()->payment_ext;
+           if(!empty($rrsult) && $rrsult =='add'){
+                DB::table('tbl_application')->where('id',$application_id)->update(['is_query_raise'=>2]);
+           }
+        //dd($rrsult);
             DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
             DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->update(['second_payment_status' => 1]);
            $courses= DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->get(); //status 5 is for done payment by TP.

@@ -557,7 +557,7 @@
                             </th>
                             <!-- <th>Total Courses</th> -->
                             <th>Amount</th>
-                            <th>Slip by User</th>
+                            <!-- <th>Slip by User</th> -->
                             <th>Slip by Approver</th>
                             <th>Remarks</th>
                         </tr>
@@ -571,7 +571,7 @@
                             <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
                             <td>
                                 ₹ {{ $ApplicationPayment->amount }}</td>
-                            <td><?php
+                            <!-- <td><?php
                                         substr($ApplicationPayment->payment_proof, -3);
                                         $data = substr($ApplicationPayment->payment_proof, -3);
                                         ?>
@@ -589,7 +589,7 @@
                                 </a>
                                 @endif
                                 @endif
-                            </td>
+                            </td> -->
                             <td>
                                 
                             @if ($ApplicationPayment->status == 0)
@@ -672,7 +672,7 @@
                             </th>
                             <!-- <th>Total Courses</th> -->
                             <th>Amount</th>
-                            <th>Slip by User</th>
+                            <!-- <th>Slip by User</th> -->
                             <th>Slip by Accountant Approver</th>
                             <th>Remarks</th>
                             <th>Action</th>
@@ -688,7 +688,7 @@
                             <!-- <td>{{ $ApplicationPayment->course_count ?? '' }}</td> -->
                             <td>
                                 ₹ {{ $ApplicationPayment->amount }}</td>
-                            <td><?php
+                            <!-- <td><?php
                                         substr($ApplicationPayment->payment_proof, -3);
                                         $data = substr($ApplicationPayment->payment_proof, -3);
                                         ?>
@@ -706,7 +706,7 @@
                                 </a>
                                 @endif
                                 @endif
-                            </td>
+                            </td> -->
                             <td>
                                 @if ($ApplicationPayment->status == 0 && $ApplicationPayment->payment_proof_by_account==null)
                                 N/A
@@ -779,72 +779,7 @@
                 </div>
             </div>
 
-            @if (isset($ApplicationPayment))
-                @if($application_payment_status &&  $application_payment_status->status==0)
-                <div class="card p-relative" id="payment_rcv_card">
-                <div class="box-overlay-2">
-                     <span class="spinner-border"></span>
-                </div>
-                    <div class="card-header bg-white text-dark">
-                        <h5 class="mt-2">
-                            Payment Process
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                    
-                        <div>
-                            
-                        <form action="#" name="payment_approve_form" id="payment_approve_form" enctype="multipart/form-data">
-                            <div class="row">
-                                
-                                <input type="hidden" name="payment_id" id="payment_id" value="{{$ApplicationPayment->id}}">
-                                <div class="col-md-4">
-                                    <label for="">Payment Proof Upload (jpg,jpeg,png,pdf)</label>
-                                    <input type="file" required class="form-control" name="payment_proof" id="payment_proof" accept="application/pdf,image/png, image/gif, image/jpeg">
-                                </div>
-                                <div class="col-md-5">
-                                    <label for="">Remark<span class="text text-danger">*</span> </label>
-                                    <textarea class="form-control" name="payment_remark" id="payment_remark" cols="30" rows="10" placeholder="Please Enter the remark"></textarea>
-                                </div>
-                                <div class="col-md-3 mt-4"> 
-                                    <button class="btn btn-primary" type="button" onclick="handleAdditionalPaymentReceived()" id="submit_btn">Payment Received
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        </div>  
-                    </div>
-                </div>
-                @endif
-                
-                @if($application_payment_status &&  $application_payment_status->status==1)
-                <div class="card" id="payment_apr_card">
-                    <div class="card-header bg-white text-dark">
-                        <h5 class="mt-2">
-                            Payment Process
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div>
-                        <form  action="#" name="final_payment_approve_form" id="final_payment_approve_form" >
-                            <div class="row" >
-                                <input type="hidden" name="payment_id" id="payment_id" value="{{$ApplicationPayment->id}}">
-                                <div class="col-md-5">
-                                    <label for="">Remark<span class="text text-danger">*</span> </label>
-                                    <textarea class="form-control remove_err" required name="final_payment_remark" id="final_payment_remark" cols="30" rows="10" placeholder="Please Enter the remark"></textarea>
-                                    <span class="err" id="final_payment_remark_err"></span>
-                                </div>
-                                <div class="col-md-3 mt-4"> 
-                                    <button class="btn btn-primary" type="button" onclick="handleAdditionalPaymentApproved()" id="submit_btn_2">Payment Approved
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                </div>
-                @endif
-        @endif
+            
 
 
         </div>

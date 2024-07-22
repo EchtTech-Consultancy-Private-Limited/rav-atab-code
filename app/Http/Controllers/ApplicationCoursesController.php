@@ -754,7 +754,7 @@ class ApplicationCoursesController extends Controller
     {
         $id = dDecrypt($id);
        
-        $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->count();
+        $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->where('payment_ext','')->count();
        
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
@@ -857,6 +857,7 @@ class ApplicationCoursesController extends Controller
         $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
                                     ->where('payment_transaction_no', $transactionNumber)
                                     ->orWhere('payment_reference_no', $referenceNumber)
+                                    ->where('payment_ext','')
                                     ->first();
         
         if(!empty($is_exist_t_num_or_ref_num)){
