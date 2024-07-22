@@ -124,7 +124,10 @@ p.greeting {
                                                             <h1 class="reciept-title">
                                                                 Ayurveda Training Accreditation Board (ATAB)
                                                             </h1>
-                                                            <p class="receipt-date">Monday, Dec 2015 at 4:13pm</p>
+                                                            <p class="receipt-date">{{date('l', strtotime($data['datetime']))??''}}, 
+                                                                {{date('M', strtotime($data['datetime']))??''}} 
+                                                                {{date('Y', strtotime($data['datetime']))??''}} 
+                                                                at {{date('g:ia', strtotime($data['datetime']))??''}}</p>
 
                                                             <table class="reciept-table">
                                                                 <tbody>
