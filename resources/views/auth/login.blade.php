@@ -360,6 +360,11 @@
       });
     });
 
+    $(document).ready(function(){
+        setInterval(()=>{
+            document.getElementById('btn-refresh').click();
+        },10000)
+    })
 
   /*
  function encrypt()

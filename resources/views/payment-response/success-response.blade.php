@@ -85,6 +85,31 @@ p.greeting {
 .card-thank {
     position: relative;
 }
+.payment-reciept-back {
+    position: absolute;
+    top: 6%;
+    right: 5%;
+    color: #fff;
+}
+.payment-reciept-back button{
+    color:#fff;
+    padding:4px 10px !important ;
+}
+.payment-reciept-back button i{
+    font: 1em sans-serif; font-size: 13px !important;
+    margin-right: 8px;
+}
+.payment-reciept-back:hover i{
+    color:#fff;
+}
+.payment-reciept-back:hover button{
+    color:#fff;
+}
+
+.fa-arrow-left:before {
+    content: "\f060";
+    font-family: fontAwesome;
+}
 </style>
 
 <body class="light">
@@ -99,6 +124,13 @@ p.greeting {
 
 
                             <div class="thank-you-container">
+                                <div class="payment-reciept-back">
+                                    <a href="{{ route('/') }}"> 
+                                        <button class="btn bg-primary">
+                                            <i class="fa fa-arrow-left" aria-hidden="true"></i>Back
+                                        </button>
+                                    </a>
+                                </div>
                                 <div class="card-thank">
                                     <div class="reciept-print" onclick="printReceipt('print-reciept-container')">
                                         <i class="fa fa-print" aria-hidden="true"></i>
@@ -172,7 +204,7 @@ p.greeting {
     
     var originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
-    var elementsToHide = document.querySelectorAll('.reciept-print');
+    var elementsToHide = document.querySelectorAll('.reciept-print, .payment-reciept-back');
     elementsToHide.forEach(function(element) {
         element.style.display = 'none';
     });

@@ -290,7 +290,7 @@
                                 <tr>
                                     <th class="width-100">S.No.</th>
                                     <th>Declaration</th>                                   
-                                    <th>Verfiy Document</th>
+                                    <th>Verify Document</th>
                                     <th>Comments</th>
                                 </tr>
                                 </thead>
