@@ -53,22 +53,26 @@ class SuperAdminApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                     
                 ])
                 ->first();
                 $last_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->latest('id')
                 ->first();
 
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->where('status',2)
                 ->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->where('status',2)
                 ->count();
@@ -112,7 +116,7 @@ class SuperAdminApplicationController extends Controller
 
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->latest('id')->first();
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->where('payment_ext','')->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
             $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
@@ -186,6 +190,7 @@ class SuperAdminApplicationController extends Controller
             }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
+                    'payment_ext'=>'',
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
                 $additional_payment = DB::table('tbl_additional_fee')->where([
@@ -213,7 +218,7 @@ class SuperAdminApplicationController extends Controller
     {
         try{
             $application = TblApplication::find($request->post('application_id'));
-            $is_exists = DB::table('tbl_application_payment')->where('aknowledgement_id',null)->first();
+            $is_exists = DB::table('tbl_application_payment')->where('aknowledgement_id',null)->where('payment_ext','')->first();
             if(!$is_exists){
                 return response()->json(['success' =>false,'message'=>'Payment Acknowledgement Already Done'], 409);
             }
@@ -1336,22 +1341,26 @@ class SuperAdminApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                     
                 ])
                 ->first();
                 $last_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->latest('id')
                 ->first();
 
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->where('status',2)
                 ->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->where('status',2)
                 ->count();
@@ -1461,6 +1470,7 @@ class SuperAdminApplicationController extends Controller
             }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
+                    'payment_ext'=>'',
                     'status'=>2 //paymnet approved by accountant 
                 ])->get();
                 $additional_payment = DB::table('tbl_additional_fee')->where([
