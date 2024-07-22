@@ -1746,7 +1746,7 @@ function handleAdminNotification(pay_id){
                     });
                     setTimeout(()=>{
                         window.location.href=`${BASE_URL}${response.redirect_url}`;
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -1799,7 +1799,7 @@ function handleSuperAdminNotification(pay_id){
                     });
                     setTimeout(()=>{
                         window.location.href=BASE_URL+response.redirect_url;
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -1853,7 +1853,7 @@ function handleDesktopNotification(pay_id){
                     });
                     setTimeout(()=>{
                         window.location.href=BASE_URL+response.redirect_url;
-                    },1000);
+                    },2000);
 
                 }else{
                     toastr.error(response.message, {
@@ -2344,7 +2344,7 @@ function removeCourseByTP(app_id,course_id){
                     });
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -2418,7 +2418,7 @@ function handleRejectCourse(){
                     $("#rejectionCouurseReasonRemark").val("");
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -2493,7 +2493,7 @@ function handleRejectCourseByAdmin(){
                     $("#rejectionCouurseReasonRemark").val("");
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -2558,7 +2558,7 @@ function handleAcceptCourseByAdmin(){
                     $("#approveCourseReasonRemark").val("");
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -2624,7 +2624,7 @@ function handleRejectApplicationByAdmin(){
                     $("#rejectionCouurseReasonRemark").val("");
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -2689,7 +2689,7 @@ function handleAcceptApplicationByAdmin(){
                     $("#approveCourseReasonRemark").val("");
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {
@@ -2770,7 +2770,7 @@ function handleRaiseQueryForAdditionalPayment(){
                     $("#raise_query_remark").val("");
                     setTimeout(()=>{
                         window.location.reload();
-                    },1000);
+                    },2000);
                     
                 }else{
                     toastr.error(response.message, {

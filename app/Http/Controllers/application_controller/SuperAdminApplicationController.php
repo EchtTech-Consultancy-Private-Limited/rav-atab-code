@@ -25,9 +25,11 @@ class SuperAdminApplicationController extends Controller
     }
     public function getApplicationList(){
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3,5])
+        ->whereIn('a.payment_status',[2,3])
+        ->Orwhere('second_payment',6)
         ->orderBy('id','desc')
         ->get();
+        // dd($application);
         $final_data=array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
         
@@ -75,6 +77,7 @@ class SuperAdminApplicationController extends Controller
                 ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
                 ->where('tbl_application_status_history.application_id', $app->id)
                 ->get();
+                
 
                 $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
@@ -622,6 +625,7 @@ class SuperAdminApplicationController extends Controller
                 ->latest('id')
                 ->first();
 
+                
 
 
             /*Don't show form if doc is accepted*/
@@ -1291,7 +1295,6 @@ class SuperAdminApplicationController extends Controller
                 ->where('assessor_type',$assessor_type)
                 ->count();
                 $total_docs = $get_courses_count*4;
-                
                 if($courses_doc_list>=$total_docs){
                     return true;
                 }else{

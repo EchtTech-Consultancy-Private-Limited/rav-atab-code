@@ -83,7 +83,7 @@
                             
                         @endphp
 
-                        <span><a href="{{url('admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+                        <span><a href="{{url('admin/application-view-level-2'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                         @endif
                     </div>
               </div>

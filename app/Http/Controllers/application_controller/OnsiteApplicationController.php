@@ -132,7 +132,7 @@ class OnsiteApplicationController extends Controller
                     } else {
                         $is_final_submit = false;
                     }
-
+                    
 
                     $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'onsite'])->count();
 
@@ -230,6 +230,7 @@ class OnsiteApplicationController extends Controller
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable($application_id);
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application_id);
         $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow($application_id,$course_id);
+        
        
         $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=> $course_id,'assessor_type'=>'onsite'])->first();
        if(!empty($is_exists)){
@@ -779,6 +780,18 @@ public function checkApplicationIsReadyForNextLevelDocList($application_id)
         $flag = 0;
         $nc_flag = 0;
         $not_any_action_flag = 0;
+        $total_courses = DB::table('tbl_application_courses')
+        ->where('application_id',$application_id)
+        ->whereIn('status',[0,2])
+        ->whereNull('deleted_at')
+        ->count();
+        $total_onsite_final_summary = DB::table('assessor_final_summary_reports')
+                            ->where('application_id',$application_id)
+                            ->where('assessor_type','onsite')
+                            ->count();
+        if($total_courses==$total_onsite_final_summary){
+            return "all_verified_f";
+        }
         foreach ($finalResults as $result) {
             if ($result->onsite_status == 1 || ($result->onsite_status == 4 && $result->admin_nc_flag == 1)) {
                 $flag = 0;
@@ -891,6 +904,19 @@ public function isShowSubmitBtnToSecretariat($application_id)
     }
     $flag = 0;
     
+    $total_courses = DB::table('tbl_application_courses')
+    ->where('application_id',$application_id)
+    ->whereIn('status',[0,2])
+    ->whereNull('deleted_at')
+    ->count();
+    $total_onsite_final_summary = DB::table('assessor_final_summary_reports')
+                        ->where('application_id',$application_id)
+                        ->where('assessor_type','onsite')
+                        ->count();
+    if($total_courses==$total_onsite_final_summary){
+        return 0;
+    }
+
     foreach ($finalResults as $result) {
         if ((($result->onsite_status == 1) || ($result->onsite_status == 4 && $result->admin_nc_flag == 1)) && $result->is_revert==1) {
             $flag = 0;
@@ -899,6 +925,7 @@ public function isShowSubmitBtnToSecretariat($application_id)
             break;
         }
     }
+    
     return $flag != 0;
 }
 
@@ -1015,7 +1042,7 @@ public function checkAllActionDoneOnRevert($application_id)
 
     
     $flag = 0;
-
+  
     foreach ($finalResults as $result) {
         if (($result->is_revert == 1)) {
             $flag = 0;
@@ -1046,6 +1073,17 @@ public function onsiteUpdateNCFlagDocList($application_id)
             DB::beginTransaction();
             $t=0;
             $secretariat_id = Auth::user()->id;
+
+
+            $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
+            /*------end here------*/
+            
+            // if ($check_all_doc_verified == "all_verified_f") {
+            //     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+            //     DB::commit();
+            //     return back()->with('success', 'All course docs Accepted successfully.');
+            // }
+
             $get_course_docs = DB::table('tbl_application_course_doc')
                 ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>'onsite'])
                 // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
@@ -1151,7 +1189,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
             // if (!$check_all_doc_verified) {
             //     return back()->with('fail', 'First create NCs on courses doc');
             // }
-            if ($check_all_doc_verified == "all_verified") {
+            if ($check_all_doc_verified == "all_verified" || $check_all_doc_verified == "all_verified_f") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                 
                 return back()->with('success', 'All course docs Accepted successfully.');

@@ -143,7 +143,6 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
 
-                                    
                                     @if($doc->nc_show_status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"

@@ -327,8 +327,8 @@
                     @endforeach
             </div> 
         </div>
-
         
+                  
         @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
         <div class="row">
                 <div class="col-md-12 mr-2">
