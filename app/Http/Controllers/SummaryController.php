@@ -305,9 +305,6 @@ class SummaryController extends Controller
         DB::table('tbl_application_course_doc')->where(['application_id'=>$application_id,'application_courses_id'=>dDecrypt($application_course_id),'assessor_type'=>'desktop'])->update(['is_revert'=>1]);
         /*end here*/ 
    
-      
-   
-
         $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->count();
      
 
@@ -534,9 +531,8 @@ class SummaryController extends Controller
             /*end here*/
 
                 /*Update revert action 1*/ 
-                    DB::table('tbl_application_course_doc')->where(['application_id'=>$application_id,'application_courses_id'=>$application_id,'assessor_type'=>'onsite'])->update(['is_revert'=>1]);
+                    DB::table('tbl_application_course_doc')->where(['application_id'=>$application_id,'application_courses_id'=>dDecrypt($request->application_course_id),'assessor_type'=>'onsite'])->update(['is_revert'=>1]);
                 /*end here*/ 
-            
 
           
             $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
@@ -969,8 +965,6 @@ class SummaryController extends Controller
         if(count($courses)==$onsite_count && isset($onsite_summary_show)){
            $is_all_course_summary_generated_onsite=true;
         }
-
-
 
         $applicationDetails = TblApplication::find($request->input('application'));
         return view('tp-admin-summary.course-summary-list', compact('courses', 'applicationDetails','is_all_course_summary_generated_desktop','is_all_course_summary_generated_onsite'));
