@@ -25639,7 +25639,7 @@ p.ref-number b{ font-weight: 600;}
 .thank-you-container {
     text-align: center;
     background-color: #ffffff;
-    padding: 50px;
+    /* padding: 50px; */
     display: flex;
     align-items: center; 
     justify-content: center; 
@@ -25649,8 +25649,9 @@ p.ref-number b{ font-weight: 600;}
   .card-thank {
     max-width: 600px;
     border: 1px solid #dbdada;
-    padding: 30px;
+    padding: 15px;
     border-radius: 10px;
+    position: relative;
 }
   .thank-you-container h1 {
     font-size: 40px;
@@ -25665,7 +25666,7 @@ p.ref-number b{ font-weight: 600;}
   .thank-you-container .checkmark {
     font-size: 5rem;
     color: green;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
   }
 
   .thank-you-container .checkmark img{
