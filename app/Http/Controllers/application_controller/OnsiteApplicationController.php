@@ -1076,9 +1076,10 @@ public function onsiteUpdateNCFlagDocList($application_id)
 
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
-            DB::commit();
-            if ($check_all_doc_verified == "all_verified") {
+            
+            if ($check_all_doc_verified == "all_verified_f") {
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                DB::commit();
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
 
