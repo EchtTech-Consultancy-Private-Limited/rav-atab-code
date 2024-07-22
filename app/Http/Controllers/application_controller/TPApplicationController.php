@@ -32,11 +32,10 @@ class TPApplicationController extends Controller
         
         $pay_list = DB::table('tbl_application_payment')
           ->where('user_id',Auth::user()->id)
-          ->where('payment_ext','')
+          ->whereNull('payment_ext')
           ->get()
           ->pluck('application_id')
           ->toArray();
-          
         if($level_type=="level-one" || $level_type=="level-first"){
             $level_id = 1;
         }else if($level_type=="level-second"){
@@ -104,7 +103,7 @@ class TPApplicationController extends Controller
         $decoded_json_courses_doc = json_decode($json_course_doc);
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->where('payment_ext','')->latest('id')->first();
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->latest('id')->first();
 
             $showSubmitBtnToTP = $this->checkReuploadBtnL1($application->id);
             
@@ -669,7 +668,7 @@ class TPApplicationController extends Controller
             $slip_by_user_file = $filename;
         }
          /*keep history for update payment info*/   
-         $update_payment = DB::table('tbl_application_payment')->where('id',$request->id)->where('payment_ext','')->first();
+         $update_payment = DB::table('tbl_application_payment')->where('id',$request->id)->whereNull('payment_ext')->first();
          $updateArr=[];
          $updateArr['old_payment_transaction_no']=$update_payment->payment_transaction_no;
          $updateArr['new_payment_transaction_no']=$request->payment_transaction_no;
@@ -680,7 +679,7 @@ class TPApplicationController extends Controller
          DB::table('payment_history')->insert($updateArr);
        /*end here*/   
 
-        $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->where('payment_ext','')->first()->tp_update_count;
+        $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->whereNull('payment_ext')->first()->tp_update_count;
        
         if($get_payment_update_count > (int)env('TP_PAYMENT_UPDATE_COUNT')-1){
             return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);
@@ -727,7 +726,7 @@ class TPApplicationController extends Controller
       $pending_payment_list = DB::table('tbl_application_payment')
           ->where('user_id',Auth::user()->id)
           ->where('level_id',$level_id)
-          ->where('payment_ext','')
+          ->whereNull('payment_ext')
           ->get()
           ->pluck('application_id')
           ->toArray();
@@ -751,7 +750,7 @@ class TPApplicationController extends Controller
 
   public function paymentReferenceValidation(Request $request)
   {
-      $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->payment_reference_no)->where('payment_ext','')->first();
+      $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->payment_reference_no)->whereNull('payment_ext')->first();
       if ($transactionNumber) {
           // Transaction number already exists
           return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);
@@ -764,7 +763,7 @@ class TPApplicationController extends Controller
 
   public function paymentTransactionValidation(Request $request)
     {
-        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->payment_transaction_no)->where('payment_ext','')->first();
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->payment_transaction_no)->whereNull('payment_ext')->first();
 
         if ($transactionNumber) {
             // Transaction number already exists
@@ -1289,7 +1288,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         
         $id = dDecrypt($id);
         
-        $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->where('payment_ext','')->count();
+        $checkPaymentAlready = DB::table('tbl_application_payment')->where('application_id', $id)->whereNull('payment_ext')->count();
        
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
@@ -1379,7 +1378,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
                                     ->where('payment_transaction_no', $transactionNumber)
                                     ->orWhere('payment_reference_no', $referenceNumber)
-                                    ->where('payment_ext','')
+                                    ->whereNull('payment_ext')
                                     ->first();
         
         if(!empty($is_exist_t_num_or_ref_num)){
@@ -1535,10 +1534,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->where('payment_ext','')->latest('id')->first();
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->latest('id')->first();
 
 
-        $app_payment = DB::table('tbl_application_payment')->where('application_id',dDecrypt($id))->where('payment_ext','')->count();
+        $app_payment = DB::table('tbl_application_payment')->where('application_id',dDecrypt($id))->whereNull('payment_ext')->count();
         $get_application = DB::table('tbl_application')->where('id',dDecrypt($id))->first();
 
             $assessor_type = "";
@@ -2092,7 +2091,7 @@ public function upgradeShowcoursePaymentLevel3(Request $request, $id = null)
         $id = dDecrypt($id);
         
     
-        $checkPaymentAlready = DB::table('tbl_application_payment')->where([['application_id', $id],['payment_ext','']])->where('payment_ext','')->count();
+        $checkPaymentAlready = DB::table('tbl_application_payment')->where([['application_id', $id],['payment_ext','']])->whereNull('payment_ext')->count();
         
         if ($checkPaymentAlready>1) {
                 return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
@@ -2176,7 +2175,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     $transactionNumber = trim($request->transaction_no);
     $referenceNumber = trim($request->reference_no);
     $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
-                                ->where('payment_ext','')
+                                ->whereNull('payment_ext')
                                 ->where('payment_transaction_no', $transactionNumber)
                                 ->orWhere('payment_reference_no', $referenceNumber)
                                 ->first();
@@ -2349,10 +2348,10 @@ public function upgradeGetApplicationViewLevel3($id){
     $decoded_json_courses_doc = json_decode($json_course_doc);
     
     $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-    $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->where('payment_ext','')->latest('id')->first();
+    $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->latest('id')->first();
 
   
-    $app_payment = DB::table('tbl_application_payment')->where('application_id',dDecrypt($id))->where('payment_ext','')->count();
+    $app_payment = DB::table('tbl_application_payment')->where('application_id',dDecrypt($id))->whereNull('payment_ext')->count();
     $get_application = DB::table('tbl_application')->where('id',dDecrypt($id))->first();
 
         $assessor_type = "";
@@ -2549,7 +2548,7 @@ public function getApplicationPaymentFeeList(){
         
     $pay_list = DB::table('tbl_application_payment')
       ->where('user_id',Auth::user()->id)
-      ->where('payment_ext','')
+      ->whereNull('payment_ext')
       ->get()
       ->pluck('application_id')
       ->toArray();

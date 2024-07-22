@@ -57,15 +57,15 @@ class OnsiteApplicationController extends Controller
                 
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->latest('created_at')->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->count();
                 if($payment){
                     $obj->payment = $payment;
@@ -90,7 +90,7 @@ class OnsiteApplicationController extends Controller
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->where('payment_ext','')->latest('id')->first();
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
                 $course = DB::table('tbl_application_courses')->where([
@@ -110,7 +110,7 @@ class OnsiteApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;
