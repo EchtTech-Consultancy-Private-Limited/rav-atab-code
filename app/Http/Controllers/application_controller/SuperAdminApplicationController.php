@@ -930,7 +930,7 @@ class SuperAdminApplicationController extends Controller
                             ->get(); 
                             
                             
-                            
+                            // dd($all_docs);
                             foreach($all_docs as $doc){
                                 if($doc->status==0){
                                     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
@@ -938,20 +938,18 @@ class SuperAdminApplicationController extends Controller
                                     DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                                 }
                             }
-
+                            
                             // taking only the rejected course
                             $all_docs = DB::table('tbl_application_course_doc')
                             ->where(['application_id' => $request->application_id])
-                            ->whereIn('approve_status',[0,2])
+                            ->whereIn('approve_status',[0,3])
                             ->where('assessor_type','secretariat')
                             ->whereNotIn('status',[2,3,4,6]) 
                             ->get(); 
-
                             
-                            
+                            // dd($all_docs);
                             foreach($all_docs as $doc){
-
-                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                    DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
                                 
                             }
 
@@ -1044,7 +1042,7 @@ class SuperAdminApplicationController extends Controller
                   /*end here*/ 
 
                   // this is for the applicaion status
-                 DB::table('tbl_application')->where('id',$app_id)->update(['status'=>7]);
+                    DB::table('tbl_application')->where('id',$app_id)->update(['status'=>7]);
                   
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
@@ -1215,7 +1213,7 @@ class SuperAdminApplicationController extends Controller
             $get_application = DB::table('tbl_application')->where('id', $request->application_id)->first();
             // this is for the level-2 and level-3
             if(isset($get_application) && ($get_application->level_id==2 || $get_application->level_id==3)){
-                DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>2]);
+                DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id])->update(['approve_status'=>3]);
             }
             
                 $updateStatus = DB::table('tbl_application_courses')

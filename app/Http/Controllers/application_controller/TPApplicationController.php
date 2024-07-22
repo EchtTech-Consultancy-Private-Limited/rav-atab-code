@@ -228,7 +228,14 @@ class TPApplicationController extends Controller
         ])
         ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status','nc_show_status')
         ->get();
-
+        $is_payment_done = DB::table('tbl_application_payment')->where('application_id',$application_id)->count();
+        $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+        $total_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
+        $is_all_doc_uploaded=false;
+        if(($total_application_courses_doc>=$total_courses*4) && $is_payment_done>0){
+            $is_all_doc_uploaded=true;
+        }
+        
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
             $obj = new \stdClass;
@@ -267,12 +274,13 @@ class TPApplicationController extends Controller
 
         
         $applicationData = TblApplication::find($application_id);
-        return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','application_uhid'));
+        return view('tp-upload-documents.tp-upload-documents', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','application_uhid','is_all_doc_uploaded'));
     }
     
 
     public function upload_documentlevel2($id, $course_id)
     {
+        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $application_uhid = TblApplication::where('id',$application_id)->first()->uhid??'';
@@ -285,6 +293,14 @@ class TPApplicationController extends Controller
             'tp_id'=>$tp_id,
             'assessor_type'=>'secretariat'
         ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','nc_show_status','status')->get();
+
+        $is_payment_done = DB::table('tbl_application_payment')->where('application_id',$application_id)->count();
+        $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+        $total_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
+        $is_all_doc_uploaded=false;
+        if(($total_application_courses_doc>=$total_courses*4) && $is_payment_done>0){
+            $is_all_doc_uploaded=true;
+        }
         
         $chapters = Chapter::all();
         foreach($chapters as $chapter){
@@ -314,7 +330,7 @@ class TPApplicationController extends Controller
         }
         
         $applicationData = TblApplication::find($application_id);
-        return view('level2-tp-upload-documents.tp-upload-documents', compact('final_data','course_doc_uploaded','application_id','course_id','application_uhid'));
+        return view('level2-tp-upload-documents.tp-upload-documents', compact('final_data','course_doc_uploaded','application_id','course_id','application_uhid','is_all_doc_uploaded'));
     }
     
 

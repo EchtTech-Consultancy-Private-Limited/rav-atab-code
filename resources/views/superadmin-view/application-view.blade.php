@@ -528,7 +528,6 @@
         </div>
 
         <div class="row">
-        
                     @if($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected" && $spocData->level_id!=3)
                         <div class="col-md-12 text-right">
                             

@@ -1950,7 +1950,7 @@ class AdminApplicationController extends Controller
          $results->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id');
             $results->where('application_id', $application_id);
             if($level_id==2){
-                // $results->where('approve_status',1);
+                $results->where('approve_status',1);
             }
             $results = $results->get();
 
@@ -1976,7 +1976,7 @@ class AdminApplicationController extends Controller
             $additionalFields->where('doc_sr_code', $result->doc_sr_code);
             $additionalFields->where('doc_unique_id', $result->doc_unique_id);
             if($level_id==2){
-                // $results->where('approve_status',1);
+                $results->where('approve_status',1);
             }
             $additionalField = $additionalFields->first();
 
