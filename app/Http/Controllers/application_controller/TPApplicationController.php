@@ -312,8 +312,6 @@ class TPApplicationController extends Controller
                 }
                 $final_data[] = $obj;
         }
-
-
         
         $applicationData = TblApplication::find($application_id);
         return view('level2-tp-upload-documents.tp-upload-documents', compact('final_data','course_doc_uploaded','application_id','course_id','application_uhid'));
@@ -1623,8 +1621,6 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 }else{
                  $is_final_submit = false;
                 }
-
-                
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
     }
 
