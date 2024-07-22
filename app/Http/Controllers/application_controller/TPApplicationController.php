@@ -65,15 +65,15 @@ class TPApplicationController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->latest('created_at')->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->count();
                 $app_history = DB::table('tbl_application_status_history')
                 ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
@@ -1634,11 +1634,11 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->get();
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
-                    'payment_ext'=>'',
+                    'payment_ext'=>null,
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;
@@ -2446,11 +2446,11 @@ public function upgradeGetApplicationViewLevel3($id){
 
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->get();
             $additional_payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->get();
             if($payment){
                 $obj->payment = $payment;
@@ -2575,15 +2575,15 @@ public function getApplicationPaymentFeeList(){
             }
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->latest('created_at')->first();
             $payment_amount = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->sum('amount');
             $payment_count = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->count();
             
             if($payment){
@@ -2679,7 +2679,7 @@ public function getApplicationPaymentFeeView($id){
 
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->get();
             $additional_payment = DB::table('tbl_additional_fee')->where([
                 'application_id' => $application->id,
