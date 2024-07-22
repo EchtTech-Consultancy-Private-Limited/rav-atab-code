@@ -57,7 +57,15 @@
                </div>
                <div class="col-sm-6">
                   <div class="pr-2">
-                     <a href="{{ url("upgrade/tp/application-view",dEncrypt($application_id)) }}" type="button" class="btn btn-primary "
+                     @php
+                     
+                      if($is_all_doc_uploaded){
+                         $url = "upgrade/tp/application-view";
+                      }else{
+                        $url = "create-level-2-new-course";
+                      }
+                     @endphp
+                     <a href="{{ url($url,dEncrypt($application_id)) }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
                   </div>
                </div>
