@@ -956,14 +956,17 @@ class SummaryController extends Controller
  
         
         $desktop_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->count();
+        $desktop_summary_show = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop','is_summary_show'=>1])->first();
         $onsite_count = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'onsite'])->count();
+        $onsite_summary_show = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'onsite','is_summary_show'=>1])->first();
 
+        
         $is_all_course_summary_generated_desktop= false;
         $is_all_course_summary_generated_onsite = false;
-        if(count($courses)==$desktop_count){
+        if(count($courses)==$desktop_count && isset($desktop_summary_show)){
            $is_all_course_summary_generated_desktop=true;
         }
-        if(count($courses)==$onsite_count){
+        if(count($courses)==$onsite_count && isset($onsite_summary_show)){
            $is_all_course_summary_generated_onsite=true;
         }
 
