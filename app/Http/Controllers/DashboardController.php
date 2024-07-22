@@ -140,16 +140,19 @@ class DashboardController extends Controller
                 }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                     
                 ])
                 ->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->where('status',2)
                 ->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
+                    'payment_ext'=>'',
                 ])
                 ->where('status',2)
                 ->count();

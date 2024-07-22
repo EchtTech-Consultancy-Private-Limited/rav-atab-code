@@ -98,12 +98,13 @@
                                         <th>Sr.No</th>
                                         <th>Level </th>
                                         <th>Application No. </th>
-                                        <th>Courses</th>
+                                        <!-- <th>Courses</th> -->
                                         <th>Total Fee</th>
-                                        <th> Payment Date </th>
+                                        <th>Pay Date </th>
                                         <th>Status</th>
                                         <th>Valid From</th>
                                         <th>Valid To</th>
+                                        <th>Payment</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -115,7 +116,7 @@
                                                 <td>{{ $k + 1 }}</td>
                                                 <td>L-{{ $item->application_list->level_id ?? '' }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
-                                                <td>{{ $item->course_count ?? '' }}</td>
+                                                <!-- <td>{{ $item->course_count ?? '' }}</td> -->
                                                 <td>
                                             @isset($item->payment)
                                                 ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
@@ -143,19 +144,22 @@
                                                 <span>N/A</span>
                                                 @endif
                                                 </td>
+                                                <td>
+                                                  
+                                                @if(isset($item->application_list->is_query_raise) && $item->application_list->is_query_raise==1)
+                                                    <a href="{{url('/tp/show-course-additional-payment'.'/'.dEncrypt($item->application_list->id))}}"
+                                                            class="btn btn-primary">Offline</a>
+                                                    <a href="{{ url('makepayment/'.dEncrypt($item->application_list->id)).'?p=addtional' }}"
+                                                                class="btn btn-primary">Online</a>   
+                                                    @elseif(isset($item->application_list->is_query_raise) && $item->application_list->is_query_raise==2)
+                                                    <span class="badge badge-main success">Paid</span>
+                                                    @endif
+                                                </td>
                                                     <td>
                                                         
                                                         <a href="{{ url('/tp/application-payment-fee-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
-                                                @if($item->application_list->is_query_raise==1)
-                                                    <a href="{{url('/tp/show-course-additional-payment'.'/'.dEncrypt($item->application_list->id))}}"
-                                                            class="btn btn-tbl-edit bg-warning"><i
-                                                                class="material-icons">forum</i></a>
-                                                    @elseif($item->application_list->is_query_raise==2)
-                                                    <span class="badge badge-main success">Paid</span>
-                                                    @endif
-
                                                 </td>
                                             </tr>
                                             @endforeach
