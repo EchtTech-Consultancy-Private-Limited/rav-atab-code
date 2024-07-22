@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
-    public function makePayment($id=null){
+    public function makePayment($id=null, Request $request){
 
         $app_id = dDecrypt($id);
 
@@ -33,7 +33,9 @@ class PaymentController extends Controller
         //$reference_no= $app_id;
         $mobile=Auth::user()->mobile_no;
         $email=Auth::user()->email;
-       // dd(count($paymentCheck));       
+        $token = csrf_token()??'';
+         
+        //dd($token);       
        
         $level_id= $appdetails->level_id;
 
@@ -88,7 +90,7 @@ class PaymentController extends Controller
             ]);
             DB::commit();
             $eazypay_integration=new Eazypay();
-            $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=null);
+            $payment_url=$eazypay_integration->getPaymentUrl($amount, $reference_no, $email, $mobile, $optionalField=$token);
             header('Location: '.$payment_url);
             exit;
         }
@@ -98,6 +100,7 @@ class PaymentController extends Controller
             $data = [
                 'ReferenceNo' =>$checkpayment->payment_reference_no, 
                 'tran_id' =>$checkpayment->payment_transaction_no, 
+                'amount' => $checkpayment->amount
             ];
             return view('payment-response.success-response',['data'=>$data]);
         }
@@ -165,6 +168,8 @@ class PaymentController extends Controller
             $data = [
                 'ReferenceNo' =>$request['ReferenceNo'], 
                 'tran_id' =>$request['Unique_Ref_Number'], 
+                'amount' => $request['Transaction_Amount'],
+                'datetime' => $request['Transaction_Date']
             ];
             return view('payment-response.success-response',['data'=>$data]);
         }else{
