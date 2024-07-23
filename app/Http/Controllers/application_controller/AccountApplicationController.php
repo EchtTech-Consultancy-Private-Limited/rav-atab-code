@@ -97,7 +97,7 @@ class AccountApplicationController extends Controller
 
         
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)
-                                ->whereNull('payment_ext')->latest('id')->first();
+                                ->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
         $additional_application_payment_status = DB::table('tbl_additional_fee')->where('application_id', '=', $application->id)->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
@@ -208,7 +208,7 @@ class AccountApplicationController extends Controller
           }
   
         /*keep history for update payment info*/   
-          $update_payment = DB::table('tbl_application_payment')->where('id',$request->id)->whereNull('payment_ext')->first();
+          $update_payment = DB::table('tbl_application_payment')->where('id',$request->id)->whereNull('payment_ext')->where('pay_status','Y')->first();
           $updateArr=[];
           $updateArr['old_payment_transaction_no']=$update_payment->payment_transaction_no;
           $updateArr['new_payment_transaction_no']=$request->payment_transaction_no;
@@ -220,7 +220,7 @@ class AccountApplicationController extends Controller
         /*end here*/   
 
 
-          $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->whereNull('payment_ext')->first()->account_update_count;
+          $get_payment_update_count = DB::table('tbl_application_payment')->where('id',$request->id)->whereNull('payment_ext')->where('pay_status','Y')->first()->account_update_count;
          
           if($get_payment_update_count > (int)env('ACCOUNT_PAYMENT_UPDATE_COUNT')-1){
               return response()->json(['success' => false,'message' =>'Your update limit is expired'],200);

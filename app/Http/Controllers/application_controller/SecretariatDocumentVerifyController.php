@@ -109,7 +109,7 @@ class SecretariatDocumentVerifyController extends Controller
             DB::beginTransaction();
             $application_id = dDecrypt($request->application_id);
 
-            $is_exists = DB::table('tbl_application_payment')->where('application_id', $application_id)->where('status', 1)->whereNull('payment_ext')->first();
+            $is_exists = DB::table('tbl_application_payment')->where('application_id', $application_id)->where('status', 1)->whereNull('payment_ext')->where('pay_status','Y')->first();
 
             if ($is_exists) {
                 return response()->json(['success' => false, 'message' => 'Payment already done.'], 200);
@@ -128,11 +128,11 @@ class SecretariatDocumentVerifyController extends Controller
                 }
 
 
-                $last_payment = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('payment_ext')->latest('id')->first();
+                $last_payment = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
                 if ($last_payment) {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id,'payment_ext'=>null,'pay_status'=>'Y'])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id]);
                 } else {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id,'payment_ext'=>null,'pay_status'=>'Y']);
                 }
             } else {
 
@@ -142,11 +142,11 @@ class SecretariatDocumentVerifyController extends Controller
                     DB::table('tbl_application')->where('id', $application_id)->update(['payment_status' => 1]); //payment_status = 1 for payment received 2 for payment approved
                 }
 
-                $last_payment = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('payment_ext')->latest('id')->first();
+                $last_payment = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
                 if ($last_payment) {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id,'payment_ext'=>null,'pay_status'=>'Y']);
                 } else {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id,'payment_status'=>null]);
                 }
             }
 
@@ -168,8 +168,8 @@ class SecretariatDocumentVerifyController extends Controller
             $application_id = dDecrypt($request->application_id);
             DB::table('tbl_application')->where('id', $application_id)->update(['payment_status' => 2]); //payment_status = 1 for payment received 2 for payment approved
 
-            $last_pay = DB::table('tbl_application_payment')->where(['application_id' => $application_id])->whereNull('payment_ext')->latest('id')->first();
-            DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_pay->id])->update(['status' => 2, 'approve_remark' => $request->final_payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
+            $last_pay = DB::table('tbl_application_payment')->where(['application_id' => $application_id])->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
+            DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_pay->id,'payment_ext'=>null,'pay_status'=>'Y'])->update(['status' => 2, 'approve_remark' => $request->final_payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
 
 
             /**

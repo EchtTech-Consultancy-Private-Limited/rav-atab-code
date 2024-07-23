@@ -1732,7 +1732,7 @@ function getUhid($appId)
 
 function isSecondPayment($application_id){
     $payment_count = DB::table('tbl_application_payment')->where('application_id',$application_id)
-                   ->where('level_id',3)->whereNull('payment_ext')->count();
+                   ->where('level_id',3)->whereNull('payment_ext')->where('pay_status','Y')->count();
     $total_course=DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->where('level_id',3)->count();
     $total_final_summary = DB::table('assessor_final_summary_reports')
                           ->where('application_id',$application_id)

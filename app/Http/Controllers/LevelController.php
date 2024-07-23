@@ -2778,7 +2778,7 @@ class LevelController extends Controller
 
     public function paymentTransactionValidation(Request $request)
     {
-        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->transaction_no)->whereNull('payment_ext')->first();
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_transaction_no', $request->transaction_no)->whereNull('payment_ext')->where('pay_status','Y')->first();
 
         if ($transactionNumber) {
             // Transaction number already exists
@@ -2792,7 +2792,7 @@ class LevelController extends Controller
 
     public function paymentReferenceValidation(Request $request)
     {
-        $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->reference_no)->whereNull('payment_ext')->first();
+        $transactionNumber = DB::table('tbl_application_payment')->where('payment_reference_no', $request->reference_no)->whereNull('payment_ext')->where('pay_status','Y')->first();
         if ($transactionNumber) {
             // Transaction number already exists
             return response()->json(['status' => 'error', 'message' => 'This Reference ID is already used']);
