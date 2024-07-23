@@ -58,6 +58,7 @@ Route::get('state-list', [AuthController::class, 'state']);
 Route::get('city-list', [AuthController::class, 'city']);
 Route::get("/logout", [AuthController::class, 'logout']);
 
+
 /*--------------------Start Online Payment Process----------------------------*/
 //Route::post('/payment/process', [PaymentController::class, 'processPayment']);
 Route::get('makepayment/{id?}',[PaymentController::class,'makePayment'])->name('makepayment');
@@ -68,6 +69,7 @@ Route::post('paymentresponse',[PaymentController::class,'paymentResponseSuccessF
 
 Route::group(['middleware' => ['guest']], function () {
     //Route::get('/', [AuthController::class, 'landing'])->name('/');
+    Route::get('/captcha-code', [AuthController::class, 'generateCaptcha'])->name('captcha-code');
     Route::get('/', [AuthController::class, 'landingLogin'])->name('/');
     Route::get('/login-page', [AuthController::class, 'landingLogin'])->name('login-page');
     Route::get('/login/{slug?}', [AuthController::class, 'login'])->name('login');
