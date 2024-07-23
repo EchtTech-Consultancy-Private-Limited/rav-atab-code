@@ -1976,6 +1976,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.assessor_type','secretariat')
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
