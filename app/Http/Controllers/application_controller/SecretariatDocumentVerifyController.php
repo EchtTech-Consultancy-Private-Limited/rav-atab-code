@@ -130,9 +130,9 @@ class SecretariatDocumentVerifyController extends Controller
 
                 $last_payment = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('payment_ext')->latest('id')->first();
                 if ($last_payment) {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id,'payment_ext'=>null])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id]);
                 } else {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'payment_proof_by_account' => $filename, 'accountant_id' => Auth::user()->id,'payment_ext'=>null]);
                 }
             } else {
 
@@ -144,9 +144,9 @@ class SecretariatDocumentVerifyController extends Controller
 
                 $last_payment = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('payment_ext')->latest('id')->first();
                 if ($last_payment) {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_payment->id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id,'payment_ext'=>null]);
                 } else {
-                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
+                    DB::table('tbl_application_payment')->where(['application_id' => $application_id])->update(['status' => 1, 'remark_by_account' => $request->payment_remark ?? '', 'accountant_id' => Auth::user()->id,'payment_status'=>null]);
                 }
             }
 
@@ -169,7 +169,7 @@ class SecretariatDocumentVerifyController extends Controller
             DB::table('tbl_application')->where('id', $application_id)->update(['payment_status' => 2]); //payment_status = 1 for payment received 2 for payment approved
 
             $last_pay = DB::table('tbl_application_payment')->where(['application_id' => $application_id])->whereNull('payment_ext')->latest('id')->first();
-            DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_pay->id])->update(['status' => 2, 'approve_remark' => $request->final_payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
+            DB::table('tbl_application_payment')->where(['application_id' => $application_id, 'id' => $last_pay->id,'payment_ext'=>null])->update(['status' => 2, 'approve_remark' => $request->final_payment_remark ?? '', 'accountant_id' => Auth::user()->id]);
 
 
             /**

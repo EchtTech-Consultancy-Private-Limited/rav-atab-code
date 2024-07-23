@@ -44,15 +44,15 @@ class DesktopApplicationController extends Controller
             }
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->latest('created_at')->first();
             $payment_amount = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->sum('amount');
             $payment_count = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->count();
             if ($payment) {
                 $obj->payment = $payment;
@@ -88,7 +88,7 @@ class DesktopApplicationController extends Controller
         }
         $payment = DB::table('tbl_application_payment')->where([
             'application_id' => $application->id,
-            'payment_ext'=>'',
+            'payment_ext'=>null,
         ])->get();
         if ($payment) {
             $obj->payment = $payment;
