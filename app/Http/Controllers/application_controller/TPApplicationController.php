@@ -1068,10 +1068,10 @@ public function  storeNewApplication(Request $request)
             $data['prev_refid'] = $request->reference_id;
             $data['application_date'] = $application_date;
             $data['region'] = $region;
-            TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
+            // TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2]);
             $application = new TblApplication($data);
             $application->save();
-            
+            TblApplication::where('id',$request->application_id)->update(['upgraded_level_id'=>2,'prev_id'=>$application->id]);
             $application->prev_refid = $request->reference_id;
             $application->save();            
             $create_new_application = $application->id;
