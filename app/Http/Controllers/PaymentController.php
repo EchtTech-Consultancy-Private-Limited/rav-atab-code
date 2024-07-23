@@ -223,10 +223,34 @@ class PaymentController extends Controller
         if($currency!="INR" && $currency!="USD"){
             $currency="OTHER";
         }
+        
         $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
         
         $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
         
+        if($level=='onsite'){
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency])->whereIn('level',['annual','assessment'])->get();
+        
+        if (count($course) == '0') {
+          
+            $total_amount = '0';
+        } elseif (count($course) <= 5) {
+            
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            
+            $total_amount = $total_amount +  (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+
+        } elseif (count($course)>=5 && count($course) <= 10) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+            
+        } elseif(count($course)>10) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[3]->courses_fee +((int)$get_payment_list[3]->courses_fee * 0.18);
+        }    
+        
+        return $total_amount;
+    }else{
         // if (Auth::user()->country == $this->get_india_id()) {
             if (count($course) == '0') {
               
@@ -243,8 +267,9 @@ class PaymentController extends Controller
                 $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
             }    
         // } 
-
         return $total_amount;
+    }
+
     }
     function get_india_id()
     {
