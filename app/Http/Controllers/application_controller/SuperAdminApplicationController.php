@@ -116,7 +116,7 @@ class SuperAdminApplicationController extends Controller
 
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
 
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->latest('id')->first();
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
             $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
@@ -195,7 +195,8 @@ class SuperAdminApplicationController extends Controller
                 ])->get();
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
-                    'payment_ext'=>'add'
+                    'payment_ext'=>'add',
+                    'payment_status'=>'Y'
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;
@@ -219,7 +220,7 @@ class SuperAdminApplicationController extends Controller
     {
         try{
             $application = TblApplication::find($request->post('application_id'));
-            $is_exists = DB::table('tbl_application_payment')->where('aknowledgement_id',null)->whereNull('payment_ext')->first();
+            $is_exists = DB::table('tbl_application_payment')->where('aknowledgement_id',null)->whereNull('payment_ext')->where('pay_status','Y')->first();
             if(!$is_exists){
                 return response()->json(['success' =>false,'message'=>'Payment Acknowledgement Already Done'], 409);
             }
@@ -1476,7 +1477,8 @@ class SuperAdminApplicationController extends Controller
                 ])->get();
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
-                    'payment_ext'=>'add'
+                    'payment_ext'=>'add',
+                    'payment_status'=>'Y'
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;
