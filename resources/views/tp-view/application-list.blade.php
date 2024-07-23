@@ -239,7 +239,9 @@
                                                             @endphp
 
                                                             @if($is_second_payment && $item->application_list->level_id==3)
-                                                            <a href="{{ url('makepayment/'.dEncrypt($item->application_list->id.'?second=payment')) }}" class="btn btn-primary btn-tbl-delete">S-Pay</a>
+                                                          
+                                                            <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-primary btn-tbl-delete">S-Pay</a>
+
                                                             @endif
                                                             <!-- end here -->
                                                         </div>
