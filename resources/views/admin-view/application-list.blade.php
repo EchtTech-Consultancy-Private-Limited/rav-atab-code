@@ -583,6 +583,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @isset($item->appHistory)
                         @foreach($item->appHistory as $key=>$hist)
                         <tr>
                             <td>{{$key+1}}</td>
@@ -592,6 +593,7 @@
                             
                         </tr>
                         @endforeach
+                        @endisset
                         </tbody>
                        </table>
             </div>
