@@ -175,7 +175,7 @@ p.greeting {
                                                                     </tr>
                                                                     <tr class="receipt-total">
                                                                         <td>Total</td>
-                                                                        <td>Rs. ={{$data['amount']??''}}/-</td>
+                                                                        <td>Rs.{{$data['amount']??''}}/-</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
