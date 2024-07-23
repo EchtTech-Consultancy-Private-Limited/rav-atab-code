@@ -23,6 +23,11 @@ class PaymentController extends Controller
         }else{
             $payment_ext = NULL;
         }
+        if($request->get('second') == 'payment'){
+            $assessor_type = 'onsite';
+        }else{
+            $assessor_type = 'desktop';
+        }
         //dd($request->get('p'));
         $checkpayment = DB::table('tbl_application_payment')->where([
                                 ['payment_mode','mode'],
@@ -48,7 +53,7 @@ class PaymentController extends Controller
             DB::beginTransaction();
                 $app_id = dDecrypt($id);
                 if($level_id==3){
-                    $amount = $this->getPaymentFee('desktop', $getcountryCode->currency, $app_id);
+                    $amount = $this->getPaymentFee($assessor_type, $getcountryCode->currency, $app_id);
                 }else{
                     $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
                 }
