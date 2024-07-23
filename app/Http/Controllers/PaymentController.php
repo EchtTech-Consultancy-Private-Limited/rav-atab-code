@@ -21,7 +21,7 @@ class PaymentController extends Controller
         if($request->get('p') == 'addtional'){
             $payment_ext = 'add';
         }else{
-            $payment_ext = '';
+            $payment_ext = NULL;
         }
         //dd($request->get('p'));
         $checkpayment = DB::table('tbl_application_payment')->where([
