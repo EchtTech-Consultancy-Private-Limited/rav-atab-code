@@ -21,10 +21,12 @@ return [
         'level3'=>'/upgrade/level-3/tp/application-view/',
         'level'=>'/tp/application-payment-fee-list'
     ],
+
+    
     'tpPaymentUrl'=>[
         'level1'=>"/show-course-payment/",
         'level2'=>'/upgrade-show-course-payment/',
-        'level3'=>'/upgrade-level-3-show-course-payment/'
+        'level3'=>'/makepayment/'
     ],
     'secretariatUrl'=>[
         'level1'=>"/admin/application-view/",

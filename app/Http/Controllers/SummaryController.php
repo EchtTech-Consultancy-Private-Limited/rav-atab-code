@@ -373,7 +373,7 @@ class SummaryController extends Controller
                 $url=$url.dEncrypt($application_id);
             }else{
                 $url=config('notification.tpPaymentUrl.level3');
-                $url=$url.dEncrypt($application_id);    
+                $url=$url.dEncrypt($application_id).'?second=payment';    
             }
             $notifiData['sender_id'] = Auth::user()->id;
             $notifiData['receiver_id'] = $get_app->tp_id;
