@@ -196,7 +196,7 @@ class SuperAdminApplicationController extends Controller
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                     'payment_ext'=>'add',
-                    'payment_status'=>'Y'
+                    'pay_status'=>'Y'
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;
@@ -1478,7 +1478,7 @@ class SuperAdminApplicationController extends Controller
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                     'payment_ext'=>'add',
-                    'payment_status'=>'Y'
+                    'pay_status'=>'Y'
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;
