@@ -65,6 +65,7 @@ class PaymentController extends Controller
                 $item->currency = $getcountryCode->currency??'inr';
                 $item->application_id = $app_id;
                 $item->payment_ext = $payment_ext;
+                $item->pay_status='N';
                 $item->save();
 
 
