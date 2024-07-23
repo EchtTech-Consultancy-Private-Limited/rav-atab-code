@@ -2217,6 +2217,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     $item->payment_mode = $request->payment;
     $item->payment_transaction_no = $transactionNumber;
     $item->payment_reference_no = $referenceNumber;
+    $item->pay_status = 'Y';
     // $item->currency = $request->currency;
     $item->application_id = $request->Application_id;
     if ($request->hasfile('payment_details_file')) {
