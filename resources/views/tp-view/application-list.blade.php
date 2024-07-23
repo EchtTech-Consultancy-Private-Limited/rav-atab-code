@@ -224,7 +224,7 @@
                                                                     <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
                                                                 @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1)
                                                                     @if($item->application_list->upgraded_level_id == 3)
-                                                                        <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                        <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                     @endif
                                                                 @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 3)
                                                                     <span class="badge badge-main success">Upgraded</span>

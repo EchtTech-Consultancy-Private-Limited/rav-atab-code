@@ -44,15 +44,15 @@ class DesktopApplicationController extends Controller
             }
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->latest('created_at')->first();
             $payment_amount = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->sum('amount');
             $payment_count = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
-                'payment_ext'=>'',
+                'payment_ext'=>null,
             ])->count();
             if ($payment) {
                 $obj->payment = $payment;
@@ -74,7 +74,7 @@ class DesktopApplicationController extends Controller
             ->where('id', dDecrypt($id))
             ->first();
         $user_data = DB::table('users')->where('users.id', $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->latest('id')->first();
+        $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
         $obj = new \stdClass;
         $obj->application = $application;
         $course = DB::table('tbl_application_courses')->where([
@@ -88,7 +88,7 @@ class DesktopApplicationController extends Controller
         }
         $payment = DB::table('tbl_application_payment')->where([
             'application_id' => $application->id,
-            'payment_ext'=>'',
+            'payment_ext'=>null,
         ])->get();
         if ($payment) {
             $obj->payment = $payment;

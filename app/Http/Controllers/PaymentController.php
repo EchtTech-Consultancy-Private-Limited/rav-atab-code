@@ -56,6 +56,7 @@ class PaymentController extends Controller
                 $item->level_id = $appdetails->level_id;
                 $item->user_id = $appdetails->tp_id;
                 $item->amount = $amount;
+                $item->pay_status = 'Y';
                 $item->payment_date = date("d-m-Y");
                 $item->payment_mode = 'mode';
                 $item->payment_transaction_no = 1234567;
