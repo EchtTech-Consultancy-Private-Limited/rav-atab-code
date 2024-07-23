@@ -124,9 +124,6 @@
                 ?>
 
                   @endif
-
-
-
                     <div class="form-section align-self-center">
                         <div class="over">
                             <div class="logo-2 logo">
@@ -207,12 +204,15 @@
 
                                     </div>
 
-                                    <div class="form-group w-40 float-right d-flex">
-                                        <div class="captcha">
-                                            <span>{!! captcha_img('math') !!}</span>
-                                            <button type="button" class="btn_refresh btn-refresh" id="btn-refresh"><i class="fa
+                                    <div class="form-group w-40 float-right">
+                                        <div class="captcha d-flex justify-content-end">
+                                            <!-- <span>{!! captcha_img('math') !!}</span> -->
+                                            <span>
+                                                <img src="{{ url('captcha-code') }}" id="captchaimg" height="50" width="350">
+                                            </span>
+                                            <!-- <button type="button" class="btn_refresh btn-refresh" id="btn-refresh"><i class="fa
                                                 fa-refresh" aria-hidden="true"></i>
-                                             </button>
+                                             </button> -->
                                          </div>
                                     </div>
                                 </div>
@@ -353,18 +353,19 @@
         $('#captcha').val("")
       $.ajax({
          type:'GET',
-         url:"{{ url('/refresh_captcha') }}",
+         url:"{{ url('/captcha-code') }}",
          success:function(data){
-            $(".captcha span").html(data.captcha);
+            console.log(data)
+            $("#captchaimg").html(data.captcha);
          }
       });
     });
 
-    $(document).ready(function(){
-        setInterval(()=>{
-            document.getElementById('btn-refresh').click();
-        },10000)
-    })
+    // $(document).ready(function(){
+    //     setInterval(()=>{
+    //         document.getElementById('btn-refresh').click();
+    //     },10000)
+    // })
 
   /*
  function encrypt()

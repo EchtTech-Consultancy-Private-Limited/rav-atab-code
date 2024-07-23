@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\emaildomeins;
 use Session, Cookie;
 use Mail;
+use App\Http\Helpers\CustomCaptcha;
 use App\Mail\VerificationMobile;
 use App\Mail\VerificationEmail;
 use App\Mail\SendMail;
@@ -63,6 +64,12 @@ class AuthController extends Controller
     protected function authenticated(){
         \Auth::logoutOtherDevices(request('password'));
     }
+    public function generateCaptcha(){
+
+        $CustomCaptchas = new CustomCaptcha;
+        return  $CustomCaptchas->phpcaptcha('#884ffb','#fff',120,40,10,25);
+  
+      }
     public function login_post(Request $request)
     {
 
@@ -73,7 +80,8 @@ class AuthController extends Controller
             [
                 'email' => ['required', 'string', 'email', 'max:50', 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix'],
                 'password'          => 'required|min:8|max:15', //|alpha_num|min:6
-                'captcha'           => 'required|captcha',
+                //'captcha'           => 'required|captcha',
+                'captcha'           => 'required|in:'.Session::get('captcha_code'),
 
             ]
         );

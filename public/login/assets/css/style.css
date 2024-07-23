@@ -14831,6 +14831,7 @@ input#captcha {
 .captcha img{
     height: 41px;
     border-radius: 9px;
+    width: 100%;
 }
 
 
