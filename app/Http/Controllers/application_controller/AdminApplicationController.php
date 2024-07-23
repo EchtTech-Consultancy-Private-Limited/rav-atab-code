@@ -2460,8 +2460,10 @@ class AdminApplicationController extends Controller
             }
             if($flagCount>1){
                 return redirect()->route('admin-app-list')->with('fail', 'Please assign single lead assessor');
+            }else if($flagCount==0)
+            {
+                return redirect()->route('admin-app-list')->with('fail', 'Please assign single lead assessor');
             }
-
             
             /*end here*/ 
          
