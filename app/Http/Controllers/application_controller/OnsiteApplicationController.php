@@ -756,6 +756,7 @@ public function checkApplicationIsReadyForNextLevelDocList($application_id)
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('application_id',$application_id)
             ->where('tbl_application_course_doc.assessor_type','onsite')
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.onsite_status', 'id', 'admin_nc_flag','approve_status','assessor_type']);
@@ -880,6 +881,7 @@ public function isShowSubmitBtnToSecretariat($application_id)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
+        ->where('application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->where('tbl_application_course_doc.assessor_type','onsite')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.onsite_status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type','is_revert']);
@@ -1020,6 +1022,7 @@ public function checkAllActionDoneOnRevert($application_id)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
+        ->where('application_id',$application_id)
         ->where('tbl_application_course_doc.assessor_type','onsite')
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.onsite_status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
@@ -1269,6 +1272,7 @@ public function uploadSignedCopy(Request $request)
                  ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                  ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
          })
+         ->where('application_id',$application_id)
          ->orderBy('tbl_application_course_doc.id', 'desc')
          ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1328,6 +1332,7 @@ public function uploadSignedCopy(Request $request)
                  ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                  ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
          })
+         ->where('application_id',$application_id)
          ->where('tbl_application_course_doc.assessor_type','onsite')
          ->orderBy('tbl_application_course_doc.id', 'desc')
          ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status','tbl_application_course_doc.onsite_status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
