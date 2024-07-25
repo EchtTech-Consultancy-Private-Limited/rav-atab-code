@@ -3126,7 +3126,7 @@ public function isShowSubmitBtnToSecretariat($application_id,$assessor_type)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
-        ->where('application_id',$application_id)
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->where('tbl_application_course_doc.assessor_type',$assessor_type)
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status','nc_show_status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type']);
