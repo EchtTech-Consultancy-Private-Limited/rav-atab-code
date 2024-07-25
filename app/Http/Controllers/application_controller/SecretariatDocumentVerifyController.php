@@ -494,7 +494,7 @@ class SecretariatDocumentVerifyController extends Controller
                 $sUrl = config('notification.adminUrl.level1');
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 
-                if($get_application->level_id==1){
+                if($get_application->level_id==1 || $get_application->level_id==2){
                 if($t && !$is_all_accepted){
                       /*send notification*/ 
                       sendNotification($notifiData);
