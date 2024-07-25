@@ -513,6 +513,13 @@ class SecretariatDocumentVerifyController extends Controller
                     sendNotification($notifiData);
                 }
             }
+
+            if($get_application->level_id==3){
+                $notifiData['user_type'] = "tp";
+                $notifiData['receiver_id'] = $get_application->tp_id;
+                $notifiData['url'] = $tpUrl;
+                sendNotification($notifiData);
+            }
             
             
 
