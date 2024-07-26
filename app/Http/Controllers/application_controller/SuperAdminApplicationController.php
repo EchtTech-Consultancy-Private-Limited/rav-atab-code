@@ -601,7 +601,6 @@ class SuperAdminApplicationController extends Controller
                     $ass_type = null;
                 }
             }
-
             // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             // ->where('nc_type',$nc_type)
             // ->where('assessor_type',$assessor_type)
@@ -650,6 +649,9 @@ class SuperAdminApplicationController extends Controller
                 }
             } else if ($nc_type == "reject") {
                 $form_view = 0;
+            }
+            if($assessor_type=='desktop'){
+                $form_view=0;
             }
 
 

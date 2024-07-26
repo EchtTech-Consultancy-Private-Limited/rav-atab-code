@@ -1199,22 +1199,19 @@ class DesktopApplicationController extends Controller
         $flag = 0;
         // dd($finalResults);
         foreach ($finalResults as $result) {
-            if (((($result->status==2 || $result->status==3)) && $result->is_revert==1)) {
+            if (($result->status==2 && $result->status==3 && $result->is_revert==1) || ($result->status==1) || ($result->status==4)) {
                 $flag = 0;
-                break;
             } else {
                $flag=1;
+               break;
             }
-            if($result->status==0){
-                $flag=0;
-                break;
-            }
+           
         }
         
         if ($flag == 0) {
-            return "hide";
-        }else{
             return "show";
+        }else{
+            return "hide";
         }
         
     }

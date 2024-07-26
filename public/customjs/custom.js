@@ -1133,9 +1133,36 @@ $(".dateID").click("on", function () {
         success: function (response) {
             if (response.message == "deleted") {
                 $this.removeClass("btn-danger").addClass("btn-success");
-            } else {
+                $("#onsite_date_selection_footer").show();
+            } 
+            else if(response.message=="failed"){
+                $this.removeClass("btn-danger").addClass("btn-success");
+                toastr.error("Please select consecutive dates", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $("#onsite_date_selection_footer").hide();
+            }
+            else if(response.message=="all_deleted"){
+                document.querySelectorAll('.dateID').forEach(function(element) {
+                    element.classList.remove("btn-danger");
+                    element.classList.add("btn-success");
+                });
+                toastr.error("Please select consecutive dates", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $("#onsite_date_selection_footer").hide();
+            }
+            else {
+                $("#onsite_date_selection_footer").show();    
                 $this.removeClass("btn-success").addClass("btn-danger");
             }
+            
         },
         error: function (error) {
             console.error("Error:", error);

@@ -552,15 +552,14 @@ Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateC
 /*super admin routes*/
 Route::get('/super-admin/application-list', [SuperAdminApplicationController::class, 'getApplicationList'])->name('superadmin-app-list');
 Route::get('/super-admin/application-view/{id}', [SuperAdminApplicationController::class, 'getApplicationView']);
-
 Route::get('/super-admin/payment-fee-list', [SuperAdminApplicationController::class, 'getApplicationPaymentFeeList']);
 
-    Route::get('/super-admin/application-payment-fee-view/{id}', [SuperAdminApplicationController::class, 'getApplicationPaymentFeeView']);
-    Route::get('/super-admin/document-list/{id}/{course_id}', [SuperAdminApplicationController::class, 'applicationDocumentList']);
-    Route::post('/super-admin/document-verfiy', [SuperAdminApplicationController::class, 'adminCourseDocumentVerify']);
+Route::get('/super-admin/application-payment-fee-view/{id}', [SuperAdminApplicationController::class, 'getApplicationPaymentFeeView']);
+Route::get('/super-admin/document-list/{id}/{course_id}', [SuperAdminApplicationController::class, 'applicationDocumentList']);
+Route::post('/super-admin/document-verfiy', [SuperAdminApplicationController::class, 'adminCourseDocumentVerify']);
 
-    Route::post('/super-admin-assign-secretariat', [SuperAdminApplicationController::class, 'assignSecretariat']);
-    Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
+Route::post('/super-admin-assign-secretariat', [SuperAdminApplicationController::class, 'assignSecretariat']);
+Route::get('/super-admin-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'adminVerfiyDocument']);
 
 /*Secretariat nc's super admin*/ 
 Route::get('/super-admin/document-list-level-2/{id}/{course_id}', [SuperAdminApplicationController::class, 'applicationDocumentListLevel2']);
@@ -569,12 +568,12 @@ Route::get('/super-admin-{nc_type}/verify-doc-level-2/{doc_sr_code}/{doc_name}/{
 Route::get('/super-admin-{nc_type}/{assessor_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [SuperAdminApplicationController::class, 'superAdminVerfiyDocumentLevel2']);
 /*end here*/ 
 
-    Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"]);
-    Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
-    Route::post('/super-admin-approved-application/', [SuperAdminApplicationController::class, 'approvedApplication']); 
-    Route::post('/super-admin-reject-application/{application_id}', [SuperAdminApplicationController::class, 'rejectApplication']); 
-    Route::post('/super-admin-approved-course', [SuperAdminApplicationController::class, 'approveCourseRejectBySecretariat']); 
-    Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
+Route::post('/super-admin-payment-acknowledge',[SuperAdminApplicationController::class,"adminPaymentAcknowledge"]);
+Route::post('/super-admin-update-notification-status/{id}', [SuperAdminApplicationController::class, 'updateAdminNotificationStatus']);
+Route::post('/super-admin-approved-application/', [SuperAdminApplicationController::class, 'approvedApplication']); 
+Route::post('/super-admin-reject-application/{application_id}', [SuperAdminApplicationController::class, 'rejectApplication']); 
+Route::post('/super-admin-approved-course', [SuperAdminApplicationController::class, 'approveCourseRejectBySecretariat']); 
+Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 
 /*--end here--*/
 

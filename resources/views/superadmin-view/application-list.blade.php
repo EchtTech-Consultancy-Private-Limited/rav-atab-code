@@ -262,7 +262,7 @@
                </div>
      
     @if($item->application_list->approve_status==0)
-     <div class="modal-footer">
+     <div class="modal-footer"  id="onsite_date_selection_footer">
          <button type="button" onclick="cancelAssign()"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
