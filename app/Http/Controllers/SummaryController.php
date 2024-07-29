@@ -122,6 +122,7 @@ class SummaryController extends Controller
         ])
         ->first();
 
+        $improvement_form_data = DB::table('assessor_improvement_form')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id),'assessor_id'=>$assessor_id])->get();
         
 
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>dDecrypt($application_id),'assessor_id'=>$assessor_id,'assessor_type'=>'onsite'])->first();
@@ -201,7 +202,7 @@ class SummaryController extends Controller
        }
 
            
-        return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign'));
+        return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign','improvement_form_data'));
     }
 
 
@@ -513,7 +514,7 @@ class SummaryController extends Controller
 
 
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
-
+            
             // $dataImprovement= [];
             // $dataImprovement['assessor_id']=$assessor_id;
             // $dataImprovement['application_id']=$application_id;
@@ -699,17 +700,20 @@ class SummaryController extends Controller
             $application_id = dDecrypt($request->app_Id);
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->get();
             foreach($get_all_courses as $key=>$course){
+                foreach($request->serial_number as $key=>$imp){
                 $dataImprovement= [];
                 $dataImprovement['assessor_id']=Auth::user()->id;
                 $dataImprovement['application_id']=$application_id;
                 $dataImprovement['application_course_id']=$course->id;
-                $dataImprovement['sr_no']=$request->serial_number??'N/A';
-                $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
-                $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
-                $dataImprovement['signatures']=$request->signatures??'N/A';
+                $dataImprovement['sr_no']=$request['serial_number'][$key]??'N/A';
+                $dataImprovement['standard_reference']=$request['standard_reference'][$key]??'N/A';
+                $dataImprovement['improvement_form']=$request['improvement_form'][$key]??'N/A';
+                $dataImprovement['signatures']=$request['signatures'][$key]??'N/A';
                 $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
-                $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
+                $dataImprovement['assessee_org']=$request['improve_assessee_org'][$key]??'N/A';
                 $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
+                }
+
             }
             if($create_onsite_final_summary_report){
                 DB::commit();

@@ -376,7 +376,7 @@
 
 <!-- OFI model form -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">OFI</h5>
@@ -388,32 +388,35 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <form action="{{url('create/ofi')}}" method="post" onsubmit="return handleImporveMentForm();">
-                    @csrf
-                    <div class="form-group">
-                        <label for="serial_number">S.No.<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="serial_number" name ="serial_number" placeholder="Enter Serial number" required="true">
+                    <form action="{{url('create/ofi')}}" method="post" onsubmit="return handleImporveMentForm();">
+                        @csrf
+                        <table class="table-form">
+                            <thead>
+                                <tr>
+                                    <th>S.No.<span class="text-danger">*</span></th>
+                                    <th>Standard Reference<span class="text-danger">*</span></th>
+                                    <th>Improvement Form<span class="text-danger">*</span></th>
+                                    <th>Improvement Form Assessee Org.<span class="text-danger">*</span></th>
+                                    <th><button type="button" class="btn btn-success add-row-btn">+</button></th>
+                                </tr>
+                            </thead>
+                            <tbody id="form-body">
+                                <tr>
+                                    <td><input type="text" class="form-control" name="serial_number[]" placeholder="Enter Serial number" required></td>
+                                    <td><input type="text" class="form-control" name="standard_reference[]" placeholder="Enter Standard Reference" required></td>
+                                    <td><input type="text" class="form-control" name="improvement_form[]" placeholder="Enter Improvement form" required></td>
+                                    <td><input type="text" class="form-control" name="improve_assessee_org[]" placeholder="Enter improve assessee org" required></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <input type="hidden" id="app_Id" value="{{dEncrypt($spocData->id)}}" name="app_Id">
                         <span id="sr_no_err" class="err"></span>
-
-                    </div>
-                    <div class="form-group">
-                        <label for="standard_reference">Standard Reference<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="standard_reference" name="standard_reference" placeholder="Enter Standard Reference" required="true">
                         <span id="improvement_form_err" class="err"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="improvement_form">Improvement Form<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="improvement_form" name="improvement_form" placeholder="Enter Improvement form" required="true">
                         <span id="standard_reference_err" class="err"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="improve_assessee_org">Improvement Form Assessee Org.<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="improve_assessee_org" name="improve_assessee_org" placeholder="Enter improve assessee org" required="true">
                         <span id="improve_assessee_org_err" class="err"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                        <button type="submit" class="btn btn-primary float-right mt-2">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>

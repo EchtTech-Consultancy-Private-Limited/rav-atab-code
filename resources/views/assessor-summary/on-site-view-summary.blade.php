@@ -379,12 +379,16 @@
                                                 <td class="fw-bold"> Opportunity for improvement Form</td>
                                                 <td class="fw-bold" colspan="2"> Standard reference</td>
                                             </tr>
+                                            @foreach ($improvement_form_data as $improve)
                                             <tr>
-                                                <td>{{$summertReport->sr_no}}</td>
-                                                <td>{{$summertReport->improvement_form}}</td>
-                                                <td>{{$summertReport->standard_reference}}</td>
+                                                <td>{{$improve->sr_no}}</td>
+                                                <td>{{$improve->improvement_form}}</td>
+                                                <td>{{$improve->standard_reference}}</td>
                                             </tr>
+                                            @endforeach
+                                           
                                     
+                                         
                                             <tr>
                                                 <td class="fw-bold"> Signatures</td>
                                                 <td class="fw-bold">.......... </td>
