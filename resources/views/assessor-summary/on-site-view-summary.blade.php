@@ -416,10 +416,15 @@
 
                                             <tr>
                                                 <td colspan="6">
-                                                <div class="col-sm-12" id="comment-section">
-                                                                    <label for="comment_text" class=""><b>Remark:</b> </label>
-                                                                    
-                                                                    {{$summertReport->remark}}                   
+                                                <br class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class=""><b>Remark:</b> </label><br>
+                                                @isset($nc_remarks_onsite)
+                                                @foreach($nc_remarks_onsite as $nc)
+                                                        {{$nc->nc_type}}: {{$nc->remark}}</br>
+                                                @endforeach
+                                                @endisset
+                                                
+                                                Final Remark :{{$summertReport->remark}}                   
                                                                     
                                                      </div>
                                                 </td>

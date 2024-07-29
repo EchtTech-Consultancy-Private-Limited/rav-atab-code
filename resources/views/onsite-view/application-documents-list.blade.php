@@ -544,6 +544,8 @@
                                         @endforeach
                                        </tbody>
                                     </table>
+                                    
+                           @if($nc_type_str!='NC1' && $nc_type_str!='NC2' && $nc_type_str!='Needs Revision')
                               @if(!$is_final_submit && $is_doc_uploaded && $isCreateSummaryBtnShow=="show")
                                  <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
                                      @csrf
@@ -559,8 +561,25 @@
                                        <input type="submit" value="Submit Summary" class="btn btn-primary btn-sm">
                                     </div>
                                  </form>
-                                    @endif
+                              @endif
+                           @endif
+                              @if((($show_submit_btn_to_onsite_course && $is_final_submit_course==false && !$is_all_doc_accepted && !$is_final_submit) || ($is_all_revert_action_done_course==false && !$is_final_submit)))
+                                          <div class="col-md-12 mr-2">
+                                          <form action="{{ url('onsite/update-nc-flag-doc-list/course/'.$encrypted_app_id.'/'.$encrypted_course_id) }}" method="post">
+                                          @csrf
+                                          <div class="col-md-12 p-2" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <input type="hidden" name="nc_type" value="{{$nc_type_str}}"/>
+                                                                    <textarea rows="30" cols="80" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                </div>
                                     
+                                          <input type="submit" class="btn btn-info float-right" value="Submit " <?php echo $enable_disable_submit_btn_course==true?'disabled':'';?> >
+                                          </form>
+                                          </div>
+                                 </div>
+                              @endif   
+
                                  </div>
                               </div>
                            </div>

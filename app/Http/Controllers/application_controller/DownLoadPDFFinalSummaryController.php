@@ -142,9 +142,12 @@ class DownLoadPDFFinalSummaryController extends Controller
             $original_data[$course->course_name] = $final_data;
         }
         
+        $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>$application_id,'assessor_type'=>'onsite'])->get();
+        
+
         $assessement_way = DB::table('asessor_applications')->where(['assessor_id'=>$assessor_id,'application_id'=>$application_id])->first()?->assessment_way;
         
-        $pdf = PDF::loadView('assessor-summary.download-onsite-final-summary', compact('summertReport', 'no_of_mandays','original_data','assessor_name','assessement_way','assessor_assign','all_assessor_assign','get_all_courses','improvement_form_data'));
+        $pdf = PDF::loadView('assessor-summary.download-onsite-final-summary', compact('summertReport', 'no_of_mandays','original_data','assessor_name','assessement_way','assessor_assign','all_assessor_assign','get_all_courses','improvement_form_data','nc_remarks_onsite'));
         $file_name = 'onsite-'.$summertReport->uhid.'.pdf';
         return $pdf->download($file_name);
     }
@@ -251,11 +254,12 @@ class DownLoadPDFFinalSummaryController extends Controller
      }
 
         // $summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->first()->remark;
-        
+        $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>$application_id,'assessor_type'=>'onsite'])->get();
+
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
 
         
-        $pdf = PDF::loadView('assessor-summary.desktop-download-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','original_data','get_all_courses','improvement_form_data'));
+        $pdf = PDF::loadView('assessor-summary.desktop-download-final-summary', compact('summeryReport', 'no_of_mandays', 'final_data', 'assessement_way', 'assessor_assign','original_data','get_all_courses','improvement_form_data','nc_remarks_onsite'));
 
         $file_name = 'desktop-'.$summeryReport->uhid.'.pdf';
         return $pdf->download($file_name);
@@ -359,7 +363,8 @@ class DownLoadPDFFinalSummaryController extends Controller
         $original_data[$course->course_name] = $final_data;
     }
     
-    
+        
+
         $summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->first()->remark;
         $assessement_way = DB::table('asessor_applications')->where(['application_id' => $application_id])->get();
         
@@ -390,7 +395,7 @@ class DownLoadPDFFinalSummaryController extends Controller
             ])
             ->orderBy('asr.id','desc')
             ->first();
-            $improvement_form_data = DB::table('assessor_improvement_form')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id])->get();
+            $improvement_form_data = DB::table('assessor_improvement_form')->where(['application_id'=>$application_id])->get();
 
             
     
@@ -426,6 +431,7 @@ class DownLoadPDFFinalSummaryController extends Controller
        ->get();
         $original_data = [];
         $final_data = [];
+        
         foreach($get_all_courses as $key => $course) {
             $assesor_distinct_report = DB::table('assessor_summary_reports as asr')
                 ->select('asr.application_id', 'asr.assessor_id', 'asr.object_element_id')

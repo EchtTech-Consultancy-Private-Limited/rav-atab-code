@@ -508,7 +508,7 @@
 
                     @if($spocData->level_id==3)
                     <div class="col-md-12 d-flex justify-content-end">
-                                <a href="{{ url('/super-admin/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
+                                <a href="{{ url('/admin/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
                                     style="float:right; color: #fff ; line-height: 25px;">View Documents</a>
                         </div>

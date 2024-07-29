@@ -238,7 +238,7 @@
                                     
                                 </button>
                                     </div>
-                                    <div class="col-sm-12" id="comment-section">
+                                    <div class="col-sm-12 mt-3" id="comment-section">
                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
                                     <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="">{{$d_summary_remark}}</textarea>
                                                                     
@@ -479,11 +479,17 @@
                                                     <td class="fw-bold"> Opportunity for improvement Form</td>
                                                     <td class="fw-bold" colspan="2"> Standard reference</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>{{$onsiteSummaryReport->sr_no}}</td>
-                                                    <td>{{$onsiteSummaryReport->improvement_form}}</td>
-                                                    <td>{{$onsiteSummaryReport->standard_reference}}</td>
-                                                </tr>
+
+                                        @if(isset($improvement_form_data))
+                                            @foreach ($improvement_form_data as $impr)
+                                            <tr>
+                                                <td>{{$impr->sr_no}}</td>
+                                                <td>{{$impr->improvement_form}}</td>
+                                                <td colspan="4">{{$impr->standard_reference}}</td>
+                                            </tr>
+                                    
+                                            @endforeach
+                                            @endisset
                                         
                                                 <tr>
                                                     <td class="fw-bold"> Signatures</td>
@@ -512,9 +518,16 @@
                                         </table>
                                         
                                     </div>
-                                    <div class="col-sm-12" id="comment-section">
+                                    <div class="col-sm-12 mt-3" id="comment-section">
                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
-                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="">{{$o_summary_remark}}</textarea>
+                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control remark_text_area" required="">
+                                        @isset($nc_remarks_onsite)
+                                           @foreach($nc_remarks_onsite as $nc)
+                                                {{$nc->nc_type}}: {{$nc->remark}}
+                                           @endforeach
+                                        @endisset
+                                        Final Remark: {{$o_summary_remark}}
+                                    </textarea>
                                                                     
                                   </div>
                                 </section>

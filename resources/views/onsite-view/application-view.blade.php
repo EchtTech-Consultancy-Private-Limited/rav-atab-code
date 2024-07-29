@@ -328,8 +328,8 @@
             </div> 
         </div>
         
-                  
-        @if(($show_submit_btn_to_onsite && $is_final_submit==false) || $is_all_revert_action_done) 
+        
+        @if(($show_submit_btn_to_onsite) || $is_all_revert_action_done) 
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
@@ -339,7 +339,6 @@
                 </div>
         </div>
         @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
-        
         <div class="row mb-5">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('/onsite/generate/final-summary')}}" method="post">
@@ -347,6 +346,14 @@
                 <input type="hidden" name="app_id" value="{{dEncrypt($spocData->id)}}">
                 <input type="submit" class="btn btn-info float-right" value="Final Submit" {{ $isOFIExists ? '' : 'disabled' }} {{$spocData->signed_copy_onsite==null?'disabled':''}}>
                 
+                
+                </div>
+              
+                </form>
+        @else
+
+    @endif
+
                 <div class="d-flex align-items-center">
                 @if(!$isOFIExists)
                 <div class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI</div>
@@ -362,12 +369,12 @@
                             
                                 @endif
                    <!-- end here -->
-                </div>
-              
-                </form>
+
+
                 </div>
         </div>
-@endif
+
+                
 
 
 

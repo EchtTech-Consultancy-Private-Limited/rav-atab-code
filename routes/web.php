@@ -455,6 +455,7 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
     Route::post('/onsite/document-verfiy', [OnsiteApplicationController::class, 'onsiteDocumentVerify']);
     Route::post('/onsite/upload-photograph', [OnsiteApplicationController::class, 'onsiteUploadPhotograph']);
     Route::post('/onsite/update-nc-flag-doc-list/{application_id}/{course_id?}', [OnsiteApplicationController::class, 'onsiteUpdateNCFlagDocList']);
+    Route::post('/onsite/update-nc-flag-doc-list/course/{application_id}/{course_id?}', [OnsiteApplicationController::class, 'onsiteUpdateNCFlagDocListCourse']);
 
     Route::post('/onsite/generate/final-summary', [OnsiteApplicationController::class, 'onsiteGenerateFinalSummary']);
     
