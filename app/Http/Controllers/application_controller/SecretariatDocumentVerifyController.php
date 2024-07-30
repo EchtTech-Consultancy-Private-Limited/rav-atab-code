@@ -941,6 +941,7 @@ class SecretariatDocumentVerifyController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1507,7 +1508,7 @@ class SecretariatDocumentVerifyController extends Controller
                   ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                   ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
           })
-          ->where('application_id',$application_id)
+          ->where('tbl_course_wise_document.application_id',$application_id)
           ->orderBy('tbl_application_course_doc.id', 'desc')
           ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1593,7 +1594,7 @@ public function isShowSubmitBtnToSecretariat($application_id)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
-        ->where('application_id',$application_id)
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1657,7 +1658,7 @@ public function checkSubmitButtonEnableOrDisable($application_id,$application_co
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
-        ->where('application_id',$application_id)
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1721,7 +1722,7 @@ public function checkAllActionDoneOnRevert($application_id)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
-        ->where('application_id',$application_id)
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1818,6 +1819,7 @@ public function uploadMoM(Request $request)
                  ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                  ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
          })
+         ->where('tbl_application_course_doc.application_id',$application_id)
          ->orderBy('tbl_course_wise_document.id', 'desc')
          ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
