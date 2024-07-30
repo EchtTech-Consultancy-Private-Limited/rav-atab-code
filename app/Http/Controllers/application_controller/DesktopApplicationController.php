@@ -89,6 +89,7 @@ class DesktopApplicationController extends Controller
         $payment = DB::table('tbl_application_payment')->where([
             'application_id' => $application->id,
             'payment_ext'=>null,
+            'pay_status'=>'Y'
         ])->get();
         if ($payment) {
             $obj->payment = $payment;

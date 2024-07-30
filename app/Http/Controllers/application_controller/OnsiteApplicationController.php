@@ -88,6 +88,21 @@ class OnsiteApplicationController extends Controller
         $show_submit_btn_to_onsite = $this->isShowSubmitBtnToSecretariat(dDecrypt($id));
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id));
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
+        $course_count = DB::table('tbl_application_courses')
+                        ->where(['application_id'=>dDecrypt($id)])
+                        ->whereNull('deleted_at')
+                        ->count();
+
+        $is_all_course_doc_uploaded = DB::table('tbl_application_course_doc')
+                                    ->where(['application_id'=>dDecrypt($id),'assessor_type'=>'onsite','approve_status'=>1])
+                                    ->whereNull('deleted_at')
+                                    ->count();
+
+        $is_all_action_taken_on_docs=false;
+        if($is_all_course_doc_uploaded>=($course_count*4)){
+            $is_all_action_taken_on_docs=true;
+        }
+
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
@@ -168,7 +183,7 @@ class OnsiteApplicationController extends Controller
                         $is_all_course_summary_completed=false;
                     }
 
-                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isOFIExists'=>$isOFIExists]);
+                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isOFIExists'=>$isOFIExists,'is_all_action_taken_on_docs'=>$is_all_action_taken_on_docs]);
     }
 
     public function onsiteGenerateFinalSummary(Request $request)
@@ -238,8 +253,12 @@ class OnsiteApplicationController extends Controller
 
         $show_submit_btn_to_onsite_course = $this->isShowSubmitBtnToSecretariatCourse($application_id,$course_id);
         $enable_disable_submit_btn_course = $this->checkSubmitButtonEnableOrDisableCourse($application_id,$course_id);
-        $is_all_revert_action_done_course =$this->checkAllActionDoneOnRevertCourse($application_id,$course_id);
-        $is_all_doc_accepted                =  $this->isAllCourseDocAcceptedCourse($application_id,$course_id);
+        $is_all_revert_action_done_course = $this->checkAllActionDoneOnRevertCourse($application_id,$course_id);
+
+        
+        $is_all_doc_accepted              = $this->isAllCourseDocAcceptedCourse($application_id,$course_id,'all_accepted');
+        $is_any_view                      = $this->isAllCourseDocAcceptedCourse($application_id,$course_id,'any_view');
+        $is_any_ncs                       = $this->isAllCourseDocAcceptedCourse($application_id,$course_id,'any_ncs');
         
         $get_nc_type = $this->getNCType($application_id,$course_id);
 
@@ -287,7 +306,7 @@ class OnsiteApplicationController extends Controller
 
         
     //    dd($onsite_course_doc_uploaded);
-        return view('onsite-view.application-documents-list', compact('desktopData', 'course_doc_uploaded','onsite_course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done','application_details','assessor_designation','encrypted_app_id','encrypted_course_id','isCreateSummaryBtnShow','show_submit_btn_to_onsite_course','enable_disable_submit_btn_course','is_all_revert_action_done_course','is_final_submit_course','nc_type_str','is_all_doc_accepted'));
+        return view('onsite-view.application-documents-list', compact('desktopData', 'course_doc_uploaded','onsite_course_doc_uploaded','application_id','course_id','is_final_submit','is_doc_uploaded','application_uhid','show_submit_btn_to_secretariat','enable_disable_submit_btn','is_all_revert_action_done','application_details','assessor_designation','encrypted_app_id','encrypted_course_id','isCreateSummaryBtnShow','show_submit_btn_to_onsite_course','enable_disable_submit_btn_course','is_all_revert_action_done_course','is_final_submit_course','nc_type_str','is_any_view','is_all_doc_accepted','is_any_ncs'));
     }
 
     
@@ -1772,7 +1791,7 @@ public function uploadSignedCopy(Request $request)
 
  }
 
- public function isAllCourseDocAcceptedCourse($application_id,$course_id)
+ public function isAllCourseDocAcceptedCourse($application_id,$course_id,$type)
  {
 
      $results = DB::table('tbl_application_course_doc')
@@ -1815,15 +1834,29 @@ public function uploadSignedCopy(Request $request)
      }
 
      $flag = 0;
-     foreach ($results as $result) {
-         if ($result->onsite_status == 1 || ($result->onsite_status == 4 && $result->admin_nc_flag == 1)) {
-             $flag = 1;
-         } else {
-             $flag = 0;
-             break;
-         }
+     if($type=="all_accepted"){
+        foreach ($results as $result) {
+            if ($result->onsite_status == 1 || $result->onsite_status==5) {
+                $flag = 1;
+            } else {
+                $flag = 0;
+                break;
+            }
+        }
      }
-
+   
+     if($type=="any_ncs"){
+        
+        foreach ($results as $result) {
+            if ($result->onsite_status == 2 || $result->onsite_status == 3 || $result->onsite_status == 4) {
+                $flag = 1;
+                break;
+            } else {
+                $flag = 0;
+            }
+        }
+     }
+     
   
      if ($flag == 1) {
          return true;

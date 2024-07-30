@@ -328,13 +328,17 @@
             </div> 
         </div>
         
-        
         @if(($show_submit_btn_to_onsite) || $is_all_revert_action_done) 
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
                 @csrf
-                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn==true?'disabled':'';?> >
+                <input 
+                        type="submit" 
+                        class="btn btn-info float-right" 
+                        value="Submit" 
+                        <?php echo ($enable_disable_submit_btn==true && !$is_all_action_taken_on_docs) ? 'disabled' : ''; ?>
+                    >
                 </form>
                 </div>
         </div>
@@ -354,6 +358,7 @@
 
     @endif
 
+            @if($is_all_action_taken_on_docs)
                 <div class="d-flex align-items-center">
                 @if(!$isOFIExists)
                 <div class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI</div>
@@ -372,6 +377,8 @@
 
 
                 </div>
+            @endif 
+
         </div>
 
                 

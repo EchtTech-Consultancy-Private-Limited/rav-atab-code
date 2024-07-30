@@ -2453,6 +2453,7 @@ public function upgradeGetApplicationViewLevel3($id){
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,
                 'payment_ext'=>null,
+                'pay_status'=>'Y'
             ])->get();
             $additional_payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $application->id,

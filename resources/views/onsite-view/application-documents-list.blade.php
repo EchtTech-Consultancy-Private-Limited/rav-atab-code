@@ -138,7 +138,6 @@
                         style="float:right;">Back</a>
                         
 
-                        {{-- @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done)  --}}
                         
 
                   </div>
@@ -544,9 +543,8 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                                    
-                           @if($nc_type_str!='NC1' && $nc_type_str!='NC2' && $nc_type_str!='Needs Revision')
-                              @if(!$is_final_submit && $is_doc_uploaded && $isCreateSummaryBtnShow=="show")
+                           
+                              @if($is_all_doc_accepted && !$is_final_submit)
                                  <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
                                      @csrf
                                        <input type="hidden" name="application_id" value="{{$encrypted_app_id}}">
@@ -561,10 +559,9 @@
                                        <input type="submit" value="Submit Summary" class="btn btn-primary btn-sm">
                                     </div>
                                  </form>
-                              @endif
-                           @endif
-                              @if((($show_submit_btn_to_onsite_course && $is_final_submit_course==false && !$is_all_doc_accepted && !$is_final_submit) || ($is_all_revert_action_done_course==false && !$is_final_submit)))
-                                          <div class="col-md-12 mr-2">
+
+                              @elseif($is_any_ncs && !$is_final_submit)
+                              <div class="col-md-12 mr-2">
                                           <form action="{{ url('onsite/update-nc-flag-doc-list/course/'.$encrypted_app_id.'/'.$encrypted_course_id) }}" method="post">
                                           @csrf
                                           <div class="col-md-12 p-2" id="comment-section">
@@ -578,7 +575,8 @@
                                           </form>
                                           </div>
                                  </div>
-                              @endif   
+                           @endif
+
 
                                  </div>
                               </div>
