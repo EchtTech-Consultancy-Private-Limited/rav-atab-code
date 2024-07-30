@@ -932,7 +932,6 @@ class SecretariatDocumentVerifyController extends Controller
             ->where('approve_status',1)
             ->get();
 
-
         $additionalFields = DB::table('tbl_course_wise_document')
             ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
                 $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
@@ -1819,7 +1818,7 @@ public function uploadMoM(Request $request)
                  ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                  ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
          })
-         ->where('tbl_application_course_doc.application_id',$application_id)
+         ->where('tbl_course_wise_document.application_id',$application_id)
          ->orderBy('tbl_course_wise_document.id', 'desc')
          ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 

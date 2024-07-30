@@ -3275,6 +3275,7 @@ $additionalFields = DB::table('tbl_course_wise_document')
             ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
             ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
     })
+    ->where('tbl_course_wise_document.application_id',$application_id)
     ->orderBy('tbl_course_wise_document.id', 'desc')
     // ->where('tbl_course_wise_document.assessor_type',$assessor_type)
     ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag', 'approve_status','nc_flag']);
@@ -3355,6 +3356,7 @@ public function checkReuploadBtn($application_id)
                 ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
         })
+        ->where('tbl_course_wise_document.application_id',$application_id)
         ->orderBy('tbl_course_wise_document.id', 'desc')
         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','nc_flag','approve_status','is_revert']);
 
@@ -3417,6 +3419,7 @@ public function checkReuploadBtnL1($application_id)
                 ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
         })
+        ->where('tbl_course_wise_document.application_id',$application_id)
         ->orderBy('tbl_course_wise_document.id', 'desc')
         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','nc_flag','approve_status','is_revert']);
 
@@ -3481,6 +3484,7 @@ public function isNcOnCourseDocs($application_id,$course_id)
                 ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
         })
+        ->where('tbl_course_wise_document.application_id',$application_id)
         ->orderBy('tbl_course_wise_document.id', 'desc')
         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
