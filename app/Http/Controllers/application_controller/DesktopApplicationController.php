@@ -21,6 +21,7 @@ class DesktopApplicationController extends Controller
     /** Application List For Account */
     public function getApplicationList()
     {
+        
         $assessor_id = Auth::user()->id;
         $assessor_application = DB::table('tbl_assessor_assign')
             ->where('assessor_id', $assessor_id)
@@ -123,6 +124,7 @@ class DesktopApplicationController extends Controller
     }
     public function applicationDocumentList($id, $course_id)
     {
+        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $application_uhid = TblApplication::where('id', $application_id)->first()->uhid ?? '';
@@ -535,7 +537,7 @@ class DesktopApplicationController extends Controller
             // }
             // if ($check_all_doc_verified == "action_not_taken") {
             //     return back()->with('fail', 'Please take any action on course doc.');
-            // }
+            // } 
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
         } catch (Exception $e) {
@@ -724,7 +726,7 @@ class DesktopApplicationController extends Controller
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 if($get_application->level_id==3){
                 if($t && !$is_all_accepted){
-                    
+                     DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
                     /*send notification*/ 
                     sendNotification($notifiData);
                     $notifiData['user_type'] = "tp";

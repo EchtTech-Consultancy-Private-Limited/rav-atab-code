@@ -403,7 +403,6 @@ class SecretariatDocumentVerifyController extends Controller
     {
         
         try {
-            
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->get();
@@ -697,6 +696,7 @@ class SecretariatDocumentVerifyController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             return back()->with('fail', 'Something went wrong');
         }
     }
@@ -1507,7 +1507,7 @@ class SecretariatDocumentVerifyController extends Controller
                   ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                   ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
           })
-          ->where('tbl_course_wise_document.application_id',$application_id)
+          ->where('tbl_application_course_doc.application_id',$application_id)
           ->orderBy('tbl_application_course_doc.id', 'desc')
           ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
