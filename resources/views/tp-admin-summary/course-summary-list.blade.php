@@ -100,7 +100,7 @@
                             @if(Auth::user()->role == 1)
                             <a href="{{ url('admin-view-final_summaries?application='.$applicationDetails->id.'&course='.$item->id) }}" class="btn btn-primary">View Summary Report</a>
                             @else
-                            <a href="{{ url('view-final_summaries?application='.dEncrypt($applicationDetails->id).'&course='.dEncrypt($item->id)) }}" class="btn btn-primary">View Summary Report</a>
+                            <a href="{{ url('admin-view-final_summaries?application='.dEncrypt($applicationDetails->id).'&course='.dEncrypt($item->id)) }}" class="btn btn-primary">View Summary Report</a>
                             @endif
                         </th>
                     </tr>

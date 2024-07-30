@@ -379,12 +379,16 @@
                                                 <td class="fw-bold"> Opportunity for improvement Form</td>
                                                 <td class="fw-bold" colspan="2"> Standard reference</td>
                                             </tr>
+                                            @foreach ($improvement_form_data as $improve)
                                             <tr>
-                                                <td>{{$summertReport->sr_no}}</td>
-                                                <td>{{$summertReport->improvement_form}}</td>
-                                                <td>{{$summertReport->standard_reference}}</td>
+                                                <td>{{$improve->sr_no}}</td>
+                                                <td>{{$improve->improvement_form}}</td>
+                                                <td>{{$improve->standard_reference}}</td>
                                             </tr>
+                                            @endforeach
+                                           
                                     
+                                         
                                             <tr>
                                                 <td class="fw-bold"> Signatures</td>
                                                 <td class="fw-bold">.......... </td>
@@ -412,10 +416,15 @@
 
                                             <tr>
                                                 <td colspan="6">
-                                                <div class="col-sm-12" id="comment-section">
-                                                                    <label for="comment_text" class=""><b>Remark:</b> </label>
-                                                                    
-                                                                    {{$summertReport->remark}}                   
+                                                <br class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class=""><b>Remark:</b> </label><br>
+                                                @isset($nc_remarks_onsite)
+                                                @foreach($nc_remarks_onsite as $nc)
+                                                        {{$nc->nc_type}}: {{$nc->remark}}</br>
+                                                @endforeach
+                                                @endisset
+                                                
+                                                Final Remark :{{$summertReport->remark}}                   
                                                                     
                                                      </div>
                                                 </td>

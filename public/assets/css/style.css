@@ -25711,3 +25711,9 @@ p.ref-number b{ font-weight: 600;}
 .accordian-card .accordion-button.bg-danger::after{
     filter: brightness(100);
 }
+
+
+.remark_text_area{
+        height: 180px;
+        white-space: pre-line;
+}

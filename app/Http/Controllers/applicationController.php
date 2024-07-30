@@ -973,19 +973,36 @@ class applicationController extends Controller
 
     public function saveSelectedDates(Request $request)
     {
-
+        DB::beginTransaction();
         $exitValCheck = DB::table('assessor_assigne_date')->where('assessor_Id', $request->assessorID)
             ->where('application_id', $request->applicationID)
             ->where('selected_date', $request->selectedDate)
             ->first();
         if ($exitValCheck != null) {
-            DB::table('assessor_assigne_date')
-                ->where('assessor_Id', $request->assessorID)
-                ->where('application_id', $request->applicationID)
-                ->where('selected_date', $request->selectedDate)
-                ->delete();
-
-            return response()->json(['status' => '201', 'message' => 'deleted']);
+                $get_all_dates = DB::table('assessor_assigne_date')
+                ->where([
+                'assessor_Id' => $request->assessorID,
+                'assesment_type' => $request->assessmentType,
+                'application_id' => $request->applicationID
+                ])
+                ->get()
+                ->pluck('selected_date')->toArray();
+                $flag = 0;
+                 $is_consecutive_dates = $this->checkDates($get_all_dates);
+                $query =  DB::table('assessor_assigne_date');
+                $query->where('assessor_Id', $request->assessorID);
+                $query->where('application_id', $request->applicationID);
+                if($is_consecutive_dates){
+                    $query->where('selected_date', $request->selectedDate);
+                    $flag=1;
+                }
+                $query->delete();
+                DB::commit();
+                if($flag==1){
+                    return response()->json(['status' => '201', 'message' => 'all_deleted']);
+                }else{
+                    return response()->json(['status' => '201', 'message' => 'deleted']);
+                }
         } else {
             //dd($exitValCheck);
             DB::table('assessor_assigne_date')->insert([
@@ -995,8 +1012,48 @@ class applicationController extends Controller
                 'selected_date' => $request->selectedDate,
                 'status' => 1
             ]);
-            return response()->json(['status' => '200', 'message' => 'inserted']);
+
+            $get_all_dates = DB::table('assessor_assigne_date')
+                ->where([
+                'assessor_Id' => $request->assessorID,
+                'assesment_type' => $request->assessmentType,
+                'application_id' => $request->applicationID
+                ])
+                ->get()
+                ->pluck('selected_date')->toArray();
+
+
+            $is_consecutive_dates = $this->checkDates($get_all_dates);
+            if($is_consecutive_dates){
+                DB::commit();
+                return response()->json(['status' => '200', 'message' => 'inserted']);
+            }else{
+                DB::rollBack();
+                return response()->json(['status' => '200', 'message' => 'failed']);
+            }
         }
+    }
+
+    public function checkDates($dates)
+    {
+        // dd($dates);
+        // Convert the date strings to Carbon instances
+        $carbonDates = array_map(function($dates) {
+            return Carbon::createFromFormat('Y-m-d', $dates);
+        }, $dates);
+        
+        // Sort the dates just in case they are not in order
+        usort($carbonDates, function($a, $b) {
+            return $a->timestamp - $b->timestamp;
+        });
+
+        // Check if each date is one day after the previous date
+        for ($i = 1; $i < count($carbonDates); $i++) {
+            if (!$carbonDates[$i]->isSameDay($carbonDates[$i - 1]->copy()->addDay())) {
+               return false;
+            }
+        }
+        return true;
     }
 
     public function submitFinalRemark(Request $request)

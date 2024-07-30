@@ -346,7 +346,12 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
 
-
+                                             @if($doc->onsite_nc_status==1)
+                                             <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />
+                                             </div>
+                                             @endif
 
 
                                              @elseif($doc->nc_show_status==5)
@@ -368,8 +373,8 @@
 
 
 
-                                            
-                                             @if($doc->onsite_nc_status==1)
+                                          
+                                       @if($doc->onsite_nc_status==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />

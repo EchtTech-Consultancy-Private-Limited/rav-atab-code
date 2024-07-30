@@ -1753,9 +1753,14 @@ function getApplicationStatus($status_value,$user_type){
         return $app_status;
     }else{
         return null;
-    }
+    }   
+}
 
-    
+function  getNCRemarks($application_id,$course_id){
+    $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>$application_id,'course_id'=>$course_id,'assessor_type'=>'onsite'])->get();
+    return $nc_remarks_onsite;
+
+
 }
 
 

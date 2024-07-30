@@ -381,6 +381,7 @@ class SuperAdminApplicationController extends Controller
     }
     public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
+        
         try{
             $accept_nc_type_status = $nc_type;
             $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','application_courses_id'=>$application_course_id])
@@ -477,6 +478,7 @@ class SuperAdminApplicationController extends Controller
     public function adminDocumentVerify(Request $request)
     {
         try{
+    
         $redirect_to=URL::to("/admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
@@ -601,7 +603,6 @@ class SuperAdminApplicationController extends Controller
                     $ass_type = null;
                 }
             }
-
             // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             // ->where('nc_type',$nc_type)
             // ->where('assessor_type',$assessor_type)
@@ -650,6 +651,9 @@ class SuperAdminApplicationController extends Controller
                 }
             } else if ($nc_type == "reject") {
                 $form_view = 0;
+            }
+            if($assessor_type=='desktop'){
+                $form_view=0;
             }
 
 
