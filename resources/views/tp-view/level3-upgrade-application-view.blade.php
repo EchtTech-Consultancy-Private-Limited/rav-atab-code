@@ -91,11 +91,17 @@
                     if($app_id<10){
                         $number = $app_id;
                         $app_id = substr((string)$number, -1);
-                    } 
+                    }
+                    
+                    if($viewLevelUrl){
+                        $v_l_url = "tp/application-view/".dEncrypt($app_id);
+                    }else{
+                        $v_l_url = "upgrade/tp/application-view/".dEncrypt($app_id);
+                    }
                     
                 @endphp
 
-                <span><a href="{{url('upgrade/tp/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
+                <span><a href="{{url($v_l_url)}}">{{$spocData->prev_refid}}</a></span>
                 @endif
             </div>
             <div class="col-md-8 pr-2">

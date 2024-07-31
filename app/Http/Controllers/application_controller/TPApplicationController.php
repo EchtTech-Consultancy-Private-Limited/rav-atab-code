@@ -2472,7 +2472,16 @@ public function upgradeGetApplicationViewLevel3($id){
             }
 
             
-    return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
+            $checkViewLevelUrl = DB::table('tbl_application')->where('prev_id',dDecrypt($id))->first();
+            
+            if(!empty($checkViewLevelUrl) && $checkViewLevelUrl->upgraded_level_id==3 && $checkViewLevelUrl->prev_refid!=null){
+                $viewLevelUrl = true;
+            }else{
+                $viewLevelUrl = false;
+            }
+            
+            
+    return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP,'viewLevelUrl'=>$viewLevelUrl]);
 }
 
 
