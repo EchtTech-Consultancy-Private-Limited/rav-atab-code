@@ -88,6 +88,7 @@ class OnsiteApplicationController extends Controller
         $show_submit_btn_to_onsite = $this->isShowSubmitBtnToSecretariat(dDecrypt($id));
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id));
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
+
         $course_count = DB::table('tbl_application_courses')
                         ->where(['application_id'=>dDecrypt($id)])
                         ->whereNull('deleted_at')
@@ -103,6 +104,7 @@ class OnsiteApplicationController extends Controller
             $is_all_action_taken_on_docs=true;
         }
 
+        
         
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
@@ -132,13 +134,6 @@ class OnsiteApplicationController extends Controller
                     $obj->payment = $payment;
                 }
                 $final_data = $obj;
-                // $is_exists =  DB::table('assessor_final_summary_reports')->where(['application_id'=>$application->id,'assessor_type'=>'onsite'])->first();
-                // if(!empty($is_exists)){
-                //     $is_final_submit = true;
-                // }else{
-                //     $is_final_submit = false;
-                // }
-                
 
                     $total_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])
                     ->where('is_summary_show',1)
@@ -169,14 +164,10 @@ class OnsiteApplicationController extends Controller
                     if(!isset($is_submitted_final_summary)){
                         $is_submitted_final_summary=0;
                     }
-                    $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->count();
+                    $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->whereNull('deleted_at')->count();
 
                     // $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'onsite'])->latest('id')->first()?->is_summary_show;
 
-
-                    if(!isset($is_submitted_final_summary)){
-                        $is_submitted_final_summary=0;
-                    }
                     
                     if ($total_summary_count==$total_courses_count) {
                         $is_all_course_summary_completed=true;
@@ -1506,7 +1497,7 @@ public function checkAllActionDoneOnRevertCourse($application_id,$course_id)
 
 public function onsiteUpdateNCFlagDocList($application_id)
     {
-
+        
         
         try {
             $application_id = dDecrypt($application_id);
@@ -1612,6 +1603,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
                   $notifiData['receiver_id'] = $get_application->secretariat_id;
                   sendNotification($notifiData);
                     /*end here*/ 
+                  DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]); //4 show status for nc raised
                   createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
             }
            
@@ -1652,7 +1644,6 @@ public function onsiteUpdateNCFlagDocList($application_id)
 public function onsiteUpdateNCFlagDocListCourse(Request $request,$application_id,$course_id)
     {
 
-        // dd($request->all());
         try {
             $application_id = dDecrypt($application_id);
             $course_id = dDecrypt($course_id);
@@ -1837,7 +1828,7 @@ public function uploadSignedCopy(Request $request)
      $flag = 0;
      if($type=="all_accepted"){
         foreach ($results as $result) {
-            if ($result->onsite_status == 1 || $result->onsite_status==5) {
+            if ($result->onsite_status == 1 || $result->onsite_status==6) {
                 $flag = 1;
             } else {
                 $flag = 0;

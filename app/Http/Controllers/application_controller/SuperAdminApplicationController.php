@@ -875,13 +875,13 @@ class SuperAdminApplicationController extends Controller
                         $all_docs_desktop = DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $request->application_id,'approve_status'=>1])
                         ->where('assessor_type','desktop')
-                        ->whereNotIn('status',[2,3,4,6]) 
+                        ->whereNotIn('status',[2,3,4,5]) 
                         ->get(); 
 
                         $all_docs_onsite = DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $request->application_id,'approve_status'=>1])
                         ->where('assessor_type','onsite')
-                        ->whereNotIn('onsite_status',[2,3,4,6]) 
+                        ->whereNotIn('onsite_status',[2,3,4,5]) 
                         ->get(); 
                         $all_docs = $all_docs_desktop->merge($all_docs_onsite);
 
@@ -914,14 +914,14 @@ class SuperAdminApplicationController extends Controller
                          ->where(['application_id' => $request->application_id])
                          ->whereIn('approve_status',[0,2])
                          ->where('assessor_type','desktop')
-                         ->whereNotIn('status',[2,3,4,6]) 
+                         ->whereNotIn('status',[2,3,4,5]) 
                          ->get(); 
  
                          $all_docs_onsite = DB::table('tbl_application_course_doc')
                          ->where(['application_id' => $request->application_id])
                          ->whereIn('approve_status',[0,2])
                          ->where('assessor_type','onsite')
-                         ->whereNotIn('onsite_status',[2,3,4,6]) 
+                         ->whereNotIn('onsite_status',[2,3,4,5]) 
                          ->get(); 
                          $all_docs = $all_docs_desktop->merge($all_docs_onsite);
  
