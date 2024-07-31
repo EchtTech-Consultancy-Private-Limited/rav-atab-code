@@ -328,12 +328,18 @@
                                                 <td class="fw-bold"> Opportunity for improvement Form</td>
                                                 <td class="fw-bold" colspan="4"> Standard reference</td>
                                             </tr>
+                                            
+                                            @if(isset($improvement_form_data))
+                                            @foreach ($improvement_form_data as $impr)
                                             <tr>
-                                                <td>{{$summertReport->sr_no}}</td>
-                                                <td>{{$summertReport->improvement_form}}</td>
-                                                <td colspan="4">{{$summertReport->standard_reference}}</td>
+                                                <td>{{$impr->sr_no}}</td>
+                                                <td>{{$impr->improvement_form}}</td>
+                                                <td colspan="4">{{$impr->standard_reference}}</td>
                                             </tr>
                                     
+                                            @endforeach
+                                            @endisset
+                                            
                                             <tr>
                                                 <td class="fw-bold"> Signatures</td>
                                                 <td class="fw-bold" colspan="5">.......... </td>
@@ -366,6 +372,18 @@
                                                                     <label for="comment_text" class="">Remark</label>
                                                                     
                                                                     @foreach($get_all_courses as $key=>$course)
+                                                                        @php
+                                                                        
+                                                                        $r_list = getNCRemarks($summertReport->application_id,$course->id);
+                                                                        
+                                                                        @endphp
+                                                                        @isset($r_list)
+                                                                            @foreach ($r_list as $nc)
+                                                                            <br>
+                                                                                {{$nc->nc_type}} : {{$nc->remark}}
+                                                                            @endforeach
+                                                                        @endisset
+                                                                        <br>
                                                                         {{$key+1}} : [{{$course->course_name}}] : <b>{{$course->remark}}</b>
                                                                     @endforeach
                                                                     

@@ -197,6 +197,7 @@ class DocApplicationController extends Controller
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 $notifiData['data'] = config('notification.admin.paymentApprove');
                 sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.admin.paymentApprove'),config('history.color.success'));
                
         /*end here*/ 
 
@@ -238,7 +239,7 @@ class DocApplicationController extends Controller
         $notifiData['url'] = $tpUrl;
         $notifiData['data'] = config('notification.admin.paymentApprove');
         sendNotification($notifiData);
-
+        createApplicationHistory($application_id,null,config('history.admin.paymentApprove'),config('history.color.success'));
 
 
            /**
@@ -320,7 +321,6 @@ class DocApplicationController extends Controller
            
         // this is for the applicaion status
         DB::table('tbl_application')->where('id',$application_id)->update(['status'=>2]);
-        createApplicationHistory($application_id,null,config('history.accountant.status2'),config('history.color.warning'));
             /*send email end here*/ 
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment approved successfully.'], 200);

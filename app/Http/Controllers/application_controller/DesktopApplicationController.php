@@ -22,6 +22,7 @@ class DesktopApplicationController extends Controller
     /** Application List For Account */
     public function getApplicationList()
     {
+        
         $assessor_id = Auth::user()->id;
         $assessor_application = DB::table('tbl_assessor_assign')
             ->where('assessor_id', $assessor_id)
@@ -100,6 +101,7 @@ class DesktopApplicationController extends Controller
         $payment = DB::table('tbl_application_payment')->where([
             'application_id' => $application->id,
             'payment_ext'=>null,
+            'pay_status'=>'Y'
         ])->get();
         if ($payment) {
             $obj->payment = $payment;
@@ -133,6 +135,7 @@ class DesktopApplicationController extends Controller
     }
     public function applicationDocumentList($id, $course_id)
     {
+        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $application_uhid = TblApplication::where('id', $application_id)->first()->uhid ?? '';
@@ -545,7 +548,7 @@ class DesktopApplicationController extends Controller
             // }
             // if ($check_all_doc_verified == "action_not_taken") {
             //     return back()->with('fail', 'Please take any action on course doc.');
-            // }
+            // } 
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
         } catch (Exception $e) {
@@ -591,6 +594,7 @@ class DesktopApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag']);
         foreach ($results as $key => $result) {
@@ -733,7 +737,7 @@ class DesktopApplicationController extends Controller
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 if($get_application->level_id==3){
                 if($t && !$is_all_accepted){
-                    
+                     DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
                     /*send notification*/ 
                     sendNotification($notifiData);
                     $notifiData['user_type'] = "tp";
@@ -744,8 +748,9 @@ class DesktopApplicationController extends Controller
                     $notifiData['receiver_id'] = $get_application->secretariat_id;
                     $notifiData['url'] = $url;
                     sendNotification($notifiData);
-                        /*end here*/ 
                     createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+                        /*end here*/ 
+                    
                 }
             
                 if($is_all_accepted){
@@ -753,6 +758,7 @@ class DesktopApplicationController extends Controller
                     $notifiData['user_type'] = "superadmin";
                     $notifiData['url'] = $sUrl.dEncrypt($application_id);
                     sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
                 }
             }
                 /*--------To Check All 44 Doc Approved----------*/
@@ -805,6 +811,8 @@ class DesktopApplicationController extends Controller
                         ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                         ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
                 })
+                ->where('tbl_application_course_doc.application_id',$application_id)
+
                 ->orderBy('tbl_application_course_doc.id', 'desc')
                 ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
     
@@ -912,6 +920,8 @@ class DesktopApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->where('tbl_application_course_doc.assessor_type','desktop')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type']);
@@ -970,8 +980,9 @@ class DesktopApplicationController extends Controller
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
-        ->orderBy('tbl_application_course_doc.id', 'desc')
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->where('tbl_application_course_doc.assessor_type','desktop')
+        ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag', 'approve_status', 'assessor_type']);
 
 
@@ -1039,6 +1050,8 @@ class DesktopApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->where('tbl_application_course_doc.assessor_type','desktop')
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
@@ -1105,6 +1118,8 @@ class DesktopApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->where('tbl_application_course_doc.assessor_type','desktop')
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
@@ -1171,6 +1186,8 @@ class DesktopApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->where('tbl_application_course_doc.assessor_type','desktop')
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
@@ -1199,22 +1216,19 @@ class DesktopApplicationController extends Controller
         $flag = 0;
         // dd($finalResults);
         foreach ($finalResults as $result) {
-            if (((($result->status==2 || $result->status==3)) && $result->is_revert==1)) {
+            if (($result->status==2 && $result->status==3 && $result->is_revert==1) || ($result->status==1) || ($result->status==4)) {
                 $flag = 0;
-                break;
             } else {
                $flag=1;
+               break;
             }
-            if($result->status==0){
-                $flag=0;
-                break;
-            }
+           
         }
         
         if ($flag == 0) {
-            return "hide";
-        }else{
             return "show";
+        }else{
+            return "hide";
         }
         
     }
@@ -1283,6 +1297,8 @@ class DesktopApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 

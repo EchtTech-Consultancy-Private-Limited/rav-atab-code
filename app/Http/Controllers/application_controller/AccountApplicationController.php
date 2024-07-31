@@ -177,10 +177,12 @@ class AccountApplicationController extends Controller
             }
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
+                    'pay_status'=>'Y',
                     'payment_ext'=>null,
                 ])->get();
                 $additional_payment = DB::table('tbl_additional_fee')->where([
                     'application_id' => $application->id,
+                    
                 ])->get();
                 if($payment){
                     $obj->payment = $payment;

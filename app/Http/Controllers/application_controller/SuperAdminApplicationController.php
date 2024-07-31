@@ -297,6 +297,7 @@ class SuperAdminApplicationController extends Controller
               $notifiData['data'] = config('notification.secretariat.assigned');
               
               sendNotification($notifiData);
+              createApplicationHistory($request->application_id,null,config('history.secretariat.assigned'),config('history.color.warning'));
             /*end here*/ 
 
             if($is_assigned_secretariat!=null){
@@ -319,7 +320,6 @@ class SuperAdminApplicationController extends Controller
 
             // this is for the applicaion status
             DB::table('tbl_application')->where('id',$request->application_id)->update(['status'=>3]);
-            createApplicationHistory($request->application_id,null,config('history.admin.assign'),config('history.color.warning'));
             DB::commit();
             return redirect()->route('superadmin-app-list')->with('success', 'Application has been successfully assigned to Secretariat');
         }
@@ -390,6 +390,7 @@ class SuperAdminApplicationController extends Controller
     }
     public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
+        
         try{
             $accept_nc_type_status = $nc_type;
             $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','application_courses_id'=>$application_course_id])
@@ -486,6 +487,7 @@ class SuperAdminApplicationController extends Controller
     public function adminDocumentVerify(Request $request)
     {
         try{
+    
         $redirect_to=URL::to("/admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
@@ -610,7 +612,6 @@ class SuperAdminApplicationController extends Controller
                     $ass_type = null;
                 }
             }
-
             // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             // ->where('nc_type',$nc_type)
             // ->where('assessor_type',$assessor_type)
@@ -659,6 +660,9 @@ class SuperAdminApplicationController extends Controller
                 }
             } else if ($nc_type == "reject") {
                 $form_view = 0;
+            }
+            if($assessor_type=='desktop'){
+                $form_view=0;
             }
 
 
@@ -880,13 +884,13 @@ class SuperAdminApplicationController extends Controller
                         $all_docs_desktop = DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $request->application_id,'approve_status'=>1])
                         ->where('assessor_type','desktop')
-                        ->whereNotIn('status',[2,3,4,6]) 
+                        ->whereNotIn('status',[2,3,4,5]) 
                         ->get(); 
 
                         $all_docs_onsite = DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $request->application_id,'approve_status'=>1])
                         ->where('assessor_type','onsite')
-                        ->whereNotIn('onsite_status',[2,3,4,6]) 
+                        ->whereNotIn('onsite_status',[2,3,4,5]) 
                         ->get(); 
                         $all_docs = $all_docs_desktop->merge($all_docs_onsite);
 
@@ -919,14 +923,14 @@ class SuperAdminApplicationController extends Controller
                          ->where(['application_id' => $request->application_id])
                          ->whereIn('approve_status',[0,2])
                          ->where('assessor_type','desktop')
-                         ->whereNotIn('status',[2,3,4,6]) 
+                         ->whereNotIn('status',[2,3,4,5]) 
                          ->get(); 
  
                          $all_docs_onsite = DB::table('tbl_application_course_doc')
                          ->where(['application_id' => $request->application_id])
                          ->whereIn('approve_status',[0,2])
                          ->where('assessor_type','onsite')
-                         ->whereNotIn('onsite_status',[2,3,4,6]) 
+                         ->whereNotIn('onsite_status',[2,3,4,5]) 
                          ->get(); 
                          $all_docs = $all_docs_desktop->merge($all_docs_onsite);
  
@@ -935,6 +939,32 @@ class SuperAdminApplicationController extends Controller
                             DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                          }
 
+
+                        //  course wise document
+                    $all_docs = DB::table('tbl_course_wise_document')
+                    ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                    ->whereNotIn('status',[2,3,4,6]) 
+                    ->get();
+                 
+                    foreach($all_docs as $doc){
+                        if($doc->status==0){
+                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                            }else{
+                                DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                            }
+                      
+                    }
+                    /*change docs status only of reject course*/ 
+                    $all_docs = DB::table('tbl_course_wise_document')
+                    ->where(['application_id' => $request->application_id])
+                    ->whereIn('approve_status',[0,2])  //get only rejected courses
+                    ->whereNotIn('status',[2,3,4,6]) 
+                    ->get(); 
+                    foreach($all_docs as $doc){
+                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                    }
+                    DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+                    /*end here*/ 
                     }else{
 
 
@@ -1055,6 +1085,7 @@ class SuperAdminApplicationController extends Controller
                   $notifiData['user_type'] = "tp";
                   $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
+                  createApplicationHistory($request->application_id,null,config('history.common.appApproved'),config('history.color.success'));
                   /*end here*/ 
 
                   // this is for the applicaion status
@@ -1531,6 +1562,7 @@ class SuperAdminApplicationController extends Controller
                       ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                       ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
               })
+              ->where('tbl_course_wise_document.application_id',$application_id)
               ->orderBy('tbl_course_wise_document.id', 'desc')
               ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
   
@@ -1595,6 +1627,8 @@ class SuperAdminApplicationController extends Controller
                       ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                       ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
               })
+              ->where('tbl_application_course_doc.application_id',$application_id)
+
               ->orderBy('tbl_application_course_doc.id', 'desc')
               ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
       

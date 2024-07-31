@@ -262,7 +262,7 @@
                                              title="{{$doc->onsite_doc_file_name}}"
                                              href="{{ url('super-admin-reject/onsite/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Reject <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             Needs Revision <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
                                         @elseif($doc->onsite_status==4)
                                           <a 
                                              title="{{$doc->onsite_doc_file_name}}"

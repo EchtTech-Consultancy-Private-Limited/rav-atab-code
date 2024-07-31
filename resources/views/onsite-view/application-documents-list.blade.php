@@ -138,7 +138,6 @@
                         style="float:right;">Back</a>
                         
 
-                        {{-- @if(($show_submit_btn_to_secretariat && $application_details->doc_list_approve_status==0) || $is_all_revert_action_done)  --}}
                         
 
                   </div>
@@ -399,7 +398,7 @@
                                             title="{{$doc->onsite_doc_file_name}}"
                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                             class="btn btn-danger btn-sm docBtn m-1">
-                                            Rejected</a>
+                                            Need Revision</a>
                                             
                                                 
                                    @endif 
@@ -544,7 +543,8 @@
                                         @endforeach
                                        </tbody>
                                     </table>
-                              @if(!$is_final_submit && $is_doc_uploaded && $isCreateSummaryBtnShow=="show")
+                           
+                              @if($is_all_doc_accepted && !$is_final_submit)
                                  <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
                                      @csrf
                                        <input type="hidden" name="application_id" value="{{$encrypted_app_id}}">
@@ -559,8 +559,25 @@
                                        <input type="submit" value="Submit Summary" class="btn btn-primary btn-sm">
                                     </div>
                                  </form>
-                                    @endif
+
+                              @elseif($is_any_ncs && !$is_final_submit)
+                              <div class="col-md-12 mr-2">
+                                          <form action="{{ url('onsite/update-nc-flag-doc-list/course/'.$encrypted_app_id.'/'.$encrypted_course_id) }}" method="post">
+                                          @csrf
+                                          <div class="col-md-12 p-2" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                                    <input type="hidden" name="nc_type" value="{{$nc_type_str}}"/>
+                                                                    <textarea rows="30" cols="80" id="comment_text" name="doc_comment" class="form-control" required=""></textarea>
+                                                                    <small id="char-count-info">0/250 characters</small>
+                                                                </div>
                                     
+                                          <input type="submit" class="btn btn-info float-right" value="Submit " <?php echo $enable_disable_submit_btn_course==true?'disabled':'';?> >
+                                          </form>
+                                          </div>
+                                 </div>
+                           @endif
+
+
                                  </div>
                               </div>
                            </div>

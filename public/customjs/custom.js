@@ -1133,9 +1133,36 @@ $(".dateID").click("on", function () {
         success: function (response) {
             if (response.message == "deleted") {
                 $this.removeClass("btn-danger").addClass("btn-success");
-            } else {
+                $("#onsite_date_selection_footer").show();
+            } 
+            else if(response.message=="failed"){
+                $this.removeClass("btn-danger").addClass("btn-success");
+                toastr.error("Please select consecutive dates", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $("#onsite_date_selection_footer").hide();
+            }
+            else if(response.message=="all_deleted"){
+                document.querySelectorAll('.dateID').forEach(function(element) {
+                    element.classList.remove("btn-danger");
+                    element.classList.add("btn-success");
+                });
+                toastr.error("Please select consecutive dates", {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    closeDuration: 5000,
+                });
+                $("#onsite_date_selection_footer").hide();
+            }
+            else {
+                $("#onsite_date_selection_footer").show();    
                 $this.removeClass("btn-success").addClass("btn-danger");
             }
+            
         },
         error: function (error) {
             console.error("Error:", error);
@@ -3555,3 +3582,31 @@ $(document).on('keyup change', '.remove_err_input_error', function () {
 $(document).on('change', '.select2-selection select2-selection--multiple', function () {
     $(this).removeClass('courses_error');
 });
+
+
+
+$(document).ready(function(){
+    document.querySelector('.add-row-btn').addEventListener('click', function () {
+        var newRow = `
+        <tr>
+            <td><input type="text" class="form-control" name="serial_number[]" placeholder="Enter Serial number" required></td>
+            <td><input type="text" class="form-control" name="standard_reference[]" placeholder="Enter Standard Reference" required></td>
+            <td><input type="text" class="form-control" name="improvement_form[]" placeholder="Enter Improvement form" required></td>
+            <td><input type="text" class="form-control" name="improve_assessee_org[]" placeholder="Enter improve assessee org" required></td>
+            <td><button type="button" class="btn btn-danger remove-row-btn">-</button></td>
+        </tr>`;
+        document.querySelector('#form-body').insertAdjacentHTML('beforeend', newRow);
+        attachRemoveRowEvent();
+    });
+
+    function attachRemoveRowEvent() {
+        document.querySelectorAll('.remove-row-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                btn.closest('tr').remove();
+            });
+        });
+    }
+    attachRemoveRowEvent();
+})
+
+    

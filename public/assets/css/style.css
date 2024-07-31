@@ -25732,4 +25732,9 @@ p.ref-number b{ font-weight: 600;}
 
 .btn.btn-success {
     line-height: 2.1 !important;
+
+
+.remark_text_area{
+        height: 180px;
+        white-space: pre-line;
 }

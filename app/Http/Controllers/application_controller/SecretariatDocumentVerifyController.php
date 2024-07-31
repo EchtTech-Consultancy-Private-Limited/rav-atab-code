@@ -403,7 +403,6 @@ class SecretariatDocumentVerifyController extends Controller
     {
         
         try {
-            
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->get();
@@ -511,7 +510,17 @@ class SecretariatDocumentVerifyController extends Controller
                     $notifiData['user_type'] = "superadmin";
                     $notifiData['url'] = $sUrl.dEncrypt($application_id);
                     sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
+
                 }
+            }
+
+            if($get_application->level_id==3){
+                $notifiData['user_type'] = "tp";
+                $notifiData['receiver_id'] = $get_application->tp_id;
+                $notifiData['url'] = $tpUrl;
+                sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
             }
             
             
@@ -604,6 +613,8 @@ class SecretariatDocumentVerifyController extends Controller
             $notifiData['user_type'] = "tp";
             $notifiData['url'] = $tpUrl;
             sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+
             /*end here*/ 
             DB::commit();
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
@@ -690,6 +701,7 @@ class SecretariatDocumentVerifyController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             return back()->with('fail', 'Something went wrong');
         }
     }
@@ -925,7 +937,6 @@ class SecretariatDocumentVerifyController extends Controller
             ->where('approve_status',1)
             ->get();
 
-
         $additionalFields = DB::table('tbl_course_wise_document')
             ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
                 $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
@@ -934,6 +945,7 @@ class SecretariatDocumentVerifyController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1500,6 +1512,7 @@ class SecretariatDocumentVerifyController extends Controller
                   ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                   ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
           })
+          ->where('tbl_application_course_doc.application_id',$application_id)
           ->orderBy('tbl_application_course_doc.id', 'desc')
           ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1585,6 +1598,7 @@ public function isShowSubmitBtnToSecretariat($application_id)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1648,6 +1662,7 @@ public function checkSubmitButtonEnableOrDisable($application_id,$application_co
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1711,6 +1726,7 @@ public function checkAllActionDoneOnRevert($application_id)
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
+        ->where('tbl_application_course_doc.application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1807,6 +1823,7 @@ public function uploadMoM(Request $request)
                  ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                  ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
          })
+         ->where('tbl_course_wise_document.application_id',$application_id)
          ->orderBy('tbl_course_wise_document.id', 'desc')
          ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 

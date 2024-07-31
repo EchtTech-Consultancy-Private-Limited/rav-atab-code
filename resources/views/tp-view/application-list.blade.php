@@ -140,16 +140,12 @@
                                                     @endisset
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->level_id==3)
-                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
-                                                @else
+                                               
                                                     @php
                                                         $status = getApplicationStatus($item->application_list->status,"TP");
                                                     @endphp
                                                 <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
-                                                
-                                                @endif
-                                                
+                                               
                                                 
                                                 </td>
                                                 <td>
@@ -218,7 +214,7 @@
                                                                 </div>
                                                             @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
                                                                      @if($item->application_list->upgraded_level_id == 2)
-                                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                      @elseif($item->application_list->upgraded_level_id == 3)
                                                                     <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                 @endif

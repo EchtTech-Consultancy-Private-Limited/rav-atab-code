@@ -122,7 +122,8 @@ class SummaryController extends Controller
         ])
         ->first();
 
-        
+        $improvement_form_data = DB::table('assessor_improvement_form')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id),'assessor_id'=>$assessor_id])->get();
+        $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>dDecrypt($application_id),'course_id'=>dDecrypt($application_course_id),'assessor_type'=>'onsite'])->get();
 
         $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>dDecrypt($application_id),'assessor_id'=>$assessor_id,'assessor_type'=>'onsite'])->first();
         
@@ -200,8 +201,10 @@ class SummaryController extends Controller
         $is_final_submit = false;
        }
 
+
+
            
-        return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign'));
+        return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign','improvement_form_data','nc_remarks_onsite'));
     }
 
 
@@ -352,6 +355,7 @@ class SummaryController extends Controller
             $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.assessor_desktop.summary'),config('history.color.danger'));
             /*end here*/ 
         // }
     
@@ -384,6 +388,7 @@ class SummaryController extends Controller
             $notifiData['url'] = $url;
             $notifiData['data'] =config('notification.tp.secondPay');
             sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.assessor_desktop.summary'),config('history.color.danger'));
         }
          
 		 
@@ -495,7 +500,7 @@ class SummaryController extends Controller
             $isCreateSummaryBtnShow = $this->isCreateSummaryBtnShow($application_id,dDecrypt($request->application_course_id),'onsite');
                 if($isCreateSummaryBtnShow=="hide"){
                     return back()->with('fail', 'Please wait for tp to reupload doc.');
-                }
+            }
 
 
             $assessor_id = Auth::user()->id;
@@ -513,7 +518,7 @@ class SummaryController extends Controller
 
 
             $create_final_summary_report=DB::table('assessor_final_summary_reports')->insert($data);
-
+            
             // $dataImprovement= [];
             // $dataImprovement['assessor_id']=$assessor_id;
             // $dataImprovement['application_id']=$application_id;
@@ -576,6 +581,7 @@ class SummaryController extends Controller
                 $notifiData['receiver_id'] = $get_app->secretariat_id;
                 $notifiData['url'] = $url;
                 sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.assessor_onsite.summary'),config('history.color.warning'));
                 /*end here*/ 
     
     
@@ -679,8 +685,6 @@ class SummaryController extends Controller
 
             /*end here*/
 
-
-
             DB::commit();
             return redirect('onsite/application-view'.'/'.$request->application_id)->with('success','Successfully submitted final summary report'); 
         }
@@ -699,17 +703,20 @@ class SummaryController extends Controller
             $application_id = dDecrypt($request->app_Id);
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->get();
             foreach($get_all_courses as $key=>$course){
+                foreach($request->serial_number as $key=>$imp){
                 $dataImprovement= [];
                 $dataImprovement['assessor_id']=Auth::user()->id;
                 $dataImprovement['application_id']=$application_id;
                 $dataImprovement['application_course_id']=$course->id;
-                $dataImprovement['sr_no']=$request->serial_number??'N/A';
-                $dataImprovement['standard_reference']=$request->standard_reference??'N/A';
-                $dataImprovement['improvement_form']=$request->improvement_form??'N/A';
-                $dataImprovement['signatures']=$request->signatures??'N/A';
+                $dataImprovement['sr_no']=$request['serial_number'][$key]??'N/A';
+                $dataImprovement['standard_reference']=$request['standard_reference'][$key]??'N/A';
+                $dataImprovement['improvement_form']=$request['improvement_form'][$key]??'N/A';
+                $dataImprovement['signatures']=$request['signatures'][$key]??'N/A';
                 $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
-                $dataImprovement['assessee_org']=$request->improve_assessee_org??'N/A';
+                $dataImprovement['assessee_org']=$request['improve_assessee_org'][$key]??'N/A';
                 $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
+                }
+
             }
             if($create_onsite_final_summary_report){
                 DB::commit();
@@ -1239,9 +1246,13 @@ class SummaryController extends Controller
 
     $o_summary_remark = DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id,'assessor_type'=>'onsite'])->first()?->remark;
 
+    $improvement_form_data = DB::table('assessor_improvement_form')->where(['application_id'=>$application_id,'application_course_id'=>$application_course_id])->get();
+
+    $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>$application_id,'course_id'=>$application_course_id,'assessor_type'=>'onsite'])->get();
+    
       /*End here*/    
       
-        return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way','assessor_assign','d_summary_remark','o_summary_remark'));
+        return view('tp-admin-summary.admin-view-final-summary',compact('summeryReport', 'no_of_mandays','final_data','assessement_way','onsiteSummaryReport','onsite_no_of_mandays','onsite_final_data','onsite_assessement_way','assessor_assign','d_summary_remark','o_summary_remark','improvement_form_data','nc_remarks_onsite'));
     }
 
 
@@ -1728,6 +1739,7 @@ class SummaryController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
             ->where('tbl_application_course_doc.assessor_type','desktop')
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
@@ -1795,6 +1807,7 @@ class SummaryController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
             ->where('tbl_application_course_doc.assessor_type',$assessor_type)
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type','onsite_status']);

@@ -1149,9 +1149,9 @@ function getSecondPaymentNotification()
         $arr['course_id']=$course_id;
         $arr['status_text']=$status;
         $arr['status_color']=$color;
-        $createHistory = DB::table('tbl_application_status_history')->insert($arr);
-        if($createHistory){
-            DB::table('tbl_application')->where('id',$app_id)->update(['status_text'=>$status,'status_color'=>$color]);
+        $isExists = DB::table('tbl_application_status_history')->where(['application_id'=>$app_id,'status_text'=>$status])->first();
+        if(empty($isExists)){
+            DB::table('tbl_application_status_history')->insert($arr);
         }
     }
         
@@ -1624,6 +1624,8 @@ function getUhid($appId)
                 ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
         })
+        ->where('tbl_course_wise_document.application_id',$application_id)
+
         ->orderBy('tbl_course_wise_document.id', 'desc')
         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1687,6 +1689,7 @@ function getUhid($appId)
                 ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
         })
+        ->where('tbl_course_wise_document.application_id',$application_id)
         ->orderBy('tbl_course_wise_document.id', 'desc')
         ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1753,9 +1756,14 @@ function getApplicationStatus($status_value,$user_type){
         return $app_status;
     }else{
         return null;
-    }
+    }   
+}
 
-    
+function  getNCRemarks($application_id,$course_id){
+    $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>$application_id,'course_id'=>$course_id,'assessor_type'=>'onsite'])->get();
+    return $nc_remarks_onsite;
+
+
 }
 
 

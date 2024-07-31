@@ -557,6 +557,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -621,6 +622,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
     
@@ -689,6 +691,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -755,6 +758,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -822,6 +826,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -888,6 +893,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -952,6 +958,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1015,6 +1022,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1076,6 +1084,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1140,6 +1149,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
     
@@ -1207,6 +1218,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
     
@@ -1274,6 +1287,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
     
@@ -1342,6 +1357,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
     
@@ -1405,6 +1422,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
     
@@ -1468,6 +1487,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
     
@@ -1531,6 +1552,7 @@ class AdminApplicationController extends Controller
                 ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                 ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
         })
+        ->where('application_id',$application_id)
         ->orderBy('tbl_application_course_doc.id', 'desc')
         ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1594,6 +1616,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1656,6 +1680,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status']);
 
@@ -1717,6 +1743,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1780,6 +1807,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1843,6 +1871,7 @@ class AdminApplicationController extends Controller
                     ->on('tbl_course_wise_document.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_course_wise_document.id', '=', 'sub.max_id');
             })
+            ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
             ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1906,6 +1935,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -1977,7 +2008,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
-            ->where('tbl_application_course_doc.assessor_type','secretariat')
+            ->where('tbl_application_course_doc.application_id',$application_id)
+            ->where('tbl_application_course_doc.assessor_type','secretariat') 
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -2051,6 +2083,8 @@ class AdminApplicationController extends Controller
                     ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
                     ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
             })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
             ->orderBy('tbl_application_course_doc.id', 'desc')
             ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert']);
 
@@ -2250,6 +2284,7 @@ class AdminApplicationController extends Controller
               $notifiData['url'] = $url.dEncrypt($request->application_id);
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
+              createApplicationHistory($request->application_id,null,config('history.secretariat.assigned'),config('history.color.warning'));
             /*end here*/ 
             
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $request->assessor_id, 'assessor_type' => $request->assessor_type])->first();
@@ -2265,7 +2300,7 @@ class AdminApplicationController extends Controller
             }
 
 
-            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
+            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id,'status'=>9]); //9 for secretariat assign DA
 
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => $assessor_types])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
 
@@ -2293,6 +2328,8 @@ class AdminApplicationController extends Controller
          $notifiData['url'] = $url.dEncrypt($request->application_id);
          $notifiData['data'] = config('notification.admin.desktopAssigned');
          sendNotification($notifiData);
+
+         createApplicationHistory($request->application_id,null,config('history.assessor_desktop.assigned'),config('history.color.warning'));
          /*end here*/ 
 
 
@@ -2511,7 +2548,7 @@ class AdminApplicationController extends Controller
             
 
 
-            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item]);
+            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item,'status'=>12]);
 
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => 'onsite'])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item]);
 
@@ -2541,6 +2578,7 @@ class AdminApplicationController extends Controller
             $notifiData['url'] = $url.dEncrypt($request->application_id);
             $notifiData['data'] = config('notification.admin.onsiteAssigned');
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.assessor_onsite.assigned'),config('history.color.warning'));
             /*end here*/ 
 
         
@@ -3205,6 +3243,7 @@ class AdminApplicationController extends Controller
             $notifiData['receiver_id'] = null;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.common.additionalPay'),config('history.color.warning'));
             /*end here for send notification*/ 
 
 
