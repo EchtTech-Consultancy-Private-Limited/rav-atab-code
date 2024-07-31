@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Mail\SendEMail;
 
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\TblApplication;
 use App\Models\TblApplicationPayment;
 use App\Models\TblApplicationCourseDoc;
@@ -34,8 +35,8 @@ class AdminApplicationController extends Controller
     {
         $application = DB::table('tbl_application as a')
             ->whereIn('a.payment_status', [2, 3,5])
-            ->where('secretariat_id', Auth::user()->id)
-            ->orderBy('id', 'desc')
+            ->where('a.secretariat_id', Auth::user()->id)
+            ->orderBy('a.id', 'desc')
             ->get();
         $final_data = array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
@@ -60,29 +61,24 @@ class AdminApplicationController extends Controller
                 'application_id' => $app->id,
                 'payment_ext'=>null,
 
-            ])
-                ->first();
+            ])->first();
+
             $last_payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
                 'payment_ext'=>null,
-            ])
-                ->latest('id')
-                ->first();
+            ])->latest('id')->first();
 
             $payment_amount = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
                 'payment_ext'=>null,
-            ])
-                ->where('status', 2)
-                ->sum('amount');
+            ])->where('status', 2)->sum('amount');
+
             $payment_count = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
                 'payment_ext'=>null,
-            ])
-                ->where('status', 2)
-                ->count();
+            ])->where('status', 2)->count();
 
-                $app_history = DB::table('tbl_application_status_history')
+            $app_history = DB::table('tbl_application_status_history')
                 ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
                 ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
                 ->where('tbl_application_status_history.application_id', $app->id)
@@ -106,8 +102,13 @@ class AdminApplicationController extends Controller
                 $obj->appHistory= $app_history;
                 
             }
+            $appTime = new ApplicationDurationCaculate;
+            $application_duration =$appTime->calculateTimeDateSecretariat(auth::user()->role,'secretariat_verify_doc_assign_assessor',$app);
+            $obj->applicationDuration = $application_duration;
+
             $final_data[] = $obj;
         }
+        //dd($final_data);
         return view('admin-view.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
     }
     
@@ -2283,6 +2284,7 @@ class AdminApplicationController extends Controller
               $notifiData['url'] = $url.dEncrypt($request->application_id);
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
+              createApplicationHistory($request->application_id,null,config('history.secretariat.assigned'),config('history.color.warning'));
             /*end here*/ 
             
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $request->assessor_id, 'assessor_type' => $request->assessor_type])->first();
@@ -2326,6 +2328,8 @@ class AdminApplicationController extends Controller
          $notifiData['url'] = $url.dEncrypt($request->application_id);
          $notifiData['data'] = config('notification.admin.desktopAssigned');
          sendNotification($notifiData);
+
+         createApplicationHistory($request->application_id,null,config('history.assessor_desktop.assigned'),config('history.color.warning'));
          /*end here*/ 
 
 
@@ -2574,6 +2578,7 @@ class AdminApplicationController extends Controller
             $notifiData['url'] = $url.dEncrypt($request->application_id);
             $notifiData['data'] = config('notification.admin.onsiteAssigned');
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.assessor_onsite.assigned'),config('history.color.warning'));
             /*end here*/ 
 
         
@@ -3238,6 +3243,7 @@ class AdminApplicationController extends Controller
             $notifiData['receiver_id'] = null;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.common.additionalPay'),config('history.color.warning'));
             /*end here for send notification*/ 
 
 

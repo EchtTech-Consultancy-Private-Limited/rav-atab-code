@@ -24,10 +24,19 @@ class SuperAdminApplicationController extends Controller
         $this->middleware('auth');
     }
     public function getApplicationList(){
+
+        $application_time = DB::table('tbl_application_time')->where([
+            'role_id' => 6,
+            'user_action'=>'verify_payment'
+        ])->first()->number_of_days;
+
+        $NewDate=Date('y:m:d H:i:s', strtotime('+'.$application_time.' days'));
+       //dd($NewDate);
+
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3])
-        ->Orwhere('second_payment',6)
-        ->orderBy('id','desc')
+        ->whereIn('a.payment_status',[2,3,5])
+        ->Orwhere('a.second_payment',6)
+        ->orderBy('a.id','desc')
         ->get();
         // dd($application);
         $final_data=array();
@@ -288,6 +297,7 @@ class SuperAdminApplicationController extends Controller
               $notifiData['data'] = config('notification.secretariat.assigned');
               
               sendNotification($notifiData);
+              createApplicationHistory($request->application_id,null,config('history.secretariat.assigned'),config('history.color.warning'));
             /*end here*/ 
 
             if($is_assigned_secretariat!=null){
@@ -310,7 +320,6 @@ class SuperAdminApplicationController extends Controller
 
             // this is for the applicaion status
             DB::table('tbl_application')->where('id',$request->application_id)->update(['status'=>3]);
-            createApplicationHistory($request->application_id,null,config('history.admin.assign'),config('history.color.warning'));
             DB::commit();
             return redirect()->route('superadmin-app-list')->with('success', 'Application has been successfully assigned to Secretariat');
         }
@@ -1076,6 +1085,7 @@ class SuperAdminApplicationController extends Controller
                   $notifiData['user_type'] = "tp";
                   $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
+                  createApplicationHistory($request->application_id,null,config('history.common.appApproved'),config('history.color.success'));
                   /*end here*/ 
 
                   // this is for the applicaion status

@@ -8,6 +8,7 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationPayment;
 use App\Models\TblApplicationCourseDoc;
 use App\Models\TblApplicationCourses;
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\Chapter;
 use App\Models\TblNCComments;
 use URL;
@@ -60,8 +61,18 @@ class DesktopApplicationController extends Controller
                 $obj->payment->payment_count = $payment_count;
                 $obj->payment->payment_amount = $payment_amount;
             }
+
+            $appTime = new ApplicationDurationCaculate;
+            $application_duration_accept_doc =$appTime->calculateTimeDateDesktopAssessorAcceptDoc(auth::user()->id, auth::user()->role,'recieved_document_same_assign_date',$app);
+            $obj->application_duration_accept_doc = $application_duration_accept_doc;
+
+            $application_duration_verify_doc =$appTime->calculateTimeDateDesktopAssessorVerifyDoc(auth::user()->id, auth::user()->role,'document_check',$app);
+            $obj->application_duration_verify_doc = $application_duration_verify_doc;
+
+
             $final_data[] = $obj;
         }
+       // dd($final_data);
         return view('desktop-view.application-list', ['list' => $final_data]);
     }
     /** Whole Application View for desktop */
@@ -737,8 +748,9 @@ class DesktopApplicationController extends Controller
                     $notifiData['receiver_id'] = $get_application->secretariat_id;
                     $notifiData['url'] = $url;
                     sendNotification($notifiData);
-                        /*end here*/ 
                     createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+                        /*end here*/ 
+                    
                 }
             
                 if($is_all_accepted){
@@ -746,6 +758,7 @@ class DesktopApplicationController extends Controller
                     $notifiData['user_type'] = "superadmin";
                     $notifiData['url'] = $sUrl.dEncrypt($application_id);
                     sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
                 }
             }
                 /*--------To Check All 44 Doc Approved----------*/

@@ -163,8 +163,22 @@
                                                 @endif
                                                 </td>
                                                     <td class="p-0-lg1">
+                                                    <div class="d-flex justify-content-between gap-1 p-1 training-provider-action">
+                                                        @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y')
+                                                        <a class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
+                                                            For Renewal
+                                                        </a>
+                                                        @endif
 
-                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                        @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y')
+                                                        <a class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
+                                                            For Surveillance
+                                                        </a>
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center gap-2 p-1">
                                                             @if($item->application_list->level_id == 1)
                                                                 <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
                                                                     <i class="material-icons">visibility</i>
@@ -200,7 +214,7 @@
                                                                 </div>
                                                             @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
                                                                      @if($item->application_list->upgraded_level_id == 2)
-                                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                      @elseif($item->application_list->upgraded_level_id == 3)
                                                                     <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                 @endif

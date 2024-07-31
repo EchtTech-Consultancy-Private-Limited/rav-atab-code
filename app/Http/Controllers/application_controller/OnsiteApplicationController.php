@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\Chapter; 
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
+use App\Http\Helpers\ApplicationDurationCaculate;
 use URL;
 use App\Jobs\SendEmailJob;
 class OnsiteApplicationController extends Controller
@@ -72,10 +73,18 @@ class OnsiteApplicationController extends Controller
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount ;
                 }
+                $appTime = new ApplicationDurationCaculate;
+                $application_duration_accept_doc =$appTime->calculateTimeDateOnsiteAssessorAcceptDoc(auth::user()->id, auth::user()->role,'recieved_document_same_assign_date',$app);
+                $obj->application_duration_accept_doc = $application_duration_accept_doc;
+    
+                $application_duration_verify_doc =$appTime->calculateTimeDateOnsiteAssessorVerifyDoc(auth::user()->id, auth::user()->role,'document_check',$app);
+                $obj->application_duration_verify_doc = $application_duration_verify_doc;
+    
+
                 $final_data[] = $obj;
                 
         }
-        
+       // dd($final_data);
         return view('onsite-view.application-list',['list'=>$final_data]);
     }
 
@@ -1612,6 +1621,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
                 $notifiData['user_type'] = "superadmin";
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
             }
         }
             /*--------To Check All 44 Doc Approved----------*/

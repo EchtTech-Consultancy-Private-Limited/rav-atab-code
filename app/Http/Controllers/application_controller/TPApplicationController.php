@@ -13,6 +13,7 @@ use App\Models\TblApplicationCourses;
 use App\Models\Chapter; 
 use App\Models\Country;
 use Carbon\Carbon;
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\TblNCComments; 
 use App\Jobs\SendEmailJob;
 use URL;
@@ -86,10 +87,18 @@ class TPApplicationController extends Controller
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
                 }
+                $appTime = new ApplicationDurationCaculate;
+                $surveillance_Renewal =$appTime->surveillanceRenewal(auth::user()->role,$app);
+                $obj->surveillanceRenewal = $surveillance_Renewal;
+
+                $application_duration =$appTime->calculateTimeDateTrainingProvider(auth::user()->role,'verify_payment',$app);
+                $obj->applicationDuration = $application_duration;
+
                 $obj->appHistory= $app_history;
                 $final_data[] = $obj;
+                
         }
-        
+       // dd($final_data);
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 
@@ -992,6 +1001,7 @@ class TPApplicationController extends Controller
             $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.common.upload'),config('history.color.warning'));
             /*end here*/ 
       
    
@@ -1086,9 +1096,9 @@ public function  storeNewApplication(Request $request)
 
 public function upgradeCreateNewCourse($id = null,$refid=null)
 {
- 
     if($id) $id = dDecrypt($id);
     if($refid) $refid = dDecrypt($refid);
+    
     
     if ($id) {
         $applicationData = TblApplication::where('id',$id)->latest()->first();
@@ -1097,14 +1107,14 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     }
     $first_application_id = TblApplication::where('refid',$refid)->first();
     
-    $last_application_id = TblApplication::where('id',$id)->first()->id;
+    $last_application_id =  $id;
     
-    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->get();
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->whereNull('deleted_at')->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->whereNull('deleted_at')->get();
     // dd($course);
-    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->whereNull('deleted_at')->count();
     $total_docs = count($course) * 4;
     
     $is_show_next_btn = false;
@@ -1430,6 +1440,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
          $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
          $notifiData['data'] = config('notification.accountant.appCreated');
          sendNotification($notifiData);
+         createApplicationHistory($request->Application_id,null,config('history.accountant.appCreated'),config('history.color.warning'));
          /*end here*/ 
 
         if(isset($first_app_id)){
@@ -1509,7 +1520,6 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                  if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
-                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');
@@ -2471,7 +2481,16 @@ public function upgradeGetApplicationViewLevel3($id){
             }
 
             
-    return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
+            $checkViewLevelUrl = DB::table('tbl_application')->where('prev_id',dDecrypt($id))->first();
+            
+            if(!empty($checkViewLevelUrl) && $checkViewLevelUrl->upgraded_level_id==3 && $checkViewLevelUrl->prev_refid!=null){
+                $viewLevelUrl = true;
+            }else{
+                $viewLevelUrl = false;
+            }
+            
+            
+    return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP,'viewLevelUrl'=>$viewLevelUrl]);
 }
 
 

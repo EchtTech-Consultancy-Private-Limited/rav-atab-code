@@ -142,6 +142,13 @@
                                                 @endif
                                                 </td>
                                                     <td>
+                                                        <div>
+                                                            @if(isset($item->application_duration_accept_doc->applicationAction) && $item->application_duration_accept_doc->applicationAction =='Y')
+                                                            <a class="btn btn-tbl-edit w-100 border-bottom border">          
+                                                                {{$item->application_duration_accept_doc->applicationDayTime}} days Left
+                                                            </a>
+                                                            @endif
+                                                        </div>
                                                         <a href="{{ url('/onsite/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
