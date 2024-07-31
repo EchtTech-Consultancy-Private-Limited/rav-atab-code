@@ -13,6 +13,7 @@ use App\Models\TblApplicationCourses;
 use App\Models\Chapter; 
 use App\Models\Country;
 use Carbon\Carbon;
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\TblNCComments; 
 use App\Jobs\SendEmailJob;
 use URL;
@@ -86,10 +87,18 @@ class TPApplicationController extends Controller
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
                 }
+                $appTime = new ApplicationDurationCaculate;
+                $surveillance_Renewal =$appTime->surveillanceRenewal(auth::user()->role,$app);
+                $obj->surveillanceRenewal = $surveillance_Renewal;
+
+                $application_duration =$appTime->calculateTimeDateTrainingProvider(auth::user()->role,'verify_payment',$app);
+                $obj->applicationDuration = $application_duration;
+
                 $obj->appHistory= $app_history;
                 $final_data[] = $obj;
+                
         }
-        
+       // dd($final_data);
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 

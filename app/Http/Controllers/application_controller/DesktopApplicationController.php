@@ -8,6 +8,7 @@ use App\Models\TblApplication;
 use App\Models\TblApplicationPayment;
 use App\Models\TblApplicationCourseDoc;
 use App\Models\TblApplicationCourses;
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\Chapter;
 use App\Models\TblNCComments;
 use URL;
@@ -59,8 +60,18 @@ class DesktopApplicationController extends Controller
                 $obj->payment->payment_count = $payment_count;
                 $obj->payment->payment_amount = $payment_amount;
             }
+
+            $appTime = new ApplicationDurationCaculate;
+            $application_duration_accept_doc =$appTime->calculateTimeDateDesktopAssessorAcceptDoc(auth::user()->id, auth::user()->role,'recieved_document_same_assign_date',$app);
+            $obj->application_duration_accept_doc = $application_duration_accept_doc;
+
+            $application_duration_verify_doc =$appTime->calculateTimeDateDesktopAssessorVerifyDoc(auth::user()->id, auth::user()->role,'document_check',$app);
+            $obj->application_duration_verify_doc = $application_duration_verify_doc;
+
+
             $final_data[] = $obj;
         }
+       // dd($final_data);
         return view('desktop-view.application-list', ['list' => $final_data]);
     }
     /** Whole Application View for desktop */

@@ -167,8 +167,22 @@
                                                 @endif
                                                 </td>
                                                     <td class="p-0-lg1">
+                                                    <div class="d-flex justify-content-between gap-1 p-1 training-provider-action">
+                                                        @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y')
+                                                        <a class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
+                                                            For Renewal
+                                                        </a>
+                                                        @endif
 
-                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                        @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y')
+                                                        <a class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
+                                                            For Surveillance
+                                                        </a>
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center gap-2 p-1">
                                                             @if($item->application_list->level_id == 1)
                                                                 <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
                                                                     <i class="material-icons">visibility</i>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\application_controller;
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\ApplicationDurationCaculate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
@@ -10,6 +11,8 @@ use File;
 
 class AccountApplicationController extends Controller
 {
+    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -17,10 +20,11 @@ class AccountApplicationController extends Controller
      
     /** Application List For Account */
     public function getApplicationList(){
-        $application = DB::table('tbl_application as a')
-        ->whereIn('payment_status',[1,2,3,5])
-        ->orderBy('id','desc')
-        ->get();
+        
+        $application = DB::table('tbl_application')
+                            ->whereIn('payment_status',[1,2,3,5])
+                            ->orderBy('id','desc')
+                            ->get();
         $final_data=array();
         foreach($application as $app){
             $obj = new \stdClass;
@@ -42,6 +46,9 @@ class AccountApplicationController extends Controller
                 //     ->count();
                         
                 // }
+                $appTime = new ApplicationDurationCaculate;
+                $application_duration =$appTime->calculateTimeDateAccount(auth::user()->role,'verify_payment',$app);
+                $obj->applicationDuration = $application_duration;
 
                 $course = DB::table('tbl_application_courses')->where([
                     'application_id' => $app->id,
@@ -83,7 +90,7 @@ class AccountApplicationController extends Controller
                 $final_data[] = $obj;
                 
         }
-        
+        //dd($final_data);
         return view('account-view.application-list',['list'=>$final_data]);
     }
     public function getApplicationView($id){

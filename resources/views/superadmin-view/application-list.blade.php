@@ -112,7 +112,7 @@
                                         @foreach ($list as $k => $item)
                                             <tr
                                                 class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
-                                                <td>{{ $k + 1 }}</td>
+                                                <td>{{ $item->application_list->id }}</td>
                                                 <td>L-{{ $item->application_list->level_id ?? '' }}</td>
                                                 <td>{{ $item->application_list->uhid }}</td>
                                                 <td>{{ $item->course_count ?? '' }}</td>
@@ -329,6 +329,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @isset($item->appHistory)
                         @foreach($item->appHistory as $key=>$hist)
                         <tr>
                             <td>{{$key+1}}</td>
@@ -338,6 +339,7 @@
                             
                         </tr>
                         @endforeach
+                        @endisset
                         </tbody>
                        </table>
             </div>

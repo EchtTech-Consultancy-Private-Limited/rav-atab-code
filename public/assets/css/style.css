@@ -25711,3 +25711,25 @@ p.ref-number b{ font-weight: 600;}
 .accordian-card .accordion-button.bg-danger::after{
     filter: brightness(100);
 }
+.remaning-days{
+    gap: 5px;
+    margin-bottom: 5px;
+}
+.remaning-days div:nth-child(2){
+    background-color: green;
+    padding: 5px;
+    white-space: nowrap; 
+    border-radius: 5px;
+    color: #fff;
+}
+.training-provider-action .for-renewal{
+    width: 42% !important;
+}
+
+.training-provider-action .for-surveliance{
+    width: 55% !important;
+}
+
+.btn.btn-success {
+    line-height: 2.1 !important;
+}
