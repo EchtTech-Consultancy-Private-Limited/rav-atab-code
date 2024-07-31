@@ -737,8 +737,9 @@ class DesktopApplicationController extends Controller
                     $notifiData['receiver_id'] = $get_application->secretariat_id;
                     $notifiData['url'] = $url;
                     sendNotification($notifiData);
-                        /*end here*/ 
                     createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+                        /*end here*/ 
+                    
                 }
             
                 if($is_all_accepted){
@@ -746,6 +747,7 @@ class DesktopApplicationController extends Controller
                     $notifiData['user_type'] = "superadmin";
                     $notifiData['url'] = $sUrl.dEncrypt($application_id);
                     sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
                 }
             }
                 /*--------To Check All 44 Doc Approved----------*/

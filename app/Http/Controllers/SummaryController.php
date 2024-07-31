@@ -355,6 +355,7 @@ class SummaryController extends Controller
             $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.assessor_desktop.summary'),config('history.color.danger'));
             /*end here*/ 
         // }
     
@@ -387,6 +388,7 @@ class SummaryController extends Controller
             $notifiData['url'] = $url;
             $notifiData['data'] =config('notification.tp.secondPay');
             sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.assessor_desktop.summary'),config('history.color.danger'));
         }
          
 		 
@@ -579,6 +581,7 @@ class SummaryController extends Controller
                 $notifiData['receiver_id'] = $get_app->secretariat_id;
                 $notifiData['url'] = $url;
                 sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.assessor_onsite.summary'),config('history.color.warning'));
                 /*end here*/ 
     
     

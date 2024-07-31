@@ -992,6 +992,7 @@ class TPApplicationController extends Controller
             $notifiData['receiver_id'] = $get_app->secretariat_id;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.common.upload'),config('history.color.warning'));
             /*end here*/ 
       
    
@@ -1430,6 +1431,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
          $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
          $notifiData['data'] = config('notification.accountant.appCreated');
          sendNotification($notifiData);
+         createApplicationHistory($request->Application_id,null,config('history.accountant.appCreated'),config('history.color.warning'));
          /*end here*/ 
 
         if(isset($first_app_id)){
@@ -1509,7 +1511,6 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                  if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
-                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
             return  redirect(url('/level-second/tp/application-list/'))->with('success', 'Payment Done successfully');

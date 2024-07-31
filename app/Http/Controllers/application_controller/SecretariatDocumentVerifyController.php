@@ -510,6 +510,8 @@ class SecretariatDocumentVerifyController extends Controller
                     $notifiData['user_type'] = "superadmin";
                     $notifiData['url'] = $sUrl.dEncrypt($application_id);
                     sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
+
                 }
             }
 
@@ -518,6 +520,7 @@ class SecretariatDocumentVerifyController extends Controller
                 $notifiData['receiver_id'] = $get_application->tp_id;
                 $notifiData['url'] = $tpUrl;
                 sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
             }
             
             
@@ -610,6 +613,8 @@ class SecretariatDocumentVerifyController extends Controller
             $notifiData['user_type'] = "tp";
             $notifiData['url'] = $tpUrl;
             sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+
             /*end here*/ 
             DB::commit();
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);

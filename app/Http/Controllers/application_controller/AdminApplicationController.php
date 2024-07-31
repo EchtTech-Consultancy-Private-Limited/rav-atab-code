@@ -2283,6 +2283,7 @@ class AdminApplicationController extends Controller
               $notifiData['url'] = $url.dEncrypt($request->application_id);
               $notifiData['data'] = config('notification.secretariat.assigned');
               sendNotification($notifiData);
+              createApplicationHistory($request->application_id,null,config('history.secretariat.assigned'),config('history.color.warning'));
             /*end here*/ 
             
             $is_assign_assessor_date = DB::table('tbl_assessor_assign')->where(['application_id' => $request->application_id, 'assessor_id' => $request->assessor_id, 'assessor_type' => $request->assessor_type])->first();
@@ -2326,6 +2327,8 @@ class AdminApplicationController extends Controller
          $notifiData['url'] = $url.dEncrypt($request->application_id);
          $notifiData['data'] = config('notification.admin.desktopAssigned');
          sendNotification($notifiData);
+
+         createApplicationHistory($request->application_id,null,config('history.assessor_desktop.assigned'),config('history.color.warning'));
          /*end here*/ 
 
 
@@ -2574,6 +2577,7 @@ class AdminApplicationController extends Controller
             $notifiData['url'] = $url.dEncrypt($request->application_id);
             $notifiData['data'] = config('notification.admin.onsiteAssigned');
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.assessor_onsite.assigned'),config('history.color.warning'));
             /*end here*/ 
 
         
@@ -3238,6 +3242,7 @@ class AdminApplicationController extends Controller
             $notifiData['receiver_id'] = null;
             $notifiData['url'] = $url;
             sendNotification($notifiData);
+            createApplicationHistory($request->application_id,null,config('history.common.additionalPay'),config('history.color.warning'));
             /*end here for send notification*/ 
 
 

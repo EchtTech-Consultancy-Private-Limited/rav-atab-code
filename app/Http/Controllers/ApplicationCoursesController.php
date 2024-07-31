@@ -911,6 +911,7 @@ class ApplicationCoursesController extends Controller
          $notifiData['url'] = $acUrl.dEncrypt($request->Application_id);
          $notifiData['data'] = config('notification.accountant.appCreated');
          sendNotification($notifiData);
+         createApplicationHistory($request->Application_id,null,config('history.accountant.appCreated'),config('history.color.warning'));
          /*end here*/ 
         
         DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
@@ -982,7 +983,6 @@ class ApplicationCoursesController extends Controller
                     dispatch(new SendEmailJob($details));
                 }
                 
-                createApplicationHistory($application_id,null,config('history.tp.status'),config('history.color.danger'));
             /*send email end here*/ 
             DB::commit();
             // return  redirect()->route('application-list')->with('success', 'Payment Done successfully');

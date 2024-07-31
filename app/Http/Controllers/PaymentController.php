@@ -180,6 +180,7 @@ class PaymentController extends Controller
                     $notifiData['url'] = $acUrl.dEncrypt($application_id);
                     $notifiData['data'] = config('notification.accountant.appCreated');
                     sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.accountant.appCreated'),config('history.color.warning'));
                     /*end here*/ 
         
 

@@ -1149,9 +1149,9 @@ function getSecondPaymentNotification()
         $arr['course_id']=$course_id;
         $arr['status_text']=$status;
         $arr['status_color']=$color;
-        $createHistory = DB::table('tbl_application_status_history')->insert($arr);
-        if($createHistory){
-            DB::table('tbl_application')->where('id',$app_id)->update(['status_text'=>$status,'status_color'=>$color]);
+        $isExists = DB::table('tbl_application_status_history')->where(['application_id'=>$app_id,'status_text'=>$status])->first();
+        if(empty($isExists)){
+            DB::table('tbl_application_status_history')->insert($arr);
         }
     }
         

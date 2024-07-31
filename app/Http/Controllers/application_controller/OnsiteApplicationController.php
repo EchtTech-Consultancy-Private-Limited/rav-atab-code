@@ -1612,6 +1612,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
                 $notifiData['user_type'] = "superadmin";
                 $notifiData['url'] = $sUrl.dEncrypt($application_id);
                 sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
             }
         }
             /*--------To Check All 44 Doc Approved----------*/
