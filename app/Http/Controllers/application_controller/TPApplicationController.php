@@ -377,7 +377,7 @@ class TPApplicationController extends Controller
             TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'assessor_type'=>'onsite'])->whereIn('onsite_status',[2,3,4])->update(['onsite_nc_status'=>0]);
         }
         /*end here*/ 
-        DB::table('tbl_application')->where('id',$request->application_id)->update(['status'=>5]);
+        // DB::table('tbl_application')->where('id',$request->application_id)->update(['status'=>5]);
         if($course_doc){
         DB::commit();
         return response()->json(['success' => true,'message' =>'Document uploaded successfully'],200);
