@@ -1087,9 +1087,9 @@ public function  storeNewApplication(Request $request)
 
 public function upgradeCreateNewCourse($id = null,$refid=null)
 {
- 
     if($id) $id = dDecrypt($id);
     if($refid) $refid = dDecrypt($refid);
+    
     
     if ($id) {
         $applicationData = TblApplication::where('id',$id)->latest()->first();
@@ -1098,14 +1098,14 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     }
     $first_application_id = TblApplication::where('refid',$refid)->first();
     
-    $last_application_id = TblApplication::where('id',$id)->first()->id;
+    $last_application_id =  $id;
     
-    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->get();
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->whereNull('deleted_at')->get();
     
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->whereNull('deleted_at')->get();
     // dd($course);
-    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->whereNull('deleted_at')->count();
     $total_docs = count($course) * 4;
     
     $is_show_next_btn = false;
