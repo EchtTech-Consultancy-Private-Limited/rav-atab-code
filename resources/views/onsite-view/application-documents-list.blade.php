@@ -398,7 +398,7 @@
                                             title="{{$doc->onsite_doc_file_name}}"
                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                             class="btn btn-danger btn-sm docBtn m-1">
-                                            Rejected</a>
+                                            Need Revision</a>
                                             
                                                 
                                    @endif 
