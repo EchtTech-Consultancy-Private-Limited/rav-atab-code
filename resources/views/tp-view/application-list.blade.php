@@ -140,16 +140,12 @@
                                                     @endisset
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->level_id==3)
-                                                <span class="badge badge-main <?php echo $item->application_list->status_color;?> ">{{$item->application_list->status_text}}</span>
-                                                @else
+                                               
                                                     @php
                                                         $status = getApplicationStatus($item->application_list->status,"TP");
                                                     @endphp
                                                 <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
-                                                
-                                                @endif
-                                                
+                                               
                                                 
                                                 </td>
                                                 <td>

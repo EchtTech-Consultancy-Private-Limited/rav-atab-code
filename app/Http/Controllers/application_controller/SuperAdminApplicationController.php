@@ -930,6 +930,32 @@ class SuperAdminApplicationController extends Controller
                             DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                          }
 
+
+                        //  course wise document
+                    $all_docs = DB::table('tbl_course_wise_document')
+                    ->where(['application_id' => $request->application_id,'approve_status'=>1])
+                    ->whereNotIn('status',[2,3,4,6]) 
+                    ->get();
+                 
+                    foreach($all_docs as $doc){
+                        if($doc->status==0){
+                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                            }else{
+                                DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                            }
+                      
+                    }
+                    /*change docs status only of reject course*/ 
+                    $all_docs = DB::table('tbl_course_wise_document')
+                    ->where(['application_id' => $request->application_id])
+                    ->whereIn('approve_status',[0,2])  //get only rejected courses
+                    ->whereNotIn('status',[2,3,4,6]) 
+                    ->get(); 
+                    foreach($all_docs as $doc){
+                            DB::table('tbl_course_wise_document')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                    }
+                    DB::table('tbl_application_courses')->where('application_id',$request->application_id)->update(['is_revert'=>1]);
+                    /*end here*/ 
                     }else{
 
 
