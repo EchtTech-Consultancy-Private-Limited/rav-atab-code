@@ -1921,8 +1921,10 @@ public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
     }
 
     $old_app = TblApplication::where('prev_id',$id)->first();
-    
-    $old_courses = TblApplicationCourses::where('application_id',$old_app->id)->where('deleted_by_tp',0)->get();
+    $old_courses =[];
+    if(isset($old_app)){
+        $old_courses = TblApplicationCourses::where('application_id',$old_app->id)->where('deleted_by_tp',0)->get();
+    }
   
     $course = TblApplicationCourses::where('application_id', $id)->get();
     
