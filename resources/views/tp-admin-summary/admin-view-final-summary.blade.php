@@ -441,6 +441,23 @@
                                                 <td colspan="6" class="fw-bold">Brief about the closing meeting: <span class="fw-bold">{{$onsiteSummaryReport->brief_closing_meeting}}</span></td>
                                             </tr>
                                             <tr>
+                                             <td colspan="6">
+                                            <div class="col-sm-12 mt-3" id="comment-section">
+                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control remark_text_area" required="">
+                                                        @isset($nc_remarks_onsite)
+                                                        @foreach($nc_remarks_onsite as $nc)
+                                                                {{$nc->nc_type}}: {{$nc->remark}}
+                                                        @endforeach
+                                                        @endisset
+                                                        Final Remark: {{$o_summary_remark}}
+                                                    </textarea>
+                                                                                    
+                                                </div>
+                                                </td>
+                                            </tr>
+                                           
+                                            <tr>
                                                 <td class="fw-bold">
                                                     Date : <span class="fw-normal">{{date('d-m-Y',strtotime($onsiteSummaryReport->summary_date))}}</span>
                                                 </td>
@@ -518,18 +535,7 @@
                                         </table>
                                         
                                     </div>
-                                    <div class="col-sm-12 mt-3" id="comment-section">
-                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
-                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control remark_text_area" required="">
-                                        @isset($nc_remarks_onsite)
-                                           @foreach($nc_remarks_onsite as $nc)
-                                                {{$nc->nc_type}}: {{$nc->remark}}
-                                           @endforeach
-                                        @endisset
-                                        Final Remark: {{$o_summary_remark}}
-                                    </textarea>
-                                                                    
-                                  </div>
+                                   
                                 </section>
                                 </div>
                                 
