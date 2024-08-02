@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-responsive" style="width:100%;" id="dataTableMain">
+                            <table class="table table-responsive" style="width:100%;" id="dataTableMain-admin">
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>

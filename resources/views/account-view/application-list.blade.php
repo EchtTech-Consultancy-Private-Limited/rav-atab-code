@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-responsive" style="width:100%;" id="dataTableMain">
+                            <table class="table table-responsive" style="width:100%;" id="dataTableMain-account">
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>
