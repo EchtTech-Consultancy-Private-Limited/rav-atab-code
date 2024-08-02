@@ -1142,7 +1142,7 @@ function getSecondPaymentNotification()
     {
         
         if($app_id!=null || $app_id!=""){
-        $user_id = Auth::user()->id;
+        $user_id = Auth::user()->id??0;
         $arr = [];
         $arr['user_id']=$user_id;
         $arr['application_id']=$app_id;
