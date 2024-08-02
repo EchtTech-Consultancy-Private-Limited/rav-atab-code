@@ -102,6 +102,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
     /*final summary report download*/ 
     Route::get('/onsite/download/pdf/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessor'])->name('onsitepdfdownload');
+    Route::get('/onsite/download/pdf/first/visit/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessorFirstVisit'])->name('onsitepdfdownloadFirstVisit');
     Route::get('/desktop/download/pdf/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryDesktopAssessor'])->name('desktoppdfdownload');
   
     Route::get('/admin/desktop/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfDesktop'])->name('admindesktoppdfdownload');

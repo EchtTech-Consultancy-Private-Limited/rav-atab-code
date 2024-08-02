@@ -1090,7 +1090,7 @@ class SuperAdminApplicationController extends Controller
 
                   // this is for the applicaion status
                     DB::table('tbl_application')->where('id',$app_id)->update(['status'=>7]);
-                  
+                //   dd("hello");
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
                 }else{

@@ -290,8 +290,30 @@
 
                                         <!-- </tbody> -->
                                         <tr>
-                                            <td colspan="6" class=""><span class="fw-bold">Brief Summary:</span> <span class="">{{$summertReport->brief_summary}}</span></td>
-                                        </tr>
+                                                <td colspan="6">
+                                                <div class="col-sm-12" id="comment-section">
+                                                                    <label for="comment_text" class="">Remark</label>
+                                                                    
+                                                                    @foreach($get_all_courses as $key=>$course)
+                                                                        @php
+                                                                        
+                                                                        $r_list = getNCRemarks($summertReport->application_id,$course->id);
+                                                                        
+                                                                        @endphp
+                                                                        @isset($r_list)
+                                                                            @foreach ($r_list as $nc)
+                                                                            <br>
+                                                                                {{$nc->nc_type}} : {{$nc->remark}}
+                                                                            @endforeach
+                                                                        @endisset
+                                                                        <br>
+                                                                        {{$key+1}} : [{{$course->course_name}}] : <b>{{$course->remark}}</b>
+                                                                    @endforeach
+                                                                    
+                                                                    
+                                                     </div>
+                                                </td>
+                                            </tr>
                                         <tr>
                                             <td colspan="6" class=""><span class="fw-bold">Brief about the closing meeting:</span> <span class="">{{$summertReport->brief_closing_meeting}}</span></td>
                                         </tr>
@@ -367,30 +389,18 @@
                                     
                                             </tr>
                                             <tr>
-                                                <td colspan="6">
+                                               
+                                            <td colspan="6">
                                                 <div class="col-sm-12" id="comment-section">
-                                                                    <label for="comment_text" class="">Remark</label>
-                                                                    
-                                                                    @foreach($get_all_courses as $key=>$course)
-                                                                        @php
-                                                                        
-                                                                        $r_list = getNCRemarks($summertReport->application_id,$course->id);
-                                                                        
-                                                                        @endphp
-                                                                        @isset($r_list)
-                                                                            @foreach ($r_list as $nc)
-                                                                            <br>
-                                                                                {{$nc->nc_type}} : {{$nc->remark}}
-                                                                            @endforeach
-                                                                        @endisset
-                                                                        <br>
-                                                                        {{$key+1}} : [{{$course->course_name}}] : <b>{{$course->remark}}</b>
-                                                                    @endforeach
-                                                                    
-                                                                    
+                                                        <label for="comment_text" class="">Brief Summary:</label>
+                                                        @if(isset($improvement_form_data))
+                                                            <p>{{$improvement_form_data[0]->brief_summary}}</p>
+                                                            @endisset
                                                      </div>
                                                 </td>
+                                    
                                             </tr>
+                                           
                                         </tbody>
                                     </table>
                                     </br>

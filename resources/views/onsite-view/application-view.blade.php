@@ -337,7 +337,7 @@
                         type="submit" 
                         class="btn btn-info float-right" 
                         value="Submit" 
-                        <?php echo ($enable_disable_submit_btn==true || !$is_all_action_taken_on_docs) ? 'disabled' : ''; ?>
+                        <?php echo ($enable_disable_submit_btn==true || !$is_all_action_taken_on_docs || $spocData->signed_copy_onsite==null) ? 'disabled' : ''; ?>
                     >
                 </form>
                 </div>
@@ -357,25 +357,27 @@
         @else
 
     @endif
+    <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>
 
             @if($is_all_action_taken_on_docs)
                 <div class="d-flex align-items-center">
                 @if(!$isOFIExists)
-                <div class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI</div>
+                <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>
                 @endif
                   <!-- signed copy -->
                       @if($spocData->signed_copy_onsite==null)
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
                                         <input type="file" name="signed_copy" id="signed_copy" class="form-control" data-app-id="{{$spocData->id}}">
                                     </div>
+                                    <div class="col-md-6 mt-3">
+                                        <a href="{{url('onsite/download/pdf/first/visit/'.dEncrypt($spocData->id))}}" class="btn btn-primary">Download Summary</a>
+                                    </div>
                                 </div>
                             
-                                @endif
+                      @endif
                    <!-- end here -->
-
-
                 </div>
             @endif 
 
@@ -393,7 +395,7 @@
   <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">OFI</h5>
+        <h5 class="modal-title" id="exampleModalLabel">OFI and Brief Summary Form</h5>
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -421,6 +423,12 @@
                                     <td><input type="text" class="form-control" name="improvement_form[]" placeholder="Enter Improvement form" required></td>
                                     <td><input type="text" class="form-control" name="improve_assessee_org[]" placeholder="Enter improve assessee org" required></td>
                                     <td></td>
+                                </tr>
+                                <tr>
+                                    <label for="">Brief Summary <span class="text-danger">(*)</span></label>
+                                    <textarea name="brief_summary" id="brief_summary" class="form-control mb-3 remark_text_area" maxlength="500" required="true">
+
+                                    </textarea>
                                 </tr>
                             </tbody>
                         </table>
