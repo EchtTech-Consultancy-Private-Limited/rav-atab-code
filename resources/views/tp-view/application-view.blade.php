@@ -310,7 +310,6 @@
                                                                     value="{{$ApplicationCourses['course']->id}}">
                                                                 <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                                                 <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
-
                                                                 @if($doc->nc_show_status==0)
                                                                 <a target="_blank" title="{{$doc->doc_file_name}}"
                                                                     href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
