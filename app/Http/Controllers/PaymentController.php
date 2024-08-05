@@ -54,20 +54,24 @@ class PaymentController extends Controller
                 $app_id = dDecrypt($id);
                 if($level_id==3){
                     $amount = $this->getPaymentFee($assessor_type, $getcountryCode->currency, $app_id);
+                    $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$getcountryCode->currency,'level'=>$assessor_type])->first();
                 }else{
                     $amount = $this->getPaymentFee('level-'.$appdetails->level_id, $getcountryCode->currency, $app_id);
+                    $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$getcountryCode->currency,'level'=>'level-'.$appdetails->level_id])->first();
                 }
+
                 $item = new TblApplicationPayment;
                 $item->level_id = $appdetails->level_id;
                 $item->user_id = $appdetails->tp_id;
                 $item->amount = $amount;
+                $item->other_country_payment = $get_payment_list->dollar_fee??0;
                 $item->pay_status = 'Y';
                 $item->payment_date = date("d-m-Y");
                 $item->payment_mode = 'mode';
                 $item->payment_transaction_no = 1234567;
                 $item->payment_reference_no = $reference_no;
                 $item->payment_proof ='image.png';
-                $item->currency = $getcountryCode->currency??'inr';
+                $item->currency = $getcountryCode->currency??'INR';
                 $item->application_id = $app_id;
                 $item->payment_ext = $payment_ext;
                 $item->pay_status='N';
@@ -238,6 +242,7 @@ class PaymentController extends Controller
         } elseif (count($course) <= 5) {
             
             $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            // $other_country_amount = (int)$get_payment_list[0]->other_country_amount +((int)$get_payment_list[0]->other_country_amount * 0.18);
             
             $total_amount = $total_amount +  (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
 
