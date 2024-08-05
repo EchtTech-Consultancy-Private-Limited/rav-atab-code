@@ -75,11 +75,11 @@
                   <div class="tabs__panel__inner">
                     <div class="row clearfix">
                         <div class="col-md-12 d-flex p-2 gap-2 flex-row-reverse pe-4">
-                        <button class="btn printTpBtn btn-warning float-end" onclick="printDiv('desktop-print')">
+                        <button class="btn printTpBtn btn-warning float-end" onclick="printDiv('desktop-print-s')">
                             <i class="fa fa-print"></i>
                     </button>  
                         </div>
-                        <div class="col-lg-12 col-md-12" id="desktop-print">
+                        <div class="col-lg-12 col-md-12" id="desktop-print-s">
                             <form id="submitForm" action="#" method="#">
                                 @csrf
                                 <input type="hidden" name="application_id" value="{{Request()->segment(3)}}">
@@ -240,7 +240,7 @@
                                     </div>
                                     <div class="col-sm-12 mt-3" id="comment-section">
                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
-                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required="">{{$d_summary_remark}}</textarea>
+                                    <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control remark_text_area" required="">{{$d_summary_remark}}</textarea>
                                                                     
                                   </div>
                                 </div>

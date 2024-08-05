@@ -74,7 +74,7 @@
                         </a>
                     @endif --}}
                     <div class="float-right">
-                        <a href="{{ url('level-first/tp/application-list') }}" type="button" class="btn btn-primary">Back
+                        <a href="{{ url('level-third/tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>

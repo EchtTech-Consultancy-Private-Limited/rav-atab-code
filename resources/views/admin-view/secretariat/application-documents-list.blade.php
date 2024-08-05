@@ -136,8 +136,9 @@
                </div>
                <div class="col-sm-6">
                   <div class="pr-2">
-                   
-                  <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
+         
+
+                  <a href="{{  url("/admin/application-view-level-2/".dEncrypt($application_id)) }} }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
       
    @if($application_details->level_id==2)

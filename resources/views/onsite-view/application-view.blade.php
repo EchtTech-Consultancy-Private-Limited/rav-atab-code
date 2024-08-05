@@ -357,7 +357,7 @@
         @else
 
     @endif
-    <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>
+    <!-- <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div> -->
 
             @if($is_all_action_taken_on_docs)
                 <div class="d-flex align-items-center">
