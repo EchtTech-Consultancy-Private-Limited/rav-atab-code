@@ -1019,7 +1019,6 @@ class SuperAdminApplicationController extends Controller
                     /*To show docs to TP*/ 
                     $all_docs = DB::table('tbl_course_wise_document')
                     ->where(['application_id' => $request->application_id,'approve_status'=>1])
-                    // ->where(['application_id' => $request->application_id])
                     ->whereNotIn('status',[2,3,4,6]) 
                     ->get();
                     
@@ -1090,7 +1089,6 @@ class SuperAdminApplicationController extends Controller
 
                   // this is for the applicaion status
                     DB::table('tbl_application')->where('id',$app_id)->update(['status'=>7]);
-                //   dd("hello");
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Application approved successfully.'], 200);
                 }else{
@@ -1267,7 +1265,7 @@ class SuperAdminApplicationController extends Controller
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
 
-                DB::table('tbl_course_wise_document')
+               $abc = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->whereNotIn('status',[2,3,4,6]) 
                 ->update(['approve_status'=>2]);
@@ -1286,7 +1284,6 @@ class SuperAdminApplicationController extends Controller
                 }
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }

@@ -82,7 +82,7 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('refresh_captcha', [AuthController::class, 'refreshCaptcha'])->name('refresh_captcha');
     //mail
     Route::post('sendOtp',  [AuthController::class, 'sendOtp'])->middleware('guest');
-    Route::post('sendEmailOtp', [AuthController::class, 'sendEmailOtp'])->middleware('guest');
+    Route::post('sendEmailOtp', [AuthController::class, 'sendEmailOtp'])->name('otp')->middleware('guest');
     Route::post('verifyOtp',  [AuthController::class, 'verifyOtp'])->middleware('guest');
     //forget password
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
