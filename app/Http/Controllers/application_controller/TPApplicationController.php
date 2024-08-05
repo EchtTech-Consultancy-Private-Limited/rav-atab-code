@@ -1098,8 +1098,6 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
 {
     if($id) $id = dDecrypt($id);
     if($refid) $refid = dDecrypt($refid);
-    
-    
     if ($id) {
         $applicationData = TblApplication::where('id',$id)->latest()->first();
     }else{
@@ -1121,7 +1119,7 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     if($uploaded_docs==$total_docs){
         $is_show_next_btn=true;
     }
-    $original_course_count = TblApplicationCourses::where('application_id', $id)->count();
+    $original_course_count = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->count();
     
     return view('tp-view.create-course', compact('applicationData', 'course','original_course_count','old_courses','is_show_next_btn'));
 }

@@ -63,7 +63,7 @@
                         <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary ">View Final Summary </a>
                     @endif --}}
                     <div class="float-right">
-                        <a href="{{ url('level-first/tp/application-list') }}" type="button" class="btn btn-primary">Back
+                        <a href="{{ url('level-second/tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>
