@@ -767,40 +767,20 @@ class ApplicationCoursesController extends Controller
                 $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>'inr','level'=>1])->get();
                 
             /*end here*/
-            
             if (Auth::user()->country == $this->get_india_id()) {
                 if($applicationData->level_id==1){
-                    $total_amount = $this->getPaymentFee('level-1',"inr",$id);
+                    $total_amount = $this->getPaymentFee('level-1',"INR",$id);
                     $currency = '₹';
                 }
-            } elseif (in_array(Auth::user()->country, $this->get_saarc_ids())) {
-                if (count($course) == '0') {
-                    $currency = 'US $';
-                    $total_amount = '0';
-                } elseif (count($course) <= 5) {
-                    $currency = 'US $';
-                    $total_amount =  '15';
-                } elseif (count($course) <= 10) {
-                    $currency = 'US $';
-                    $total_amount = '30';
-                } else {
-                    $currency = 'US $';
-                    $total_amount =  '45';
-                }
-            } else {
-                if (count($course) == '0') {
-                    $currency = 'US $';
-                    $total_amount = '';
-                } elseif (count($course) <= 5) {
-                    $currency = 'US $';
-                    $total_amount = '50';
-                } elseif (count($course) <= 10) {
-                    $currency = 'US $';
-                    $total_amount = '100';
-                } else {
-                    $currency = 'US $';
-                    $total_amount =  '150';
-                }
+            }
+            else if(in_array(Auth::User()->country,$this->get_saarc_ids())){
+                $total_amount = $this->getPaymentFee('level-1',"USD",$id);
+                $currency = '$';
+            }
+             else {
+                $total_amount = $this->getPaymentFee('level-1',"OTHER",$id);
+                $currency = '$';
+                
             }
         }
         return view('create-application.course-payment.show-course-payment', compact('applicationData', 'course', 'currency', 'total_amount'));
@@ -850,9 +830,23 @@ class ApplicationCoursesController extends Controller
         ]);
        try{
         DB::beginTransaction();
-        
-        $total_amount = $this->getPaymentFee('level-1',"inr",$request->Application_id);
-        
+
+        $id = $request->Application_id;
+        if (Auth::user()->country == $this->get_india_id()) {
+            
+                $total_amount = $this->getPaymentFee('level-1',"INR",$id);
+                $currency = '₹';
+            
+        }
+        else if(in_array(Auth::User()->country,$this->get_saarc_ids())){
+            $total_amount = $this->getPaymentFee('level-1',"USD",$id);
+            $currency = '$';
+        }
+         else {
+            $total_amount = $this->getPaymentFee('level-1',"OTHER",$id);
+            $currency = '$';
+            
+        }
         $transactionNumber = trim($request->transaction_no);
         $referenceNumber = trim($request->reference_no);
         $is_exist_t_num_or_ref_num = DB::table('tbl_application_payment')
@@ -1130,11 +1124,34 @@ class ApplicationCoursesController extends Controller
 
 
     function getPaymentFee($level,$currency,$application_id){
+
+        if($currency!="INR" && $currency!="USD"){
+            $currency="OTHER";
+        }
+        
         $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
         
-        $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
+        $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereNull('deleted_at')->get();
         
-        if (Auth::user()->country == $this->get_india_id()) {
+        if($level=='onsite'){
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency])->whereIn('level',['annual','assessment'])->get();
+        
+        if (count($course) == '0') {
+          
+            $total_amount = '0';
+        } elseif (count($course) <= 5) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[1]->courses_fee +((int)$get_payment_list[1]->courses_fee * 0.18);
+        } elseif (count($course)>=5 && count($course) <= 10) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
+        } elseif(count($course)>10) {
+            $total_amount = (int)$get_payment_list[0]->courses_fee +((int)$get_payment_list[0]->courses_fee * 0.18);
+            $total_amount = $total_amount +  (int)$get_payment_list[3]->courses_fee +((int)$get_payment_list[3]->courses_fee * 0.18);
+        }    
+        
+        return $total_amount;
+    }else{
             if (count($course) == '0') {
               
                 $total_amount = '0';
@@ -1149,9 +1166,9 @@ class ApplicationCoursesController extends Controller
                 
                 $total_amount = (int)$get_payment_list[2]->courses_fee +((int)$get_payment_list[2]->courses_fee * 0.18);
             }    
-        } 
-
         return $total_amount;
+    }
+
     }
 
 
@@ -1209,6 +1226,15 @@ function getTotalAmount(Request $request){
            return response()->json(['success' => false,'message' =>'Failed to get payment details'],200);
     }
    }
+
+   function get_saarc_ids(){
+    //Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan and Sri-Lanka
+    // $saarc=Country::whereIn('name',Array('Afghanistan', 'Bangladesh', 'Bhutan', 'Maldives', 'Nepal', 'Pakistan', 'Sri Lanka'))->get('id');
+    $saarc=Country::whereIn('name',Array('American Samoa'))->get('id');
+    $saarc_ids=Array();
+    foreach($saarc as $val)$saarc_ids[]=$val->id;
+    return $saarc_ids;
+}
     
 }
 

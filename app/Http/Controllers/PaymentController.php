@@ -231,7 +231,7 @@ class PaymentController extends Controller
         
         $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency,'level'=>$level])->get();
         
-        $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->get();
+        $course = DB::table('tbl_application_courses')->where('application_id', $application_id)->whereNull('deleted_at')->get();
         
         if($level=='onsite'){
         $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$currency])->whereIn('level',['annual','assessment'])->get();

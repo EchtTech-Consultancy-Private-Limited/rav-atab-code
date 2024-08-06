@@ -131,7 +131,12 @@
                                                 <td>{{ $item->course_count ?? '' }}</td>
                                                 <td>
                                                 @isset($item->payment)
-                                                ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                    @if($item->payment->other_country_payment!=null)
+                                                    $ {{ $item->payment->other_country_payment}}<span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                    @else
+                                                    ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                    @endif
+                                                    
                                                 @endisset
                                                 </td>
                                                 <td>
