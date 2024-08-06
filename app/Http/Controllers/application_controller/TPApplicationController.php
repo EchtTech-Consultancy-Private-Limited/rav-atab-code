@@ -86,6 +86,7 @@ class TPApplicationController extends Controller
                     $obj->payment = $payment;
                     $obj->payment->payment_count = $payment_count;
                     $obj->payment->payment_amount = $payment_amount;
+                    $obj->otherCountryPayment = "";
                 }
                 $appTime = new ApplicationDurationCaculate;
                 $surveillance_Renewal =$appTime->surveillanceRenewal(auth::user()->role,$app);
@@ -1061,7 +1062,7 @@ public function  storeNewApplication(Request $request)
     }else{
         $region ="other";
     }
-
+   
     /*check if application already created*/
             $data = [];
             $data['level_id'] = 2;
@@ -1407,16 +1408,22 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
         ]);
+
+        $getcountryCode = DB::table('countries')->where([['id',Auth::user()->country]])->first();
+        $appdetails = DB::table('tbl_application')->where('id',$request->Application_id)->first();
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$getcountryCode->currency,'level'=>'level-'.$appdetails->level_id])->first();
+
         $item = new TblApplicationPayment;
         $item->level_id = $request->level_id;
         $item->user_id = Auth::user()->id;
         $item->amount = $total_amount;
+        $item->other_country_amount = $get_payment_list->dollar_fee;
         $item->pay_status = 'Y';
         $item->payment_date = date("d-m-Y");
         $item->payment_mode = $request->payment;
         $item->payment_transaction_no = $transactionNumber;
         $item->payment_reference_no = $referenceNumber;
-        // $item->currency = $request->currency;
+        $item->currency =  $getcountryCode->currency??'INR';
         $item->application_id = $request->Application_id;
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
@@ -2217,16 +2224,31 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     $this->validate($request, [
         'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
     ]);
+
+    $getcountryCode = DB::table('countries')->where([['id',Auth::user()->country]])->first();
+    $appdetails = DB::table('tbl_application')->where('id',$request->Application_id)->first();
+    $final_summary = DB::table('assessor_final_summary_reports')->where(['application_id'=>$request->Application_id,'assessor_type'=>'desktop','is_summary_show'=>1])->first();
+    if(empty($final_summary)){
+        $assessor_type_ = "desktop";
+    }else{
+        $assessor_type_ = "onsite";
+    }
+    if($appdetails->level_id==3){
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$getcountryCode->currency,'level'=>$assessor_type_])->first();
+    }else{
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$getcountryCode->currency,'level'=>$assessor_type_])->first();
+    }
     $item = new TblApplicationPayment;
     $item->level_id = $request->level_id;
     $item->user_id = Auth::user()->id;
     $item->amount = $request->amount;
+    $item->other_country_amount = $get_payment_list->dollar_fee;
     $item->payment_date = date("d-m-Y");
     $item->payment_mode = $request->payment;
     $item->payment_transaction_no = $transactionNumber;
     $item->payment_reference_no = $referenceNumber;
     $item->pay_status = 'Y';
-    // $item->currency = $request->currency;
+    $item->currency =  $getcountryCode->currency??'INR';
     $item->application_id = $request->Application_id;
     if ($request->hasfile('payment_details_file')) {
         $img = $request->file('payment_details_file');

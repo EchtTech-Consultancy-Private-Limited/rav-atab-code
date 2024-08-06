@@ -830,6 +830,7 @@ class ApplicationCoursesController extends Controller
     public function newApplicationPayment(Request $request)
     {
 
+
         
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
@@ -880,6 +881,11 @@ class ApplicationCoursesController extends Controller
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
         ]);
+      
+        
+        $getcountryCode = DB::table('countries')->where([['id',Auth::user()->country]])->first();
+        $appdetails = DB::table('tbl_application')->where('id',$request->Application_id)->first();
+        $get_payment_list = DB::table('tbl_fee_structure')->where(['currency_type'=>$getcountryCode->currency,'level'=>'level-'.$appdetails->level_id])->first();
 
         $item = new TblApplicationPayment;
         $item->level_id = $request->level_id;
@@ -890,7 +896,8 @@ class ApplicationCoursesController extends Controller
         $item->payment_mode = $request->payment;
         $item->payment_transaction_no = $transactionNumber;
         $item->payment_reference_no = $referenceNumber;
-        // $item->currency = $request->currency;
+        $item->currency =  $getcountryCode->currency??'INR';
+        $item->other_country_payment = $get_payment_list->dollar_fee;
         $item->application_id = $request->Application_id;
         if ($request->hasfile('payment_details_file')) {
             $img = $request->file('payment_details_file');
