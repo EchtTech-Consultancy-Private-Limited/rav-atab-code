@@ -113,6 +113,101 @@ class SuperAdminApplicationController extends Controller
         // dd($final_data);
         return view('superadmin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
+
+    public function getInternationApplicationList(Request $request){
+
+
+        $application_time = DB::table('tbl_application_time')->where([
+            'role_id' => 6,
+            'user_action'=>'verify_payment'
+        ])->first()->number_of_days;
+
+        $NewDate=Date('y:m:d H:i:s', strtotime('+'.$application_time.' days'));
+       //dd($NewDate);
+
+       if($request->get('type')=='other-world'){
+        $region_type = 'other';
+    }else {
+        $region_type = 'saarc';
+    }
+
+        $application = DB::table('tbl_application as a')
+        ->whereIn('a.payment_status',[2,3,5])
+        ->where('region',$region_type)
+        ->Orwhere('a.second_payment',6)
+        ->orderBy('a.id','desc')
+        ->get();
+        $final_data=array();
+        
+        $desktop_assessor_list = DB::table('users')->where(['assessment'=>1,'role'=>3,'status'=>0])->orderBy('id', 'DESC')->get();
+        
+        $onsite_assessor_list = DB::table('users')->where(['assessment'=>2,'role'=>3,'status'=>0])->orderBy('id', 'DESC')->get();
+       
+        $secretariatdata = DB::table('users')->where('role', '5')->orderBy('id', 'DESC')->get();
+        foreach($application as $app){
+            $obj = new \stdClass;
+            $obj->application_list= $app;
+                $course = DB::table('tbl_application_courses')->where([
+                    'application_id' => $app->id,
+                ])
+                ->whereNull('deleted_at') 
+                ->count();
+                if($course){
+                    $obj->course_count = $course;
+                }
+                $payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                    'payment_ext'=>null,
+                    
+                ])
+                ->first();
+                $last_payment = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                    'payment_ext'=>null,
+                ])
+                ->latest('id')
+                ->first();
+
+                $payment_amount = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                    'payment_ext'=>null,
+                ])
+                ->where('status',2)
+                ->sum('amount');
+                $payment_count = DB::table('tbl_application_payment')->where([
+                    'application_id' => $app->id,
+                    'payment_ext'=>null,
+                ])
+                ->where('status',2)
+                ->count();
+                $app_history = DB::table('tbl_application_status_history')
+                ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
+                ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
+                ->where('tbl_application_status_history.application_id', $app->id)
+                ->get();
+                
+
+                $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
+                $obj->doc_uploaded_count = $doc_uploaded_count;
+                
+                $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way??'';
+
+                if($payment){
+                    $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
+                    $obj->assessor_type = $payment_count>1?"onsite":"desktop";
+                    $obj->payment = $payment;
+                    $obj->assessment_way = $assessment_way;
+                    $obj->payment->payment_count = $payment_count;
+                    $obj->payment->payment_amount = $payment_amount;
+                    $obj->payment->last_payment = $last_payment;
+                    $obj->appHistory= $app_history;
+                    $obj->is_all_docs_uploaded = $this->checkAllDocsUploaded($app->id,$payment_count);
+                }
+                $final_data[] = $obj;
+        }
+        // dd($final_data);
+        return view('application.international_page',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
+    }
     /** Whole Application View for Account */
     public function getApplicationView($id){
         $application = DB::table('tbl_application')

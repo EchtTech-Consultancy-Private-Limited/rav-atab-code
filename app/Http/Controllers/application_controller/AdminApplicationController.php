@@ -36,6 +36,7 @@ class AdminApplicationController extends Controller
         $application = DB::table('tbl_application as a')
             ->whereIn('a.payment_status', [2, 3,5])
             ->where('a.secretariat_id', Auth::user()->id)
+            ->where('region','ind')
             ->orderBy('a.id', 'desc')
             ->get();
         $final_data = array();
@@ -112,6 +113,94 @@ class AdminApplicationController extends Controller
         return view('admin-view.application-list', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
     }
     
+    public function getInternationalApplicationList(Request $request)
+    {
+
+        if($request->get('type')=='other-world'){
+            $region_type = 'other';
+        }else {
+            $region_type = 'saarc';
+        }
+        $application = DB::table('tbl_application as a')
+            ->whereIn('a.payment_status', [2, 3,5])
+            ->where('a.secretariat_id', Auth::user()->id)
+            ->where('region',$region_type)
+            ->orderBy('a.id', 'desc')
+            ->get();
+            
+        $final_data = array();
+        // $payment_count = DB::table("tbl_application_payment")->where('')
+        
+        $desktop_assessor_list = DB::table('users')->where(['assessment' => 1, 'role' => 3, 'status' => 0])->orderBy('id', 'DESC')->get();
+
+        $onsite_assessor_list = DB::table('users')->where(['assessment' => 2, 'role' => 3, 'status' => 0])->orderBy('id', 'DESC')->get();
+
+        $secretariatdata = DB::table('users')->where('role', '5')->orderBy('id', 'DESC')->get();
+        foreach ($application as $app) {
+            $obj = new \stdClass;
+            $obj->application_list = $app;
+            $course = DB::table('tbl_application_courses')->where([
+                'application_id' => $app->id,
+            ])
+                ->whereNull('deleted_at')
+                ->count();
+            if ($course) {
+                $obj->course_count = $course;
+            }
+            $payment = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+
+            ])->first();
+
+            $last_payment = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+            ])->latest('id')->first();
+
+            $payment_amount = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+            ])->where('status', 2)->sum('amount');
+
+            $payment_count = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+            ])->where('status', 2)->count();
+
+            $app_history = DB::table('tbl_application_status_history')
+                ->select('tbl_application_status_history.*','users.firstname','users.middlename','users.lastname','users.role')
+                ->leftJoin('users', 'tbl_application_status_history.user_id', '=', 'users.id')
+                ->where('tbl_application_status_history.application_id', $app->id)
+                ->get();
+
+            $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
+            $approved_course = DB::table('tbl_application_courses')->where('application_id',$app->id)->whereIn('status',[0,2])->count();
+            $obj->doc_uploaded_count = $doc_uploaded_count;
+            $obj->approved_course = $approved_course;
+                
+            $assessment_way = DB::table('asessor_applications')->where('application_id', $app->id)->first()->assessment_way ?? '';
+            
+            if ($payment) {
+                $obj->assessor_list = $payment_count > 1 ? $onsite_assessor_list : $desktop_assessor_list;
+                $obj->assessor_type = $payment_count > 1 ? "onsite" : "desktop";
+                $obj->payment = $payment;
+                $obj->assessment_way = $assessment_way;
+                $obj->payment->payment_count = $payment_count;
+                $obj->payment->payment_amount = $payment_amount;
+                $obj->payment->last_payment = $last_payment;
+                $obj->appHistory= $app_history;
+                
+            }
+            $appTime = new ApplicationDurationCaculate;
+            $application_duration =$appTime->calculateTimeDateSecretariat(auth::user()->role,'secretariat_verify_doc_assign_assessor',$app);
+            $obj->applicationDuration = $application_duration;
+
+            $final_data[] = $obj;
+        }
+        //dd($final_data);
+        return view('secretariat.international', ['list' => $final_data, 'secretariatdata' => $secretariatdata]);
+    }
     public function getApplicationView($id)
     {
         

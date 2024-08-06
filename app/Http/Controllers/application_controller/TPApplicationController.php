@@ -37,13 +37,18 @@ class TPApplicationController extends Controller
           ->get()
           ->pluck('application_id')
           ->toArray();
+
         if($level_type=="level-one" || $level_type=="level-first"){
             $level_id = 1;
+            $level_url="level-first";
         }else if($level_type=="level-second"){
             $level_id = 2;
+            $level_url="level-second";
         }else{
             $level_id = 3;
+            $level_url="level-third";
         }
+
         $application = DB::table('tbl_application as a')
         ->where('tp_id',Auth::user()->id)
         ->where('level_id',$level_id)
@@ -97,12 +102,12 @@ class TPApplicationController extends Controller
 
                 $application_duration =$appTime->calculateTimeDateTrainingProvider(auth::user()->role,'verify_payment',$app);
                 $obj->applicationDuration = $application_duration;
-
+                
+                $obj->renewal_url = "renewal/".$level_url."?sr_prev_id=".dEncrypt($app->id)."&q=renewal";
+                $obj->surveillance_url ="surveillance/".$level_url."?sr_prev_id=".dEncrypt($app->id)."&q=surveillance";
                 $obj->appHistory= $app_history;
                 $final_data[] = $obj;
-                
         }
-       // dd($final_data);
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 

@@ -117,6 +117,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::post('/new-application', [LevelController::class, 'new_application']);
     Route::get('level-list', [LevelController::class, 'level_list']);
     Route::get('/level-first/{id?}', [LevelController::class, 'level1tp']);
+    
     Route::get('/edit-application/{id?}', [LevelController::class, 'edit_application']);
     Route::get('/course-payment/{id?}', [LevelController::class, 'coursePayment'])->name('course.payment');
     Route::get('/level-first-upgrade/{upgrade_application_id?}/{id?}', [LevelController::class, 'level1tp_upgrade']);
@@ -166,12 +167,12 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     //acknowledgement letter
     Route::get('/Akment-letter', [aknownledgeController::class, 'index']);
     //Application
-    Route::get('/internationl-page', [applicationController::class, 'internationl_index']);
+    Route::get('/internationl-page', [SuperAdminApplicationController::class, 'getInternationApplicationList']);
     Route::get('/nationl-page', [applicationController::class, 'nationl_page']);
     Route::get('/internationl-accesser', [applicationController::class, 'internationl_accesser']);
     Route::get('/nationl-accesser', [applicationController::class, 'nationl_accesser']);
     Route::get('/nationl-secretariat', [SecretariatController::class, 'nationl_secretariat']);
-    Route::get('/internationl-secretariat', [SecretariatController::class, 'internationl_secretariat']);
+    Route::get('/internationl-secretariat', [AdminApplicationController::class, 'getInternationalApplicationList']);
     //use index page url 
     Route::get('/admin-user', [adminController::class, 'user_index']);
     Route::get('/training-provider', [adminController::class, 'tp_index']);
@@ -583,9 +584,20 @@ Route::post('/super-admin-reject-course', [SuperAdminApplicationController::clas
 /********Surveillance */
 Route::get('/surveillance-create',[SurveillanceController::class,"index"])->name('surveillance-create');
 Route::post('/surveillance',[SurveillanceController::class,"surveillanceCreate"]);
+Route::get('surveillance/level-first', [SurveillanceController::class, 'level1tp']);
+Route::get('surveillance/level-second', [SurveillanceController::class, 'level2tp']);
+Route::get('surveillance/level-third', [SurveillanceController::class, 'level3tp']);
+Route::get('create-new-applications/surveillance',[SurveillanceController::class,"createNewApplication"]);
+Route::get('create-level-2-new-applications/surveillance',[SurveillanceController::class,"createNewApplication"]);
+Route::get('create-level-3new-applications/surveillance',[SurveillanceController::class,"createNewApplication"]);
 
 /********Renewal */
 Route::get('/renewal-create',[RenewalController::class,"index"])->name('renewal-create');
+Route::get('renewal/level-first', [RenewalController::class, 'level1tp']);
+Route::get('renewal/level-second', [RenewalController::class, 'level2tp']);
+Route::get('renewal/level-third', [RenewalController::class, 'level3tp']);
 Route::post('/renewal',[RenewalController::class,"renewalCreate"]);
-
+Route::get('renewal/create-new-applications',[RenewalController::class,"createNewApplication"]);
+Route::get('renewal/create-level-2-new-applications',[RenewalController::class,"createLevel2NewApplication"]);
+Route::get('renewal/create-level-3-new-applications',[RenewalController::class,"createLevel3NewApplication"]);
 /*qr code generation*/

@@ -270,6 +270,8 @@ active @endif"
                                                         action="{{ url('/store-level-2-new-applications') }}" method="post">
 
                                                         @csrf
+                                                        <input name="sr_prev_id" type="hidden" name="" value="{{request('sr_prev_id')}}">
+                                                        <input name="sr_type" type="hidden" name="" value="{{request('q')}}">
                                                         @if ($applicationData)
                                                             <input type="hidden" name="previous_data" value="1">
                                                             <input type="hidden" name="application_id"
@@ -298,6 +300,10 @@ active @endif"
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
+                                                               
+
+
                                                                 <input type="hidden" name="user_id"
                                                                     value="{{ Auth::user()->id }}">
                                                                 <input type="hidden" name="state_id"
