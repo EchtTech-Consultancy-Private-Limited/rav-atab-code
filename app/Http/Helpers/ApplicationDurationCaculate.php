@@ -365,9 +365,12 @@ class ApplicationDurationCaculate {
         $obj = new \stdclass;
         $now = time();
         if($app->valid_till !=''){
+
+            $totalday = strtotime($app->valid_till)-strtotime($app->valid_from);
+            $totoaldayscount = round($totalday/ (60 * 60 * 24));
             $fromDate = strtotime($app->valid_till)-$now;
             $dayscount = round($fromDate/ (60 * 60 * 24));
-        //dd($dayscount);
+        //dd($totoaldayscount);
             if($dayscount <= $surveillance->popup_show_days){
                 $obj->surveillance_popup = $surveillance->popup_show_days;
                 $obj->surveillance_totalDay = $surveillance->number_of_days;

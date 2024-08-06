@@ -27,6 +27,8 @@ use App\Http\Controllers\application_controller\DocApplicationController;
 use App\Http\Controllers\application_controller\SecretariatDocumentVerifyController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\application_controller\DownLoadPDFFinalSummaryController;
+use App\Http\Controllers\application_controller\RenewalController;
+use App\Http\Controllers\application_controller\SurveillanceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -577,6 +579,12 @@ Route::post('/super-admin-approved-course', [SuperAdminApplicationController::cl
 Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 
 /*--end here--*/
+/********Surveillance */
+Route::get('/surveillance-create',[SurveillanceController::class,"index"])->name('surveillance-create');
+Route::post('/surveillance',[SurveillanceController::class,"surveillanceCreate"]);
 
+/********Renewal */
+Route::get('/renewal-create',[RenewalController::class,"index"])->name('renewal-create');
+Route::post('/renewal',[RenewalController::class,"renewalCreate"]);
 
 /*qr code generation*/
