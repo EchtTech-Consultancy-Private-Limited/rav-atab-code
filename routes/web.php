@@ -84,7 +84,7 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('refresh_captcha', [AuthController::class, 'refreshCaptcha'])->name('refresh_captcha');
     //mail
     Route::post('sendOtp',  [AuthController::class, 'sendOtp'])->middleware('guest');
-    Route::post('sendEmailOtp', [AuthController::class, 'sendEmailOtp'])->middleware('guest');
+    Route::post('sendEmailOtp', [AuthController::class, 'sendEmcreate-application-paymentailOtp'])->name('otp')->middleware('guest');
     Route::post('verifyOtp',  [AuthController::class, 'verifyOtp'])->middleware('guest');
     //forget password
     Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
 
     /*final summary report download*/ 
     Route::get('/onsite/download/pdf/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessor'])->name('onsitepdfdownload');
+    Route::get('/onsite/download/pdf/first/visit/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryOnsiteAssessorFirstVisit'])->name('onsitepdfdownloadFirstVisit');
     Route::get('/desktop/download/pdf/{application_id}',[DownLoadPDFFinalSummaryController::class,'downloadFinalSummaryDesktopAssessor'])->name('desktoppdfdownload');
   
     Route::get('/admin/desktop/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfDesktop'])->name('admindesktoppdfdownload');

@@ -59,11 +59,11 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    @if($is_final_submit)
+                    {{-- @if($is_final_submit)
                         <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary ">View Final Summary </a>
-                    @endif
+                    @endif --}}
                     <div class="float-right">
-                        <a href="{{ url('level-first/tp/application-list') }}" type="button" class="btn btn-primary">Back
+                        <a href="{{ url('level-second/tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
                     </div>
                 </div>

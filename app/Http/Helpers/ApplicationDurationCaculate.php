@@ -8,7 +8,7 @@ class ApplicationDurationCaculate {
 
     /****** Start Secretariat ****/
     function calculateTimeDateAccount($role_id, $userAction, $app) {
-        
+        if(isset($app)){
         $application_time = DB::table('tbl_application_time')->where([
             'role_id' => $role_id,
             'user_action'=>$userAction
@@ -57,12 +57,14 @@ class ApplicationDurationCaculate {
            
        }
        return $obj;
+    }else{
+        return null;
+    }
     }
     /****** End Account *********/
 
     /****** Start Secretariat ***/
     function calculateTimeDateSecretariat($role_id, $userAction, $app) {
-       
         $application_time = DB::table('tbl_application_time')->where([
             'role_id' => $role_id,
             'user_action'=>$userAction

@@ -193,7 +193,6 @@
 </head>
 
 <body class="light">
-
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
     @include('layout.topbar')
@@ -428,13 +427,14 @@
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
-                                                    <?php
 
-                                                            
-                                                            if(isset($modes[1])){
-                                                                echo $modes[1];
-                                                            }
-                                                    ?>
+                                                    
+                                                            @if(isset($crs->mode_of_course))
+                                                                @foreach(explode(',',$crs->mode_of_course) as $mode)
+                                                                    
+                                                                @endforeach
+                                                            @endif
+                                                    
                                                     <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
                                                         required multiple="">
                                                         <option disabled>Select Mode of Course</option>
@@ -630,9 +630,8 @@
                                                     <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
                                                         required multiple="">
                                                         <option disabled>Select Mode of Course</option>
-
+                                                            
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
-                                                        
                                                             <option value="{{ $value }}" >
                                                                 {{ $value }}</option>
                                                         @endforeach

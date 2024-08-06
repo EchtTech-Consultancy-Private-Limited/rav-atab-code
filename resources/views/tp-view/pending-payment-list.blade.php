@@ -251,7 +251,7 @@
                                             <div class="table-responsive"
                                                 style="width:100%; overflow:hidden; padding-bottom:20px;">
                                                 <table class="table table-responsive"
-                                                    style="width:100%; overflow:hidden;" id="dataTableMain">
+                                                    style="width:100%; overflow:hidden;" id="dataTableMain-pending">
                                                     <thead>
                                                         <tr>
                                                             <th> Application ID </th>

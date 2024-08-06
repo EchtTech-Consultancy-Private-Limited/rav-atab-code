@@ -201,9 +201,6 @@ class SummaryController extends Controller
         $is_final_submit = false;
        }
 
-
-
-           
         return view('assessor-summary.on-site-view-summary',compact('summertReport', 'no_of_mandays','final_data','is_final_submit','assessor_name','assessement_way','assessor_assign','improvement_form_data','nc_remarks_onsite'));
     }
 
@@ -714,6 +711,7 @@ class SummaryController extends Controller
                 $dataImprovement['signatures']=$request['signatures'][$key]??'N/A';
                 $dataImprovement['signatures_of_team_leader']=$request->signatures_of_team_leader??'N/A';
                 $dataImprovement['assessee_org']=$request['improve_assessee_org'][$key]??'N/A';
+                $dataImprovement['brief_summary']=$request['brief_summary'][$key]??'N/A';
                 $create_onsite_final_summary_report=DB::table('assessor_improvement_form')->insert($dataImprovement);
                 }
 

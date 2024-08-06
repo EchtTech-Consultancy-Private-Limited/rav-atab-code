@@ -58,9 +58,9 @@
                         </li>
                         <li class="breadcrumb-item active"> View Previous Applications </li>
                     </ul>
-                    @if($is_final_submit)
-                        <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary ">View Final Summary </a>
-                    @endif
+                {{--@if($is_final_submit)
+                    <a href="{{ url('application-course-summaries').'?application='.$spocData->id}}" class="float-left btn btn-primary ">View Final Summary </a>
+                @endif --}}
                     <div class="float-right">
                         <a href="{{ url('level-first/tp/application-list') }}" type="button" class="btn btn-primary">Back
                         </a>
@@ -310,7 +310,6 @@
                                                                     value="{{$ApplicationCourses['course']->id}}">
                                                                 <input type="hidden" name="doc_sr_code" value="{{$doc->doc_sr_code}}">
                                                                 <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
-
                                                                 @if($doc->nc_show_status==0)
                                                                 <a target="_blank" title="{{$doc->doc_file_name}}"
                                                                     href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"

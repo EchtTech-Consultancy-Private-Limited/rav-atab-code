@@ -867,7 +867,7 @@
             $('#targetemail').html('sending..');
 
             $.ajax({
-                url: '{{ url(' / sendEmailOtp ') }}',
+                url: '{{ url('/sendEmailOtp') }}',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
