@@ -2213,7 +2213,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     $item->level_id = $request->level_id;
     $item->user_id = Auth::user()->id;
     $item->amount = $request->amount;
-    $item->other_country_amount = $get_payment_list->dollar_fee??null;
+    $item->other_country_payment = $get_payment_list->dollar_fee??null;
     $item->payment_date = date("d-m-Y");
     $item->payment_mode = $request->payment;
     $item->payment_transaction_no = $transactionNumber;
