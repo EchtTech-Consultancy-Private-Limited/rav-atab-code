@@ -64,12 +64,14 @@ class SuperAdminApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                     
                 ])
                 ->first();
                 $last_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])
                 ->latest('id')
                 ->first();
@@ -77,12 +79,14 @@ class SuperAdminApplicationController extends Controller
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])
                 ->where('status',2)
                 ->sum('amount');
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])
                 ->where('status',2)
                 ->count();

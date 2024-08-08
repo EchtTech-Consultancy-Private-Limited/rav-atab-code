@@ -214,7 +214,8 @@ class TPApplicationController extends Controller
 
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
-                    'payment_ext'=>null
+                    'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->get();
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
@@ -1649,6 +1650,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->get();
                 $additional_payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
