@@ -188,7 +188,7 @@ class ApplicationDurationCaculate {
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
        $daysCount = strtotime(date('Y-m-d'))-strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
-       if($application_time->number_of_days ==1){
+       if(isset($application_time->number_of_days) && $application_time->number_of_days ==1){
             $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
        }else{
             $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at. ' + '.$application_time->number_of_days.' days')));
