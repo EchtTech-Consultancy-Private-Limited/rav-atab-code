@@ -37,6 +37,7 @@ class SuperAdminApplicationController extends Controller
         ->whereIn('a.payment_status',[2,3,5])
         ->Orwhere('a.second_payment',6)
         ->orderBy('a.id','desc')
+        ->where('region','ind')
         ->get();
         // dd($application);
         $final_data=array();
@@ -973,6 +974,8 @@ class SuperAdminApplicationController extends Controller
                         $data['valid_till'] = $valid_till;
                         $data['level_id'] = $get_application->level_id;
                         DB::table('tbl_certificate')->insert($data);
+
+                        
                         /*end here*/ 
 
                         /*To show docs to TP*/ 

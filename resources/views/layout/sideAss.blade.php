@@ -49,14 +49,16 @@
             @if(Auth::user()->assessment==1)
                 <?php
                     $url = "desktop/application-list";
+                    $int_url = "/international-assessor/desktop?type=other-world";
                 ?>
             @else
             <?php
                     $url = "onsite/application-list";
+                    $int_url = "/international-assessor/onsite?type=other-world"
                 ?>
             @endif
 
-            <li  class="{{ (Request::is($url) ||  Request::is('internationl-accesser') )?'active':''}}" >
+            <li  class="{{ (Request::is($url) ||  Request::is('international-assessor') )?'active':''}}" >
                 <a href="#" onClick="return false;" class="menu-toggle" >
                 <i class="fa fa-cog"></i>
                     <span>Manage Application</span>
@@ -67,8 +69,8 @@
                         <a  href="{{ url($url) }}">National Application</a>
                     </li>
 
-                    <li class="{{ Request::is('internationl-accesser')?'active':''}}">
-                        <a  href="{{ url('/internationl-accesser') }}">International Application</a>
+                    <li class="{{ Request::is('international-assessor')?'active':''}}">
+                        <a  href="{{ url($int_url) }}">International Application</a>
                     </li>
 
                 </ul>

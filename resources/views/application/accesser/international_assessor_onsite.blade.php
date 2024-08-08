@@ -20,7 +20,6 @@
         @endif
         @include('layout.rightbar')
     </div>
-   
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -28,7 +27,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <ul class="breadcrumb breadcrumb-style">
                             <li class="breadcrumb-item">
-                                <h4 class="page-title">International Application</h4>
+                                <h4 class="page-title">National Application</h4>
                             </li>
                             <li class="breadcrumb-item bcrumb-1">
                                 <a href="{{ url('/dashboard') }}">
@@ -37,17 +36,17 @@
                             <li class="breadcrumb-item bcrumb-2">
                                 <a href="#" onClick="return false;">Dashboard</a>
                             </li>
-                            <li class="breadcrumb-item active">International Application</li>
+                            <li class="breadcrumb-item active">National Application</li>
                         </ul>
                         <div class="card">
                         <div class="profile-tab-box">
                             <div class="p-l-20">
                                 <ul class="nav ">
                                     <li class="nav-item tab-all p-l-20">
-                                        <a class="nav-link {{request("type")=="other-world"?'active':''}}" href="{{url('international-assessor/desktop?type=other-world')}}">Rest of the World</a>
+                                        <a class="nav-link {{request("type")=="other-world"?'active':''}}" href="{{url('international-assessor/onsite?type=other-world')}}">Rest of the World</a>
                                     </li>
                                     <li class="nav-item tab-all">
-                                        <a class="nav-link  {{request("type")=="saarc"?'active':''}}" href="{{url('international-assessor/desktop?type=saarc')}}" >SAARC Countries</a>
+                                        <a class="nav-link  {{request("type")=="saarc"?'active':''}}" href="{{url('international-assessor/onsite?type=saarc')}}" >SAARC Countries</a>
                                     </li>
 
                                 </ul>
@@ -89,7 +88,7 @@
                                     <tr>
                                         <th>Sr.No</th>
                                         <th>Level </th>
-                                        <th>Application No. </th>
+                                        <th>Application No.</th>
                                         <th>Courses</th>
                                         <th>Total Fee</th>
                                         <th> Payment Date </th>
@@ -137,12 +136,10 @@
                                                   
                                                 </td>
                                                 <td>
-                                                    @php
-                                                        $status = getApplicationStatus($item->application_list->status,"Desktop Assessor");
-                                                        
+                                                @php
+                                                        $status = getApplicationStatus($item->application_list->status,"Onsite Assessor");
                                                     @endphp
                                                 <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
-                                                
                                                 </td>
                                                 <td>
                                                 @if($item->application_list->valid_from)
@@ -159,7 +156,14 @@
                                                 @endif
                                                 </td>
                                                     <td>
-                                                        <a href="{{ url('/desktop/application-view', dEncrypt($item->application_list->id)) }}"
+                                                        <div>
+                                                            @if(isset($item->application_duration_accept_doc->applicationAction) && $item->application_duration_accept_doc->applicationAction =='Y')
+                                                            <a class="btn btn-tbl-edit w-100 border-bottom border">          
+                                                                {{$item->application_duration_accept_doc->applicationDayTime}} days Left
+                                                            </a>
+                                                            @endif
+                                                        </div>
+                                                        <a href="{{ url('/onsite/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
                                                                 class="material-icons">visibility</i></a>
                                                     </td>

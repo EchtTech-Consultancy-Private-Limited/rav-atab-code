@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\application_controller\DownloadPDFCertificateController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
@@ -39,6 +40,11 @@ use App\Http\Controllers\application_controller\SurveillanceController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/certificate-demo', function () {
+    
+    return view('certificate.certificate');
+});
+
 Route::get('/optimize-clear', function () {
     $exitCode = Artisan::call('optimize:clear');
     return 'Optimized successfully';
@@ -109,6 +115,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
   
     Route::get('/admin/desktop/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfDesktop'])->name('admindesktoppdfdownload');
     Route::get('/admin/onsite/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfOnsite'])->name('adminonsitepdfdownload');
+    Route::get('/download/pdf/certificate/{applicaion_id}',[DownloadPDFCertificateController::class,'downloadPDFCertificate']);
+    
     /*end here*/ 
      
 
@@ -169,7 +177,8 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     //Application
     Route::get('/internationl-page', [SuperAdminApplicationController::class, 'getInternationApplicationList']);
     Route::get('/nationl-page', [applicationController::class, 'nationl_page']);
-    Route::get('/internationl-accesser', [applicationController::class, 'internationl_accesser']);
+    Route::get('/international-assessor/desktop', [DesktopApplicationController::class, 'getInternationalApplicationList']);
+    Route::get('/international-assessor/onsite', [OnsiteApplicationController::class, 'getInternationalApplicationList']);
     Route::get('/nationl-accesser', [applicationController::class, 'nationl_accesser']);
     Route::get('/nationl-secretariat', [SecretariatController::class, 'nationl_secretariat']);
     Route::get('/internationl-secretariat', [AdminApplicationController::class, 'getInternationalApplicationList']);

@@ -183,6 +183,7 @@ class ApplicationDurationCaculate {
             'assessor_id' => $assID,
             'assessor_type' => 'desktop'
         ])->latest()->first();
+       if(!empty($assessor_assign)){
        $obj = new \stdclass;
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
@@ -200,6 +201,10 @@ class ApplicationDurationCaculate {
            }
         }
         return $obj;
+      }else{
+        return null;
+      }
+
     }
     function calculateTimeDateDesktopAssessorVerifyDoc($assID, $role_id, $userAction, $app) {
        
@@ -214,6 +219,7 @@ class ApplicationDurationCaculate {
             'assessor_id' => $assID,
             'assessor_type' => 'desktop'
         ])->latest()->first();
+        if(!empty($assessor_assign)){
        $obj = new \stdclass;
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
@@ -231,6 +237,9 @@ class ApplicationDurationCaculate {
            }
         }
         return $obj;
+      }else{
+        return null;
+      }
     }
     /****** End Desktop Assessor Verify Document *******/
 
@@ -248,6 +257,7 @@ class ApplicationDurationCaculate {
             'assessor_id' => $assID,
             'assessor_type' => 'onsite'
         ])->latest()->first();
+       if(!empty($assessor_assign)){
        $obj = new \stdclass;
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
@@ -265,6 +275,9 @@ class ApplicationDurationCaculate {
            }
         }
         return $obj;
+     }else{
+        return null;
+     }
     }
     function calculateTimeDateOnsiteAssessorVerifyDoc($assID, $role_id, $userAction, $app) {
        
@@ -279,6 +292,7 @@ class ApplicationDurationCaculate {
             'assessor_id' => $assID,
             'assessor_type' => 'onsite'
         ])->latest()->first();
+        if(!empty($assessor_assign)){
        $obj = new \stdclass;
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
@@ -296,6 +310,9 @@ class ApplicationDurationCaculate {
            }
         }
         return $obj;
+     }else{
+        return null;
+     }
     }
     /****** End Onsite Assessor Verify Document ********/
 

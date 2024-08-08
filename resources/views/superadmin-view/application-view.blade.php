@@ -73,13 +73,14 @@
               </div>
                     <div class="col-md-6 mb-3">
                     <div class="float-right">
-                   
+                    
+                @if($is_final_submit && $spocData->level_id==3  && $spocData->approve_status==1)
+                    <a href="{{url('download/pdf/certificate/'.$spocData->id)}}" class="btn btn-primary">Download Certificate</a>
+                @endif
                 @if($is_final_submit && $spocData->level_id==3 && $spocData->mom_file_name!=null && $spocData->approve_status==2)
                 
                     <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id))}}" class="float-left btn btn-primary btn-sm"> View MoM
                     </a>    
-                
-                   
                 @endif
               <!-- signed copy -->
               @if($spocData->signed_copy_onsite!=null)

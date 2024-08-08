@@ -25738,3 +25738,279 @@ p.ref-number b{ font-weight: 600;}
         height: 180px;
         white-space: pre-line;
 }
+
+
+/* certificate css */
+
+
+.certificate-box {
+    margin: 50px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-box {
+    height: 1132px;
+    background: url(./bg_img.png);
+    width: 800px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Roboto';
+    box-shadow: 0px 0px 12px #ddd;
+}
+
+.content-box {
+    padding: 10% 6% 0;
+    text-align: center;
+}
+.content-box.aiia-scope {
+    padding: 5% 6% 0;
+    text-align: center;
+}
+.heading-light {
+    padding-bottom: 20px;
+    color: #ad8d42;
+    font-weight: 400;
+    letter-spacing: 3px;
+    font-size: 36px;
+}
+
+h2.heading-bold {
+    color: #ad8d42;
+    letter-spacing: 5px;
+    font-size: 52px;
+    font-weight: bold;
+    font-family: inherit;
+    padding-bottom: 16px;
+}
+.certificate-box h1, .certificate-box h2, .certificate-box h3{
+    margin: 0;
+ }
+p.text-sm {
+    padding-bottom: 05px;
+    font-size: 22px;
+    /* font-weight: 100; */
+    color: #333;
+}
+.aiia-container {
+    margin: 0 0px 12px;
+    border-bottom: 2.5px solid #c9a34e;
+    padding: 12px 12px 6px;
+
+}
+h3.aiia {
+    color: #ad8d42;
+    font-size: 29px;
+    padding: 11px 0 8px;
+    letter-spacing: 1px;
+    font-family: 'Times New Roman', serif;
+}
+h4.aiia-address {
+    font-size: 18px;
+    font-family: 'Merriweather', serif;
+    font-weight: 900;
+}
+.center-content{
+    padding: 0 60px;
+}
+
+p.content-para {
+    font-size: 20px;
+    line-height: 1.6;
+    padding: 0 25px;
+    margin-bottom: 25px;
+    font-family: 'Trebuchet MS', sans-serif;
+    color: #000;
+}
+p.content-para b {
+    font-size: 22px;
+    font-weight: bolder;
+}
+.validity {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.validity p {
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+.approval img {
+    width: 85px;
+}
+.approval {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.approval {
+    display: flex;
+    justify-content: space-between;
+    padding: 27px 45px;
+}
+.approval.certificate {
+    padding: 56px 45px 55px;
+}
+.sign-img {
+    border-bottom: 1px solid #000;
+    padding: 4px;
+}
+.director-name{
+    font-size: 15px;
+    line-height: 1.4;
+}
+.director-name span:first-child{
+    color: #ad8d47;
+    font-size: 18px;
+    font-weight: 600;
+}
+.certificate-atab-logo {
+    padding-bottom: 35px;
+}
+.certificate-atab-logo img{
+    width: 160px;
+}
+
+/* aiaa sope css  */
+.content-box.aiia-scope{
+    position: relative;
+    height: -webkit-fill-available;
+}
+.content-box.aiia-scope .title {
+    font-size: 22px;
+    color: #ad8d42;
+    font-weight: bolder;
+    letter-spacing: 2px;
+}
+
+.bg-box2 {
+    height: 1132px;
+    background: url(../images/certificate/AIIA_SCOPE_CERTIFICATE.png);
+    width: 800px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Roboto';
+    box-shadow: 0px 0px 12px #ddd;
+}
+
+.certificate-no {
+    display: flex;
+    justify-content: end;
+}
+
+.certificate-no p{
+    font-size: 15px;
+    padding: 8px 0;
+    font-weight: 600;
+}
+
+.detail p{
+    font-size: 13px;
+    text-align: left;
+    font-weight: 600;
+    margin: 10px 0;
+    display: flex;
+    gap: 13px;
+}
+
+.detail p:first-child span:nth-child(2){
+     font-weight: 700;
+}
+.detail p:nth-child(2) span:nth-child(2){
+     font-weight: 400;
+}
+.detail p:first-child span:nth-child(1){
+     font-weight: 600;
+     white-space: nowrap;
+}
+.detail p span:nth-child(2){
+    border-bottom: 1px solid #ddb149;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+.aiia-scope-table table{
+    width: 100%;
+    margin-top: 26px;
+}
+.aiia-scope-table table thead th{
+    background-color: #a88940;
+    padding: 7px 4px;
+    font-size: 14px;
+    border-bottom: 2px solid #edb124;
+}
+
+.aiia-scope-table table tbody tr td:nth-child(1), .aiia-scope-table table tbody tr td:nth-child(3){
+    background-color: #faf7f0;
+}
+.aiia-scope-table table tbody tr td:nth-child(2), .aiia-scope-table table tbody tr td:nth-child(4){
+    background-color: #e6eef6;
+}
+.aiia-scope-table table tr td{
+    padding: 7px 4px;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+
+.aiia-scope-table table tr th{
+    padding: 7px 4px;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    
+}
+.aiascope-sign p{
+    font-size: 15px;
+}
+.aiascope-sign-container{
+    position: absolute;
+    width: -webkit-fill-available;
+    bottom: 29px;
+    left: 8px;
+}
+
+.qr{
+    margin-top: -84px;
+}
+
+.header-logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0px 0 18px;
+    margin-bottom: 25px;
+}
+.header-logo.certificate-footer {
+    justify-content: center;
+}
+
+.header-logo img{
+    width: 80px;
+}
+h1.header-title {
+    font-size: 18px;
+    color: #9f0e00;
+    line-height: 1.5;
+    font-weight: 900;
+}
+
+.header-content p{
+    font-size: 11px;
+    line-height: 1.3;
+    color: #333594;
+    font-weight: 500;
+}
+.header-content p a{
+    font-size: 11px;
+    line-height: 1.3;
+    color: #333594;
+    font-weight: 500;
+}
+
+.atab-logo img{
+    width: 110px;
+}

@@ -840,7 +840,6 @@ class ApplicationCoursesController extends Controller
     {
 
 
-        
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 
