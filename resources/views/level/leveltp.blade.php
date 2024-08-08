@@ -364,29 +364,53 @@
                                              <br>
                                          </div>
                                          <div class="col-md-12 ml-auto" style="text-align: right">
-                                         @if (request()->path() == 'level-first')
+                                         @if (in_array(request()->path(),['level-first','renewal/level-first','surveillance/level-first']))
                                             @php
-                                                $url=url('/create-new-applications/');
+                                                if(request('q')=="renewal")
+                                                {
+                                                    $url=url('renewal/create-new-applications?sr_prev_id='.request('sr_prev_id').'&q=renewal');
+                                                }else if(request('q')=='surveillance'){
+                                                    $url=url('surveillance/create-new-applications?sr_prev_id='.request('sr_prev_id').'&q=surveillance');
+                                                
+                                                }else{
+                                                    $url=url('/create-new-applications/');
+                                                }
+                                                
                                                 
                                             @endphp
-                                        @elseif(request()->path() == 'level-second')
+                                        @elseif(in_array(request()->path(),['level-second','renewal/level-second','surveillance/level-second']))
                                         @php
-                                                $url=url('/create-level-2-new-applications/');
+                                                 if(request('q')=="renewal")
+                                                {
+                                                    $url=url('renewal/create-level-2-new-applications?sr_prev_id='.request('sr_prev_id').'&q=renewal');
+                                                }else if(request('q')=='surveillance'){
+                                                    $url=url('surveillance/create-level-2-new-applications?sr_prev_id='.request('sr_prev_id').'&q=surveillance');
+                                                
+                                                }else{
+                                                    $url=url('/create-level-2-new-applications/');
+                                                }
                                                 
                                             @endphp
-                                        @elseif(request()->path() == 'level-third')
+                                        @elseif(in_array(request()->path(),['level-third','renewal/level-third','surveillace/level-third']))
                                         @php
-                                                $url=url('/create-level-3-new-applications/');
-                                                
+                                                if(request('q')=="renewal")
+                                                {
+                                                    $url=url('renewal/create-level-3-new-applications?sr_prev_id='.request('sr_prev_id').'&q=renewal');
+                                                }else if(request('q')=='surveillance'){
+                                                    $url=url('surveillance/create-level-3-new-applications?sr_prev_id='.request('sr_prev_id').'&q=surveillance');
+                                                }else{
+                                                    $url=url('/create-level-3-new-applications/');
+                                                }
                                             @endphp
                                         @elseif(request()->path() == 'level-fourth')
                                             Level Fourth
                                         @endif
-                                            <form action="{{ $url??"" }}"  method="get">
+                                            <form action="#"  method="get">
                                                  <input type="checkbox" name="level_proceed" id="level_proceed">
                                                  <label for="term_and_conditions" class="ps-1">Terms And Condition</label>
-                                                 <input type="submit" value="Process" id="t_a_c" disabled class="btn btn-primary btn-sm ms-3">
                                           </form>
+                                          <a href="{{$url??''}}" id="t_a_c" disabled class="btn btn-primary btn-sm ms-3">Process</a>
+
                                          </div>
                                      </div>
                                  </div>

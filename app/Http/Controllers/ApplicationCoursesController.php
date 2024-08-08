@@ -68,6 +68,8 @@ class ApplicationCoursesController extends Controller
     
     public function  storeNewApplication(Request $request)
     {
+        // dd($request->all());
+        
         $this->validate(
             $request,
             [
@@ -85,6 +87,16 @@ class ApplicationCoursesController extends Controller
         $saarc_country = [1,19,26,133,154,167,208];
         $india = [101];
         $region="";
+        // $getcountryCode = DB::table('countries')->where([['id',Auth::user()->country]])->first();
+
+        // if($getcountryCode->currency=='INR' || $getcountryCode->currency=='USD'){
+        //     $region = $getcountryCode->currency;
+        // }else if(in_array(Auth::user()->country,$saarc_country)){
+        //     $region ="saarc";
+        // }else{
+        //     $region ="other";
+        // }
+
         if(in_array(Auth::user()->country,$india)){
             $region ="ind";
         }else if(in_array(Auth::user()->country,$saarc_country)){
@@ -103,6 +115,8 @@ class ApplicationCoursesController extends Controller
                 $data['person_name'] = $request->Person_Name;
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
+                $data['renewal_surveillance_type'] = $request->sr_type??null;
+                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
                 $data['designation'] = $request->designation;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
@@ -118,12 +132,19 @@ class ApplicationCoursesController extends Controller
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
+                $data['renewal_surveillance_type'] = $request->sr_type??null;
+                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
                 $data['region'] = $region;
                 $application = new TblApplication($data);
                 $application->save();
+                // dd($application );
+                if($request->sr_type=='renewal' || $request->sr_type=='surveillance'){
+                    $type = $request->sr_type=='renewal'?'Already renewed.':'Already surveillance.';
+                    DB::table('tbl_application')->where(['id'=>$application->sr_prev_id])->update(['renewal_surveillance_type'=>$type]);
+                }
 
                 $create_new_application = $application->id;
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
@@ -171,6 +192,8 @@ class ApplicationCoursesController extends Controller
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
+                $data['renewal_surveillance_type'] = $request->sr_type??null;
+                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
@@ -184,6 +207,8 @@ class ApplicationCoursesController extends Controller
                 $data['person_name'] = $request->Person_Name;
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
+                $data['renewal_surveillance_type'] = $request->sr_type??null;
+                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
                 $data['designation'] = $request->designation;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
@@ -237,6 +262,8 @@ class ApplicationCoursesController extends Controller
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
+                $data['renewal_surveillance_type'] = $request->sr_type??null;
+                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
@@ -251,6 +278,8 @@ class ApplicationCoursesController extends Controller
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
+                $data['renewal_surveillance_type'] = $request->sr_type??null;
+                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
@@ -811,7 +840,6 @@ class ApplicationCoursesController extends Controller
     {
 
 
-        
         $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
         $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
 

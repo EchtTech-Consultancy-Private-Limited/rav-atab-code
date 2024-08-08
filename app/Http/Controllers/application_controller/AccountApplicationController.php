@@ -22,9 +22,10 @@ class AccountApplicationController extends Controller
     public function getApplicationList(){
         
         $application = DB::table('tbl_application')
-                            ->whereIn('payment_status',[1,2,3,5])
-                            ->orderBy('id','desc')
-                            ->get();
+                    ->where('region','ind')
+                    ->whereIn('payment_status',[1,2,3,5])
+                    ->orderBy('id','desc')
+                    ->get();
         $final_data=array();
         foreach($application as $app){
             $obj = new \stdClass;

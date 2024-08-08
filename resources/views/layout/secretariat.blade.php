@@ -55,7 +55,7 @@
                     </li>
 
                     <li class="{{ Request::is('internationl-secretariat')?'active':''}}">
-                        <a  href="{{ url('/internationl-secretariat') }}">International Application</a>
+                        <a  href="{{ url('/internationl-secretariat/?type=other-world') }}">International Application</a>
                     </li>
 
                 </ul>

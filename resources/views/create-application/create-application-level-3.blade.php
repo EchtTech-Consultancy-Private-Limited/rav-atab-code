@@ -298,6 +298,8 @@ active @endif"
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <input name="sr_prev_id" type="hidden" name="" value="{{request('sr_prev_id')}}">
+                                                                <input name="sr_type" type="hidden" name="" value="{{request('q')}}">
                                                                 <input type="hidden" name="user_id"
                                                                     value="{{ Auth::user()->id }}">
                                                                 <input type="hidden" name="state_id"

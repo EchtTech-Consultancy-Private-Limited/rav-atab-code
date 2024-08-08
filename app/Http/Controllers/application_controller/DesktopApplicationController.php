@@ -31,6 +31,7 @@ class DesktopApplicationController extends Controller
         $application = DB::table('tbl_application')
             ->whereIn('payment_status', [1, 2, 3, 5])
             ->whereIn('id', $assessor_application)
+            ->where('region','ind')
             ->orderBy('id', 'desc')
             ->get();
         foreach ($application as $app) {
@@ -47,14 +48,17 @@ class DesktopApplicationController extends Controller
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
                 'payment_ext'=>null,
+                'pay_status'=>'Y'
             ])->latest('created_at')->first();
             $payment_amount = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
                 'payment_ext'=>null,
+                'pay_status'=>'Y'
             ])->sum('amount');
             $payment_count = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
                 'payment_ext'=>null,
+                'pay_status'=>'Y'
             ])->count();
             if ($payment) {
                 $obj->payment = $payment;
@@ -74,6 +78,72 @@ class DesktopApplicationController extends Controller
         }
        // dd($final_data);
         return view('desktop-view.application-list', ['list' => $final_data]);
+    }
+
+    public function getInternationalApplicationList(Request $request)
+    {
+        if($request->get('type')=='other-world'){
+            $region_type = 'other';
+        }else {
+            $region_type = 'saarc';
+        }
+        
+        $assessor_id = Auth::user()->id;
+        $assessor_application = DB::table('tbl_assessor_assign')
+            ->where('assessor_id', $assessor_id)
+            ->pluck('application_id')->toArray();
+        $final_data = array();
+        $application = DB::table('tbl_application')
+            ->whereIn('payment_status', [1, 2, 3, 5])
+            ->whereIn('id', $assessor_application)
+            ->where('region',$region_type)
+            ->orderBy('id', 'desc')
+            ->get();
+            
+        foreach ($application as $app) {
+            $obj = new \stdClass;
+            $obj->application_list = $app;
+            $course = DB::table('tbl_application_courses')->where([
+                'application_id' => $app->id,
+            ])
+                ->whereNull('deleted_at')
+                ->count();
+            if ($course) {
+                $obj->course_count = $course;
+            }
+            $payment = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+                'pay_status'=>'Y'
+            ])->latest('created_at')->first();
+            $payment_amount = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+                'pay_status'=>'Y'
+            ])->sum('amount');
+            $payment_count = DB::table('tbl_application_payment')->where([
+                'application_id' => $app->id,
+                'payment_ext'=>null,
+                'pay_status'=>'Y'
+            ])->count();
+            if ($payment) {
+                $obj->payment = $payment;
+                $obj->payment->payment_count = $payment_count;
+                $obj->payment->payment_amount = $payment_amount;
+            }
+
+            $appTime = new ApplicationDurationCaculate;
+            $application_duration_accept_doc =$appTime->calculateTimeDateDesktopAssessorAcceptDoc(auth::user()->id, auth::user()->role,'recieved_document_same_assign_date',$app);
+            $obj->application_duration_accept_doc = $application_duration_accept_doc;
+
+            $application_duration_verify_doc =$appTime->calculateTimeDateDesktopAssessorVerifyDoc(auth::user()->id, auth::user()->role,'document_check',$app);
+            $obj->application_duration_verify_doc = $application_duration_verify_doc;
+
+
+            $final_data[] = $obj;
+        }
+       // dd($final_data);
+       return view('application.accesser.internation_accesser',['list' => $final_data]);
     }
     /** Whole Application View for desktop */
     public function getApplicationView($id)

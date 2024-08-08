@@ -170,13 +170,13 @@
                                                     <td class="p-0-lg1">
                                                     <div class="d-flex justify-content-between gap-1 p-1 training-provider-action">
                                                         @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y')
-                                                        <a class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
+                                                        <a href="{{url($item->renewal_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
                                                             For Renewal
                                                         </a>
                                                         @endif
 
                                                         @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y')
-                                                        <a class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
+                                                        <a href="{{url($item->surveillance_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
                                                             For Surveillance
                                                         </a>
                                                         @endif

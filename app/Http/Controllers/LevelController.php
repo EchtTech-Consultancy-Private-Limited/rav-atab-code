@@ -379,6 +379,7 @@ class LevelController extends Controller
 
     public function level1tp(Request $request, $id = null)
     {
+        
         if ($request->input('display') == 'applications') {
             Session::put('session_for_redirections', 'application-payment');
         }

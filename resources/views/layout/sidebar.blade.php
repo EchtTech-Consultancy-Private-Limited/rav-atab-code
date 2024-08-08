@@ -92,7 +92,7 @@
                         </li>
 
                         <li class="{{ Request::is('internationl-page')?'active':''}}">
-                            <a  href="{{ url('/internationl-page') }}">International Application</a>
+                            <a  href="{{ url('/internationl-page?type=other-world') }}">International Application</a>
                         </li>
 
                     </ul>
