@@ -968,6 +968,7 @@ class SuperAdminApplicationController extends Controller
                         $data = [];
                         $data['application_id'] = $app_id;
                         $data['refid'] = $get_application->refid;
+                        $data['user_id']  = $get_application->tp_id;
                         $data['certificate_no'] = 1;
                         $data['certificate_file'] = 1;
                         $data['valid_from'] = $valid_from;
