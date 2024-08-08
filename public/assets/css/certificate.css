@@ -2,20 +2,25 @@
 
 /* certificate css */
 
+*{
+    margin: 0;
+    padding: 0;
+}
+
 .certificate-box p{
     margin: 0;
 }
-.certificate-box {
-    margin: 50px auto;
+/* .certificate-box {
+    margin: 0px auto;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
+} */
+    
 .bg-box {
-    height: 1132px;
+    height: 1123px;
     background: url(../images/certificate/bg_img.png);
-    width: 800px;
+    width: 794px;
     background-repeat: no-repeat;
     background-size: cover;
     font-family: 'Roboto';
@@ -31,7 +36,7 @@
     text-align: center;
 }
 .heading-light {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     color: #ad8d42;
     font-weight: 400;
     letter-spacing: 3px;
@@ -44,7 +49,7 @@ h2.heading-bold {
     font-size: 52px;
     font-weight: bold;
     font-family: inherit;
-    padding-bottom: 16px;
+    padding-bottom: 10px;
 }
 .certificate-box h1, .certificate-box h2, .certificate-box h3{
     margin: 0;
@@ -89,33 +94,41 @@ p.content-para b {
     font-size: 22px;
     font-weight: bolder;
 }
-.validity {
+/* .validity {
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
-}
+} */
 
 .validity p {
     font-size: 15px;
     line-height: 1.5;
     font-weight: 500;
+    font-family: 'Trebuchet MS', sans-serif;
 }
 .approval img {
     width: 85px;
 }
-.approval {
+
+.approval .logo-r img{
+width: 100px;
+margin-top: 10px;
+}
+/* .approval {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+} */
 
-.approval {
+/* .approval {
     display: flex;
     justify-content: space-between;
     padding: 27px 45px;
-}
+} */
 .approval.certificate {
-    padding: 37px 45px 47px;
+    padding: 60px 35px 60px;
+    margin-top: 40px;
+
 }
 .sign-img {
     border-bottom: 1px solid #000;
@@ -251,15 +264,24 @@ p.content-para b {
 }
 .header-logo.certificate-footer {
     justify-content: center;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.header-content{
+    padding-top: 60px;
+    text-align: center;
+    width: 100%;
 }
 
 .header-logo img{
     width: 80px;
 }
 h1.header-title {
-    font-size: 18px;
+    font-size: 16px;
     color: #9f0e00;
     line-height: 1.5;
+    white-space: nowrap;
     font-weight: 900;
 }
 
@@ -278,6 +300,15 @@ h1.header-title {
 
 .atab-logo img{
     width: 110px;
+}
+
+.width-val-50{
+    width: 50%;
+    float: left;
+}
+.width-img-30{
+    width: 33%;
+    float: left;
 }
 
 /* end here */
