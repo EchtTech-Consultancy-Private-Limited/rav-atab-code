@@ -68,7 +68,7 @@ class ApplicationCoursesController extends Controller
     
     public function  storeNewApplication(Request $request)
     {
-        // dd($request->all());
+        
         
         $this->validate(
             $request,
@@ -107,7 +107,7 @@ class ApplicationCoursesController extends Controller
         
         $application_date = Carbon::now()->addDays(364);
         /*check if application already created*/
-
+        
             if($request->application_id && $request->previous_data==1){
                 $data = [];
                 $data['level_id'] = 1;
@@ -116,7 +116,9 @@ class ApplicationCoursesController extends Controller
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
                 $data['renewal_surveillance_type'] = $request->sr_type??null;
-                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                if(isset($request->sr_prev_id)){
+                    $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                }
                 $data['designation'] = $request->designation;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
@@ -133,7 +135,10 @@ class ApplicationCoursesController extends Controller
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
                 $data['renewal_surveillance_type'] = $request->sr_type??null;
-                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                
+                if(isset($request->sr_prev_id)){
+                    $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                }
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
@@ -193,7 +198,10 @@ class ApplicationCoursesController extends Controller
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
                 $data['renewal_surveillance_type'] = $request->sr_type??null;
-                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                if(isset($request->sr_prev_id)){
+                    $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                }
+
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
@@ -208,7 +216,10 @@ class ApplicationCoursesController extends Controller
                 $data['email'] =  $request->Email_ID;
                 $data['contact_number'] = $request->Contact_Number;
                 $data['renewal_surveillance_type'] = $request->sr_type??null;
-                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                if(isset($request->sr_prev_id)){
+                    $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                }
+
                 $data['designation'] = $request->designation;
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
@@ -263,7 +274,10 @@ class ApplicationCoursesController extends Controller
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
                 $data['renewal_surveillance_type'] = $request->sr_type??null;
-                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                if(isset($request->sr_prev_id)){
+                    $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                }
+
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
@@ -279,7 +293,10 @@ class ApplicationCoursesController extends Controller
                 $data['contact_number'] = $request->Contact_Number;
                 $data['designation'] = $request->designation;
                 $data['renewal_surveillance_type'] = $request->sr_type??null;
-                $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                if(isset($request->sr_prev_id)){
+                    $data['sr_prev_id'] = dDecrypt($request->sr_prev_id)??null;
+                }
+
                 $data['tp_ip'] = getHostByName(getHostName());
                 $data['user_type'] = 'tp';
                 $data['application_date'] = $application_date;
