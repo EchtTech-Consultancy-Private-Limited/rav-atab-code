@@ -3425,6 +3425,7 @@ public function adminReturnMom(Request $request)
                      /*Certificate generation*/ 
                      $data = [];
                      $data['application_id'] = $app_id;
+                     $data['user_id']  = $get_application->tp_id;
                      $data['refid'] = $get_application->refid;
                      $data['certificate_no'] = 1;
                      $data['certificate_file'] = 1;
