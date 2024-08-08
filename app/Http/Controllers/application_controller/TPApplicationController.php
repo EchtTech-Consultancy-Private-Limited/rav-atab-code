@@ -120,7 +120,12 @@ class TPApplicationController extends Controller
         $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
         $decoded_json_courses_doc = json_decode($json_course_doc);
         
-        $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+        $user_data = DB::table('users')->where('users.id',  $application->tp_id)
+        ->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')
+        ->join('countries', 'users.country', '=', 'countries.id')
+        ->join('cities', 'users.city', '=', 'cities.id')
+        ->join('states', 'users.state', '=', 'states.id')
+        ->first();
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
 
             $showSubmitBtnToTP = $this->checkReuploadBtnL1($application->id);
@@ -2190,7 +2195,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     ->count();
    
     if($checkPaymentAlready>1){
-        DB::table('tbl_application')->where('id',$request->Application_id)->upadte(['payment_status'=>6]);
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['payment_status'=>6]);
     }
     
     // dd($checkPaymentAlready);

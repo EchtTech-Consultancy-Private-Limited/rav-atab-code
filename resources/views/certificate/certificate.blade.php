@@ -28,7 +28,8 @@
                <div class="aiia-container">
                 <h3 class="aiia">All India Institute of Ayurveda (AIIA)</h3>
                 <h4 class="aiia-address">
-                    Gautampuri, Sarita Vihar, MathuraRoad, New Delhi-110076
+                    {{$app_details->address}},{{$app_details->city_name}},{{$app_details->state_name}},{{$app_details->country_name}}-{{$app_details->postal}}
+                    <!-- Gautampuri, Sarita Vihar, MathuraRoad, New Delhi-110076 -->
                 </h4>
                </div>
 
@@ -43,16 +44,20 @@
                </p>
 
              </div>
-             
+             @php
+                use \Carbon\Carbon;
+                $formattedValidFrom = Carbon::parse($app_details->valid_from)->format('M d, Y');
+                $formattedValidTill = Carbon::parse($app_details->valid_till)->format('M d, Y');
+            @endphp
              <div class="validity">
                 <div class="width-val-50">
-                    <p><b> Valid from: </b> <span class="value">Feb 28, 2024</span></p>
-                    <p><b>Valid thru: </b> <span class="value">Feb 27, 2027</span></p>
+                    <p><b> Valid from: </b> <span class="value">{{$formattedValidFrom}}</span></p>
+                    <p><b>Valid thru: </b> <span class="value">{{$formattedValidTill}}</span></p>
                 </div>
                 <div class="width-val-50">
                     <p>
                         <b>Certificate No. :</b> <br>
-                        <span class="vlaue">ATAB/AAC/00009/23-24</span>
+                        <span class="vlaue">{{$app_details->certificate_no}}</span>
                     </p>
                 </div>
              </div>
