@@ -45,11 +45,11 @@
              </div>
              
              <div class="validity">
-                <div>
+                <div class="width-val-50">
                     <p><b> Valid from: </b> <span class="value">Feb 28, 2024</span></p>
                     <p><b>Valid thru: </b> <span class="value">Feb 27, 2027</span></p>
                 </div>
-                <div>
+                <div class="width-val-50">
                     <p>
                         <b>Certificate No. :</b> <br>
                         <span class="vlaue">ATAB/AAC/00009/23-24</span>
@@ -58,13 +58,13 @@
              </div>
 
              <div class="approval certificate">
-                <div>
+                <div class="width-img-30">
                     <img src="{{public_path('/assets/images/certificate/qr.png')}}" alt="qr code">
                 </div>
-                <div>
+                <div class="width-img-30 logo-r">
                     <img src="{{public_path('/assets/images/certificate/rava-logo.png')}}" alt="RAV logo">
                 </div>
-                <div class="sign">
+                <div class="sign width-img-30">
                     <div class="sign-img">
                         <img src="{{public_path('/assets/images/certificate/AIIA_SCOPE_CERTIFICATE_sign.png')}}" alt="Dr. Vandana Siroha">
                     </div>
