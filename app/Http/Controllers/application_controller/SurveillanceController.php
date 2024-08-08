@@ -32,6 +32,10 @@ use Carbon\Carbon;
 use PDF;
 use Mail;
 use App\Mail\SendMail;
+use App\Models\TblApplication;
+use App\Models\TblApplicationCourses;
+use App\Http\Traits\PdfImageSizeTrait;
+
 use App\Mail\SendAcknowledgment;
 use App\Mail\AdmintoAssessorSingleFinalMail;
 use App\Mail\assessorAdminFinalApplicationMail;
@@ -54,6 +58,8 @@ use App\Models\AssessorApplication;
 
 class SurveillanceController extends Controller
 {
+    use PdfImageSizeTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -419,6 +425,39 @@ class SurveillanceController extends Controller
         $data = DB::table('users')->where('users.id', $id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
         return view('create-application.create-application-level-3', ['data' => $data, 'applicationData' => $applicationData, 'item' => $item]);
     }
+
+
+
+    
+public function renewalNewCourse($id = null,$refid=null)
+{
+    if($id) $id = dDecrypt($id);
+    if($refid) $refid = dDecrypt($refid);
+    if ($id) {
+        $applicationData = TblApplication::where('id',$id)->latest()->first();
+    }else{
+        $applicationData=null;
+    }
+    $first_application_id = TblApplication::where('refid',$refid)->first();
+    
+    $last_application_id =  $id;
+    
+    $old_courses = TblApplicationCourses::where('application_id',$first_application_id->id)->where('deleted_by_tp',0)->whereNotIn('status',[1,3])->whereNull('deleted_at')->get();
+    
+    // $last_application = TblApplication::where('refid',$refid)->first();
+    $course = TblApplicationCourses::where('application_id', $last_application_id)->whereNull('deleted_at')->get();
+    // dd($course);
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->whereNull('deleted_at')->count();
+    $total_docs = count($course) * 4;
+    
+    $is_show_next_btn = false;
+    if($uploaded_docs==$total_docs){
+        $is_show_next_btn=true;
+    }
+    $original_course_count = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->count();
+    
+    return view('renewal-view.create-course-renewal', compact('applicationData', 'course','original_course_count','old_courses','is_show_next_btn'));
+}
 
     function get_saarc_ids(){
         //Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan and Sri-Lanka

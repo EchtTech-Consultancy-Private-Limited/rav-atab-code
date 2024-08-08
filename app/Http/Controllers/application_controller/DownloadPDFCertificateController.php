@@ -27,10 +27,10 @@ class DownloadPDFCertificateController extends Controller
                     ->first();
 
         // dd($app_details);
-        $pdf = PDF::loadView('certificate.certificate',compact('app_details'));
-        $file_name = 'training-provider-'.$app_details->certificate_no.'.pdf';
-        // return view('certificate.certificate');
+        // $pdf = PDF::loadView('certificate.certificate',compact('app_details'));
+        // $file_name = 'training-provider-'.$app_details->certificate_no.'.pdf';
+        return view('certificate.aiia_scope_certificate');
         // dd($pdf);
-        return $pdf->download($file_name);
+        // return $pdf->download($file_name);
     }
 }

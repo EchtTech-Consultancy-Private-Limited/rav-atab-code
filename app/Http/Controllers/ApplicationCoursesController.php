@@ -152,11 +152,17 @@ class ApplicationCoursesController extends Controller
                 }
 
                 $create_new_application = $application->id;
+                // dd($create_new_application);
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
             }
             // $this->sendNotification->SendNotification(1,2,3,'TP','testing');
         /*end here*/
+        if($request->sr_type=='renewal'){
+            return redirect(url('renewal-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
+        }else if( $request->sr_type=='surveillance'){
+            return redirect(url('surveillance-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
+        }
         return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
 
