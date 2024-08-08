@@ -270,7 +270,7 @@ active @endif"
                                                         action="{{ url('/store-new-applications') }}" method="post">
 
                                                         @csrf
-                                                        @if ($applicationData)
+                                                        @if ($applicationData && !Request::get('sr_prev_id'))
                                                             <input type="hidden" name="previous_data" value="1">
                                                             <input type="hidden" name="application_id"
                                                                 value="{{ $applicationData->id }}">
@@ -361,10 +361,7 @@ active @endif"
                                                                                 placeholder="Email-ID"
                                                                                 required="true"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">
-                                                                            <!-- <input id="emailId" type="text"
-                                                                                name="Email_ID"
-                                                                                placeholder="Email-ID"
-                                                                                value="{{ old('email', $applicationData->email ?? '') }}"> -->
+                                                                       
                                                                         </div>
                                                                         @error('Email_ID')
                                                                             <span id="backendError" class="text-danger">

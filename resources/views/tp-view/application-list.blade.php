@@ -169,13 +169,13 @@
                                                 </td>
                                                     <td class="p-0-lg1">
                                                     <div class="d-flex justify-content-between gap-1 p-1 training-provider-action">
-                                                        @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y')
+                                                        @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y' && $item->application_list->renewal_surveillance_type==null)
                                                         <a href="{{url($item->renewal_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
                                                             For Renewal
                                                         </a>
                                                         @endif
 
-                                                        @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y')
+                                                        @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y'  && $item->application_list->renewal_surveillance_type==null)
                                                         <a href="{{url($item->surveillance_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
                                                             For Surveillance
                                                         </a>
@@ -217,19 +217,20 @@
                                                                         @endif
                                                                     @endif
                                                                 </div>
-                                                            @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
+
+                                                             {{-- @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
                                                                      @if($item->application_list->upgraded_level_id == 2)
                                                                     <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
                                                                      @elseif($item->application_list->upgraded_level_id == 3)
-                                                                    <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                    <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a> --}}
                                                                 @endif
-                                                            @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
-                                                                <span class="badge badge-main success">Upgraded</span>
-                                                            @endif
+                                                           {{--  @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
+                                                                <span class="badge badge-main success">Upgraded</span> 
+                                                            @endif--}}
                                                             <!-- End here level - 1  -->
 
                                                             <!-- If level - 2 -->
-                                                            @if($item->application_list->level_id == 2)
+                                                            {{--  @if($item->application_list->level_id == 2)
                                                                 @php
                                                                     $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
                                                                     
@@ -244,7 +245,7 @@
                                                                 @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 3)
                                                                     <span class="badge badge-main success">Upgraded</span>
                                                                 @endif
-                                                            @endif
+                                                            @endif --}}
                                                             <!-- End here level - 2  -->
 
                                                             <!-- level-3 -->

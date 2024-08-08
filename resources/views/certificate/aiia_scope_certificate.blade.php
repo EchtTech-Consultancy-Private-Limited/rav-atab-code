@@ -1,5 +1,16 @@
-@include('layout.header')
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate</title>
+    <link rel="stylesheet" href="{{asset("/assets/css/certificate.css")}}">
+   
+</head>
+
+<body>
     <div class="certificate-box">
         <div class="bg-box2">    
           <div class="content-box aiia-scope">
@@ -100,4 +111,6 @@
           
         </div>
     </div>
-    @include('layout.footer')
+    </body>
+    </html>
+    

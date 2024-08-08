@@ -599,6 +599,7 @@ Route::get('surveillance/level-third', [SurveillanceController::class, 'level3tp
 Route::get('create-new-applications/surveillance',[SurveillanceController::class,"createNewApplication"]);
 Route::get('create-level-2-new-applications/surveillance',[SurveillanceController::class,"createNewApplication"]);
 Route::get('create-level-3new-applications/surveillance',[SurveillanceController::class,"createNewApplication"]);
+Route::get('/surveillance-new-course/{id?}/{refid?}', [SurveillanceController::class, 'surveillanceNewCourse']);
 
 /********Renewal */
 Route::get('/renewal-create',[RenewalController::class,"index"])->name('renewal-create');
@@ -609,4 +610,7 @@ Route::post('/renewal',[RenewalController::class,"renewalCreate"]);
 Route::get('renewal/create-new-applications',[RenewalController::class,"createNewApplication"]);
 Route::get('renewal/create-level-2-new-applications',[RenewalController::class,"createLevel2NewApplication"]);
 Route::get('renewal/create-level-3-new-applications',[RenewalController::class,"createLevel3NewApplication"]);
+Route::get('/renewal-new-course/{id?}/{refid?}', [RenewalController::class, 'renewalNewCourse']);
+Route::post('/renewal-store-new-application-course', [RenewalController::class, 'renewalStoreNewApplicationCourse']);
+
 /*qr code generation*/

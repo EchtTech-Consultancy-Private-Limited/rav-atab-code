@@ -154,6 +154,7 @@ margin-top: 10px;
 .content-box.aiia-scope{
     position: relative;
     height: -webkit-fill-available;
+    height: 100%;
 }
 .content-box.aiia-scope .title {
     font-size: 22px;
@@ -245,7 +246,7 @@ margin-top: 10px;
     font-size: 15px;
 }
 .aiascope-sign-container{
-    position: absolute;
+    /* position: absolute; */
     width: -webkit-fill-available;
     bottom: 29px;
     left: 8px;
