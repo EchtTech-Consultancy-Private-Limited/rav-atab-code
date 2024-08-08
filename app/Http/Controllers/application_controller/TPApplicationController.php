@@ -33,7 +33,8 @@ class TPApplicationController extends Controller
         
         $pay_list = DB::table('tbl_application_payment')
           ->where('user_id',Auth::user()->id)
-          ->whereNull('payment_ext')->where('pay_status','Y')
+          ->whereNull('payment_ext')
+          ->where('pay_status','Y')
           ->get()
           ->pluck('application_id')
           ->toArray();
@@ -108,6 +109,7 @@ class TPApplicationController extends Controller
                 $obj->appHistory= $app_history;
                 $final_data[] = $obj;
         }
+
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 
