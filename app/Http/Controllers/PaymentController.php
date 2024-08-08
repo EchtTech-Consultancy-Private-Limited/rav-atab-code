@@ -186,7 +186,8 @@ class PaymentController extends Controller
                     sendNotification($notifiData);
                     createApplicationHistory($application_id,null,config('history.accountant.appCreated'),config('history.color.warning'));
                     /*end here*/ 
-        
+                    DB::table('tbl_notifications')->where(['application_id'=>$application_id,'user_type'=>'tp','level_id'=>3,'notification_mode'=>'second_pay'])
+                    ->update(['is_read'=>1]);
 
             DB::commit();
             $data = [
