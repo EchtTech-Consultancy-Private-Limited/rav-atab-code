@@ -167,7 +167,7 @@
                                  $is_all_course_accepted=checkAllCoursesDocAccepted($item->application_list->id);
                                  $is_all_revert = checkAllActionDoneOnRevert($item->application_list->id);
                                  @endphp
-                                 @if($is_all_course_accepted==false   && $item->application_list->level_id==3 && ($item->application_list->approve_status!=3 && $item->application_list->approve_status!=4))
+                                 @if($is_all_course_accepted==false  && $item->application_list->level_id==3 && ($item->application_list->approve_status!=3 && $item->application_list->approve_status!=4))
                                  <a class="btn btn-tbl-delete bg-primary font-a"
                                     data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                     data-bs-target="#{{$type_}}{{ $item->application_list->id }}"
@@ -188,6 +188,7 @@
                                  @endif
                                  @endisset  
                                  @isset($item->payment)
+                                 
                                  @if($item->payment->aknowledgement_id==null && $item->payment->accountant_id &&  $item->payment->approve_remark!=null)
                                  <button id="acknowledgement_{{$item->application_list->id}}"
                                     class="btn btn-primary btn-sm mb-0 p-2" style="margin-left: 5px !important;" title="Acknowledge Payment"><i class="fa fa-credit-card" aria-hidden="true" onclick="handleAcknowledgementPayment({{$item->application_list->id}})"></i></button>
@@ -198,6 +199,7 @@
                                  </a>
                               </td>
                            </tr>
+
                            @isset($item->assessor_type)
                            <!-- Modal box assessor assign-->
                            <div class="modal fade" id="View_popup_{{ $item->application_list->id }}"
