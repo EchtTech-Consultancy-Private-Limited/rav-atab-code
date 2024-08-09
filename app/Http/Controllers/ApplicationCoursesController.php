@@ -918,10 +918,12 @@ class ApplicationCoursesController extends Controller
         /*end here*/
 
         $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+        ->where('pay_status','Y')
         ->whereNull('remark_by_account')
         ->count();
             if ($checkPaymentAlready>2) {
-                return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
+                return redirect(url('level-first/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
+                // return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
             }
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',

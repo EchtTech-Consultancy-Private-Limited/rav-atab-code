@@ -1404,6 +1404,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
           }
         /*end here*/
         $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+        ->where('pay_status','Y')
         ->whereNull('remark_by_account')
         ->count();
             if ($checkPaymentAlready>2) {
@@ -2195,6 +2196,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
         }
     /*end here*/
     $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+    ->where('pay_status','Y')
     ->whereNull('remark_by_account')
     ->count();
    
@@ -2204,7 +2206,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     
     // dd($checkPaymentAlready);
         if ($checkPaymentAlready>2) {
-            return redirect(url('level-second/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
+            return redirect(url('level-third/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
         }
     $this->validate($request, [
         'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',
