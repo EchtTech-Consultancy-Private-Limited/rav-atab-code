@@ -2248,7 +2248,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
 
 
     /*If tp pay second time then show the application admin as well*/ 
-    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->count();
+    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->whereNull('deleted_at')->where('pay_status','Y')->count();
     if($pay_count>1){
         DB::table('tbl_application')->where('id',$request->Application_id)->update(['second_payment'=>6]);
     }
