@@ -350,13 +350,14 @@ class ApplicationCoursesController extends Controller
             $applicationData=null;
         }
         $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
-        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->where('approve_status',1)->count();
         $total_docs = count($course) * 4;
         
         $is_show_next_btn = false;
         if($uploaded_docs==$total_docs){
             $is_show_next_btn=true;
         }
+        
         
 
         return view('create-application.course.level-2-create-course', compact('applicationData', 'course','is_show_next_btn'));
@@ -372,7 +373,7 @@ class ApplicationCoursesController extends Controller
         }
         
         $course = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->get();
-        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->count();
+        $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$id)->whereNull('deleted_at')->where('approve_status',1)->count();
         $total_docs = count($course) * 4;
         
         $is_show_next_btn = false;

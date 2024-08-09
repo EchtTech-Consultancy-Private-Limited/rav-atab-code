@@ -207,7 +207,7 @@ class DocApplicationController extends Controller
           
              $app_ = DB::table('tbl_application')->where('id',$application_id)->first();
              $get_all_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
-             $get_all_uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+             $get_all_uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->where('approve_status',1)->whereNull('deleted_at')->count();
              
              if($app_->level_id==1){
                 $tpUrl=config('notification.tpUrl.level1').dEncrypt($application_id);
