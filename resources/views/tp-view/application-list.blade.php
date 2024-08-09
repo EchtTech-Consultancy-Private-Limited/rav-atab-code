@@ -236,7 +236,7 @@
                                                                 @endphp
                                                             @endif
 
-                                                            @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1)
+                                                            @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1 && $item->application_list->level_id == 2)
                                                             <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
                                                             @endif
                                                             {{--  @if($item->application_list->level_id == 2)
