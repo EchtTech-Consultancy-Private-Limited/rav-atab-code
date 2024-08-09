@@ -34,10 +34,10 @@ class SuperAdminApplicationController extends Controller
        //dd($NewDate);
 
         $application = DB::table('tbl_application as a')
+        ->where('region','ind')
         ->whereIn('a.payment_status',[2,3])
         ->Orwhere('a.second_payment',6)
         ->orderBy('a.id','desc')
-        ->where('region','ind')
         ->get();
         // dd($application);
         $final_data=array();

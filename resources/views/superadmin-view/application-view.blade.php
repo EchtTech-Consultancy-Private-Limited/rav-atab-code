@@ -66,7 +66,7 @@
                         $app_id = substr((string)$number, -1);
                     } 
                 @endphp
-
+                
                 <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                 @endif  
             </div>
