@@ -34,7 +34,7 @@ class SuperAdminApplicationController extends Controller
        //dd($NewDate);
 
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3,5])
+        ->whereIn('a.payment_status',[2,3])
         ->Orwhere('a.second_payment',6)
         ->orderBy('a.id','desc')
         ->where('region','ind')
@@ -137,7 +137,7 @@ class SuperAdminApplicationController extends Controller
     }
 
         $application = DB::table('tbl_application as a')
-        ->whereIn('a.payment_status',[2,3,5])
+        ->whereIn('a.payment_status',[2,3])
         ->where('region',$region_type)
         ->Orwhere('a.second_payment',6)
         ->orderBy('a.id','desc')
