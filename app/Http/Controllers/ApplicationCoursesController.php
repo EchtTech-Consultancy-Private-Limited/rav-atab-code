@@ -152,11 +152,17 @@ class ApplicationCoursesController extends Controller
                 }
 
                 $create_new_application = $application->id;
+                // dd($create_new_application);
                 // $create_new_application = DB::table('tbl_application')->insertGetId($data);
                 $msg="Application Created Successfully";
             }
             // $this->sendNotification->SendNotification(1,2,3,'TP','testing');
         /*end here*/
+        if($request->sr_type=='renewal'){
+            return redirect(url('renewal-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
+        }else if( $request->sr_type=='surveillance'){
+            return redirect(url('surveillance-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
+        }
         return redirect(url('create-new-course/' . dEncrypt($create_new_application)))->with('success', $msg);
     }
 
@@ -912,10 +918,12 @@ class ApplicationCoursesController extends Controller
         /*end here*/
 
         $checkPaymentAlready = TblApplicationPayment::where('application_id', $request->Application_id)
+        ->where('pay_status','Y')
         ->whereNull('remark_by_account')
         ->count();
             if ($checkPaymentAlready>2) {
-                return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
+                return redirect(url('level-first/tp/application-list'))->with('fail', 'Payment has already been submitted for this application.');
+                // return redirect(url('get-application-list'))->with('fail', 'Payment has already been submitted for this application.');
             }
         $this->validate($request, [
             'payment_details_file' => 'mimes:pdf,jpeg,png,jpg,gif,svg',

@@ -380,7 +380,8 @@ class SummaryController extends Controller
             $notifiData['receiver_id'] = $get_app->tp_id;
             $notifiData['application_id'] =$application_id;
             $notifiData['uhid'] = getUhid($application_id)[0];
-            $notifiData['level_id'] = getUhid($application_id)[1] ;
+            $notifiData['level_id'] = getUhid($application_id)[1];
+            $notifiData['notification_mode'] = "second_pay";
             $notifiData['user_type'] = "tp";
             $notifiData['url'] = $url;
             $notifiData['data'] =config('notification.tp.secondPay');

@@ -53,7 +53,7 @@
                     </div>
               </div>
               <div class="row align-items-center">
-              <div class="col-md-6 mb-3">
+              <div class="col-md-3 mb-3">
               <div class="previous_refid ref-num">
                 @if(!empty($spocData->prev_refid))
                 @php
@@ -66,16 +66,17 @@
                         $app_id = substr((string)$number, -1);
                     } 
                 @endphp
-
+                
                 <span><a href="{{url('super-admin/application-view'.'/'.dEncrypt($app_id))}}">{{$spocData->prev_refid}}</a></span>
                 @endif  
             </div>
               </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-9 mb-3">
                     <div class="float-right">
                     
                 @if($is_final_submit && $spocData->level_id==3  && $spocData->approve_status==1)
                     <a href="{{url('download/pdf/certificate/'.$spocData->id)}}" class="btn btn-primary">Download Certificate</a>
+                    <a href="{{url('download/pdf/aiia_scope/certificate/'.$spocData->id)}}" class="btn btn-primary">Download AIIA Scope</a>
                 @endif
                 @if($is_final_submit && $spocData->level_id==3 && $spocData->mom_file_name!=null && $spocData->approve_status==2)
                 
