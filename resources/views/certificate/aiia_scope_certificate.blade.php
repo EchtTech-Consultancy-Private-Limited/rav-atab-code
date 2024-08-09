@@ -41,14 +41,15 @@
                 </div>
 
                 <div class="certificate-no">
-                    <p>CERTIFICATE NO. : ATAB/AAC/00009/23-24</p>
+                    <p>CERTIFICATE NO. : {{$app_details->certificate_no}}</p>
                 </div>
 
                 <div class="detail ">
                     <p class="w-100"><span class="w-d-30">NAME OF INSTITUTE:</span> <span class="w-d-70"> ALL INDIA INSTITUTE OF AYURVEDA (AIIA)</span></p>
                 </div>
                 <div class="detail ">
-                    <p class="w-100"><span class="w-d-30">ADDRESS:</span> <span class="w-d-70">Gautampuri, Sarita Vihar, Mathura Road, New Delhi-110076</span></p>
+
+                    <p class="w-100"><span class="w-d-30">ADDRESS:</span> <span class="w-d-70">{{$app_details->address}},{{$app_details->city_name}},{{$app_details->state_name}},{{$app_details->country_name}}-{{$app_details->postal}}</span></p>
                 </div>
                 <div class="aiia-scope-table">
                     <table>
@@ -62,24 +63,14 @@
                         </thead>
 
                         <tbody>
+                            @foreach ($courses as $key=>$course)
                             <tr>
-                                <td>01</td>
-                                <td>Panchakarma Technician</td>
+                                <td>{{$key+1}}</td>
+                                <td>{{$course->course_name}}</td>
                                 <td>1500 Hours</td>
-                                <td>Offline</td>
+                                <td>{{$course->mode_of_course}}</td>
                             </tr>
-                            <tr>
-                                <td>02</td>
-                                <td>Ayurveda Dietician</td>
-                                <td>540 Hours</td>
-                                <td>Offline</td>
-                            </tr>
-                            <tr>
-                                <td>03</td>
-                                <td>Kshara Karma Technician</td>
-                                <td>1200 Hours</td>
-                                <td>Offline</td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -89,8 +80,13 @@
 
                 <div class="approval aiascope-sign-container">
                     <div class="aiascope-sign width-img-30">
-                        <p><b> Valid from: </b> <span class="value">Feb 28, 2024</span></p>
-                        <p><b>Valid thru: </b> <span class="value">Feb 27, 2027</span></p>
+                    @php
+                        use \Carbon\Carbon;
+                        $formattedValidFrom = Carbon::parse($app_details->valid_from)->format('M d, Y');
+                        $formattedValidTill = Carbon::parse($app_details->valid_till)->format('M d, Y');
+                    @endphp
+                        <p><b> Valid from: </b> <span class="value">{{$formattedValidFrom}}</span></p>
+                        <p><b>Valid thru: </b> <span class="value">{{$formattedValidTill}}</span></p>
                     </div>
 
                     <div class="qr width-img-30">

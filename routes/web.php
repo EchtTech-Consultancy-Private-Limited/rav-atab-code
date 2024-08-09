@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/admin/desktop/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfDesktop'])->name('admindesktoppdfdownload');
     Route::get('/admin/onsite/download/pdf/{applicaion_id}',[DownLoadPDFFinalSummaryController::class,'adminDownloadPdfOnsite'])->name('adminonsitepdfdownload');
     Route::get('/download/pdf/certificate/{applicaion_id}',[DownloadPDFCertificateController::class,'downloadPDFCertificate']);
+    Route::get('/download/pdf/aiia_scope/certificate/{applicaion_id}',[DownloadPDFCertificateController::class,'downloadPDFAIIAScopeCertificate']);
     
     /*end here*/ 
      
