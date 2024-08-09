@@ -230,6 +230,15 @@
                                                             <!-- End here level - 1  -->
 
                                                             <!-- If level - 2 -->
+                                                            @if($item->application_list->level_id == 2)
+                                                                @php
+                                                                    $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
+                                                                @endphp
+                                                            @endif
+
+                                                            @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1)
+                                                            <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
+                                                            @endif
                                                             {{--  @if($item->application_list->level_id == 2)
                                                                 @php
                                                                     $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
