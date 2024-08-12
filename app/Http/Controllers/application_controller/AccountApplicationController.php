@@ -50,6 +50,7 @@ class AccountApplicationController extends Controller
                 $appTime = new ApplicationDurationCaculate;
                 $application_duration =$appTime->calculateTimeDateAccount(auth::user()->role,'verify_payment',$app);
                 $obj->applicationDuration = $application_duration;
+                
 
                 $course = DB::table('tbl_application_courses')->where([
                     'application_id' => $app->id,
@@ -61,7 +62,7 @@ class AccountApplicationController extends Controller
                     $obj->course_count = $course;
                 }
                 
-                $payment = DB::table('tbl_application_payment')->where([
+                $payment = DB::table('tbl_application_payment') ->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
                 ])->latest('created_at')->first();
@@ -91,7 +92,7 @@ class AccountApplicationController extends Controller
                 $final_data[] = $obj;
                 
         }
-        //dd($final_data);
+        // dd($final_data);
         return view('account-view.application-list',['list'=>$final_data]);
     }
     public function getApplicationView($id){
