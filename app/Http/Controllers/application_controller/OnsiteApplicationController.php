@@ -296,6 +296,8 @@ class OnsiteApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
+        ->where('approve_status',1)
+        ->whereNull('deleted_at')
         ->select('id','doc_unique_id','doc_file_name','doc_sr_code','assessor_type','onsite_status','onsite_doc_file_name','status','onsite_photograph','admin_nc_flag','is_revert','is_doc_show')
         ->get();
 

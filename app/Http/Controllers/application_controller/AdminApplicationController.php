@@ -782,7 +782,7 @@ class AdminApplicationController extends Controller
             })
             ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
-            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status']);
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','nc_flag','approve_status']);
 
         
         foreach ($results as $key => $result) {
@@ -796,6 +796,7 @@ class AdminApplicationController extends Controller
                 $results[$key]->status = $additionalField->status;
                 $results[$key]->id = $additionalField->id;
                 $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $results[$key]->nc_flag = $additionalField->nc_flag;
                 $results[$key]->approve_status = $additionalField->approve_status;
             }
         }
@@ -808,7 +809,7 @@ class AdminApplicationController extends Controller
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             if(isset($result)){
                 
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1) || ($result->status == 6)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -875,7 +876,7 @@ class AdminApplicationController extends Controller
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             if(isset($result)){
                 
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1 || $result->status == 4 && $result->admin_nc_flag == 2) || $results->status==6) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -938,13 +939,11 @@ class AdminApplicationController extends Controller
 
         
         $flag = 0;
-        
         foreach ($results as $result) {
-            
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             if(isset($result)){
                 
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+                if (($result->status == 1 || $result->status==6) || ($result->status == 4 && $result->admin_nc_flag == 1) || ($result->status == 4 && $result->admin_nc_flag == 2)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -1007,7 +1006,7 @@ class AdminApplicationController extends Controller
         $accepted_count = 0;
         foreach ($results as $result) {
             
-            if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if ($result->status == 1 || ($result->status == 4 && $result->admin_nc_flag == 1) || ($result->status == 4 && $result->admin_nc_flag == 2) || $result->status == 6) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -1336,7 +1335,7 @@ class AdminApplicationController extends Controller
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
     
-            if (($result->status == 1 || $result->status == 5) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1 || $result->status == 5 || $result->status == 6) || ($result->status == 4 && $result->admin_nc_flag == 1 || $result->status == 4 && $result->admin_nc_flag == 2)) {
                 $flag = 0;
             } else {
                 $flag = 1;
