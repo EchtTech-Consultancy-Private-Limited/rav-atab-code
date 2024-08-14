@@ -560,7 +560,7 @@
                                     </div>
                                  </form>
 
-                              @elseif($is_any_ncs && !$is_final_submit)
+                              @elseif(count($onsite_course_doc_uploaded)>=4 && $is_any_ncs && !$is_final_submit)
                               <div class="col-md-12 mr-2">
                                           <form action="{{ url('onsite/update-nc-flag-doc-list/course/'.$encrypted_app_id.'/'.$encrypted_course_id) }}" method="post">
                                           @csrf

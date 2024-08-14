@@ -446,7 +446,7 @@ public function renewalNewCourse($id = null,$refid=null)
 
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->whereNull('deleted_at')->get();
-    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->whereNull('deleted_at')->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->where('approve_status',1)->whereNull('deleted_at')->count();
     $total_docs = count($course) * 4;
     
     $is_show_next_btn = false;

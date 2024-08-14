@@ -78,7 +78,7 @@ class AdminApplicationController extends Controller
                 ->where('status',2)
                 ->count();
               
-                $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->count();
+                $doc_uploaded_count = DB::table('tbl_application_course_doc')->where(['application_id' => $app->id])->where('approve_status',1)->whereNull('deleted_at')->count();
                 $obj->doc_uploaded_count = $doc_uploaded_count;
                 
                 $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way??'';

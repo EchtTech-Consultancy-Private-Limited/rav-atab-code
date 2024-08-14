@@ -14,12 +14,13 @@ class ApplicationDurationCaculate {
             'user_action'=>$userAction
         ])->first();
 
-        $application_payment = DB::table('tbl_application_payment')->where([
-            'application_id' => $app->id
+        $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+            'application_id' => $app->id,
+            'pay_status'=>'Y'
         ])->latest()->first();
-       // dd($application_payment->approve_remark);
+    //    dd($application_payment->approve_remark);
        $obj = new \stdclass;
-       if($application_payment->approve_remark == null){
+       if($application_payment?->approve_remark == null){
         if($application_time){
             $now = time();
             /**Start-- Extra Day Assign By Admin */
@@ -70,8 +71,9 @@ class ApplicationDurationCaculate {
             'user_action'=>$userAction
         ])->first();
 
-        $application_payment = DB::table('tbl_application_payment')->where([
-            'application_id' => $app->id
+        $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+            'application_id' => $app->id,
+            'pay_status'=>'Y'
         ])->latest()->first();
         //dd($application_time);
        $obj = new \stdclass;
@@ -123,8 +125,9 @@ class ApplicationDurationCaculate {
             'user_action'=>$userAction
         ])->first();
 
-        $application_payment = DB::table('tbl_application_payment')->where([
-            'application_id' => $app->id
+        $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+            'application_id' => $app->id,
+            'pay_status'=>'Y'
         ])->latest()->first();
        //dd($role_id);
        $obj = new \stdclass;
@@ -219,7 +222,7 @@ class ApplicationDurationCaculate {
             'assessor_id' => $assID,
             'assessor_type' => 'desktop'
         ])->latest()->first();
-        if(!empty($assessor_assign)){
+    if(!empty($assessor_assign)){
        $obj = new \stdclass;
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
@@ -324,8 +327,9 @@ class ApplicationDurationCaculate {
             'user_action'=>$userAction
         ])->first();
 
-        $application_payment = DB::table('tbl_application_payment')->where([
-            'application_id' => $app->id
+        $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+            'application_id' => $app->id,
+            'pay_status'=>'Y'
         ])->latest()->first();
        //dd($role_id);
        $obj = new \stdclass;
