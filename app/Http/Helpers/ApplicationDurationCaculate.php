@@ -387,6 +387,7 @@ class ApplicationDurationCaculate {
 
             $totalday = strtotime($app->valid_till)-strtotime($app->valid_from);
             $totoaldayscount = round($totalday/ (60 * 60 * 24));
+            
             $fromDate = strtotime($app->valid_till)-$now;
             $dayscount = round($fromDate/ (60 * 60 * 24));
         //dd($totoaldayscount);
