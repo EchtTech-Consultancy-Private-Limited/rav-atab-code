@@ -158,10 +158,23 @@
                                                 <span>N/A</span>
                                                 @endif
                                                 </td>
-                                                    <td>
-                                                        <a href="{{ url('/desktop/application-view', dEncrypt($item->application_list->id)) }}"
+                                                <td>
+                                                    @if(isset($item->application_duration_verify_doc->applicationDayTime) && $item->application_duration_verify_doc->applicationDayTime !=0)
+                                                    <a class="btn btn-tbl-edit w-100 border-bottom border">          
+                                                        {{$item->application_duration_verify_doc->applicationDayTime}} days Left
+                                                    </a>
+                                                    @endif
+                                                    @if(isset($item->application_duration_verify_doc->applicationAction) && $item->application_duration_verify_doc->applicationAction =='Y' || $item->application_list->approve_status==1)
+                                                    <a href="{{ url('/desktop/application-view', dEncrypt($item->application_list->id)) }}"
                                                             class="btn btn-tbl-edit"><i
-                                                                class="material-icons">visibility</i></a>
+                                                            class="material-icons">visibility</i></a>
+
+                                                    @else
+                                                        <a class="btn btn-tbl-edit w-100 border-bottom border badge badge-main danger">  
+                                                            Contact to admin           
+                                                        </a>
+                                                    @endif
+                                                        
                                                     </td>
                                             </tr>
                                         @endforeach

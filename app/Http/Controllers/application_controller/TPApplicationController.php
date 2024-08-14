@@ -266,7 +266,7 @@ class TPApplicationController extends Controller
         ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status','nc_show_status')
         ->get();
         $is_payment_done = DB::table('tbl_application_payment')->where('application_id',$application_id)->whereNull('payment_ext')->where('pay_status','Y')->count();
-        $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+        $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->where('approve_status',1)->whereNull('deleted_at')->count();
         $total_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
         $is_all_doc_uploaded=false;
         if(($total_application_courses_doc>=$total_courses*4) && $is_payment_done>0){
@@ -332,7 +332,7 @@ class TPApplicationController extends Controller
         ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','nc_show_status','status')->get();
 
         $is_payment_done = DB::table('tbl_application_payment')->where('application_id',$application_id)->whereNull('payment_ext')->where('pay_status','Y')->count();
-        $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
+        $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->where('approve_status',1)->whereNull('deleted_at')->count();
         $total_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->count();
         $is_all_doc_uploaded=false;
         if(($total_application_courses_doc>=$total_courses*4) && $is_payment_done>0){
@@ -1129,7 +1129,7 @@ public function upgradeCreateNewCourse($id = null,$refid=null)
     // $last_application = TblApplication::where('refid',$refid)->first();
     $course = TblApplicationCourses::where('application_id', $last_application_id)->whereNull('deleted_at')->get();
     // dd($course);
-    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->whereNull('deleted_at')->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->where('application_id',$last_application_id)->where('approve_status',1)->whereNull('deleted_at')->count();
     $total_docs = count($course) * 4;
     
     $is_show_next_btn = false;
@@ -1938,7 +1938,7 @@ public function upgradeCreateNewCourseLevel3($id = null,$refid=null)
     $course = TblApplicationCourses::where('application_id', $id)->get();
     
     $original_course_count = TblApplicationCourses::where('application_id', $id)->whereNull('deleted_at')->count();
-    $uploaded_docs = DB::table('tbl_application_course_doc')->whereNull('deleted_at')->where('application_id',$id)->count();
+    $uploaded_docs = DB::table('tbl_application_course_doc')->whereNull('deleted_at')->where('application_id',$id)->where('approve_status',1)->count();
     $total_docs = $original_course_count * 4;
 
     $is_show_next_btn = false;
@@ -2248,7 +2248,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
 
 
     /*If tp pay second time then show the application admin as well*/ 
-    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->count();
+    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->whereNull('deleted_at')->where('pay_status','Y')->count();
     if($pay_count>1){
         DB::table('tbl_application')->where('id',$request->Application_id)->update(['second_payment'=>6]);
     }
@@ -2825,6 +2825,7 @@ public function tpUpdateNCFlagDocList($application_id)
             $t=0;
             $get_course_docs = DB::table('tbl_application_course_doc')
                 ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
+                ->whereNull('deleted_at')
                 ->latest('id')->get();
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";

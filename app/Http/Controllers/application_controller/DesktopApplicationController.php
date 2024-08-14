@@ -76,7 +76,7 @@ class DesktopApplicationController extends Controller
 
             $final_data[] = $obj;
         }
-       // dd($final_data);
+    //    dd($final_data);
         return view('desktop-view.application-list', ['list' => $final_data]);
     }
 
