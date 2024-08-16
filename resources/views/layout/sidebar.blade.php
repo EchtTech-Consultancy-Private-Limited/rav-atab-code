@@ -70,7 +70,7 @@
 
 
 
-                <li  class="{{ (Request::is('/admin/application-list') ||  Request::is('internationl-page') )?'active':''}}" >
+                <li  class="{{ (Request::is('/admin/application-list','super-admin/pending-application-list','internationl-page') )?'active':''}}" >
                     <a href="#" onClick="return false;" class="menu-toggle" >
                         <!-- <i data-feather="file"></i> -->
                         <i class="fa fa-file-alt"></i>
@@ -90,9 +90,12 @@
                         <li class="{{ Request::is($url)?'active':''}}" >
                             <a  href="{{ url($url) }}">National Application</a>
                         </li>
-
+                       
                         <li class="{{ Request::is('internationl-page')?'active':''}}">
                             <a  href="{{ url('/internationl-page?type=other-world') }}">International Application</a>
+                        </li>
+                        <li class="{{ Request::is("super-admin/pending-application-list")?'active':''}}" >
+                            <a  href="{{ url('/super-admin/pending-application-list') }}">Pending Application</a>
                         </li>
 
                     </ul>

@@ -119,6 +119,24 @@ class SuperAdminApplicationController extends Controller
         return view('superadmin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
     }
 
+    public function getPendingApplicationList(){
+
+        $application_time = DB::table('tbl_application_time')->where([
+            'role_id' => 6,
+            'user_action'=>'verify_payment'
+        ])->first()->number_of_days;
+        
+        $application = DB::table('tbl_application as a')
+        ->where('region','ind')
+        ->whereIn('a.payment_status',[2,3])
+        ->Orwhere('a.second_payment',6)
+        ->orderBy('a.id','desc')
+        ->get();
+
+        // dd($application);
+        return view('superadmin-view.pending-application-list',['list'=>$application]);
+    }
+
     public function getInternationApplicationList(Request $request){
 
 

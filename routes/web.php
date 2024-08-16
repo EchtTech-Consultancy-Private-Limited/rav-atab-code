@@ -566,6 +566,7 @@ Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateC
 
 /*super admin routes*/
 Route::get('/super-admin/application-list', [SuperAdminApplicationController::class, 'getApplicationList'])->name('superadmin-app-list');
+Route::get('/super-admin/pending-application-list', [SuperAdminApplicationController::class, 'getPendingApplicationList'])->name('superadmin-app-pending-list');
 Route::get('/super-admin/application-view/{id}', [SuperAdminApplicationController::class, 'getApplicationView']);
 Route::get('/super-admin/payment-fee-list', [SuperAdminApplicationController::class, 'getApplicationPaymentFeeList']);
 
