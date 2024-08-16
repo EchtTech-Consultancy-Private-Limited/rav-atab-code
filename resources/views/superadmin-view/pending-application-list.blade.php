@@ -108,32 +108,32 @@
                                     @isset($list)
                                         @foreach ($list as $k => $item)
                                             <tr
-                                                class="odd gradeX @if ($item->status == 2) approved_status @elseif($item->status == 1) process_status @elseif($item->status == 0) pending_status @endif">
-                                                <td>{{ $item->id }}</td>
-                                                <td>L-{{ $item->level_id ?? '' }}</td>
-                                                <td>{{ $item->uhid }}</td>
+                                                class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
+                                                <td>{{ $item->application_list->id }}</td>
+                                                <td>L-{{ $item->application_list->level_id ?? '' }}</td>
+                                                <td>{{ $item->application_list->uhid }}</td>
                                                 <td>
                                                 @php
-                                                        $status = getApplicationStatus($item->status,"Admin");
+                                                        $status = getApplicationStatus($item->application_list->status,"Admin");
                                                     @endphp
                                                 <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
                                                 </td>
                                                 <td>
-                                                @if($item->valid_from)
-                                                {{\Carbon\Carbon::parse($item->valid_from)->format('d-m-Y')}}
+                                                @if($item->application_list->valid_from)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
                                                 @else
                                                 <span>N/A</span>
                                                 @endif
                                                 </td>
                                                 <td>
-                                                @if($item->valid_till)
-                                                {{\Carbon\Carbon::parse($item->valid_till)->format('d-m-Y')}}
+                                                @if($item->application_list->valid_till)
+                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
                                                 @else
                                                 <span>N/A</span>
                                                 @endif
                                                 </td>
                                                    <td>
-
+                                                    
                                                    </td>
                                             </tr>
 

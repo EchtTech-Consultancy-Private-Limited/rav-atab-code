@@ -10,6 +10,7 @@ use App\Models\TblApplicationPayment;
 use App\Models\TblApplicationCourseDoc; 
 use App\Models\AssessorApplication; 
 use App\Models\asessor_application; 
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\Chapter; 
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
@@ -102,6 +103,7 @@ class SuperAdminApplicationController extends Controller
                 
                 $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way??'';
 
+
                 if($payment){
                     $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
                     $obj->assessor_type = $payment_count>1?"onsite":"desktop";
@@ -120,21 +122,26 @@ class SuperAdminApplicationController extends Controller
     }
 
     public function getPendingApplicationList(){
-
-        $application_time = DB::table('tbl_application_time')->where([
-            'role_id' => 6,
-            'user_action'=>'verify_payment'
-        ])->first()->number_of_days;
-        
         $application = DB::table('tbl_application as a')
         ->where('region','ind')
-        ->whereIn('a.payment_status',[2,3])
-        ->Orwhere('a.second_payment',6)
+        ->whereIn('a.approve_status',[0,2])
+        // ->Orwhere('a.second_payment',6)
         ->orderBy('a.id','desc')
         ->get();
+        $final_data=[];
+        foreach($application as $app){
+            $obj = new \stdClass;
+            $appTime = new ApplicationDurationCaculate;
+            $checkShowAppList =$appTime->calculateTimeDateSuperAdminPendingApplication(auth::user()->role,'verify_payment',$app);
+            $key = array_search('N', array_column($checkShowAppList, 'applicationAction'));
+            if($key){
+                $obj->application_list= $app;
+                $final_data[] = $obj;
+            }
+        }
 
-        // dd($application);
-        return view('superadmin-view.pending-application-list',['list'=>$application]);
+        // dd($final_data);
+        return view('superadmin-view.pending-application-list',['list'=>$final_data]);
     }
 
     public function getInternationApplicationList(Request $request){

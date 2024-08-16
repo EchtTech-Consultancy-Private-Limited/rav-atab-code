@@ -411,4 +411,61 @@ class ApplicationDurationCaculate {
     }
     /****** End Surveillance Renewal ****/
 
+
+        /****** Start SuperAdmin ***/
+    function calculateTimeDateSuperAdminPendingApplication($role_id, $userAction, $app) {
+        $application_time = DB::table('tbl_application_time')
+        // ->whereNotIn('user_type',['admin'])
+        ->get();
+
+        // dd($application_time);
+        $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+            'application_id' => $app->id,
+            'pay_status'=>'Y'
+        ])->latest()->first();
+        $arr = [];
+
+        foreach($application_time as $app_time){
+        $obj = new \stdclass;
+        if($application_time){
+            $now = time();
+            /**Start-- Extra Day Assign By Admin */
+            // $assignDayTime = $now - strtotime($app->assign_day_for_verify_date);
+            // $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+            // if($app->assign_day_for_verify >= $assigndayscount){
+            //     $assignDayVerifys = (int)($app->assign_day_for_verify);
+            // }else{
+            //     $assignDayVerifys =0;
+            // }
+            /**End-- Extra Day Assign By Admin */
+             
+            if(in_array($app_time->user_action,["recieved_document_same_assign_date",
+            "assign_secretariat"])){
+                $created_at = DB::table('tbl_assessor_assign')->where('application_id',$app->id)->first()?->created_at;
+            }else{
+                $created_at = $app->created_at;
+            }
+            $dayTime = $now - strtotime($created_at);
+            $dayscount = round($dayTime/ (60 * 60 * 24));
+            if($app_time->number_of_days >= $dayscount && $application_payment->status==2){
+                $applicationTime = (int)($app_time->number_of_days-$dayscount);
+            }else{
+                $applicationTime =0;
+            }
+            if($applicationTime == 0){
+                $obj->applicationAction = 'N';
+                $obj->applicationDayTime =0;
+            }else{
+                $obj->applicationAction = 'Y';
+                $obj->applicationDayTime =$applicationTime;
+            }
+        }
+        $arr[] = $obj;
+        // return $obj;
+    }
+    return $arr;
+
+}
+
+
 }
