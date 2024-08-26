@@ -54,7 +54,6 @@ $(".toggle-password").click(function() {
 
 
 
-
 $(function(){
 
   $('#eye').click(function(){
@@ -179,6 +178,7 @@ $(document).ready(function(){
 
 
 
+
 $('.assessment_type').on('change', function() {
   var data = $(this).val();
   ///  alert(data);
@@ -287,3 +287,5 @@ $('.dateID').click('on', function() {
       }
   });
 })
+
+

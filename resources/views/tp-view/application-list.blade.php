@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-responsive" style="width:100%;" id="dataTableMain">
+                            <table class="table table-responsive p-0" style="width:100%;" id="dataTableMain">
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>
@@ -183,7 +183,7 @@
                                                     </div>
                                                     <div>
                                                     </div>
-                                                    <div class="d-flex align-items-center justify-content-center gap-2 p-1">
+                                                    <div class="d-flex align-items-center justify-content-center gap-2 p-1 position-relative">
                                                             @if($item->application_list->level_id == 1)
                                                                 <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
                                                                     <i class="material-icons">visibility</i>
@@ -265,10 +265,17 @@
 
                                                             @if($is_second_payment && $item->application_list->level_id==3)
                                                           
-                                                            <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-primary btn-tbl-delete">S-Pay</a>
-
+                                                            <!-- <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-primary btn-tbl-delete">Second-Pay</a> -->
+                                                            <button class="btn btn-primary btn-tbl-delete text-nowrap tooltip-btn-pay" onclick="f1()">Second-Pay</button>
                                                             @endif
                                                             <!-- end here -->
+
+                                                            <div class="tooltip-popup">
+                                                            <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-danger btn-tbl-delete">offline</a>
+
+                                                            <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-success btn-tbl-delete">Online</a>
+                                                            </div>
+
                                                         </div>
 
                                                             </td>
@@ -360,5 +367,9 @@
 
 
     </section>
-   
+   <script>
+    $(".tooltip-btn-pay").on('click',function(){
+        $(this).toggleClass('active')
+      })
+   </script>
     @include('layout.footer')

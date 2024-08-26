@@ -26014,3 +26014,46 @@ h1.header-title {
 .atab-logo img{
     width: 110px;
 }
+
+.tooltip-popup{
+    display: none;
+}
+
+.tooltip-btn-pay.active + .tooltip-popup {
+    display: flex;
+    position: absolute;
+    top: 46px;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 8px 7px;
+    z-index: 9;
+    border: 1px solid #f96332;
+    border-radius: 8px;
+    box-shadow: 0 0 30px #e3e3e3;
+    right: 0;
+    /* width: 100%; */
+}
+
+.tooltip-popup a:last-child{margin-left: 10px;}
+.tooltip-popup a.btn {
+    font-size: 12px;
+    line-height: 17px !important;
+}
+.tooltip-popup:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #f96332;
+    position: absolute;
+    top: -34%;
+    right: 45%;
+}
+
+.custom-input-date-time{
+    border:1px solid black !important;
+    padding:4px !important;
+    margin:2px !important;
+}

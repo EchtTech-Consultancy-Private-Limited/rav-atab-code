@@ -10,6 +10,7 @@ use App\Models\TblApplicationPayment;
 use App\Models\TblApplicationCourseDoc; 
 use App\Models\AssessorApplication; 
 use App\Models\asessor_application; 
+use App\Http\Helpers\ApplicationDurationCaculate;
 use App\Models\Chapter; 
 use App\Models\TblNCComments; 
 use Carbon\Carbon;
@@ -102,6 +103,7 @@ class SuperAdminApplicationController extends Controller
                 
                 $assessment_way = DB::table('asessor_applications')->where('application_id',$app->id)->first()->assessment_way??'';
 
+
                 if($payment){
                     $obj->assessor_list = $payment_count>1 ?$onsite_assessor_list :$desktop_assessor_list;
                     $obj->assessor_type = $payment_count>1?"onsite":"desktop";
@@ -117,6 +119,125 @@ class SuperAdminApplicationController extends Controller
         }
         // dd($final_data);
         return view('superadmin-view.application-list',['list'=>$final_data,'secretariatdata' => $secretariatdata]);
+    }
+
+    public function getPendingApplicationList(){
+        $application = DB::table('tbl_application as a')
+        // ->where('region','ind')
+        ->whereIn('a.approve_status',[0,2])
+        // ->Orwhere('a.second_payment',6)
+        ->orderBy('a.id','desc')
+        ->get();
+
+        $account_application = DB::table('tbl_application as a')
+        ->whereIn('a.approve_status',[0,2])
+        ->whereNull('secretariat_id')
+        ->whereNull('assessor_id')
+        ->orderBy('a.id','desc')
+        ->get()->toArray();
+
+        
+        $secretariat_application = DB::table('tbl_application as a')
+        ->whereIn('a.approve_status',[0,2])
+        ->whereNotNull('secretariat_id')
+        ->whereNull('assessor_id')
+        ->orderBy('a.id','desc')
+        ->get()->toArray();
+
+        $assessor_application = DB::table('tbl_application as a')
+        ->whereIn('a.approve_status',[0,2])
+        ->whereNotNull('assessor_id')
+        ->orderBy('a.id','desc')
+        ->get()->toArray();
+
+        $mergedApp = array_merge($account_application,$secretariat_application,$assessor_application);
+        $newArr = [];
+        $appTime = new ApplicationDurationCaculate;
+
+        foreach($mergedApp as $app){
+            if($app->secretariat_id==null && $app->assessor_id==null){
+                if(isset($app)){
+                    $application_time = DB::table('tbl_application_time')->where([
+                        'user_action'=>"verify_payment"
+                    ])->first();
+            
+                    $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+                        'application_id' => $app->id,
+                        'pay_status'=>'Y'
+                    ])->latest()->first();
+                //    dd($application_payment->approve_remark);
+                   $obj = new \stdclass;
+                   if($application_payment?->approve_remark == null){
+                    if($application_time){
+                        $now = time();
+                        /**Start-- Extra Day Assign By Admin */
+                        $assignDayTime = $now - strtotime($app->assign_day_for_verify_date);
+                        $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+                        if($app->assign_day_for_verify >= $assigndayscount){
+                            $assignDayVerifys = (int)($app->assign_day_for_verify);
+                        }else{
+                            $assignDayVerifys =0;
+                        }
+                        /**End-- Extra Day Assign By Admin */
+                        $dayTime = $now - strtotime($app->created_at);
+                        $dayscount = round($dayTime/ (60 * 60 * 24));
+                        if($application_time->number_of_days >= $dayscount){
+                            $applicationTime = (int)($application_time->number_of_days-$dayscount);
+                        }elseif($app->assign_day_for_verify !=0 && $assignDayVerifys !=0){
+                            $applicationTime = (int)($app->assign_day_for_verify);
+                            
+                        }else{
+                            $applicationTime =0;
+                        }
+                       
+                        if($applicationTime == 0){
+                            if($assignDayVerifys>0){
+                                $obj->applicationAction = 'Y';
+                                $obj->applicationDayTime =$assignDayVerifys;
+                            }else{
+                                $obj->applicationAction = 'N';
+                                $obj->applicationDayTime =0;
+                            }
+                        }else{
+                            $obj->applicationAction = 'Y';
+                            $obj->applicationDayTime =$applicationTime;
+                        }
+                    }
+                    //return $obj;
+                   }else{
+                        $obj->applicationAction = 'V';
+                        $obj->applicationDayTime =0;
+                       
+                   }
+                   if(!empty($obj->applicationAction) && $obj->applicationAction=='N'){
+                    array_push($newArr,$app);
+                   }
+                }
+            }else if($app->secretariat_id!=null && $app->assessor_id==null){
+                
+                $checkShowAppList =$appTime->calculateTimeDateSecretariat(5,'secretariat_verify_doc_assign_assessor',$app);
+                if(!empty($checkShowAppList->applicationAction) && $checkShowAppList->applicationAction=='N'){
+                    array_push($newArr,$app);
+                }
+            }
+            else if($app->secretariat_id!=null && $app->assessor_id!=null){
+                $assessment = DB::table('users')->where('id',$app->assessor_id)->first()->assessment;
+                if($assessment==1){
+                    $checkShowAppList =$appTime->calculateTimeDateDesktopAssessorVerifyDoc($app->assessor_id,3,'document_check',$app);
+                    if(!empty($checkShowAppList->applicationAction) && $checkShowAppList->applicationAction=='N'){
+                        array_push($newArr,$app);
+                    }
+
+                }else{
+                    $checkShowAppList =$appTime->calculateTimeDateOnsiteAssessorVerifyDoc($app->assessor_id,3,'document_check',$app);
+                    if(!empty($checkShowAppList->applicationAction) && $checkShowAppList->applicationAction=='N'){
+                        array_push($newArr,$app);
+                    }
+                }
+            }
+        }
+        
+        return view('superadmin-view.pending-application-list',['list'=>$newArr]);
     }
 
     public function getInternationApplicationList(Request $request){
@@ -1775,4 +1896,32 @@ class SuperAdminApplicationController extends Controller
       
       }
       /*end here*/ 
+
+
+
+
+      public function assignExtraDates(Request $request){
+        try {
+            DB::beginTransaction();
+            $application_id = $request->application_id;
+            $extra_dates = $request->extra_dates;
+            $currentDate = Carbon::now();
+            $dateObject = Carbon::parse($extra_dates);
+            $assign_day_for_verify = $currentDate->diffInDays($dateObject);
+            $assign_day_for_verify += 1;
+            $extra_dates = explode(' ',$extra_dates)[0];
+            $is_updated = DB::table('tbl_application')->where('id',$application_id)->update(['assign_day_for_verify'=>$assign_day_for_verify,'assign_day_for_verify_date'=>$extra_dates]);
+            if($is_updated){
+                DB::commit();
+                return response()->json(['success' => true, 'message' => 'Given extra dates successfully.'], 200);
+            }else{
+                DB::rollBack();
+                return response()->json(['success' => false, 'message' => 'Failed to give extra dates'], 200);
+            }
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
+        }
+    }
 }

@@ -859,7 +859,7 @@ class SecretariatDocumentVerifyController extends Controller
             DB::beginTransaction();
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
-                ->update(['approve_status'=>2]);
+                ->update(['approve_status'=>2,'assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]);
                 
                 /*Make revert button hide according to course wise*/ 
                 DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);

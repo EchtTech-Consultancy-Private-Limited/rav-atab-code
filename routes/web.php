@@ -566,6 +566,7 @@ Route::post('check-payment-duplicacy',[LevelController::class,"paymentDuplicateC
 
 /*super admin routes*/
 Route::get('/super-admin/application-list', [SuperAdminApplicationController::class, 'getApplicationList'])->name('superadmin-app-list');
+Route::get('/super-admin/pending-application-list', [SuperAdminApplicationController::class, 'getPendingApplicationList'])->name('superadmin-app-pending-list');
 Route::get('/super-admin/application-view/{id}', [SuperAdminApplicationController::class, 'getApplicationView']);
 Route::get('/super-admin/payment-fee-list', [SuperAdminApplicationController::class, 'getApplicationPaymentFeeList']);
 
@@ -591,6 +592,9 @@ Route::post('/super-admin-approved-course', [SuperAdminApplicationController::cl
 Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 
 /*--end here--*/
+
+Route::post('/super-admin/assign-extra-dates', [SuperAdminApplicationController::class, 'assignExtraDates']); 
+
 /********Surveillance */
 Route::get('/surveillance-create',[SurveillanceController::class,"index"])->name('surveillance-create');
 Route::post('/surveillance',[SurveillanceController::class,"surveillanceCreate"]);

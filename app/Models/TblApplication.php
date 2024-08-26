@@ -22,23 +22,26 @@ class TblApplication extends Model
         // Generate code before saving the model
         static::creating(function ($model) {
             $model->generateCode();
-            $model->generateReferenceCode();
+            // $model->generateReferenceCode();
         });
     }
 
     public function generateCode()
     {
         $prefix = 'ATAB/TP-';
+        $ref_prefix = 'ATAB/REF-';
         $suffix = date('Y');
 
         $maxCode = static::where('uhid', 'like', "$prefix%$suffix")->max('uhid');
         if (!$maxCode) {
             $newCode = "$prefix" . str_pad('001', 3, '0', STR_PAD_LEFT) . "/$suffix";
+            $ref_newCode = "$ref_prefix" . str_pad('001', 3, '0', STR_PAD_LEFT) . "/$suffix";
         } else {
             // Extract the numeric part from the uhid
             $numberPart = preg_match('/(\d+)(?=\/\d{4}$)/', $maxCode, $matches) ? $matches[1] : '0';
             $codeNumber = (int)$numberPart + 1;
             $newCode = "$prefix" . str_pad($codeNumber, 3, '0', STR_PAD_LEFT) . "/$suffix";
+            $ref_newCode = "$ref_prefix" . str_pad($codeNumber, 3, '0', STR_PAD_LEFT) . "/$suffix";
         }
 
         // if (!$maxCode) {
@@ -49,6 +52,8 @@ class TblApplication extends Model
         // }
         
         $this->uhid = $newCode;
+        $this->refid = $ref_newCode;
+        
     }
 
     public function generateReferenceCode()

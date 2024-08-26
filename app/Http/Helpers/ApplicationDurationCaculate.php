@@ -44,8 +44,13 @@ class ApplicationDurationCaculate {
             }
            
             if($applicationTime == 0){
-                $obj->applicationAction = 'N';
-                $obj->applicationDayTime =0;
+                if($assignDayVerifys>0){
+                    $obj->applicationAction = 'Y';
+                    $obj->applicationDayTime =$assignDayVerifys;
+                }else{
+                    $obj->applicationAction = 'N';
+                    $obj->applicationDayTime =0;
+                }
             }else{
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$applicationTime;
@@ -89,20 +94,25 @@ class ApplicationDurationCaculate {
                 $assignDayVerifys =0;
             }
             /**End-- Extra Day Assign By Admin */
-            $dayTime = $now - strtotime($app->created_at);
+            $secretariat_details = DB::table('tbl_secretariat_assign')->where('application_id',$app->id)->first();
+            $dayTime = $now - strtotime($secretariat_details->created_at);
             $dayscount = round($dayTime/ (60 * 60 * 24));
             if($application_time->number_of_days >= $dayscount){
                 $applicationTime = (int)($application_time->number_of_days-$dayscount);
             }elseif($app->assign_day_for_verify !=0 && $assignDayVerifys !=0){
                 $applicationTime = (int)($app->assign_day_for_verify);
-                
             }else{
                 $applicationTime =0;
             }
            
             if($applicationTime == 0){
-                $obj->applicationAction = 'N';
-                $obj->applicationDayTime =0;
+                if($assignDayVerifys>0){
+                    $obj->applicationAction = 'Y';
+                    $obj->applicationDayTime =$assignDayVerifys;
+                }else{
+                    $obj->applicationAction = 'N';
+                    $obj->applicationDayTime =0;
+                }
             }else{
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$applicationTime;
@@ -155,8 +165,13 @@ class ApplicationDurationCaculate {
             }
            
             if($applicationTime == 0){
-                $obj->applicationAction = 'N';
-                $obj->applicationDayTime =0;
+                if($assignDayVerifys>0){
+                    $obj->applicationAction = 'Y';
+                    $obj->applicationDayTime =$assignDayVerifys;
+                }else{
+                    $obj->applicationAction = 'N';
+                    $obj->applicationDayTime =0;
+                }
             }else{
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$applicationTime;
@@ -175,6 +190,18 @@ class ApplicationDurationCaculate {
     /****** Start Desktop Assessor Verify Document ******/
     function calculateTimeDateDesktopAssessorAcceptDoc($assID, $role_id, $userAction, $app) {
        
+        $now = time();
+        /**Start-- Extra Day Assign By Admin */
+        $assignDayTime = $now - strtotime($app->assign_day_for_verify_date);
+        $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+        if($app->assign_day_for_verify >= $assigndayscount){
+            $assignDayVerifys = (int)($app->assign_day_for_verify);
+        }else{
+            $assignDayVerifys =0;
+        }
+        /**End-- Extra Day Assign By Admin */
+
+
         $application_time = DB::table('tbl_application_time')->where([
             'role_id' => $role_id,
             'user_action'=>$userAction,
@@ -186,6 +213,8 @@ class ApplicationDurationCaculate {
             'assessor_id' => $assID,
             'assessor_type' => 'desktop'
         ])->latest()->first();
+
+
        if(!empty($assessor_assign)){
        $obj = new \stdclass;
        $now = strtotime(date('Y-m-d'));
@@ -203,6 +232,15 @@ class ApplicationDurationCaculate {
                 $obj->applicationDayTime =$application_time->number_of_days;
            }
         }
+        else{
+            if($assignDayVerifys>0){
+                $obj->applicationAction = 'Y';
+                $obj->applicationDayTime =$assignDayVerifys;
+            }else{
+                $obj->applicationAction = 'N';
+                $obj->applicationDayTime =0;
+            }
+        }
         return $obj;
       }else{
         return null;
@@ -211,6 +249,18 @@ class ApplicationDurationCaculate {
     }
     function calculateTimeDateDesktopAssessorVerifyDoc($assID, $role_id, $userAction, $app) {
        
+        $now = time();
+        /**Start-- Extra Day Assign By Admin */
+        $assignDayTime = $now - strtotime($app->assign_day_for_verify_date);
+        $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+        if($app->assign_day_for_verify >= $assigndayscount){
+            $assignDayVerifys = (int)($app->assign_day_for_verify);
+        }else{
+            $assignDayVerifys =0;
+        }
+        /**End-- Extra Day Assign By Admin */
+
+
         $application_time = DB::table('tbl_application_time')->where([
             'role_id' => $role_id,
             'user_action'=>$userAction,
@@ -239,6 +289,15 @@ class ApplicationDurationCaculate {
                 $obj->applicationDayTime =$application_time->number_of_days;
            }
         }
+        else{
+            if($assignDayVerifys>0){
+                $obj->applicationAction = 'Y';
+                $obj->applicationDayTime =$assignDayVerifys;
+            }else{
+                $obj->applicationAction = 'N';
+                $obj->applicationDayTime =0;
+            }
+        }
         return $obj;
       }else{
         return null;
@@ -249,6 +308,17 @@ class ApplicationDurationCaculate {
     /****** Start Onsite Assessor Verify Document ******/
     function calculateTimeDateOnsiteAssessorAcceptDoc($assID, $role_id, $userAction, $app) {
        
+        $now = time();
+        /**Start-- Extra Day Assign By Admin */
+        $assignDayTime = $now - strtotime($app->assign_day_for_verify_date);
+        $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+        if($app->assign_day_for_verify >= $assigndayscount){
+            $assignDayVerifys = (int)($app->assign_day_for_verify);
+        }else{
+            $assignDayVerifys =0;
+        }
+        /**End-- Extra Day Assign By Admin */
+
         $application_time = DB::table('tbl_application_time')->where([
             'role_id' => $role_id,
             'user_action'=>$userAction,
@@ -276,6 +346,14 @@ class ApplicationDurationCaculate {
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$application_time->number_of_days;
            }
+        }else{
+            if($assignDayVerifys>0){
+                $obj->applicationAction = 'Y';
+                $obj->applicationDayTime =$assignDayVerifys;
+            }else{
+                $obj->applicationAction = 'N';
+                $obj->applicationDayTime =0;
+            }
         }
         return $obj;
      }else{
@@ -284,6 +362,17 @@ class ApplicationDurationCaculate {
     }
     function calculateTimeDateOnsiteAssessorVerifyDoc($assID, $role_id, $userAction, $app) {
        
+        $now = time();
+        /**Start-- Extra Day Assign By Admin */
+        $assignDayTime = $now - strtotime($app->assign_day_for_verify_date);
+        $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+        if($app->assign_day_for_verify >= $assigndayscount){
+            $assignDayVerifys = (int)($app->assign_day_for_verify);
+        }else{
+            $assignDayVerifys =0;
+        }
+        /**End-- Extra Day Assign By Admin */
+
         $application_time = DB::table('tbl_application_time')->where([
             'role_id' => $role_id,
             'user_action'=>$userAction,
@@ -311,6 +400,14 @@ class ApplicationDurationCaculate {
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$application_time->number_of_days;
            }
+        }else{
+            if($assignDayVerifys>0){
+                $obj->applicationAction = 'Y';
+                $obj->applicationDayTime =$assignDayVerifys;
+            }else{
+                $obj->applicationAction = 'N';
+                $obj->applicationDayTime =0;
+            }
         }
         return $obj;
      }else{
@@ -331,7 +428,6 @@ class ApplicationDurationCaculate {
             'application_id' => $app->id,
             'pay_status'=>'Y'
         ])->latest()->first();
-       //dd($role_id);
        $obj = new \stdclass;
        //if($application_payment->approve_remark == null){
         if($application_time){
@@ -357,19 +453,19 @@ class ApplicationDurationCaculate {
             }
            
             if($applicationTime == 0){
-                $obj->applicationAction = 'N';
-                $obj->applicationDayTime =0;
+                 if($assignDayVerifys>0){
+                    $obj->applicationAction = 'Y';
+                    $obj->applicationDayTime =$assignDayVerifys;
+                }else{
+                    $obj->applicationAction = 'N';
+                    $obj->applicationDayTime =0;
+                }
             }else{
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$applicationTime;
             }
         }
-        //return $obj;
-        //    }else{
-        //         $obj->applicationAction = 'V';
-        //         $obj->applicationDayTime =0;
-            
-        //    }
+    
             return $obj;
     }
     /****** End Admin ******/
@@ -391,6 +487,7 @@ class ApplicationDurationCaculate {
 
             $totalday = strtotime($app->valid_till)-strtotime($app->valid_from);
             $totoaldayscount = round($totalday/ (60 * 60 * 24));
+            
             $fromDate = strtotime($app->valid_till)-$now;
             $dayscount = round($fromDate/ (60 * 60 * 24));
         //dd($totoaldayscount);
@@ -409,5 +506,72 @@ class ApplicationDurationCaculate {
         return $obj;
     }
     /****** End Surveillance Renewal ****/
+
+        /****** Start SuperAdmin ***/
+    function calculateTimeDateSuperAdminPendingApplication($app) {
+        $application_time = DB::table('tbl_application_time')
+        // ->whereNotIn('user_type',['admin'])
+        ->get();
+
+        // dd($application_time);
+        $application_payment = DB::table('tbl_application_payment')->whereNull('deleted_at')->where([
+            'application_id' => $app->id,
+            'pay_status'=>'Y'
+        ])->latest()->first();
+        $arr = [];
+
+        foreach($application_time as $app_time){
+        $obj = new \stdclass;
+        if($application_time){
+            $now = time();
+            /**Start-- Extra Day Assign By Admin */
+            $assignDayTime =  strtotime($app->assign_day_for_verify_date) - $now;
+            $assigndayscount = round($assignDayTime/ (60 * 60 * 24));
+            
+            if($app->assign_day_for_verify >= $assigndayscount){
+                $assignDayVerifys = (int)($app->assign_day_for_verify);
+            }else{
+                $assignDayVerifys =0;
+            }
+            /**End-- Extra Day Assign By Admin */
+
+            if($app_time->user_action =="recieved_document_same_assign_date"){
+                $created_at = DB::table('tbl_assessor_assign')->where('application_id',$app->id)->first()?->created_at;
+            }
+            else if($app_time->user_action=="assign_secretariat"){
+                $created_at = DB::table('tbl_secretariat_assign')->where(['application_id'=>$app->id])->first()?->created_at;
+            }
+            else{
+                $created_at = $app->created_at;
+            }
+
+            $dayTime = $now - strtotime($created_at);
+            $dayscount = round($dayTime/ (60 * 60 * 24));
+            if($app_time->number_of_days >= $dayscount && $application_payment->status==2){
+                $applicationTime = (int)($app_time->number_of_days-$dayscount);
+            }else{
+                $applicationTime =0;
+            }
+            if($applicationTime == 0){
+                if($assignDayVerifys>0){
+                    $obj->applicationAction = 'Y';
+                    $obj->applicationDayTime =$assignDayVerifys;
+                }else{
+                    $obj->applicationAction = 'N';
+                    $obj->applicationDayTime =0;
+                }
+            }else{
+                $obj->applicationAction = 'Y';
+                $obj->applicationDayTime =$applicationTime;
+            }
+        }
+        $arr[] = $obj;
+        // return $obj;
+    }
+    
+    return $arr;
+
+}
+
 
 }
