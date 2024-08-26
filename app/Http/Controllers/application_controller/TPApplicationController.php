@@ -109,7 +109,7 @@ class TPApplicationController extends Controller
                 $obj->appHistory= $app_history;
                 $final_data[] = $obj;
         }
-
+        
         return view('tp-view.application-list',['list'=>$final_data]);
     }
 

@@ -108,37 +108,43 @@
                                     @isset($list)
                                         @foreach ($list as $k => $item)
                                             <tr
-                                                class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
-                                                <td>{{ $item->application_list->id }}</td>
-                                                <td>L-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>{{ $item->application_list->uhid }}</td>
+                                                class="odd gradeX @if ($item->status == 2) approved_status @elseif($item->status == 1) process_status @elseif($item->status == 0) pending_status @endif">
+                                                <td>{{ $item->id }}</td>
+                                                <td>L-{{ $item->level_id ?? '' }}</td>
+                                                <td>{{ $item->uhid }}</td>
                                                 <td>
                                                 @php
-                                                        $status = getApplicationStatus($item->application_list->status,"Admin");
+                                                        $status = getApplicationStatus($item->status,"Admin");
                                                     @endphp
                                                 <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->valid_from)
-                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
+                                                @if($item->valid_from)
+                                                {{\Carbon\Carbon::parse($item->valid_from)->format('d-m-Y')}}
                                                 @else
                                                 <span>N/A</span>
                                                 @endif
                                                 </td>
                                                 <td>
-                                                @if($item->application_list->valid_till)
-                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
+                                                @if($item->valid_till)
+                                                {{\Carbon\Carbon::parse($item->valid_till)->format('d-m-Y')}}
                                                 @else
                                                 <span>N/A</span>
                                                 @endif
                                                 </td>
                                                    <td>
-                                                    
+                                                @if($item->assign_day_for_verify!=0)
+                                                <span class="badge badge-main success">Assigned Date[{{\Carbon\Carbon::parse($item->valid_till)->format('d-m-Y')}}]</span>
+                                                @else
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#raise_query_payment"
+                                                    onclick="setPayModalData({{$item->id}})"
+                                                    class="btn btn-tbl-edit bg-warning">
+                                                    <i class="material-icons">event</i>
+                                                </a>
+                                                @endif
+
                                                    </td>
                                             </tr>
-
-           
-
       
    </div>
 </div>
@@ -157,9 +163,35 @@
         </div>
         </div>
 
+<!-- Modal -->
+<div class="modal fade" id="raise_query_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="raise_query_payment">Give extra days</h5>
+        
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="dateForm">
+      <se class="modal-body">
+                <label for="dateInput">Select a date and time:</label>
+                <input type="text" id="dateInput" name="date" class="form-control custom-input-date-time">
+                <input type="text" id="timeInput" name="timeInput" class="form-control custom-input-date-time">
 
+                <input type="hidden" name="application_id" value="" id="application_id"/>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="handleToGiveExtraDates()">Assign extra Date</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- end here edit payment modal -->
 
 
     </section>
-   
+  
     @include('layout.footer')
