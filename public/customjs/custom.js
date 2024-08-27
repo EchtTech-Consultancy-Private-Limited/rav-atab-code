@@ -3500,7 +3500,7 @@ $(document).ready(function() {
     
          const signed_copy = $(this)[0].files[0];
          const fileInput = $(this);
-         console.log(fileInput,' file input');
+         
          
           const formData = new FormData();
           formData.append("application_id", application_id);
@@ -3610,3 +3610,88 @@ $(document).ready(function(){
 })
 
     
+
+$(document).ready(function() {
+    $("#dateInput").datepicker({
+        minDate: 0,
+        dateFormat: 'yy-mm-dd'
+    });
+
+    $("#timeInput").timepicker({
+        timeFormat: 'hh:mm TT',
+        onSelect: function(timeText) {
+            // Convert timeText to 24-hour format
+            let [time, period] = timeText.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (period === 'PM' && hours < 12) {
+                hours = parseInt(hours, 10) + 12;
+            } else if (period === 'AM' && hours == 12) {
+                hours = 0;
+            }
+            hours = hours.toString().padStart(2, '0');
+            $("#timeInput").val(`${hours}:${minutes}:00`);
+        }
+    });
+});
+
+function handleToGiveExtraDates(){
+    let application_id = $("#application_id").val();
+    const date = $("#dateInput").val();
+    const time = $("#timeInput").val();
+    const extra_dates = `${date} ${time}`;
+    if(!date || !time){
+        toastr.error("Please select date and time", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        return false;
+    }
+    const formData = new FormData();
+    formData.append("application_id",application_id);
+    formData.append("extra_dates", extra_dates);
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: `${BASE_URL}/super-admin/assign-extra-dates`, // Your server-side upload endpoint
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+           $('.full_screen_loading').hide();
+            if (response.success) {
+              toastr.success(response.message, {
+                  timeOut: 0,
+                  extendedTimeOut: 0,
+                  closeButton: true,
+                  closeDuration: 5000,
+              });
+              setTimeout(()=>{
+                  window.location.reload();
+              },500)
+            }else{
+              $('.full_screen_loading').hide();
+              toastr.success(response.message, {
+                  timeOut: 0,
+                  extendedTimeOut: 0,
+                  closeButton: true,
+                  closeDuration: 5000,
+              });
+            }
+        },
+        error: function(xhr, status, error) {
+            $('.full_screen_loading').hide();
+            toastr.error("Something went wrong!", {
+                  timeOut: 0,
+                  extendedTimeOut: 0,
+                  closeButton: true,
+                  closeDuration: 5000,
+              });
+        }
+    });
+}

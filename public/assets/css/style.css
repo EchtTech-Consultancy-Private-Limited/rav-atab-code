@@ -26051,3 +26051,9 @@ h1.header-title {
     top: -34%;
     right: 45%;
 }
+
+.custom-input-date-time{
+    border:1px solid black !important;
+    padding:4px !important;
+    margin:2px !important;
+}

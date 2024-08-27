@@ -592,6 +592,9 @@ Route::post('/super-admin-approved-course', [SuperAdminApplicationController::cl
 Route::post('/super-admin-reject-course', [SuperAdminApplicationController::class, 'adminRejectCourse']); 
 
 /*--end here--*/
+
+Route::post('/super-admin/assign-extra-dates', [SuperAdminApplicationController::class, 'assignExtraDates']); 
+
 /********Surveillance */
 Route::get('/surveillance-create',[SurveillanceController::class,"index"])->name('surveillance-create');
 Route::post('/surveillance',[SurveillanceController::class,"surveillanceCreate"]);

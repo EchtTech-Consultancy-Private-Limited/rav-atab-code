@@ -153,6 +153,9 @@
                                  $view_url="/admin/application-view-level-3";
                                  }
                                  @endphp
+
+                              @if(isset($item->applicationDuration->applicationAction) && $item->applicationDuration->applicationAction =='Y')
+
                                  <a href="{{ url($view_url, dEncrypt($item->application_list->id)) }}"
                                     class="btn btn-tbl-edit"><i
                                     class="material-icons">visibility</i></a>
@@ -197,6 +200,13 @@
                                  <a class="btn btn-tbl-delete bg-history font-a"  data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
                                  History
                                  </a>
+                                 @else
+                                 <a class="btn btn-tbl-edit w-100 border-bottom border badge badge-main danger">  
+                                            Contact to admin           
+                                        </a>
+                                 @endif
+
+
                               </td>
                            </tr>
 

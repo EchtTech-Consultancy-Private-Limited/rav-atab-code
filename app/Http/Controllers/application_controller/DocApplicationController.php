@@ -181,7 +181,7 @@ class DocApplicationController extends Controller
         try{
             DB::beginTransaction();
             $application_id = dDecrypt($request->application_id);
-            DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>2]); //payment_status = 1 for payment received 2 for payment approved
+            DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>2,'assign_day_for_verify_date'=>null,'assign_day_for_verify'=>0]); //payment_status = 1 for payment received 2 for payment approved
             
             $last_pay=DB::table('tbl_application_payment')->where(['application_id'=>$application_id])->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
             DB::table('tbl_application_payment')->where(['application_id'=>$application_id,'id'=>$last_pay->id,'payment_ext'=>null,'pay_status'=>'Y'])->update(['status'=>2,'approve_remark'=>$request->final_payment_remark??'','accountant_id'=>Auth::user()->id]);

@@ -49,6 +49,7 @@ class AccountApplicationController extends Controller
                 // }
                 $appTime = new ApplicationDurationCaculate;
                 $application_duration =$appTime->calculateTimeDateAccount(auth::user()->role,'verify_payment',$app);
+                
                 $obj->applicationDuration = $application_duration;
                 
 
@@ -92,7 +93,7 @@ class AccountApplicationController extends Controller
                 $final_data[] = $obj;
                 
         }
-        // dd($final_data);
+        
         return view('account-view.application-list',['list'=>$final_data]);
     }
     public function getApplicationView($id){
