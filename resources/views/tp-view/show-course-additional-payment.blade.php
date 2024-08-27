@@ -714,18 +714,20 @@ $('#payment_transaction_no').on('keyup focusout', function() {
         var paymentTransactionNo = $(this).val();
         paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
         $(this).val(paymentTransactionNo);
-        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
-            $('#payment_transaction_no-error').text(
-                'Payment Transaction no. must not contain special characters.');
-            $('#submitBtn').attr('disabled', true);
-            return;
-        } else {
+        if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+            $('#payment_transaction_no-error').text('');
             $('#submitBtn').attr('disabled', false);
+        } else {
+            $('#payment_transaction_no-error').text('Payment Transaction no. must contain both letters and numbers.');
+            $('#submitBtn').attr('disabled', true);
+            return false;
         }
+
 
         if (paymentTransactionNo.length < 9) {
             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
             $('#submitBtn').attr('disabled', true);
+            return false;
         }else{
             $.ajax({
             type: 'POST',
@@ -833,14 +835,15 @@ $('#payment_reference_no').on('keyup', function() {
         }
         paymentReferenceNo = paymentReferenceNo.replace(/\s/g, '');
         $(this).val(paymentReferenceNo);
-        if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
-            $('#payment_reference_no-error').text(
-                'Payment Reference no. must not contain special characters.');
-            $('#submitBtn').attr('disabled', true);
-            return;
-        } else {
+        if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
+            $('#payment_reference_no-error').text('');
             $('#submitBtn').attr('disabled', false);
+        } else {
+            $('#payment_reference_no-error').text('Payment Reference no. must contain both letters and numbers.');
+            $('#submitBtn').attr('disabled', true);
+            return false;
         }
+
 
         if (paymentReferenceNo.length < 9) {
             $('#payment_reference_no-error').text('Payment Reference no. must be at least 9 characters.');

@@ -359,6 +359,7 @@ active @endif"
                                                                                 name="Email_ID"
                                                                                 placeholder="Email-ID"
                                                                                 required="true"
+                                                                                id="email_id"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">
                                                                             <!-- <input id="emailId" type="text"
                                                                                 name="Email_ID"
