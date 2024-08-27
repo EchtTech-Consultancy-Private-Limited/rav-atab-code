@@ -2,6 +2,7 @@
 namespace App\Http\Helpers;
 
 use DB,Log;
+use Carbon\Carbon;
 
 
 class ApplicationDurationCaculate {
@@ -230,9 +231,7 @@ class ApplicationDurationCaculate {
             if($assignDate >= $now){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$application_time->number_of_days;
-           }
-        }
-        else{
+           }else{
             if($assignDayVerifys>0){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$assignDayVerifys;
@@ -240,6 +239,7 @@ class ApplicationDurationCaculate {
                 $obj->applicationAction = 'N';
                 $obj->applicationDayTime =0;
             }
+           }
         }
         return $obj;
       }else{
@@ -282,14 +282,11 @@ class ApplicationDurationCaculate {
        }else{
             $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at. ' + '.$application_time->number_of_days.' days')));
        }
-      //dd($assignDate);
         if($application_time){
             if($assignDate >= $now){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$application_time->number_of_days;
-           }
-        }
-        else{
+           }else{
             if($assignDayVerifys>0){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$assignDayVerifys;
@@ -297,9 +294,11 @@ class ApplicationDurationCaculate {
                 $obj->applicationAction = 'N';
                 $obj->applicationDayTime =0;
             }
+           }
         }
         return $obj;
       }else{
+        
         return null;
       }
     }
@@ -345,8 +344,7 @@ class ApplicationDurationCaculate {
             if($assignDate >= $now){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$application_time->number_of_days;
-           }
-        }else{
+           }else{
             if($assignDayVerifys>0){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$assignDayVerifys;
@@ -354,6 +352,7 @@ class ApplicationDurationCaculate {
                 $obj->applicationAction = 'N';
                 $obj->applicationDayTime =0;
             }
+           }
         }
         return $obj;
      }else{
@@ -399,8 +398,7 @@ class ApplicationDurationCaculate {
             if($assignDate >= $now){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$application_time->number_of_days;
-           }
-        }else{
+           }else{
             if($assignDayVerifys>0){
                 $obj->applicationAction = 'Y';
                 $obj->applicationDayTime =$assignDayVerifys;
@@ -408,6 +406,7 @@ class ApplicationDurationCaculate {
                 $obj->applicationAction = 'N';
                 $obj->applicationDayTime =0;
             }
+           }
         }
         return $obj;
      }else{
@@ -571,7 +570,5 @@ class ApplicationDurationCaculate {
     
     return $arr;
 
-}
-
-
+    }
 }
