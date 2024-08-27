@@ -4657,7 +4657,7 @@ table .checkbox [type="checkbox"]+label {
 }
 
 .light .nav>li>a {
-    color: #0d091d;
+    color:#000;
 
 }
 
@@ -14600,7 +14600,7 @@ span.notify {
     width: 5px;
     height: 5px;
     position: absolute;
-    top: 8px;
+    top: 4px;
     right: 7px;
     border-radius: 50%;
     background-color: #30cdab
@@ -14608,7 +14608,7 @@ span.notify {
 
 .heartbeat {
     position: absolute;
-    top: -2px;
+    top: -6px;
     right: -3px;
     height: 25px;
     width: 25px;
@@ -20940,7 +20940,7 @@ span.badge {
     color: #555;
     padding: 15px
 }
-
+/* 
 .card .body .col-xs-1,
 .card .body .col-sm-1,
 .card .body .col-md-1,
@@ -21023,7 +21023,7 @@ span.badge {
 .card .body .col-md-12,
 .card .body .col-lg-12 {
     margin-bottom: 20px
-}
+} */
 
 .plain-card {
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
@@ -24100,7 +24100,7 @@ ul.list-inline.pull-right {
 }
 
 .form-group {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .tab-content>.active .card {
@@ -24401,6 +24401,8 @@ div#ui-datepicker-div{
 
 .select2-container{
     display: inline !important;
+    z-index: 8;
+
 }
 
 .profile-tab-box li.nav-item.tab-all a.nav-link:hover {
@@ -25626,6 +25628,8 @@ p.ref-number b{ font-weight: 600;}
     line-height: 18px;
     padding-top: 5px;
 }
+
+.notification-card .normal-text p{margin-bottom: 0;}
 
 /* ******************************** */
 
