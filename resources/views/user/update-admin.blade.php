@@ -54,6 +54,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
+                    <div class="body">
                         <div class="header">
                             <h2>
                                 <strong>Edit</strong> User
@@ -66,7 +67,7 @@
                             class="javavoid(0) validation-form123" id="regForm" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id" value="{{ $data->id }}">
-                            <div class="body">
+                            
                                 <div class="row clearfix">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -542,16 +543,17 @@
                                 <input type="text" placeholder="role" name="role"  value="{{ $data->role }}">
                             @endif
 
-
-                            </div>
-
-
-                            <div class="col-lg-12 p-t-20 text-center">
+                            <div class="col-lg-12 p-t-10 text-center">
                                 <button type="submit" class="btn btn-primary waves-effect m-r-15">Submit</button>
                                 <button type="button" class="btn btn-danger waves-effect">Cancel</button>
                             </div>
+
+                            </div>
+
+
+                           
+                        </form>
                     </div>
-                    </form>
 
                 </div>
 

@@ -298,16 +298,16 @@
                 
             @for($i=0;$i<count($chartData);$i++)
             <div class="col-lg-4">
-              <div class="card">
-                <div class="body">
-                    <figure class="highcharts-figure">
-                        <div id="container_{{$i}}"></div>
-                        <!--<p class="highcharts-description">
-                             3D pie chart with an inner radius
-                        </p>-->
-                    </figure>
-                  </div>
-                </div>
+               <div class="card">
+                   <div class="body">
+                        <figure class="highcharts-figure">
+                            <div id="container_{{$i}}"></div>
+                            <!--<p class="highcharts-description">
+                                3D pie chart with an inner radius
+                            </p>-->
+                        </figure>
+                    </div>
+               </div>
             </div>
                 @endfor
               

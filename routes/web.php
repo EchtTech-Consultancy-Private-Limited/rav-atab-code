@@ -183,7 +183,7 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('/nationl-accesser', [applicationController::class, 'nationl_accesser']);
     Route::get('/nationl-secretariat', [SecretariatController::class, 'nationl_secretariat']);
     Route::get('/internationl-secretariat', [AdminApplicationController::class, 'getInternationalApplicationList']);
-    //use index page url 
+    //use index page url
     Route::get('/admin-user', [adminController::class, 'user_index']);
     Route::get('/training-provider', [adminController::class, 'tp_index']);
     Route::get('/assessor-user', [adminController::class, 'assessor_user']);
