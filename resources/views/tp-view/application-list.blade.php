@@ -105,187 +105,189 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-responsive p-0" style="width:100%;" id="dataTableMain">
-                                <thead>
-                                    <tr>
-                                        <th>Sr.No</th>
-                                        <th>Level </th>
-                                        <th>Application No. </th>
-                                        <th>Courses</th>
-                                        <th>Total Fee</th>
-                                        <th> Payment Date </th>
-                                        <th>Status</th>
-                                        <th>Valid From</th>
-                                        <th>Valid To</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @isset($list)
-                                        @foreach ($list as $k => $item)
-                                            <tr
-                                                class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
-                                                <td>{{ $k + 1 }}</td>
-                                                <td>L-{{ $item->application_list->level_id ?? '' }}</td>
-                                                <td>{{ $item->application_list->uhid }}</td>
-                                                <td>{{ $item->course_count ?? '' }}</td>
-                                                <td>
-                                                @isset($item->payment)
-                                                    @if(isset($item->payment->other_country_payment) && $item->payment->other_country_payment!=null && $item->payment->other_country_payment!=0)
-                                                    $ {{ $item->payment->other_country_payment}}<span class="payment-count">({{$item->payment->payment_count}})</span>
-                                                    @else
-                                                    ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
-                                                    @endif
-                                                    
-                                                @endisset
-                                                </td>
-                                                <td>
-                                                @isset($item->payment)
-                                                    {{ \Carbon\Carbon::parse($item->payment->payment_date)->format('d-m-Y') }}
+                            <div class="table-responsive">
+                                <table class="table p-0" style="width:100%;" id="dataTableMain">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Level </th>
+                                            <th>Application No. </th>
+                                            <th>Courses</th>
+                                            <th>Total Fee</th>
+                                            <th> Payment Date </th>
+                                            <th>Status</th>
+                                            <th>Valid From</th>
+                                            <th>Valid To</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @isset($list)
+                                            @foreach ($list as $k => $item)
+                                                <tr
+                                                    class="odd gradeX @if ($item->application_list->status == 2) approved_status @elseif($item->application_list->status == 1) process_status @elseif($item->application_list->status == 0) pending_status @endif">
+                                                    <td>{{ $k + 1 }}</td>
+                                                    <td>L-{{ $item->application_list->level_id ?? '' }}</td>
+                                                    <td>{{ $item->application_list->uhid }}</td>
+                                                    <td>{{ $item->course_count ?? '' }}</td>
+                                                    <td>
+                                                    @isset($item->payment)
+                                                        @if(isset($item->payment->other_country_payment) && $item->payment->other_country_payment!=null && $item->payment->other_country_payment!=0)
+                                                        $ {{ $item->payment->other_country_payment}}<span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                        @else
+                                                        ₹ {{ $item->payment->payment_amount}}/- <span class="payment-count">({{$item->payment->payment_count}})</span>
+                                                        @endif
+                                                        
                                                     @endisset
-                                                </td>
-                                                <td>
-                                               
-                                                    @php
-                                                        $status = getApplicationStatus($item->application_list->status,"TP");
-                                                    @endphp
-                                                <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
-                                               
+                                                    </td>
+                                                    <td>
+                                                    @isset($item->payment)
+                                                        {{ \Carbon\Carbon::parse($item->payment->payment_date)->format('d-m-Y') }}
+                                                        @endisset
+                                                    </td>
+                                                    <td>
                                                 
-                                                </td>
-                                                <td>
-                                                @if($item->application_list->valid_from)
-                                                {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
-                                                @else
-                                                <span>N/A</span>
-                                                @endif
-                                                </td>
-                                                <td>
-                                                @if($item->application_list->valid_till)
-                                                {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
-                                                @else
-                                                <span>N/A</span>
-                                                @endif
-                                                </td>
-                                                    <td class="p-0-lg1">
-                                                    <div class="d-flex justify-content-between gap-1 p-1 training-provider-action">
-                                                        @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y' && $item->application_list->renewal_surveillance_type==null)
-                                                        <a href="{{url($item->renewal_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
-                                                            For Renewal
-                                                        </a>
-                                                        @endif
-
-                                                        @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y'  && $item->application_list->renewal_surveillance_type==null)
-                                                        <a href="{{url($item->surveillance_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
-                                                            For Surveillance
-                                                        </a>
-                                                        @endif
-                                                    </div>
-                                                    <div>
-                                                    </div>
-                                                    <div class="d-flex align-items-center justify-content-center gap-2 p-1 position-relative">
-                                                            @if($item->application_list->level_id == 1)
-                                                                <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
-                                                                    <i class="material-icons">visibility</i>
-                                                                </a>
-                                                            @elseif($item->application_list->level_id == 2)
-                                                                <a href="{{ url('/upgrade/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
-                                                                    <i class="material-icons">visibility</i>
-                                                                </a>
-                                                            @elseif($item->application_list->level_id == 3)
-                                                                <a href="{{ url('/upgrade/level-3/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
-                                                                    <i class="material-icons">visibility</i>
-                                                                </a>
-                                                            @endif
-
-                                                            <a class="btn btn-tbl-delete bg-history font-a" data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
-                                                                History
+                                                        @php
+                                                            $status = getApplicationStatus($item->application_list->status,"TP");
+                                                        @endphp
+                                                    <span class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
+                                                
+                                                    
+                                                    </td>
+                                                    <td>
+                                                    @if($item->application_list->valid_from)
+                                                    {{\Carbon\Carbon::parse($item->application_list->valid_from)->format('d-m-Y')}}
+                                                    @else
+                                                    <span>N/A</span>
+                                                    @endif
+                                                    </td>
+                                                    <td>
+                                                    @if($item->application_list->valid_till)
+                                                    {{\Carbon\Carbon::parse($item->application_list->valid_till)->format('d-m-Y')}}
+                                                    @else
+                                                    <span>N/A</span>
+                                                    @endif
+                                                    </td>
+                                                        <td class="p-0-lg1">
+                                                        <div class="d-flex justify-content-between gap-1 p-1 training-provider-action">
+                                                            @if(isset($item->surveillanceRenewal->renewal_status) && $item->surveillanceRenewal->renewal_status =='Y' && $item->application_list->renewal_surveillance_type==null)
+                                                            <a href="{{url($item->renewal_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-renewal">          
+                                                                For Renewal
                                                             </a>
-                                                            <!-- If level - 1 -->
-                                                        @if($item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 1 && $item->application_list->level_id==1)
-                                                                <div class="d-flex action-button-div">
-                                                                    <?php
-                                                                        $isApplicationBeingExpired = checkApplicationValidityExpire($item->application_list->id, $item->application_list->valid_till);
-                                                                    ?>
-                                                                    @if($isApplicationBeingExpired)
-                                                                        <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
-                                                                    @else
-                                                                        <!-- If previous application upgraded then need not to show l-1 and l-2 -->
-                                                                        @if($item->application_list->upgraded_level_id == 1)
-                                                                            <a href="{{ url('/upgrade-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-warning">L-2</a>
-                                                                            <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-warning">L-3</a>
-                                                                        @endif
-                                                                    @endif
-                                                                </div>
+                                                            @endif
 
-                                                             {{-- @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
-                                                                     @if($item->application_list->upgraded_level_id == 2)
-                                                                    <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
-                                                                     @elseif($item->application_list->upgraded_level_id == 3)
-                                                                    <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a> --}}
+                                                            @if(isset($item->surveillanceRenewal->surveillance_status) && $item->surveillanceRenewal->surveillance_status =='Y'  && $item->application_list->renewal_surveillance_type==null)
+                                                            <a href="{{url($item->surveillance_url)}}" class="btn btn-tbl-edit w-50 border-bottom border for-surveliance">          
+                                                                For Surveillance
+                                                            </a>
+                                                            @endif
+                                                        </div>
+                                                        <div>
+                                                        </div>
+                                                        <div class="d-flex align-items-center justify-content-center gap-2 p-1 position-relative">
+                                                                @if($item->application_list->level_id == 1)
+                                                                    <a href="{{ url('/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
+                                                                        <i class="material-icons">visibility</i>
+                                                                    </a>
+                                                                @elseif($item->application_list->level_id == 2)
+                                                                    <a href="{{ url('/upgrade/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
+                                                                        <i class="material-icons">visibility</i>
+                                                                    </a>
+                                                                @elseif($item->application_list->level_id == 3)
+                                                                    <a href="{{ url('/upgrade/level-3/tp/application-view', dEncrypt($item->application_list->id)) }}" class="btn btn-tbl-edit">
+                                                                        <i class="material-icons">visibility</i>
+                                                                    </a>
                                                                 @endif
-                                                           {{--  @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
-                                                                <span class="badge badge-main success">Upgraded</span> 
-                                                            @endif--}}
-                                                            <!-- End here level - 1  -->
 
-                                                            <!-- If level - 2 -->
-                                                            @if($item->application_list->level_id == 2)
-                                                                @php
-                                                                    $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
-                                                                @endphp
-                                                            @endif
+                                                                <a class="btn btn-tbl-delete bg-history font-a" data-bs-toggle="modal" data-bs-target="#view_history_{{$item->application_list->id}}">
+                                                                    History
+                                                                </a>
+                                                                <!-- If level - 1 -->
+                                                            @if($item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 1 && $item->application_list->level_id==1)
+                                                                    <div class="d-flex action-button-div">
+                                                                        <?php
+                                                                            $isApplicationBeingExpired = checkApplicationValidityExpire($item->application_list->id, $item->application_list->valid_till);
+                                                                        ?>
+                                                                        @if($isApplicationBeingExpired)
+                                                                            <button class="btn btn-primary bg-history blink-btn text-white" data-bs-toggle="modal" data-bs-target="#expiry_popup">Upgrade</button>
+                                                                        @else
+                                                                            <!-- If previous application upgraded then need not to show l-1 and l-2 -->
+                                                                            @if($item->application_list->upgraded_level_id == 1)
+                                                                                <a href="{{ url('/upgrade-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-warning">L-2</a>
+                                                                                <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-warning">L-3</a>
+                                                                            @endif
+                                                                        @endif
+                                                                    </div>
 
-                                                            @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1 && $item->application_list->level_id == 2)
-                                                            <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
-                                                            @endif
-                                                            {{--  @if($item->application_list->level_id == 2)
+                                                                {{-- @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
+                                                                        @if($item->application_list->upgraded_level_id == 2)
+                                                                        <a href="{{ url('/upgrade-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                        @elseif($item->application_list->upgraded_level_id == 3)
+                                                                        <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a> --}}
+                                                                    @endif
+                                                            {{--  @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->level_id==1)
+                                                                    <span class="badge badge-main success">Upgraded</span> 
+                                                                @endif--}}
+                                                                <!-- End here level - 1  -->
+
+                                                                <!-- If level - 2 -->
+                                                                @if($item->application_list->level_id == 2)
+                                                                    @php
+                                                                        $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
+                                                                    @endphp
+                                                                @endif
+
+                                                                @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1 && $item->application_list->level_id == 2)
+                                                                <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
+                                                                @endif
+                                                                {{--  @if($item->application_list->level_id == 2)
+                                                                    @php
+                                                                        $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
+                                                                        
+                                                                    @endphp
+                                                                    
+                                                                    @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1)
+                                                                        <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
+                                                                    @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1)
+                                                                        @if($item->application_list->upgraded_level_id == 3)
+                                                                            <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
+                                                                        @endif
+                                                                    @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 3)
+                                                                        <span class="badge badge-main success">Upgraded</span>
+                                                                    @endif
+                                                                @endif --}}
+                                                                <!-- End here level - 2  -->
+
+                                                                <!-- level-3 -->
                                                                 @php
-                                                                    $reference_id = $item->application_list->prev_refid == null ? $item->application_list->refid : $item->application_list->prev_refid;
+                                                                    $is_second_payment = isSecondPayment($item->application_list->id);
                                                                     
                                                                 @endphp
-                                                                
-                                                                @if($item->application_list->upgraded_level_id == 1 && $item->application_list->approve_status == 1)
-                                                                    <a href="{{ url('/upgrade-level-3-new-application/'.dEncrypt($item->application_list->id).'/'.dEncrypt($reference_id)) }}" class="btn btn-warning">L-3</a>
-                                                                @elseif($item->application_list->is_all_course_doc_verified == 2 && $item->application_list->approve_status == 1)
-                                                                    @if($item->application_list->upgraded_level_id == 3)
-                                                                        <a href="{{ url('/upgrade-level-3-create-new-course', dEncrypt($item->application_list->prev_id).'/'.dEncrypt($item->application_list->refid)) }}" class="btn btn-success">Upgraded</a>
-                                                                    @endif
-                                                                @elseif($item->application_list->is_all_course_doc_verified == 3 && $item->application_list->approve_status == 1 && $item->application_list->upgraded_level_id == 3)
-                                                                    <span class="badge badge-main success">Upgraded</span>
+
+                                                                @if($is_second_payment && $item->application_list->level_id==3)
+                                                            
+                                                                <!-- <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-primary btn-tbl-delete">Second-Pay</a> -->
+                                                                <button class="btn btn-primary btn-tbl-delete text-nowrap tooltip-btn-pay" onclick="f1()">Second-Pay</button>
                                                                 @endif
-                                                            @endif --}}
-                                                            <!-- End here level - 2  -->
+                                                                <!-- end here -->
 
-                                                            <!-- level-3 -->
-                                                            @php
-                                                                $is_second_payment = isSecondPayment($item->application_list->id);
-                                                                
-                                                            @endphp
+                                                                <div class="tooltip-popup">
+                                                                <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-danger btn-tbl-delete">offline</a>
 
-                                                            @if($is_second_payment && $item->application_list->level_id==3)
-                                                          
-                                                            <!-- <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-primary btn-tbl-delete">Second-Pay</a> -->
-                                                            <button class="btn btn-primary btn-tbl-delete text-nowrap tooltip-btn-pay" onclick="f1()">Second-Pay</button>
-                                                            @endif
-                                                            <!-- end here -->
+                                                                <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-success btn-tbl-delete">Online</a>
+                                                                </div>
 
-                                                            <div class="tooltip-popup">
-                                                            <a href="{{ url('upgrade-level-3-show-course-payment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-danger btn-tbl-delete">offline</a>
-
-                                                            <a href="{{ url('makepayment/' . dEncrypt($item->application_list->id) . '?second=payment') }}" class="btn btn-success btn-tbl-delete">Online</a>
                                                             </div>
 
-                                                        </div>
+                                                                </td>
 
-                                                            </td>
-
-                                                    
-                                            </tr>
-                                        @endforeach
-                                    @endisset
-                                </tbody>
-                            </table>
+                                                        
+                                                </tr>
+                                            @endforeach
+                                        @endisset
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
