@@ -332,6 +332,7 @@ active @endif"
                                                                                     class="text-danger">*</span></label>
                                                                             <input type="text" required="required"
                                                                                 maxlength="10" name="Contact_Number"
+                                                                                id="Contact_Number"
                                                                                 class="preventalpha"
                                                                                 placeholder="Contact Number"
                                                                                 value="{{ old('contact_number', $applicationData->contact_number ?? '') }}">
@@ -358,6 +359,7 @@ active @endif"
                                                                             <input
                                                                                type="text"
                                                                                 name="Email_ID"
+                                                                                id="email_id"
                                                                                 placeholder="Email-ID"
                                                                                 required="true"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">

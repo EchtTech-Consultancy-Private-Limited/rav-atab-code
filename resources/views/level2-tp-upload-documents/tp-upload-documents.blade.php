@@ -23,6 +23,7 @@
       </div>
    </div>
    <div class="full_screen_loading">Loading&#8230;</div>
+   
    <!-- Overlay For Sidebars -->
    <div class="overlay"></div>
    <!-- #END# Overlay For Sidebars -->
@@ -163,13 +164,13 @@
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-success btn-sm docBtn docBtn_nc m-1">
-                                        Accepted <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                        Accepted <span>{{ucfirst($doc->assessor_type)}} </span></a>
                                     @elseif($doc->nc_show_status==2)
                                     <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                        NC1 <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                         @if($doc->nc_flag==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
@@ -183,7 +184,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             NC2 <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                              @if($doc->nc_flag==1)
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
@@ -196,14 +197,14 @@
                                                 title="{{$doc->doc_file_name}}"
                                                 href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                                 class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                                Rejected <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                                Rejected <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                         @elseif($doc->nc_show_status==4)
                                        
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             Not Recommended <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                              @if($doc->admin_nc_flag==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"

@@ -1097,7 +1097,8 @@
                         </div>
                     </div>
                     <!-- Edit Modal Poup -->
-                    <div class="modal fade" id="edit_popup">
+                     
+                     <div class="modal fade" id="edit_popup">
                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -1116,7 +1117,7 @@
                                 </div>
                                 <div class="modal-body edit-popup">
                                     <div class="body col-md-12">
-                                        <form action="" id="form_update" method="post" enctype="multipart/form-data">
+                                        <form action="" id="form_update" method="post" enctype="multipart/form-data" onsubmit="return handleUpdateCourse();">
                                             @csrf
                                             <div class="row mt-4">
                                                 <div class="col-sm-6">
@@ -1125,7 +1126,8 @@
                                                             <label class="active">Course Name<span
                                                                     class="text-danger">*</span></label>
                                                             <input type="text" name="Course_Names"
-                                                                id="Course_Names" class="form-control" required>
+                                                                id="Course_Names" class="form-control remove_err_input_error" >
+                                                                <span class="err error_name">Please enter the course name</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1138,17 +1140,21 @@
                                                             </label>
                                                             <div class="course_group">
                                                                 Y <input type="number" placeholder="Years"
-                                                                    name="years" required class="course_input"
+                                                                    name="years"  class="course_input remove_err_input_error"
                                                                     id="years">
+                                                                    <span class="err error_name">Please enter the year</span>
                                                                 M <input type="number" placeholder="Months"
-                                                                    name="months" required class="course_input"
+                                                                    name="months"  class="course_input remove_err_input_error"
                                                                     id="months">
+                                                                    <span class="err error_name">Please enter the month</span>
                                                                 D <input type="number" placeholder="Days"
-                                                                    name="days" required class="course_input"
+                                                                    name="days"  class="course_input remove_err_input_error"
                                                                     id="days">
+                                                                    <span class="err error_name">Please enter the day</span>
                                                                 H <input type="number" placeholder="Hours"
-                                                                    name="hours" required class="course_input"
+                                                                    name="hours"  class="course_input remove_err_input_error"
                                                                     id="hours">
+                                                                    <span class="err error_name">Please enter the hours</span>
                                                             </div>
                                                         </div>
                                                         @error('course_duration')
@@ -1159,9 +1165,10 @@
                                                 <div class="col-sm-6 pt-3">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <label class="active">Eligibility<span> </label>
-                                                            <input type="text" name="Eligibilitys" required
-                                                                id="Eligibilitys" class="form-control">
+                                                            <label class="active">Eligibility<span class="text-danger">*</span> </label>
+                                                            <input type="text" name="Eligibilitys"
+                                                                id="Eligibilitys" class="form-control remove_err_input_error">
+                                                                <span class="err error_name">Please enter the eligibility</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1174,19 +1181,20 @@
                                                                 <label class="custom-button">
                                                                     <input type="checkbox" name="mode_of_course[]"
                                                                         id="offline_checkbox" value="Offline">
-                                                                    <span class="checkbox-label">Offline</span>
+                                                                    <span class="checkbox-label remove_err_input_error">Offline</span>
                                                                 </label>
                                                                 <label class="custom-button">
                                                                     <input type="checkbox" name="mode_of_course[]"
                                                                         id="online_checkbox" value="Online">
-                                                                    <span class="checkbox-label">Online</span>
+                                                                    <span class="checkbox-label remove_err_input_error">Online</span>
                                                                 </label>
                                                                 <label class="custom-button">
                                                                     <input type="checkbox" name="mode_of_course[]"
                                                                         id="hybrid_checkbox" value="Hybrid">
-                                                                    <span class="checkbox-label">Hybrid</span>
+                                                                    <span class="checkbox-label remove_err_input_error">Hybrid</span>
                                                                 </label>
                                                             </div>
+                                                            <span class="err error_name">Please select mode of courses</span>
                                                         </div>
                                                         @error('mode_of_course')
                                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -1200,8 +1208,9 @@
                                                         <div class="form-line">
                                                             <label>Course Brief<span
                                                                     class="text-danger">*</span></label>
-                                                            <textarea rows="4" cols="50" class="form-control" required placeholder="Course Brief"
+                                                            <textarea rows="4" cols="50" class="form-control remove_err_input_error"  placeholder="Course Brief"
                                                                 name="course_brief" id="course_brief" maxlength="500"></textarea>
+                                                                <span class="err error_name">Please enter the course brief</span>
                                                         </div>
                                                         @error('course_brief')
                                                             <div class="alert alert-danger">{{ $message }}
@@ -1216,6 +1225,7 @@
                                                                     class="text-danger">*</span></label>
                                                             <input type="file" name="doc1" id="doc1_edit"
                                                                 class="form-control doc_edit_1 file_size">
+                                                                <span class="err error_name remove_err_input_error">Please select Declaration (PDF)</span>
                                                             <a target="_blank" href="" id="docpdf1ss"
                                                                 title=" Document 1"><i
                                                                     class="fa fa-eye mr-2 d-inline-block w-auto"></i>
@@ -1230,7 +1240,8 @@
                                                                     class="text-danger">*</span></label>
                                                             <input type="file" name="doc2"
                                                                 id="payment_reference_no"
-                                                                class="form-control doc_edit_2 file_size">
+                                                                class="form-control doc_edit_2 file_size remove_err_input_error">
+                                                                <span class="err error_name">Please select Course Curriculum</span>
                                                             <a target="_blank" href="" id="docpdf2ss"
                                                                 title=" Document 1"><i
                                                                     class="fa fa-eye mr-2 d-inline-block w-auto"></i>
@@ -1245,7 +1256,8 @@
                                                                     class="text-danger">*</span></label>
                                                             <input type="file" name="doc3"
                                                                 id="payment_reference_no"
-                                                                class="form-control doc_edit_3 file_size">
+                                                                class="form-control doc_edit_3 file_size_exl remove_err_input_error">
+                                                                <span class="err error_name">Please select Course Details</span>
                                                             <a href="" id="docpdf3ss"
                                                                 title="Download Document 1" download><i
                                                                     class="fa fa-download mr-2 d-inline-block w-"></i>
@@ -1256,7 +1268,7 @@
                                                 <div class="col-md-12 text-center">
                                                    
                                                     <button type="submit" class="btn btn-primary waves-effect m-r-15"
-                                                        onclick="load();">Save</button>
+                                                        >Save</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -1265,7 +1277,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     @include('layout.footer')
 

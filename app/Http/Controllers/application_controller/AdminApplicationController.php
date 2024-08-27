@@ -2388,7 +2388,7 @@ class AdminApplicationController extends Controller
             }
 
 
-            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id,'status'=>9]); //9 for secretariat assign DA
+            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id,'status'=>9,'assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]); //9 for secretariat assign DA
 
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => $assessor_types])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $request->assessor_id]);
 
@@ -2640,7 +2640,7 @@ class AdminApplicationController extends Controller
             
 
 
-            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item,'status'=>12]);
+            DB::table('tbl_application')->where('id', $request->application_id)->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item,'status'=>12,'assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]);
 
             DB::table('tbl_application_course_doc')->where(['application_id' => $request->application_id, 'assessor_type' => 'onsite'])->update(['admin_id' => Auth::user()->id, 'assessor_id' => $item]);
 
