@@ -170,31 +170,31 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-accept/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
-                                             Accept <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             Accept <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                     @elseif($doc->status==2)
                                     <a 
                                         title="{{$doc->doc_file_name}}"
                                         href="{{ url('super-admin-nc1/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                        NC1 <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                         @elseif($doc->status==3)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-nc2/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             NC2 <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             NC2 <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                              @elseif($doc->status==6)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-reject/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Reject <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             Reject <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                         @elseif($doc->status==4)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-nr/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Not Recommended <span>{{ucfirst($doc->assessor_type)}} Assessor</span></a>
+                                             Not Recommended <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                              @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
