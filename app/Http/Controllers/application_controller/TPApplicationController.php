@@ -2158,6 +2158,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     
     // dd($first_app_id);
 
+    DB::table('tbl_application')->where('id',$request->Application_id)->update(['status'=>0]);
     
     $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
     $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();

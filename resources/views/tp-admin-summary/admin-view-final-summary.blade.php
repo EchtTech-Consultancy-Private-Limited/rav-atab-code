@@ -239,7 +239,7 @@
                                 </button>
                                     </div>
                                     <div class="col-sm-12 mt-3" id="comment-section">
-                                                    <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
+                                                    <label for="comment_text" class="">Remark</label>
                                     <textarea disabled="true" rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control remark_text_area" required="">{{$d_summary_remark}}</textarea>
                                                                     
                                   </div>

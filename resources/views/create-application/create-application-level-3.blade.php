@@ -331,7 +331,9 @@ active @endif"
                                                                             <label>Contact Number<span
                                                                                     class="text-danger">*</span></label>
                                                                             <input type="text" required="required"
-                                                                                maxlength="10" name="Contact_Number"
+                                                                                maxlength="10" 
+                                                                                name="Contact_Number"
+                                                                                id="Contact_Number"
                                                                                 class="preventalpha"
                                                                                 placeholder="Contact Number"
                                                                                 
@@ -354,6 +356,7 @@ active @endif"
                                                                             
                                                                              type="text"
                                                                                 name="Email_ID"
+                                                                                id="email_id"
                                                                                 placeholder="Email-ID"
                                                                                 value="{{ old('email', $applicationData->email ?? '') }}">
                                                                         </div>

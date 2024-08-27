@@ -430,12 +430,13 @@
         $(this).val(paymentTransactionNo);
 
         // Check if the input contains special characters
-        if (!/^[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
-            $('#payment_transaction_no-error').text(
-                'Payment Transaction no. must not contain special characters');
-            // Disable the button
+        if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+            $('#payment_transaction_no-error').text('');
+            $('#submitBtn').attr('disabled', false);
+        } else {
+            $('#payment_transaction_no-error').text('Payment Transaction no. must contain both letters and numbers.');
             $('#submitBtn').attr('disabled', true);
-            return;
+            return false;
         }
 
         // Check if the length of the input is less than the minimum required length
@@ -443,7 +444,7 @@
             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters');
             // Disable the button
             $('#submitBtn').attr('disabled', true);
-            return;
+            return false;
         }
 
         $.ajax({
@@ -490,10 +491,13 @@
         $(this).val(paymentReferenceNo);
 
         // Check if the input contains special characters
-        if (!/^[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
-            $('#payment_reference_no-error').text(
-                'Payment Reference no. must not contain special characters.');
-            return;
+        if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
+            $('#payment_reference_no-error').text('');
+            $('#submitBtn').attr('disabled', false);
+        } else {
+            $('#payment_reference_no-error').text('Payment Reference no. must contain both letters and numbers.');
+            $('#submitBtn').attr('disabled', true);
+            return false;
         }
 
         // Check if the length of the input is less than the minimum required length

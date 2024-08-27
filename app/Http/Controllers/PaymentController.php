@@ -142,7 +142,7 @@ class PaymentController extends Controller
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_query_raise'=>2]);
            }
         //dd($rrsult);
-            DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>5]); //status 5 is for done payment by TP.
+            DB::table('tbl_application')->where('id',$application_id)->update(['payment_status'=>5,'status'=>0]); //status 5 is for done payment by TP.
             DB::table('assessor_final_summary_reports')->where(['application_id'=>$application_id])->update(['second_payment_status' => 1]);
            $courses= DB::table('tbl_application_courses')->where('application_id',$application_id)->whereNull('deleted_at')->get(); //status 5 is for done payment by TP.
        

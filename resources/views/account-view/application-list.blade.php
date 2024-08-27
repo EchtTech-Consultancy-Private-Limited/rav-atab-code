@@ -124,12 +124,10 @@
                                         </td>
                                         <td>
                                             @php
-                                            $status =
-                                            getApplicationStatus($item->application_list->status,"Accountant");
+                                            $status = getApplicationStatus($item->application_list->status,"Accountant");
                                             @endphp
                                             <span
                                                 class="badge badge-main <?php echo $status?->color;?> ">{{$status?->status_text}}</span>
-
                                         </td>
                                         <td>
                                             @if($item->application_list->valid_from)

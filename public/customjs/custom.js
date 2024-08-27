@@ -911,15 +911,11 @@ function onsiteDocumentVerfiy() {
 
     if (is_acknowledged) {
         $('.full_screen_loading').show();
-
         let doc_sr_code = $('#onsite_application_doc_sr_code_nc').val();
         let doc_file_name = $('#onsite_application_doc_file_name_nc').val();
         let application_id = $('#onsite_application_id_nc').val();
         let doc_unique_id = $('#onsite_application_doc_unique_code_nc').val();
         let application_courses_id = $('#onsite_application_course_id_nc').val();
-
-      
-       
         let doc_comment = $("#comment_text").val();
         let nc_type = $("#status").find(":selected").val();
         if(doc_comment=="" && nc_type=="Accept"){
@@ -1965,6 +1961,7 @@ function handleOnsiteNotification(pay_id){
 }
 
 function updateFileName(input) {
+    alert("hello")
     var selectedFileName = "";
     if (input.files && input.files.length > 0) {
         selectedFileName = input.files[0].name;
@@ -1999,11 +1996,11 @@ $(document).on('keyup', '[name="years[]"]', function() {
     }
     return true;
 });
-$(document).on('keyup', '[name="months[]"]', function() {
+$(document).on('keyup change', '[name="months[]"]', function() {
     var monthsInputs = document.getElementsByName('months[]');
     // Validate Months
     for (var i = 0; i < monthsInputs.length; i++) {
-        if (!isValidNumber(monthsInputs[i].value, 1, 12)) {
+        if (!isValidNumber(monthsInputs[i].value, 0, 11)) {
             monthsInputs[i].value="";
             // return false;
         }
@@ -2014,7 +2011,7 @@ $(document).on('keyup', '[name="months[]"]', function() {
 $(document).on('keyup', '[name="days[]"]', function() {
     var daysInputs = document.getElementsByName('days[]');
     for (var i = 0; i < daysInputs.length; i++) {
-        if (!isValidNumber(daysInputs[i].value, 1, 31)) {
+        if (!isValidNumber(daysInputs[i].value, 0, 29)) {
             daysInputs[i].value="";
             // return false;
         }
@@ -2169,10 +2166,11 @@ $(document).on('change focus','.select2-selection--multiple',function(){
         }
     });
 
-    mode_of_course.forEach((elem)=>{
-        console.log(elem,' element')
-        if(elem.value==""){
-            $('[name="mode_of_course[1][]"]').addClass('courses_error');
+    mode_of_course.forEach((elem) => {
+        if (elem.value == "") {
+            $(elem).addClass('courses_error');
+        } else {
+            $(elem).removeClass('courses_error'); // Optionally remove the error class if it's not empty
         }
     });
 
@@ -3695,3 +3693,105 @@ function handleToGiveExtraDates(){
         }
     });
 }
+
+
+
+function handleUpdateCourse(){
+    const course_names = document.getElementById('Course_Names');
+    const years = document.getElementById('years');
+    const months = document.getElementById('months');
+    const days = document.getElementById('days');
+    const hours = document.getElementById('hours');
+    const eligibility = document.getElementById('Eligibilitys');
+    
+    const mode_of_course = document.getElementsByName('mode_of_course[]');
+    const course_brief = document.getElementById('course_brief');
+    let flag = 0;
+    if(course_names.value==""){
+        flag=1;
+        $(course_names).addClass('courses_error');
+    }
+    if(years.value==""){
+        flag=1;
+        $(years).addClass('courses_error');
+    }
+    if(months.value==""){
+        flag=1;
+        $(months).addClass('courses_error');
+    }
+    if(days.value==""){
+        flag=1;
+        $(days).addClass('courses_error');
+    }
+    
+    if(hours.value==""){
+        flag=1;
+        $(hours).addClass('courses_error');
+    }
+    if(eligibility.value==""){
+        flag=1;
+        $(eligibility).addClass('courses_error');
+    }
+    
+    if(course_brief.value==""){
+        flag=1;
+        $(course_brief).addClass('courses_error');
+    }
+
+    let isAnyChecked = false;
+    mode_of_course.forEach((elem) => {
+        if (elem.checked) {
+            isAnyChecked = true; // At least one checkbox is selected
+        }
+    });
+
+    if(!isAnyChecked) return false;
+    return flag!=1
+
+    
+}
+
+
+
+
+function validateMobileNumber(mobileNumber) {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    return mobileRegex.test(mobileNumber);
+}
+function validateEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|org|net|gov|edu)$/;
+    return emailRegex.test(email);
+}
+
+$('#email_id').on('blur',function(){
+    const email  = $("#email_id").val();
+    const Contact_Number  = $("#Contact_Number").val();
+    if (!validateEmail(email) || !validateMobileNumber(Contact_Number)) {
+        toastr.error("Please enter valid email", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        $("#nextBtn").attr('disabled',true);
+    }else{
+        $("#nextBtn").attr('disabled',false);
+    } 
+})
+
+$('#Contact_Number').on('blur',function(){
+    const email  = $("#email_id").val();
+    const mobile_number  = $("#Contact_Number").val();
+    if (!validateEmail(email) || !validateMobileNumber(mobile_number)) {
+        toastr.error("Please enter valid mobile number", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        $("#nextBtn").attr('disabled',true);
+    }else{
+        $("#nextBtn").attr('disabled',false);
+    } 
+})
+
