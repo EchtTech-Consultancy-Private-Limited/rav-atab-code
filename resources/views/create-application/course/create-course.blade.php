@@ -422,7 +422,7 @@
                                                 <div class="form-group default-select">
 
                                                     <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
-                                                        required multiple="">
+                                                         multiple="">
                                                         <option disabled>Select Mode of Course</option>
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                             <option value="{{ $value }}">

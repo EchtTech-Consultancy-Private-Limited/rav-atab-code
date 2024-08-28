@@ -632,7 +632,7 @@ class DesktopApplicationController extends Controller
         try {
             DB::beginTransaction();
             $app_id = dDecrypt($request->app_id);
-            DB::table('tbl_application')->where('id',$app_id)->update(['assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]);
+            DB::table('tbl_application')->where('id',$app_id)->update(['status'=>10,'assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]);
             $isUpdate = DB::table('assessor_final_summary_reports')->where(['application_id'=>$app_id,'assessor_type'=>'desktop'])->update(['is_summary_show'=>1]);
             if($isUpdate){
                 DB::commit();

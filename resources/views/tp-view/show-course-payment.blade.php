@@ -692,7 +692,7 @@ $('#payment_transaction_no').on('keyup focusout', function() {
         var paymentTransactionNo = $(this).val();
         paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
         $(this).val(paymentTransactionNo);
-        alert(paymentTransactionNo)
+        
         if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
             $('#payment_transaction_no-error').text('');
             $('#submitBtn').attr('disabled', false);
