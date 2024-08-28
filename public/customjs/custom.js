@@ -3766,7 +3766,7 @@ function validateEmail(email) {
 $('#email_id').on('blur',function(){
     const email  = $("#email_id").val();
     const Contact_Number  = $("#Contact_Number").val();
-    if (!validateEmail(email) || !validateMobileNumber(Contact_Number)) {
+    if (!validateEmail(email) ||  (Contact_Number!="" && !validateMobileNumber(Contact_Number))) {
         toastr.error("Please enter valid email", {
             timeOut: 0,
             extendedTimeOut: 0,
@@ -3782,7 +3782,7 @@ $('#email_id').on('blur',function(){
 $('#Contact_Number').on('blur',function(){
     const email  = $("#email_id").val();
     const mobile_number  = $("#Contact_Number").val();
-    if (!validateEmail(email) || !validateMobileNumber(mobile_number)) {
+    if (!validateMobileNumber(mobile_number) || (email!="" && !validateEmail(email))) {
         toastr.error("Please enter valid mobile number", {
             timeOut: 0,
             extendedTimeOut: 0,
