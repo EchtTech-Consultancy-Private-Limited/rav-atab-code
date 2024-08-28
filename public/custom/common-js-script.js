@@ -149,7 +149,7 @@ $(document).ready(function () {
 
             },
             address:{
-                required: "Address is Must",
+                required: "Address is required",
             }
 
         }
