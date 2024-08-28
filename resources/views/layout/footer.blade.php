@@ -168,7 +168,7 @@
 
                  },
                  address: {
-                     required: "Address is Must",
+                     required: "Address is required",
                  }
 
              }
@@ -288,7 +288,8 @@
      togglePassword.addEventListener('click', (e) => {       
          const type = password.getAttribute('type') == 'password' ? 'text' : 'password';
          password.setAttribute('type', type);
-         this.classlist.toggle('fa fa-eye');
+         e.target.classList.toggle('fa-eye');
+    e.target.classList.toggle('fa-eye-slash');
      });
 
      let cpassword = document.querySelector('#cpassword');
@@ -297,7 +298,8 @@
          const type = cpassword.getAttribute('type') == 'password' ? 'text' : 'password';
          cpassword.setAttribute('type', type);
 
-         this.classlist.toggle('fa-eye-slash');
+         e.target.classList.toggle('fa-eye');
+    e.target.classList.toggle('fa-eye-slash');
 
      })
  </script>

@@ -178,7 +178,7 @@
                                                                     id="view">
                                                                     <i class="fa fa-scribd" aria-hidden="true"
                                                                         title=""></i>
-                                                    </a>
+                                                         </a>
                                                         @endif
 
                                                     @endif

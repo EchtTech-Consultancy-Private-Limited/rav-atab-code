@@ -73,7 +73,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <div class="form-line">
+                                            <div class="form-line mb-3">
                                                 <label>Title<span class="text-danger">*</span></label>
                                                 <select name="title" class="form-control" id="title">
                                                     <option value="">Select Title </option>
@@ -187,7 +187,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <label>Email</label>
+                                                <label>Email<span class="text-danger">*</span></label>
                                                 <input type="email" placeholder="Enter Email id" id="email"
                                                     name="email" value="{{ old('email') }}" id="email"
                                                     onkeydown="validation()">
@@ -439,7 +439,7 @@
                                                 <label for="example-text-input"
                                                     class="form-control-label">Password<span
                                                         class="text-danger">*</span></label>
-                                                <i class="fa fa-eye " aria-hidden="true" id="togglepassword"></i>
+                                                <i class="fa fa-eye" aria-hidden="true" id="togglepassword"></i>
                                                 <input type="password" value="{{ old('password') }}"
                                                     placeholder="Password" id="password" name="password"
                                                     autocomplete="new-password" required>
@@ -459,7 +459,7 @@
                                                 <label for="example-text-input" class="form-control-label">Confirm
                                                     password<span class="text-danger">*</span></label>
 
-                                                <i class="fa fa-eye " aria-hidden="true" id="togglecpassword"></i>
+                                                <i class="fa fa-eye" aria-hidden="true" id="togglecpassword"></i>
                                            
                                             <input type="password" placeholder="Confirm Password" name="cpassword"
                                                 value="{{ old('cpassword') }}" for="cpassword" id="cpassword" required>
