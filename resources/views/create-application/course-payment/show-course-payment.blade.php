@@ -693,10 +693,17 @@ $('#payment_transaction_no').on('keyup focusout', function() {
         const payment_reference_no = $("#payment_reference_no").val();
         paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
         $(this).val(paymentTransactionNo);
-            if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo) (payment_reference_no!="" && /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(payment_reference_no))) {
-
-            $('#payment_transaction_no-error').text('');
-            $('#submitBtn').attr('disabled', false);
+            if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                if(payment_reference_no!="" && !(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(payment_reference_no))){
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', true);
+                    return false;
+                }else{
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', false);
+                }
             
         } else {
             $('#payment_transaction_no-error').text('Payment Transaction no. must contain both letters and numbers.');
@@ -811,16 +818,25 @@ $('#payment_reference_no').on('keyup', function() {
     debounceTimerRef = setTimeout(function() {
         var paymentReferenceNo = $(this).val();
         const paymentTransactionNo = $("#payment_transaction_no").val();
-        console.log(paymentTransactionNo,'paymentTransactionNo')
         if (paymentReferenceNo == '') {
             $('#payment_reference_no-error').text('');
             return;
         }
         paymentReferenceNo = paymentReferenceNo.replace(/\s/g, '');
         $(this).val(paymentReferenceNo);
-        if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentReferenceNo) || (paymentTransactionNo!="" && /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo))) {
-            $('#payment_reference_no-error').text('');
-            $('#submitBtn').attr('disabled', false);
+        if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
+
+            if(paymentTransactionNo!="" && !(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo))){
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', true);
+                    return false;
+                }else{
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', false);
+                }
+           
         } else {
             $('#payment_reference_no-error').text('Payment Reference no. must contain both letters and numbers.');
             $('#submitBtn').attr('disabled', true);
