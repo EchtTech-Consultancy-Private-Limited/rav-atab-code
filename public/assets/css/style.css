@@ -12884,7 +12884,10 @@ input:not([type]), input[type=text]:not(.browser-default), input[type=password]:
 }
 
 .form-control{
-    font-size: 14px;
+    font-size: 13px;
+}
+.form-control.error, input.error{
+    color: #333 !important;
 }
 
 .form-group .help-info {
@@ -26061,4 +26064,8 @@ h1.header-title {
     border:1px solid black !important;
     padding:4px !important;
     margin:2px !important;
+}
+
+.text-left {
+    text-align: left;
 }
