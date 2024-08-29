@@ -178,7 +178,7 @@
                                                                     id="view">
                                                                     <i class="fa fa-scribd" aria-hidden="true"
                                                                         title=""></i>
-                                                    </a>
+                                                         </a>
                                                         @endif
 
                                                     @endif
@@ -334,9 +334,8 @@
                         <tr>
                             <td>{{$key+1}}</td>
                             <td>{{$hist->firstname??''}} {{$hist->middlename??''}} {{$hist->lastname??''}}</td>
-                            <td>{{$hist->created_at}}</td>
+                            <td>{{ \Carbon\Carbon::parse($hist->created_at)->format('d-m-Y')}}</td>
                             <td><span class="badge badge-main {{$hist->status_color}}">{{$hist->status_text}}</span></td>
-                            
                         </tr>
                         @endforeach
                         @endisset

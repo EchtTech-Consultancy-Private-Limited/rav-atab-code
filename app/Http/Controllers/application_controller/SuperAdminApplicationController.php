@@ -1120,13 +1120,12 @@ class SuperAdminApplicationController extends Controller
                         $all_docs = $all_docs_desktop->merge($all_docs_onsite);
 
                         
-                        foreach($all_docs as $doc){
+                        foreach($all_docs_desktop as $doc){
                             if($doc->status==0){
-                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                                 
                             }else{
-                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'onsite_status'=>$doc->onsite_status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                             }
                             // $data = [];
                             //     $data['application_id'] = $doc->application_id;
@@ -1139,6 +1138,15 @@ class SuperAdminApplicationController extends Controller
                             //     $data['comments'] = 'Document has been approved';
                             //     $data['nc_show_status'] = 1;
                             //     DB::table('tbl_nc_comments_secretariat')->insert($data);
+                        }
+                        foreach($all_docs_onsite as $doc){
+                            if($doc->onsite_status==0){
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                
+                            }else{
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['onsite_status'=>$doc->onsite_status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+
+                            }
                         }
 
                         // rejected courses list doc
@@ -1160,8 +1168,11 @@ class SuperAdminApplicationController extends Controller
                          $all_docs = $all_docs_desktop->merge($all_docs_onsite);
  
                          
-                         foreach($all_docs as $doc){
-                            DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                         foreach($all_docs_desktop as $doc){
+                            DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                         }
+                         foreach($all_docs_onsite as $doc){
+                            DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                          }
 
 
