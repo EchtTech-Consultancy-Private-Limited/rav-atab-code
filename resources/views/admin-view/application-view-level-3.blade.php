@@ -627,7 +627,7 @@
                                 <input type="submit" class="btn btn-info float-right" value="Send for Approval">
                                 @if($spocData?->mom_file_name)
                                     <div class="col-md-12">
-                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
+                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm mt-2"> View MoM
                                     </a>  
                                     
                                     </div>
@@ -654,22 +654,22 @@
         <div class="row">
            
         @if($spocData?->mom_file_name && $application_details->application->approve_status!=0)
-                                    <div class="col-md-12">
-                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm"> View MoM
+                                    <div class="col-md-6">
+                                    <a href="{{ url('mom/doc/'.$spocData?->mom_file_name.'/'.dEncrypt($spocData->id).'?secret=true')}}" class="float-left btn btn-primary btn-sm mt-4"> View MoM
                                     </a>  
                                     </div>
                                     
                                     @endif
                         @if($application_details->application->approve_status==1) 
-                        <div class="col-md-12">
+                        <div class="col-md-6 mt-4">
                           <div class="badge badge-main success float-right">Application Approved by admin</div>
                         </div>
                         @elseif($application_details->application->approve_status==2) 
-                        <div class="col-md-12">
+                        <div class="col-md-6 mt-4">
                         <div class="badge badge-main success float-right">Sent Request for Approval</div>
                         </div>
                         @elseif($application_details->application->approve_status==3) 
-                        <div class="col-md-12">
+                        <div class="col-md-6 mt-4">
                         <div class="badge badge-main danger float-right">Application Rejected by admin</div>
                         </div>
                         @endif

@@ -415,7 +415,7 @@ class SecretariatDocumentVerifyController extends Controller
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
                 $t = 0;
-                
+                $reuploadbtnToTPorAdmin = 0;
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -433,6 +433,7 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_comment_status = 4;
                         $nc_flag = 0;
                         $nc_comments=0;
+                        $reuploadbtnToTPorAdmin=1;
                     } 
                     else if ($course_doc->status == 6) {
                         $nc_comment_status = 6;
@@ -561,6 +562,9 @@ class SecretariatDocumentVerifyController extends Controller
 
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
                 DB::commit();
+                if($reuploadbtnToTPorAdmin){
+                    return back()->with('success', 'Enabled Course Doc upload button to TP.');
+                }
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 
             }else{

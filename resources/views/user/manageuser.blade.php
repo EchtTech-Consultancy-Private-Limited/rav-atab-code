@@ -226,10 +226,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <div class="form-group">
+                                                <div class="form-group mb-3">
                                                     <div class="form-line">
                                                         <label>Gender<span class="text-danger">*</span></label>
-                                                        <div class="name">
+                                                        <div class="name mt-2">
                                                             <label for="male">
                                                                 <input type="radio" id="male" name="gender"
                                                                     value="Male" class="radio"
@@ -285,7 +285,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <div class="form-line">
+                                            <div class="form-line mb-3">
 
                                                 <label>Designation<span class="text-danger">*</span></label>
                                                 <select name="designation" class="form-control" id="designation">
@@ -315,8 +315,8 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <div class="form-group">
-                                                    <div class="form-line">
+                                                <div class="form-group mb-3">
+                                                    <div class="form-line mb-2">
                                                         <label>Country<span class="text-danger">*</span></label>
                                                         <select name="Country" class="form-control" id="Country">
                                                             <option value="">Select Country</option>
@@ -344,7 +344,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <div class="form-line">
+                                            <div class="form-line mb-3">
                                                 <label for="example-text-input" class="form-control-label">State<span
                                                         class="text-danger">*</span></label>
                                                 <select name="state" class="form-control" id="state"
@@ -364,7 +364,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <div class="form-line">
+                                            <div class="form-line mb-3">
                                                 <label for="example-text-input" class="form-control-label">City<span
                                                         class="text-danger">*</span></label>
                                                 <select name="city" id="city" class="form-control"
@@ -408,7 +408,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <div class="form-line">
+                                            <div class="form-line mb-3">
                                                 <label for="example-text-input" class="form-control-label">Status<span
                                                         class="text-danger">*</span></label>
                                                 <select name="status" class="form-control" id="status">
@@ -479,7 +479,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <div class="form-line">
+                                        <div class="form-line mb-3">
                                             <label for="example-text-input" class="form-control-label">User Type<span
                                                     class="text-danger">*</span></label>
                                             <select name="role" class="form-control" id="role">
