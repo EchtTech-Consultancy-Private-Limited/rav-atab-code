@@ -1649,7 +1649,7 @@ function getUhid($appId)
     $flag = 0;
     
     foreach ($results as $result) {
-        if (($result->status == 1 || $result->status==6) || ($result->status == 4 && $result->admin_nc_flag == 1) || ($result->status == 4 && $result->admin_nc_flag == 2)) {
+        if (($result->status == 1 || $result->status==6) || ($result->status == 4 && in_array($result->admin_nc_flag,[1,2]))) {
             $flag = 0;
         } else {
             $flag = 1;

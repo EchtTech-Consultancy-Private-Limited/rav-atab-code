@@ -525,7 +525,7 @@
                     @endforeach
             </div>
       
-
+        
         @if($application_details->show_submit_btn_to_secretariat  && $application_details->application->approve_status==0 && $application_details->application->level_id==1) 
         
                 <div class="row mt-4">

@@ -3406,8 +3406,9 @@ $additionalFields = DB::table('tbl_course_wise_document')
 
     
     $flag = 0;
+    
     foreach ($finalResults as $result) {
-        if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
+        if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1)) {
             $flag = 1;
             break;
         }
