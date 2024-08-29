@@ -812,14 +812,12 @@ class SuperAdminApplicationController extends Controller
     
     public function superAdminVerfiyDocumentLevel2($nc_type, $assessor_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
-        
         try {
             
             $accept_nc_type_status = $nc_type;
             $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type,'application_courses_id'=> $application_course_id])
                 ->where('nc_type', "Request_For_Final_Approval")
                 ->latest('id')->first();
-
             // dd($final_approval);
             $ass_type = $assessor_type == "desktop" ? "desktop" : "onsite";
             if ($nc_type == "nr") {
@@ -834,8 +832,6 @@ class SuperAdminApplicationController extends Controller
                     $ass_type = null;
                 }
             }
-
-            
             
             // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             // ->where('nc_type',$nc_type)
@@ -862,16 +858,14 @@ class SuperAdminApplicationController extends Controller
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
                 ->first();
 
-            // dd($nc_comments);
-
-            $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
-                // ->where('final_status', $ass_type)
-                ->where('final_status', $assessor_type)
-                ->latest('id')
-                ->first();
-
-                
-
+            
+            
+            $tbl_nc_comments = TblNCComments::where('doc_file_name',$doc_name)->first();
+            // $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
+            //     // ->where('final_status', $ass_type)
+            //     ->where('final_status', $assessor_type)
+            //     ->latest('id')
+            //     ->first();
 
             /*Don't show form if doc is accepted*/
             $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
@@ -879,7 +873,7 @@ class SuperAdminApplicationController extends Controller
                 ->where('final_status', $assessor_type)
                 ->latest('id')
                 ->first();
-
+                
             /*end here*/
             $form_view = 0;
             if ($nc_type == "not_recommended" && ($tbl_nc_comments->nc_type !== "Reject") && ($tbl_nc_comments->nc_type !== "Accept") && ($tbl_nc_comments->nc_type !== "NC1") && ($tbl_nc_comments->nc_type !== "NC2") && ($tbl_nc_comments->nc_type !== "Request_For_Final_Approval")) {
@@ -892,7 +886,7 @@ class SuperAdminApplicationController extends Controller
             if($assessor_type=='desktop'){
                 $form_view=0;
             }
-
+            
 
             if (isset($tbl_nc_comments->nc_type)) {
                 if ($tbl_nc_comments->nc_type == "not_recommended") {
@@ -903,6 +897,7 @@ class SuperAdminApplicationController extends Controller
                     );
                 }
             }
+            
             $doc_latest_record = TblApplicationCourseDoc::latest('id')
                 ->where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code])
                 ->first();
@@ -923,6 +918,7 @@ class SuperAdminApplicationController extends Controller
                 'nc_type' => $nc_type,
             ]);
         } catch (Exception $e) {
+            dd($e);
             return back()->with('fail', 'Something went wrong');
         }
     }

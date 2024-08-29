@@ -136,10 +136,6 @@
                   <div class="pr-2">
                      <a href="{{ url("/onsite/application-view/".dEncrypt($application_id)) }}" type="button" class="btn btn-primary "
                         style="float:right;">Back</a>
-                        
-
-                        
-
                   </div>
                </div>
             </div>
