@@ -60,6 +60,7 @@ class AdminApplicationController extends Controller
             }
             $payment = DB::table('tbl_application_payment')->where([
                 'application_id' => $app->id,
+                'pay_status'=>'Y',
                 'payment_ext'=>null,
 
             ])->first();
