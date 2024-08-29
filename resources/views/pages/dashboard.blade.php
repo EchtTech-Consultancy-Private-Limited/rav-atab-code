@@ -406,6 +406,9 @@
                         depth: 45
                     }
                 },
+                credits: {
+                    enabled: false
+                },
                 series: [{
                     name: '{{ $chartData[$i]['name'] }}',
                     data: {!! json_encode($chartData[$i]['data']) !!}
