@@ -171,6 +171,7 @@
                                     $is_all_course_accepted=checkAllCoursesDocAccepted($item->application_list->id);
                                     $is_all_revert = checkAllActionDoneOnRevert($item->application_list->id);
                                     @endphp
+                                    
                                     @if($is_all_course_accepted==false  && $item->application_list->level_id==3 && ($item->application_list->approve_status!=3 && $item->application_list->approve_status!=4))
                                     <a class="btn btn-tbl-delete bg-primary font-a"
                                        data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
