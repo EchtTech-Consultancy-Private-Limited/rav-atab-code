@@ -189,6 +189,17 @@ class PaymentController extends Controller
                     DB::table('tbl_notifications')->where(['application_id'=>$application_id,'user_type'=>'tp','level_id'=>3,'notification_mode'=>'second_pay'])
                     ->update(['is_read'=>1]);
 
+
+                    /*final app status */ 
+                    $pay_count = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('deleted_at')->where('pay_status','Y')->count();
+        
+                    if($pay_count==0){
+                        DB::table('tbl_application')->where('id',$application_id)->update(['status'=>0]);
+                    }else if($pay_count>1){
+                        DB::table('tbl_application')->where('id',$application_id)->update(['status'=>15]);
+                    }
+                    /*end here*/ 
+
             DB::commit();
             $data = [
                 'ReferenceNo' =>$request['ReferenceNo'], 

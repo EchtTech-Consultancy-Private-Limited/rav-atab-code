@@ -337,7 +337,8 @@
                         type="submit" 
                         class="btn btn-info float-right" 
                         value="Submit" 
-                        <?php echo ($enable_disable_submit_btn==true || !$is_all_action_taken_on_docs || $spocData->signed_copy_onsite==null) ? 'disabled' : ''; ?>
+
+                        <?php echo ($enable_disable_submit_btn==true || !$is_all_action_taken_on_docs || $spocData->signed_copy_onsite==null || $is_in_improvement==null) ? 'disabled' : ''; ?>
                     >
                 </form>
                 </div>

@@ -320,7 +320,14 @@ class DocApplicationController extends Controller
         }
            
         // this is for the applicaion status
-        DB::table('tbl_application')->where('id',$application_id)->update(['status'=>2]);
+        
+        $pay_count = DB::table('tbl_application_payment')->where('application_id', $application_id)->whereNull('deleted_at')->where('pay_status','Y')->count();
+        
+        if($pay_count==1){
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>2]);
+        }else if($pay_count>1){
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>15]);
+        }
             /*send email end here*/ 
             DB::commit();
             return response()->json(['success' => true,'message' => 'Payment approved successfully.'], 200);

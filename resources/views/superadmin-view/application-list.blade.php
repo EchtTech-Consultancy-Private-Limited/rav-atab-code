@@ -336,7 +336,6 @@
                             <td>{{$hist->firstname??''}} {{$hist->middlename??''}} {{$hist->lastname??''}}</td>
                             <td>{{ \Carbon\Carbon::parse($hist->created_at)->format('d-m-Y')}}</td>
                             <td><span class="badge badge-main {{$hist->status_color}}">{{$hist->status_text}}</span></td>
-                            
                         </tr>
                         @endforeach
                         @endisset

@@ -814,6 +814,7 @@ class SuperAdminApplicationController extends Controller
     {
         
         try {
+            
             $accept_nc_type_status = $nc_type;
             $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type,'application_courses_id'=> $application_course_id])
                 ->where('nc_type', "Request_For_Final_Approval")
@@ -821,7 +822,6 @@ class SuperAdminApplicationController extends Controller
 
             // dd($final_approval);
             $ass_type = $assessor_type == "desktop" ? "desktop" : "onsite";
-
             if ($nc_type == "nr") {
                 $nc_type = "not_recommended";
             }
@@ -834,6 +834,9 @@ class SuperAdminApplicationController extends Controller
                     $ass_type = null;
                 }
             }
+
+            
+            
             // $nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code])
             // ->where('nc_type',$nc_type)
             // ->where('assessor_type',$assessor_type)
@@ -841,7 +844,7 @@ class SuperAdminApplicationController extends Controller
             // ->select('tbl_nc_comments.*','users.firstname','users.middlename','users.lastname')
             // ->leftJoin('users','tbl_nc_comments.assessor_id','=','users.id')
             // ->first();
-
+            
             $query = TblNCComments::where([
                 'doc_sr_code' => $doc_sr_code,
                 'application_id' => $application_id,
@@ -850,17 +853,20 @@ class SuperAdminApplicationController extends Controller
                 ->where('nc_type', $nc_type)
                 ->where('assessor_type', $assessor_type);
             if ($nc_type == "not_recommended" || $nc_type == "Request_For_Final_Approval") {
-                $query->where('final_status', $ass_type);
+                // $query->where('final_status', $ass_type);
+                $query->where('final_status', $assessor_type);
             }
+            
             $nc_comments = $query
-                ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname')
+                ->select('tbl_nc_comments.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
                 ->first();
 
             // dd($nc_comments);
 
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
-                ->where('final_status', $ass_type)
+                // ->where('final_status', $ass_type)
+                ->where('final_status', $assessor_type)
                 ->latest('id')
                 ->first();
 
@@ -957,7 +963,7 @@ class SuperAdminApplicationController extends Controller
             $nc_comment_status=4; //request for final approval
             $nc_flag=1;
         }
-
+        // dd($admin_nc_flag,$nc_comment_status,$nc_flag,$request->assessor_type);
         $create_nc_comments = TblNCComments::insert($data);
 
         if($request->assessor_type=="onsite"){
@@ -1120,13 +1126,12 @@ class SuperAdminApplicationController extends Controller
                         $all_docs = $all_docs_desktop->merge($all_docs_onsite);
 
                         
-                        foreach($all_docs as $doc){
+                        foreach($all_docs_desktop as $doc){
                             if($doc->status==0){
-                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                                 
                             }else{
-                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'onsite_status'=>$doc->onsite_status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
-
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                             }
                             // $data = [];
                             //     $data['application_id'] = $doc->application_id;
@@ -1139,6 +1144,15 @@ class SuperAdminApplicationController extends Controller
                             //     $data['comments'] = 'Document has been approved';
                             //     $data['nc_show_status'] = 1;
                             //     DB::table('tbl_nc_comments_secretariat')->insert($data);
+                        }
+                        foreach($all_docs_onsite as $doc){
+                            if($doc->onsite_status==0){
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                                
+                            }else{
+                                DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['onsite_status'=>$doc->onsite_status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+
+                            }
                         }
 
                         // rejected courses list doc
@@ -1160,8 +1174,11 @@ class SuperAdminApplicationController extends Controller
                          $all_docs = $all_docs_desktop->merge($all_docs_onsite);
  
                          
-                         foreach($all_docs as $doc){
-                            DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                         foreach($all_docs_desktop as $doc){
+                            DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                         }
+                         foreach($all_docs_onsite as $doc){
+                            DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['onsite_status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
                          }
 
 
@@ -1302,10 +1319,11 @@ class SuperAdminApplicationController extends Controller
                   $notifiData['data'] = config('notification.common.appApproved');
                   $notifiData['user_type'] = "secretariat";
                   $notifiData['url'] = $url;
-            
+
                   /*send notification*/ 
                   sendNotification($notifiData);
-                  $notifiData['sender_id'] = $get_app->tp_id;
+                  $notifiData['sender_id'] = Auth::user()->id;
+                  $notifiData['receiver_id'] = $get_app->tp_id;
                   $notifiData['user_type'] = "tp";
                   $notifiData['url'] = $tpUrl;
                   sendNotification($notifiData);
@@ -1333,7 +1351,7 @@ class SuperAdminApplicationController extends Controller
         $app_id = $application_id;
         try {
             DB::beginTransaction();
-
+            $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
             /*TP show ncs*/
             DB::table('tbl_course_wise_document')
             ->where(['application_id' => $application_id])
@@ -1367,8 +1385,38 @@ class SuperAdminApplicationController extends Controller
             }
             /*end here*/
 
+            /*update doc after rejected by admin*/ 
+            if($get_app->level_id==2){
+                $all_docs = DB::table('tbl_application_course_doc')
+                ->where(['application_id' => $app_id,'approve_status'=>1])
+                ->where('assessor_type','secretariat')
+                ->whereNotIn('status',[2,3,4,6]) 
+                ->get(); 
+                
+                foreach($all_docs as $doc){
+                    if($doc->status==0){
+                        DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                    }else{
+                        DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>$doc->status,'admin_nc_flag'=>1,'nc_show_status'=>5,'is_revert'=>1]);
+                    }
+                }
+                
+                // taking only the rejected course
+                $all_docs = DB::table('tbl_application_course_doc')
+                ->where(['application_id' => $app_id])
+                ->orWhere('approve_status',[0,3])
+                ->where('assessor_type','secretariat')
+                ->whereNotIn('status',[2,3,4,6]) 
+                ->get(); 
+                
+                foreach($all_docs as $doc){
+                        DB::table('tbl_application_course_doc')->where('id',$doc->id)->update(['status'=>5,'admin_nc_flag'=>2,'nc_show_status'=>5,'is_revert'=>1]);
+                    
+                }
+            }
 
-            $get_app = DB::table('tbl_application')->where('id',$application_id)->first();
+
+            
             if($get_app->level_id==1){
                 $url= config('notification.secretariatUrl.level1');
                 $url=$url.dEncrypt($application_id);

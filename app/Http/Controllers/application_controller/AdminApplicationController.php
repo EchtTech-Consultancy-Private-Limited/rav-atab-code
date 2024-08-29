@@ -803,13 +803,12 @@ class AdminApplicationController extends Controller
 
         
         $flag = 0;
-        
         foreach ($results as $result) {
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             if(isset($result)){
                 
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1) || ($result->status == 6)) {
+            if (($result->status == 1) || ($result->status == 4 && in_array($result->admin_nc_flag,[1,2])) || ($result->status == 6)) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -870,13 +869,9 @@ class AdminApplicationController extends Controller
 
         
         $flag = 0;
-        
         foreach ($results as $result) {
-            
-            // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
             if(isset($result)){
-                
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1 || $result->status == 4 && $result->admin_nc_flag == 2) || $results->status==6) {
+            if (($result->status == 1) || ($result->status == 4 && in_array($result->admin_nc_flag,[1,2])) || $result->status==6) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -1266,7 +1261,7 @@ class AdminApplicationController extends Controller
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
     
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1) || ($result->status == 4 && in_array($result->admin_nc_flag,[1,2]))) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -1335,7 +1330,7 @@ class AdminApplicationController extends Controller
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
     
-            if (($result->status == 1 || $result->status == 5 || $result->status == 6) || ($result->status == 4 && $result->admin_nc_flag == 1 || $result->status == 4 && $result->admin_nc_flag == 2)) {
+            if (($result->status == 1 || $result->status == 5 || $result->status == 6) || ($result->status == 4 && in_array($result->admin_nc_flag,[1,2]))) {
                 $flag = 0;
             } else {
                 $flag = 1;
@@ -1404,7 +1399,7 @@ class AdminApplicationController extends Controller
             
             // if (($result->status == 1 && $result->approve_status==1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
     
-            if (($result->status == 1) || ($result->status == 4 && $result->admin_nc_flag == 1)) {
+            if (($result->status == 1) || ($result->status == 4 && in_array($result->admin_nc_flag,[1,2]))) {
                 $flag = 0;
             } else {
                 $flag = 1;

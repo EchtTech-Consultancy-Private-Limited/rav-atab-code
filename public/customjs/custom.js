@@ -1961,7 +1961,7 @@ function handleOnsiteNotification(pay_id){
 }
 
 function updateFileName(input) {
-    alert("hello")
+    
     var selectedFileName = "";
     if (input.files && input.files.length > 0) {
         selectedFileName = input.files[0].name;

@@ -2157,8 +2157,13 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
     }
     
     // dd($first_app_id);
-
-    DB::table('tbl_application')->where('id',$request->Application_id)->update(['status'=>0]);
+    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->whereNull('deleted_at')->where('pay_status','Y')->count();
+    
+    if($pay_count==0){
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['status'=>0]);
+    }else if($pay_count>0){
+        DB::table('tbl_application')->where('id',$request->Application_id)->update(['status'=>11]);
+    }
     
     $get_all_account_users = DB::table('users')->whereIn('role',[1,6])->get()->pluck('email')->toArray();
     $get_all_admin_users = DB::table('users')->where('role',1)->get()->pluck('email')->toArray();
@@ -2249,7 +2254,7 @@ public function upgradeNewApplicationPaymentLevel3(Request $request)
 
 
     /*If tp pay second time then show the application admin as well*/ 
-    $pay_count = TblApplicationPayment::where('application_id', $request->Application_id)->whereNull('deleted_at')->where('pay_status','Y')->count();
+   
     if($pay_count>1){
         DB::table('tbl_application')->where('id',$request->Application_id)->update(['second_payment'=>6]);
     }
@@ -3401,8 +3406,9 @@ $additionalFields = DB::table('tbl_course_wise_document')
 
     
     $flag = 0;
+    
     foreach ($finalResults as $result) {
-        if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
+        if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1)) {
             $flag = 1;
             break;
         }

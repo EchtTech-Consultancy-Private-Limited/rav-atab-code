@@ -192,7 +192,7 @@
                                         @elseif($doc->status==4)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('super-admin-nr/secretariat/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('super-admin-nr/admin/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Not Recommended <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                              @if($doc->admin_nc_flag==1)

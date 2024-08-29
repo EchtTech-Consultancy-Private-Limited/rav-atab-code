@@ -690,20 +690,32 @@ $('#payment_transaction_no').on('keyup focusout', function() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(function() {
         var paymentTransactionNo = $(this).val();
+        const payment_reference_no = $("#payment_reference_no").val();
         paymentTransactionNo = paymentTransactionNo.replace(/\s/g, '');
         $(this).val(paymentTransactionNo);
-              if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
-            $('#payment_transaction_no-error').text('');
-            $('#submitBtn').attr('disabled', false);
+            if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo)) {
+                if(payment_reference_no!="" && !(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(payment_reference_no))){
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', true);
+                    return false;
+                }else{
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', false);
+                }
+            
         } else {
             $('#payment_transaction_no-error').text('Payment Transaction no. must contain both letters and numbers.');
             $('#submitBtn').attr('disabled', true);
+            return false;
         }
 
 
         if (paymentTransactionNo.length < 9) {
             $('#payment_transaction_no-error').text('Payment Transaction no. must be at least 9 characters.');
             $('#submitBtn').attr('disabled', true);
+            return false;
         }else{
             $.ajax({
             type: 'POST',
@@ -805,15 +817,26 @@ $('#payment_reference_no').on('keyup', function() {
     clearTimeout(debounceTimerRef);
     debounceTimerRef = setTimeout(function() {
         var paymentReferenceNo = $(this).val();
-        if (paymentReferenceNo === '') {
+        const paymentTransactionNo = $("#payment_transaction_no").val();
+        if (paymentReferenceNo == '') {
             $('#payment_reference_no-error').text('');
             return;
         }
         paymentReferenceNo = paymentReferenceNo.replace(/\s/g, '');
         $(this).val(paymentReferenceNo);
         if (/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentReferenceNo)) {
-            $('#payment_reference_no-error').text('');
-            $('#submitBtn').attr('disabled', false);
+
+            if(paymentTransactionNo!="" && !(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/.test(paymentTransactionNo))){
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', true);
+                    return false;
+                }else{
+                    $('#payment_reference_no-error').text('');
+                    $('#payment_transaction_no-error').text('');
+                    $('#submitBtn').attr('disabled', false);
+                }
+           
         } else {
             $('#payment_reference_no-error').text('Payment Reference no. must contain both letters and numbers.');
             $('#submitBtn').attr('disabled', true);
