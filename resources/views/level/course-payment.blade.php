@@ -503,15 +503,15 @@
                             if (type === 'QR-Code') {
                                 $("#bank_id").hide();
                                 $("#QR").show();
-                                submitBtn.disabled = false;
+                                // submitBtn.disabled = false;
                             } else if (type === 'Bank') {
                                 $("#bank_id").show();
                                 $("#QR").hide();
-                                submitBtn.disabled = false;
+                                // submitBtn.disabled = false;
                             } else {
                                 $("#bank_id").hide();
                                 $("#QR").hide();
-                                submitBtn.disabled = true;
+                                // submitBtn.disabled = true;
                             }
                         });
 
