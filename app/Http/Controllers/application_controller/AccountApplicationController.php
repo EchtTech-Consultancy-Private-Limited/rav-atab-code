@@ -66,15 +66,18 @@ class AccountApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment') ->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->latest('created_at')->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->sum('amount');
                 
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->count();
                 
                 $app_history = DB::table('tbl_application_status_history')
@@ -489,15 +492,18 @@ class AccountApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->latest('created_at')->first();
                 $payment_amount = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->sum('amount');
                 
                 $payment_count = DB::table('tbl_application_payment')->where([
                     'application_id' => $app->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->count();
                 if($payment){
                     $obj->payment = $payment;
@@ -589,6 +595,7 @@ class AccountApplicationController extends Controller
                 $payment = DB::table('tbl_application_payment')->where([
                     'application_id' => $application->id,
                     'payment_ext'=>null,
+                    'pay_status'=>'Y'
                 ])->get();
                 $additional_payment = DB::table('tbl_additional_fee')->where([
                     'application_id' => $application->id,

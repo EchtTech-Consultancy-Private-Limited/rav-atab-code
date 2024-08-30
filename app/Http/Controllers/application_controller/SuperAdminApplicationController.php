@@ -814,6 +814,7 @@ class SuperAdminApplicationController extends Controller
     {
         try {
             
+            $app_details  = DB::table('tbl_application')->where('id',$application_id)->first();
             $accept_nc_type_status = $nc_type;
             $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type,'application_courses_id'=> $application_course_id])
                 ->where('nc_type', "Request_For_Final_Approval")
@@ -849,8 +850,8 @@ class SuperAdminApplicationController extends Controller
                 ->where('nc_type', $nc_type)
                 ->where('assessor_type', $assessor_type);
             if ($nc_type == "not_recommended" || $nc_type == "Request_For_Final_Approval") {
-                // $query->where('final_status', $ass_type);
-                $query->where('final_status', $assessor_type);
+                $app_details->level_id==2?$query->where('final_status', $assessor_type):$query->where('final_status', $ass_type);
+                
             }
             
             $nc_comments = $query
@@ -858,15 +859,13 @@ class SuperAdminApplicationController extends Controller
                 ->leftJoin('users', 'tbl_nc_comments.assessor_id', '=', 'users.id')
                 ->first();
 
+                $tbl_nc_comments = $app_details->level_id==2?
+                TblNCComments::where('doc_file_name',$doc_name)->first():
+                TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
+                ->where('final_status', $ass_type)
+                ->latest('id')
+                ->first();
             
-            
-            $tbl_nc_comments = TblNCComments::where('doc_file_name',$doc_name)->first();
-            // $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
-            //     // ->where('final_status', $ass_type)
-            //     ->where('final_status', $assessor_type)
-            //     ->latest('id')
-            //     ->first();
-
             /*Don't show form if doc is accepted*/
             $accepted_doc = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code,'application_courses_id'=> $application_course_id])
                 ->whereIn('nc_type', ["Accept", "Reject"])
@@ -918,7 +917,6 @@ class SuperAdminApplicationController extends Controller
                 'nc_type' => $nc_type,
             ]);
         } catch (Exception $e) {
-            dd($e);
             return back()->with('fail', 'Something went wrong');
         }
     }
