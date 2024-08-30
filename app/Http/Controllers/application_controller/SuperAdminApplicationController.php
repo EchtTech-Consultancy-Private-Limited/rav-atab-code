@@ -902,38 +902,20 @@ class SuperAdminApplicationController extends Controller
                 ->first();
             // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
             $doc_path = URL::to("/level") . '/' . $doc_name;
-            if($app_details->level_id==2){
-                return view('superadmin-view.secretariat.document-verify', [
-                    'doc_latest_record' => $doc_latest_record,
-                    'doc_id' => $doc_sr_code,
-                    'doc_code' => $doc_unique_code,
-                    'application_id' => $application_id,
-                    'application_course_id' => $application_course_id,
-                    'doc_path' => $doc_path,
-                    'doc_file_name' => $doc_name,
-                    'dropdown_arr' => $dropdown_arr ?? [],
-                    'nc_comments' => $nc_comments,
-                    'form_view' => $form_view,
-                    'assessor_type' => $assessor_type,
-                    'nc_type' => $nc_type,
-                ]);
-            }else{
-                
-                return view('superadmin-view.document-verify', [
-                    'doc_latest_record' => $doc_latest_record,
-                    'doc_id' => $doc_sr_code,
-                    'doc_code' => $doc_unique_code,
-                    'application_id' => $application_id,
-                    'application_course_id' => $application_course_id,
-                    'doc_path' => $doc_path,
-                    'doc_file_name' => $doc_name,
-                    'dropdown_arr' => $dropdown_arr ?? [],
-                    'nc_comments' => $nc_comments,
-                    'form_view' => $form_view,
-                    'assessor_type' => $assessor_type,
-                    'nc_type' => $nc_type,
-                ]);
-            }
+            return view('superadmin-view.secretariat.document-verify', [
+                'doc_latest_record' => $doc_latest_record,
+                'doc_id' => $doc_sr_code,
+                'doc_code' => $doc_unique_code,
+                'application_id' => $application_id,
+                'application_course_id' => $application_course_id,
+                'doc_path' => $doc_path,
+                'doc_file_name' => $doc_name,
+                'dropdown_arr' => $dropdown_arr ?? [],
+                'nc_comments' => $nc_comments,
+                'form_view' => $form_view,
+                'assessor_type' => $assessor_type,
+                'nc_type' => $nc_type,
+            ]);
             
         } catch (Exception $e) {
             return back()->with('fail', 'Something went wrong');
@@ -944,7 +926,9 @@ class SuperAdminApplicationController extends Controller
     {
         
         try{
-        $redirect_to=URL::to("/super-admin/document-list-level-2").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
+        $app_details = DB::table('tbl_application')->where('id',$request->application_id)->first();
+        $redirect_to=$app_details->level_id==2?URL::to("/super-admin/document-list-level-2").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id):URL::to("/super-admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
+        
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
         $assessor_type = 'admin';
@@ -979,13 +963,12 @@ class SuperAdminApplicationController extends Controller
         // dd($admin_nc_flag,$nc_comment_status,$nc_flag,$request->assessor_type);
         $create_nc_comments = TblNCComments::insert($data);
 
+        
         if($request->assessor_type=="onsite"){
             TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'onsite_status'=>4])->update(['onsite_nc_status'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
         }else{
             TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag,'nc_show_status'=>4]);
         }
-        
-
 
         if($create_nc_comments){
             DB::commit();

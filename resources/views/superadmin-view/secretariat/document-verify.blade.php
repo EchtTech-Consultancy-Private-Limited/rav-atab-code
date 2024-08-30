@@ -91,6 +91,7 @@
                                                         <h4>Create NC</h4>
                                                     </div>
                                                     <div class="body">
+                                                        
                                                             <div class="row">
                                                                 <input type="hidden" value="{{$application_id}}" id="secretariat_application_id_nc">
 
@@ -155,7 +156,7 @@
 
                                                     <div class="card-footer">
                                                         <button id="submitBtn" type="button" value="Submit"
-                                                            class="btn btn-primary" onclick="superadminCourseDocumentVerfiy('admin')">Submit</button>
+                                                            class="btn btn-primary" onclick="superadminCourseDocumentVerfiy('{{$assessor_type}}')">Submit</button>
                                                     </div>
 
                                 </div>
