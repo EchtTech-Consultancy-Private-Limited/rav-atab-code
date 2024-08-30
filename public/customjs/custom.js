@@ -3762,36 +3762,50 @@ function validateEmail(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|org|net|gov|edu)$/;
     return emailRegex.test(email);
 }
+$('#email_id').on('blur', function() {
+    const email = $("#email_id").val();
+    const contactNumber = $("#Contact_Number").val();
+    const isValidEmail = validateEmail(email);
+    const isValidMobile = contactNumber == "" || validateMobileNumber(contactNumber);
+    const errorOptions = {
+        timeOut: 0,
+        extendedTimeOut: 0,
+        closeButton: true,
+        closeDuration: 5000,
+    };
 
-$('#email_id').on('blur',function(){
-    const email  = $("#email_id").val();
-    const Contact_Number  = $("#Contact_Number").val();
-    if (!validateEmail(email) ||  (Contact_Number!="" && !validateMobileNumber(Contact_Number))) {
-        toastr.error("Please enter valid email", {
-            timeOut: 0,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-        $("#nextBtn").attr('disabled',true);
-    }else{
-        $("#nextBtn").attr('disabled',false);
-    } 
-})
+    if (!isValidEmail) {
+        toastr.error("Please enter valid email", errorOptions);
+    }
+    
+    if (!isValidMobile) {
+        toastr.error("Please enter valid mobile number", errorOptions);
+    }
 
-$('#Contact_Number').on('blur',function(){
-    const email  = $("#email_id").val();
-    const mobile_number  = $("#Contact_Number").val();
-    if (!validateMobileNumber(mobile_number) || (email!="" && !validateEmail(email))) {
-        toastr.error("Please enter valid mobile number", {
-            timeOut: 0,
-            extendedTimeOut: 0,
-            closeButton: true,
-            closeDuration: 5000,
-        });
-        $("#nextBtn").attr('disabled',true);
-    }else{
-        $("#nextBtn").attr('disabled',false);
-    } 
-})
+    $("#nextBtn").attr('disabled', !(isValidEmail && isValidMobile));
+});
+
+$('#Contact_Number').on('blur', function() {
+    const email = $("#email_id").val();
+    const mobile_number = $("#Contact_Number").val();
+    const isValidMobile = validateMobileNumber(mobile_number);
+    const isValidEmail = email == "" || validateEmail(email);
+    const errorOptions = {
+        timeOut: 0,
+        extendedTimeOut: 0,
+        closeButton: true,
+        closeDuration: 5000,
+    };
+
+    if (!isValidMobile) {
+        toastr.error("Please enter valid mobile number", errorOptions);
+    }
+    
+    if (!isValidEmail) {
+        toastr.error("Please enter valid email", errorOptions);
+    }
+
+    $("#nextBtn").attr('disabled', !(isValidMobile && isValidEmail));
+});
+
 
