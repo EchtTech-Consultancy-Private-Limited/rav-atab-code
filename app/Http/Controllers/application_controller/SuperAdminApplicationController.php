@@ -819,7 +819,7 @@ class SuperAdminApplicationController extends Controller
             $final_approval = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'admin', 'final_status' => $assessor_type,'application_courses_id'=> $application_course_id])
                 ->where('nc_type', "Request_For_Final_Approval")
                 ->latest('id')->first();
-            // dd($final_approval);
+            
             $ass_type = $assessor_type == "desktop" ? "desktop" : "onsite";
             if ($nc_type == "nr") {
                 $nc_type = "not_recommended";
@@ -882,7 +882,8 @@ class SuperAdminApplicationController extends Controller
             } else if ($nc_type == "reject") {
                 $form_view = 0;
             }
-            if($assessor_type=='desktop'){
+            
+            if($assessor_type=='desktop' && $nc_type!="not_recommended"){
                 $form_view=0;
             }
             
