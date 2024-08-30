@@ -902,20 +902,39 @@ class SuperAdminApplicationController extends Controller
                 ->first();
             // $doc_path = URL::to("/level").'/'.$doc_latest_record->doc_file_name;
             $doc_path = URL::to("/level") . '/' . $doc_name;
-            return view('superadmin-view.secretariat.document-verify', [
-                'doc_latest_record' => $doc_latest_record,
-                'doc_id' => $doc_sr_code,
-                'doc_code' => $doc_unique_code,
-                'application_id' => $application_id,
-                'application_course_id' => $application_course_id,
-                'doc_path' => $doc_path,
-                'doc_file_name' => $doc_name,
-                'dropdown_arr' => $dropdown_arr ?? [],
-                'nc_comments' => $nc_comments,
-                'form_view' => $form_view,
-                'assessor_type' => $assessor_type,
-                'nc_type' => $nc_type,
-            ]);
+            if($app_details->level_id==2){
+                return view('superadmin-view.secretariat.document-verify', [
+                    'doc_latest_record' => $doc_latest_record,
+                    'doc_id' => $doc_sr_code,
+                    'doc_code' => $doc_unique_code,
+                    'application_id' => $application_id,
+                    'application_course_id' => $application_course_id,
+                    'doc_path' => $doc_path,
+                    'doc_file_name' => $doc_name,
+                    'dropdown_arr' => $dropdown_arr ?? [],
+                    'nc_comments' => $nc_comments,
+                    'form_view' => $form_view,
+                    'assessor_type' => $assessor_type,
+                    'nc_type' => $nc_type,
+                ]);
+            }else{
+                
+                return view('superadmin-view.document-verify', [
+                    'doc_latest_record' => $doc_latest_record,
+                    'doc_id' => $doc_sr_code,
+                    'doc_code' => $doc_unique_code,
+                    'application_id' => $application_id,
+                    'application_course_id' => $application_course_id,
+                    'doc_path' => $doc_path,
+                    'doc_file_name' => $doc_name,
+                    'dropdown_arr' => $dropdown_arr ?? [],
+                    'nc_comments' => $nc_comments,
+                    'form_view' => $form_view,
+                    'assessor_type' => $assessor_type,
+                    'nc_type' => $nc_type,
+                ]);
+            }
+            
         } catch (Exception $e) {
             return back()->with('fail', 'Something went wrong');
         }
