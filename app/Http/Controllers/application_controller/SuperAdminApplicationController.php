@@ -918,6 +918,7 @@ class SuperAdminApplicationController extends Controller
                     'nc_type' => $nc_type,
                 ]);
             }else{
+                
                 return view('superadmin-view.document-verify', [
                     'doc_latest_record' => $doc_latest_record,
                     'doc_id' => $doc_sr_code,
