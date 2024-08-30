@@ -417,7 +417,13 @@
                                                                     class="btn btn-danger btn-sm docBtn docBtn_nc  m-1">
                                                                     Rejected <span>By Admin</span></a>
                                                                 @endif
-
+                                                                @if($doc->nc_flag==1)
+                                                                <div class="upload-btn-wrapper">
+                                                                    <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                                    <input type="file" class="from-control fileup" name="fileup"
+                                                                        id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" />
+                                                                </div>
+                                                                @endif                                            
 
 
 
