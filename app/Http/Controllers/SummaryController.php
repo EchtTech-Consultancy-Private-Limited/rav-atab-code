@@ -1794,8 +1794,6 @@ class SummaryController extends Controller
             ->where('application_id', $application_id)
             ->where('approve_status',1)
             ->get();
-
-            
             
 
         $additionalFields = DB::table('tbl_application_course_doc')
