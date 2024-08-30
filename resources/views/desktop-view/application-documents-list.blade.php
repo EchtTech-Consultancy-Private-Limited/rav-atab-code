@@ -364,6 +364,7 @@
                                        </tbody>
                                        
                                     </table>
+                                    
                                     @if(!$is_final_submit && $is_doc_uploaded && $isCreateSummaryBtnShow=="show" )
                                                 <div class="col-md-12 p-2" id="comment-section">
                                                                     <label for="comment_text" class="">Remark<span class="text-danger">*</span></label>
