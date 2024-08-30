@@ -425,9 +425,6 @@
                                                                 </div>
                                                                 @endif                                            
 
-
-
-
                                                                 @elseif($doc->nc_show_status==5)
                                                                 @if($doc->admin_nc_flag==1)
                                                                 <a title="{{$doc->doc_file_name}}"
