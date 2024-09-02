@@ -473,6 +473,8 @@
                     </div>
 
 
+
+
                     
                     @if($ApplicationCourses['course']->status == 1)
                     <p class="text-danger"> <b>Note : </b> {{$ApplicationCourses['course']->sec_reject_remark}}</p>
@@ -530,6 +532,24 @@
         </div>
 
         <div class="row">
+
+        <div class="row mt-4">
+                    <div class="col-md-12">
+                            <form action="{{url('super-admin/update-nc-flag/'.$spocData->id)}}" method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-info float-right" value="Submit" >
+                            </form>
+                        </div>
+                        
+                    </div>
+
+
+
+
+
+
+
+
                     @if($spocData->approve_status==2 && $application_details->is_course_rejected!="rejected" && $spocData->level_id!=3)
                         <div class="col-md-12 text-right">
                             

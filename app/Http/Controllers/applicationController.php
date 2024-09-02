@@ -974,10 +974,20 @@ class applicationController extends Controller
     public function saveSelectedDates(Request $request)
     {
         DB::beginTransaction();
+        // dd($request->all());
+
+        if($request->assessmentType==1){
+            DB::table('assessor_assigne_date')
+            ->where('assessor_Id', $request->assessorID)
+            ->where('application_id', $request->applicationID)
+            ->delete();
+        }
+
         $exitValCheck = DB::table('assessor_assigne_date')->where('assessor_Id', $request->assessorID)
             ->where('application_id', $request->applicationID)
             ->where('selected_date', $request->selectedDate)
             ->first();
+
         if ($exitValCheck != null) {
                 $get_all_dates = DB::table('assessor_assigne_date')
                 ->where([

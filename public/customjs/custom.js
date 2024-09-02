@@ -1105,7 +1105,6 @@ const assessor_dates = [];
 $(".dateID").click("on", function () {
     var $this = $(this);
     var dataVal = $(this).attr("data-id").split(",");
-    console.log(dataVal,' data val ')
     assessor_dates.push(dataVal[3]);
     // $("#assessor_type_"+dataVal[0]).attr("required", true);
 
@@ -1155,8 +1154,17 @@ $(".dateID").click("on", function () {
                 $("#onsite_date_selection_footer").hide();
             }
             else {
-                $("#onsite_date_selection_footer").show();    
-                $this.removeClass("btn-success").addClass("btn-danger");
+                if(dataVal[2]==1){
+                    document.querySelectorAll('.dateID').forEach(function(element) {
+                        element.classList.remove("btn-danger");
+                        element.classList.add("btn-success");
+                    });
+                    $this.removeClass("btn-success").addClass("btn-danger");
+                }else{
+                    $("#onsite_date_selection_footer").show();    
+                    $this.removeClass("btn-success").addClass("btn-danger");
+                }
+                
             }
             
         },

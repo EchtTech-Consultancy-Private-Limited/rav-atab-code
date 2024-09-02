@@ -412,7 +412,7 @@
                                             doc-primary-id="{{$doc->id}}" />
                                     </div>
                                     @endif
-                                    @if($doc->nc_flag==1)
+                                    @if($doc->nc_flag==1 && $doc->admin_nc_flag==3)
                                     <div class="upload-btn-wrapper">
                                         <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                         <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
