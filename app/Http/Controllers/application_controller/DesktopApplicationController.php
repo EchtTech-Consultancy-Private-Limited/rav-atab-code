@@ -73,10 +73,9 @@ class DesktopApplicationController extends Controller
             $application_duration_verify_doc =$appTime->calculateTimeDateDesktopAssessorVerifyDoc(auth::user()->id, auth::user()->role,'document_check',$app);
             $obj->application_duration_verify_doc = $application_duration_verify_doc;
 
-
             $final_data[] = $obj;
         }
-    //    dd($final_data);
+       
         return view('desktop-view.application-list', ['list' => $final_data]);
     }
 
@@ -949,7 +948,9 @@ class DesktopApplicationController extends Controller
                 
                 $get_course_doc = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->latest('id')->first();
 
-                
+                if($get_course_doc->is_revert==1){
+                    return response()->json(['success' => false, 'message' => 'Action reverted failed.'], 200);
+                }
                     if($get_course_doc->status==4){
                         $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0,'admin_nc_flag'=>0]);
     

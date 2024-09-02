@@ -1573,7 +1573,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id),$assessor_type);
         $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
-        
+
             $obj = new \stdClass;
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
@@ -1674,6 +1674,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
     }
 
+  
 
 
     public function newAdditionalApplicationPaymentFee(Request $request)
@@ -3257,7 +3258,6 @@ public function isShowSubmitBtnToSecretariat($application_id,$assessor_type)
     }
 
     $flag = 0;
-    
     foreach ($finalResults as $result) {
         if (($result->nc_show_status == 1) || ($result->nc_show_status == 4 && $result->admin_nc_flag == 1)) {
             $flag = 0;
@@ -3317,13 +3317,11 @@ $additionalFields = DB::table('tbl_application_course_doc')
         }
 
     
-    $flag = 0;
-
+    $flag = 0;    
     
-  
     foreach ($finalResults as $result) {
         if($assessor_type=="desktop" || $assessor_type=="secretariat"){
-            if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
+            if (($result->status==2 || $result->status==3 || $result->status==4) && ($result->nc_flag==1 || $result->admin_nc_flag==3)) {
                 $flag = 1;
                 break;
             }
@@ -3335,26 +3333,16 @@ $additionalFields = DB::table('tbl_application_course_doc')
         }
         
     }
-    
-
     $get_docs_count = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->count();
     $get_course_count = DB::table('tbl_application_courses')->where('application_id',$application_id)->where('deleted_at',null)->count();
- 
+    
     $total_docs = $get_course_count*4;
-    
-    
     if(($get_docs_count<$total_docs) || $flag == 1){
      return true;
     }else{
      return false;
     }
 
-
-    // if ($flag == 0) {
-    //     return false;
-    // } else {
-    //     return true;
-    // }
 
 }
 
@@ -3483,12 +3471,11 @@ public function checkReuploadBtn($application_id)
     
     $flag = 0;
     foreach ($results as $result) {
-        if (($result->status == 2 || $result->status == 3 || $result->status == 4) && ($result->nc_flag==1 || $result->admin_nc_flag==1)) {
+        if (($result->status == 2 || $result->status == 3 || $result->status == 4) && ($result->nc_flag==1 || $result->admin_nc_flag==3)) {
             $flag = 1;
             break;
         } else {
             $flag = 0;
-            
         }
     }
 

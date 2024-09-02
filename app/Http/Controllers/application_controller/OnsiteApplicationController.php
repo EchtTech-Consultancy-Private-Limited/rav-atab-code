@@ -1062,10 +1062,9 @@ function revertCourseDocListActionOnsite(Request $request){
             DB::beginTransaction();
             $get_course_doc = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'onsite_doc_file_name'=>$request->doc_file_name])->first();
             
-
-
-
-
+            if($get_course_doc->is_revert==1){
+                return response()->json(['success' => false, 'message' => 'Action reverted failed.'], 200);
+            }
             $count_docs_uploaded = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_sr_code'=>$get_course_doc->doc_sr_code,'doc_unique_id'=>$get_course_doc->doc_unique_id,'assessor_type'=>'onsite'])->count();
 
             if($count_docs_uploaded<2){
