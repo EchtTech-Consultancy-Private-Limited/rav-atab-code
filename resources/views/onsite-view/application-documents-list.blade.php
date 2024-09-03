@@ -567,7 +567,7 @@
                                                                     <small id="char-count-info">0/250 characters</small>
                                                                 </div>
                                     
-                                          <input type="submit" class="btn btn-info float-right" value="Submit " <?php echo $enable_disable_submit_btn_course==true?'disabled':'';?> >
+                                          <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo $enable_disable_submit_btn_course==true?'disabled':'';?> >
                                           </form>
                                           </div>
                                  </div>

@@ -534,12 +534,12 @@
         <div class="row">
 
         <div class="row mt-4">
-                    <div class="col-md-12">
+                    <!-- <div class="col-md-12">
                             <form action="{{url('super-admin/update-nc-flag/'.$spocData->id)}}" method="post">
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit" >
                             </form>
-                        </div>
+                        </div> -->
                         
                     </div>
 

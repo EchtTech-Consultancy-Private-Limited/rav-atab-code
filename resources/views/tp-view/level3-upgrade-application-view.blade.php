@@ -473,6 +473,9 @@
                                                 <td>
                                                     <button class="expand-button btn btn-primary btn-sm mt-3" onclick="toggleDocumentDetails(this)">Show
                                                         Comments</button>
+                                                        @if($doc->status==0 && $doc->is_tp_revert==0)
+                                                            <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
+                                                        @endif
                                                 </td>
                                                 </tr>
 

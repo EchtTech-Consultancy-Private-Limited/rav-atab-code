@@ -278,7 +278,7 @@
                                           title="{{$doc->onsite_doc_file_name}}"
                                           href="{{ url('tp-document-detail/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code . '/' . ($doc->onsite_doc_file_name != null ? $doc->onsite_doc_file_name : $doc->doc_file_name) . '/' . $application_id . '/' . $doc->doc_unique_id . '/' . $course_id) }}"
                                           class="btn btn-primary btn-sm docBtn m-1">
-                                          View
+                                          View 
                                        </a>
 
                                         
@@ -294,7 +294,7 @@
                                         href="{{ url('tp-document-detail'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                         class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                         
-                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span>
+                                        NC1 <span>{{ucfirst($doc->assessor_type)}} Assessor</span> 
                                        <!-- <img src="{{url('assets/images/nc1.png')}}" alt=""> -->
                                        </a>
                                         @if($doc->onsite_nc_status==1)
@@ -421,10 +421,18 @@
 
 
                                              <td>
+                                                
                                  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                   <?php
+                                                   $status = $doc->assessor_type=="onsite"?$doc->onsite_status:$doc->status;
+                                                   
+                                                   ?>
+                                                   @if($status==0 && $doc->is_tp_revert==0)
+                                                         <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertActionOnDocList('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
+                                                   @endif
                                     @else
                                                 <span class="text-danger"
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment

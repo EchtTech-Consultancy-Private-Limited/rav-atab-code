@@ -3068,7 +3068,7 @@ function handleRevertActionOnDocList(application_id,course_id,doc_file_name){
 }
 
 
-function handleTPRevertAction(application_id,course_id,doc_file_name){
+function handleTPRevertAction(application_id,course_id,doc_file_name,doc_sr_code){
     const is_confirm = confirm('Are you sure to revert the action?');
     if(is_confirm){
         const formData = new FormData();
@@ -3076,6 +3076,7 @@ function handleTPRevertAction(application_id,course_id,doc_file_name){
         formData.append('application_id',application_id);
         formData.append('course_id',course_id);
         formData.append('doc_file_name',doc_file_name);
+        formData.append('doc_sr_code',doc_sr_code);
 
         $.ajaxSetup({
             headers: {
@@ -3119,6 +3120,60 @@ function handleTPRevertAction(application_id,course_id,doc_file_name){
     }
     
 }
+
+function handleTPRevertActionOnDocList(application_id,course_id,doc_file_name,doc_sr_code){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+        formData.append('doc_sr_code',doc_sr_code);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-revert-doc-list-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+         
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
 
 
 function handleRevertActionOnDocListDesktop(application_id,course_id,doc_file_name){

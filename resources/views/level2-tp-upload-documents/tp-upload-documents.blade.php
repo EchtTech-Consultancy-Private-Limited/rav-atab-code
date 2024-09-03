@@ -152,6 +152,7 @@
                                         return $item['doc_unique_id'] == $question['question']->id;
                                     }) as $doc)
 
+                                    
                                     @if($doc->nc_show_status==0)
                                        <a target="_blank"
                                         title="{{$doc->doc_file_name}}"
@@ -252,14 +253,14 @@
                                              @if($doc->nc_flag==1)
                                              <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                              </div>
                                              @endif
 
                                     @else
                                        <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                              </div>
                                     @endif 
                                     @endforeach
@@ -267,7 +268,7 @@
 
                                  <!--this else for first time upload doc  -->
                                     @else
-                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                     @endif
 
                                 </form>
@@ -282,16 +283,17 @@
                                                 {{-- getting documents for each row end point --}}
                                              </td>
 
-
-                                        
-
-
-
                                              <td>
+                                             
                                  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 
+                                  
                                                 <button
                                                    class="expand-button btn btn-primary btn-sm mt-3"
                                                    onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                   
+                                                   @if($doc->status==0 && $doc->is_tp_revert==0)
+                                                         <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertActionOnDocList('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
+                                                   @endif
                                     @else
                                                 <span class="text-danger"
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment

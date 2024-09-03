@@ -279,7 +279,6 @@ class OnsiteApplicationController extends Controller
     /** Whole Application View for Onsite assessor */
     public function applicationDocumentList($id, $course_id)
     {
-        
         $assessor_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
@@ -1920,7 +1919,8 @@ public function uploadSignedCopy(Request $request)
      $flag = 0;
      if($type=="all_accepted"){
         foreach ($results as $result) {
-            if ($result->onsite_status == 1 || $result->onsite_status==6) {
+            // if ($result->onsite_status == 1 || $result->onsite_status==6 ) {
+            if ((in_array($result->onsite_status,[1,6])) || (in_array($result->onsite_status,[4]) && $result->admin_nc_flag!=0)) {
                 $flag = 1;
             } else {
                 $flag = 0;

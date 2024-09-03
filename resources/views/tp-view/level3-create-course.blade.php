@@ -434,7 +434,7 @@
 
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                         
-                                                            <option value="{{ $value }}" {{in_array($value,explode(',',$crs->mode_of_course))?'selected':''}}>
+                                                            <option value="{{ $value }}" {{in_array(strtolower($value),explode(',',$crs->mode_of_course))?'selected':''}}>
                                                                 {{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -608,6 +608,7 @@
                                             @enderror
                                         </div>
                                     </div>
+                                  
                                     <div class="col-sm-6">
                                         <div class="form-group" style="margin-top: 5px;">
                                             <div class="form-line">
@@ -620,7 +621,7 @@
 
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                         
-                                                            <option value="{{ $value }}">
+                                                        <option value="{{ $value }}">
                                                                 {{ $value }}</option>
                                                         @endforeach
                                                     </select>

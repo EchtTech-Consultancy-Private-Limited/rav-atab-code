@@ -398,8 +398,8 @@
                                                         @if($doc->nc_show_status==1)
                                                         <div class="upload-btn-wrapper">
                                                             <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                            <input type="file" class="from-control fileup" name="fileup"
-                                                                id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" />
+                                                            <input type="file" class="from-control fileup"  name="fileup"
+                                                                id="fileup_{{$doc->id}}"  doc-primary-id="{{$doc->id}}" />
                                                         </div>
                                     </div>
                                     @endif
@@ -412,6 +412,7 @@
                                             doc-primary-id="{{$doc->id}}" />
                                     </div>
                                     @endif
+                                    
                                     @if($doc->nc_flag==1 || $doc->admin_nc_flag==3)
                                     <div class="upload-btn-wrapper">
                                         <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
@@ -429,7 +430,7 @@
                                             onclick="toggleDocumentDetails(this)">Show Comments</button>
 
                                             @if($doc->status==0 && $doc->is_tp_revert==0)
-                                            <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
+                                            <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
                                             @endif
                                     </td>
                                     </tr>
@@ -927,7 +928,6 @@
               const form = $('#submitform_doc_form_' + doc_primary_id)[0];
 
               const formData = new FormData(form);
-              
               let allowedExtensions="";
               let uploadedFileName="";
               let fileExtension="";

@@ -617,19 +617,12 @@
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
                                                 <div class="form-group default-select">
                                                     
-                                                    <?php
-
-                                                            
-                                                            if(isset($modes[1])){
-                                                                echo $modes[1];
-                                                            }
-                                                    ?>
                                                     <select class="form-control select2 remove_err_input_error" name="mode_of_course[1][]"
                                                         required multiple="">
                                                         <option disabled>Select Mode of Course</option>
                                                             
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
-                                                            <option value="{{ $value }}" >
+                                                        <option value="{{ $value }}" {{in_array($value,explode(',',$crs->mode_of_course))?'selected':''}}>
                                                                 {{ $value }}</option>
                                                         @endforeach
                                                     </select>

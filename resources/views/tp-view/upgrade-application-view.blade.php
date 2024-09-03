@@ -34,6 +34,15 @@
                         closeDuration: 5000,
                     });
     @endif
+    @if ($message = Session::get('fail'))
+       
+        toastr.error("{{ $message }}", {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+    @endif
     </script>
     <div class="loading-img d-none" id="loader">
       <div class="box">
@@ -429,7 +438,7 @@
                                                                     @if($doc->nc_show_status==1)
                                                                     <div class="upload-btn-wrapper">
                                                                         <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                                                     </div>
                                                                     </div>
                                                                     @endif
@@ -439,7 +448,7 @@
                                                                         <div class="upload-btn-wrapper">
                                                                             
                                                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                                                                 </div>
                                                                         @endif 
                                                                         {{-- @if($doc->nc_flag==1)
@@ -458,6 +467,9 @@
                                                                             <button
                                                                         class="expand-button btn btn-primary btn-sm mt-3"
                                                                         onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                                        @if($doc->status==0 && $doc->is_tp_revert==0)
+                                                                        <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
+                                                                        @endif
                                                                     </td>
                                                                 </tr>
                                                 
