@@ -3686,6 +3686,48 @@ public function isNcOnCourseDocsList($application_id,$application_courses_id)
 }
 
 
+
+function revertTPCourseDocAction(Request $request){
+    try{
+        
+        DB::beginTransaction();
+
+        dd($request->all());
+        
+        $get_course_doc = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->latest('id')->first();
+
+        if($get_course_doc->is_tp_revert==1){
+            return response()->json(['success' => false, 'message' => 'Action reverted failed.'], 200);
+        }
+
+        $revertAction = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_tp_revert'=>0])->delete();
+            
+        /*Delete nc on course doc*/ 
+        $delete_= DB::table('tbl_nc_comments_secretariat')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$get_course_doc->doc_file_name])->delete();
+                
+                 /*end here*/            
+        if($revertAction){
+        $last_docs = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id])->first();
+        
+        if($last_docs->status==4){
+            DB::table('tbl_course_wise_document')->where('id',$last_docs->id)->update(['nc_flag'=>1,'admin_nc_flag'=>1]);
+        }else{
+            DB::table('tbl_course_wise_document')->where('id',$last_docs->id)->update(['nc_flag'=>1]);
+        }
+
+        DB::commit();
+        return response()->json(['success' => true, 'message' => 'Action reverted successfully.'], 200);
+        }else{
+            DB::rollBack();
+            return response()->json(['success' =>false, 'message' => 'Failed to revert action.'], 200);
+        }
+    }catch(Exception $e){
+        DB::rollBack();
+        return response()->json(['success' =>false, 'message' => 'Something went wrong!'], 200);
+    }
+}
+
+
    function get_saarc_ids(){
     //Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan and Sri-Lanka
     // $saarc=Country::whereIn('name',Array('Afghanistan', 'Bangladesh', 'Bhutan', 'Maldives', 'Nepal', 'Pakistan', 'Sri Lanka'))->get('id');

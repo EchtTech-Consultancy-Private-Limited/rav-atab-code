@@ -412,7 +412,7 @@
                                             doc-primary-id="{{$doc->id}}" />
                                     </div>
                                     @endif
-                                    @if($doc->nc_flag==1 && $doc->admin_nc_flag==3)
+                                    @if($doc->nc_flag==1 || $doc->admin_nc_flag==3)
                                     <div class="upload-btn-wrapper">
                                         <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                         <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
@@ -427,6 +427,10 @@
                                     <td>
                                         <button class="expand-button btn btn-primary btn-sm mt-3"
                                             onclick="toggleDocumentDetails(this)">Show Comments</button>
+
+                                            @if($doc->status==0 && $doc->is_tp_revert==0)
+                                            <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
+                                            @endif
                                     </td>
                                     </tr>
 
