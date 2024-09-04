@@ -268,7 +268,7 @@
 
                                  <!--this else for first time upload doc  -->
                                     @else
-                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
+                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}"/>
                                     @endif
 
                                 </form>
@@ -384,11 +384,11 @@
               let total_doc = $(`#submitform_doc_form_${questionId}`).find('a').length;
               formData.append('total_uploaded_doc',total_doc);
               formData.append('assessor_type',assessor_type_by_tp);
-              var allowedExtensions = ['pdf', 'doc', 'docx']; // Add more extensions if needed
+              var allowedExtensions = ['pdf']; // Add more extensions if needed
               var uploadedFileName = fileInput.val();
               var fileExtension = uploadedFileName.split('.').pop().toLowerCase();
               if (allowedExtensions.indexOf(fileExtension) == -1) {
-                  toastr.error("Please upload a PDF or DOC file.", "Invalid file type",{
+                  toastr.error("Please upload a PDF file only.", "Invalid file type",{
                             timeOut: 0,
                             extendedTimeOut: 0,
                             closeButton: true,

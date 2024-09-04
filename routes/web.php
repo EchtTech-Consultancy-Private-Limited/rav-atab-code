@@ -455,6 +455,7 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
     Route::post('/tp-add-document-level-2', [TPApplicationController::class, 'addDocumentLevel2']);
+    
     Route::get('/tp-document-detail/{nc_type}/{assessor_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetails']);
 
     Route::get('/tp-document-detail-level-2/{nc_type}/{assessor_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetailsLevel2']);
