@@ -508,7 +508,7 @@
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
                             "<?php 
-                            if($enable_disable_submit_btn){
+                            if($enable_disable_submit_btn || $application_details->is_all_revert_action_done==false){
                                 echo 'disabled';
                             }else{
                                 echo '';

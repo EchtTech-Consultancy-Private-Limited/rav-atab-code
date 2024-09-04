@@ -622,7 +622,7 @@
                                                         <option disabled>Select Mode of Course</option>
                                                             
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
-                                                        <option value="{{ $value }}" {{in_array($value,explode(',',$crs->mode_of_course))?'selected':''}}>
+                                                        <option value="{{ $value }}">
                                                                 {{ $value }}</option>
                                                         @endforeach
                                                     </select>
