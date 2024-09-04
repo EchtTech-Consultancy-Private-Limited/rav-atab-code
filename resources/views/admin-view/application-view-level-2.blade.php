@@ -401,13 +401,6 @@
                                                                                 @endif
                                                                                 <!-- end here -->
 
-
-
-
-
-
-
-
                                                             @elseif($doc->status==5)
                                                                 @if($doc->admin_nc_flag==1)
                                                                 <a 
@@ -425,11 +418,6 @@
                                                                 Rejected <span>By Admin</span></a>
                                                                 @endif
 
-
-
-
-
-
                                                                                 @elseif($doc->status==6)
                                                                             <a 
                                                                                 title="{{$doc->doc_file_name}}"
@@ -441,16 +429,12 @@
                                                                         @endif 
 
                                                                             @endforeach
-                                                                            
-                                                                            
-                                                                            
-                                                                        
+                                                                           
                                                                         </td>
                                                                             <td>
                                                                                     <button
                                                                                     class="expand-button btn btn-primary btn-sm mt-3"
                                                                                     onclick="toggleDocumentDetails(this)">Show Comments</button>
-                                                                                    
                                                                                     @if($doc->status!=0 && $doc->is_revert!=1)
                                                                                     <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}')">Revert</button>
 
@@ -562,7 +546,7 @@
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
-                            "<?php echo ($application_details->enable_disable_submit_btn==true || $application_details->enable_disable_submit_btn44==true)?'disabled':'';?> >
+                            "<?php echo ($application_details->enable_disable_submit_btn==true || $application_details->enable_disable_submit_btn44==true) || ($application_details->is_all_revert_action_done44==false || $application_details->is_all_revert_action_done==false)?'disabled':'';?> >
 
                             </form>
                         </div>

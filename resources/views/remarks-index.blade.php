@@ -173,9 +173,9 @@
                         <div class="form-group">
                             <label for="remark">Remark</label>
                             <textarea name="remark" class="form-control" id="remarkField" placeholder="Write remark..." required></textarea>
-                            <small id="charCount" class="text-muted">0/100 characters</small>
+                            <small id="charCount" class="text-muted">0/500 characters</small>
                             <small id="charCountWarning" class="text-danger" style="display: none;">You have exceeded
-                                the character limit (100 characters).</small>
+                                the character limit (500 characters).</small>
                         </div>
 
 
@@ -241,10 +241,10 @@
 
         textarea.addEventListener('input', function() {
             const currentCount = textarea.value.length;
-            charCount.textContent = currentCount + '/100 characters';
+            charCount.textContent = currentCount + '/500 characters';
 
-            if (currentCount > 100) {
-                textarea.value = textarea.value.substring(0, 100);
+            if (currentCount > 500) {
+                textarea.value = textarea.value.substring(0, 500);
                 charCount.style.display = 'none';
                 charCountWarning.style.display = 'inline';
             } else {

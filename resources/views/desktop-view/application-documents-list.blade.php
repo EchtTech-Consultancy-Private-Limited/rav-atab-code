@@ -329,7 +329,7 @@
                                                          <th>Date</th>
                                                          <th>Comments</th>
                                                          <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
+                                                         <th>Remarks from</th>
                                                       </tr>
                                                    </thead>
                                                    <tbody>

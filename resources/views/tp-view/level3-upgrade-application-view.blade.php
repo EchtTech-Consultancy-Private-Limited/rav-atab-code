@@ -552,7 +552,6 @@
      
 
         @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==3)) 
-        
         <div class="row mt-4">
                         <div class="col-md-12">
                             <form action="{{url('tp/update-nc-flag/'.$spocData->id)}}" method="post">
@@ -560,12 +559,20 @@
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
                             "<?php 
-                            if($enable_disable_submit_btn || $showSubmitBtnToTP){
-                                echo 'disabled';
+                            if($doc_list_count>0){
+                                if($enable_disable_submit_btn || $showSubmitBtnToTP || ($application_details->is_all_revert_action_done44==false) ){
+                                    echo 'disabled';
+                                }else{
+                                    echo '';
+                                }
                             }else{
-                                echo '';
+                                
+                                if($enable_disable_submit_btn || $showSubmitBtnToTP || ( $application_details->is_all_revert_action_done==false) ){
+                                    echo 'disabled';
+                                }else{
+                                    echo '';
+                                }
                             }
-                            
                             ?> >
                             </form>
                         </div>

@@ -551,7 +551,6 @@ class SecretariatDocumentVerifyController extends Controller
 
             // this is for the applicaion status
             
-           
             
            
             /*------end here------*/
@@ -647,12 +646,12 @@ class SecretariatDocumentVerifyController extends Controller
             // ->where(['application_id' => $application_id,'approve_status'=>1])
             ->where(['application_id' => $application_id])
             ->latest('id')->get();
-            foreach($get_course_docs as $course_doc){
-                if(in_array($course_doc->status,[2,3,4]) && $course_doc->nc_flag==1){
-                    return "action_not_taken";
-                }
+            // foreach($get_course_docs as $course_doc){
+            //     if(in_array($course_doc->status,[2,3,4]) && $course_doc->nc_flag==1){
+            //         return "action_not_taken";
+            //     }
                 
-            }
+            // }
             foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
