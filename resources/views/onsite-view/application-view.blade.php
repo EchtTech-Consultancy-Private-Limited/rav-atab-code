@@ -338,7 +338,7 @@
                         class="btn btn-info float-right" 
                         value="Submit" 
 
-                        <?php echo ($enable_disable_submit_btn==true || !$is_all_action_taken_on_docs || $spocData->signed_copy_onsite==null || $is_in_improvement==null) ? 'disabled' : ''; ?>
+                        <?php echo ($enable_disable_submit_btn==true || !$is_all_action_taken_on_docs || $spocData->signed_copy_onsite==null || $is_in_improvement==null) || $is_all_nc_flag==false? 'disabled' : ''; ?>
                     >
                 </form>
                 </div>
@@ -360,7 +360,7 @@
     @endif
     <!-- <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div> -->
 
-            @if($is_all_action_taken_on_docs)
+            @if($is_all_action_taken_on_docs && $any_nc>0)
                 <div class="d-flex align-items-center">
                 @if(!$isOFIExists)
                 <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>

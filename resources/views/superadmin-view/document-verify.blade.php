@@ -122,7 +122,7 @@
                                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label for="comment_text">Remark</label>
                                                                     <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
-                                                                    <small id="char-count-info">0/100 characters</small>
+                                                                    <small id="char-count-info">0/500 characters</small>
                                                                 </div>
                                                                     <!-- <div class="col-sm-12">
                                                                         <div>
@@ -323,14 +323,14 @@
             var currentCharCount = commentTextArea.value.length;
 
             // Update the character count info
-            charCountInfo.textContent = currentCharCount + '/100 characters';
+            charCountInfo.textContent = currentCharCount + '/500 characters';
 
             // Check if the limit is reached
             // Check if the limit is reached
-            if (currentCharCount > 100) {
-                // Truncate the text to 100 characters
-                commentTextArea.value = commentTextArea.value.substring(0, 100);
-                charCountInfo.textContent = '100/100 characters (maximum reached)';
+            if (currentCharCount > 500) {
+                // Truncate the text to 500 characters
+                commentTextArea.value = commentTextArea.value.substring(0, 500);
+                charCountInfo.textContent = '500/500 characters (maximum reached)';
                 charCountInfo.style.color = 'red'; // Set text color to red
                 submitButton.disabled = true; // Disable the submit button
             } else {

@@ -107,7 +107,7 @@
                                                                 <div class="col-sm-12" id="comment-section">
                                                                     <label for="comment_text">Remark</label>
                                                                     <textarea rows="10" cols="60" id="comment_text" name="doc_comment" class="form-control" required></textarea>
-                                                                    <small id="char-count-info">0/100 characters</small>
+                                                                    <small id="char-count-info">0/500 characters</small>
                                                                 </div>
                                                             </div>
 

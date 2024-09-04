@@ -389,14 +389,22 @@ Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']
     Route::get('onsite/doc/{doc_name}/{app_id}', [OnsiteApplicationController::class, 'sigendCopyOnsite']);
 
     Route::post('/secretariat-revert-course-doc-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocAction']);
+    
+    Route::post('/secretariat-revert-doc-list-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocListAction']);
+
+
+    Route::post('/tp-revert-course-doc-action', [TPApplicationController::class, 'revertTPCourseDocAction']);
+    Route::post('/tp-revert-doc-list-action', [TPApplicationController::class, 'revertTPCourseDocListAction']);
+
+
     Route::post('/secretariat-revert-course-reject', [SecretariatDocumentVerifyController::class, 'revertCourseRejectAction']);
 
-    Route::post('/secretariat-revert-doc-list-action', [SecretariatDocumentVerifyController::class, 'revertCourseDocListAction']);
     
     Route::get('/secretariat-{nc_type}/verify-doc/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [DocApplicationController::class, 'secretariatVerfiyDocument']);
 
     Route::post('/secretariat/document-verfiy', [SecretariatDocumentVerifyController::class, 'secretariatDocumentVerify']);
     Route::post('/secretariat/update-nc-flag/{application_id}/{course_id?}', [SecretariatDocumentVerifyController::class, 'secretariatUpdateNCFlag']);
+    Route::post('/super-admin/update-nc-flag/{application_id}/{course_id?}', [SuperAdminApplicationController::class, 'superAdminUpdateNCFlag']);
 
     Route::post('/secretariat/reject-course/{application_id}/{course_id}', [SecretariatDocumentVerifyController::class, 'secretariatRejectCourse']);
 
@@ -447,6 +455,7 @@ Route::post('/desktop/generate/final-summary', [DesktopApplicationController::cl
     Route::post('/tp-upload-document', [TPApplicationController::class, 'uploads_document']);
     Route::post('/tp-add-document', [TPApplicationController::class, 'addDocument']);
     Route::post('/tp-add-document-level-2', [TPApplicationController::class, 'addDocumentLevel2']);
+    
     Route::get('/tp-document-detail/{nc_type}/{assessor_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetails']);
 
     Route::get('/tp-document-detail-level-2/{nc_type}/{assessor_type}/{doc_sr_code}/{doc_name}/{application_id}/{doc_unique_code}/{application_courses_id}', [TPApplicationController::class, 'tpDocumentDetailsLevel2']);

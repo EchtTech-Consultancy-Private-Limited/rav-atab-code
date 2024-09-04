@@ -34,6 +34,15 @@
                         closeDuration: 5000,
                     });
     @endif
+    @if ($message = Session::get('fail'))
+       
+        toastr.error("{{ $message }}", {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+    @endif
     </script>
     <div class="loading-img d-none" id="loader">
       <div class="box">
@@ -404,7 +413,7 @@
                                                                     @if($doc->nc_flag==1)
                                                                     <div class="upload-btn-wrapper">
                                                                             <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                            <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                                                            <input type="file" class="from-control fileup" name="fileup" doc-sr-code="{{$doc->doc_sr_code}}" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
                                                                         </div>
                                                                         @endif
 
@@ -429,7 +438,7 @@
                                                                     @if($doc->nc_show_status==1)
                                                                     <div class="upload-btn-wrapper">
                                                                         <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                                                     </div>
                                                                     </div>
                                                                     @endif
@@ -439,7 +448,7 @@
                                                                         <div class="upload-btn-wrapper">
                                                                             
                                                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}"/>
+                                                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}" doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}"/>
                                                                                 </div>
                                                                         @endif 
                                                                         {{-- @if($doc->nc_flag==1)
@@ -458,6 +467,9 @@
                                                                             <button
                                                                         class="expand-button btn btn-primary btn-sm mt-3"
                                                                         onclick="toggleDocumentDetails(this)">Show Comments</button>
+                                                                        @if($doc->status==0 && $doc->is_tp_revert==0)
+                                                                        <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
+                                                                        @endif
                                                                     </td>
                                                                 </tr>
                                                 
@@ -524,8 +536,6 @@
             </div>
         </div>
 
-
-      
         @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
         
         <div class="row">
@@ -535,7 +545,7 @@
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
                             "<?php 
-                            if($enable_disable_submit_btn || $showSubmitBtnToTP){
+                            if(($enable_disable_submit_btn || $showSubmitBtnToTP) || ($application_details->is_all_revert_action_done44==false || $application_details->is_all_revert_action_done==false)){
                                 echo 'disabled';
                             }else{
                                 echo '';
@@ -1001,14 +1011,11 @@
               const doc_primary_id = fileInput.attr('doc-primary-id');
               const doc_sr_code  = fileInput.attr('doc-sr-code');
               const form = $('#submitform_doc_form_' + doc_primary_id)[0];
-
               const formData = new FormData(form);
-              
               let allowedExtensions="";
               let uploadedFileName="";
               let fileExtension="";
-
-              if(doc_sr_code==="co03"){
+              if(doc_sr_code=="co03"){
               allowedExtensions = ['xlsx', 'xls', 'xlsb']; // Add more extensions if needed
               uploadedFileName = fileInput.val();
               fileExtension = uploadedFileName.split('.').pop().toLowerCase();
@@ -1020,7 +1027,7 @@
               
 
               if (allowedExtensions.indexOf(fileExtension) == -1) {
-                if(doc_sr_code==="co03"){
+                if(doc_sr_code=="co03"){
                     toastr.error("Please upload a xls file.", "Invalid File type",{
                         timeOut: 0,
                         extendedTimeOut: 0,

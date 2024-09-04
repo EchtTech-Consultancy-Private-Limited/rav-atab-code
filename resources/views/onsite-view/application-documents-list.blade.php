@@ -504,7 +504,7 @@
                                                          <th>Date</th>
                                                          <th>Comments</th>
                                                          <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
+                                                         <th>Remarks from</th>
                                                       </tr>
                                                    </thead>
                                                    <tbody>
@@ -525,7 +525,7 @@
                                                             $capitalizedArray = array_map('ucfirst', $explodedArray);
                                                             $resultString = implode(" ", $capitalizedArray);
                                                          @endphp
-                                                         {{$resultString}} 
+                                                         {{$resultString=="Not Recommended"?"Needs Revision":$resultString}} 
                                                          </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
                                                       </tr>
@@ -567,7 +567,7 @@
                                                                     <small id="char-count-info">0/250 characters</small>
                                                                 </div>
                                     
-                                          <input type="submit" class="btn btn-info float-right" value="Submit " <?php echo $enable_disable_submit_btn_course==true?'disabled':'';?> >
+                                          <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($enable_disable_submit_btn_course==true || $is_all_revert_action_done==false)?'disabled':'';?> >
                                           </form>
                                           </div>
                                  </div>

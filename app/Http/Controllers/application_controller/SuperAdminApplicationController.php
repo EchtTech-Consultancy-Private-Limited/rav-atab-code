@@ -1969,4 +1969,239 @@ class SuperAdminApplicationController extends Controller
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
         }
     }
+
+
+
+
+    public function superAdminUpdateNCFlag($application_id)
+    {
+
+        dd($application_id);
+        
+        try {
+            DB::beginTransaction();
+            $secretariat_id = Auth::user()->id;
+            $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->get();
+            $get_course_docs = DB::table('tbl_course_wise_document')
+                ->where(['application_id' => $application_id,'approve_status'=>1])
+                ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
+                ->latest('id')->get();
+
+                /*reject course and revert back before click on submit button*/
+                DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
+                
+                $t = 0;
+                $reuploadbtnToTPorAdmin = 0;
+                foreach($get_course_docs as $course_doc){
+                    $nc_comment_status = "";
+                    $nc_flag=0;
+                    $nc_comments = 0;
+                   if ($course_doc->status == 2) {
+                        $nc_comment_status = 2;
+                        $nc_flag = 1;
+                        $nc_comments=1;
+                    } else if ($course_doc->status == 3) {
+                        $nc_comment_status = 3;
+                        $nc_flag = 1;
+                        $nc_comments=1;
+                    } 
+                    else if ($course_doc->status == 4) {
+                        $nc_comment_status = 4;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                        $reuploadbtnToTPorAdmin=1;
+                    } 
+                    else if ($course_doc->status == 6) {
+                        $nc_comment_status = 6;
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    } 
+                    else {
+                        $nc_comment_status = 0; //not recommended
+                        $nc_flag = 0;
+                        $nc_comments=0;
+                    }
+
+               $is_update = DB::table('tbl_course_wise_document')
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0,'nc_flag'=>0])
+                ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
+
+                DB::table('tbl_nc_comments_secretariat')
+                ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->course_id,'nc_show_status'=>0])
+                ->update(['nc_show_status' => $nc_comments]);
+
+                /*if any courses rejected then hide the revert button according to courses*/ 
+                if($t==0){
+                    if($is_update){
+                        $t=1;
+                    }
+                }
+                
+                
+            }
+
+            
+                $get_application = DB::table('tbl_application')->where('id',$application_id)->first();
+
+                if($get_application->level_id==1){
+                    $url= config('notification.secretariatUrl.level1');
+                    $url=$url.dEncrypt($application_id);
+                    $tpUrl = config('notification.tpUrl.level1');
+                    $tpUrl=$tpUrl.dEncrypt($application_id);
+                }else if($get_application->level_id==2){
+                    $url= config('notification.secretariatUrl.level2');
+                    $url=$url.dEncrypt($application_id);
+                    $tpUrl = config('notification.tpUrl.level2');
+                    $tpUrl=$tpUrl.dEncrypt($application_id);
+                }else{
+                    $url= config('notification.secretariatUrl.level3');
+                    $url=$url.dEncrypt($application_id);
+                    $tpUrl = config('notification.tpUrl.level3');
+                    $tpUrl=$tpUrl.dEncrypt($application_id);
+                }
+                $is_all_accepted=$this->isAllCourseDocAccepted($application_id);
+                $notifiData = [];
+                $notifiData['sender_id'] = Auth::user()->id;
+                $notifiData['application_id'] = $application_id;
+                $notifiData['uhid'] = getUhid( $application_id)[0];
+                $notifiData['level_id'] = getUhid( $application_id)[1];
+                $notifiData['data'] = config('notification.common.nc');
+                $notifiData['user_type'] = "superadmin";
+                $sUrl = config('notification.adminUrl.level1');
+                $notifiData['url'] = $sUrl.dEncrypt($application_id);
+                
+                if($get_application->level_id==1 || $get_application->level_id==2){
+                if($t && !$is_all_accepted){
+                      /*send notification*/ 
+                      sendNotification($notifiData);
+                      $notifiData['user_type'] = "tp";
+                      $notifiData['receiver_id'] = $get_application->tp_id;
+                      $notifiData['url'] = $tpUrl;
+                      sendNotification($notifiData);
+                        /*end here*/ 
+                    createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+                }
+               
+                if($is_all_accepted){
+                    $notifiData['data'] = config('notification.admin.acceptCourseDoc');
+                    $notifiData['user_type'] = "superadmin";
+                    $notifiData['url'] = $sUrl.dEncrypt($application_id);
+                    sendNotification($notifiData);
+                    createApplicationHistory($application_id,null,config('history.admin.acceptCourseDoc'),config('history.color.success'));
+
+                }
+            }
+
+            if($get_application->level_id==3){
+                $notifiData['user_type'] = "tp";
+                $notifiData['receiver_id'] = $get_application->tp_id;
+                $notifiData['url'] = $tpUrl;
+                sendNotification($notifiData);
+                createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+            }
+            
+            
+
+            foreach($get_all_courses as $course){
+                if($course_doc->status==1){
+                    DB::table('tbl_course_wise_document')->where('course_id',$course->id)->update(['is_revert'=>1]);
+                }
+            }
+
+
+            /*--------To Check All Course Doc Approved----------*/
+
+            $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
+            if($get_application->level_id==2){
+                $check_all_doc_verifiedDocList = $this->secretariatUpdateNCFlagDocList($application_id);
+            }else{
+                $check_all_doc_verifiedDocList=null;
+            }
+
+            // this is for the applicaion status
+            
+           
+            
+           
+            /*------end here------*/
+            // DB::commit();
+            
+            if($get_application->level_id==1 || $get_application->level_id==3){
+                
+                if ($check_all_doc_verified == "all_verified") {
+                    DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                    return back()->with('success', 'All course docs Accepted successfully.');
+                }
+                if ($check_all_doc_verified == "action_not_taken") {
+                    return back()->with('fail', 'Please take any action on course doc.');
+                }
+
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
+                DB::commit();
+                if($reuploadbtnToTPorAdmin){
+                    return back()->with('success', 'Enabled Course Doc upload button to TP.');
+                }
+                return back()->with('success', 'Enabled Course Doc upload button to TP.');
+                
+            }else{
+               
+            // if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
+            //     return back()->with('fail', 'First create NCs on courses doc');
+            // }
+            if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
+                DB::commit();
+                DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
+                
+                return back()->with('success', 'All course docs Accepted successfully.');
+            }
+            if ($check_all_doc_verified == "action_not_taken" && $check_all_doc_verifiedDocList=="action_not_taken") {
+                return back()->with('fail', 'Please take any action on course doc.');
+
+            }
+
+            if($get_application->level_id==1){
+                $url= config('notification.secretariatUrl.level1');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level1');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }else if($get_application->level_id==2){
+                $url= config('notification.secretariatUrl.level2');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level2');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }else{
+                $url= config('notification.secretariatUrl.level3');
+                $url=$url.dEncrypt($application_id);
+                $tpUrl = config('notification.tpUrl.level3');
+                $tpUrl=$tpUrl.dEncrypt($application_id);
+            }
+            $notifiData = [];
+            $notifiData['sender_id'] = Auth::user()->id;
+            $notifiData['application_id'] = $application_id;
+            $notifiData['uhid'] = getUhid( $application_id)[0];
+            $notifiData['level_id'] = getUhid( $application_id)[1];
+            $notifiData['data'] = config('notification.common.nc');
+            $notifiData['user_type'] = "superadmin";
+            $sUrl = config('notification.adminUrl.level1');
+            $notifiData['url'] = $sUrl.dEncrypt($application_id);
+            
+            /*send notification*/ 
+            sendNotification($notifiData);
+            $notifiData['user_type'] = "tp";
+            $notifiData['url'] = $tpUrl;
+            sendNotification($notifiData);
+            createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
+
+            /*end here*/ 
+            DB::commit();
+            DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
+            return back()->with('success', 'Enabled Course Doc upload button to TP.');
+            // return redirect($redirect_to);
+         }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('fail', 'Something went wrong');
+        }
+    }
+
 }

@@ -532,7 +532,7 @@
                         <div class="col-md-12">
                             <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($application_details->enable_disable_submit_btn==true)?'disabled':'';?> >
+                            <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($application_details->enable_disable_submit_btn==true || $application_details->is_all_revert_action_done==false)?'disabled':'';?> >
 
                             </form>
                         </div>

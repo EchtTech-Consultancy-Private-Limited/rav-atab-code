@@ -473,6 +473,9 @@
                                                 <td>
                                                     <button class="expand-button btn btn-primary btn-sm mt-3" onclick="toggleDocumentDetails(this)">Show
                                                         Comments</button>
+                                                        @if($doc->status==0 && $doc->is_tp_revert==0)
+                                                            <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleTPRevertAction('{{ $doc->application_id }}', '{{ $doc->course_id }}', '{{ $doc->doc_file_name }}','{{$doc->doc_sr_code}}')">Revert</button>
+                                                        @endif
                                                 </td>
                                                 </tr>
 
@@ -549,7 +552,6 @@
      
 
         @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==3)) 
-        
         <div class="row mt-4">
                         <div class="col-md-12">
                             <form action="{{url('tp/update-nc-flag/'.$spocData->id)}}" method="post">
@@ -557,12 +559,20 @@
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
                             "<?php 
-                            if($enable_disable_submit_btn || $showSubmitBtnToTP){
-                                echo 'disabled';
+                            if($doc_list_count>0){
+                                if($enable_disable_submit_btn || $showSubmitBtnToTP || ($application_details->is_all_revert_action_done44==false) ){
+                                    echo 'disabled';
+                                }else{
+                                    echo '';
+                                }
                             }else{
-                                echo '';
+                                
+                                if($enable_disable_submit_btn || $showSubmitBtnToTP || ( $application_details->is_all_revert_action_done==false) ){
+                                    echo 'disabled';
+                                }else{
+                                    echo '';
+                                }
                             }
-                            
                             ?> >
                             </form>
                         </div>

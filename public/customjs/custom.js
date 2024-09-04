@@ -1105,7 +1105,6 @@ const assessor_dates = [];
 $(".dateID").click("on", function () {
     var $this = $(this);
     var dataVal = $(this).attr("data-id").split(",");
-    console.log(dataVal,' data val ')
     assessor_dates.push(dataVal[3]);
     // $("#assessor_type_"+dataVal[0]).attr("required", true);
 
@@ -1155,8 +1154,17 @@ $(".dateID").click("on", function () {
                 $("#onsite_date_selection_footer").hide();
             }
             else {
-                $("#onsite_date_selection_footer").show();    
-                $this.removeClass("btn-success").addClass("btn-danger");
+                if(dataVal[2]==1){
+                    document.querySelectorAll('.dateID').forEach(function(element) {
+                        element.classList.remove("btn-danger");
+                        element.classList.add("btn-success");
+                    });
+                    $this.removeClass("btn-success").addClass("btn-danger");
+                }else{
+                    $("#onsite_date_selection_footer").show();    
+                    $this.removeClass("btn-success").addClass("btn-danger");
+                }
+                
             }
             
         },
@@ -3023,6 +3031,113 @@ function handleRevertActionOnDocList(application_id,course_id,doc_file_name){
         });
         $.ajax({
             url: `${BASE_URL}/secretariat-revert-doc-list-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+         
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
+
+function handleTPRevertAction(application_id,course_id,doc_file_name,doc_sr_code){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+        formData.append('doc_sr_code',doc_sr_code);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-revert-course-doc-action`,
+            type: "post",
+            datatype: "json",
+            data:formData,
+            contentType: false,
+            processData: false,
+          
+            success: function (resdata) {
+                if (resdata.success) {
+                    toastr.success(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(resdata.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $(".box-overlay").hide();
+                }
+            },
+            error: (xhr, st) => {
+                console.log(st, "st");
+            },
+        });
+    }
+    
+}
+
+function handleTPRevertActionOnDocList(application_id,course_id,doc_file_name,doc_sr_code){
+    const is_confirm = confirm('Are you sure to revert the action?');
+    if(is_confirm){
+        const formData = new FormData();
+
+        formData.append('application_id',application_id);
+        formData.append('course_id',course_id);
+        formData.append('doc_file_name',doc_file_name);
+        formData.append('doc_sr_code',doc_sr_code);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-revert-doc-list-action`,
             type: "post",
             datatype: "json",
             data:formData,

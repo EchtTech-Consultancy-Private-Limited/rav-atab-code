@@ -364,6 +364,7 @@ class AdminApplicationController extends Controller
         $obj->enable_disable_submit_btn44 = $this->checkSubmitButtonEnableOrDisable44L2($application->id);
         
         
+        
        
 
         $courses = DB::table('tbl_application_courses')->where([
@@ -472,11 +473,7 @@ class AdminApplicationController extends Controller
         if(count($courses)==$admin_final_summary_count){
             $is_final_summary_generated =true;
         }
-
         
-
-        
-        // dd($final_data);
         return view('admin-view.application-view-level-2', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'courses_doc' => $decoded_json_courses_doc,'is_final_summary_generated'=>$is_final_summary_generated]);
     }
 
@@ -1543,6 +1540,7 @@ class AdminApplicationController extends Controller
         
         $flag = 0;
     
+        
         foreach ($results as $result) {
             if (($result->is_revert == 1)) {
                 $flag = 0;

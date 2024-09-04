@@ -329,7 +329,7 @@
                                                          <th>Date</th>
                                                          <th>Comments</th>
                                                          <th>Status Code</th>
-                                                         <th>Approved/Rejected By</th>
+                                                         <th>Remarks from</th>
                                                       </tr>
                                                    </thead>
                                                    <tbody>
@@ -348,7 +348,7 @@
                                                             $capitalizedArray = array_map('ucfirst', $explodedArray);
                                                             $resultString = implode(" ", $capitalizedArray);
                                                          @endphp
-                                                         {{$resultString}} 
+                                                         {{$resultString=="Not Recommended"?"Needs Revision":$resultString}} 
                                                          </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
                                                       </tr>

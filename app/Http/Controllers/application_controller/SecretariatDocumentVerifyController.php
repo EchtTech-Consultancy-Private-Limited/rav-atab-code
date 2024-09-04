@@ -411,6 +411,13 @@ class SecretariatDocumentVerifyController extends Controller
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
 
+                foreach($get_course_docs as $course_doc){
+                    if(in_array($course_doc->status,[2,3,4]) && $course_doc->nc_flag==1){
+                        return back()->with('fail', 'Please first take all action on doc');
+                    }
+                }
+
+
                 /*reject course and revert back before click on submit button*/
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
                 
@@ -544,7 +551,6 @@ class SecretariatDocumentVerifyController extends Controller
 
             // this is for the applicaion status
             
-           
             
            
             /*------end here------*/
@@ -640,6 +646,12 @@ class SecretariatDocumentVerifyController extends Controller
             // ->where(['application_id' => $application_id,'approve_status'=>1])
             ->where(['application_id' => $application_id])
             ->latest('id')->get();
+            // foreach($get_course_docs as $course_doc){
+            //     if(in_array($course_doc->status,[2,3,4]) && $course_doc->nc_flag==1){
+            //         return "action_not_taken";
+            //     }
+                
+            // }
             foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -1015,7 +1027,9 @@ class SecretariatDocumentVerifyController extends Controller
             
             $get_course_doc = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->latest('id')->first();
 
-            
+            if($get_course_doc->is_revert==1){
+                return response()->json(['success' => false, 'message' => 'Action reverted failed.'], 200);
+            }
                 if($get_course_doc->status==4){
                     $revertAction = DB::table('tbl_course_wise_document')->where(['application_id'=>$request->application_id,'course_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0,'admin_nc_flag'=>0]);
  
@@ -1047,7 +1061,10 @@ class SecretariatDocumentVerifyController extends Controller
             
             $get_course_doc = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name])->latest('id')->first();
 
-            
+                if($get_course_doc->is_revert==1){
+                    return response()->json(['success' => false, 'message' => 'Action reverted failed.'], 200);
+                }
+
                 if($get_course_doc->status==4){
                     $revertAction = DB::table('tbl_application_course_doc')->where(['application_id'=>$request->application_id,'application_courses_id'=>$request->course_id,'doc_file_name'=>$request->doc_file_name,'is_revert'=>0])->update(['status'=>0,'admin_nc_flag'=>0]);
  
