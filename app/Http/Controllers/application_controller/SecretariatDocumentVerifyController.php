@@ -423,6 +423,7 @@ class SecretariatDocumentVerifyController extends Controller
                 
                 $t = 0;
                 $reuploadbtnToTPorAdmin = 0;
+                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -436,7 +437,7 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_flag = 1;
                         $nc_comments=1;
                     } 
-                    else if ($course_doc->status == 4) {
+                    else if ($course_doc->status == 4 && $course_doc->is_admin_submit!=1) {
                         $nc_comment_status = 4;
                         $nc_flag = 0;
                         $nc_comments=0;
@@ -452,7 +453,7 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_flag = 0;
                         $nc_comments=0;
                     }
-
+                    
                $is_update = DB::table('tbl_course_wise_document')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'nc_show_status'=>0,'nc_flag'=>0])
                 ->update(['nc_flag' => $nc_flag, 'secretariat_id' => $secretariat_id,'nc_show_status'=>$nc_comment_status,'is_revert'=>1]);
@@ -568,16 +569,14 @@ class SecretariatDocumentVerifyController extends Controller
 
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
                 DB::commit();
+                
                 if($reuploadbtnToTPorAdmin){
-                    return back()->with('success', 'Enabled Course Doc upload button to TP.');
+                    return back()->with('success', 'File sent to admin.');
                 }
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 
             }else{
-               
-            // if (!$check_all_doc_verified && !$check_all_doc_verifiedDocList) {
-            //     return back()->with('fail', 'First create NCs on courses doc');
-            // }
+                
             if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
                 DB::commit();
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
@@ -588,6 +587,8 @@ class SecretariatDocumentVerifyController extends Controller
                 return back()->with('fail', 'Please take any action on course doc.');
 
             }
+
+            
 
             if($get_application->level_id==1){
                 $url= config('notification.secretariatUrl.level1');
@@ -625,6 +626,9 @@ class SecretariatDocumentVerifyController extends Controller
             /*end here*/ 
             DB::commit();
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
+            if($check_all_doc_verifiedDocList=="file_sent_admin"){
+                return back()->with('success', 'File sent to admin.');
+            }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
          }
@@ -652,6 +656,7 @@ class SecretariatDocumentVerifyController extends Controller
             //     }
                 
             // }
+            $reuploadbtnToTPorAdmin = 0;
             foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -665,10 +670,11 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_flag = 1;
                         $nc_comments=1;
                     } 
-                    else if ($course_doc->status == 4) {
+                    else if ($course_doc->status == 4 && $course_doc->is_admin_submit!=1) {
                         $nc_comment_status = 4;
                         $nc_flag = 0;
                         $nc_comments=0;
+                        $reuploadbtnToTPorAdmin=1;
                     } 
                     else if ($course_doc->status == 6) {
                         $nc_comment_status = 6;
@@ -697,6 +703,9 @@ class SecretariatDocumentVerifyController extends Controller
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
             DB::commit();
+            if($reuploadbtnToTPorAdmin){
+                return "file_sent_admin";
+            }
             return $check_all_doc_verified;
             // if (!$check_all_doc_verified) {
             //     return back()->with('fail', 'First create NCs on courses doc');
@@ -714,7 +723,6 @@ class SecretariatDocumentVerifyController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
             return back()->with('fail', 'Something went wrong');
         }
     }
@@ -1574,6 +1582,7 @@ class SecretariatDocumentVerifyController extends Controller
               break;
           }
       }
+
 
       
       if ($flag == 0) {

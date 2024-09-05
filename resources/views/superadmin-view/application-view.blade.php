@@ -533,15 +533,22 @@
 
         <div class="row">
 
-        <div class="row mt-4">
-                    <!-- <div class="col-md-12">
+        @if($show_submit_or_not)
+        
+                <div class="row mt-4">
+                    <div class="col-md-12">
                             <form action="{{url('super-admin/update-nc-flag/'.$spocData->id)}}" method="post">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit" >
+                            <input type="submit" class="btn btn-info float-right" value="Submit" 
+                            <?php echo ($enabled_or_disabled_btn || $alreadySubmitted)?'disabled':''; 
+                            
+                            ?>
+                            >
                             </form>
-                        </div> -->
-                        
-                    </div>
+                        </div>
+                </div>
+        @endif
+
 
 
 

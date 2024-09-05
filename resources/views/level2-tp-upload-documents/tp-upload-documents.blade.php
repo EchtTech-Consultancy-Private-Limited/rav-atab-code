@@ -206,7 +206,7 @@
                                              href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Not Recommended <span>{{ucfirst($doc->assessor_type)}}</span></a>
-                                             @if($doc->admin_nc_flag==1)
+                                             @if($doc->admin_nc_flag==1 && $doc->is_admin_submit==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail-level-2'. '/5'. '/' . 'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
@@ -214,7 +214,7 @@
                                              Accepted <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->admin_nc_flag==2)
+                                             @if($doc->admin_nc_flag==2 && $doc->is_admin_submit==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail-level-2'.  '/6/' .'admin/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"

@@ -511,6 +511,7 @@ class ApplicationCoursesController extends Controller
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
              $data['is_doc_show'] = 0;
+             $data['is_tp_revert'] = 1;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }
@@ -653,6 +654,7 @@ class ApplicationCoursesController extends Controller
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
              $data['is_doc_show'] = 0;
+             $data['is_tp_revert'] = 1;
              DB::table('tbl_course_wise_document')->insert($data);
             }
         }
@@ -788,6 +790,7 @@ class ApplicationCoursesController extends Controller
              $data['level_id'] = $request->level_id;
              $data['course_name'] = $course_name[$i];
              $data['is_doc_show'] = 0;
+             $data['is_tp_revert'] = 1;
              
              DB::table('tbl_course_wise_document')->insert($data);
             }
