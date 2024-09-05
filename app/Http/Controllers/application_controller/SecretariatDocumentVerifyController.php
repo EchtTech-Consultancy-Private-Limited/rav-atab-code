@@ -560,10 +560,13 @@ class SecretariatDocumentVerifyController extends Controller
             if($get_application->level_id==1 || $get_application->level_id==3){
                 
                 if ($check_all_doc_verified == "all_verified") {
+                    DB::commit();
+                    
                     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                     return back()->with('success', 'All course docs Accepted successfully.');
                 }
                 if ($check_all_doc_verified == "action_not_taken") {
+                    DB::commit();
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
 
@@ -580,7 +583,6 @@ class SecretariatDocumentVerifyController extends Controller
             if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
                 DB::commit();
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
-                
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
             if ($check_all_doc_verified == "action_not_taken" && $check_all_doc_verifiedDocList=="action_not_taken") {

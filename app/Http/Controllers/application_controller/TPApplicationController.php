@@ -1440,6 +1440,12 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
         }
         $item->save();
 
+
+
+        /*is_tp_revert make it 1 first time*/ 
+        DB::table('tbl_application_course_doc')->where('application_id',$request->Application_id)->update(['is_tp_revert'=>1]);
+        /*end here*/ 
+
          /*send notification*/ 
          $notifiData = [];
          $notifiData['user_type'] = "accountant";
@@ -3777,7 +3783,7 @@ public function checkAllActionDoneOnRevert($application_id)
     $flag = 0;
     
     foreach ($results as $result) {
-        if (($result->is_tp_revert == 1)) {
+        if ($result->is_tp_revert == 1 && $result->status!=1) {
             $flag = 0;
         } else {
             $flag = 1;
@@ -3786,7 +3792,7 @@ public function checkAllActionDoneOnRevert($application_id)
     }
 
     
-    
+
     
     if ($flag == 0) {
         return false;
@@ -3843,7 +3849,7 @@ public function checkAllActionDoneOnRevert44($application_id)
     
     $flag = 0;
     foreach ($results as $result) {
-        if (($result->is_tp_revert == 1)) {
+        if ($result->is_tp_revert == 1) {
             $flag = 0;
         } else {
             $flag = 1;
