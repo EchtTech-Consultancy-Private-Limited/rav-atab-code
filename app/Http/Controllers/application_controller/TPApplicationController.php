@@ -3049,7 +3049,7 @@ public function tpUpdateNCFlagCourseDoc($application_id)
             $get_course_wise_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $application_id,'approve_status'=>1,'is_doc_show'=>-1])
                 ->latest('id')->get();
-
+            
                 foreach($get_course_wise_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -3078,7 +3078,7 @@ public function tpUpdateNCFlagCourseDoc($application_id)
                
              $is_update=  DB::table('tbl_course_wise_document')
             ->where(['id' => $course_doc->id, 'application_id' => $application_id,'is_doc_show'=>-1])
-            ->update(['is_doc_show'=>$course_doc->nc_show_status,'is_tp_revert'=>1]);
+            ->update(['is_doc_show'=>$course_doc->nc_show_status,'is_tp_revert'=>1,'is_admin_submit'=>0]);
               
                 if($t==0){
                     if($is_update){
@@ -3775,7 +3775,7 @@ public function checkAllActionDoneOnRevert($application_id)
 
     
     $flag = 0;
-
+    
     foreach ($results as $result) {
         if (($result->is_tp_revert == 1)) {
             $flag = 0;
@@ -3785,6 +3785,7 @@ public function checkAllActionDoneOnRevert($application_id)
         }
     }
 
+    
     
     
     if ($flag == 0) {
@@ -3806,9 +3807,6 @@ public function checkAllActionDoneOnRevert44($application_id)
         ->where('application_id', $application_id)
         ->where('approve_status',1)
         ->get();
-
-        
-        
 
     $additionalFields = DB::table('tbl_application_course_doc')
         ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {

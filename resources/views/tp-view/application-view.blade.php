@@ -365,14 +365,14 @@
                                                             href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                             class="btn btn-danger btn-sm docBtn  m-1">
                                                             Not Recommended</span></a>
-                                                        @if($doc->admin_nc_flag==1)
+                                                        @if($doc->admin_nc_flag==1 && $doc->is_admin_submit)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
                                                             href="{{ url('tp-course-document-detail'. '/' . '5/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                                             Accepted <span>By Admin</span></a>
                                                         @endif
 
-                                                        @if($doc->admin_nc_flag==2)
+                                                        @if($doc->admin_nc_flag==2 && $doc->is_admin_submit)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
                                                             href="{{ url('tp-course-document-detail'. '/' . '6/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                             class="btn btn-danger btn-sm docBtn docBtn_nc  m-1">
@@ -412,14 +412,23 @@
                                             doc-primary-id="{{$doc->id}}" />
                                     </div>
                                     @endif
-                                    
-                                    @if($doc->nc_flag==1 || $doc->admin_nc_flag==3)
-                                    <div class="upload-btn-wrapper">
-                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
-                                            doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}" />
-                                    </div>
+                                    @if($doc->admin_nc_flag==3 && $doc->is_admin_submit)
+                                        <div class="upload-btn-wrapper">
+                                            <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                            <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
+                                                doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}" />
+                                        </div>
+                                    @else
+                                        @if($doc->nc_flag==1 && $doc->status!=4)
+                                        <div class="upload-btn-wrapper">
+                                            <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                            <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
+                                                doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}" />
+                                        </div>
+                                        @endif
                                     @endif
+
+                                    
 
                                     </form>
                                     @endforeach
