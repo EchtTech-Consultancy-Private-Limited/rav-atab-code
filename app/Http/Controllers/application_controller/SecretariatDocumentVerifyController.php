@@ -880,6 +880,7 @@ class SecretariatDocumentVerifyController extends Controller
         $app_id = dDecrypt($application_id);
         try {
             DB::beginTransaction();
+            $app_details = DB::table('tbl_application')->where('id',$app_id)->first();
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
                 ->update(['approve_status'=>2,'assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]);
@@ -887,6 +888,11 @@ class SecretariatDocumentVerifyController extends Controller
                 /*Make revert button hide according to course wise*/ 
                 DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);
                 DB::table('tbl_course_wise_document')->where('application_id',$app_id)->update(['is_revert'=>1]);
+
+                if($app_details->level_id!=1){
+                    DB::table('tbl_application_course_doc')->where(['application_id'=>$app_id,'approve_status'=>1])->update(['is_revert'=>1]);
+                }
+
                 $notifiData = [];
                 $notifiData['sender_id'] = Auth::user()->id;
                 $notifiData['application_id'] = $app_id;
