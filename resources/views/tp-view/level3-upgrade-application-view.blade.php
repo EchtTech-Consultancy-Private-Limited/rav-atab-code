@@ -383,7 +383,7 @@
                                                                     href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                                                     class="btn btn-danger btn-sm docBtn  m-1">
                                                                     NC2</span></a>
-                                                                @if($doc->nc_flag==1)
+                                                                @if($doc->nc_show_status==1)
                                                                 <div class="upload-btn-wrapper">
                                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                                     <input type="file" class="from-control fileup" name="fileup"
