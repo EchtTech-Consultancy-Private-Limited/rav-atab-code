@@ -277,7 +277,8 @@ class ApplicationDurationCaculate {
        $now = strtotime(date('Y-m-d'));
        $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
        $daysCount = strtotime(date('Y-m-d'))-strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
-       dd($daysCount);
+       $assigndayscount = round($daysCount/ (60 * 60 * 24));
+
        if($application_time->number_of_days ==1){
             $assignDate = strtotime(date('Y-m-d', strtotime($assessor_assign->created_at)));
        }else{
@@ -286,7 +287,7 @@ class ApplicationDurationCaculate {
         if($application_time){
             if($assignDate >= $now){
                 $obj->applicationAction = 'Y';
-                $obj->applicationDayTime =$application_time->number_of_days;
+                $obj->applicationDayTime =$assigndayscount;
            }else{
             if($assignDayVerifys>0){
                 $obj->applicationAction = 'Y';
