@@ -257,14 +257,14 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'desktop'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status','nc_show_status','is_tp_revert')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','status','nc_show_status','is_tp_revert','is_admin_submit')->get();
 
         $onsite_course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
             'application_courses_id'=>$course_id,
             'assessor_type'=>'onsite'
         ])
-        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status','nc_show_status','is_tp_revert')
+        ->select('id','doc_unique_id','onsite_doc_file_name','doc_file_name','doc_sr_code','admin_nc_flag','assessor_type','onsite_status','onsite_nc_status','status','nc_show_status','is_tp_revert','is_admin_submit')
         ->get();
         
         $is_payment_done = DB::table('tbl_application_payment')->where('application_id',$application_id)->whereNull('payment_ext')->where('pay_status','Y')->count();
@@ -331,7 +331,7 @@ class TPApplicationController extends Controller
             'application_courses_id'=>$course_id,
             'tp_id'=>$tp_id,
             'assessor_type'=>'secretariat'
-        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','nc_show_status','status','is_tp_revert')->get();
+        ])->select('id','doc_unique_id','doc_file_name','doc_sr_code','nc_flag','admin_nc_flag','assessor_type','ncs_flag_status','nc_show_status','status','is_tp_revert','is_admin_submit')->get();
 
         $is_payment_done = DB::table('tbl_application_payment')->where('application_id',$application_id)->whereNull('payment_ext')->where('pay_status','Y')->count();
         $total_application_courses_doc = DB::table('tbl_application_course_doc')->where('application_id',$application_id)->where('approve_status',1)->whereNull('deleted_at')->count();
@@ -1439,6 +1439,12 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $item->payment_proof = $filename;
         }
         $item->save();
+
+
+
+        /*is_tp_revert make it 1 first time*/ 
+        DB::table('tbl_application_course_doc')->where('application_id',$request->Application_id)->update(['is_tp_revert'=>1]);
+        /*end here*/ 
 
          /*send notification*/ 
          $notifiData = [];
@@ -3777,7 +3783,8 @@ public function checkAllActionDoneOnRevert($application_id)
     $flag = 0;
     
     foreach ($results as $result) {
-        if (($result->is_tp_revert == 1)) {
+        // if ($result->is_tp_revert == 1 && $result->status!=1) {
+        if ($result->is_tp_revert == 1) {
             $flag = 0;
         } else {
             $flag = 1;
@@ -3786,7 +3793,7 @@ public function checkAllActionDoneOnRevert($application_id)
     }
 
     
-    
+
     
     if ($flag == 0) {
         return false;
@@ -3843,7 +3850,7 @@ public function checkAllActionDoneOnRevert44($application_id)
     
     $flag = 0;
     foreach ($results as $result) {
-        if (($result->is_tp_revert == 1)) {
+        if ($result->is_tp_revert == 1) {
             $flag = 0;
         } else {
             $flag = 1;

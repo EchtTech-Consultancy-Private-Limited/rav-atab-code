@@ -433,14 +433,6 @@
                                                                     Rejected</a>
                                                                 @endif
 
-
-
-
-
-
-
-
-
                                                                 @if($doc->nc_show_status==1)
                                                                 <div class="upload-btn-wrapper">
                                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
@@ -458,7 +450,7 @@
                                                         doc-primary-id="{{$doc->id}}" />
                                                 </div>
                                                 @endif
-                                                @if($doc->nc_flag==1)
+                                                @if($doc->nc_flag==1 && ($doc->status==4 && $doc->is_admin_submit==1))
                                                 <div class="upload-btn-wrapper">
                                                     <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                     <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
@@ -556,8 +548,8 @@
                         <div class="col-md-12">
                             <form action="{{url('tp/update-nc-flag/'.$spocData->id)}}" method="post">
                             @csrf
-                            <input type="submit" class="btn btn-info float-right" value="Submit
                             
+                            <input type="submit" class="btn btn-info float-right" value="Submit
                             "<?php 
                             if($doc_list_count>0){
                                 if($enable_disable_submit_btn || $showSubmitBtnToTP || ($application_details->is_all_revert_action_done44==false) ){

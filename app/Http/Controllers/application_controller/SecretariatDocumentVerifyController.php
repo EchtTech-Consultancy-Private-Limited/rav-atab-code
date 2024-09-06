@@ -560,10 +560,13 @@ class SecretariatDocumentVerifyController extends Controller
             if($get_application->level_id==1 || $get_application->level_id==3){
                 
                 if ($check_all_doc_verified == "all_verified") {
+                    DB::commit();
+                    
                     DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
                     return back()->with('success', 'All course docs Accepted successfully.');
                 }
                 if ($check_all_doc_verified == "action_not_taken") {
+                    DB::commit();
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
 
@@ -580,7 +583,6 @@ class SecretariatDocumentVerifyController extends Controller
             if ($check_all_doc_verified == "all_verified" && $check_all_doc_verifiedDocList=="all_verified") {
                 DB::commit();
                 DB::table('tbl_application')->where('id',$application_id)->update(['is_secretariat_submit_btn_show'=>0]);
-                
                 return back()->with('success', 'All course docs Accepted successfully.');
             }
             if ($check_all_doc_verified == "action_not_taken" && $check_all_doc_verifiedDocList=="action_not_taken") {
@@ -878,6 +880,7 @@ class SecretariatDocumentVerifyController extends Controller
         $app_id = dDecrypt($application_id);
         try {
             DB::beginTransaction();
+            $app_details = DB::table('tbl_application')->where('id',$app_id)->first();
             $approve_app = DB::table('tbl_application')
                 ->where(['id' => $app_id])
                 ->update(['approve_status'=>2,'assign_day_for_verify'=>0,'assign_day_for_verify_date'=>null]);
@@ -885,6 +888,11 @@ class SecretariatDocumentVerifyController extends Controller
                 /*Make revert button hide according to course wise*/ 
                 DB::table('tbl_application_courses')->where('application_id',$app_id)->update(['is_revert'=>1]);
                 DB::table('tbl_course_wise_document')->where('application_id',$app_id)->update(['is_revert'=>1]);
+
+                if($app_details->level_id!=1){
+                    DB::table('tbl_application_course_doc')->where(['application_id'=>$app_id,'approve_status'=>1])->update(['is_revert'=>1]);
+                }
+
                 $notifiData = [];
                 $notifiData['sender_id'] = Auth::user()->id;
                 $notifiData['application_id'] = $app_id;
