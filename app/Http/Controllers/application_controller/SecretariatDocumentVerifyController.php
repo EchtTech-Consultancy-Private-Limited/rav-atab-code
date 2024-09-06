@@ -574,6 +574,7 @@ class SecretariatDocumentVerifyController extends Controller
                 DB::commit();
                 
                 if($reuploadbtnToTPorAdmin){
+                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>16]);
                     return back()->with('success', 'File sent to admin.');
                 }
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
@@ -629,6 +630,7 @@ class SecretariatDocumentVerifyController extends Controller
             DB::commit();
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
             if($check_all_doc_verifiedDocList=="file_sent_admin"){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>16]);
                 return back()->with('success', 'File sent to admin.');
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');

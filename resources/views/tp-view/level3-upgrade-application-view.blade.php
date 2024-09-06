@@ -450,13 +450,24 @@
                                                         doc-primary-id="{{$doc->id}}" />
                                                 </div>
                                                 @endif
-                                                @if($doc->nc_flag==1)
-                                                <div class="upload-btn-wrapper">
-                                                    <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
-                                                    <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
-                                                        doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}" />
-                                                </div>
-                                                @endif
+                                                
+                                                    @if($doc->status==4 && $doc->is_admin_submit==1 && $doc->nc_flag!=0 && $doc->admin_nc_flag==3)
+                                                    <div class="upload-btn-wrapper">
+                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
+                                                            doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}" />
+                                                    </div>
+                                                    @endif
+                                                
+                                                    @if($doc->nc_flag==1 && $doc->status!=4)
+                                                    <div class="upload-btn-wrapper">
+                                                        <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                        <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$doc->id}}"
+                                                            doc-primary-id="{{$doc->id}}" doc-sr-code="{{$doc->doc_sr_code}}" />
+                                                    </div>
+                                                    @endif
+                                                
+                                                
 
                                                 </form>
                                                 @endforeach

@@ -584,7 +584,7 @@ class DesktopApplicationController extends Controller
                 ->whereIn('id', $app_ids)
                 ->whereNotIn('status', [0, 1, 4, 6])
                 ->get();
-            // ->update(['nc_flag' => 1, 'assessor_id' => $assessor_id]);
+            
             foreach ($all_app as $app) {
                 $nc_comment_status = "";
                 if ($app->status == 1) {
@@ -600,26 +600,16 @@ class DesktopApplicationController extends Controller
                     $nc_comment_status = 6;
                     $nc_flag = 0;
                 } else {
-                    $nc_comment_status = 4; //not recommended
-                    $nc_flag = 0;
+                        $nc_comment_status = 4; //not recommended
+                        $nc_flag = 0;
                 }
                 TblApplicationCourseDoc::where(['id' => $app->id, 'ncs_flag_status' => 0])->update(['ncs_flag_status' => $nc_comment_status, 'nc_flag' => $nc_flag, 'assessor_id' => $assessor_id]);
             }
-            /*--------To Check All Course Doc Approved----------*/
-            // $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevel($application_id);
-            // /*------end here------*/
             DB::commit();
-            // if (!$check_all_doc_verified) {
-            //     return back()->with('fail', 'First create NCs on courses doc');
-            // }
-            // if ($check_all_doc_verified == "all_verified") {
-            //     return back()->with('success', 'All course docs Accepted successfully.');
-            // }
-            // if ($check_all_doc_verified == "action_not_taken") {
-            //     return back()->with('fail', 'Please take any action on course doc.');
-            // } 
+
+            
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
-            // return redirect($redirect_to);
+            
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 200);
@@ -720,18 +710,21 @@ class DesktopApplicationController extends Controller
 
     public function desktopUpdateNCFlagDocList($application_id)
         {
-
-            
             try {
                 $application_id = dDecrypt($application_id);
-                
                 DB::beginTransaction();
                 $t=0;
+                $reuploadbtnToTPorAdmin=0;
                 $secretariat_id = Auth::user()->id;
                 $get_course_docs = DB::table('tbl_application_course_doc')
                     ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>'desktop'])
                     // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                     ->latest('id')->get();
+                    foreach($get_course_docs as $course_doc){
+                        if ($course_doc->status == 4 && $course_doc->is_admin_submit!=1) {
+                            $reuploadbtnToTPorAdmin=1;
+                        }
+                    }
                     foreach($get_course_docs as $course_doc){
                         $nc_comment_status = "";
                         $nc_flag=0;
@@ -847,11 +840,14 @@ class DesktopApplicationController extends Controller
                 if ($check_all_doc_verified == "action_not_taken") {
                     return back()->with('fail', 'Please take any action on course doc.');
                 }
+                if($reuploadbtnToTPorAdmin){
+                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>16]);
+                    return back()->with('success', 'File sent to admin.');
+                }
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
                 // return redirect($redirect_to);
 
             } catch (Exception $e) {
-                dd($e);
                 DB::rollBack();
                 return back()->with('fail', 'Something went wrong');
             }

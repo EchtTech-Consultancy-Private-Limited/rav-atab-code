@@ -1993,10 +1993,23 @@ class SuperAdminApplicationController extends Controller
                 ->where(['application_id' => $application_id,'approve_status'=>1])
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
+                $nc_type = 'nr';
+                $nc_type_list = 'nr';
+
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
                     $nc_comments = 0;
+
+                    if($course_doc->status==4 && $course_doc->admin_nc_flag==1){
+                        $nc_type='accepted';
+                    }else if($course_doc->status==4 && $course_doc->admin_nc_flag==2){
+                        $nc_type='rejected';
+                    }else{
+                        $nc_type='nr';
+                    }
+
+
                    if ($course_doc->status == 2) {
                         $nc_comment_status = 2;
                         $nc_flag = 1;
@@ -2045,10 +2058,27 @@ class SuperAdminApplicationController extends Controller
                         }
                     }
                     
-                    $get_course_docs = DB::table('tbl_application_course_doc')
+                        DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
                         ->whereNull('deleted_at')
                         ->update(['is_admin_submit'=>1]);
+
+                        $get_course_docs = DB::table('tbl_application_course_doc')
+                        ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
+                        ->whereNull('deleted_at')
+                        ->get();
+
+                        foreach($get_course_docs as $course_doc){
+                            if($course_doc->status==4 && $course_doc->admin_nc_flag==1){
+                                $$nc_type_list='accepted';
+                            }else if($course_doc->status==4 && $course_doc->admin_nc_flag==2){
+                                $$nc_type_list='rejected';
+                            }else{
+                                $$nc_type_list='nr';
+                            }
+                        }
+
+
                 }
 
                 if($get_application->level_id==1){
@@ -2090,7 +2120,15 @@ class SuperAdminApplicationController extends Controller
                 }
             }
 
-                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
+
+               if($nc_type=="nr" || $nc_type_list=="nr"){
+                   DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
+               }else if($nc_type=="accepted" || $nc_type_list=="accepted"){
+                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>19]);
+               }else{
+                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>20]);
+               }
+
                 DB::commit();
                 return back()->with('success', 'Enabled Course Doc upload button to TP.');
         } catch (Exception $e) {
@@ -2177,7 +2215,7 @@ class SuperAdminApplicationController extends Controller
             ->where('tbl_application_course_doc.application_id',$application_id)
     
             ->orderBy('tbl_application_course_doc.id', 'desc')
-            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag']);
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag','onsite_status','assessor_type']);
     
     
         foreach ($results as $key => $result) {
@@ -2190,6 +2228,8 @@ class SuperAdminApplicationController extends Controller
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
+                $results[$key]->onsite_status = $additionalField->onsite_status;
+                $results[$key]->assessor_type = $additionalField->assessor_type;
                 $results[$key]->id = $additionalField->id;
                 $results[$key]->nc_flag = $additionalField->nc_flag;
                 $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
@@ -2200,17 +2240,31 @@ class SuperAdminApplicationController extends Controller
         }
     
         
+        $assessor_type = $results[0]->assessor_type;
         
         foreach ($results as $result) {
-            if ($result->status == 4 && $result->nc_flag) {
-                $flag2 = 1;
-                break;
-            } else {
-                $flag2 = 0;
+            
+            if($assessor_type=="onsite"){
+                if ($result->onsite_status == 4 && $result->nc_flag) {
+                    $flag2 = 1;
+                    break;
+                } else {
+                    $flag2 = 0;
+                }
+            }else{
+                if ($result->status == 4 && $result->nc_flag) {
+                    $flag2 = 1;
+                    break;
+                } else {
+                    $flag2 = 0;
+                }
             }
+            
         }
 
 }
+
+
         
             if ($flag == 1 || $flag2==1) {
                 return true;
@@ -2294,7 +2348,7 @@ class SuperAdminApplicationController extends Controller
             ->where('tbl_application_course_doc.application_id',$application_id)
     
             ->orderBy('tbl_application_course_doc.id', 'desc')
-            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag']);
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag','onsite_status','assessor_type']);
     
     
         foreach ($results as $key => $result) {
@@ -2307,6 +2361,8 @@ class SuperAdminApplicationController extends Controller
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
+                $results[$key]->onsite_status = $additionalField->onsite_status;
+                $results[$key]->assessor_type = $additionalField->assessor_type;
                 $results[$key]->id = $additionalField->id;
                 $results[$key]->nc_flag = $additionalField->nc_flag;
                 $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
@@ -2317,15 +2373,28 @@ class SuperAdminApplicationController extends Controller
         }
     
         
+        $assessor_type = $results[0]->assessor_type;
         
         foreach ($results as $result) {
-            if ($result->status == 4 && $result->admin_nc_flag==0) {
-                $flag2 = 1;
-                break;
-            } else {
-                $flag2 = 0;
+            
+            if($assessor_type=="onsite"){
+                if ($result->onsite_status == 4 && $result->admin_nc_flag==0) {
+                    $flag2 = 1;
+                    break;
+                } else {
+                    $flag2 = 0;
+                }
+            }else{
+                if ($result->status == 4 && $result->admin_nc_flag==0) {
+                    $flag2 = 1;
+                    break;
+                } else {
+                    $flag2 = 0;
+                }
             }
+            
         }
+        
 
 }
         
@@ -2412,7 +2481,7 @@ class SuperAdminApplicationController extends Controller
             ->where('tbl_application_course_doc.application_id',$application_id)
     
             ->orderBy('tbl_application_course_doc.id', 'desc')
-            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag','is_admin_submit']);
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag','is_admin_submit','onsite_status','assessor_type']);
     
     
         foreach ($results as $key => $result) {
@@ -2425,6 +2494,8 @@ class SuperAdminApplicationController extends Controller
                 ->first();
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
+                $results[$key]->onsite_status = $additionalField->onsite_status;
+                $results[$key]->assessor_type = $additionalField->assessor_type;
                 $results[$key]->id = $additionalField->id;
                 $results[$key]->nc_flag = $additionalField->nc_flag;
                 $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
@@ -2436,15 +2507,34 @@ class SuperAdminApplicationController extends Controller
         }
     
         
-        
+        $assessor_type = $results[0]->assessor_type;
         foreach ($results as $result) {
-            if ($result->status == 4 && $result->is_admin_submit==1) {
-                $flag2 = 1;
-                break;
-            } else {
-                $flag2 = 0;
+            if($assessor_type=="onsite"){
+                if ($result->onsite_status == 4 && $result->is_admin_submit==1) {
+                    $flag2 = 1;
+                    break;
+                } else {
+                    $flag2 = 0;
+                }
+            }else{
+                if ($result->status == 4 && $result->is_admin_submit==1) {
+                    $flag2 = 1;
+                    break;
+                } else {
+                    $flag2 = 0;
+                }
             }
+            
         }
+        
+        // foreach ($results as $result) {
+        //     if ($result->status == 4 && $result->is_admin_submit==1) {
+        //         $flag2 = 1;
+        //         break;
+        //     } else {
+        //         $flag2 = 0;
+        //     }
+        // }
 
 }
         
