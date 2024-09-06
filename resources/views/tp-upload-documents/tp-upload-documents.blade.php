@@ -218,7 +218,14 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
 
-                                             @if($doc->nc_flag==1)
+                                             @if($doc->status==4 && $doc->is_admin_submit==1 && $doc->admin_nc_flag==3 && $doc->nc_flag!=0 )
+                                             <div class="upload-btn-wrapper">
+                                                <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
+                                                <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
+                                             </div>
+                                             @endif
+
+                                             @if($doc->nc_flag==1 && $doc->status!=4)
                                              <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" />
@@ -374,7 +381,7 @@
 
 
                                           
-                                       @if($doc->onsite_nc_status==1)
+                                       @if($doc->onsite_nc_status==1 )
                                         <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
                                                 <input type="file" class="from-control fileup" name="fileup" id="fileup_{{$question['question']->id}}" data-question-id="{{$question['question']->id}}" assessor_type_by_tp="onsite" />

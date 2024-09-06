@@ -291,7 +291,9 @@ class ApplicationDurationCaculate {
            }else{
             if($assignDayVerifys>0){
                 $obj->applicationAction = 'Y';
-                $obj->applicationDayTime =$assignDayVerifys;
+                $daysCount = strtotime(date('Y-m-d'))-strtotime(date('Y-m-d', strtotime($app->assign_day_for_verify_date)));
+                $assigndayscount = round($daysCount/ (60 * 60 * 24));
+                $obj->applicationDayTime =$assigndayscount;
             }else{
                 $obj->applicationAction = 'N';
                 $obj->applicationDayTime =0;

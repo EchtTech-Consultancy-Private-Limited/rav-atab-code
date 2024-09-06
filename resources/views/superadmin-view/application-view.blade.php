@@ -532,7 +532,7 @@
         </div>
 
         <div class="row">
-
+            
         @if($show_submit_or_not)
         
                 <div class="row mt-4">

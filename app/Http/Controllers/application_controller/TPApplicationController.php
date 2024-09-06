@@ -2858,7 +2858,9 @@ public function tpUpdateNCFlagDocList($application_id)
                 ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
                 ->whereNull('deleted_at')
                 ->latest('id')->get();
-            
+                $is_nr = false;
+                $is_nr_list = false;
+                
                 foreach($get_course_docs as $course_doc){
                     if($course_doc->assessor_type=="onsite"){
                         if(in_array($course_doc->onsite_status,[2,3,4]) && $course_doc->onsite_nc_status==1){
@@ -2892,6 +2894,7 @@ public function tpUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
+                        $is_nr=true;
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -2944,6 +2947,7 @@ public function tpUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
+                        $is_nr_list=true;
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -3028,6 +3032,11 @@ public function tpUpdateNCFlagDocList($application_id)
             if($t==1){
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
             }
+
+            if($is_nr || $is_nr_list){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>18]);
+            }
+            
             DB::commit();
             // if ($check_all_doc_verified == "all_verified") {
             //     return back()->with('success', 'All course docs Accepted successfully.');
@@ -3055,7 +3064,8 @@ public function tpUpdateNCFlagCourseDoc($application_id)
             $get_course_wise_docs = DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $application_id,'approve_status'=>1,'is_doc_show'=>-1])
                 ->latest('id')->get();
-            
+                $is_nr = false;
+                
                 foreach($get_course_wise_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -3073,6 +3083,7 @@ public function tpUpdateNCFlagCourseDoc($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
+                        $is_nr = true;
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -3091,8 +3102,6 @@ public function tpUpdateNCFlagCourseDoc($application_id)
                         $t=1;
                     }
                 }
-
-
             }
 
             
@@ -3156,8 +3165,12 @@ public function tpUpdateNCFlagCourseDoc($application_id)
             /*------end here------*/
 
             // this is for the applicaion status
+            
             if($t==1){
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>5]);
+            }
+            if($is_nr){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>18]);
             }
             DB::commit();
             // if ($check_all_doc_verified == "all_verified") {

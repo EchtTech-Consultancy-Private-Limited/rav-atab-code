@@ -1665,7 +1665,6 @@ public function onsiteUpdateNCFlagDocList($application_id)
             $t=0;
             $secretariat_id = Auth::user()->id;
 
-
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
             /*------end here------*/
             
@@ -1679,7 +1678,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
                 ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>'onsite'])
                 // ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
-                
+                $reuploadbtnToTPorAdmin = 0;
 
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
@@ -1698,6 +1697,7 @@ public function onsiteUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
+                        $reuploadbtnToTPorAdmin=1;
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -1789,6 +1789,11 @@ public function onsiteUpdateNCFlagDocList($application_id)
             }
             if ($check_all_doc_verified == "action_not_taken") {
                 return back()->with('fail', 'Please take any action on course doc.');
+            }
+
+            if($reuploadbtnToTPorAdmin){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>16]);
+                return back()->with('success', 'File sent to admin.');
             }
             return back()->with('success', 'Enabled Course Doc upload button to TP.');
             // return redirect($redirect_to);
