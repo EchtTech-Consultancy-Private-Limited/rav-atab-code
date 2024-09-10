@@ -386,6 +386,7 @@
                                                       Type</b></label><br>
                                                       <p>Onsite Assessment</p>
                                                       <!--   -->
+                                                      {{$item->assessment_way}}
                                                       <div class="form-check form-check-inline radio-ass">
                                                          <label>
                                                          <input type="radio" id="assesorsid_{{ $item->application_list->id }}" class="" name="on_site_type" value="onsite" checked @if($item->assessment_way=='onsite') checked @endif>

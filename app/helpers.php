@@ -381,6 +381,7 @@ function get_accessor_date($id)
 function get_accessor_date_new($id, $applicationID, $assessmentType)
 {
     $assessor_types = $assessmentType==1?'desktop':'onsite';
+    
     if($id && $applicationID && $assessmentType){
         $assesorAssigned = DB::table('tbl_assessor_assign')->where(['assessor_id' => $id,'application_id' => $applicationID,'assessor_type' => $assessor_types])->first();
         if($assesorAssigned == null){
@@ -403,6 +404,7 @@ function get_accessor_date_new($id, $applicationID, $assessmentType)
     $eventsDate = [];
     $allSelectedDates = [];
     $allSelectedDates = array_merge($events, $selectedDate);
+    
     for ($j = $begin; $j <= $end; $j->modify('+1 day')) {
 
         if (in_array($j->format("Y-m-d"), $allSelectedDates)) {
