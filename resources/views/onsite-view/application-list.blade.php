@@ -142,7 +142,7 @@
                                                 @endif
                                                 </td>
                                                 <td>
-                                                    @if(isset($item->application_duration_verify_doc->applicationDayTime) && $item->application_duration_verify_doc->applicationDayTime !=0)
+                                                    @if(isset($item->application_duration_verify_doc->applicationDayTime) && $item->application_duration_verify_doc->applicationDayTime !=0 && $item->application_list->approve_status!=1)
                                                     <a class="btn btn-tbl-edit w-100 border-bottom border">          
                                                         {{$item->application_duration_verify_doc->applicationDayTime}} days Left
                                                     </a>
