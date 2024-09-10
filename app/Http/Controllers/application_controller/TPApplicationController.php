@@ -390,9 +390,11 @@ class TPApplicationController extends Controller
         
         
         if ($request->hasfile('fileup')) {
+            $timestamp = now()->format('YmdHis'); 
             $file = $request->file('fileup');
+            $randomString = Str::random(8);
             $name = $file->getClientOriginalName();
-            $filename = time() . $name;
+            $filename="{$timestamp}_{$randomString}".$name;
             $file->move('level/', $filename);
             $course_doc->doc_file_name = $filename;
         }
