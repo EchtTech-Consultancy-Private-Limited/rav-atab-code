@@ -2487,8 +2487,6 @@ function setModelData(application_id,course_id,course_name,action){
  }
  
 function handleRejectCourseByAdmin(){
-
-
     const application_id = $('#reject_app_id').val();
     const course_id = $('#reject_course_id').val();
     

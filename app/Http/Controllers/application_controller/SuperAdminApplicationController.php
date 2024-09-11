@@ -1112,7 +1112,6 @@ class SuperAdminApplicationController extends Controller
                         $data['valid_till'] = $valid_till;
                         $data['level_id'] = $get_application->level_id;
                         DB::table('tbl_certificate')->insert($data);
-
                         
                         /*end here*/ 
 
@@ -1388,10 +1387,11 @@ class SuperAdminApplicationController extends Controller
                 //     $data['nc_show_status'] = 1;
                 //     DB::table('tbl_nc_comments_secretariat')->insert($data);
             }
+            
             /*end here*/
 
             /*update doc after rejected by admin*/ 
-            if($get_app->level_id==2){
+            if(in_array($get_app->level_id,[2,3])){
                 $all_docs = DB::table('tbl_application_course_doc')
                 ->where(['application_id' => $app_id,'approve_status'=>1])
                 ->where('assessor_type','secretariat')
@@ -1543,7 +1543,7 @@ class SuperAdminApplicationController extends Controller
                 ->where(['id'=>$request->course_id])
                 ->update(['status'=>3,'admin_reject_remark'=>$request->remark]); //reject by admin
 
-               $abc = DB::table('tbl_course_wise_document')
+               DB::table('tbl_course_wise_document')
                 ->where(['application_id' => $request->application_id,'course_id'=>$request->course_id])
                 ->whereNotIn('status',[2,3,4,6]) 
                 ->update(['approve_status'=>2]);
@@ -2120,17 +2120,20 @@ class SuperAdminApplicationController extends Controller
                 }
             }
 
-
+            DB::commit();
                if($nc_type=="nr" || $nc_type_list=="nr"){
                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
+                   return back()->with('success', 'Enabled Course Doc upload button to TP.');
                }else if($nc_type=="accepted" || $nc_type_list=="accepted"){
                     DB::table('tbl_application')->where('id',$application_id)->update(['status'=>19]);
+                    return back()->with('success', 'Action taken on NR doc.');
                }else{
                     DB::table('tbl_application')->where('id',$application_id)->update(['status'=>20]);
+                    return back()->with('success', 'Action taken on NR doc.');
                }
 
-                DB::commit();
-                return back()->with('success', 'Enabled Course Doc upload button to TP.');
+                
+                
         } catch (Exception $e) {
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');

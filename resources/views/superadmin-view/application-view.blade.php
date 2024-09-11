@@ -26,14 +26,12 @@
     </div>
     @if ($message = Session::get('success'))
     <script>
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: "Success",
-        text: "{{ $message }}",
-        showConfirmButton: false,
-        timer: 3000
-    })
+      toastr.success("{{$message}}", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
     </script>
     @endif
     <section class="content">
@@ -408,10 +406,11 @@
                                              <a title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Rejected 
-                                                @if($doc->is_secretariat_reject==0)
+                                             Rejected <span>By Admin</span>
+                                                
+                                                {{-- @if($doc->is_secretariat_reject==0)
                                                 <span>By Admin</span>
-                                                @endif
+                                                @endif --}}
                                             </a>
                                              @endif
                                             @else
