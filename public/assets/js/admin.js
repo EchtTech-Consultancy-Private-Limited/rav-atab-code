@@ -789,3 +789,15 @@ function setLtrLayout() {
 }
 
 //==========================================================================================================================
+$('.accordion-button').on('click', function() {
+  const accordion_name = $(this).attr('data-bs-target');
+  sessionStorage.setItem("accordion_name", accordion_name);
+});
+$(document).ready(function() {
+  const accordianName = sessionStorage.getItem("accordion_name");
+  if(accordianName){
+      $(accordianName).addClass('show');
+  }else{
+      $('#collapse1').addClass('show');
+  }
+});

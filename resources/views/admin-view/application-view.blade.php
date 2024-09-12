@@ -924,15 +924,7 @@
         });
     });
     </script>
-    <script>
-    $('.accordion-button').on('click', function() {
-        const accordion_name = $(this).attr('data-bs-target');
-        sessionStorage.setItem("accordion_name", accordion_name);
-    });
-    $(document).ready(function() {
-        const accordianName = sessionStorage.getItem("accordion_name");
-        $(accordianName).addClass('show');
-    });
+    <script>    
     function confirm_option() {
         Swal.fire({
             title: 'Do you want to approve this payment?',
@@ -954,8 +946,6 @@
     </script>
     <script>
     $(document).ready(function() {
-        const accordianName = sessionStorage.getItem("accordion_name");
-        $(accordianName).addClass('show');
         $('.image-link').magnificPopup({
             type: 'image',
             mainClass: 'mfp-with-zoom',
