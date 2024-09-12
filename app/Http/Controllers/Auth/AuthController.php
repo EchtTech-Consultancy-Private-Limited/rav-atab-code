@@ -69,7 +69,7 @@ class AuthController extends Controller
         $CustomCaptchas = new CustomCaptcha;
         return  $CustomCaptchas->phpcaptcha('#884ffb','#fff',120,40,10,25);
   
-      }
+    }
     public function login_post(Request $request)
     {
 

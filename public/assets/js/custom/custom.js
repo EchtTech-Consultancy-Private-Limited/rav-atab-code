@@ -287,5 +287,3 @@ $('.dateID').click('on', function() {
       }
   });
 })
-
-

@@ -252,7 +252,7 @@
 
             <div class="card p-3 accordian-card">
                <div class="accordion" id="accordionExample">
-                      @foreach ($application_details->course as $k => $ApplicationCourses)
+                    @foreach ($application_details->course as $k => $ApplicationCourses)
                         <div class="accordion-item <?php if(($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) echo 'border-reject'; else echo ''; ?>">
                             <h2 class="accordion-header" id="heading{{ $k + 1 }}">
                                 <button class="accordion-button {{$k==0?'':'collapsed'}} <?php echo (($ApplicationCourses['course']->status == 1 || $ApplicationCourses['course']->status == 3) ||($ApplicationCourses['isAnyNcOnCourse']==true || $ApplicationCourses['isAnyNcOnCourseDocList']==true)) ? 'bg-danger text-white' :'bg-transparent text-dark' ;?> d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $k + 1 }}" aria-expanded="true" aria-controls="collapse{{ $k + 1 }}">
@@ -277,7 +277,8 @@
                                 </div>
                              </button>
                             </h2>
-                            <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}"
+                            {{-- @dd(Session::get('accordion_name')); --}}
+                            <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse"
                                 aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                      <div class="row">
@@ -924,6 +925,14 @@
     });
     </script>
     <script>
+    $('.accordion-button').on('click', function() {
+        const accordion_name = $(this).attr('data-bs-target');
+        sessionStorage.setItem("accordion_name", accordion_name);
+    });
+    $(document).ready(function() {
+        const accordianName = sessionStorage.getItem("accordion_name");
+        $(accordianName).addClass('show');
+    });
     function confirm_option() {
         Swal.fire({
             title: 'Do you want to approve this payment?',
@@ -945,6 +954,8 @@
     </script>
     <script>
     $(document).ready(function() {
+        const accordianName = sessionStorage.getItem("accordion_name");
+        $(accordianName).addClass('show');
         $('.image-link').magnificPopup({
             type: 'image',
             mainClass: 'mfp-with-zoom',
