@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>RAV-ATAB</title>
+    <title></title>
 </head>
 <body>
 
