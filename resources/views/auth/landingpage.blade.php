@@ -108,52 +108,52 @@
             <div class="col-md-7">
                <div class="box-card row">
                   <div class="col-md-4">
+                     <a href="{{ url('/login/admin') }}">
                      <div class="inner-box">
-                        <a href="{{ url('/login/admin') }}">
                            <img src="{{ asset('landing_page/businessman.png') }}" alt="admin-login">
                            <h4>Admin Login <i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
-                        </a>
-                     </div>
+                        </div>
+                     </a>
                   </div>
                   <div class="col-md-4">
+                     <a href="{{ url('/login/TP')}}">
                      <div class="inner-box">
-                        <a href="{{ url('/login/TP')}}">
                            <img src="{{ asset('landing_page/presentation.png')}}" alt="admin-login">
                            <h4>Training Provider Login <i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
-                        </a>
-                     </div>
+                        </div>
+                     </a>
                   </div>
                   <div class="col-md-4">
+                     <a href="{{ url('/login/Accessor') }}">
                      <div class="inner-box">
-                        <a href="{{ url('/login/Accessor') }}">
                            <img src="{{ asset('landing_page/employee.png')}}" alt="admin-login">
                            <h4>Assessor Login <i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
-                        </a>
-                     </div>
+                        </div>
+                     </a>
                   </div>
                   <div class="col-md-4">
+                     <a href="{{ url('/login/secretariat') }}">
                      <div class="inner-box">
-                        <a href="{{ url('/login/secretariat') }}">
                            <img src="{{ asset('landing_page/businessman2.png')}}" alt="admin-login">
                            <h4>Secretariat Login <i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
-                        </a>
-                     </div>
+                        </div>
+                     </a>
                   </div>
                   <div class="col-md-4">
+                     <a href="{{ url('/login/professional') }}">
                      <div class="inner-box">
-                        <a href="{{ url('/login/professional') }}">
                            <img src="{{ asset('landing_page/businessman1.png')}}" alt="admin-login">
                            <h4>Professional Login<i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
-                        </a>
-                     </div>
+                        </div>
+                     </a>
                   </div>
                   <div class="col-md-4">
+                     <a href="{{ url('/login/account') }}">
                      <div class="inner-box">
-                        <a href="{{ url('/login/account') }}">
                            <img src="{{ asset('landing_page/account.png')}}" alt="admin-login">
                            <h4>Accountant Login<i class="fa fa-long-arrow-right" aria-hidden="true"></i> </h4>
-                        </a>
-                     </div>
+                        </div>
+                     </a>
                   </div>
                </div>
             </div>
