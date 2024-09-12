@@ -233,7 +233,7 @@
                                 </h5>
                             </button>
                         </h2>
-                    <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse {{$k==0?'show':''}}" aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
+                    <div id="collapse{{ $k + 1 }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $k + 1 }}" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="row">
                                 <div class="col-sm-3">
