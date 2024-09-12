@@ -18,6 +18,7 @@ use App\Http\Controllers\FaqController; #SKP
 use App\Http\Controllers\AssessorController; #SKP
 use App\Http\Controllers\Roles\MenuController;
 use App\Http\Models\Otp;
+use App\Jobs\SendEmailJob;
 use App\Http\Controllers\application_controller\AdminApplicationController;
 use App\Http\Controllers\application_controller\SuperAdminApplicationController;
 use App\Http\Controllers\application_controller\TPApplicationController;
@@ -552,9 +553,8 @@ Route::get('email-test', function(){
     $details['title'] = 'Traing Provider Created a New Application and Course Payment Successfully Done'; 
     $details['subject'] = 'New Application | Application ID'; 
     $details['content'] = 'New Application has been created with Application ID'; 
-     if(env('MAIL_SEND')){
-                    dispatch(new SendEmailJob($details));
-                }
+    dispatch(new SendEmailJob($details));
+
     dd('done');
 });
 //notification status change

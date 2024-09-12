@@ -404,13 +404,14 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $data = User::where('email',auth()->user()->email)->first();
 
+    if(!empty(auth()->user())){
+        $data = User::where('email',auth()->user()->email)->first();
         if ($data->is_loggedin == 1) {
             $data->update(['is_loggedin' => 0]);
         }
-
-        auth()->logout();
+         auth()->logout();
+     }
         return redirect('/')->with(['success' => 'User successfully signed out']);
     }
 
