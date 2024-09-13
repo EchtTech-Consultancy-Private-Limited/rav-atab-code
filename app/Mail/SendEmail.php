@@ -42,35 +42,35 @@ class SendEmail extends Mailable
                 $template = 'NewApplicationByTp.tp';
             }else if($this->data['user_type']=='accountant'){
                 $template = 'NewApplicationByTp.account';
-            }else if($this->data['user_type']=='admin'){
+            }else if(in_array($this->data['user_type'],['admin','secretariat'])){
                 $template = 'NewApplicationByTp.admin';
             }
-        }else if($this->data['action_type']=="payment_approve"){
-            if($this->data['user_type']=='tp'){
-                $template = 'PaymentApprove.TP';
-            }else if($this->data['user_type']=='accountant'){
-                $template = 'PaymentApprove.account';
-            }else if($this->data['user_type']=='admin'){
-                $template = 'PaymentApprove.admin';
+            }else if($this->data['action_type']=="payment_approve"){
+                if($this->data['user_type']=='tp'){
+                    $template = 'PaymentApprove.TP';
+                }else if($this->data['user_type']=='accountant'){
+                    $template = 'PaymentApprove.account';
+                }else if(in_array($this->data['user_type'],['admin','secretariat'])){
+                    $template = 'PaymentApprove.admin';
+                }
             }
-        }
-        else if($this->data['action_type']=="nc_created"){
-            if($this->data['user_type']=='tp'){
-                $template = 'NcCreated.tp';
+            else if($this->data['action_type']=="nc_created"){
+                if($this->data['user_type']=='tp'){
+                    $template = 'NcCreated.tp';
+                }
             }
-        }
-        else if($this->data['action_type']=="final_submit_assessor"){
-            if($this->data['user_type']=='tp'){
-                $template = 'SubmitFinalSummary.tp';
-            }else if($this->data['user_type']=='admin'){
-                $template = 'SubmitFinalSummary.admin';
+            else if($this->data['action_type']=="final_submit_assessor"){
+                if($this->data['user_type']=='tp'){
+                    $template = 'SubmitFinalSummary.tp';
+                }else if(in_array($this->data['user_type'],['admin','secretariat'])){
+                    $template = 'SubmitFinalSummary.admin';
+                }
             }
-        }
-        else if($this->data['action_type']=="certificate_generate"){
-            if($this->data['user_type']=='tp'){
-                $template = 'CertificateGenerate.tp';
+            else if($this->data['action_type']=="certificate_generate"){
+                if($this->data['user_type']=='tp'){
+                    $template = 'CertificateGenerate.tp';
+                }
             }
-        }
 
         return new Content(
             view: 'email.'.$template.'',
