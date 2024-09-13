@@ -14,7 +14,7 @@ class DownloadPDFCertificateController extends Controller
         //$this->middleware('auth')->except('logout');
     }
     public function downloadPDFCertificate($application_id) {
-        
+        $application_id  = dDecrypt($application_id);
         $app_details = DB::table('tbl_certificate as certificate')
                     ->select('certificate.*','certificate.valid_till',
                     'users.address','users.postal',
@@ -32,7 +32,7 @@ class DownloadPDFCertificateController extends Controller
     }
 
     public function downloadPDFAIIAScopeCertificate($application_id) {
-        
+        $application_id  = dDecrypt($application_id);
         $app_details = DB::table('tbl_certificate as certificate')
                     ->select('certificate.*','certificate.valid_till',
                     'users.address','users.postal',

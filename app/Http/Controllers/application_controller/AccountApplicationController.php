@@ -358,7 +358,11 @@ class AccountApplicationController extends Controller
 
     public function accountantVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
-        
+        $doc_sr_code = dDecrypt($doc_sr_code);
+        $application_id = dDecrypt($application_id);
+        $doc_unique_code= dDecrypt($doc_unique_code);
+        $application_course_id= dDecrypt($application_course_id);
+
         try{
             $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin'])
             ->where('nc_type',"Request_For_Final_Approval")

@@ -362,32 +362,32 @@
                                                                             @elseif($doc->status==1)
                                                                             <a 
                                                                                 title="{{$doc->doc_file_name}}"
-                                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                                 class="btn btn-success btn-sm docBtn m-1">
                                                                                 Accepted</a>
                                                                         @elseif($doc->status==2)
                                                                         <a 
                                                                             title="{{$doc->doc_file_name}}"
-                                                                            href="{{ url('secretariat-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                            href="{{ url('secretariat-nc1/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                             class="btn btn-danger btn-sm docBtn m-1">
                                                                             NC1</a>
                                                                             @elseif($doc->status==3)
                                                                             <a 
                                                                                 title="{{$doc->doc_file_name}}"
-                                                                                href="{{ url('secretariat-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                href="{{ url('secretariat-nc2/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                                 class="btn btn-danger btn-sm docBtn m-1">
                                                                                 NC2</a>
                                                                             @elseif($doc->status==4)
                                                                             <a 
                                                                                 title="{{$doc->doc_file_name}}"
-                                                                                href="{{ url('secretariat-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                href="{{ url('secretariat-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                                 class="btn btn-danger btn-sm docBtn m-1">
                                                                                 Not Recommended</a>
                                                                                 <!-- admin accept/reject -->
                                                                                 @if($doc->admin_nc_flag==1)
                                                                                 <a 
                                                                                 title="{{$doc->doc_file_name}}"
-                                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                                 class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                                                                 Accepted <span>By Admin</span></a>
                                                                                 @endif
@@ -395,7 +395,7 @@
                                                                                 @if($doc->admin_nc_flag==2)
                                                                                 <a 
                                                                                 title="{{$doc->doc_file_name}}"
-                                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                                 class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                                                                 Rejected <span>By Admin</span></a>
                                                                                 @endif
@@ -405,7 +405,7 @@
                                                                 @if($doc->admin_nc_flag==1)
                                                                 <a 
                                                                 title="{{$doc->doc_file_name}}"
-                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                href="{{ url('secretariat-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                 class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                                                 Accepted <span>By Admin</span></a>
                                                                 @endif
@@ -413,7 +413,7 @@
                                                                 @if($doc->admin_nc_flag==2)
                                                                 <a 
                                                                 title="{{$doc->doc_file_name}}"
-                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                 class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                                                 Rejected <span>By Admin</span></a>
                                                                 @endif
@@ -421,7 +421,7 @@
                                                                                 @elseif($doc->status==6)
                                                                             <a 
                                                                                 title="{{$doc->doc_file_name}}"
-                                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                                href="{{ url('secretariat-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                                 class="btn btn-danger btn-sm docBtn m-1">
                                                                                 Rejected</a>
                                                                         @else
@@ -543,7 +543,7 @@
         
         <div class="row">
                         <div class="col-md-12">
-                            <form action="{{url('secretariat/update-nc-flag/'.$spocData->id)}}" method="post" return="confirm('Are you sure to reject this course')">
+                            <form action="{{url('secretariat/update-nc-flag/'.dEncrypt($spocData->id))}}" method="post" return="confirm('Are you sure to reject this course')">
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
