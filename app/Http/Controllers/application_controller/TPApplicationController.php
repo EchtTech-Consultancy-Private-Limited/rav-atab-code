@@ -839,6 +839,13 @@ class TPApplicationController extends Controller
     
   public function tpCourseDocumentDetails($nc_status_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_courses_id)
   {
+
+    $doc_sr_code = dDecrypt($doc_sr_code);
+    $application_id = dDecrypt($application_id);
+    $doc_unique_code= dDecrypt($doc_unique_code);
+    $application_courses_id= dDecrypt($application_courses_id);
+    
+
       try{
         $nc_type = "NC1";
         if($nc_status_type==2){

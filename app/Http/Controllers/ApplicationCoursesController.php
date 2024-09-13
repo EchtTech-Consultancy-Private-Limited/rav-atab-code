@@ -989,21 +989,12 @@ class ApplicationCoursesController extends Controller
             foreach($get_all_account_users as $email){
                 $title="New Application Created - Welcome Aboard : RAVAP-".$application_id;
                 $subject="New Application Created - Welcome Aboard : RAVAP-".$application_id;
-                
-                $body="Dear Team,".PHP_EOL."
-                I trust this message finds you well. I am writing to request the approval of the payment associated with my recent application for RAVAP-".$application_id." submitted on ".date('d-m-Y').". As part of the application process, a payment of Rs.".$request->amount." was made under the transaction reference ID ".$referenceNumber.". ".PHP_EOL."
-                Here are the transaction details: ".PHP_EOL."
-                Transaction ID: ".$transactionNumber." ".PHP_EOL."
-                Payment Amount: ".$request->amount." ".PHP_EOL."
-                Payment Date: ".date("Y-m-d", strtotime($request->payment_date))." ".PHP_EOL."
-                
-                Best regard,".PHP_EOL."
-                RAV Team";
 
+                $details['action_type'] = 'new_application';
+                $details['user_type'] = 'account';
                 $details['email'] = $email;
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
-                $details['body'] = $body; 
                  if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
@@ -1012,31 +1003,26 @@ class ApplicationCoursesController extends Controller
             foreach($get_all_admin_users as $email){
                 $title="New Application Created | RAVAP-".$application_id;
                 $subject="New Application Created | RAVAP-".$application_id;
-                $body="Dear Team,".PHP_EOL."
-
-                We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make.".PHP_EOL."
-               Best regard,".PHP_EOL."
-               RAV Team";
-
+   
+                $details['action_type'] = 'new_application';
+                $details['user_type'] = 'admin';
+                $details['applicant_name'] = Auth::user()->firstname;
                 $details['email'] = $email;
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
-                $details['body'] = $body; 
                  if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
             }
 
             //tp email
-               $body = "Dear ,".Auth::user()->firstname." ".PHP_EOL."
-               We are thrilled to inform you that your application has been successfully processed, and we are delighted to welcome you to our RAVAP family! Your dedication and skills have truly impressed us, and we are excited about the positive impact we believe you will make. ".PHP_EOL."
-               Best regards,".PHP_EOL."
-               RAV Team";
 
+                $details['action_type'] = 'new_application';
+                $details['user_type'] = 'tp';
+                $details['applicant_name'] = Auth::user()->firstname;
                 $details['email'] = Auth::user()->email;
                 $details['title'] = "Payment Approval | RAVAP-".$application_id; 
                 $details['subject'] = "Payment Approval | RAVAP-".$application_id; 
-                $details['body'] = $body; 
                      if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
