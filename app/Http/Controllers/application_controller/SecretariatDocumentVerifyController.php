@@ -403,6 +403,7 @@ class SecretariatDocumentVerifyController extends Controller
     {
         
         try {
+            $application_id = dDecrypt($application_id);
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->get();
@@ -410,20 +411,15 @@ class SecretariatDocumentVerifyController extends Controller
                 ->where(['application_id' => $application_id,'approve_status'=>1])
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
-
                 foreach($get_course_docs as $course_doc){
                     if(in_array($course_doc->status,[2,3,4]) && $course_doc->nc_flag==1){
                         return back()->with('fail', 'Please first take all action on doc');
                     }
                 }
-
-
                 /*reject course and revert back before click on submit button*/
                 DB::table('tbl_application_courses')->where('application_id',$application_id)->update(['is_revert'=>2]);
-                
                 $t = 0;
                 $reuploadbtnToTPorAdmin = 0;
-                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -647,7 +643,7 @@ class SecretariatDocumentVerifyController extends Controller
     {
         
         try {
-            
+                      
             DB::beginTransaction();
             $secretariat_id = Auth::user()->id;
             $get_course_docs = DB::table('tbl_application_course_doc')
@@ -1200,15 +1196,11 @@ class SecretariatDocumentVerifyController extends Controller
 
     public function applicationDocumentListDAOA($id, $course_id)
     {
-        
-
         $level_id = DB::table('tbl_application')->where('id',dDecrypt($id))->first()->level_id;
-        
         if($level_id!=3){
             return $this->applicationDocumentList($id,$course_id);
         }else{
 
-        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
@@ -1261,13 +1253,19 @@ class SecretariatDocumentVerifyController extends Controller
                 }
                 $final_data[] = $obj;
         }
-        // dd($final_data);
+        
         $applicationData = TblApplication::find($application_id);
         return view('admin-view.secretariat.application-document-list-l3', compact('final_data','onsite_course_doc_uploaded', 'course_doc_uploaded','application_id','course_id','applicationData'));
       }
     }
     public function secretariatVerfiyDocumentLevel2($nc_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
+        
+        
+        $doc_sr_code = dDecrypt($doc_sr_code);
+        $application_id = dDecrypt($application_id);
+        $doc_unique_code= dDecrypt($doc_unique_code);
+        $application_course_id= dDecrypt($application_course_id);
         try {
             $tbl_nc_comments = TblNCComments::where(['doc_sr_code' => $doc_sr_code, 'application_id' => $application_id, 'doc_unique_id' => $doc_unique_code, 'assessor_type' => 'secretariat','application_courses_id'=>$application_course_id])->latest('id')->first();
             $application_details = TblApplication::find($application_id);

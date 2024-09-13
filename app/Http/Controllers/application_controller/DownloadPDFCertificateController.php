@@ -14,7 +14,7 @@ class DownloadPDFCertificateController extends Controller
         //$this->middleware('auth')->except('logout');
     }
     public function downloadPDFCertificate($application_id) {
-        
+        $application_id  = dDecrypt($application_id);
         $app_details = DB::table('tbl_certificate as certificate')
                     ->select('certificate.*','certificate.valid_till',
                     'users.address','users.postal',
@@ -25,17 +25,14 @@ class DownloadPDFCertificateController extends Controller
                     ->leftJoin('states', 'users.state', '=', 'states.id')
                     ->where('certificate.application_id', $application_id)
                     ->first();
-        
-        // // dd($app_details);
+
         $pdf = PDF::loadView('certificate.certificate',compact('app_details'));
         $file_name = 'training-provider-certificate-'.$app_details->certificate_no.'.pdf';
-        // return view('certificate.aiia_scope_certificate');
-        // dd($pdf);
         return $pdf->download($file_name);
     }
 
     public function downloadPDFAIIAScopeCertificate($application_id) {
-        
+        $application_id  = dDecrypt($application_id);
         $app_details = DB::table('tbl_certificate as certificate')
                     ->select('certificate.*','certificate.valid_till',
                     'users.address','users.postal',
@@ -50,9 +47,6 @@ class DownloadPDFCertificateController extends Controller
                 ->whereNull('deleted_at')
                 ->get();
 
-
-
-        
         $pdf = PDF::loadView('certificate.aiia_scope_certificate',compact('app_details','courses')) ->setPaper('A4', 'portrait');;
         $file_name = 'training-provider-certificate-'.$app_details->certificate_no.'.pdf';
         // return view('certificate.aiia_scope_certificate');

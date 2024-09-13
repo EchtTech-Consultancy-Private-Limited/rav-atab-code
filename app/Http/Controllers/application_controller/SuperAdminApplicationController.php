@@ -621,6 +621,11 @@ class SuperAdminApplicationController extends Controller
     public function adminVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
         
+        $doc_sr_code = dDecrypt($doc_sr_code);
+        $application_id = dDecrypt($application_id);
+        $doc_unique_code= dDecrypt($doc_unique_code);
+        $application_course_id= dDecrypt($application_course_id);
+
         try{
             $accept_nc_type_status = $nc_type;
             $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','application_courses_id'=>$application_course_id])
@@ -820,6 +825,11 @@ class SuperAdminApplicationController extends Controller
     
     public function superAdminVerfiyDocumentLevel2($nc_type, $assessor_type, $doc_sr_code, $doc_name, $application_id, $doc_unique_code, $application_course_id)
     {
+        $doc_sr_code = dDecrypt($doc_sr_code);
+        $application_id = dDecrypt($application_id);
+        $doc_unique_code= dDecrypt($doc_unique_code);
+        $application_course_id= dDecrypt($application_course_id);
+
         try {
             
             $app_details  = DB::table('tbl_application')->where('id',$application_id)->first();

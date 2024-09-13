@@ -221,7 +221,7 @@
                                                         </td>
                                                         <td class="center">
                                                                   {{$nc_comments->firstname??''}} {{$nc_comments->middlename??''}}
-                                                                  {{$nc_comments->lastname??''}} ({{$nc_comments->role==5?"Secretariat":"Super Admin"}})</td>
+                                                                  {{$nc_comments->lastname??''}} ({{$assessor_type}})</td>
 
                                                         <td class="center">
                                                             <a>{{date('d-m-Y',strtotime($nc_comments->created_at))}}</a>

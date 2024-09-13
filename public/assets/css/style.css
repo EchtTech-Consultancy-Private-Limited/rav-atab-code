@@ -24442,6 +24442,9 @@ td#view_course_brief {
 ul.ml-menu li.active a {
     background: #f89d5e;
 }
+ul.ml-menu li.active a:hover {
+    color: #fff;
+}
 
 i.fa.fa-eye {
     width: 100%;
@@ -24694,7 +24697,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 
 
 
-@media(max-width:1400px) {
+@media(max-width:1420px) {
     .sidebar .logo-brand img {
         text-align: center;
         width: 115px !important;
@@ -24703,6 +24706,13 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     .logo-brand{height: 62px;}
     .user-panel{padding: 10px 10px 10px 0;}
     .user-panel .image {width: 22%;}
+
+    .col-sm-6.create-course-left-field {
+        width: 40%;
+    }
+    .col-sm-6.create-course-right-field {
+        width: 60%;
+    }
 }
 
 .badge-main {
@@ -25710,10 +25720,14 @@ p.ref-number b{ font-weight: 600;}
 }
 .accordian-card .docBtn.docBtn_nc{
     padding: 6px 10px !important;
+    height: 42px;
 }
 .accordian-card .accordion-button.bg-danger {
     background: #dc3545 !important;
     color: #fff !important;
+}
+.accordian-card .docBtn.docBtn_nc span{
+    margin-left: 0;
 }
 
 .accordian-card .accordion-button.bg-danger::after{
@@ -26068,4 +26082,7 @@ h1.header-title {
 
 .text-left {
     text-align: left;
+}
+.submitform_doc_form {
+    display: flex;
 }
