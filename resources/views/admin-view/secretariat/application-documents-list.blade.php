@@ -196,7 +196,7 @@
                                              <th class="center">Sr.No.</th>
                                              <th class="center width-50">Objective criteria</th>
                                              <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
-                                             <th class="center">Desktop Assessor
+                                             <th class="center">Secretariat
                                              </th>
                                              <th>Action</th>
                                           </tr>

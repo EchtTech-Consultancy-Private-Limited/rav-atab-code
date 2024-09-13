@@ -439,7 +439,7 @@
                                                 <label for="example-text-input"
                                                     class="form-control-label">Password<span
                                                         class="text-danger">*</span></label>
-                                                <i class="fa fa-eye" aria-hidden="true" id="togglepassword"></i>
+                                                <i class="fa fa-eye-slash" aria-hidden="true" id="togglepassword"></i>
                                                 <input type="password" value="{{ old('password') }}"
                                                     placeholder="Password" id="password" name="password"
                                                     autocomplete="new-password" required>
@@ -459,7 +459,7 @@
                                                 <label for="example-text-input" class="form-control-label">Confirm
                                                     password<span class="text-danger">*</span></label>
 
-                                                <i class="fa fa-eye" aria-hidden="true" id="togglecpassword"></i>
+                                                <i class="fa fa-eye-slash" aria-hidden="true" id="togglecpassword"></i>
                                            
                                             <input type="password" placeholder="Confirm Password" name="cpassword"
                                                 value="{{ old('cpassword') }}" for="cpassword" id="cpassword" required>
