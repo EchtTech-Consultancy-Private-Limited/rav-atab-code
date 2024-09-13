@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>RAV-ATAB</title>
+    <title>New Application Created | RAVAP-{{$details['title']}}</title>
 </head>
 <body>
 
 <p>Dear Team,</p>
-<p></p>
+<p>{{$details['body']}}</p>
   
 <strong>Regards & Thanks</strong>
 <p>RAV Teams</p>
