@@ -103,6 +103,7 @@ class AccountApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
+        
         $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
         $decoded_json_courses_doc = json_decode($json_course_doc);
         

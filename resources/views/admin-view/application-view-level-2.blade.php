@@ -356,7 +356,7 @@
                                                                     @if($doc->is_doc_show==0 && $doc->status==0)
                                                                         <a 
                                                                             title="{{$doc->doc_file_name}}"
-                                                                            href="{{ url('secretariat-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                            href="{{ url('secretariat-view/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                             class="btn btn-primary btn-sm docBtn m-1">
                                                                             View</a>
                                                                             @elseif($doc->status==1)
