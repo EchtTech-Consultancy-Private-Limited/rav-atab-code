@@ -210,9 +210,10 @@
                                             <span>
                                                 <img src="{{ url('captcha-code') }}" id="captchaimg" height="50" width="350">
                                             </span>
-                                            <!-- <button type="button" class="btn_refresh btn-refresh" id="btn-refresh"><i class="fa
+                                            {{-- <a class="ccc" href="javascript:void(0);" onClick="refreshCaptcha();">Refresh</a> --}}
+                                            <button type="button" class="btn_refresh btn-refresh" onClick="refreshCaptcha();"><i class="fa
                                                 fa-refresh" aria-hidden="true"></i>
-                                             </button> -->
+                                            </button>
                                          </div>
                                     </div>
                                 </div>
@@ -221,7 +222,7 @@
 
                                 <div class="form-group clearfix">
                                     <button type="submit" class="btn btn-lg btn-info btn-theme"  class="submit" onclick="return encrypt();">Login</button>
-                                    <a href="{{ route('forget.password.get') }}" class="forgot-password float-end link-text">Forgot Password</a>
+                                    <a href="{{ route('forget.password.get') }}" class="forgot-password float-end link-text">Forgot Password</a>                                    
                                 </div>
                             </form>
 
@@ -360,6 +361,22 @@
          }
       });
     });
+
+    function refreshCaptcha(){
+        var baseURL = "{{ url('/captcha-code') }}";
+        $.ajax({
+            url: baseURL, // URL to the server-side script
+            type: 'GET',
+            success: function() {
+                // Update captcha image source
+                $('#captchaimg').attr('src', baseURL);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error refreshing captcha:', error);
+            }
+        });
+        
+    }
 
     // $(document).ready(function(){
     //     setInterval(()=>{

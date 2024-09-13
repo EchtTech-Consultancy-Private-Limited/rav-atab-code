@@ -789,3 +789,18 @@ function setLtrLayout() {
 }
 
 //==========================================================================================================================
+$('.accordion-button').on('click', function() {
+  const accordion_name = $(this).attr('data-bs-target');
+  sessionStorage.setItem("accordion_name", accordion_name);
+});
+$(document).ready(function() {
+  const accordianName = sessionStorage.getItem("accordion_name");
+  $('.accordion-button').addClass('collapsed')
+  if(accordianName){
+      $(accordianName).addClass('show');
+      $(`[data-bs-target="${accordianName}"]`).removeClass('collapsed');
+  }else{
+      $('#collapse1').addClass('show');
+      $(`[data-bs-target="#collapse1"]`).removeClass('collapsed')
+  }
+});

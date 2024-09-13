@@ -101,7 +101,7 @@ Route::group(['middleware' => ['guest']], function () {
 });
 //dashboard Route
 Route::group(['middleware' => ['auth','EnsureTokenIsValid','PreventBackHistory']], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');;
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/admin-user', [adminController::class, 'user_index']);
     Route::get('/training-provider', [adminController::class, 'tp_index']);
     Route::get('/assessor-user', [adminController::class, 'assessor_user']);
