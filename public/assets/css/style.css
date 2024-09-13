@@ -14049,7 +14049,7 @@ fieldset[disabled] .form-control {
 }
 
 .side-closed.submenu-closed .sidebar-user-panel {
-    display: none
+    display: none !important;
 }
 
 .top-sidebar {
@@ -14432,7 +14432,7 @@ fieldset[disabled] .form-control {
 
 .navbar-header {
     padding: 8px 7px;
-    background-color: #000;
+    background-color: #def0f5;
     width: 265px;
     -moz-transition: all .5s;
     -o-transition: all .5s;
@@ -15494,6 +15494,7 @@ nav.navbar {
 .side-closed .navbar-brand {
     margin-left: 30px
 }
+/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 .side-closed.side-closed-hover .sidebar {
     width: 260px
@@ -15532,6 +15533,8 @@ nav.navbar {
 .side-closed.side-closed-hover section.content {
     margin-left: 276px
 }
+
+/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 .sidemenu-collapse {
     height: 50px;
@@ -23411,7 +23414,7 @@ html.ie11 .bs-searchbox .form-control {
     padding-left: 3rem !important;
     padding-right: unset !important
 }
-
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 .rtl.side-closed.side-closed-hover section.content {
     margin-right: 276px;
     margin-left: 0
@@ -23428,6 +23431,8 @@ html.ie11 .bs-searchbox .form-control {
     display: block;
     float: right
 }
+
+/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 .rtl.side-closed section.content {
     margin-right: 75px;
@@ -24059,6 +24064,7 @@ html.ie11 .bs-searchbox .form-control {
 .logo-name {
     font-size: 18px;
     color: #000;
+    display: none;
 }
 
 .logo-brand img {
@@ -26085,4 +26091,16 @@ h1.header-title {
 }
 .submitform_doc_form {
     display: flex;
+}
+.table-responsive .table-hover th.center:first-child {
+    width: 220px;
+}
+.side-closed .logo-brand {
+    display: none;
+}
+.submenu-closed .sidebar .menu .list, .side-closed-hover .sidebar .menu .list {
+    margin-top: 13px;
+}
+.fa-expand:before, .fa-bell:before{
+    color: #fff;
 }
