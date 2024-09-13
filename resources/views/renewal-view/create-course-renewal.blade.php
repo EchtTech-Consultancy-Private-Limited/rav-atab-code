@@ -331,7 +331,7 @@
                                         </div>
                                     </div>
                                 
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6 create-course-left-field">
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <label>Course Name<span class="text-danger">*</span></label>
@@ -360,7 +360,7 @@
 
                                     <input type="hidden" name="coutry" value=" {{ $applicationData->country ?? '' }}">
                                     <input type="hidden" name="state" value=" {{ $applicationData->state ?? '' }}">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6 create-course-right-field">
                                         <div class="form-group">
                                             <div class="form-line"> 
                                                 <label>Course Duration<span class="text-danger">*</span></label>
@@ -725,7 +725,7 @@
                             <div class="table-responsive">
                                 <table class="table table-hover js-basic-example contact_list">
                                     <thead>
-                                        <tr>
+                                        <!-- <tr>
                                             <th class="center">S.No.</th>
                                             <th class="center"> Course Name </th>
                                             <th class="center"> Duration </th>
@@ -734,6 +734,16 @@
                                             <th class="center">  Brief</th>
                                             <th class="center">Payment Status</th>
 
+                                            <th class="center">Action</th>
+                                        </tr> -->
+                                        <tr>
+                                            <th class="center">S.No.</th>
+                                            <th class="center"> Course Name </th>
+                                            <th class="center"> Course Duration </th>
+                                            <th class="center"> Eligibility </th>
+                                            <th class="center"> Mode of Course</th>
+                                            <th class="center">Course  Brief</th>
+                                            <th class="center">Payment Status</th>
                                             <th class="center">Action</th>
                                         </tr>
                                     </thead>

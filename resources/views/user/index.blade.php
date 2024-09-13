@@ -131,7 +131,7 @@
                                           <i class="fas fa-ban"></i>
                                        </a>
                                     @else
-                                    <a href="{{ url('active-users/'.dEncrypt($user->id)) }}" onclick="return confirm_option('change status')" class="@if($user->status==1) btn-tbl-disable @elseif($user->status==0) btn-tbl-edit @endif" title="Status">
+                                    <a href="{{ url('active-users/'.dEncrypt($user->id)) }}" onclick="return confirm_option('change status')" class="@if($user->status==1) btn-tbl-disable @elseif($user->status==0) btn-tbl-edit @endif">
                                           <i class="fas fa-ban"></i>
                                        </a>
                                     @endif
