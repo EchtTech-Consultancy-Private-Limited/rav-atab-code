@@ -246,7 +246,7 @@ class DocApplicationController extends Controller
 
 
            /**
-             * Send Email to Accountant
+             * Send Email to admin
              * */ 
           
             $tp_id = $app_->tp_id;
@@ -258,17 +258,14 @@ class DocApplicationController extends Controller
             foreach($get_all_admin_users as $email){
                 $title="Application Payment Approved : RAVAP-".$application_id;
                 $subject="Application Payment Approved : RAVAP-".$application_id;
-                $body="Dear Team,".PHP_EOL."
-
-                We hope this message finds you well. We are pleased to inform you that your application payment has been successfully processed and approved. Thank you for your prompt and seamless transaction.".PHP_EOL."
-
-                Best regards,".PHP_EOL."
-                RAV Team";
-
+                
+                $details['action_type'] = 'payment_approve';
+                $details['user_type'] = 'admin';
+                $details['applicant_name'] = Auth::user()->firstname;
                 $details['email'] = $email;
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
-                $details['body'] = $body; 
+                
                  if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
@@ -277,23 +274,14 @@ class DocApplicationController extends Controller
             // tp mail
                 $title="Payment Approved for Your Application | RAVAP-".$application_id;
                 $subject="Payment Approved for Your Application | RAVAP-".$application_id;
-                $body="Dear ".Auth::user()->firstname.",".PHP_EOL."
-
-                I hope this email finds you well. I am writing to inform you that the payment associated with your application for RAVAP-".$application_id." has been successfully approved by our accounting department.".PHP_EOL."
                 
-                Here are the details of your payment:".PHP_EOL."
-                
-                Transaction ID: ".$last_pay->payment_transaction_no." ".PHP_EOL."
-                Payment Amount: ".$last_pay->amount." ".PHP_EOL."
-                Payment Date: ".date('d-m-Y',strtotime($last_pay->created_at))." ".PHP_EOL."
-                
-                Best regards, ".PHP_EOL."
-                RAV Team";
-
+                $details['action_type'] = 'payment_approve';
+                $details['user_type'] = 'tp';
+                $details['applicant_name'] = Auth::user()->firstname;
                 $details['email'] = $tp_email;
                 $details['title'] = $title; 
                 $details['subject'] = $subject; 
-                $details['body'] = $body; 
+                
                  if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }
@@ -301,21 +289,13 @@ class DocApplicationController extends Controller
                  // accountant mail
                  $title="Application Payment Approved  | RAVAP-".$application_id;
                  $subject="Application Payment Approved  | RAVAP-".$application_id;
-                 $body="Dear ".Auth::user()->firstname.",".PHP_EOL."
-
-                 We hope this message finds you well. We are pleased to inform you that your application payment has been successfully processed and approved. Thank you for your prompt and seamless transaction.".PHP_EOL."
                  
-                 Transaction ID: ".$last_pay->payment_transaction_no." ".PHP_EOL."
-                 Payment Amount: ".$last_pay->amount." ".PHP_EOL."
-                 Payment Date: ".date('d-m-Y',strtotime($last_pay->created_at))." ".PHP_EOL."
-                 
-                 Best regards, ".PHP_EOL."
-                 RAV Team";
- 
+                 $details['action_type'] = 'payment_approve';
+                 $details['user_type'] = 'account';
+                 $details['applicant_name'] = Auth::user()->firstname;
                  $details['email'] = $account_email;
                  $details['title'] = $title; 
                  $details['subject'] = $subject; 
-                 $details['body'] = $body; 
                   if(env('MAIL_SEND')){
                     dispatch(new SendEmailJob($details));
                 }

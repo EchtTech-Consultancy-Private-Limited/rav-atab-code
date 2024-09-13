@@ -25,9 +25,8 @@ class SendEmail extends Mailable
      */
     public function envelope(): Envelope
     {
-     
         return new Envelope(
-            subject: 'RAV ATAB - '.$this->data['title'],
+            subject: 'RAV ATAB -'.$this->data['subject'],
         );
     }
   
@@ -36,8 +35,45 @@ class SendEmail extends Mailable
      */
     public function content(): Content
     {
+
+        $template = 'email';
+        if($this->data['action_type']=="new_application"){
+            if($this->data['user_type']=='tp'){
+                $template = 'NewApplicationByTp.tp';
+            }else if($this->data['user_type']=='accountant'){
+                $template = 'NewApplicationByTp.account';
+            }else if($this->data['user_type']=='admin'){
+                $template = 'NewApplicationByTp.admin';
+            }
+        }else if($this->data['action_type']=="payment_approve"){
+            if($this->data['user_type']=='tp'){
+                $template = 'PaymentApprove.TP';
+            }else if($this->data['user_type']=='accountant'){
+                $template = 'PaymentApprove.account';
+            }else if($this->data['user_type']=='admin'){
+                $template = 'PaymentApprove.admin';
+            }
+        }
+        else if($this->data['action_type']=="nc_created"){
+            if($this->data['user_type']=='tp'){
+                $template = 'NcCreated.tp';
+            }
+        }
+        else if($this->data['action_type']=="final_submit_assessor"){
+            if($this->data['user_type']=='tp'){
+                $template = 'SubmitFinalSummary.tp';
+            }else if($this->data['user_type']=='admin'){
+                $template = 'SubmitFinalSummary.admin';
+            }
+        }
+        else if($this->data['action_type']=="certificate_generate"){
+            if($this->data['user_type']=='tp'){
+                $template = 'CertificateGenerate.tp';
+            }
+        }
+
         return new Content(
-            view: 'email.email',
+            view: 'email.'.$template.'',
             with:['data'=>$this->data]
         );
     }
