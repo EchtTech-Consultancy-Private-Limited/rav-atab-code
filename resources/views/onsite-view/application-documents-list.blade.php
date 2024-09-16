@@ -226,31 +226,31 @@
                                     @if($doc->status==0)
                                        <a 
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('desktop-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('desktop-view/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                         class="btn btn-primary btn-sm docBtn m-1">
                                         View</a>
                                         @elseif($doc->status==1)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('desktop-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('desktop-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-success btn-sm docBtn m-1">
                                              Accepted</a>
                                     @elseif($doc->status==2)
                                     <a 
                                         title="{{$doc->doc_file_name}}"
-                                        href="{{ url('desktop-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                        href="{{ url('desktop-nc1/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                         class="btn btn-danger btn-sm docBtn m-1">
                                         NC1</a>
                                         @elseif($doc->status==3)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('desktop-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('desktop-nc2/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              NC2</a>
                                         @elseif($doc->status==4)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('desktop-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('desktop-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                               Not Recommended</a>
 
@@ -258,7 +258,7 @@
                                               @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('desktop-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('desktop-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
@@ -266,7 +266,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('desktop-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('desktop-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
@@ -275,7 +275,7 @@
                                              @elseif($doc->status==6)
                                           <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('desktop-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('desktop-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
                                              Rejected</a>
                                     @else
@@ -324,31 +324,31 @@
                                    @endphp
                                       <a 
                                        title="{{$doc->onsite_doc_file_name}}"
-                                       href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc_ . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                       href="{{ url('onsite-view/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc_ . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                        class="btn btn-primary btn-sm docBtn m-1">
                                        View</a>
                                     @elseif($doc->onsite_status==1)
                                          <a 
                                             title="{{$doc->onsite_doc_file_name}}"
-                                            href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name. '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                            href="{{ url('onsite-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name. '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                             class="btn btn-success btn-sm docBtn m-1">
                                             Accepted</a>
                                           @elseif($doc->onsite_status==2)
                                           <a 
                                                 title="{{$doc->onsite_doc_file_name}}"
-                                                href="{{ url('onsite-nc1/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                                href="{{ url('onsite-nc1/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                                 class="btn btn-danger btn-sm docBtn m-1">
                                                 NC1</a>
                                         @elseif($doc->onsite_status==3)
                                          <a 
                                             title="{{$doc->onsite_doc_file_name}}"
-                                            href="{{ url('onsite-nc2/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                            href="{{ url('onsite-nc2/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                             class="btn btn-danger btn-sm docBtn m-1">
                                             NC2</a>
                                        @elseif($doc->onsite_status==4)
                                          <a 
                                             title="{{$doc->onsite_doc_file_name}}"
-                                            href="{{ url('onsite-nr/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                            href="{{ url('onsite-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                             class="btn btn-danger btn-sm docBtn m-1">
                                              Not Recommended</a>
 
@@ -356,7 +356,7 @@
                                               @if($doc->admin_nc_flag==1)
                                              <a 
                                              title="{{$doc->onsite_doc_file_name}}"
-                                             href="{{ url('onsite-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name. '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name. '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                              Accepted <span>By Admin</span></a>
                                              @endif
@@ -364,7 +364,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a
                                              title="{{$doc->onsite_doc_file_name}}"
-                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
@@ -375,7 +375,7 @@
                                              
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('onsite-accept/verify-doc'. '/'. $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-accept/verify-doc'. '/'. dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                              Accepted</a>
                                              @endif
@@ -383,7 +383,7 @@
                                              @if($doc->admin_nc_flag==2)
                                              <a 
                                              title="{{$doc->doc_file_name}}"
-                                             href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                             href="{{ url('onsite-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected</a>
                                              @endif
@@ -392,7 +392,7 @@
                                        @elseif($doc->onsite_status==6)
                                              <a 
                                             title="{{$doc->onsite_doc_file_name}}"
-                                            href="{{ url('onsite-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->onsite_doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                            href="{{ url('onsite-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                             class="btn btn-danger btn-sm docBtn m-1">
                                             Need Revision</a>
                                             

@@ -445,7 +445,11 @@ class OnsiteApplicationController extends Controller
 
     public function onsiteVerfiyDocument($nc_type,$doc_sr_code, $doc_name, $application_id, $doc_unique_code,$application_course_id)
     {
-        
+        $doc_sr_code = dDecrypt($doc_sr_code);
+        $application_id = dDecrypt($application_id);
+        $doc_unique_code= dDecrypt($doc_unique_code);
+        $application_course_id= dDecrypt($application_course_id);
+
         try{   
             if($nc_type == 'nr')
             {

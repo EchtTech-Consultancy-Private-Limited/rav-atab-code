@@ -312,18 +312,18 @@
                                                                 <input type="hidden" name="doc_unique_id" value="{{$doc->doc_unique_id}}">
                                                                 @if($doc->nc_show_status==0)
                                                                 <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                                    href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                    href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                     class="btn btn-primary btn-sm docBtn m-1">
                                                                     View</a>
                                                                 @elseif($doc->nc_show_status==1)
                                                                 <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                                    href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                                    href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                     class="btn btn-success btn-sm docBtn  m-1">
                                                                     Accepted
                                                         </span></a>
                                                         @elseif($doc->nc_show_status==2)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status   . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status   . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-danger btn-sm docBtn  m-1">
 
                                                             NC1</span>
@@ -341,7 +341,7 @@
 
                                                         @elseif($doc->nc_show_status==3)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-danger btn-sm docBtn  m-1">
                                                             NC2</span></a>
                                                         @if($doc->nc_show_status==1)
@@ -356,25 +356,25 @@
 
                                                         @elseif($doc->nc_show_status==6)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-danger btn-sm docBtn  m-1">
                                                             Rejected</span></a>
                                                         @elseif($doc->nc_show_status==4)
 
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-danger btn-sm docBtn  m-1">
                                                             Not Recommended</span></a>
                                                         @if($doc->admin_nc_flag==1 && $doc->is_admin_submit)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . '5/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . '5/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                                             Accepted <span>By Admin</span></a>
                                                         @endif
 
                                                         @if($doc->admin_nc_flag==2 && $doc->is_admin_submit)
                                                         <a target="_blank" title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . '6/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . '6/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-danger btn-sm docBtn docBtn_nc  m-1">
                                                             Rejected <span>By Admin</span></a>
                                                         @endif
@@ -383,14 +383,14 @@
                                                         @elseif($doc->nc_show_status==5)
                                                         @if($doc->admin_nc_flag==1)
                                                         <a title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status .'/'. $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status .'/'. dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                                             Accepted</a>
                                                         @endif
 
                                                         @if($doc->admin_nc_flag==2)
                                                         <a title="{{$doc->doc_file_name}}"
-                                                            href="{{ url('super-admin-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $spocData->id . '/' . $doc->doc_unique_id.'/'.$ApplicationCourses['course']->id) }}"
+                                                            href="{{ url('super-admin-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                                             Rejected</a>
                                                         @endif
