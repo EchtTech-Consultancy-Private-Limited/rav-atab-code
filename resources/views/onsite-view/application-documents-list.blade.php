@@ -271,6 +271,7 @@
                                              Rejected <span>By Admin</span></a>
                                              @endif
                                              <!-- end here -->
+                                              
                                              
                                              @elseif($doc->status==6)
                                           <a 
