@@ -134,7 +134,7 @@
                                 National Application 
                                 </h2>
                         </div>
-                        <div class="body">
+                        <div class="body table-responsive">
                             <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
 
 

@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="body">
+                        <div class="body table-responsive">
                             <div class="table-responsive" style="width:100%; overflow:hidden; padding-bottom:20px;">
                                 <!-- The Modal -->
                                 <div class="modal" id="myModal">
