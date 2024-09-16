@@ -443,7 +443,7 @@
                                                 
                                                   @if($assessor_designation->assessor_designation=="Lead Assessor")   
                                                 <div>
-                                                   <a  href="{{ url('onsite-view/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc_paths . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}" class="btn btn-primary btn-sm">Upload Document</a>&nbsp;
+                                                   <a  href="{{ url('onsite-view/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc_paths . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}" class="btn btn-primary btn-sm">Upload Document</a>&nbsp;
                                                 </div>
                                                 @else
                                                 <span>Please assign lead assessor</span>
