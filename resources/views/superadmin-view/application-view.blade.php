@@ -73,8 +73,8 @@
                     <div class="float-right">
                     
                 @if($is_final_submit && $spocData->level_id==3  && $spocData->approve_status==1)
-                    <a href="{{url('download/pdf/certificate/'.$spocData->id)}}" class="btn btn-primary">Download Certificate</a>
-                    <a href="{{url('download/pdf/aiia_scope/certificate/'.$spocData->id)}}" class="btn btn-primary">Download AIIA Scope</a>
+                    <a href="{{url('download/pdf/certificate/'.dEncrypt($spocData->id))}}" class="btn btn-primary">Download Certificate</a>
+                    <a href="{{url('download/pdf/aiia_scope/certificate/'.dEncrypt($spocData->id))}}" class="btn btn-primary">Download AIIA Scope</a>
                 @endif
                 @if($is_final_submit && $spocData->level_id==3 && $spocData->mom_file_name!=null && $spocData->approve_status==2)
                 

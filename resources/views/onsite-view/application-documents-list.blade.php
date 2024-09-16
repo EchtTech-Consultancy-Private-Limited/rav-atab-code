@@ -448,7 +448,7 @@
                                                 @else
                                                 <span>Please assign lead assessor</span>
                                                 @endif
-                                                
+                                                 
                                                 <!-- upload photograph -->
                                                 <div>
                                                   <input type="hidden" id="doc_sr_code_{{$question['question']->id}}" value="{{$question['question']->code}}">
