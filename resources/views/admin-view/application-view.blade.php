@@ -407,7 +407,7 @@
                                                                     @if($doc->admin_nc_flag==1)
                                                                     <a 
                                                                     title="{{$doc->doc_file_name}}"
-                                                                    href="{{ url('secretariat-accept/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
+                                                                    href="{{ url('secretariat-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                     class="btn btn-success btn-sm docBtn docBtn_nc  m-1">
                                                                     Accepted <span>By Admin</span></a>
                                                                     @endif
@@ -415,7 +415,7 @@
                                                                     @if($doc->admin_nc_flag==2)
                                                                     <a 
                                                                     title="{{$doc->doc_file_name}}"
-                                                                    href="{{ url('secretariat-reject/verify-doc' . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
+                                                                    href="{{ url('secretariat-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                     class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                                                     Rejected <span>By Admin</span></a>
                                                                     @endif
