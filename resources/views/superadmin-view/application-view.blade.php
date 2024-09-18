@@ -73,8 +73,10 @@
                     <div class="float-right">
                     
                 @if($is_final_submit && $spocData->level_id==3  && $spocData->approve_status==1)
-                    <a href="{{url('download/pdf/certificate/'.dEncrypt($spocData->id))}}" class="btn btn-primary">Download Certificate</a>
-                    <a href="{{url('download/pdf/aiia_scope/certificate/'.dEncrypt($spocData->id))}}" class="btn btn-primary">Download AIIA Scope</a>
+                    <a href="{{url('download/pdf/certificate/'.dEncrypt($spocData->id)
+                    )}}" class="btn btn-primary">Download Certificate</a>
+                    <a href="{{url('download/pdf/aiia_scope/certificate/'.dEncrypt($spocData->id)
+                    )}}" class="btn btn-primary">Download AIIA Scope</a>
                 @endif
                 @if($is_final_submit && $spocData->level_id==3 && $spocData->mom_file_name!=null && $spocData->approve_status==2)
                 
@@ -379,7 +381,7 @@
                                              <a title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                              class="btn btn-danger btn-sm docBtn  m-1">
-                                             Not Recommended </span></a>
+                                             Needs Revision </span></a>
                                              @if($doc->admin_nc_flag==1)
                                              <a title="{{$doc->doc_file_name}}"
                                              href="{{ url('super-admin-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
@@ -457,7 +459,7 @@
                                                             $capitalizedArray = array_map('ucfirst', $explodedArray);
                                                             $resultString = implode(" ", $capitalizedArray);
                                                          @endphp
-                                                         {{$resultString}} 
+                                                         {{$resultString=="Not Recommended"?"Needs Revision":$resultString}}  
                                                          </td>
                                                          <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} ({{$nc->role==5?"Secretariat":"Super Admin"}})</td>
                                                       </tr>

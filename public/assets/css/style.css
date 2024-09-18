@@ -14537,7 +14537,8 @@ fieldset[disabled] .form-control {
 .navbar-nav .far {
     line-height: 1;
     height: 24px;
-    font-size: 18px
+    font-size: 18px;
+    color: #fff;
 }
 
 .navbar-nav .fab {

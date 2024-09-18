@@ -125,7 +125,7 @@
                                             @if ($lastDocComment->status == 1)
                                                 <option value="2">NC2</option>
                                             @elseif ($lastDocComment->status == 2)
-                                                <option value="3">Not Recommended</option>
+                                                <option value="3">Needs Revision</option>
                                             @endif
                                         @else
                                             <option value="1">NC1</option>
