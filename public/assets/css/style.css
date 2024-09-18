@@ -25727,7 +25727,7 @@ p.ref-number b{ font-weight: 600;}
 }
 .accordian-card .docBtn.docBtn_nc{
     padding: 6px 10px !important;
-    height: 42px;
+    height: auto;
 }
 .accordian-card .accordion-button.bg-danger {
     background: #dc3545 !important;
@@ -26090,7 +26090,7 @@ h1.header-title {
 .text-left {
     text-align: left;
 }
-.submitform_doc_form {
+.comon-table {
     display: flex;
     width: 375px;
     flex-wrap: wrap;
