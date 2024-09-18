@@ -26091,6 +26091,11 @@ h1.header-title {
 }
 .submitform_doc_form {
     display: flex;
+    width: 375px;
+    flex-wrap: wrap;
+}
+.table-th{
+    width: 260px;
 }
 .table-responsive .table-hover th.center:first-child {
     width: 220px;
@@ -26101,6 +26106,6 @@ h1.header-title {
 .submenu-closed .sidebar .menu .list, .side-closed-hover .sidebar .menu .list {
     margin-top: 13px;
 }
-.fa-expand:before, .fa-bell:before{
+.fa-expand:before{
     color: #fff;
 }

@@ -106,7 +106,7 @@
                                              <th class="center">Sr.No.</th>
                                              <th class="center width-50">Objective criteria</th>
                                              <!--  <th class="center" style="white-space: nowrap;width:85px;">Yes / No</th> -->
-                                             <th class="center"> Cross reference to supporting evidence provided
+                                             <th class="center table-th"> Cross reference to supporting evidence provided
                                              </th>
                                              
                                              <th>Action</th>

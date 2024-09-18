@@ -69,7 +69,7 @@ class CustomCaptcha {
     }
 
 
-    public function phpcaptcha($textColor,$backgroundColor,$imgWidth,$imgHeight,$noiceLines=0,$noiceDots=0,$noiceColor='#162453')
+    public function phpcaptcha($textColor,$backgroundColor,$imgWidth,$imgHeight,$noiceLines=4,$noiceDots=9,$noiceColor='#000')
         {       
                 /* Settings */
                 $text=rand(6,999999);
