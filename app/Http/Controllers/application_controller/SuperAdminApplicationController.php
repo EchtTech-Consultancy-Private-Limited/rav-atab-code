@@ -128,7 +128,19 @@ class SuperAdminApplicationController extends Controller
         // ->Orwhere('a.second_payment',6)
         ->orderBy('a.id','desc')
         ->get();
+       $acc_app = [];
+        foreach($application as $app){
+            $payment_count = DB::table('tbl_application_payment')->where(['application_id'=>$app->id,'pay_status'=>'Y'])->count();
+            if($payment_count>1){
+                $acc_app[]=$app;
+            }else{
+                if($app->secretariat_id==null && $app->assessor_id==null){
+                    $acc_app[]=$app;
+                }
+            }
+        }
 
+        
         $account_application = DB::table('tbl_application as a')
         ->whereIn('a.approve_status',[0,2])
         ->whereNull('secretariat_id')
@@ -150,12 +162,11 @@ class SuperAdminApplicationController extends Controller
         ->orderBy('a.id','desc')
         ->get()->toArray();
 
-        $mergedApp = array_merge($account_application,$secretariat_application,$assessor_application);
+        $mergedApp = array_merge($acc_app,$secretariat_application,$assessor_application);
         $newArr = [];
         $appTime = new ApplicationDurationCaculate;
-
         foreach($mergedApp as $app){
-            if($app->secretariat_id==null && $app->assessor_id==null){
+            if(($app->secretariat_id==null && $app->assessor_id==null) || $app->payment_status==5){
                 if(isset($app)){
                     $application_time = DB::table('tbl_application_time')->where([
                         'user_action'=>"verify_payment"
