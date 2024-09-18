@@ -477,7 +477,7 @@
                                         <div class="form-line">
                                             <label for="example-text-input" class="form-control-label">New
                                                 Password</label>
-                                            <i class="fa fa-eye " aria-hidden="true" id="togglepassword"></i>
+                                            <i class="fa fa-eye-slash " aria-hidden="true" id="togglepassword"></i>
                                             <input type="password" placeholder="Password" id="password" minlength="8"   maxlength="15"
                                                 name="password" autocomplete="new-password">
 
@@ -497,7 +497,7 @@
                                             <label for="example-text-input" class="form-control-label">Confirm
                                                 Password</label>
 
-                                            <i class="fa fa-eye " aria-hidden="true" id="togglecpassword"></i>
+                                            <i class="fa fa-eye-slash " aria-hidden="true" id="togglecpassword"></i>
 
                                         <input type="password" placeholder="Confirm Password" name="cpassword"  minlength="8"   maxlength="15"
                                             value="{{ old('cpassword') }}" for="cpassword" id="cpassword">
