@@ -205,7 +205,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
-                                             Not Recommended <span>{{ucfirst($doc->assessor_type)}}</span></a>
+                                             Needs Revision <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                              @if($doc->admin_nc_flag==1 && $doc->is_admin_submit==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
@@ -330,7 +330,7 @@
                                                             $capitalizedArray = array_map('ucfirst', $explodedArray);
                                                             $resultString = implode(" ", $capitalizedArray);
                                                          @endphp
-                                                         {{$resultString}} 
+                                                         {{$resultString=="Not Recommended"?"Needs Revision":$resultString}} 
                                                          </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}} ({{ucfirst($nc_comment->assessor_type)}})</td>
                                                       </tr>

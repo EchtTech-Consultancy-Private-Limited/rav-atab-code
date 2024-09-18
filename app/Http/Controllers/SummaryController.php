@@ -283,10 +283,10 @@ class SummaryController extends Controller
         $app_id = dDecrypt($application_id);
         $course_id = dDecrypt($application_course_id);
 
-        $isAnyNRPendingAdminSide = $this->isAnyNRPendingAdminSide($app_id,$course_id);
-        if($isAnyNRPendingAdminSide){
-            return back()->with('fail', 'File is sent to admin for NR.');
-        }
+        // $isAnyNRPendingAdminSide = $this->isAnyNRPendingAdminSide($app_id,$course_id);
+        // if($isAnyNRPendingAdminSide){
+        //     return back()->with('fail', 'File is sent to admin for NR.');
+        // }
         $check_report = DB::table('assessor_final_summary_reports')->where(['application_id' => dDecrypt($application_id),'application_course_id' => dDecrypt($application_course_id),'assessor_type'=>'desktop'])->first();
         $tbl_application = DB::table('tbl_application')->where('id',dDecrypt($application_id))->first();
 

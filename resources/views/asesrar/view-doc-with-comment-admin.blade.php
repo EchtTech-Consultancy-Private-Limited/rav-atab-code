@@ -216,7 +216,7 @@
                                                             @elseif($comments->status == 2)
                                                                 NC2
                                                             @elseif($comments->status == 3)
-                                                                Not Recommended
+                                                            Needs Revision
                                                             @elseif($comments->status == 4)
                                                                 Approved
                                                             @elseif($comments->status == 5)

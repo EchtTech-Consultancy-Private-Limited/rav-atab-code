@@ -383,7 +383,7 @@
                                                                         <a title="{{$doc->doc_file_name}}"
                                                                             href="{{ url('secretariat-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                             class="btn btn-danger btn-sm docBtn m-1">
-                                                                            Not Recommended</a>
+                                                                            Needs Revision</a>
                                                                             <!-- admin accept/reject -->
                                                                             @if($doc->admin_nc_flag==1)
                                                                             <a title="{{$doc->doc_file_name}}"
@@ -473,7 +473,7 @@
                                                                             $capitalizedArray = array_map('ucfirst', $explodedArray);
                                                                             $resultString = implode(" ", $capitalizedArray);
                                                                         @endphp
-                                                                        {{$resultString}} 
+                                                                        {{$resultString=="Not Recommended"?"Needs Revision":$resultString}} 
                                                                         </td>
                                                                         <td>{{ucfirst($nc->firstname)}} {{ucfirst($nc->middlename)}} {{ucfirst($nc->lastname)}} ({{$nc->role==5?"Secretariat":"Super Admin"}})</td>
                                                                     </tr>

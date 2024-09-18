@@ -332,7 +332,7 @@
                 <div class="col-md-12 mr-2">
                 <form action="{{url('desktop/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
                 @csrf
-                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($enable_disable_submit_btn==true || $is_all_revert_action_done==false || $isAllDocAccepted)?'disabled':'';?> >
+                <input type="submit" class="btn btn-info float-right" value="Submit" <?php echo ($enable_disable_submit_btn==true || $is_all_revert_action_done==false || $isAllDocAccepted || $isNrButSummaryNotSubmittedYet)?'disabled':'';?> >
                 </form>
                 </div>
         </div>

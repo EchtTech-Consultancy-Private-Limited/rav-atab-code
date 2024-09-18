@@ -127,7 +127,7 @@
                                                                         @elseif ($doc_latest_record->notApraove_count == 2)
                                                                             <option value="2">NC 2</option>
                                                                         @elseif ($doc_latest_record->notApraove_count == 3)
-                                                                            <option value="3">Not Recommended
+                                                                            <option value="3">Needs Revision
                                                                             </option>
                                                                         @elseif ($doc_latest_record->notApraove_count == 4)
                                                                             <option value="6">Not Approve</option>
