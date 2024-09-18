@@ -151,8 +151,7 @@ class DesktopApplicationController extends Controller
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id));
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
         $isAllDocAccepted=$this->isAllDocAccepted(dDecrypt($id));
-
-        
+        $isNrButSummaryNotSubmittedYet = $this->isNrOnDesktopDocList(dDecrypt($id));
         $application = DB::table('tbl_application')
             ->where('id', dDecrypt($id))
             ->first();
@@ -201,7 +200,7 @@ class DesktopApplicationController extends Controller
         /*  All course summary generated*/
             
         /*end here*/
-        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isAllDocAccepted'=>$isAllDocAccepted]);
+        return view('desktop-view.application-view', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit,'show_submit_btn_to_desktop'=>$show_submit_btn_to_desktop,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isAllDocAccepted'=>$isAllDocAccepted,'isNrButSummaryNotSubmittedYet'=>$isNrButSummaryNotSubmittedYet]);
     }
     public function applicationDocumentList($id, $course_id)
     {
@@ -1370,6 +1369,82 @@ class DesktopApplicationController extends Controller
         }
         
         if ($flag == 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    public function isNrOnDesktopDocList($application_id)
+    {
+
+        $results = DB::table('tbl_application_course_doc')
+            ->select('application_id', 'application_courses_id','assessor_type', DB::raw('MAX(doc_sr_code) as doc_sr_code'), DB::raw('MAX(doc_unique_id) as doc_unique_id'))
+            ->groupBy('application_id', 'application_courses_id', 'doc_sr_code', 'doc_unique_id','assessor_type')
+            // ->where('application_courses_id', $application_courses_id)
+            ->where('application_id', $application_id)
+            ->where('approve_status',1)
+            ->get();
+
+            
+            
+
+        $additionalFields = DB::table('tbl_application_course_doc')
+            ->join(DB::raw('(SELECT application_id, application_courses_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_application_course_doc GROUP BY application_id, application_courses_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
+                $join->on('tbl_application_course_doc.application_id', '=', 'sub.application_id')
+                    ->on('tbl_application_course_doc.application_courses_id', '=', 'sub.application_courses_id')
+                    ->on('tbl_application_course_doc.doc_sr_code', '=', 'sub.doc_sr_code')
+                    ->on('tbl_application_course_doc.doc_unique_id', '=', 'sub.doc_unique_id')
+                    ->on('tbl_application_course_doc.id', '=', 'sub.max_id');
+            })
+            ->where('tbl_application_course_doc.application_id',$application_id)
+
+            ->where('tbl_application_course_doc.assessor_type','desktop')
+            ->orderBy('tbl_application_course_doc.id', 'desc')
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','assessor_type']);
+
+        $finalResults = [];
+        foreach ($results as $key => $result) {
+            if ($result->assessor_type == 'desktop') {
+            $additionalField = $additionalFields->where('application_id', $result->application_id)
+                ->where('application_courses_id', $result->application_courses_id)
+                ->where('doc_sr_code', $result->doc_sr_code)
+                ->where('doc_unique_id', $result->doc_unique_id)
+                ->where('approve_status',1)
+                ->first();
+            if ($additionalField) {
+                $finalResults[$key] = (object)[];
+                $finalResults[$key]->status = $additionalField->status;
+                $finalResults[$key]->id = $additionalField->id;
+                $finalResults[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $finalResults[$key]->approve_status = $additionalField->approve_status;
+                $finalResults[$key]->is_revert = $additionalField->is_revert;
+            }
+        }
+        }
+
+        
+        $flag = 0;
+
+        
+        foreach ($finalResults as $result) {
+            if ($result->status == 4) {
+                $flag = 1;
+                break;
+            }
+        }
+        $total_course = DB::table('tbl_application_courses')
+        ->where(['application_id'=>$application_id,'deleted_by_tp'=>0])
+        ->whereNull('deleted_at')
+        ->count();
+
+        $total_summary = DB::table('assessor_final_summary_reports')
+        ->where(['application_id'=>$application_id,'assessor_type'=>'desktop','assessor_id'=>Auth::user()->id])
+        ->count();
+        
+        if ($flag == 1 && ($total_summary!=$total_course)) {
             return true;
         } else {
             return false;

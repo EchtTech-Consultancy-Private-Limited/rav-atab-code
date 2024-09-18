@@ -252,7 +252,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('desktop-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
-                                              Not Recommended</a>
+                                             Needs Revision</a>
 
                                               <!-- admin accept/reject -->
                                               @if($doc->admin_nc_flag==1)
@@ -351,7 +351,7 @@
                                             title="{{$doc->onsite_doc_file_name}}"
                                             href="{{ url('onsite-nr/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->onsite_doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                             class="btn btn-danger btn-sm docBtn m-1">
-                                             Not Recommended</a>
+                                            Needs Revision</a>
 
                                               <!-- admin accept/reject -->
                                               @if($doc->admin_nc_flag==1)

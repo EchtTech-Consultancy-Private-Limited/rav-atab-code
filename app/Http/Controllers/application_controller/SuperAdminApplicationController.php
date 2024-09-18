@@ -912,7 +912,7 @@ class SuperAdminApplicationController extends Controller
                 $form_view = 0;
             }
             
-            if($assessor_type=='desktop' && $nc_type!="not_recommended"){
+            if($assessor_type=='desktop' && $nc_type=="not_recommended"){
                 $form_view=0;
             }
             

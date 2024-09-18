@@ -271,7 +271,7 @@
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('secretariat-nr/verify-doc-level-2' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}"
                                              class="btn btn-danger btn-sm docBtn m-1">
-                                              Not Recommended</a>
+                                             Needs Revision</a>
                                               <!-- admin accept/reject -->
                                               @if($doc->admin_nc_flag==1)
                                              <a 
@@ -394,7 +394,7 @@
                                                             $capitalizedArray = array_map('ucfirst', $explodedArray);
                                                             $resultString = implode(" ", $capitalizedArray);
                                                          @endphp
-                                                         {{$resultString}} 
+                                                         {{$resultString=="Not Recommended"?"Needs Revision":$resultString}}  
                                                          </td>
                                                          <td>{{$nc_comment->firstname}} {{$nc_comment->middlename}} {{$nc_comment->lastname}}</td>
                                                       </tr>
