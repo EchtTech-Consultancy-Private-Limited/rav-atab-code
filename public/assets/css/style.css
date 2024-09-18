@@ -24156,7 +24156,7 @@ i#togglecpassword {
 
 .modal-content input {
     margin-bottom: 0 !important;
-    border-bottom: 0px !important;
+    /* border-bottom: 0px !important; */
     /* height: 1rem !important; */
     text-align: center;
 }
@@ -24332,9 +24332,33 @@ div#QR > div {
     background-color: #ffb463 !important;
 }
 
-div#ui-datepicker-div{
+#ui-datepicker-div{
     padding: 12px 15px 5px !important;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 2px 4px 10px #6d6d6d;
 }
+  
+  .ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all {
+    margin: 10px 0;
+  }
+  
+    .ui-datepicker-prev, .ui-datepicker-next {
+    background: #727272;
+    color: #fff;
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .ui-datepicker-prev:hover, .ui-datepicker-next:hover{
+    background: #000;
+    color: #fff;
+  }
+  
+  .ui-datepicker-title {
+    margin-top: 15px;
+  }
 
 .card .body .header{
     padding-left: 0px;
@@ -24488,6 +24512,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 .modal input[type=text]:not(.browser-default) {
     height: 2rem !important;
     text-align: left;
+    width: 97%;
 }
 
 .modal-create-course .table tbody tr td a .fa.fa-eye {
@@ -26109,4 +26134,20 @@ h1.header-title {
 }
 .fa-expand:before{
     color: #fff;
+}
+.time-modal .modal{
+    height: auto;
+}
+
+/* Media query start from here */
+@media (min-width: 1024px) and (max-width:1399px) {
+    .btn:not(.btn-link):not(.btn-circle) {
+        padding: 5px 20px;
+      }
+}
+
+@media (min-width: 1200px) and (max-width:1850px) {
+    #dataTableMain-admin.table thead tr th:last-child{
+        min-width: 124px;
+    }
 }
