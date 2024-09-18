@@ -24450,6 +24450,7 @@ div#ui-datepicker-div{
 
 .table-responsive{
     overflow-x: overlay;
+    overflow-y: hidden;
 }
 
 .modal-content .edit-popup .edit-m-d .select-wrapper li input {
@@ -26139,6 +26140,7 @@ h1.header-title {
     height: auto;
 }
 
+
 /* Media query start from here */
 @media (min-width: 1024px) and (max-width:1399px) {
     .btn:not(.btn-link):not(.btn-circle) {
@@ -26149,5 +26151,8 @@ h1.header-title {
 @media (min-width: 1200px) and (max-width:1850px) {
     #dataTableMain-admin.table thead tr th:last-child{
         min-width: 124px;
+    }
+    .last-th{
+        min-width: 142px;
     }
 }
