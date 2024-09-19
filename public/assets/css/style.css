@@ -20314,7 +20314,7 @@ span.badge {
     border-radius: 2px;
     border: 0;
     outline: 0;
-    line-height: 23px;
+    line-height: 22px;
     /* margin-bottom: 15px; */
 }
 
@@ -26149,9 +26149,13 @@ h1.header-title {
 }
 
 @media (min-width: 1200px) and (max-width:1850px) {
-    #dataTableMain-admin.table thead tr th:last-child{
-        min-width: 124px;
+    #dataTableMain-admin.table thead tr th:last-child, .table.dataTable tr td:last-child {
+        min-width: 125px;
     }
+    div.dataTables_wrapper {
+        position: relative;
+        margin-bottom: 8px;
+      }
     .last-th{
         min-width: 142px;
     }

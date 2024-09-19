@@ -525,12 +525,12 @@
                     </div>
         @endif   
         
-        <div class="row">
+        <div class="row col-md-12">
         
         
                         
 
-        <div class="card p-relative">
+        <div class="card p-relative mt-4">
             <div class="box-overlay">
                 <span class="spinner-border"></span>
             </div>

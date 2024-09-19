@@ -205,7 +205,7 @@
                                              <td>
                                                 <div class="d-flex">
                                                   
-                                                   <div>
+                                                   <div class="comon-table">
                                                       <form
                                                          name="submitform_doc_form"
                                                          id="submitform_doc_form_{{$question['question']->id}}"
@@ -308,7 +308,7 @@
                                              <td>
                                              <div class="d-flex">
                                                   
-                                                  <div>
+                                                  <div class="comon-table">
                                         
                                    
                                 @if(in_array($question['question']->id,$onsite_course_doc_uploaded->pluck('doc_unique_id')->all())) 
