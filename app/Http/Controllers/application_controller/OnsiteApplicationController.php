@@ -206,7 +206,6 @@ class OnsiteApplicationController extends Controller
                     foreach($course as $crse){
                         $course_doc_count = DB::table('tbl_application_course_doc')->where(['application_id'=>$application->id,'application_courses_id'=>$crse->id])->where('approve_status',1)->whereNull('deleted_at')->count();
                         $crse->is_doc_uploaded = $course_doc_count;
-                        
                     }
                     $obj->course = $course;
                 }

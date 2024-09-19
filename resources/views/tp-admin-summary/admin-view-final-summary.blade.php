@@ -435,7 +435,7 @@
                                                 @endforeach
                                             </tbody>
                                             <tr>
-                                                <td colspan="6" class="fw-bold">Brief Summary: <span class="fw-normal">{{$onsiteSummaryReport->brief_summary}}</span></td>
+                                                <td colspan="6" class="fw-bold">Brief Summary: <span class="fw-normal">{{$onsiteSummaryReport->ofi_brief_summary}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="6" class="fw-bold">Brief about the closing meeting: <span class="fw-bold">{{$onsiteSummaryReport->brief_closing_meeting}}</span></td>
