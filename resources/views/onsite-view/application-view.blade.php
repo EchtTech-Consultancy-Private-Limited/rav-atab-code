@@ -328,7 +328,7 @@
             </div> 
         </div>
         
-        @if(($show_submit_btn_to_onsite) || $is_all_revert_action_done) 
+        @if(($assessor_designation=="Lead Assessor" && ($show_submit_btn_to_onsite) || $is_all_revert_action_done)) 
         <div class="row">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('onsite/update-nc-flag-doc-list/'.dEncrypt($spocData->id))}}" method="post">
@@ -343,7 +343,7 @@
                 </form>
                 </div>
         </div>
-        @elseif($is_all_course_summary_completed && $is_submitted_final_summary!=1)
+        @elseif($assessor_designation=="Lead Assessor" && ($is_all_course_summary_completed && $is_submitted_final_summary!=1))
         <div class="row mb-5">
                 <div class="col-md-12 mr-2">
                 <form action="{{url('/onsite/generate/final-summary')}}" method="post">
@@ -360,13 +360,13 @@
     @endif
     <!-- <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div> -->
 
-            @if($is_all_action_taken_on_docs || $any_nc>0)
+            @if($assessor_designation=="Lead Assessor" && ($is_all_action_taken_on_docs || $any_nc>0))
                 <div class="d-flex align-items-center">
                 @if(!$isOFIExists)
                 <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>
-                @endif
+            @endif
                   <!-- signed copy -->
-                      @if($spocData->signed_copy_onsite==null)
+                      @if($assessor_designation=="Lead Assessor" && $spocData->signed_copy_onsite==null)
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
