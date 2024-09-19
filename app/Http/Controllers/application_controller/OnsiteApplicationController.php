@@ -191,7 +191,7 @@ class OnsiteApplicationController extends Controller
         ->where('application_id',dDecrypt($id))
         ->where('assessor_id',Auth::user()->id)
         ->first();
-        
+        $assessor_designation=$assessor_designation->assessor_designation;
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;

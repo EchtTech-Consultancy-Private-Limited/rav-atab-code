@@ -503,7 +503,7 @@
                         </div>
                        
                     </div>
-                    @if($spocData->level_id==2)
+                    @if($spocData->level_id==2 && Auth::user()->role!=6)
                     <div class="col-md-12 d-flex justify-content-end">
                                 <a href="{{ url('/super-admin/document-list-level-2' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
@@ -511,7 +511,7 @@
                         </div>
                     @endif
 
-                    @if($spocData->level_id==3)
+                    @if($spocData->level_id==3 && Auth::user()->role!=6)
                     <div class="col-md-12 d-flex justify-content-end">
                                 <a href="{{ url('/super-admin/document-list' . '/' . dEncrypt($spocData->id) . '/' .dEncrypt($ApplicationCourses['course']->id) ) }}"
                                     class="btn text-white bg-primary mb-0"
