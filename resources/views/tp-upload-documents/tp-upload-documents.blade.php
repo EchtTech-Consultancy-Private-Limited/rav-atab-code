@@ -109,7 +109,7 @@
                                              <th class="center table-th"> Cross reference to supporting evidence provided
                                              </th>
                                              
-                                             <th>Action</th>
+                                             <th class="last-th">Action</th>
                                           </tr>
                                        </thead>
                                        <tbody>
