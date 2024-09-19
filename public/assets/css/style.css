@@ -26118,7 +26118,9 @@ h1.header-title {
 }
 .comon-table {
     display: flex;
-    width: 375px;
+    width: max-content;
+    max-width: 375px;
+    min-width: 124px;
     flex-wrap: wrap;
 }
 .table-th{
@@ -26139,6 +26141,15 @@ h1.header-title {
 .time-modal .modal{
     height: auto;
 }
+.both-field {
+    display: flex;
+  }
+  .btn.btn-primary.last-btn {
+    margin-right: 0;
+  }
+  .both-field input:first-child {
+    margin-right: 10px !important;
+  }
 
 
 /* Media query start from here */
