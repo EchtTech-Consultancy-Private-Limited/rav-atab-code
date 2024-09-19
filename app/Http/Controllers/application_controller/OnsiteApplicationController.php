@@ -185,7 +185,13 @@ class OnsiteApplicationController extends Controller
         $any_nc = DB::table('tbl_onsite_status')->where(['application_id'=>dDecrypt($id)])->count();
         
         
-        $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
+        $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')
+        ->first();
+        $assessor_designation = DB::table('tbl_assessor_assign')
+        ->where('application_id',dDecrypt($id))
+        ->where('assessor_id',Auth::user()->id)
+        ->first();
+        
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
             $obj = new \stdClass;
             $obj->application= $application;
@@ -254,7 +260,7 @@ class OnsiteApplicationController extends Controller
                         $is_all_course_summary_completed=false;
                     }
 
-                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isOFIExists'=>$isOFIExists,'is_all_action_taken_on_docs'=>$is_all_action_taken_on_docs,'is_in_improvement'=>$is_in_improvement,'is_all_nc_flag'=>$is_all_nc_flag,'any_nc'=>$any_nc]);
+                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isOFIExists'=>$isOFIExists,'is_all_action_taken_on_docs'=>$is_all_action_taken_on_docs,'is_in_improvement'=>$is_in_improvement,'is_all_nc_flag'=>$is_all_nc_flag,'any_nc'=>$any_nc,'assessor_designation'=>$assessor_designation]);
     }
 
     public function onsiteGenerateFinalSummary(Request $request)

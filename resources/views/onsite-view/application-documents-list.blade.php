@@ -149,11 +149,13 @@
             {{ session::get('fail') }}
          </div>
          @endif
+
          <div>
             <div class="row clearfix">
                <div class="col-lg-12 col-md-12">
                   <div>
                      <b class="fw-bold">Application ID:</b> <span>{{$application_uhid}}</span>
+                     
                   </div>
                   <div>
                      <div>
@@ -446,7 +448,7 @@
                                                    <a  href="{{ url('onsite-view/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc_paths . '/' . dEncrypt($application_id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($course_id)) }}" class="btn btn-primary btn-sm">Upload Document</a>&nbsp;
                                                 </div>
                                                 @else
-                                                <span>Please assign lead assessor</span>
+                                                <span>Pending from Lead Assessor</span>
                                                 @endif
                                                  
                                                 <!-- upload photograph -->
@@ -489,7 +491,8 @@
                                                    style="font-size: 12px; padding:5px; border-radius:5px;">Comment
                                                 pending!</span>
                                                 @endif
-                                                @if($doc->onsite_status!=0  && $doc->is_revert!=1 )
+                                             
+                                             @if($assessor_designation->assessor_designation=="Lead Assessor" && $doc->onsite_status!=0  && $doc->is_revert!=1)
                                                 <button type="button" class="btn btn-primary btn-sm mt-3" onclick="handleRevertActionOnDocListOnsite('{{ $application_id }}', '{{ $course_id }}', '{{ $doc->onsite_doc_file_name }}')">Revert</button>
 
                                                 @endif
@@ -542,7 +545,7 @@
                                        </tbody>
                                     </table>
                            
-                              @if($is_all_doc_accepted && !$is_final_submit)
+                              @if($assessor_designation->assessor_designation=="Lead Assessor" && $is_all_doc_accepted && !$is_final_submit)
                                  <form id="submitForm" action="{{url('onsite/final-summary')}}" method="post">
                                      @csrf
                                        <input type="hidden" name="application_id" value="{{$encrypted_app_id}}">
@@ -558,7 +561,7 @@
                                     </div>
                                  </form>
 
-                              @elseif(count($onsite_course_doc_uploaded)>=4 && $is_any_ncs && !$is_final_submit)
+                              @elseif($assessor_designation->assessor_designation=="Lead Assessor" &&  count($onsite_course_doc_uploaded)>=4 && $is_any_ncs && !$is_final_submit)
                               <div class="col-md-12 mr-2">
                                           <form action="{{ url('onsite/update-nc-flag-doc-list/course/'.$encrypted_app_id.'/'.$encrypted_course_id) }}" method="post">
                                           @csrf
