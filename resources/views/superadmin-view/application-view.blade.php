@@ -339,7 +339,7 @@
                                     <td>{{$k+1}}</td>
                                     <td>{{$course_doc->name}}</td>      
                                     <td> 
-                                    <span class="d-flex flex-wrap">
+                                    <span class="d-flex flex-wrap comon-table">
                                     @foreach($ApplicationCourses[$course_doc->nc] as $doc)
                                     <form
                                         name="submitform_doc_form_{{$doc->id}}"

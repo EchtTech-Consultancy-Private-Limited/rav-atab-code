@@ -109,7 +109,7 @@
                                              <th class="center table-th"> Cross reference to supporting evidence provided
                                              </th>
                                              
-                                             <th>Action</th>
+                                             <th class="last-th">Action</th>
                                           </tr>
                                        </thead>
                                        <tbody>
@@ -133,7 +133,7 @@
                                              <td>
                                                 <div class="d-flex">
                                                   
-                                                   <div>
+                                                   <div class="comon-table">
                                                       <form
                                                          name="submitform_doc_form"
                                                          id="submitform_doc_form_{{$question['question']->id}}"

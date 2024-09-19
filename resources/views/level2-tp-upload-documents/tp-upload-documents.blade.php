@@ -135,7 +135,7 @@
                                              <td>
                                                 <div class="d-flex">
                                                   
-                                                   <div>
+                                                   <div class="comon-table">
                                                       <form
                                                          name="submitform_doc_form"
                                                          id="submitform_doc_form_{{$question['question']->id}}"
