@@ -613,7 +613,7 @@
 
        @elseif($application_details->application->approve_status==0 && $application_details->application->level_id==3)
                             
-                        @if(!$is_final_summary_generated && $application_details->is_all_courses_rejected==false) 
+                        @if(!$is_final_summary_generated && $application_details->is_all_courses_rejected==false && !$is_onsite_assigned) 
                         <div class="col-md-12">
                             <button class="btn btn-primary btn-sm float-right mb-2" onclick="handleAssignBothAssessor('{{$application_details->application->id}}')">Assign Assessor</button>
                         

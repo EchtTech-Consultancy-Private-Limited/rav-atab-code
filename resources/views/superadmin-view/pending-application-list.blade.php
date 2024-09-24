@@ -176,14 +176,16 @@
       </div>
       <form id="dateForm">
       <se class="modal-body">
-                <label for="dateInput">Select a date and time:</label>
-                <input type="text" id="dateInput" name="date" class="form-control custom-input-date-time">
-                <input type="text" id="timeInput" name="timeInput" class="form-control custom-input-date-time">
+                    <label for="dateInput" class="mb-3">Select a date and time:</label>
+                    <div class="both-field">
+                        <input type="text" id="dateInput" name="date" class="form-control custom-input-date-time rounded mr-4" placeholder="Select Date">
+                        <input type="text" id="timeInput" name="timeInput" class="form-control custom-input-date-time rounded" placeholder="Select Time">
+                    </div>
 
                 <input type="hidden" name="application_id" value="" id="application_id"/>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="handleToGiveExtraDates()">Assign extra Date</button>
+        <button type="button" class="btn btn-primary last-btn" onclick="handleToGiveExtraDates()">Assign extra Date</button>
         </form>
       </div>
     </div>

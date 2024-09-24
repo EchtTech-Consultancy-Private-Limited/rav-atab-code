@@ -39,6 +39,7 @@ class AdminApplicationController extends Controller
             ->where('region','ind')
             ->orderBy('a.id', 'desc')
             ->get();
+            
         $final_data = array();
         // $payment_count = DB::table("tbl_application_payment")->where('')
         
@@ -47,7 +48,9 @@ class AdminApplicationController extends Controller
         $onsite_assessor_list = DB::table('users')->where(['assessment' => 2, 'role' => 3, 'status' => 0])->orderBy('id', 'DESC')->get();
 
         $secretariatdata = DB::table('users')->where('role', '5')->orderBy('id', 'DESC')->get();
+  
         foreach ($application as $app) {
+            
             $obj = new \stdClass;
             $obj->application_list = $app;
             $course = DB::table('tbl_application_courses')->where([
@@ -615,16 +618,17 @@ class AdminApplicationController extends Controller
             $is_final_submit = false;
         }
         
-       
+        $onsite_final_submit = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'onsite'])->latest('id')->first();
+        
         $admin_final_summary_count = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id])->count();
         $is_final_summary_generated=false;
         
-        if((count($courses)*2)==$admin_final_summary_count){
+        if((count($courses)*2)==$admin_final_summary_count && $onsite_final_submit->is_summary_show==1){
             $is_final_summary_generated =true;
         }
+        // dd($is_final_summary_generated);
         
-        // dd($final_data);
-        return view('admin-view.application-view-level-3', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc,'is_final_summary_generated'=>$is_final_summary_generated]);
+        return view('admin-view.application-view-level-3', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc,'is_final_summary_generated'=>$is_final_summary_generated,'is_onsite_assigned'=>$onsite_final_submit]);
     }
 
 
