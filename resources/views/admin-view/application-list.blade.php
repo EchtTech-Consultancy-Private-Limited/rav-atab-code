@@ -172,7 +172,7 @@
                                     $is_all_revert = checkAllActionDoneOnRevert($item->application_list->id);
                                     @endphp
                                     
-                                    @if($is_all_course_accepted==false  && $item->application_list->level_id==3 && ($item->application_list->approve_status!=3 && $item->application_list->approve_status!=4))
+                                    @if($is_all_course_accepted==false  && $item->application_list->level_id==3 && ($item->application_list->approve_status!=3 && $item->application_list->approve_status!=4) && !$item->is_assessor_assign_btn_show)
                                     <a class="btn btn-tbl-delete bg-primary font-a"
                                        data-bs-toggle="modal" data-id="{{ $item->application_list->id }}"
                                        data-bs-target="#{{$type_}}{{ $item->application_list->id }}"

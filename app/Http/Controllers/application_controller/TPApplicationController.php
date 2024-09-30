@@ -1593,6 +1593,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
             $obj = new \stdClass;
             $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
+            
             $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
@@ -3805,8 +3806,8 @@ public function checkAllActionDoneOnRevert($application_id)
     $flag = 0;
     
     foreach ($results as $result) {
-        // if ($result->is_tp_revert == 1 && $result->status!=1) {
-        if ($result->is_tp_revert == 1) {
+        if ($result->is_tp_revert == 1 && $result->status!=1) {
+        // if ($result->is_tp_revert == 1) {
             $flag = 0;
         } else {
             $flag = 1;
@@ -3871,6 +3872,7 @@ public function checkAllActionDoneOnRevert44($application_id)
 
     
     $flag = 0;
+    
     foreach ($results as $result) {
         if ($result->is_tp_revert == 1) {
             $flag = 0;
