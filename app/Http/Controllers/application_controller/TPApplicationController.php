@@ -1593,6 +1593,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
 
             $obj = new \stdClass;
             $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
+            
             $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
@@ -1690,6 +1691,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 }else{
                  $is_final_submit = false;
                 }
+
+
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
     }
 
@@ -2503,7 +2506,7 @@ public function upgradeGetApplicationViewLevel3($id){
                         ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                         ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                         ->get()
-                ]; // Added semicolon here
+                ]; 
             }
         }
 
@@ -2537,6 +2540,10 @@ public function upgradeGetApplicationViewLevel3($id){
             }else{
                 $viewLevelUrl = false;
             }
+
+
+            
+              
             
             
     return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP,'viewLevelUrl'=>$viewLevelUrl,'doc_list_count'=>$doc_list_count]);
@@ -3805,8 +3812,8 @@ public function checkAllActionDoneOnRevert($application_id)
     $flag = 0;
     
     foreach ($results as $result) {
-        // if ($result->is_tp_revert == 1 && $result->status!=1) {
-        if ($result->is_tp_revert == 1) {
+        if ($result->is_tp_revert == 1 && $result->status!=1) {
+        // if ($result->is_tp_revert == 1) {
             $flag = 0;
         } else {
             $flag = 1;
@@ -3871,6 +3878,7 @@ public function checkAllActionDoneOnRevert44($application_id)
 
     
     $flag = 0;
+    
     foreach ($results as $result) {
         if ($result->is_tp_revert == 1) {
             $flag = 0;

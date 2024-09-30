@@ -263,6 +263,62 @@
             </div>
         </div>
 
+
+
+
+
+        <div class="row">
+        <!-- desktop assessor basic details -->
+        <div class="col-md-12 pr-2">
+            <div class="card">
+            <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
+                <h5 class="mt-2">
+                   Assessor Basic Information
+                </h5>
+            </div>
+            <div class="card-body fixed-label-w">
+                <div class="row">
+                  
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Person Name</th>
+                                <th>Contact Number</th>
+                                <th>Email ID</th>
+                                <th>Designation</th>
+                                <th>Assessor Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($assessor_basic_info as $key=>$ass)
+                            <tr>
+                            <td>{{$key+1}}</td>
+                            <td>{{$ass->firstname??''}} {{$ass->middlename??''}} {{$ass->lastname??''}}</td>
+                            <td>{{$ass->mobile_no}}</td>
+                            <td>{{$ass->email}}</td>
+                            <td>{{$ass->assessor_designation??'N/A'}}</td>
+                            <td>{{$ass->assessor_type}}</td>
+                            </tr>
+                        @endforeach
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+            </div>
+
+</div>
+
+
+
+
+
+
+
+
+
         <div class="card p-3 accordian-card">
             <div class="accordion" id="accordionExample">
                 @foreach ($application_details->course as $k => $ApplicationCourses)
@@ -385,14 +441,14 @@
                                                                             class="btn btn-danger btn-sm docBtn m-1">
                                                                             Needs Revision</a>
                                                                             <!-- admin accept/reject -->
-                                                                            @if($doc->admin_nc_flag==1)
+                                                                            @if($doc->admin_nc_flag==1 && $doc->is_admin_submit==1)
                                                                             <a title="{{$doc->doc_file_name}}"
                                                                             href="{{ url('secretariat-accept/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                             class="btn btn-success btn-sm docBtn docBtn_nc m-1">
                                                                             Accepted <span>By Admin</span></a>
                                                                             @endif
 
-                                                                            @if($doc->admin_nc_flag==2)
+                                                                            @if($doc->admin_nc_flag==2 && $doc->is_admin_submit==1)
                                                                             <a title="{{$doc->doc_file_name}}"
                                                                             href="{{ url('secretariat-reject/verify-doc' . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                             class="btn btn-danger btn-sm docBtn docBtn_nc m-1">

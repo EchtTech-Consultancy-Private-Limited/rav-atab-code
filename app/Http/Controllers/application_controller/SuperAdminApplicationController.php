@@ -366,7 +366,7 @@ class SuperAdminApplicationController extends Controller
         $show_submit_or_not = $this->checkToShowSubmitBtn($application->id, $level_id);
         $enabled_or_disabled_btn = $this->checkAllActionTaken($application->id, $level_id);
         $alreadySubmitted = $this->alreadySubmitted($application->id, $level_id);
-        
+            // dd($enabled_or_disabled_btn);
             $obj = new \stdClass;
             $obj->application= $application;
             $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
@@ -2015,7 +2015,9 @@ class SuperAdminApplicationController extends Controller
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
                 $nc_type = 'nr';
-                $nc_type_list = 'nr';
+                $nc_type_course = 'nr';
+                $nc_type_list = 'accepted';
+                $nc_type_course_doc_list = 'nr';
 
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
@@ -2023,9 +2025,9 @@ class SuperAdminApplicationController extends Controller
                     $nc_comments = 0;
 
                     if($course_doc->status==4 && $course_doc->admin_nc_flag==1){
-                        $nc_type='accepted';
+                        $nc_type_course='accepted';
                     }else if($course_doc->status==4 && $course_doc->admin_nc_flag==2){
-                        $nc_type='rejected';
+                        $nc_type_course='rejected';
                     }else{
                         $nc_type='nr';
                     }
@@ -2088,15 +2090,29 @@ class SuperAdminApplicationController extends Controller
                         ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
                         ->whereNull('deleted_at')
                         ->get();
-
                         foreach($get_course_docs as $course_doc){
-                            if($course_doc->status==4 && $course_doc->admin_nc_flag==1){
-                                $$nc_type_list='accepted';
-                            }else if($course_doc->status==4 && $course_doc->admin_nc_flag==2){
-                                $$nc_type_list='rejected';
+                            if($assessor_type=='onsite'){
+                                if($course_doc->onsite_status==4 && $course_doc->admin_nc_flag==1){
+                                    $nc_type_list='accepted';
+                                    $nc_type_course_doc_list="accepted";
+                                }else if($course_doc->onsite_status==4 && $course_doc->admin_nc_flag==2){
+                                    $nc_type_list='rejected';
+                                    $nc_type_course_doc_list="rejected";
+                                }else{
+                                    $nc_type_list='nr';
+                                }
                             }else{
-                                $$nc_type_list='nr';
+                                if($course_doc->status==4 && $course_doc->admin_nc_flag==1){
+                                    $nc_type_list='accepted';
+                                    $nc_type_course_doc_list="accepted";
+                                }else if($course_doc->status==4 && $course_doc->admin_nc_flag==2){
+                                    $nc_type_list='rejected';
+                                    $nc_type_course_doc_list="rejected";
+                                }else{
+                                    $nc_type_list='nr';
+                                }
                             }
+                            
                         }
 
 
@@ -2141,17 +2157,29 @@ class SuperAdminApplicationController extends Controller
                 }
             }
 
-            DB::commit();
-               if($nc_type=="nr" || $nc_type_list=="nr"){
-                   DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
-                   return back()->with('success', 'Enabled Course Doc upload button to TP.');
-               }else if($nc_type=="accepted" || $nc_type_list=="accepted"){
-                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>19]);
-                    return back()->with('success', 'Action taken on NR doc.');
-               }else{
-                    DB::table('tbl_application')->where('id',$application_id)->update(['status'=>20]);
-                    return back()->with('success', 'Action taken on NR doc.');
-               }
+
+            if($nc_type_course=='nr' || $nc_type_course_doc_list=='nr'){
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
+                DB::commit();
+                return back()->with('success', 'Enabled Course Doc upload button to TP');
+            }else{
+                DB::table('tbl_application')->where('id',$application_id)->update(['status'=>19]);
+                DB::commit();
+                return back()->with('success', 'Action taken on NR doc.');
+            }
+            //    if($nc_type=="nr" || $nc_type_list=="nr"){
+            //        DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
+            //        DB::commit();
+            //        return back()->with('success', 'Enabled Course Doc upload button to TP.');
+            //    }else if($nc_type=="accepted" || $nc_type_list=="accepted"){
+            //         DB::table('tbl_application')->where('id',$application_id)->update(['status'=>19]);
+            //         DB::commit();
+            //         return back()->with('success', 'Action taken on NR doc.');
+            //    }else{
+            //         DB::table('tbl_application')->where('id',$application_id)->update(['status'=>20]);
+            //         DB::commit();
+            //         return back()->with('success', 'Action taken on NR doc.');
+            //    }
 
                 
                 
@@ -2190,7 +2218,7 @@ class SuperAdminApplicationController extends Controller
             })
             ->where('tbl_course_wise_document.application_id',$application_id)
             ->orderBy('tbl_course_wise_document.id', 'desc')
-            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','nc_flag']);
+            ->get(['tbl_course_wise_document.application_id', 'tbl_course_wise_document.course_id', 'tbl_course_wise_document.doc_sr_code', 'tbl_course_wise_document.doc_unique_id', 'tbl_course_wise_document.status', 'id', 'admin_nc_flag','approve_status','nc_flag','is_admin_submit']);
    
    
         foreach ($results as $key => $result) {
@@ -2203,12 +2231,15 @@ class SuperAdminApplicationController extends Controller
             if ($additionalField) {
                 $results[$key]->status = $additionalField->status;
                 $results[$key]->nc_flag = $additionalField->nc_flag;
+                $results[$key]->admin_nc_flag = $additionalField->admin_nc_flag;
+                $results[$key]->is_admin_submit = $additionalField->is_admin_submit;
             }
         }
    
-        
+        // dd($results);
         foreach ($results as $result) {
-            if ($result->status == 4 && $result->nc_flag) {
+            // if ($result->status == 4 && $result->nc_flag && $result->is_admin_submit==0) {
+            if ($result->status == 4 && $result->is_admin_submit==0) {
                 $flag = 1;
                 break;
             } else {
@@ -2287,8 +2318,6 @@ class SuperAdminApplicationController extends Controller
         }
 
 }
-
-
         
             if ($flag == 1 || $flag2==1) {
                 return true;
@@ -2372,7 +2401,7 @@ class SuperAdminApplicationController extends Controller
             ->where('tbl_application_course_doc.application_id',$application_id)
     
             ->orderBy('tbl_application_course_doc.id', 'desc')
-            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag','onsite_status','assessor_type']);
+            ->get(['tbl_application_course_doc.application_id', 'tbl_application_course_doc.application_courses_id', 'tbl_application_course_doc.doc_sr_code', 'tbl_application_course_doc.doc_unique_id', 'tbl_application_course_doc.status', 'id', 'admin_nc_flag','approve_status','is_revert','is_tp_revert','nc_flag','onsite_status','assessor_type','is_admin_submit']);
     
     
         foreach ($results as $key => $result) {
@@ -2393,6 +2422,7 @@ class SuperAdminApplicationController extends Controller
                 $results[$key]->approve_status = $additionalField->approve_status;
                 $results[$key]->is_revert = $additionalField->is_revert;
                 $results[$key]->is_tp_revert = $additionalField->is_tp_revert;
+                $results[$key]->is_admin_submit = $additionalField->is_admin_submit;
             }
         }
     
@@ -2408,20 +2438,20 @@ class SuperAdminApplicationController extends Controller
                 } else {
                     $flag2 = 0;
                 }
-            }else{
-                if ($result->status == 4 && $result->admin_nc_flag==0) {
-                    $flag2 = 1;
-                    break;
-                } else {
-                    $flag2 = 0;
-                }
             }
+            // else{
+            //     if ($result->status == 4 && $result->admin_nc_flag==0) {
+            //         $flag2 = 1;
+            //         break;
+            //     } else {
+            //         $flag2 = 0;
+            //     }
+            // }
             
         }
         
 
 }
-        
             if ($flag == 1 || $flag2==1) {
                 return true;
             } else {
@@ -2473,16 +2503,18 @@ class SuperAdminApplicationController extends Controller
                 $results[$key]->is_admin_submit = $additionalField->is_admin_submit;
             }
         }
-   
-        
-        foreach ($results as $result) {
-            if ($result->status == 4 && $result->is_admin_submit==1) {
-                $flag = 1;
-                break;
-            } else {
-                $flag = 0;
+        $is_assessor_exists = DB::table('tbl_assessor_assign')->where('application_id',$application_id)->first();
+        if(!$is_assessor_exists){
+            foreach ($results as $result) {
+                if ($result->status == 4 && $result->is_admin_submit==1) {
+                    $flag = 1;
+                    break;
+                } else {
+                    $flag = 0;
+                }
             }
         }
+        
         
         if($level_id!=1){
             $results = DB::table('tbl_application_course_doc')
@@ -2540,14 +2572,15 @@ class SuperAdminApplicationController extends Controller
                 } else {
                     $flag2 = 0;
                 }
-            }else{
-                if ($result->status == 4 && $result->is_admin_submit==1) {
-                    $flag2 = 1;
-                    break;
-                } else {
-                    $flag2 = 0;
-                }
             }
+            // else{
+            //     if ($result->status == 4 && $result->is_admin_submit==1) {
+            //         $flag2 = 1;
+            //         break;
+            //     } else {
+            //         $flag2 = 0;
+            //     }
+            // }
             
         }
         
@@ -2561,7 +2594,8 @@ class SuperAdminApplicationController extends Controller
         // }
 
 }
-        
+ 
+    
             if ($flag == 1 || $flag2==1) {
                 return true;
             } else {
