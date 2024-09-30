@@ -1691,6 +1691,8 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                 }else{
                  $is_final_submit = false;
                 }
+
+
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
     }
 
@@ -2504,7 +2506,7 @@ public function upgradeGetApplicationViewLevel3($id){
                         ->select('tbl_nc_comments_secretariat.*', 'users.firstname', 'users.middlename', 'users.lastname','users.role')
                         ->leftJoin('users', 'tbl_nc_comments_secretariat.secretariat_id', '=', 'users.id')
                         ->get()
-                ]; // Added semicolon here
+                ]; 
             }
         }
 
@@ -2538,6 +2540,10 @@ public function upgradeGetApplicationViewLevel3($id){
             }else{
                 $viewLevelUrl = false;
             }
+
+
+            
+              
             
             
     return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP,'viewLevelUrl'=>$viewLevelUrl,'doc_list_count'=>$doc_list_count]);

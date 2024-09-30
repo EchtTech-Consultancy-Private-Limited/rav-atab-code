@@ -627,8 +627,11 @@ class AdminApplicationController extends Controller
             $is_final_summary_generated =true;
         }
         // dd($is_final_summary_generated);
-        
-        return view('admin-view.application-view-level-3', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc,'is_final_summary_generated'=>$is_final_summary_generated,'is_onsite_assigned'=>$onsite_final_submit]);
+          // basic assessor information
+          $assessor_basic_info = DB::table('tbl_assessor_assign as ass')->where('ass.application_id',  $application->id)->select('ass.assessor_type','ass.assessor_designation','ass.assessor_id','ass.application_id', 'users.firstname','users.middlename','users.lastname','users.email','users.mobile_no')->join('users', 'ass.assessor_id', '=', 'users.id')->get();
+                
+          // end here
+        return view('admin-view.application-view-level-3', ['application_details' => $final_data, 'data' => $user_data, 'spocData' => $application, 'application_payment_status' => $application_payment_status, 'is_final_submit' => $is_final_submit, 'courses_doc' => $decoded_json_courses_doc,'is_final_summary_generated'=>$is_final_summary_generated,'is_onsite_assigned'=>$onsite_final_submit,'assessor_basic_info'=>$assessor_basic_info]);
     }
 
 
