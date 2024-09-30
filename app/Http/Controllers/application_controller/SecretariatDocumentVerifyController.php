@@ -675,6 +675,9 @@ class SecretariatDocumentVerifyController extends Controller
                         $nc_flag = 0;
                         $nc_comments=0;
                         $reuploadbtnToTPorAdmin=1;
+                        if($course_doc->status==4 && $course_doc->admin_nc_flag==3){
+                            $nc_flag = 1;
+                        }
                     } 
                     else if ($course_doc->status == 6) {
                         $nc_comment_status = 6;

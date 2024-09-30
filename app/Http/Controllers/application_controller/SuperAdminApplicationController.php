@@ -2081,6 +2081,9 @@ class SuperAdminApplicationController extends Controller
                         }
                     }
                     
+
+
+
                         DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
                         ->whereNull('deleted_at')
@@ -2091,6 +2094,15 @@ class SuperAdminApplicationController extends Controller
                         ->whereNull('deleted_at')
                         ->get();
                         foreach($get_course_docs as $course_doc){
+
+
+                            
+
+
+
+
+
+                            
                             if($assessor_type=='onsite'){
                                 if($course_doc->onsite_status==4 && $course_doc->admin_nc_flag==1){
                                     $nc_type_list='accepted';

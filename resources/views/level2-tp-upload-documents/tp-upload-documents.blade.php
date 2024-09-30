@@ -201,11 +201,23 @@
                                                 Rejected <span>{{ucfirst($doc->assessor_type)}}</span></a>
                                         @elseif($doc->nc_show_status==4)
                                        
+                                        @if(in_array($doc->admin_nc_flag,[0,3]) && $doc->is_admin_submit)
                                           <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
                                              href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status. '/' . $doc->assessor_type  . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Needs Revision <span>{{ucfirst($doc->assessor_type)}}</span></a>
+                                             @else
+                                                @if(!in_array($doc->admin_nc_flag,[1,2]))
+                                                <a target="_blank"
+                                                   title="{{$doc->doc_file_name}}"
+                                                   href="{{ url('tp-document-detail-level-2'. '/' . $doc->nc_show_status . '/' . $doc->assessor_type . '/' . $doc->doc_sr_code .'/' . $doc->doc_file_name . '/' . $application_id . '/' . $doc->doc_unique_id.'/'.$course_id) }}"
+                                                   class="btn btn-primary btn-sm docBtn m-1">
+                                                   View</a>
+                                                @endif
+                                          @endif
+                                          
+                                             
                                              @if($doc->admin_nc_flag==1 && $doc->is_admin_submit==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
@@ -221,7 +233,6 @@
                                              class="btn btn-danger btn-sm docBtn docBtn_nc m-1">
                                              Rejected <span>By Admin</span></a>
                                              @endif
-                                             
                                              @if($doc->nc_flag==1 && $doc->is_admin_submit==1)
                                              <div class="upload-btn-wrapper">
                                                 <button class="upld-btn"><i class="fas fa-cloud-upload-alt"></i></button>
