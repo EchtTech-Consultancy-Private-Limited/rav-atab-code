@@ -533,7 +533,7 @@
         </div>
 
         <div class="row">
-        
+            
         @if($show_submit_or_not && $spocData->approve_status!=1)
                                                     
                 <div class="row mt-4">

@@ -266,7 +266,7 @@
 
 
 
-
+    @if(count($assessor_basic_info)>0)
         <div class="row">
         <!-- desktop assessor basic details -->
         <div class="col-md-12 pr-2">
@@ -308,9 +308,8 @@
             </div>
         </div>
             </div>
-
-</div>
-
+        </div>
+    @endif
 
 
 
