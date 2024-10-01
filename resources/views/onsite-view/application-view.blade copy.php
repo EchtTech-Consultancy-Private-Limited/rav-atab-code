@@ -364,51 +364,30 @@
                     @if($assessor_designation=="Lead Assessor" && !$isOFIExists)
                     <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>
                     @else
-                        @if(!$is_submitted_final_summary && $check==null)
-                        <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModalUpdate">Update OFI and Summary</div>
-                        @endif
-
+                    <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Update OFI and Summary</div>
                     @endif
-               
                   <!-- signed copy -->
-                             
-
-
+                      @if($assessor_designation=="Lead Assessor" && $spocData->signed_copy_onsite==null)
                                 <div class="row">
-                                <div class="col-md-4 mt-3">
-                                @if(!$is_submitted_final_summary && $check==null)
+                                <div class="col-md-6 mt-3">
                                       <?php 
                                       $url = $isOFIExists?url('onsite/download/pdf/first/visit/'.dEncrypt($spocData->id)):'#';
                                       ?>
                                         <a href="{{$url}}" class="btn btn-primary" >Download Summary</a>
                                     </div>
-                                    
-                                    @if($assessor_designation=="Lead Assessor")
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
                                         <input type="file" name="signed_copy" id="signed_copy" class="form-control" data-app-id="{{$spocData->id}}">
                                     </div>
-
-                                    @endif
-                                @endif
-
-
-                                    @if($spocData->signed_copy_onsite!=null)
-                                    <div class="col-md-4">
-                                        <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">Preview Signed Copy 
-                                        </a>
-                                    </div>               
-                                    @endif
-
+                                   
                                 </div>
-                  
-                                
-                      
+                            
+                      @endif
                    <!-- end here -->
                 </div>
             @endif 
-            </div>
-      
+
+        </div>
 
                 
 
@@ -454,8 +433,8 @@
                                 <tr>
                                     <label for="">Brief Summary <span class="text-danger">(*)</span></label>
                                     <textarea name="brief_summary" id="brief_summary" class="form-control mb-3 remark_text_area" maxlength="500" required="true">
+
                                     </textarea>
-                                    <input type="hidden" name="formType" id="formType" value="create">
                                 </tr>
                             </tbody>
                         </table>
@@ -475,74 +454,6 @@
 </div>
 
 <!-- OFI model form end here -->
-
-
-
-<!-- Updatee OFI model form -->
-<div class="modal fade" id="exampleModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog  modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">OFI and Brief Summary Form</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <form action="{{url('create/ofi')}}" method="post" onsubmit="return handleImporveMentForm();">
-                        @csrf
-                        <table class="table-form">
-                            <thead>
-                                <tr>
-                                    <th>S.No.<span class="text-danger">*</span></th>
-                                    <th>Standard Reference<span class="text-danger">*</span></th>
-                                    <th>Improvement Form<span class="text-danger">*</span></th>
-                                    <th>Improvement Form Assessee Org.<span class="text-danger">*</span></th>
-                                    <th><button type="button" class="btn btn-success add-row-btn-update">+</button></th>
-                                </tr>
-                            </thead>
-                            <tbody id="form-body-update">
-                                @if(count($assessor_improvement)>0)
-                                @foreach($assessor_improvement as $key=>$ass)
-                                <tr>
-                                    <td><input type="text" class="form-control" name="serial_number[]" placeholder="Enter Serial number" required value="{{$ass->sr_no}}"></td>
-                                    <td><input type="text" class="form-control" name="standard_reference[]" placeholder="Enter Standard Reference" required value="{{$ass->standard_reference}}"></td>
-                                    <td><input type="text" class="form-control" name="improvement_form[]" placeholder="Enter Improvement form" required value="{{$ass->improvement_form}}"></td>
-                                    <td><input type="text" class="form-control" name="improve_assessee_org[]" placeholder="Enter improve assessee org" value="{{$ass->assessee_org}}" required></td>
-                                    @if($key!=0)
-                                    <td><button type="button" class="btn btn-danger remove-row-btn-update">-</button></td>
-                                    @endif
-                                </tr>
-                                @endforeach
-                                @endif
-                                <tr>
-                                    <label for="">Brief Summary <span class="text-danger">(*)</span></label>
-                                    <textarea name="brief_summary" id="brief_summary" class="form-control mb-3 remark_text_area" maxlength="500" required="true">{{isset($assessor_improvement[0])?$assessor_improvement[0]?->brief_summary:''}}</textarea>
-                                    <input type="hidden" name="formType" id="formType" value="update">
-                                </tr>
-                            </tbody>
-                        </table>
-                        <input type="hidden" id="app_Id" value="{{dEncrypt($spocData->id)}}" name="app_Id">
-                        <span id="sr_no_err" class="err"></span>
-                        <span id="improvement_form_err" class="err"></span>
-                        <span id="standard_reference_err" class="err"></span>
-                        <span id="improve_assessee_org_err" class="err"></span>
-                        <button type="submit" class="btn btn-primary float-right mt-2">Update</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- OFI model form end here -->
-
-
 
         <div class="card p-relative">
             <div class="box-overlay">

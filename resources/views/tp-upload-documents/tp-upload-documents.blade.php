@@ -348,11 +348,8 @@
                                                                         class="btn btn-primary btn-sm docBtn m-1">
                                                                         View 
                                                                      </a>
-
                                                                     @endif
                                                 @endif
-
-
                                              @if($doc->admin_nc_flag==1 && $doc->is_admin_submit==1)
                                              <a target="_blank"
                                              title="{{$doc->doc_file_name}}"
@@ -437,12 +434,6 @@
                                               
                                                 {{-- getting documents for each row end point --}}
                                              </td>
-
-
-                                        
-
-
-
                                              <td>
                                                 
                                  @if(in_array($question['question']->id,$course_doc_uploaded->pluck('doc_unique_id')->all())) 

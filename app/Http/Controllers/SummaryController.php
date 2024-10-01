@@ -704,9 +704,14 @@ class SummaryController extends Controller
 
     public function createOFI(Request $request){
         try{
+            
             DB::beginTransaction();
+            $formType = $request->formType;
             $application_id = dDecrypt($request->app_Id);
             $get_all_courses = DB::table('tbl_application_courses')->where('application_id',$application_id)->whereIn('status',[0,2])->get();
+            if($formType=="update"){
+                DB::table('assessor_improvement_form')->where(['application_id'=>$application_id,'assessor_id'=>Auth::user()->id])->delete();
+            }
             foreach($get_all_courses as $key=>$course){
                 foreach($request->serial_number as $key=>$imp){
                 $dataImprovement= [];
