@@ -164,16 +164,11 @@ class DownLoadPDFFinalSummaryController extends Controller
             ->where([
                 'asr.application_id' => $application_id,
                 'asr.assessor_id' => $assessor_id,
-                // 'asr.application_course_id' => 87,
                 'asr.assessor_type' => 'onsite',
                 'ass_impr_form.application_id'=>$application_id
             ])
             ->first();
-
-            
-            
         // $assessor_assign = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_id'=>$assessor_id,'assessor_type'=>'onsite'])->first();
-
 
         $all_assessor_assign = DB::table('tbl_assessor_assign')
         ->select('tbl_assessor_assign.*','usr.firstname','usr.middlename','usr.lastname')

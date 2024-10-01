@@ -165,6 +165,8 @@ class OnsiteApplicationController extends Controller
         $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id));
         $is_all_revert_action_done=$this->checkAllActionDoneOnRevert(dDecrypt($id));
         $is_all_nc_flag=$this->isAllNCFlag(dDecrypt($id));
+
+        $assessor_improvement = DB::table('assessor_improvement_form')->where(['application_id'=>$application->id])->get();
         
         $course_count = DB::table('tbl_application_courses')
                         ->where(['application_id'=>dDecrypt($id)])
@@ -248,10 +250,8 @@ class OnsiteApplicationController extends Controller
                     if(!isset($is_submitted_final_summary)){
                         $is_submitted_final_summary=0;
                     }
+                    
                     $total_courses_count = DB::table('tbl_application_courses')->where('application_id',$application->id)->whereIn('status',[0,2])->whereNull('deleted_at')->count();
-
-                    // $is_submitted_final_summary = DB::table('assessor_final_summary_reports')->where(['application_id' => $application->id,'assessor_type'=>'onsite'])->latest('id')->first()?->is_summary_show;
-
                     
                     if ($total_summary_count==$total_courses_count) {
                         $is_all_course_summary_completed=true;
@@ -259,7 +259,9 @@ class OnsiteApplicationController extends Controller
                         $is_all_course_summary_completed=false;
                     }
 
-                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isOFIExists'=>$isOFIExists,'is_all_action_taken_on_docs'=>$is_all_action_taken_on_docs,'is_in_improvement'=>$is_in_improvement,'is_all_nc_flag'=>$is_all_nc_flag,'any_nc'=>$any_nc,'assessor_designation'=>$assessor_designation]);
+                 $check = DB::table('tbl_application_course_doc')
+                        ->where(['application_id' => $application->id,'nc_flag'=>1,'assessor_type'=>'onsite','is_revert'=>1])->first();
+                return view('onsite-view.application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'show_submit_btn_to_onsite'=>$show_submit_btn_to_onsite,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'is_all_revert_action_done'=>$is_all_revert_action_done,'is_all_course_summary_completed'=>$is_all_course_summary_completed,'is_submitted_final_summary'=>$is_submitted_final_summary,'isOFIExists'=>$isOFIExists,'is_all_action_taken_on_docs'=>$is_all_action_taken_on_docs,'is_in_improvement'=>$is_in_improvement,'is_all_nc_flag'=>$is_all_nc_flag,'any_nc'=>$any_nc,'assessor_designation'=>$assessor_designation,'assessor_improvement'=>$assessor_improvement,'check'=>$check]);
     }
 
     public function onsiteGenerateFinalSummary(Request $request)

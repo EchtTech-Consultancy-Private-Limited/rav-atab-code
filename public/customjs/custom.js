@@ -2220,6 +2220,7 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     const improvement_form = $("#improvement_form").val();
     const standard_reference = $("#standard_reference").val();
     const improve_assessee_org = $("#improve_assessee_org").val();
+    const formType = $("#formType").val();
 
     if(sr_no==""){
         $("#sr_no_err").html("Please enter serial number");
@@ -3712,6 +3713,29 @@ $(document).ready(function(){
 
     function attachRemoveRowEvent() {
         document.querySelectorAll('.remove-row-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                btn.closest('tr').remove();
+            });
+        });
+    }
+    attachRemoveRowEvent();
+})
+$(document).ready(function(){
+    document.querySelector('.add-row-btn-update').addEventListener('click', function () {
+        var newRow = `
+        <tr>
+            <td><input type="text" class="form-control" name="serial_number[]" placeholder="Enter Serial number" required></td>
+            <td><input type="text" class="form-control" name="standard_reference[]" placeholder="Enter Standard Reference" required></td>
+            <td><input type="text" class="form-control" name="improvement_form[]" placeholder="Enter Improvement form" required></td>
+            <td><input type="text" class="form-control" name="improve_assessee_org[]" placeholder="Enter improve assessee org" required></td>
+            <td><button type="button" class="btn btn-danger remove-row-btn-update">-</button></td>
+        </tr>`;
+        document.querySelector('#form-body-update').insertAdjacentHTML('beforeend', newRow);
+        attachRemoveRowEvent();
+    });
+
+    function attachRemoveRowEvent() {
+        document.querySelectorAll('.remove-row-btn-update').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 btn.closest('tr').remove();
             });
