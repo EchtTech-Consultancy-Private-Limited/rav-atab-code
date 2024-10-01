@@ -408,10 +408,22 @@
                                                                     Rejected</span></a>
                                                                 @elseif($doc->nc_show_status==4)
 
+                                                                @if(in_array($doc->admin_nc_flag,[0,3]) && $doc->is_admin_submit)
                                                                 <a target="_blank" title="{{$doc->doc_file_name}}"
                                                                     href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status.  '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
                                                                     class="btn btn-danger btn-sm docBtn  m-1">
                                                                     Needs Revision</span></a>
+                                                                @else
+                                                                    @if(in_array($doc->admin_nc_flag,[1,2,3]) && $doc->is_admin_submit==0)
+                                                                    <a target="_blank" title="{{$doc->doc_file_name}}"
+                                                                            href="{{ url('tp-course-document-detail'. '/' . $doc->nc_show_status  . '/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"
+                                                                            class="btn btn-primary btn-sm docBtn m-1">
+                                                                            View</a>
+                                                                    @endif
+                                                                @endif
+
+                                                                
+
                                                                     @if($doc->admin_nc_flag==1 && $doc->is_admin_submit)
                                                                 <a target="_blank" title="{{$doc->doc_file_name}}"
                                                                     href="{{ url('tp-course-document-detail'. '/' . '5/' . dEncrypt($doc->doc_sr_code) .'/' . $doc->doc_file_name . '/' . dEncrypt($spocData->id) . '/' . dEncrypt($doc->doc_unique_id).'/'.dEncrypt($ApplicationCourses['course']->id)) }}"

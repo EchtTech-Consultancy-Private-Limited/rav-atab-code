@@ -351,22 +351,18 @@ class SuperAdminApplicationController extends Controller
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
-        
         $mom = DB::table('tbl_mom')->where('application_id',dDecrypt($id))->latest('id')->first();
-        
         $json_course_doc = File::get(base_path('/public/course-doc/courses.json'));
         $decoded_json_courses_doc = json_decode($json_course_doc);
-
         $user_data = DB::table('users')->where('users.id',  $application->tp_id)->select('users.*', 'cities.name as city_name', 'states.name as state_name', 'countries.name as country_name')->join('countries', 'users.country', '=', 'countries.id')->join('cities', 'users.city', '=', 'cities.id')->join('states', 'users.state', '=', 'states.id')->first();
-
         $application_payment_status = DB::table('tbl_application_payment')->where('application_id', '=', $application->id)->whereNull('payment_ext')->where('pay_status','Y')->latest('id')->first();
-
-
         $level_id = $application->level_id;
         $show_submit_or_not = $this->checkToShowSubmitBtn($application->id, $level_id);
         $enabled_or_disabled_btn = $this->checkAllActionTaken($application->id, $level_id);
+        
         $alreadySubmitted = $this->alreadySubmitted($application->id, $level_id);
-            // dd($enabled_or_disabled_btn);
+            
+
             $obj = new \stdClass;
             $obj->application= $application;
             $obj->is_course_rejected=$this->checkAnyCoursesRejected($application->id);
@@ -2081,6 +2077,9 @@ class SuperAdminApplicationController extends Controller
                         }
                     }
                     
+
+
+
                         DB::table('tbl_application_course_doc')
                         ->where(['application_id' => $application_id,'approve_status'=>1,'assessor_type'=>$assessor_type])
                         ->whereNull('deleted_at')
@@ -2091,6 +2090,15 @@ class SuperAdminApplicationController extends Controller
                         ->whereNull('deleted_at')
                         ->get();
                         foreach($get_course_docs as $course_doc){
+
+
+
+
+
+
+
+
+                            
                             if($assessor_type=='onsite'){
                                 if($course_doc->onsite_status==4 && $course_doc->admin_nc_flag==1){
                                     $nc_type_list='accepted';
@@ -2236,10 +2244,10 @@ class SuperAdminApplicationController extends Controller
             }
         }
    
-        // dd($results);
+        
         foreach ($results as $result) {
             // if ($result->status == 4 && $result->nc_flag && $result->is_admin_submit==0) {
-            if ($result->status == 4 && $result->is_admin_submit==0) {
+            if (($result->status == 4 && $result->is_admin_submit==0) || in_array($result->admin_nc_flag,[1,2])) {
                 $flag = 1;
                 break;
             } else {
@@ -2296,7 +2304,6 @@ class SuperAdminApplicationController extends Controller
     
         
         $assessor_type = $results[0]->assessor_type;
-        
         foreach ($results as $result) {
             
             if($assessor_type=="onsite"){
@@ -2318,7 +2325,16 @@ class SuperAdminApplicationController extends Controller
         }
 
 }
-        
+            /**/
+            // $ass = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_type'=>'desktop'])->first();
+            // $on=false;
+            // $payment_count = DB::table('tbl_application_payment')->where(['application_id'=>$application_id,'pay_status'=>'Y'])->count();
+            // if($payment_count>1){
+            //     $on=true;
+            // }
+            
+            /*end here*/ 
+
             if ($flag == 1 || $flag2==1) {
                 return true;
             } else {
@@ -2379,6 +2395,7 @@ class SuperAdminApplicationController extends Controller
                 $flag = 0;
             }
         }
+        
         
         if($level_id!=1){
             $results = DB::table('tbl_application_course_doc')
@@ -2452,6 +2469,7 @@ class SuperAdminApplicationController extends Controller
         
 
 }
+
             if ($flag == 1 || $flag2==1) {
                 return true;
             } else {

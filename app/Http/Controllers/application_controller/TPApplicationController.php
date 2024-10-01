@@ -136,7 +136,7 @@ class TPApplicationController extends Controller
         
             $obj = new \stdClass;
             $obj->application= $application;
-            $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
+            $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id,1);
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id' => $application->id,
             ])
@@ -1592,7 +1592,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
 
             $obj = new \stdClass;
-            $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
+            $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id,2);
             
             $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
             $obj->application= $application;
@@ -2434,7 +2434,7 @@ public function upgradeGetApplicationViewLevel3($id){
         $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
         
         $obj = new \stdClass;
-        $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id);
+        $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id,3);
         $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
         $obj->application= $application;
         $courses = DB::table('tbl_application_courses')->where([
@@ -3764,7 +3764,7 @@ public function isNcOnCourseDocsList($application_id,$application_courses_id)
 
 }
 
-public function checkAllActionDoneOnRevert($application_id)
+public function checkAllActionDoneOnRevert($application_id,$level_id)
 {
 
     $results = DB::table('tbl_course_wise_document')
@@ -3812,13 +3812,22 @@ public function checkAllActionDoneOnRevert($application_id)
     $flag = 0;
     
     foreach ($results as $result) {
-        if ($result->is_tp_revert == 1 && $result->status!=1) {
-        // if ($result->is_tp_revert == 1) {
-            $flag = 0;
-        } else {
-            $flag = 1;
-            break;
+        if($level_id==2){
+            if ($result->is_tp_revert == 1 && $result->status!=1) {
+                    $flag = 0;
+                } else {
+                    $flag = 1;
+                    break;
+                }
+        }else{
+                if ($result->is_tp_revert == 1) {
+                    $flag = 0;
+                } else {
+                    $flag = 1;
+                    break;
+                }
         }
+        
     }
 
     
