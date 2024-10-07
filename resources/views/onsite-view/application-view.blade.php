@@ -365,7 +365,7 @@
 
     @endif
 
-            @if(($is_all_action_taken_on_docs || $any_nc>0))
+            @if(($is_all_action_taken_on_docs || $any_nc>0) && $f_data)
                 <div class="d-flex align-items-center">
                     @if($assessor_designation=="Lead Assessor" && !$isOFIExists)
                     <div class="btn btn-primary me-4 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Create OFI and Summary</div>

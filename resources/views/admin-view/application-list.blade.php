@@ -324,13 +324,18 @@
                                                          </div>
                                                          @endforeach  
                                                       </div>
+                                                      <?php 
+                                                        $isDAassigned = checkDesktopAssigned($item->application_list->id)
+                                                      ?>
+                                                      @if(!$isDAassigned)
                                                       <div class="modal-footer">
                                                          <button type="button" onclick="cancelAssign()"
                                                             class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Close</button>
                                                          <button type="submit"
-                                                            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
+                                                            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()" disabled="true" id="secret_{{$item->application_list->id}}">Submit</button>
                                                       </div>
+                                                      @endif
                                                 </div>
                                              </div>
                                              </form>
@@ -465,7 +470,7 @@
                                                             class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Close</button>
                                                          <button type="submit"
-                                                            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
+                                                            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()" disabled="true" id="secret_{{$item->application_list->id}}">Submit</button>
                                                    </div>
                                                    @endif
 
