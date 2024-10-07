@@ -2946,10 +2946,10 @@ public function tpUpdateNCFlagDocList($application_id)
                 }
 
                 /*get assessor data for notification*/ 
-                if($assessor_type=="desktop" && $level_id==3){
+                if($assessor_type=="desktop" && $get_application->level_id==3){
                     $assessor = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_type'=>'desktop'])->first();
                 }
-                if($assessor_type=="onsite" && $level_id==3){
+                if($assessor_type=="onsite" && $get_application->level_id==3){
                     $assessor = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_type'=>'onsite','assessor_designation'=>'Lead Assessor'])->first();
                 }
                   
