@@ -1188,7 +1188,7 @@ $(document).ready(()=>{
 $(".assesorsid").on("click", function () {
     var application_id = $(this).attr("application-id");
     var assessor_id = $(this).val();
-    $("#secret_"+assessor_id).removeAttr("disabled")
+    $("#secret_"+application_id).removeAttr("disabled")
     $(`#assessor_id_`).val(assessor_id);
     const assessor_type = $(`#assessor_types_${application_id}`).val();
     if(assessor_type!="onsite"){

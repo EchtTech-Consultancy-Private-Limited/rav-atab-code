@@ -260,14 +260,17 @@
                   </div>
               @endforeach  
                </div>
-     
-    @if($item->application_list->approve_status==0)
+     <?php
+        $assigend_secret = checkSecretariatAssigned($item->application_list->id);
+        
+     ?>
+    @if($item->application_list->approve_status==0 && !$assigend_secret)
      <div class="modal-footer"  id="onsite_date_selection_footer">
          <button type="button" onclick="cancelAssign()"
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
          <button type="submit"
-            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()" id="secret_{{$secretariatData->id}}" >Submit</button>
+            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()" id="secret_{{$item->application_list->id}}" disabled="true">Submit</button>
          </div>
       </div>
     @endif
