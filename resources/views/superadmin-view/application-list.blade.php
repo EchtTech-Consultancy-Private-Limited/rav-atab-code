@@ -267,7 +267,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal">Close</button>
          <button type="submit"
-            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
+            class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()" id="secret_{{$secretariatData->id}}" >Submit</button>
          </div>
       </div>
     @endif

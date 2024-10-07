@@ -50,7 +50,13 @@
                     </ul>
                     <div class="">
                     @if($spocData->signed_copy_onsite!=null)
-                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
+                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">
+                    @if(!$is_submitted_final_summary && $check==null)
+                    Preview Signed Copy 
+                    @else
+                    View Signed Copy 
+                    @endif    
+                    
                     </a>
                     @endif
                     @if($is_submitted_final_summary)
@@ -376,7 +382,7 @@
 
                                 <div class="row">
                                 <div class="col-md-4 mt-3">
-                                @if(!$is_submitted_final_summary && $check==null)
+                                @if(!$is_submitted_final_summary && $check==null && $isOFIExists)
                                       <?php 
                                       $url = $isOFIExists?url('onsite/download/pdf/first/visit/'.dEncrypt($spocData->id)):'#';
                                       ?>
@@ -388,26 +394,23 @@
                                         <label for="signed_copy_label">Signed Copy(<span class="text-danger">*</span>)</label>
                                         <input type="file" name="signed_copy" id="signed_copy" class="form-control" data-app-id="{{$spocData->id}}">
                                     </div>
-
+                                    
                                     @endif
                                 @endif
-
+                                @if($spocData->signed_copy_onsite!=null && !$is_submitted_final_summary && $check==null)
+                                <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">
+                                Preview Signed Copy 
+                                </a>
+                            @endif
                                 </div>
                   
-                                
+                        
                       
                    <!-- end here -->
                 </div>
             @endif 
             </div>
       
-
-                
-
-
-
-
-
 
 <!-- OFI model form -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

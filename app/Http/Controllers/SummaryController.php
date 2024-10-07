@@ -100,7 +100,7 @@ class SummaryController extends Controller
         $assessor_name = Auth::user()->firstname.' '.Auth::user()->middlename.' '.Auth::user()->lastname;
         
         $summertReport = DB::table('assessor_summary_reports as asr')
-        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','final_summary_repo.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.remark','ass_impr_form.assessee_org as onsite_assessee_org')
+        ->select('asr.application_id', 'asr.application_course_id', 'asr.assessor_id','asr.assessor_type','asr.object_element_id', 'app.person_name','app.id','app.created_at as app_created_at','app.uhid','app_course.course_name','usr.firstname','usr.lastname','final_summary_repo.assessee_org','ass_impr_form.sr_no','ass_impr_form.improvement_form','ass_impr_form.standard_reference','final_summary_repo.brief_open_meeting','final_summary_repo.brief_summary','final_summary_repo.brief_closing_meeting','final_summary_repo.summary_date','final_summary_repo.remark','ass_impr_form.assessee_org as onsite_assessee_org','ass_impr_form.brief_summary')
         ->leftJoin('tbl_application as app', 'app.id', '=', 'asr.application_id')
         ->leftJoin('tbl_application_courses as app_course', 'app_course.id', '=', 'asr.application_course_id')
         ->leftJoin('users as usr', 'usr.id', '=', 'asr.assessor_id')
@@ -121,7 +121,7 @@ class SummaryController extends Controller
             'final_summary_repo.application_course_id'=>dDecrypt($application_course_id),
         ])
         ->first();
-
+            
         $improvement_form_data = DB::table('assessor_improvement_form')->where(['application_id'=>dDecrypt($application_id),'application_course_id'=>dDecrypt($application_course_id),'assessor_id'=>$assessor_id])->get();
         $nc_remarks_onsite = DB::table('tbl_onsite_status')->where(['application_id'=>dDecrypt($application_id),'course_id'=>dDecrypt($application_course_id),'assessor_type'=>'onsite'])->get();
 
