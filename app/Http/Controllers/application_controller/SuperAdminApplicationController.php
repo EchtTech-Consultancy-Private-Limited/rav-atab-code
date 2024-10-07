@@ -2299,7 +2299,7 @@ class SuperAdminApplicationController extends Controller
         }
     
         
-        $assessor_type = $results[0]->assessor_type;
+        $assessor_type = $results[0]?->assessor_type??'desktop';
         foreach ($results as $result) {
             
             if($assessor_type=="onsite"){
@@ -2440,7 +2440,7 @@ class SuperAdminApplicationController extends Controller
         }
     
         
-        $assessor_type = $results[0]->assessor_type;
+        $assessor_type = $results[0]?->assessor_type??'desktop';
         
         if($level_id==2){
             foreach ($results as $result) {
@@ -2589,7 +2589,7 @@ class SuperAdminApplicationController extends Controller
         }
     
         
-        $assessor_type = $results[0]->assessor_type;
+        $assessor_type = $results[0]?->assessor_type??'desktop';
         foreach ($results as $result) {
             if($assessor_type=="onsite"){
                 if ($result->onsite_status == 4 && $result->is_admin_submit==1) {
