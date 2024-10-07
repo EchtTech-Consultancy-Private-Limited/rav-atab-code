@@ -50,7 +50,7 @@
                     </ul>
                     <div class="">
                     @if($spocData->signed_copy_onsite!=null)
-                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">Preview Signed Copy 
+                    <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">View Signed Copy 
                     </a>
                     @endif
                     @if($is_submitted_final_summary)
@@ -391,14 +391,6 @@
 
                                     @endif
                                 @endif
-
-
-                                    @if($spocData->signed_copy_onsite!=null)
-                                    <div class="col-md-4">
-                                        <a href="{{ url('onsite/doc/'.$spocData->signed_copy_onsite).'/'.$spocData->id}}" class="float-left btn btn-primary btn-sm" target="_blank">Preview Signed Copy 
-                                        </a>
-                                    </div>               
-                                    @endif
 
                                 </div>
                   
