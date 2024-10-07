@@ -2011,9 +2011,9 @@ class SuperAdminApplicationController extends Controller
                 ->whereIn('doc_sr_code',[config('constant.declaration.doc_sr_code'),config('constant.curiculum.doc_sr_code'),config('constant.details.doc_sr_code')])
                 ->latest('id')->get();
                 $nc_type = 'nr';
-                $nc_type_course = 'nr';
+                $nc_type_course = '';
                 $nc_type_list = 'accepted';
-                $nc_type_course_doc_list = 'nr';
+                $nc_type_course_doc_list = '';
 
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
@@ -2090,15 +2090,6 @@ class SuperAdminApplicationController extends Controller
                         ->whereNull('deleted_at')
                         ->get();
                         foreach($get_course_docs as $course_doc){
-
-
-
-
-
-
-
-
-                            
                             if($assessor_type=='onsite'){
                                 if($course_doc->onsite_status==4 && $course_doc->admin_nc_flag==1){
                                     $nc_type_list='accepted';
@@ -2108,6 +2099,7 @@ class SuperAdminApplicationController extends Controller
                                     $nc_type_course_doc_list="rejected";
                                 }else{
                                     $nc_type_list='nr';
+                                    
                                 }
                             }else{
                                 if($course_doc->status==4 && $course_doc->admin_nc_flag==1){
@@ -2117,7 +2109,10 @@ class SuperAdminApplicationController extends Controller
                                     $nc_type_list='rejected';
                                     $nc_type_course_doc_list="rejected";
                                 }else{
-                                    $nc_type_list='nr';
+                                    if($course_doc->is_revert==1){
+                                        $nc_type_list='nr';
+                                        $nc_type_course_doc_list="nr";
+                                    }
                                 }
                             }
                             
@@ -2192,6 +2187,7 @@ class SuperAdminApplicationController extends Controller
                 
                 
         } catch (Exception $e) {
+            
             DB::rollBack();
             return back()->with('fail', 'Something went wrong');
         }
@@ -2446,26 +2442,38 @@ class SuperAdminApplicationController extends Controller
         
         $assessor_type = $results[0]->assessor_type;
         
-        foreach ($results as $result) {
-            
-            if($assessor_type=="onsite"){
-                if ($result->onsite_status == 4 && $result->admin_nc_flag==0) {
-                    $flag2 = 1;
-                    break;
-                } else {
-                    $flag2 = 0;
-                }
+        if($level_id==2){
+            foreach ($results as $result) {
+                    if ($result->status == 4 && $result->admin_nc_flag==0) {
+                        $flag2 = 1;
+                        break;
+                    } else {
+                        $flag2 = 0;
+                    }
             }
-            // else{
-            //     if ($result->status == 4 && $result->admin_nc_flag==0) {
-            //         $flag2 = 1;
-            //         break;
-            //     } else {
-            //         $flag2 = 0;
-            //     }
-            // }
+        }else{
+            foreach ($results as $result) {
             
+                if($assessor_type=="onsite"){
+                    if ($result->onsite_status == 4 && $result->admin_nc_flag==0) {
+                        $flag2 = 1;
+                        break;
+                    } else {
+                        $flag2 = 0;
+                    }
+                }
+                // else{
+                //     if ($result->status == 4 && $result->admin_nc_flag==0) {
+                //         $flag2 = 1;
+                //         break;
+                //     } else {
+                //         $flag2 = 0;
+                //     }
+                // }
+                
+            }
         }
+       
         
 
 }

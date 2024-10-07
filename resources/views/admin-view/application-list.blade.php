@@ -455,13 +455,21 @@
                                                          </div>
                                                          @endforeach  
                                                       </div>
+
+                                                      <?php 
+                                                        $isOAassigned = checkOnsiteAssigned($item->application_list->id)
+                                                      ?>
+                                                      @if(!$isOAassigned)
                                                       <div class="modal-footer">
                                                          <button type="button" onclick="cancelAssign()"
                                                             class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Close</button>
                                                          <button type="submit"
                                                             class="btn btn-primary my-button" onclick="handleAdminAssignAssessorValidation()">Submit</button>
-                                                      </div>
+                                                   </div>
+                                                   @endif
+
+
                                                 </div>
                                              </div>
                                              </form>

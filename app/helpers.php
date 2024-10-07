@@ -1767,5 +1767,13 @@ function  getNCRemarks($application_id,$course_id){
 
 
 }
+function checkOnsiteAssigned($application_id){
+    $app_status = DB::table('tbl_assessor_assign')->where(['application_id'=>$application_id,'assessor_type'=>'onsite'])->first();
+    if(!empty($app_status)){
+        return true;
+    }else{
+        return false;
+    }   
+}
 
 
