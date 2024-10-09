@@ -546,7 +546,7 @@
                
             </div>
         </div>
-
+        
         @if(($show_submit_btn_to_tp) && ($application_details->application->approve_status==0 && $application_details->application->level_id==2)) 
         <div class="row">
                         <div class="col-md-12">
@@ -554,7 +554,7 @@
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             "<?php 
-                            if(($enable_disable_submit_btn || $showSubmitBtnToTP) || ($application_details->is_all_revert_action_done44==false || $application_details->is_all_revert_action_done==false)){
+                            if(($enable_disable_submit_btn || $showSubmitBtnToTP) || ($application_details->is_all_revert_action_done44==false && $application_details->is_all_revert_action_done==false)){
                                 echo 'disabled';
                             }else{
                                 echo '';

@@ -547,7 +547,7 @@
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             
-                            "<?php echo ($application_details->enable_disable_submit_btn==true || $application_details->enable_disable_submit_btn44==true) || ($application_details->is_all_revert_action_done44==false || $application_details->is_all_revert_action_done==false)?'disabled':'';?> >
+                            "<?php echo ($application_details->enable_disable_submit_btn==true || $application_details->enable_disable_submit_btn44==true) || ($application_details->is_all_revert_action_done44==false && $application_details->is_all_revert_action_done==false)?'disabled':'';?> >
 
                             </form>
                         </div>

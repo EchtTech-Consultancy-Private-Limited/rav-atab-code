@@ -1598,9 +1598,10 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
             // dd($enable_disable_submit_btn);
             $obj = new \stdClass;
-            $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id,2);
             
+            $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id,2);
             $obj->is_all_revert_action_done44=$this->checkAllActionDoneOnRevert44($application->id);
+
             $obj->application= $application;
             $courses = DB::table('tbl_application_courses')->where([
                 'application_id'=>$application->id,
@@ -2921,23 +2922,30 @@ public function tpUpdateNCFlagDocList($application_id)
                     }
 
             /*if any courses rejected then hide the revert button according to courses*/ 
-            if($get_application->level_id==2){
-                if($assessor_type=="onsite"){
-                    $is_update =  DB::table('tbl_application_course_doc')
-                    ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
-                    ->whereNot('onsite_status',0)
-                    ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
-                }else{
-                    $is_update =  DB::table('tbl_application_course_doc')
-                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
-                ->whereNot('status',0)
-                ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
-                }
-            }else{
-                $is_update =  DB::table('tbl_application_course_doc')
-                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
-                ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
-            }
+            // if($get_application->level_id==2){
+                
+            //     if($assessor_type=="onsite"){
+            //         $is_update =  DB::table('tbl_application_course_doc')
+            //         ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+            //         ->whereNot('onsite_status',0)
+            //         ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+            //     }else{
+            //         dd($course_doc);
+            //         $is_update =  DB::table('tbl_application_course_doc')
+            //     ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+            //     ->whereNot('status',0)
+            //     ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+                
+            //     }
+            // }else{
+            //     $is_update =  DB::table('tbl_application_course_doc')
+            //     ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+            //     ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+            // }
+
+            $is_update =  DB::table('tbl_application_course_doc')
+            ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+            ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
                 if($t==0){
                     if($is_update){
                         $t=1;
@@ -3840,7 +3848,8 @@ public function checkAllActionDoneOnRevert($application_id,$level_id)
     
     foreach ($results as $result) {
         if($level_id==2){
-            if ($result->is_tp_revert == 1 && $result->status!=1) {
+            // if ($result->is_tp_revert == 1 && $result->status!=1) {
+            if ($result->is_tp_revert == 1) {
                     $flag = 0;
                 } else {
                     $flag = 1;
@@ -3856,10 +3865,6 @@ public function checkAllActionDoneOnRevert($application_id,$level_id)
         }
         
     }
-
-    
-    
-    
     if ($flag == 0) {
         return false;
     } else {

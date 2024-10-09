@@ -1928,7 +1928,8 @@ class AdminApplicationController extends Controller
         $flag = 0;
 
         foreach ($results as $result) {
-            if ($result->is_revert == 1 && $result->status!=1) {
+            // if ($result->is_revert == 1 && $result->status!=1) {
+            if ($result->is_revert == 1) {
                 $flag = 0;
             } else {
                 $flag = 1;
