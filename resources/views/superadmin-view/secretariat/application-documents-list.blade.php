@@ -71,8 +71,8 @@
                             <div class="badge badge-main success float-right">Approved by you</div>
                             @endif
 
-                            <a href="{{ url()->previous() }}" type="button" class="btn btn-primary "
-                        style="float:right;">Back</a>
+                            <a href="{{ url('/super-admin/application-view/' . dEncrypt($applicationData->id)) }}" type="button" class="btn btn-primary" style="float:right;">Back</a>
+
                         </div>
                   </div>
                </div>

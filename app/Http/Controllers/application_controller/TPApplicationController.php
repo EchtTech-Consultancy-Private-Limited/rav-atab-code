@@ -246,11 +246,16 @@ class TPApplicationController extends Controller
     }
     public function upload_document($id, $course_id)
     {
+        
         $tp_id = Auth::user()->id;
         $application_id = $id ? dDecrypt($id) : $id;
         $application_uhid = TblApplication::where('id',$application_id)->first()->uhid??'';
         $course_id = $course_id ? dDecrypt($course_id) : $course_id;
         $data = TblApplicationPayment::where('application_id',$application_id)->get();
+        $course_approved=true;
+        if(!empty($is_course_approved)){
+            $course_approved=false;
+        }
         $file = DB::table('add_documents')->where('application_id', $application_id)->where('course_id', $course_id)->get();
         $course_doc_uploaded = TblApplicationCourseDoc::where([
             'application_id'=>$application_id,
@@ -1562,6 +1567,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
     
     public function upgradeGetApplicationView($id){
         
+        
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
@@ -1590,7 +1596,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
             $show_submit_btn_to_tp = $this->isShowSubmitBtnToSecretariat(dDecrypt($id),$assessor_type);
             $enable_disable_submit_btn = $this->checkSubmitButtonEnableOrDisable(dDecrypt($id),$assessor_type);
             $showSubmitBtnToTP = $this->checkReuploadBtn($application->id);
-
+            // dd($enable_disable_submit_btn);
             $obj = new \stdClass;
             $obj->is_all_revert_action_done=$this->checkAllActionDoneOnRevert($application->id,2);
             
@@ -1692,7 +1698,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
                  $is_final_submit = false;
                 }
 
-
+        
         return view('tp-view.upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP]);
     }
 
@@ -2540,12 +2546,6 @@ public function upgradeGetApplicationViewLevel3($id){
             }else{
                 $viewLevelUrl = false;
             }
-
-
-            
-              
-            
-            
     return view('tp-view.level3-upgrade-application-view',['application_details'=>$final_data,'data' => $user_data,'spocData' => $application,'application_payment_status'=>$application_payment_status,'is_final_submit'=>$is_final_submit,'courses_doc'=>$decoded_json_courses_doc,'show_submit_btn_to_tp'=>$show_submit_btn_to_tp,'enable_disable_submit_btn'=>$enable_disable_submit_btn,'showSubmitBtnToTP'=>$showSubmitBtnToTP,'viewLevelUrl'=>$viewLevelUrl,'doc_list_count'=>$doc_list_count]);
 }
 
@@ -2910,7 +2910,9 @@ public function tpUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
-                        $is_nr=true;
+                        if($course_doc->admin_nc_flag!=0){
+                            $is_nr=true;
+                        }
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -2919,11 +2921,24 @@ public function tpUpdateNCFlagDocList($application_id)
                     }
 
             /*if any courses rejected then hide the revert button according to courses*/ 
-               
-              $is_update =  DB::table('tbl_application_course_doc')
+            if($get_application->level_id==2){
+                if($assessor_type=="onsite"){
+                    $is_update =  DB::table('tbl_application_course_doc')
+                    ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+                    ->whereNot('onsite_status',0)
+                    ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+                }else{
+                    $is_update =  DB::table('tbl_application_course_doc')
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+                ->whereNot('status',0)
+                ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+                }
+            }else{
+                $is_update =  DB::table('tbl_application_course_doc')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
                 ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
-              
+            }
+            
                 if($t==0){
                     if($is_update){
                         $t=1;
@@ -2973,7 +2988,9 @@ public function tpUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
-                        $is_nr_list=true;
+                        if($course_doc->admin_nc_flag!=0){
+                            $is_nr_list=true;
+                        }
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -3791,9 +3808,6 @@ public function checkAllActionDoneOnRevert($application_id,$level_id)
         ->where('approve_status',1)
         ->get();
 
-        
-        
-
     $additionalFields = DB::table('tbl_course_wise_document')
         ->join(DB::raw('(SELECT application_id, course_id, doc_sr_code, doc_unique_id, MAX(id) as max_id FROM tbl_course_wise_document GROUP BY application_id, course_id, doc_sr_code, doc_unique_id) as sub'), function ($join) {
             $join->on('tbl_course_wise_document.application_id', '=', 'sub.application_id')
@@ -3847,7 +3861,7 @@ public function checkAllActionDoneOnRevert($application_id,$level_id)
     }
 
     
-
+    
     
     if ($flag == 0) {
         return false;

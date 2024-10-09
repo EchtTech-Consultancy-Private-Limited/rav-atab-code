@@ -638,9 +638,7 @@ class SuperAdminApplicationController extends Controller
             $final_approval = DB::table('tbl_nc_comments_secretariat')->where(['doc_sr_code' => $doc_sr_code,'application_id' => $application_id,'doc_unique_id' => $doc_unique_code,'assessor_type'=>'admin','application_courses_id'=>$application_course_id])
             ->where('nc_type',"Request_For_Final_Approval")
             ->latest('id')->first();
-            
             // $ass_type = $assessor_type=="desktop"?"desktop":"onsite";
-
             if($nc_type=="nr"){
                 $nc_type="not_recommended";
             }
@@ -708,7 +706,6 @@ class SuperAdminApplicationController extends Controller
                             );
                 }
        }
-        
         $doc_path = URL::to("/documnet").'/'.$doc_name;
         return view('superadmin-view.document-verify', [
             'doc_id' => $doc_sr_code,
@@ -729,7 +726,6 @@ class SuperAdminApplicationController extends Controller
     public function adminDocumentVerify(Request $request)
     {
         try{
-    
         $redirect_to=URL::to("/admin/document-list").'/'.dEncrypt($request->application_id).'/'.dEncrypt($request->application_courses_id);
         DB::beginTransaction();
         $assessor_id = Auth::user()->id;
@@ -762,7 +758,6 @@ class SuperAdminApplicationController extends Controller
             $nc_comment_status=4; //request for final approval
             $nc_flag=1;
         }
-
         $create_nc_comments = TblNCComments::insert($data);
 
         if($request->assessor_type=="onsite"){
@@ -770,8 +765,6 @@ class SuperAdminApplicationController extends Controller
         }else{
             TblApplicationCourseDoc::where(['application_id'=> $request->application_id,'application_courses_id'=>$request->application_courses_id,'doc_sr_code'=>$request->doc_sr_code,'doc_unique_id'=>$request->doc_unique_id,'status'=>4])->update(['nc_flag'=>$nc_flag,'admin_nc_flag'=>$admin_nc_flag]);
         }
-        
-
 
         if($create_nc_comments){
             DB::commit();
@@ -2014,7 +2007,7 @@ class SuperAdminApplicationController extends Controller
                 $nc_type_course = '';
                 $nc_type_list = 'accepted';
                 $nc_type_course_doc_list = '';
-
+                
                 foreach($get_course_docs as $course_doc){
                     $nc_comment_status = "";
                     $nc_flag=0;
@@ -2063,6 +2056,7 @@ class SuperAdminApplicationController extends Controller
                 ->where(['application_id' => $application_id, 'application_courses_id' => $course_doc->course_id,'nc_show_status'=>0])
                 ->update(['nc_show_status' => $nc_comments]);
             }
+
 
                 if($get_application->level_id!=1){
                     $app_payment = DB::table('tbl_application_payment')->where([['application_id',$application_id]])->whereNull('payment_ext')->where('pay_status','Y')->count();
@@ -2160,7 +2154,7 @@ class SuperAdminApplicationController extends Controller
                 }
             }
 
-
+            
             if($nc_type_course=='nr' || $nc_type_course_doc_list=='nr'){
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
                 DB::commit();

@@ -587,7 +587,6 @@ class SecretariatDocumentVerifyController extends Controller
 
             }
 
-            
 
             if($get_application->level_id==1){
                 $url= config('notification.secretariatUrl.level1');
@@ -621,7 +620,6 @@ class SecretariatDocumentVerifyController extends Controller
             $notifiData['url'] = $tpUrl;
             sendNotification($notifiData);
             createApplicationHistory($application_id,null,config('history.common.nc'),config('history.color.danger'));
-
             /*end here*/ 
             DB::commit();
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>4]);
@@ -700,7 +698,6 @@ class SecretariatDocumentVerifyController extends Controller
 
                 
             }
-
             /*--------To Check All 44 Doc Approved----------*/
             
             $check_all_doc_verified = $this->checkApplicationIsReadyForNextLevelDocList($application_id);
