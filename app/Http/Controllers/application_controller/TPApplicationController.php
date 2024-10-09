@@ -2938,14 +2938,11 @@ public function tpUpdateNCFlagDocList($application_id)
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
                 ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
             }
-            
                 if($t==0){
                     if($is_update){
                         $t=1;
                     }
                 }
-
-
             }
 
             $get_course_wise_docs = DB::table('tbl_course_wise_document')
