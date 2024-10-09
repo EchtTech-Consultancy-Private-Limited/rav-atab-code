@@ -554,7 +554,7 @@
                             @csrf
                             <input type="submit" class="btn btn-info float-right" value="Submit
                             "<?php 
-                            if(($enable_disable_submit_btn || $showSubmitBtnToTP) || ($application_details->is_all_revert_action_done44 || $application_details->is_all_revert_action_done==false)){
+                            if(($enable_disable_submit_btn || $showSubmitBtnToTP) || ($application_details->is_all_revert_action_done44==false || $application_details->is_all_revert_action_done==false)){
                                 echo 'disabled';
                             }else{
                                 echo '';

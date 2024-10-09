@@ -218,6 +218,7 @@ class DocApplicationController extends Controller
                 $tpUrl=config('notification.tpUrl.level2').dEncrypt($application_id);
             }else{
                 $tpUrl=config('notification.tpUrl.level3').dEncrypt($application_id);
+                $secretUrl = config('notification.secretariatUrl.level3').dEncrypt($application_id);
             }               
 
              /*send notification*/ 
@@ -309,6 +310,18 @@ class DocApplicationController extends Controller
         if($pay_count==1){
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>2]);
         }else if($pay_count>1){
+               /*send notification*/ 
+               $notifiData = [];
+               $notifiData['user_type'] = "secretariat";
+               $notifiData['sender_id'] = Auth::user()->id;
+               $notifiData['receiver_id'] = $app_->secretariat_id;
+               $notifiData['application_id'] = $application_id;
+               $notifiData['uhid'] = getUhid( $application_id)[0];
+               $notifiData['level_id'] = getUhid( $application_id)[1];
+               $notifiData['url'] = $secretUrl;
+               $notifiData['data'] = config('notification.secretariat.sec_pay');
+               sendNotification($notifiData);
+
             DB::table('tbl_application')->where('id',$application_id)->update(['status'=>15]);
         }
             /*send email end here*/ 

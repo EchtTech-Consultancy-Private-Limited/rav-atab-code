@@ -1567,6 +1567,7 @@ public function upgradeShowcoursePayment(Request $request, $id = null)
     
     public function upgradeGetApplicationView($id){
         
+        
         $application = DB::table('tbl_application')
         ->where('id', dDecrypt($id))
         ->first();
@@ -2909,7 +2910,9 @@ public function tpUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
-                        $is_nr=true;
+                        if($course_doc->admin_nc_flag!=0){
+                            $is_nr=true;
+                        }
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -2918,11 +2921,24 @@ public function tpUpdateNCFlagDocList($application_id)
                     }
 
             /*if any courses rejected then hide the revert button according to courses*/ 
-               
-              $is_update =  DB::table('tbl_application_course_doc')
+            if($get_application->level_id==2){
+                if($assessor_type=="onsite"){
+                    $is_update =  DB::table('tbl_application_course_doc')
+                    ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+                    ->whereNot('onsite_status',0)
+                    ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+                }else{
+                    $is_update =  DB::table('tbl_application_course_doc')
+                ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
+                ->whereNot('status',0)
+                ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
+                }
+            }else{
+                $is_update =  DB::table('tbl_application_course_doc')
                 ->where(['id' => $course_doc->id, 'application_id' => $application_id,'assessor_type'=>$assessor_type])
                 ->update(['is_doc_show'=>$course_doc->status,'is_tp_revert'=>1]);
-              
+            }
+            
                 if($t==0){
                     if($is_update){
                         $t=1;
@@ -2972,7 +2988,9 @@ public function tpUpdateNCFlagDocList($application_id)
                         $nc_comment_status = 4;
                         $nc_flag = 1;
                         $nc_comments=1;
-                        $is_nr_list=true;
+                        if($course_doc->admin_nc_flag!=0){
+                            $is_nr_list=true;
+                        }
                     } 
                     else {
                         $nc_comment_status = 0; //not recommended
@@ -3843,7 +3861,7 @@ public function checkAllActionDoneOnRevert($application_id,$level_id)
     }
 
     
-
+    
     
     if ($flag == 0) {
         return false;

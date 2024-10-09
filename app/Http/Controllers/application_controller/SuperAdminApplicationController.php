@@ -2154,7 +2154,7 @@ class SuperAdminApplicationController extends Controller
                 }
             }
 
-
+            
             if($nc_type_course=='nr' || $nc_type_course_doc_list=='nr'){
                 DB::table('tbl_application')->where('id',$application_id)->update(['status'=>17]);
                 DB::commit();
