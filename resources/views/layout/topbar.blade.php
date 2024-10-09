@@ -234,7 +234,7 @@ ul.menu h5 {
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
                                 
-                                <li>
+                                <li onclick="handleTPNotification({{$notification->id}})">
                                     <a href="{{ url($notification->url) }}"
                                         style="color: #000;" class="p-0">                                      
                                         <div class="notification-card <?php echo $notification->is_read==0?'active':'inactive';?>">

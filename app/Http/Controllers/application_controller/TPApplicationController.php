@@ -4095,4 +4095,28 @@ public function isAllCourseDocAccepted($application_id)
 }
 
 
+public function updateTPNotificationStatus(Request $request,$id)
+{
+    
+    try{
+      $request->validate([
+          'id' => 'required',
+      ]);
+      DB::beginTransaction();
+      $is_read = DB::table('tbl_notifications')->where('id',$id)->update(['is_read'=>"1"]);
+      $d=DB::table('tbl_notifications')->where('id',$id)->first();
+      if($is_read){
+          DB::commit();
+          return response()->json(['success' => true,'message' =>'Read notification successfully.','redirect_url'=>$d->url],200);
+      }else{
+          DB::rollback();
+          return response()->json(['success' => false,'message' =>'Notification Already read','redirect_url'=>$d->url],200);
+      }
+}
+catch(Exception $e){
+      DB::rollback();
+      return response()->json(['success' => false,'message' =>'Failed to read notification'],200);
+}
+}
+
 }

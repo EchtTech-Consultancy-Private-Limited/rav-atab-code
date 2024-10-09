@@ -1969,6 +1969,60 @@ function handleOnsiteNotification(pay_id){
     }
 }
 
+function handleTPNotification(pay_id){
+
+    if(pay_id!=null){
+       $('.full_screen_loading').show();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: `${BASE_URL}/tp-update-notification-status/${pay_id}`, // Your server-side upload endpoint
+            type: "POST",
+            data:{id:pay_id},
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    $('.full_screen_loading').hide();
+                    setTimeout(()=>{
+                        window.location.href=BASE_URL+response.redirect_url;
+                    },1000)
+                }else{
+                    toastr.error(response.message, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                        closeButton: true,
+                        closeDuration: 5000,
+                    });
+                    setTimeout(()=>{
+                        window.location.href=response.redirect_url;
+                    },1000)
+                    $('.full_screen_loading').hide();
+                }
+            },
+            error: function (xhr, status, error) {
+                $('.full_screen_loading').hide();
+                // Handle errors
+            },
+        });
+    }else{
+        toastr.error("Something went wrong!", {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: true,
+            closeDuration: 5000,
+        });
+        $('.full_screen_loading').hide();
+    }
+}
+
 function updateFileName(input) {
     
     var selectedFileName = "";
