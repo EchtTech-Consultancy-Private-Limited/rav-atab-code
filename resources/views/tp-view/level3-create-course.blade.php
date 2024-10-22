@@ -312,7 +312,7 @@
                             </div>
                         </div>
                         <form action="{{ url('/upgrade-level-3-store-new-application-course') }}" enctype="multipart/form-data" method="post"
-                            class="form">
+                            class="form" onSubmit="return handleCourseValidation();">
                             @csrf
                             <input type="hidden" name="form_step_type" value="add-course">
                             <div class="body pb-0" id="courses_body">
@@ -338,7 +338,7 @@
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
                                                 value="{{$crs->course_name}}"
-                                                    class="preventnumeric remove_err_input_error" maxlength="50" required>
+                                                    class="preventnumeric remove_err_input_error" maxlength="50" >
                                                     <span class="err error_name">Please enter the course name</span>
                                             </div>
                                             @error('course_name')
@@ -372,7 +372,7 @@
                                                   <div>
                                                   <input type="text" placeholder="Years" name="years[]"
                                                         value="{{$crs->course_duration_y}}"
-                                                        maxlength="4" required class="course_i nput preventalpha remove_err_input_error" >
+                                                        maxlength="4"  class="course_i nput preventalpha remove_err_input_error" >
                                                         <span class="err error_name">Please enter the year</span>
                                                   </div>
 
@@ -380,7 +380,7 @@
                                                    <div>
                                                    <input type="text" placeholder="Months" name="months[]"
                                                         value="{{$crs->course_duration_m}}"
-                                                        maxlength="2" required class="course_input preventalpha remove_err_input_error">
+                                                        maxlength="2"  class="course_input preventalpha remove_err_input_error">
                                                         <span class="err error_name">Please enter the month</span>
                                                    </div>
 
@@ -389,13 +389,13 @@
                                                     <div>
                                                     <input type="text" maxlength="2" placeholder="Days "
                                                     value="{{$crs->course_duration_d}}"
-                                                     name="days[]" required class="course_input preventalpha remove_err_input_error">
+                                                     name="days[]"  class="course_input preventalpha remove_err_input_error">
                                                         <span class="err error_name">Please enter the day</span>
                                                     </div>
 
                                                     <span style="margin-top:10px; margin-right:5px;">H</span>
                                                    <div>
-                                                   <input type="number" placeholder="Hours" name="hours[]" required
+                                                   <input type="number" placeholder="Hours" name="hours[]" 
                                                         value="{{$crs->course_duration_h}}"
                                                         class="course_input remove_err_input_error">
                                                         <span class="err error_name">Please enter the hours</span>
@@ -414,7 +414,7 @@
                                                 <label>Eligibility<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Eligibility" name="eligibility[]"
                                                 value="{{$crs->eligibility}}"
-                                                    required id="eligibility" class="remove_err_input_error">
+                                                     id="eligibility" class="remove_err_input_error">
                                                     <span class="err error_name">Please enter the eligibility</span>
                                             </div>
                                             @error('eligibility')
@@ -434,8 +434,8 @@
 
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                         
-                                                            <option value="{{ $value }}" {{in_array(strtolower($value),explode(',',$crs->mode_of_course))?'selected':''}}>
-                                                                {{ $value }}</option>
+                                                        <option value="{{ $value }}" {{ in_array(strtolower($value), explode(',', strtolower($crs->mode_of_course))) ? 'selected' : '' }}>{{ $value }}</option>
+
                                                         @endforeach
                                                     </select>
                                                     <span class="err error_name">Please select mode of courses</span>
@@ -454,7 +454,7 @@
 
                                                 <textarea rows="4" cols="50" class="form-control remove_err_input_error" 
                                                 
-                                                name="course_brief[]" required maxlength="500">{{$crs->course_brief}}</textarea>
+                                                name="course_brief[]"  maxlength="500">{{$crs->course_brief}}</textarea>
                                                 <span class="err error_name">Please enter the course brief</span>
                                             </div>
                                             @error('course_brief')
@@ -469,7 +469,7 @@
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc1[]"
-                                                    class="form-control doc_1 file_size remove_err_input_error" required>
+                                                    class="form-control doc_1 file_size remove_err_input_error" >
                                                     <span class="err error_name">Please select Declaration (PDF)</span>
                                             </div>
                                         </div>
@@ -480,7 +480,7 @@
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc2[]"
-                                                    class="form-control doc_2 file_size remove_err_input_error" required>
+                                                    class="form-control doc_2 file_size remove_err_input_error" >
                                                     <span class="err error_name">Please select Course Curriculum</span>
                                             
                                             </div>
@@ -493,7 +493,7 @@
                                                 <label>Course Details (Excel format)<span
                                                         class="text-danger">*</span></label>
                                                 <input type="file" name="doc3[]" id="payment_reference_no"
-                                                    required class="form-control doc_3 file_size_exl remove_err_input_error">
+                                                     class="form-control doc_3 file_size_exl remove_err_input_error">
                                                     <span class="err error_name">Please select Course Details</span>
                                             </div>
                                         </div>
@@ -524,7 +524,7 @@
                                                 <label>Course Name<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Course Name" name="course_name[]"
                                                 
-                                                    class="preventnumeric remove_err_input_error" maxlength="50" required>
+                                                    class="preventnumeric remove_err_input_error" maxlength="50" >
                                                     <span class="err error_name">Please enter the course name</span>
                                             </div>
                                             @error('course_name')
@@ -558,7 +558,7 @@
                                                   <div>
                                                   <input type="text" placeholder="Years" name="years[]"
                                                         
-                                                        maxlength="4" required class="course_i nput preventalpha remove_err_input_error" >
+                                                        maxlength="4"  class="course_i nput preventalpha remove_err_input_error" >
                                                         <span class="err error_name">Please enter the year</span>
                                                   </div>
 
@@ -566,7 +566,7 @@
                                                    <div>
                                                    <input type="text" placeholder="Months" name="months[]"
                                                         
-                                                        maxlength="2" required class="course_input preventalpha remove_err_input_error">
+                                                        maxlength="2"  class="course_input preventalpha remove_err_input_error">
                                                         <span class="err error_name">Please enter the month</span>
                                                    </div>
 
@@ -575,13 +575,13 @@
                                                     <div>
                                                     <input type="text" maxlength="2" placeholder="Days "
                                                     
-                                                     name="days[]" required class="course_input preventalpha remove_err_input_error">
+                                                     name="days[]"  class="course_input preventalpha remove_err_input_error">
                                                         <span class="err error_name">Please enter the day</span>
                                                     </div>
 
                                                     <span style="margin-top:10px; margin-right:5px;">H</span>
                                                    <div>
-                                                   <input type="number" placeholder="Hours" name="hours[]" required
+                                                   <input type="number" placeholder="Hours" name="hours[]" 
                                                         
                                                         class="course_input remove_err_input_error">
                                                         <span class="err error_name">Please enter the hours</span>
@@ -599,7 +599,7 @@
                                             <div class="form-line">
                                                 <label>Eligibility<span class="text-danger">*</span></label>
                                                 <input type="text" placeholder="Eligibility" name="eligibility[]"
-                                                    required id="eligibility" class="remove_err_input_error">
+                                                     id="eligibility" class="remove_err_input_error">
                                                     <span class="err error_name">Please enter the eligibility</span>
                                             </div>
                                             @error('eligibility')
@@ -610,6 +610,7 @@
                                     </div>
                                   
                                     <div class="col-sm-6">
+                                        
                                         <div class="form-group" style="margin-top: 5px;">
                                             <div class="form-line">
                                                 <label>Mode of Course <span class="text-danger">*</span></label>
@@ -622,7 +623,7 @@
                                                         @foreach (__('arrayfile.mode_of_course_array') as $key => $value)
                                                         
                                                         <option value="{{ $value }}">
-                                                                {{ $value }}</option>
+                                                        {{ $value }}</option>
                                                         @endforeach
                                                     </select>
                                                     <span class="err error_name">Please select mode of courses</span>
@@ -641,7 +642,7 @@
 
                                                 <textarea rows="4" cols="50" class="form-control remove_err_input_error" 
                                                 
-                                                name="course_brief[]" required maxlength="500"></textarea>
+                                                name="course_brief[]"  maxlength="500"></textarea>
                                                 <span class="err error_name">Please enter the course brief</span>
                                             </div>
                                             @error('course_brief')
@@ -656,7 +657,7 @@
                                             <div class="form-line">
                                                 <label>Declaration (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc1[]"
-                                                    class="form-control doc_1 file_size remove_err_input_error" required>
+                                                    class="form-control doc_1 file_size remove_err_input_error" >
                                                     <span class="err error_name">Please select Declaration (PDF)</span>
                                             </div>
                                         </div>
@@ -667,7 +668,7 @@
                                                 <label>Course Curriculum / Material / Syllabus
                                                     (PDF)<span class="text-danger">*</span></label>
                                                 <input type="file" name="doc2[]"
-                                                    class="form-control doc_2 file_size remove_err_input_error" required>
+                                                    class="form-control doc_2 file_size remove_err_input_error" >
                                                     <span class="err error_name">Please select Course Curriculum</span>
                                             
                                             </div>
@@ -680,7 +681,7 @@
                                                 <label>Course Details (Excel format)<span
                                                         class="text-danger">*</span></label>
                                                 <input type="file" name="doc3[]" id="payment_reference_no"
-                                                    required class="form-control doc_3 file_size_exl remove_err_input_error">
+                                                     class="form-control doc_3 file_size_exl remove_err_input_error">
                                                     <span class="err error_name">Please select Course Details</span>
                                             </div>
                                         </div>
@@ -704,7 +705,7 @@
                             @endif
                             @endisset
                             
-                                <button class="btn btn-primary waves-effect m-r-15 add_course" onclick="handleCourseValidation()">Save</button>
+                                <button class="btn btn-primary waves-effect m-r-15 add_course">Save</button>
                             </div>
                             {{-- @endif --}}
                         </form>

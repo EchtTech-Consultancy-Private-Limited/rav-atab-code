@@ -2187,6 +2187,7 @@ $(document).on('change focus','.select2-selection--multiple',function(){
   }
 
   function handleCourseValidation() {
+    
     const course_names = document.getElementsByName('course_name[]');
     const years = document.getElementsByName('years[]');
     const months = document.getElementsByName('months[]');
@@ -2198,39 +2199,49 @@ $(document).on('change focus','.select2-selection--multiple',function(){
     const docs1 = document.getElementsByName('doc1[]');
     const docs2 = document.getElementsByName('doc2[]');
     const docs3 = document.getElementsByName('doc3[]');
+    let flag = 0;
+    
     course_names.forEach((elem,i)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
+    
     years.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
     months.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
     days.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
     hours.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
     eligibility.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
 
     mode_of_course.forEach((elem) => {
         if (elem.value == "") {
+            flag=1;
             $(elem).addClass('courses_error');
         } else {
             $(elem).removeClass('courses_error'); // Optionally remove the error class if it's not empty
@@ -2239,33 +2250,45 @@ $(document).on('change focus','.select2-selection--multiple',function(){
 
     $("select.remove_err_input_error option").each(function (index, elem) {
         if (mode_of_course[index] == "") {
+            flag=1;
             $(elem).addClass('courses_error');
         }
   })
-
+  
     course_brief.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
 
     docs1.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
 
     docs2.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
 
     docs3.forEach((elem)=>{
         if(elem.value==""){
+            flag=1;
             $(elem).addClass('courses_error');
         }
     });
+    
+    if(flag){
+        return false;
+    }else{
+        return true;
+    }
+    
   }
 
 

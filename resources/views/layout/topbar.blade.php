@@ -228,12 +228,11 @@ ul.menu h5 {
                         @endif
                     </a>
                     <ul class="dropdown-menu pullDown placeholder_input notification">
-                        <li class="header header-2">NOTIFICATIONS </li>
+                        <li class="header header-2">NOTIFICATIONS </li> 
                         <li class="body col-md-12">
                             <ul class="text-dark menu" style="padding: 0px !important;">
                                 @if (count($notifications)>0)
                                 @foreach ($notifications as $notification)
-                                
                                 <li onclick="handleTPNotification({{$notification->id}})">
                                     <a href="{{ url($notification->url) }}"
                                         style="color: #000;" class="p-0">                                      
